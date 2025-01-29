@@ -1,5 +1,6 @@
 # Godot 4+ specific ignores
 .godot/
+*.tmp
 
 # Godot-specific ignores
 .import/
@@ -13,3 +14,23 @@ export_presets.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+/android/
+
+/Build/
+
+# Mac OS ignores
+.DS_Store
+
+# local VSCode settings
+.vscode/
+*.code-workspace
+
+#JetBrains IDE ignores
+.idea
+
+# Blender backup files
+*.blend[0-9]
+
+# Audacity temp files
+*.aup3-*
