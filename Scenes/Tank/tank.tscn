@@ -1,34 +1,45 @@
-[gd_scene load_steps=5 format=3 uid="uid://dvr6bm2hlj5h4"]
+[gd_scene load_steps=6 format=3 uid="uid://dvr6bm2hlj5h4"]
 
 [ext_resource type="Script" path="res://Scripts/Tank/tank.gd" id="1_0iy80"]
 [ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="1_yk8fo"]
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1pofo"]
+friction = 100.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qqqyu"]
+size = Vector2(26, 26)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bbvof"]
-size = Vector2(31, 125)
+size = Vector2(6, 23.5)
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dk5ro"]
-radius = 84.0
-height = 170.0
-
-[node name="Tank" type="RigidBody2D"]
-gravity_scale = 0.0
+[node name="Tank" type="Node2D"]
 script = ExtResource("1_0iy80")
 
-[node name="TankBodySprite" type="Sprite2D" parent="."]
+[node name="TankBody" type="RigidBody2D" parent="."]
+mass = 1000.0
+physics_material_override = SubResource("PhysicsMaterial_1pofo")
+center_of_mass_mode = 1
+center_of_mass = Vector2(0, -300)
+
+[node name="TankBodySprite" type="Sprite2D" parent="TankBody"]
+scale = Vector2(0.2, 0.2)
 texture = ExtResource("1_yk8fo")
 
-[node name="TankTurret" type="Area2D" parent="."]
+[node name="TankBodyCollision" type="CollisionShape2D" parent="TankBody"]
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_qqqyu")
 
-[node name="TurretSprite" type="Sprite2D" parent="TankTurret"]
-position = Vector2(1, -45)
-scale = Vector2(0.25, 1)
+[node name="TankTurret" type="Area2D" parent="TankBody"]
+z_index = -1
+scale = Vector2(1, 1)
+
+[node name="TurretSprite" type="Sprite2D" parent="TankBody/TankTurret"]
+position = Vector2(0, -11)
+scale = Vector2(0.05, 0.2)
 texture = ExtResource("1_yk8fo")
 offset = Vector2(0, -60)
 
-[node name="TurretCollision" type="CollisionShape2D" parent="TankTurret"]
-position = Vector2(0.5, -106.5)
+[node name="TurretCollision" type="CollisionShape2D" parent="TankBody/TankTurret"]
+position = Vector2(-1.19209e-07, -24.25)
+scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_bbvof")
-
-[node name="TankBodyCollision" type="CollisionShape2D" parent="."]
-position = Vector2(1, 0)
-shape = SubResource("CapsuleShape2D_dk5ro")

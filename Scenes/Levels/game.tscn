@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cminvc7kxh00u"]
+[gd_scene load_steps=5 format=3 uid="uid://cminvc7kxh00u"]
 
 [ext_resource type="PackedScene" uid="uid://dvr6bm2hlj5h4" path="res://Scenes/Tank/tank.tscn" id="1_c04sx"]
+[ext_resource type="PackedScene" uid="uid://l1x5kvupj7so" path="res://Scenes/Terrain/terrain.tscn" id="2_6lfu7"]
 
 [sub_resource type="Gradient" id="Gradient_h05uu"]
 colors = PackedColorArray(0, 0, 1, 1, 0.866667, 0, 0, 1)
@@ -13,10 +14,17 @@ height = 2048
 [node name="Game" type="Node2D"]
 
 [node name="Background" type="TextureRect" parent="."]
-offset_right = 1289.0
-offset_bottom = 733.0
+z_index = -100
+offset_right = 2048.0
+offset_bottom = 2048.0
+scale = Vector2(0.64, 0.36)
 texture = SubResource("GradientTexture2D_jmhd1")
 stretch_mode = 1
 
 [node name="Tank" parent="." instance=ExtResource("1_c04sx")]
-position = Vector2(626, 348)
+position = Vector2(86, 321)
+
+[node name="Terrain" parent="." instance=ExtResource("2_6lfu7")]
+z_index = -10
+position = Vector2(118, 444)
+scale = Vector2(1.28, 0.68)
