@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://dvr6bm2hlj5h4"]
+
+[ext_resource type="Script" path="res://Scripts/Tank/tank.gd" id="1_0iy80"]
+[ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="1_yk8fo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bbvof"]
+size = Vector2(31, 125)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dk5ro"]
+radius = 84.0
+height = 170.0
+
+[node name="Tank" type="RigidBody2D"]
+gravity_scale = 0.0
+script = ExtResource("1_0iy80")
+
+[node name="TankBodySprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_yk8fo")
+
+[node name="TankTurret" type="Area2D" parent="."]
+
+[node name="TurretSprite" type="Sprite2D" parent="TankTurret"]
+position = Vector2(1, -45)
+scale = Vector2(0.25, 1)
+texture = ExtResource("1_yk8fo")
+offset = Vector2(0, -60)
+
+[node name="TurretCollision" type="CollisionShape2D" parent="TankTurret"]
+position = Vector2(0.5, -106.5)
+shape = SubResource("RectangleShape2D_bbvof")
+
+[node name="TankBodyCollision" type="CollisionShape2D" parent="."]
+position = Vector2(1, 0)
+shape = SubResource("CapsuleShape2D_dk5ro")
