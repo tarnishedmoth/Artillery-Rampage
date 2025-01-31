@@ -10,7 +10,6 @@ func _ready() -> void:
 	round_director = RoundDirector.new()
 	begin_round()
 
-
 # This is called at the start of the round to enable input for players
 # TODO: We could pass in the global players data containing info about who is playing
 # or more simply could do an auto-load Singleton and store the state for the active game there
