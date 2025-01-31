@@ -40,3 +40,8 @@ texture = ExtResource("1_yk8fo")
 [node name="TurretCollision" type="CollisionShape2D" parent="TankBody/TankTurret"]
 position = Vector2(0.2, -11.28)
 shape = SubResource("RectangleShape2D_bbvof")
+
+[node name="WeaponFireLocation" type="Marker2D" parent="TankBody/TankTurret"]
+position = Vector2(0, -33.14)
+
+[node name="FiredWeaponContainer" type="Node" parent="."]
