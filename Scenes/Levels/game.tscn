@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://cminvc7kxh00u"]
+[gd_scene load_steps=7 format=3 uid="uid://cminvc7kxh00u"]
 
 [ext_resource type="PackedScene" uid="uid://dvr6bm2hlj5h4" path="res://Scenes/Tank/tank.tscn" id="1_c04sx"]
+[ext_resource type="Script" path="res://Scenes/Levels/game.gd" id="1_ey0gp"]
 [ext_resource type="PackedScene" uid="uid://l1x5kvupj7so" path="res://Scenes/Terrain/terrain.tscn" id="2_6lfu7"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://Scenes/Tank/player.tscn" id="3_fct5c"]
 
@@ -13,6 +14,7 @@ width = 2048
 height = 2048
 
 [node name="Game" type="Node2D"]
+script = ExtResource("1_ey0gp")
 
 [node name="Background" type="TextureRect" parent="."]
 z_index = -100
