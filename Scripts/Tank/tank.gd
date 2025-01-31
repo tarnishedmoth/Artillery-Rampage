@@ -22,12 +22,14 @@ var weapon_project_scene = preload("res://Scenes/Items/WeaponProjectiles/weapon_
 
 var health: float
 var power:float
+var max_power:float
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	health = max_health
 	# TODO: Will be set by function based on player controller and be clamped to min,max
-	power = max_health * weapon_max_power_health_mult
+	max_power = max_health * weapon_max_power_health_mult
+	power = max_power
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -38,6 +40,14 @@ func aim_at(angle_rads: float) -> void:
 
 func aim_delta(angle_rads_delta: float) -> void:
 	aim_at(turret.rotation + angle_rads_delta)
+	
+func set_power_percent(power_pct: float) -> void:
+	power = clampf(power_pct * max_power / 100.0, 0.0, max_power)
+	print("power_pct=" + str(power_pct) + "; power=" + str(power))
+	
+func set_power_delta(power_pct_delta: float) -> void:
+	print("set_power_delta=" + str(power_pct_delta))
+	set_power_percent(power / max_power * 100 + power_pct_delta)
 	
 func get_turret_rotation() -> float:
 	return turret.rotation
