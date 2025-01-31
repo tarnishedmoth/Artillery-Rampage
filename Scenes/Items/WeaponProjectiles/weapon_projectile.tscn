@@ -2,18 +2,22 @@
 
 [ext_resource type="Script" path="res://Scripts/Items/WeaponProjectile/weapon_projectile.gd" id="1_01gh6"]
 [ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="2_xdn3x"]
+[ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://Scenes/Items/WeaponProjectiles/weapon_projectile.tres" id="3_0q2o4"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_kj4vo"]
-radius = 6.0
-
-[node name="WeaponProjectile" type="Area2D"]
+[node name="WeaponProjectile" type="RigidBody2D"]
+collision_layer = 0
+collision_mask = 0
 script = ExtResource("1_01gh6")
-
-[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+power_velocity_mult = 0.9
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_xdn3x")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_kj4vo")
+[node name="PhysicsShape" type="CollisionShape2D" parent="."]
+shape = ExtResource("3_0q2o4")
+
+[node name="Overlap" type="Area2D" parent="."]
+
+[node name="OverlapCollisionShape" type="CollisionShape2D" parent="Overlap"]
+shape = ExtResource("3_0q2o4")

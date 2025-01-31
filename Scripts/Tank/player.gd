@@ -18,6 +18,8 @@ func begin_turn():
 	can_shoot = true
 	can_aim = true
 
+# TODO: handle power set input
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if Input.is_action_pressed("aim_left"):
