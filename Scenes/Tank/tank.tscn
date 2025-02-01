@@ -16,6 +16,7 @@ size = Vector2(6, 30.8)
 script = ExtResource("1_0iy80")
 
 [node name="TankBody" type="RigidBody2D" parent="."]
+collision_mask = 15
 mass = 1000.0
 physics_material_override = SubResource("PhysicsMaterial_1pofo")
 center_of_mass_mode = 1
@@ -31,6 +32,7 @@ shape = SubResource("RectangleShape2D_qqqyu")
 [node name="TankTurret" type="Area2D" parent="TankBody"]
 z_index = -1
 position = Vector2(0, -8.86)
+collision_mask = 15
 
 [node name="TurretSprite" type="Sprite2D" parent="TankBody/TankTurret"]
 position = Vector2(0.2, -10.88)

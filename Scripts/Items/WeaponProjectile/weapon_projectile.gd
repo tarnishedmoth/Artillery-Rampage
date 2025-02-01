@@ -1,4 +1,6 @@
-extends RigidBody2D
+class_name WeaponProjectile extends RigidBody2D
+
+#TODO: We might not need the Overlap if we only have the weapon projectile interact with Area2D's and not other physics bodies
 
 # The idea here is that we are using RigidBody2D for the physics behavior
 # and the Area2D as the overlap detection for detecting hits

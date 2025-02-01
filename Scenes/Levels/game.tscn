@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://cminvc7kxh00u"]
+[gd_scene load_steps=9 format=3 uid="uid://cminvc7kxh00u"]
 
 [ext_resource type="PackedScene" uid="uid://dvr6bm2hlj5h4" path="res://Scenes/Tank/tank.tscn" id="1_c04sx"]
-[ext_resource type="Script" path="res://Scenes/Levels/game.gd" id="1_ey0gp"]
+[ext_resource type="Script" path="res://Scripts/game.gd" id="1_hpf3p"]
 [ext_resource type="PackedScene" uid="uid://l1x5kvupj7so" path="res://Scenes/Terrain/terrain.tscn" id="2_6lfu7"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://Scenes/Tank/player.tscn" id="3_fct5c"]
+[ext_resource type="PackedScene" uid="uid://b7vpl03hcrs3e" path="res://Scenes/Walls/walls.tscn" id="5_omhqb"]
 
 [sub_resource type="Gradient" id="Gradient_h05uu"]
 colors = PackedColorArray(0, 0, 1, 1, 0.866667, 0, 0, 1)
@@ -13,8 +14,11 @@ gradient = SubResource("Gradient_h05uu")
 width = 2048
 height = 2048
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tqrgy"]
+size = Vector2(1248, 688)
+
 [node name="Game" type="Node2D"]
-script = ExtResource("1_ey0gp")
+script = ExtResource("1_hpf3p")
 
 [node name="Background" type="TextureRect" parent="."]
 z_index = -100
@@ -24,8 +28,17 @@ scale = Vector2(0.64, 0.36)
 texture = SubResource("GradientTexture2D_jmhd1")
 stretch_mode = 1
 
-[node name="Tank" parent="." instance=ExtResource("1_c04sx")]
-position = Vector2(511, 304)
+[node name="TestTank1" parent="." instance=ExtResource("1_c04sx")]
+position = Vector2(555, 238)
+
+[node name="TankBody" parent="TestTank1" index="0"]
+gravity_scale = 0.0
+
+[node name="TestTank2" parent="." instance=ExtResource("1_c04sx")]
+position = Vector2(1100, 433)
+
+[node name="TankBody" parent="TestTank2" index="0"]
+gravity_scale = 0.0
 
 [node name="Terrain" parent="." instance=ExtResource("2_6lfu7")]
 z_index = -10
@@ -35,3 +48,14 @@ scale = Vector2(1.28, 0.68)
 [node name="Player" parent="." instance=ExtResource("3_fct5c")]
 position = Vector2(128, 323)
 debug_controls = true
+
+[node name="Walls" parent="." instance=ExtResource("5_omhqb")]
+
+[node name="CollisionShape2D" parent="Walls/PlayableArea" index="0"]
+visible = false
+position = Vector2(636, 358)
+shape = SubResource("RectangleShape2D_tqrgy")
+
+[editable path="TestTank1"]
+[editable path="TestTank2"]
+[editable path="Walls"]

@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7vpl03hcrs3e"]
+
+[ext_resource type="Script" path="res://Scripts/Levels/walls.gd" id="1_pbin1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q4e8e"]
+
+[node name="Walls" type="Node2D"]
+script = ExtResource("1_pbin1")
+
+[node name="PlayableArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayableArea"]
+shape = SubResource("RectangleShape2D_q4e8e")
