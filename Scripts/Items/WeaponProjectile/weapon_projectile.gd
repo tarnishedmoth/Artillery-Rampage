@@ -6,14 +6,24 @@ class_name WeaponProjectile extends RigidBody2D
 # and the Area2D as the overlap detection for detecting hits
 @export var power_velocity_mult:float = 1
 
+@onready var overlap = $Overlap
+
 func set_spawn_parameters(power:float, angle:float):
 	linear_velocity = Vector2.from_angle(angle) * power * power_velocity_mult
 	
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	overlap.connect("body_entered", on_body_entered)
 
-# TODO: Handle wall overlaps with wall border and overlaps with terrain and tanks
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+	
+func on_body_entered(body: Node2D):
+	if body.owner is Tank:
+		on_hit_tank(body.owner)
+		
+func on_hit_tank(tank: Tank):
+	print("HIT TANK!")
+	# Destroy tank and projectile
+	tank.queue_free()
+	self.queue_free()
+	
