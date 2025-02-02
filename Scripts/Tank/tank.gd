@@ -1,5 +1,9 @@
 class_name Tank extends Node2D
 
+signal tank_killed(tank: Tank, instigatorController: Node2D, weapon: WeaponProjectile)
+signal tank_took_damage(
+	tank: Tank, instigatorController: Node2D, weapon: WeaponProjectile, amount: float)
+
 @export var min_angle:float = -90
 @export var max_angle:float = 90
 
@@ -8,6 +12,7 @@ class_name Tank extends Node2D
 
 @export var turret_shot_angle_offset:float = -90
 
+@onready var tankBody = $TankBody
 @onready var turret = $TankBody/TankTurret
 @onready var weapon_fire_location = $TankBody/TankTurret/WeaponFireLocation
 
@@ -21,8 +26,11 @@ class_name Tank extends Node2D
 var weapon_project_scene = preload("res://Scenes/Items/WeaponProjectiles/weapon_projectile.tscn")
 
 var health: float
+
 var power:float
 var max_power:float
+
+var orig_gravity:float
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -30,7 +38,12 @@ func _ready() -> void:
 	# TODO: Will be set by function based on player controller and be clamped to min,max
 	max_power = max_health * weapon_max_power_health_mult
 	power = max_power
+	
+	orig_gravity = tankBody.gravity_scale
 
+func toggle_gravity(enabled: bool) -> void:
+	tankBody.gravity_scale = orig_gravity if enabled else 0
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
@@ -57,7 +70,22 @@ func shoot() -> void:
 	var fired_weapon_instance = weapon_project_scene.instantiate()
 	
 	fired_weapon_instance.global_position = weapon_fire_location.global_position
-	fired_weapon_instance.set_spawn_parameters(power, turret.global_rotation + deg_to_rad(turret_shot_angle_offset))
+	fired_weapon_instance.set_spawn_parameters(self, power, turret.global_rotation + deg_to_rad(turret_shot_angle_offset))
 	
 	# Add the instance to the game
 	fired_weapon_container.add_child(fired_weapon_instance)
+
+func take_damage(instigatorController: Node2D, weapon: WeaponProjectile, amount: float) -> void:
+	var orig_health = health
+	health = clampf(health - amount, 0, max_health)
+	var actual_damage = orig_health - health
+	
+	print("Tank " + name + " took " + str(actual_damage) + " damage; health=" + str(health))
+	# TODO: don't emit if damage zero
+	emit_signal("tank_took_damage", self, instigatorController, weapon, actual_damage)
+	if health == 0:
+		emit_signal("tank_killed", self, instigatorController, weapon)
+		
+func kill():
+	print("Tank: " + name + " Killed")
+	queue_free()

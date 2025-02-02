@@ -26,3 +26,7 @@ func begin_round():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+func _on_player_player_killed(player: Player) -> void:
+	print("Game Over!")
+	player.queue_free()

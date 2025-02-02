@@ -8,7 +8,10 @@ class_name WeaponProjectile extends RigidBody2D
 
 @onready var overlap = $Overlap
 
-func set_spawn_parameters(power:float, angle:float):
+var owner_tank: Tank;
+
+func set_spawn_parameters(owner_tank: Tank, power:float, angle:float):
+	self.owner_tank = owner_tank
 	linear_velocity = Vector2.from_angle(angle) * power * power_velocity_mult
 	
 func _ready() -> void:
@@ -24,6 +27,8 @@ func on_body_entered(body: Node2D):
 func on_hit_tank(tank: Tank):
 	print("HIT TANK!")
 	# Destroy tank and projectile
-	tank.queue_free()
+	# TODO: Will need to support radial damage that falls off
+	# Need concept of area of effect for projectile
+	tank.take_damage(owner_tank, self, 10000)
 	self.queue_free()
 	

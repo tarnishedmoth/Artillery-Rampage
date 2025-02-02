@@ -7,3 +7,5 @@
 script = ExtResource("1_t03mm")
 
 [node name="Tank" parent="." instance=ExtResource("2_3s1jp")]
+
+[connection signal="tank_killed" from="Tank" to="." method="_on_tank_tank_killed"]

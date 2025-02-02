@@ -1,5 +1,7 @@
 class_name Player extends Node2D
 
+signal player_killed(player: Player)
+
 @onready var tank = $Tank
 
 @export var aim_speed_degs_per_sec = 45
@@ -21,10 +23,9 @@ func begin_turn():
 	can_shoot = true
 	can_aim = true
 
-# TODO: handle power set input
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+		
 	if Input.is_action_pressed("aim_left"):
 		aim(-delta)
 	if Input.is_action_pressed("aim_right"):
@@ -53,3 +54,9 @@ func shoot() -> void:
 	if(!debug_controls):
 		can_shoot = false
 		can_aim = false
+
+
+func _on_tank_tank_killed(tank: Tank, instigatorController: Node2D, weapon: WeaponProjectile) -> void:
+	# player tank killed
+	tank.kill()
+	emit_signal("player_killed", self)
