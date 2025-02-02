@@ -18,6 +18,7 @@ func begin_round() -> void:
 
 	# Start with first player
 	active_player_index = 0
-	tank_controllers[active_player_index].begin_turn()
-
 	
+	var active_player = tank_controllers[active_player_index]
+	active_player.begin_turn()
+	GameEvents.emit_turn_started(active_player)

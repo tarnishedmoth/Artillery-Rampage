@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://cminvc7kxh00u"]
+[gd_scene load_steps=11 format=3 uid="uid://cminvc7kxh00u"]
 
 [ext_resource type="PackedScene" uid="uid://dvr6bm2hlj5h4" path="res://Scenes/Tank/tank.tscn" id="1_c04sx"]
 [ext_resource type="Script" path="res://Scripts/game.gd" id="1_hpf3p"]
 [ext_resource type="PackedScene" uid="uid://l1x5kvupj7so" path="res://Scenes/Terrain/terrain.tscn" id="2_6lfu7"]
+[ext_resource type="PackedScene" uid="uid://bg64wc8fibctr" path="res://Scenes/UI/hud.tscn" id="2_chikn"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://Scenes/Tank/ai_tank.tscn" id="2_jcrlq"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://Scenes/Tank/player.tscn" id="3_fct5c"]
 [ext_resource type="PackedScene" uid="uid://b7vpl03hcrs3e" path="res://Scenes/Walls/walls.tscn" id="5_omhqb"]
@@ -20,6 +21,12 @@ size = Vector2(1248, 688)
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_hpf3p")
+
+[node name="UI" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+
+[node name="HUD" parent="UI" instance=ExtResource("2_chikn")]
+unique_name_in_owner = true
 
 [node name="Background" type="TextureRect" parent="."]
 z_index = -100

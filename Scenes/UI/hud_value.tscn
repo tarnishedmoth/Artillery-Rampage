@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://csk42q7q75rcy"]
+
+[ext_resource type="LabelSettings" uid="uid://d2qiettag13xr" path="res://Scenes/UI/LabelSettings/hud_labels.tres" id="1_6ir8l"]
+[ext_resource type="Script" path="res://Scripts/UI/hud_value.gd" id="1_rvkc5"]
+[ext_resource type="LabelSettings" uid="uid://ckve5dbqttaql" path="res://Scenes/UI/LabelSettings/hud_values.tres" id="2_m4o08"]
+
+[node name="HUDElement" type="HBoxContainer"]
+offset_right = 140.0
+offset_bottom = 56.0
+script = ExtResource("1_rvkc5")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Angle:"
+label_settings = ExtResource("1_6ir8l")
+
+[node name="Value" type="Label" parent="."]
+layout_mode = 2
+text = "75"
+label_settings = ExtResource("2_m4o08")

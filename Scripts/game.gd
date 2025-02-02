@@ -1,4 +1,4 @@
-extends Node2D
+class_name Game extends Node2D
 
 var round_director : RoundDirector
 

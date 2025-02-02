@@ -1,0 +1,98 @@
+[gd_scene load_steps=4 format=3 uid="uid://bg64wc8fibctr"]
+
+[ext_resource type="PackedScene" uid="uid://csk42q7q75rcy" path="res://Scenes/UI/hud_value.tscn" id="1_iign6"]
+[ext_resource type="Script" path="res://Scripts/UI/hud.gd" id="1_qwt2x"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ln601"]
+font_size = 24
+font_color = Color(0.03, 0.03, 0.03, 1)
+outline_size = 5
+outline_color = Color(0.14, 0.14, 0.14, 1)
+shadow_size = 0
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qwt2x")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 159.0
+offset_bottom = 92.0
+
+[node name="Angle" parent="VBoxContainer" instance=ExtResource("1_iign6")]
+layout_mode = 2
+
+[node name="Power" parent="VBoxContainer" instance=ExtResource("1_iign6")]
+layout_mode = 2
+
+[node name="Label" parent="VBoxContainer/Power" index="0"]
+text = "Power:"
+
+[node name="Value" parent="VBoxContainer/Power" index="1"]
+text = "1000
+"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 1099.0
+offset_top = 20.0
+offset_right = 1238.0
+offset_bottom = 92.0
+
+[node name="AimDirection" parent="VBoxContainer2" instance=ExtResource("1_iign6")]
+layout_mode = 2
+
+[node name="Label" parent="VBoxContainer2/AimDirection" index="0"]
+text = "Direction: "
+
+[node name="Value" parent="VBoxContainer2/AimDirection" index="1"]
+text = "->"
+
+[node name="Health" parent="VBoxContainer2" instance=ExtResource("1_iign6")]
+layout_mode = 2
+
+[node name="Label" parent="VBoxContainer2/Health" index="0"]
+text = "Health:"
+
+[node name="Value" parent="VBoxContainer2/Health" index="1"]
+text = "100
+"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -72.0
+offset_top = 20.0
+offset_right = 72.0
+offset_bottom = 92.0
+grow_horizontal = 2
+
+[node name="ActivePlayer" type="Label" parent="VBoxContainer3"]
+layout_mode = 2
+text = "Bill"
+label_settings = SubResource("LabelSettings_ln601")
+horizontal_alignment = 1
+
+[node name="Wind" parent="VBoxContainer3" instance=ExtResource("1_iign6")]
+layout_mode = 2
+
+[node name="Label" parent="VBoxContainer3/Wind" index="0"]
+text = "Wind:"
+
+[node name="Value" parent="VBoxContainer3/Wind" index="1"]
+text = "50 ->"
+
+[editable path="VBoxContainer/Angle"]
+[editable path="VBoxContainer/Power"]
+[editable path="VBoxContainer2/AimDirection"]
+[editable path="VBoxContainer2/Health"]
+[editable path="VBoxContainer3/Wind"]

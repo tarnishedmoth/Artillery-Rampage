@@ -1,8 +1,8 @@
-class_name Player extends Node2D
+class_name Player extends TankController
 
 signal player_killed(player: Player)
 
-@onready var tank = $Tank
+@onready var _tank = $Tank
 
 @export var aim_speed_degs_per_sec = 45
 @export var power_pct_per_sec = 30
@@ -23,6 +23,9 @@ func begin_turn():
 	can_shoot = true
 	can_aim = true
 
+func _get_tank():
+	return _tank
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 		
