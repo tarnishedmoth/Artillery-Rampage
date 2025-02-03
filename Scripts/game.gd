@@ -30,3 +30,7 @@ func _process(delta: float) -> void:
 func _on_player_player_killed(player: Player) -> void:
 	print("Game Over!")
 	player.queue_free()
+	
+	await get_tree().create_timer(1).timeout
+	# Restart the game 
+	get_tree().reload_current_scene()
