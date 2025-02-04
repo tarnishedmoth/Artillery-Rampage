@@ -14,4 +14,4 @@ func _process(delta: float) -> void:
 func on_area_entered(area: Area2D):
 	if area.owner is WeaponProjectile:
 		# Destroy
-		area.owner.queue_free()
+		area.owner.destroy()

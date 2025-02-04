@@ -1,5 +1,7 @@
 class_name Tank extends Node2D
 
+# TODO: These maybe should be global events
+
 signal tank_killed(tank: Tank, instigatorController: Node2D, weapon: WeaponProjectile)
 signal tank_took_damage(
 	tank: Tank, instigatorController: Node2D, weapon: WeaponProjectile, amount: float)
@@ -86,7 +88,7 @@ func take_damage(instigatorController: Node2D, weapon: WeaponProjectile, amount:
 	print("Tank " + name + " took " + str(actual_damage) + " damage; health=" + str(health))
 	# TODO: don't emit if damage zero
 	emit_signal("tank_took_damage", self, instigatorController, weapon, actual_damage)
-	if health == 0:
+	if health <= 0:
 		emit_signal("tank_killed", self, instigatorController, weapon)
 		
 func kill():

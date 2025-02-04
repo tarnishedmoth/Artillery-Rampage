@@ -48,7 +48,6 @@ scale = Vector2(1.28, 0.68)
 
 [node name="Player" parent="." instance=ExtResource("3_fct5c")]
 position = Vector2(128, 323)
-debug_controls = true
 
 [node name="Walls" parent="." instance=ExtResource("5_omhqb")]
 unique_name_in_owner = true

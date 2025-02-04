@@ -23,6 +23,10 @@ func _process(delta: float) -> void:
 func on_body_entered(body: Node2D):
 	if body.owner is Tank:
 		on_hit_tank(body.owner)
+
+func destroy():
+	GameEvents.emit_turn_ended(owner_tank.owner)
+	queue_free()
 		
 func on_hit_tank(tank: Tank):
 	print("HIT TANK!")
@@ -30,5 +34,4 @@ func on_hit_tank(tank: Tank):
 	# TODO: Will need to support radial damage that falls off
 	# Need concept of area of effect for projectile
 	tank.take_damage(owner_tank, self, 10000)
-	self.queue_free()
-	
+	destroy()

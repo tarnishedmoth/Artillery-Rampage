@@ -43,7 +43,7 @@ func projectile_warp(projectile: WeaponProjectile):
 		#pos.y = bounds.position.y + bounds.size.y - warp_offset
 	if pos.y >= bounds.position.y + bounds.size.y:
 		#Delete projectile
-		projectile.queue_free()
+		projectile.destroy()
 		#pos.y = bounds.position.y + warp_offset
 	
 	projectile.global_position = pos
