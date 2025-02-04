@@ -21,6 +21,10 @@ func begin_round():
 	# to then create the necessary controllers and tanks from it
 	# For now just loading in the instance from the scene
 	round_director.add_controller(player)
+	# TODO: Temporarily adding in fixed enemies from scene
+	round_director.add_controller($Enemy1)
+	round_director.add_controller($Enemy2)
+	
 	round_director.begin_round()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.

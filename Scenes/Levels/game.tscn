@@ -1,6 +1,5 @@
-[gd_scene load_steps=11 format=3 uid="uid://cminvc7kxh00u"]
+[gd_scene load_steps=10 format=3 uid="uid://cminvc7kxh00u"]
 
-[ext_resource type="PackedScene" uid="uid://dvr6bm2hlj5h4" path="res://Scenes/Tank/tank.tscn" id="1_c04sx"]
 [ext_resource type="Script" path="res://Scripts/game.gd" id="1_hpf3p"]
 [ext_resource type="PackedScene" uid="uid://l1x5kvupj7so" path="res://Scenes/Terrain/terrain.tscn" id="2_6lfu7"]
 [ext_resource type="PackedScene" uid="uid://bg64wc8fibctr" path="res://Scenes/UI/hud.tscn" id="2_chikn"]
@@ -39,7 +38,7 @@ stretch_mode = 1
 [node name="Enemy1" parent="." instance=ExtResource("2_jcrlq")]
 position = Vector2(555, 238)
 
-[node name="Enemy2" parent="." instance=ExtResource("1_c04sx")]
+[node name="Enemy2" parent="." instance=ExtResource("2_jcrlq")]
 position = Vector2(1100, 433)
 
 [node name="Terrain" parent="." instance=ExtResource("2_6lfu7")]
