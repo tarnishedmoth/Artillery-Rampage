@@ -95,7 +95,10 @@ class AIAimingState extends AIActionState:
 		var total_delta = target_rads - parent.tank.get_turret_rotation()
 	
 		rads_sec = deg_to_rad(randf_range(parent.min_ai_degrees_sec, parent.max_ai_degrees_sec)) * sign(total_delta)
-		total_time = total_delta / abs(rads_sec)
+		# No need for abs as they will have the same sign
+		total_time = total_delta / rads_sec
+		
+		print("AI Aim: rads_sec=" + str(rads_sec) + "; total_time=" + str(total_time))
 		
 	func _next_state() -> AIActionState: return AIPoweringState.new(parent)
 
