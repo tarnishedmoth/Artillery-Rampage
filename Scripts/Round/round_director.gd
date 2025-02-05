@@ -12,12 +12,17 @@ func begin_round() -> bool:
 	
 	for controller in tank_controllers:
 		controller.tank.connect("tank_killed", _on_tank_killed)
+		
 	# Order of tanks is always random per original "Tank Wars"
 	tank_controllers.shuffle()
+	
+	GameEvents.emit_round_started()
+	
 	return next_player()
 
 func next_player() -> bool:
-	if tank_controllers.is_empty():
+	# If there are 1 or 0 players left then the round is over
+	if tank_controllers.size() <= 1:
 		active_player_index = -1
 		return false
 		
@@ -33,7 +38,7 @@ func _on_turn_ended(controller: TankController):
 	print("Turn ended for " + controller.name)
 	
 	if !next_player():
-		# TODO: Fire a "round ended event"
+		GameEvents.emit_round_ended()
 		return
 
 func _on_tank_killed(tank: Tank, instigatorController: Node2D, weapon: WeaponProjectile):

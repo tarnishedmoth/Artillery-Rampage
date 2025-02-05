@@ -7,6 +7,8 @@ var round_director : RoundDirector
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	GameEvents.connect("round_ended", _on_round_ended)
+	
 	round_director = RoundDirector.new()
 	begin_round()
 
@@ -35,6 +37,12 @@ func _on_player_player_killed(player: Player) -> void:
 	print("Game Over!")
 	player.queue_free()
 	
+	restart_game()
+
+func _on_round_ended() -> void:
+	restart_game()
+	
+func restart_game():
 	await get_tree().create_timer(1).timeout
 	# Restart the game 
 	get_tree().reload_current_scene()
