@@ -10,14 +10,14 @@ class_name WeaponProjectile extends RigidBody2D
 
 var owner_tank: Tank;
 
-func set_spawn_parameters(owner_tank: Tank, power:float, angle:float):
-	self.owner_tank = owner_tank
+func set_spawn_parameters(in_owner_tank: Tank, power:float, angle:float):
+	self.owner_tank = in_owner_tank
 	linear_velocity = Vector2.from_angle(angle) * power * power_velocity_mult
 	
 func _ready() -> void:
 	overlap.connect("body_entered", on_body_entered)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 	
 func on_body_entered(body: Node2D):

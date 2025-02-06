@@ -11,10 +11,6 @@ extends Control
 func _ready() -> void:
 	init_signals()
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 	
 func init_signals():
 	GameEvents.connect("turn_started", _on_turn_started);

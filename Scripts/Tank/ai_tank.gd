@@ -64,7 +64,7 @@ class AIActionState:
 		return self
 	
 	# Do the actual action in derived class
-	func _do_execute(delta: float) -> void:
+	func _do_execute(_delta: float) -> void:
 		pass
 	
 	func _exit() -> void: pass

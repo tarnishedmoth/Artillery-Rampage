@@ -14,10 +14,6 @@ func _ready() -> void:
 	bounds = shape.shape.get_rect()
 	bounds = Rect2(shape.to_global(bounds.position), bounds.size)
 	# print(bounds)
-	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 		
 func on_body_exited(body : Node2D):	
 	pass

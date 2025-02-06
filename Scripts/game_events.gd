@@ -1,12 +1,21 @@
 extends Node
 
+@warning_ignore("unused_signal")
 signal turn_started(player: TankController)
+
+@warning_ignore("unused_signal")
 signal turn_ended(player: TankController)
 
+@warning_ignore("unused_signal")
 signal round_started()
+
+@warning_ignore("unused_signal")
 signal round_ended()
 
+@warning_ignore("unused_signal")
 signal aim_updated(player: TankController)
+
+@warning_ignore("unused_signal")
 signal power_updated(player: TankController)
 
 func emit_turn_started(player: TankController):

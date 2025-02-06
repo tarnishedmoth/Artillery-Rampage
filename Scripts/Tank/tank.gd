@@ -2,7 +2,10 @@ class_name Tank extends Node2D
 
 # TODO: These maybe should be global events
 
+@warning_ignore("unused_signal")
 signal tank_killed(tank: Tank, instigatorController: Node2D, weapon: WeaponProjectile)
+
+@warning_ignore("unused_signal")
 signal tank_took_damage(
 	tank: Tank, instigatorController: Node2D, weapon: WeaponProjectile, amount: float)
 
@@ -45,10 +48,6 @@ func _ready() -> void:
 
 func toggle_gravity(enabled: bool) -> void:
 	tankBody.gravity_scale = orig_gravity if enabled else 0
-	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 	
 func aim_at(angle_rads: float) -> void:
 	turret.rotation = clampf(angle_rads, deg_to_rad(min_angle), deg_to_rad(max_angle))

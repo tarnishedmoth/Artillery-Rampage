@@ -42,7 +42,3 @@ func execute(tank: Tank) -> TankActionResult:
 func _ready() -> void:
 	active_state = RandomActionState.new()
 	active_state.enter()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass

@@ -28,14 +28,10 @@ func begin_round():
 	round_director.add_controller($Enemy2)
 	
 	round_director.begin_round()
-	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 
-func _on_player_player_killed(player: Player) -> void:
+func _on_player_player_killed(in_player: Player) -> void:
 	print("Game Over!")
-	player.queue_free()
+	in_player.queue_free()
 	
 	restart_game()
 
