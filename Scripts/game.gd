@@ -5,6 +5,8 @@ var round_director : RoundDirector
 #TODO: These will be instantiated from the "players data" 
 @onready var player = $Player
 
+var is_restarting: bool
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	GameEvents.connect("round_ended", _on_round_ended)
@@ -39,6 +41,12 @@ func _on_round_ended() -> void:
 	restart_game()
 	
 func restart_game():
+	if is_restarting:
+		return
+	
+	# Avoid two events causing a restart in the same game (e.g. player dies and leaves 1 player remaining)
+	is_restarting = true
 	await get_tree().create_timer(1).timeout
+	
 	# Restart the game 
 	get_tree().reload_current_scene()
