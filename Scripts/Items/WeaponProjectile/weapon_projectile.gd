@@ -23,6 +23,10 @@ func _process(_delta: float) -> void:
 func on_body_entered(body: Node2D):
 	if body.owner is Tank:
 		on_hit_tank(body.owner)
+	elif body.is_in_group("Destructible"):
+		# Explosion scale
+		body.owner.clip($DestructiblePolygon, Vector2(10,10))
+		
 
 func destroy():
 	GameEvents.emit_turn_ended(owner_tank.owner)

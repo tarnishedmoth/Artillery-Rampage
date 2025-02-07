@@ -37,9 +37,11 @@ stretch_mode = 1
 
 [node name="Enemy1" parent="." instance=ExtResource("2_jcrlq")]
 position = Vector2(555, 238)
+enable_gravity = true
 
 [node name="Enemy2" parent="." instance=ExtResource("2_jcrlq")]
 position = Vector2(1100, 433)
+enable_gravity = true
 
 [node name="Terrain" parent="." instance=ExtResource("2_6lfu7")]
 z_index = -10

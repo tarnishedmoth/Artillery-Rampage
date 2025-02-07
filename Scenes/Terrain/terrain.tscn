@@ -6,7 +6,7 @@
 z_index = -100
 script = ExtResource("1_jkum5")
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="StaticBody2D" type="StaticBody2D" parent="." groups=["Destructible"]]
 collision_layer = 8
 collision_mask = 11
 
@@ -18,9 +18,9 @@ color = Color(0, 0.368627, 0, 1)
 polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 245, -3, 390, -447, 609, -8, 937, -3, 945, 445, -103, 448)
 
 [node name="Overlap" type="Area2D" parent="StaticBody2D"]
-visible = false
 collision_layer = 8
 collision_mask = 2
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D/Overlap"]
+visible = false
 polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 245, -3, 390, -447, 609, -8, 937, -3, 945, 445, -103, 448)
