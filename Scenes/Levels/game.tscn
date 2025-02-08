@@ -36,7 +36,7 @@ texture = SubResource("GradientTexture2D_jmhd1")
 stretch_mode = 1
 
 [node name="Enemy1" parent="." instance=ExtResource("2_jcrlq")]
-position = Vector2(555, 238)
+position = Vector2(479, 278)
 enable_gravity = true
 
 [node name="Enemy2" parent="." instance=ExtResource("2_jcrlq")]
