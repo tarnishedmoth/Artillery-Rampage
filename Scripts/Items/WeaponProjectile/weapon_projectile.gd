@@ -25,7 +25,7 @@ func on_body_entered(body: Node2D):
 		on_hit_tank(body.owner)
 	elif body.is_in_group("Destructible"):
 		# Explosion scale
-		body.owner.clip($DestructiblePolygon, Vector2(10,10))
+		body.owner.damage($DestructiblePolygon, Vector2(10,10))
 		
 
 func destroy():
