@@ -48,4 +48,7 @@ shape = SubResource("RectangleShape2D_bbvof")
 [node name="WeaponFireLocation" type="Marker2D" parent="TankBody/TankTurret"]
 position = Vector2(0, -33.14)
 
+[node name="Bottom" type="Marker2D" parent="TankBody"]
+position = Vector2(0, 13)
+
 [node name="FiredWeaponContainer" type="Node" parent="."]

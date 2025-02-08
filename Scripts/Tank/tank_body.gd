@@ -3,6 +3,8 @@ class_name TankBody extends RigidBody2D
 var orig_gravity:float
 var queue_reset_orientation: bool = false
 
+signal on_reset_orientation(tankBody: TankBody)
+
 func _ready() -> void:
 	orig_gravity = gravity_scale
 
@@ -25,6 +27,8 @@ func _do_reset_orientation(state: PhysicsDirectBodyState2D) -> void:
 	state.angular_velocity = 0
 	
 	rotation = 0
+	
+	emit_signal("on_reset_orientation", self)
 	
 func is_falling() -> bool:
 	# This seems to always return true as they are slightly in motion

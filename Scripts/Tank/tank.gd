@@ -14,6 +14,7 @@ signal tank_took_damage(
 
 @export var weapon_max_power_health_mult:float = 10
 @export var max_health:float = 100
+@export var ground_trace_distance:float = 500
 
 @export var turret_shot_angle_offset:float = -90
 
@@ -23,6 +24,8 @@ signal tank_took_damage(
 
 # Contains fired projectiles for scene management
 @onready var fired_weapon_container = $FiredWeaponContainer
+
+@onready var bottom_reference_point = $TankBody/Bottom
 
 # This is called a packed scene
 # Calling "instantiate" on it is equivalent to an instanced scene
@@ -41,7 +44,10 @@ func _ready() -> void:
 	# TODO: Will be set by function based on player controller and be clamped to min,max
 	max_power = max_health * weapon_max_power_health_mult
 	power = max_power
-
+	
+	# Make sure to do snap_to_ground from the physics task
+	tankBody.connect("on_reset_orientation", _on_reset_orientation)
+	
 func toggle_gravity(enabled: bool) -> void:
 	tankBody.toggle_gravity(enabled)
 	
@@ -95,3 +101,27 @@ func take_damage(instigatorController: Node2D, weapon: WeaponProjectile, amount:
 func kill():
 	print("Tank: " + name + " Killed")
 	queue_free()
+
+func snap_to_ground():
+	var space_state = get_world_2d().direct_space_state
+	# in 2D positive y goes down
+	# Terrain is 4th bit
+	var terrain_mask:int = 1 << 3
+	
+	var query_params = PhysicsRayQueryParameters2D.create(global_position, global_position + Vector2(0, ground_trace_distance), terrain_mask)
+	query_params.exclude = [self]
+	
+	var result = space_state.intersect_ray(query_params)
+	if !result:
+		print("tank.snap_to_ground(" + name + "): cannot find ground")
+		return 
+		
+	# Setting the position here will put the center of the tank at the position. Need to offset by the bottom offset
+	var ground_position = result["position"]
+	var adjusted_ground_position = ground_position - bottom_reference_point.position
+	
+	print("tank.snap_to_ground(" + name + "): adjusting from " + str(global_position) + " to " + str(adjusted_ground_position))
+	global_position = adjusted_ground_position
+	
+func _on_reset_orientation(tankBody: TankBody) -> void:
+	snap_to_ground()
