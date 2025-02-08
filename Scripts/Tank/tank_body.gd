@@ -25,3 +25,12 @@ func _do_reset_orientation(state: PhysicsDirectBodyState2D) -> void:
 	state.angular_velocity = 0
 	
 	rotation = 0
+	
+func is_falling() -> bool:
+	# This seems to always return true as they are slightly in motion
+	# return !linear_velocity.is_zero_approx() || !is_zero_approx(angular_velocity)
+	var result:bool =  abs(angular_velocity) >= 0.1 || linear_velocity.length_squared() >= 1.0
+	
+	print("tank: " + name + " (is_falling=" + str(result) + ") - angular_velocity=" + str(angular_velocity) + ";linear_velocity=" + str(linear_velocity.length()))
+
+	return result

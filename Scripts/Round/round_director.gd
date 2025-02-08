@@ -2,6 +2,8 @@ class_name RoundDirector
 
 var tank_controllers: Array = []
 var active_player_index: int = -1
+var physics_sim_time: float = 5.0
+var physics_check_time: float = 0.2
 
 func add_controller(tank_controller) -> void:
 	tank_controllers.append(tank_controller)
@@ -36,10 +38,27 @@ func next_player() -> bool:
 	
 func _on_turn_ended(controller: TankController):
 	print("Turn ended for " + controller.name)
+	 # Wait for physics to settle prior to allowing next player to start
+	# TODO: use an AutoLoad SceneManager to get the current tree 
+	# or just make this class a Node and add to tree from Game
+	# Making this class a node would allow export properties to be set from the editor
+	var scene_tree = controller.get_tree()
+
+	# Wait a smidge and then check if any tank is falling and give time for physics to settle
+	await scene_tree.create_timer(physics_check_time).timeout
+	
+	if is_any_tank_falling():
+		await controller.get_tree().create_timer(physics_sim_time).timeout
 	
 	if !next_player():
 		GameEvents.emit_round_ended()
 		return
 
+func is_any_tank_falling() -> bool:
+	for controller in tank_controllers:
+		if is_instance_valid(controller) && controller.tank.is_falling():
+			return true
+	return false
+	
 func _on_tank_killed(tank: Tank, instigatorController: Node2D, weapon: WeaponProjectile):
 	tank_controllers.erase(tank.owner)

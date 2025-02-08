@@ -44,7 +44,10 @@ func _ready() -> void:
 
 func toggle_gravity(enabled: bool) -> void:
 	tankBody.toggle_gravity(enabled)
-
+	
+func is_falling() -> bool:
+	return tankBody.is_falling()
+	
 func reset_orientation() -> void:
 	tankBody.reset_orientation()
 		
