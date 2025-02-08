@@ -17,7 +17,7 @@ signal tank_took_damage(
 
 @export var turret_shot_angle_offset:float = -90
 
-@onready var tankBody = $TankBody
+@onready var tankBody: TankBody = $TankBody
 @onready var turret = $TankBody/TankTurret
 @onready var weapon_fire_location = $TankBody/TankTurret/WeaponFireLocation
 
@@ -35,20 +35,19 @@ var health: float
 var power:float
 var max_power:float
 
-var orig_gravity:float
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	health = max_health
 	# TODO: Will be set by function based on player controller and be clamped to min,max
 	max_power = max_health * weapon_max_power_health_mult
 	power = max_power
-	
-	orig_gravity = tankBody.gravity_scale
 
 func toggle_gravity(enabled: bool) -> void:
-	tankBody.gravity_scale = orig_gravity if enabled else 0
-	
+	tankBody.toggle_gravity(enabled)
+
+func reset_orientation() -> void:
+	tankBody.reset_orientation()
+		
 func aim_at(angle_rads: float) -> void:
 	turret.rotation = clampf(angle_rads, deg_to_rad(min_angle), deg_to_rad(max_angle))
 	GameEvents.emit_aim_updated(owner)

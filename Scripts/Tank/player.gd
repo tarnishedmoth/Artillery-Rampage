@@ -14,12 +14,13 @@ var can_aim: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	super._ready()
 
 # Called at the start of a turn
 # This will be a method available on all "tank controller" classes
 # like the player or the AI
 func begin_turn():
+	super.begin_turn()
 	can_shoot = true
 	can_aim = true
 

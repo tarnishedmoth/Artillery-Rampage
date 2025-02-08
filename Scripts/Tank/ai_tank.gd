@@ -18,15 +18,15 @@ class_name AITank extends TankController
 var current_action_state: AIActionState
 var target_result: AITankStateMachine.TankActionResult
 
-@export var enable_gravity: bool = false
-
 func _ready() -> void:
-	tank.toggle_gravity(enable_gravity)
+	super._ready()
 
 func begin_turn():
 	print("AI began turn")
 	target_result = ai_decision_state_machine.execute(tank)
 	current_action_state = AIWaitingState.new(self)
+	
+	tank.reset_orientation()
 	
 func _get_tank():
 	return _tank

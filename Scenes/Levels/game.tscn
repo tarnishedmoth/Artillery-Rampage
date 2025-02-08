@@ -37,11 +37,9 @@ stretch_mode = 1
 
 [node name="Enemy1" parent="." instance=ExtResource("2_jcrlq")]
 position = Vector2(479, 278)
-enable_gravity = true
 
 [node name="Enemy2" parent="." instance=ExtResource("2_jcrlq")]
 position = Vector2(1100, 433)
-enable_gravity = true
 
 [node name="Terrain" parent="." instance=ExtResource("2_6lfu7")]
 z_index = -10
@@ -49,7 +47,7 @@ position = Vector2(118, 444)
 scale = Vector2(1.28, 0.68)
 
 [node name="Player" parent="." instance=ExtResource("3_fct5c")]
-position = Vector2(128, 323)
+position = Vector2(120, 427)
 
 [node name="Walls" parent="." instance=ExtResource("5_omhqb")]
 unique_name_in_owner = true
