@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://dvr6bm2hlj5h4"]
 
-[ext_resource type="Script" path="res://Scripts/Tank/tank.gd" id="1_0iy80"]
+[ext_resource type="Script" path="res://scripts/tank/tank.gd" id="1_0iy80"]
 [ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="1_yk8fo"]
-[ext_resource type="Script" path="res://Scripts/Tank/tank_body.gd" id="2_o5qn2"]
+[ext_resource type="Script" path="res://scripts/tank/tank_body.gd" id="2_o5qn2"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1pofo"]
 friction = 100.0

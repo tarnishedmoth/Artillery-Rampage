@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="ArtilleryRampage"
-run/main_scene="res://Scenes/Levels/game.tscn"
+run/main_scene="res://scenes/levels/game.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-GameEvents="*res://Scripts/game_events.gd"
+GameEvents="*res://scripts/game_events.gd"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 
 [display]

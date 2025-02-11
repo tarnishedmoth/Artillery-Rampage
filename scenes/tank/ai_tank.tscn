@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://dmtjm8de7ep32"]
 
-[ext_resource type="Script" path="res://Scripts/Tank/ai_tank.gd" id="1_x14qc"]
-[ext_resource type="PackedScene" uid="uid://dvr6bm2hlj5h4" path="res://Scenes/Tank/tank.tscn" id="2_1btk6"]
-[ext_resource type="Script" path="res://Scripts/Tank/ai_tank_state_machine.gd" id="3_7xwap"]
+[ext_resource type="Script" path="res://scripts/tank/ai_tank.gd" id="1_x14qc"]
+[ext_resource type="PackedScene" uid="uid://dvr6bm2hlj5h4" path="res://scenes/tank/tank.tscn" id="2_1btk6"]
+[ext_resource type="Script" path="res://scripts/tank/ai_tank_state_machine.gd" id="3_7xwap"]
 
 [node name="AITank" type="Node2D"]
 script = ExtResource("1_x14qc")

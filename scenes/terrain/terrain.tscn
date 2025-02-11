@@ -1,10 +1,10 @@
 [gd_scene load_steps=2 format=3 uid="uid://l1x5kvupj7so"]
 
-[ext_resource type="Script" path="res://Scripts/Terrain/terrain.gd" id="1_jkum5"]
+[ext_resource type="Script" path="res://scripts/terrain/terrain.gd" id="1_4p40s"]
 
 [node name="Terrain" type="Node2D"]
 z_index = -100
-script = ExtResource("1_jkum5")
+script = ExtResource("1_4p40s")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." groups=["Destructible"]]
 collision_layer = 8
