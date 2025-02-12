@@ -1,4 +1,4 @@
-# Tank Rampage Tactics
+# Artillery Rampage
 
 ## Info
 
