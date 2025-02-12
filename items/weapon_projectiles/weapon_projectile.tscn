@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://c7jh5lsef6gd1"]
 
-[ext_resource type="Script" path="res://scripts/items/weapon_projectile/weapon_projectile.gd" id="1_01gh6"]
+[ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile.gd" id="1_01gh6"]
 [ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="2_xdn3x"]
-[ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://scenes/items/weapon_projectiles/weapon_projectile.tres" id="3_0q2o4"]
+[ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="3_0q2o4"]
 
 [node name="WeaponProjectile" type="RigidBody2D"]
 collision_layer = 0

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://l1x5kvupj7so"]
 
-[ext_resource type="Script" path="res://scripts/terrain/terrain.gd" id="1_4p40s"]
+[ext_resource type="Script" path="res://terrain/terrain.gd" id="1_4p40s"]
 
 [node name="Terrain" type="Node2D"]
 z_index = -100

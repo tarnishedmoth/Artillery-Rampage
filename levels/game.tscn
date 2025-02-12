@@ -1,11 +1,11 @@
 [gd_scene load_steps=10 format=3 uid="uid://cminvc7kxh00u"]
 
-[ext_resource type="Script" path="res://scripts/game.gd" id="1_md0ik"]
-[ext_resource type="PackedScene" uid="uid://bg64wc8fibctr" path="res://scenes/ui/hud.tscn" id="2_x44et"]
-[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://scenes/tank/ai_tank.tscn" id="3_slxrb"]
-[ext_resource type="PackedScene" uid="uid://l1x5kvupj7so" path="res://scenes/terrain/terrain.tscn" id="4_dmdja"]
-[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://scenes/tank/player.tscn" id="5_yi76p"]
-[ext_resource type="PackedScene" uid="uid://b7vpl03hcrs3e" path="res://scenes/walls/walls.tscn" id="6_iyyak"]
+[ext_resource type="Script" path="res://levels/game.gd" id="1_3rew0"]
+[ext_resource type="PackedScene" uid="uid://bg64wc8fibctr" path="res://ui/hud.tscn" id="2_8b8bf"]
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="3_smlwl"]
+[ext_resource type="PackedScene" uid="uid://l1x5kvupj7so" path="res://terrain/terrain.tscn" id="4_6jsnc"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="5_uok63"]
+[ext_resource type="PackedScene" uid="uid://b7vpl03hcrs3e" path="res://walls/walls.tscn" id="6_bqilx"]
 
 [sub_resource type="Gradient" id="Gradient_h05uu"]
 colors = PackedColorArray(0, 0, 1, 1, 0.866667, 0, 0, 1)
@@ -19,12 +19,12 @@ height = 2048
 size = Vector2(1248, 688)
 
 [node name="Game" type="Node2D"]
-script = ExtResource("1_md0ik")
+script = ExtResource("1_3rew0")
 
 [node name="UI" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 
-[node name="HUD" parent="UI" instance=ExtResource("2_x44et")]
+[node name="HUD" parent="UI" instance=ExtResource("2_8b8bf")]
 unique_name_in_owner = true
 
 [node name="Background" type="TextureRect" parent="."]
@@ -35,21 +35,21 @@ scale = Vector2(0.64, 0.36)
 texture = SubResource("GradientTexture2D_jmhd1")
 stretch_mode = 1
 
-[node name="Enemy1" parent="." instance=ExtResource("3_slxrb")]
+[node name="Enemy1" parent="." instance=ExtResource("3_smlwl")]
 position = Vector2(479, 278)
 
-[node name="Enemy2" parent="." instance=ExtResource("3_slxrb")]
+[node name="Enemy2" parent="." instance=ExtResource("3_smlwl")]
 position = Vector2(1100, 426)
 
-[node name="Terrain" parent="." instance=ExtResource("4_dmdja")]
+[node name="Terrain" parent="." instance=ExtResource("4_6jsnc")]
 z_index = -10
 position = Vector2(118, 444)
 scale = Vector2(1.28, 0.68)
 
-[node name="Player" parent="." instance=ExtResource("5_yi76p")]
+[node name="Player" parent="." instance=ExtResource("5_uok63")]
 position = Vector2(120, 427)
 
-[node name="Walls" parent="." instance=ExtResource("6_iyyak")]
+[node name="Walls" parent="." instance=ExtResource("6_bqilx")]
 unique_name_in_owner = true
 
 [node name="CollisionShape2D" parent="Walls/PlayableArea" index="0"]

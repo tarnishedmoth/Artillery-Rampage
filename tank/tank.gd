@@ -31,7 +31,7 @@ signal tank_took_damage(
 # Calling "instantiate" on it is equivalent to an instanced scene
 # TODO: This need to be loaded from an inventory component and selected at time of shoot
 # for the active weapon
-var weapon_project_scene = preload("res://scenes/items/weapon_projectiles/weapon_projectile.tscn")
+var weapon_project_scene = preload("res://items/weapon_projectiles/weapon_projectile.tscn")
 
 var health: float
 
