@@ -31,7 +31,6 @@ func begin_turn():
 func _get_tank():
 	return _tank
 	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	# Action completed
 	if !is_instance_valid(current_action_state):

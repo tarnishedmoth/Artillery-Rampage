@@ -7,7 +7,6 @@ var round_director : RoundDirector
 
 var is_restarting: bool
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	GameEvents.connect("round_ended", _on_round_ended)
 	

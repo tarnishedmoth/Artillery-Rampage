@@ -6,7 +6,6 @@ extends Node2D
 
 var bounds: Rect2;
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	playableArea.connect("body_exited", on_body_exited)
 	playableArea.connect("area_exited",on_area_exited)

@@ -7,7 +7,6 @@ extends Control
 @onready var health_text = $VBoxContainer2/Health
 @onready var aim_direction_text = $VBoxContainer2/AimDirection
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	init_signals()
 

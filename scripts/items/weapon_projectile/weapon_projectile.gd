@@ -16,9 +16,6 @@ func set_spawn_parameters(in_owner_tank: Tank, power:float, angle:float):
 	
 func _ready() -> void:
 	overlap.connect("body_entered", on_body_entered)
-
-func _process(_delta: float) -> void:
-	pass
 	
 func on_body_entered(body: Node2D):
 	if body.owner is Tank:

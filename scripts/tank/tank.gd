@@ -38,7 +38,6 @@ var health: float
 var power:float
 var max_power:float
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	health = max_health
 	# TODO: Will be set by function based on player controller and be clamped to min,max

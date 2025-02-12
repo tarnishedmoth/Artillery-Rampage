@@ -38,7 +38,6 @@ func execute(tank: Tank) -> TankActionResult:
 	# The state machine state space is going to be somewhat driven by that
 	return active_state.execute(tank)
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	active_state = RandomActionState.new()
 	active_state.enter()
