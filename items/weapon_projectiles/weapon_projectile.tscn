@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://c7jh5lsef6gd1"]
 
 [ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile.gd" id="1_01gh6"]
-[ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="2_xdn3x"]
+[ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="2_l4fkv"]
 [ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="3_0q2o4"]
 
 [node name="WeaponProjectile" type="RigidBody2D"]
@@ -11,8 +11,8 @@ script = ExtResource("1_01gh6")
 power_velocity_mult = 0.9
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("2_xdn3x")
+scale = Vector2(0.183745, 0.183745)
+texture = ExtResource("2_l4fkv")
 
 [node name="PhysicsShape" type="CollisionShape2D" parent="."]
 shape = ExtResource("3_0q2o4")
@@ -25,4 +25,5 @@ collision_mask = 15
 shape = ExtResource("3_0q2o4")
 
 [node name="DestructiblePolygon" type="CollisionPolygon2D" parent="."]
-polygon = PackedVector2Array(-5, 0, -4, -3, -1, -4, 2, -4, 5, -1, 4, 3, 2, 5, -2, 5, -4, 4)
+scale = Vector2(1.07263, 1.07263)
+polygon = PackedVector2Array(-5.59373, 1.86458, -5.59373, 0, -4.66144, -2.79687, -2.79687, -4.66144, 0, -5.59373, 2.79687, -4.66144, 4.66144, -2.79687, 5.59373, 0, 4.66144, 2.79687, 2.79687, 4.66144, 0, 5.59373, -2, 5, -4, 4)

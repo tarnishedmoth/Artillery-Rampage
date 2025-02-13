@@ -5,6 +5,7 @@ class_name WeaponProjectile extends RigidBody2D
 # The idea here is that we are using RigidBody2D for the physics behavior
 # and the Area2D as the overlap detection for detecting hits
 @export var power_velocity_mult:float = 1
+@export var color: Color = Color.BLACK
 
 @onready var overlap = $Overlap
 
@@ -15,6 +16,8 @@ func set_spawn_parameters(in_owner_tank: Tank, power:float, angle:float):
 	linear_velocity = Vector2.from_angle(angle) * power * power_velocity_mult
 	
 func _ready() -> void:
+	modulate = color
+	
 	overlap.connect("body_entered", on_body_entered)
 	
 func on_body_entered(body: Node2D):
