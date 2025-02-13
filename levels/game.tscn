@@ -55,9 +55,6 @@ scale = Vector2(1.28, 0.68)
 [node name="Player" parent="." instance=ExtResource("5_uok63")]
 position = Vector2(120, 427)
 
-[node name="Tank" parent="Player" index="0"]
-color = Color(0.145098, 0.227451, 0.00392157, 1)
-
 [node name="Walls" parent="." instance=ExtResource("6_bqilx")]
 unique_name_in_owner = true
 
@@ -70,5 +67,4 @@ shape = SubResource("RectangleShape2D_tqrgy")
 
 [editable path="Enemy1"]
 [editable path="Enemy2"]
-[editable path="Player"]
 [editable path="Walls"]
