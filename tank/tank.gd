@@ -18,6 +18,9 @@ signal tank_took_damage(
 
 @export var turret_shot_angle_offset:float = -90
 
+@export var color: Color = Color.WHITE
+@export var turret_color_value: float = 0.7
+
 @onready var tankBody: TankBody = $TankBody
 @onready var turret = $TankBody/TankTurret
 @onready var weapon_fire_location = $TankBody/TankTurret/WeaponFireLocation
@@ -39,6 +42,9 @@ var power:float
 var max_power:float
 
 func _ready() -> void:
+	modulate = color
+	turret.modulate = color.darkened(1 - turret_color_value)
+	
 	health = max_health
 	# TODO: Will be set by function based on player controller and be clamped to min,max
 	max_power = max_health * weapon_max_power_health_mult

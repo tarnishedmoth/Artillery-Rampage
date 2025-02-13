@@ -38,8 +38,14 @@ stretch_mode = 1
 [node name="Enemy1" parent="." instance=ExtResource("3_smlwl")]
 position = Vector2(479, 278)
 
+[node name="Tank" parent="Enemy1" index="0"]
+color = Color(0.682353, 0.713726, 0.219608, 1)
+
 [node name="Enemy2" parent="." instance=ExtResource("3_smlwl")]
 position = Vector2(1100, 426)
+
+[node name="Tank" parent="Enemy2" index="0"]
+color = Color(0.137255, 0.180392, 0.701961, 1)
 
 [node name="Terrain" parent="." instance=ExtResource("4_6jsnc")]
 z_index = -10
@@ -48,6 +54,9 @@ scale = Vector2(1.28, 0.68)
 
 [node name="Player" parent="." instance=ExtResource("5_uok63")]
 position = Vector2(120, 427)
+
+[node name="Tank" parent="Player" index="0"]
+color = Color(0.145098, 0.227451, 0.00392157, 1)
 
 [node name="Walls" parent="." instance=ExtResource("6_bqilx")]
 unique_name_in_owner = true
@@ -59,4 +68,7 @@ shape = SubResource("RectangleShape2D_tqrgy")
 
 [connection signal="player_killed" from="Player" to="." method="_on_player_player_killed"]
 
+[editable path="Enemy1"]
+[editable path="Enemy2"]
+[editable path="Player"]
 [editable path="Walls"]
