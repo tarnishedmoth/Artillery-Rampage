@@ -73,3 +73,8 @@ power_decrease={
 2d_physics/layer_2="Projectile"
 2d_physics/layer_3="Wall"
 2d_physics/layer_4="Terrain"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
