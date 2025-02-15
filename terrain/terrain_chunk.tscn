@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://dmbj0iglwwo7x"]
+
+[ext_resource type="Script" path="res://terrain/terrain_chunk.gd" id="1_m7lgb"]
+
+[node name="TerrainChunk" type="StaticBody2D" groups=["Destructible"]]
+collision_layer = 8
+collision_mask = 11
+script = ExtResource("1_m7lgb")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 390, -447, 609, -8, 937, -3, 945, 445, -103, 448)
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color(0, 0.368627, 0, 1)
+polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 390, -447, 609, -8, 937, -3, 945, 445, -103, 448)
+
+[node name="Overlap" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Overlap"]
+visible = false
+polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 390, -447, 609, -8, 937, -3, 945, 445, -103, 448)
