@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GameEvents="*res://events/game_events.gd"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
+AITypes="*res://controller/ai/behaviors/ai_types.gd"
 
 [display]
 

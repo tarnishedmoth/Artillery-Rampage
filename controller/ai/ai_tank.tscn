@@ -9,7 +9,7 @@ script = ExtResource("1_x14qc")
 
 [node name="Tank" parent="." instance=ExtResource("2_1btk6")]
 
-[node name="AITankStateMachine" type="Node" parent="."]
+[node name="StateMachine" type="Node" parent="."]
 script = ExtResource("3_7xwap")
 
 [connection signal="tank_killed" from="Tank" to="." method="_on_tank_tank_killed"]

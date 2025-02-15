@@ -1,7 +1,7 @@
 class_name AITank extends TankController
 
 @onready var _tank:Tank = $Tank
-@onready var ai_decision_state_machine: AITankStateMachine = $AITankStateMachine
+@onready var ai_decision_state_machine: AITankStateMachine = $StateMachine
 
 @export var min_ai_start_delay: float = 0.2
 @export var max_ai_start_delay: float = 1.0
@@ -16,7 +16,7 @@ class_name AITank extends TankController
 @export var max_ai_shoot_delay_time = 1.5
 
 var current_action_state: AIActionState
-var target_result: AITankStateMachine.TankActionResult
+var target_result: TankActionResult
 
 func _ready() -> void:
 	super._ready()
