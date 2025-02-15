@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 GameEvents="*res://events/game_events.gd"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 AITypes="*res://controller/ai/behaviors/ai_types.gd"
+RuntimeDebugTools="*res://addons/runtime_debug_tools/scenes/remote_inspector.tscn"
 
 [display]
 
@@ -29,7 +30,7 @@ window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg")
+enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/runtime_debug_tools/plugin.cfg")
 
 [global_group]
 
