@@ -25,15 +25,15 @@ func damage(terrainChunk: TerrainChunk, projectile_poly: CollisionPolygon2D, pol
 	#print_poly(terrain_poly_global)
 	
 	# Do clipping operations in global space
-	var clipping_result = Geometry2D.clip_polygons(terrain_poly_global, projectile_poly_global)
+	var clipping_results = Geometry2D.clip_polygons(terrain_poly_global, projectile_poly_global)
 	
 	# This means the chunk was destroyed so we need to queue_free
-	if clipping_result.is_empty():
+	if clipping_results.is_empty():
 		print("damage(" + name + ") completely destroyed by poly=" + projectile_poly.owner.name)
 		terrainChunk.queue_free()
 		return
 	
-	var updated_terrain_poly = clipping_result[0]
+	var updated_terrain_poly = clipping_results[0]
 	print("damage(" + name + ") Clip result with " + projectile_poly.owner.name +
 	 " - Changing from size of " + str(terrain_poly_global.size()) + " to " + str(updated_terrain_poly.size()))
 
@@ -45,14 +45,14 @@ func damage(terrainChunk: TerrainChunk, projectile_poly: CollisionPolygon2D, pol
 	terrainChunk.replace_contents(updated_terrain_poly)
 	
 	# We updated the current chunk and no more chunks to add 
-	if clipping_result.size() == 1:
+	if clipping_results.size() == 1:
 		return
 		
 	# Create additional terrain pieces for the remaining clipping results
 	# iterate through the remaining clipping results
 	
-	for i in range(1, clipping_result.size()):
-		var new_clip_poly = clipping_result[i]
+	for i in range(1, clipping_results.size()):
+		var new_clip_poly = clipping_results[i]
 
 		# Ignore clockwise results as these are "holes" and need to handle these differently later
 		if Geometry2D.is_polygon_clockwise(new_clip_poly):
