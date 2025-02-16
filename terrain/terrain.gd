@@ -54,10 +54,11 @@ func damage(terrainChunk: TerrainChunk, projectile_poly: CollisionPolygon2D, pol
 	for i in range(1, clipping_result.size()):
 		var new_clip_poly = clipping_result[i]
 
-		# Ignore counter-clockwise results as these are "holes" and need to handle these differently later
-		if !Geometry2D.is_polygon_clockwise(new_clip_poly):
+		# Ignore clockwise results as these are "holes" and need to handle these differently later
+		if Geometry2D.is_polygon_clockwise(new_clip_poly):
 			print("damage(" + name + ") Ignoring 'hole' polygon for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
-
+			continue
+			
 		var current_child_count: int = get_child_count()		
 		var new_chunk_name = initial_chunk_name + str(i + current_child_count)
 		
