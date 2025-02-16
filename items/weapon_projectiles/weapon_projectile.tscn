@@ -9,6 +9,9 @@ collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_01gh6")
 power_velocity_mult = 0.9
+min_falloff_distance = 5.0
+max_falloff_distance = 45.0
+destructible_scale_multiplier = Vector2(7, 7)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.183745, 0.183745)
