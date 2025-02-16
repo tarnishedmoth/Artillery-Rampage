@@ -46,8 +46,7 @@ func _ready() -> void:
 	turret.modulate = color.darkened(1 - turret_color_value)
 	
 	health = max_health
-	# TODO: Will be set by function based on player controller and be clamped to min,max
-	max_power = max_health * weapon_max_power_health_mult
+	_update_max_power()
 	power = max_power
 	
 	# Make sure to do snap_to_ground from the physics task
@@ -97,12 +96,31 @@ func take_damage(instigatorController: Node2D, weapon: WeaponProjectile, amount:
 	health = clampf(health - amount, 0, max_health)
 	var actual_damage = orig_health - health
 	
+	if is_zero_approx(actual_damage):
+		print("Tank " + name + " didn't take any actual damage")
+		return
+	
+	_update_max_power()
+	
+	if health > 0 and actual_damage > 0:
+		_update_visuals_after_damage()
+	
 	print("Tank " + name + " took " + str(actual_damage) + " damage; health=" + str(health))
-	# TODO: don't emit if damage zero
 	emit_signal("tank_took_damage", self, instigatorController, weapon, actual_damage)
 	if health <= 0:
 		emit_signal("tank_killed", self, instigatorController, weapon)
-		
+
+func _update_max_power():
+	max_power = health * weapon_max_power_health_mult
+	
+func _update_visuals_after_damage():
+	# TODO: This is placeholder but right now just darkening the tanks accordingly
+	var health_pct = health / max_health
+	var dark_pct = 1 - health_pct
+	
+	modulate = modulate.darkened(dark_pct)
+	turret.modulate = turret.modulate.darkened(dark_pct)
+
 func kill():
 	print("Tank: " + name + " Killed")
 	queue_free()
