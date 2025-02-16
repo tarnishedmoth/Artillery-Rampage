@@ -128,10 +128,11 @@ func kill():
 func snap_to_ground():
 	var space_state = get_world_2d().direct_space_state
 	# in 2D positive y goes down
-	# Terrain is 4th bit
-	var terrain_mask:int = 1 << 3
 	
-	var query_params = PhysicsRayQueryParameters2D.create(global_position, global_position + Vector2(0, ground_trace_distance), terrain_mask)
+	var query_params = PhysicsRayQueryParameters2D.create(
+		global_position, global_position + Vector2(0, ground_trace_distance),
+		 Collisions.Layers.terrain)
+		
 	query_params.exclude = [self]
 	
 	var result = space_state.intersect_ray(query_params)

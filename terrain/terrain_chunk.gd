@@ -6,14 +6,8 @@ class_name TerrainChunk extends StaticBody2D
 @onready var overlapMesh = $Overlap/CollisionPolygon2D
 
 func _ready() -> void:
-	overlap.connect("area_entered", on_area_entered)
 	# Make sure the collision and visual polygon the same
 	collisionMesh.polygon = terrainMesh.polygon
-
-func on_area_entered(area: Area2D):
-	if area.owner is WeaponProjectile:
-		# Destroy
-		area.owner.destroy()
 
 func _replace_contents_local(new_poly: PackedVector2Array) -> void:
 	terrainMesh.set_deferred("polygon", new_poly)

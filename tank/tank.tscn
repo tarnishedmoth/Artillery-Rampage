@@ -13,7 +13,7 @@ size = Vector2(26, 26)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bbvof"]
 size = Vector2(6, 30.8)
 
-[node name="Tank" type="Node2D"]
+[node name="Tank" type="Node2D" groups=["Damageable", "Unit"]]
 script = ExtResource("1_0iy80")
 turret_color_value = 0.5
 
