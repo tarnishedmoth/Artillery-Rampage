@@ -61,4 +61,20 @@ func is_any_tank_falling() -> bool:
 	return false
 	
 func _on_tank_killed(tank: Tank, instigatorController: Node2D, weapon: WeaponProjectile):
-	tank_controllers.erase(tank.owner)
+	# Need to reset the active player index when removing the controller
+	var tank_controller_to_remove: TankController = tank.owner
+	if !is_instance_valid(tank_controller_to_remove):
+		push_warning("tank=" + tank.name + " has no owner controller")
+		return
+	var index_to_remove: int = tank_controllers.find(tank_controller_to_remove)
+	if(index_to_remove < 0):
+		push_warning("TankController=" + tank_controller_to_remove.name + " is not in round")
+		return
+	
+	tank_controllers.erase(tank_controller_to_remove)
+	
+	# See if we need to shift the active player index
+	if index_to_remove <= active_player_index:
+		active_player_index -= 1
+		if active_player_index < 0:
+			active_player_index = tank_controllers.size() - 1
