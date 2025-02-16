@@ -10,7 +10,6 @@ extends Control
 func _ready() -> void:
 	init_signals()
 
-	
 func init_signals():
 	GameEvents.connect("turn_started", _on_turn_started);
 	GameEvents.connect("aim_updated", _on_aim_updated);
@@ -18,6 +17,8 @@ func init_signals():
 
 func _on_turn_started(player: TankController) -> void:
 	active_player_text.text = player.name
+	health_text.set_value(ceil(player.tank.health))
+	
 	_on_aim_updated(player)
 	_on_power_updated(player)
 

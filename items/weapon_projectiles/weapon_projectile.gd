@@ -46,13 +46,13 @@ func _ready() -> void:
 	
 	overlap.connect("body_entered", on_body_entered)
 	
-func on_body_entered(body: Node2D):
-	# TODO: Need to do a sweep to see all the things we have influenced
+func on_body_entered(_body: Node2D):
+	# Need to do a sweep to see all the things we have influenced
 	# Need to be sure not to "double-damage" things both from influence and from direct hit
-	# The body here is the direct hit body
+	# The body here is the direct hit body that will trigger the projectile to explode if an interaction happens
 	if calculated_hit:
 		return
-	var affected_nodes = _sweep_test()
+	var affected_nodes = _find_interaction_overlaps()
 	var had_interaction:bool = false
 	
 	var processed_set: Dictionary = {}
@@ -93,7 +93,7 @@ func destroy():
 	GameEvents.emit_turn_ended(owner_tank.owner)
 	queue_free()
 	
-func _sweep_test() -> Array[Node2D]:
+func _find_interaction_overlaps() -> Array[Node2D]:
 	var space_state = get_world_2d().direct_space_state
 	
 	# TODO: Maybe this belongs in Collisions auto-load
