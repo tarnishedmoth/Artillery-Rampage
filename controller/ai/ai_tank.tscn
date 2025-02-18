@@ -7,7 +7,7 @@
 [node name="AITank" type="Node2D"]
 script = ExtResource("1_x14qc")
 
-[node name="Tank" parent="." instance=ExtResource("2_1btk6")]
+[node name="Tank" parent="." groups=["Bot"] instance=ExtResource("2_1btk6")]
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("3_7xwap")
