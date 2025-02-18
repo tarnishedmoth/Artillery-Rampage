@@ -5,10 +5,35 @@ class_name TerrainChunk extends StaticBody2D
 @onready var collisionMesh = $CollisionPolygon2D
 @onready var overlapMesh = $Overlap/CollisionPolygon2D
 
+@export var gravity:float = 9.8
+
+var falling:bool = false:
+	set(value):
+		if value != falling:
+			falling = value
+			_velocity = Vector2.ZERO
+	get:
+		return falling
+		
+var _velocity:Vector2
+
 func _ready() -> void:
 	# Make sure the collision and visual polygon the same
 	collisionMesh.polygon = terrainMesh.polygon
+	
+func _physics_process(delta: float) -> void:
+	if !falling: return
+	
+	# Check for overlaps with other chunks and stop falling if so
+	var overlaps = overlap.get_overlapping_areas()
+	for overlap in overlaps:
+		if overlap.collision_layer == Collisions.Layers.terrain:
+			falling = false
+			return
 
+	_velocity += Vector2(0, gravity) * delta
+	global_position += _velocity * delta
+	
 func _replace_contents_local(new_poly: PackedVector2Array) -> void:
 	terrainMesh.set_deferred("polygon", new_poly)
 	collisionMesh.set_deferred("polygon", new_poly)

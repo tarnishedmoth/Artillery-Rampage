@@ -69,6 +69,8 @@ func damage(terrainChunk: TerrainChunk, projectile_poly: CollisionPolygon2D, pol
 func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_poly: PackedVector2Array):
 	var new_chunk = TerrainChunkScene.instantiate()
 	new_chunk.name = chunk_name
+	# By definition a disconnected chunk could be falling so we will let it test for that
+	new_chunk.falling = true
 	
 	add_child(new_chunk)
 	# Must be done after adding as a child
