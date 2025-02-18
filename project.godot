@@ -39,6 +39,7 @@ enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/ru
 Destructible="Collision object that can be progressively destroyed such as terrain"
 Unit="a controllable unit in the game like an artillery"
 Damageable="Supports the \"take_damage\" function to affect the health of a unit and respond to collision queries"
+Player="Player unit"
 
 [input]
 

@@ -6,7 +6,7 @@
 [node name="Player" type="Node2D"]
 script = ExtResource("1_t03mm")
 
-[node name="Tank" parent="." instance=ExtResource("2_3s1jp")]
+[node name="Tank" parent="." groups=["Player"] instance=ExtResource("2_3s1jp")]
 color = Color(0.145098, 0.227451, 0.00392157, 1)
 
 [connection signal="tank_killed" from="Tank" to="." method="_on_tank_tank_killed"]
