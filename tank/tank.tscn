@@ -23,6 +23,7 @@ mass = 1000.0
 physics_material_override = SubResource("PhysicsMaterial_1pofo")
 center_of_mass_mode = 1
 center_of_mass = Vector2(0, -300)
+lock_rotation = true
 script = ExtResource("2_o5qn2")
 
 [node name="TankBodySprite" type="Sprite2D" parent="TankBody"]
@@ -51,5 +52,8 @@ position = Vector2(0, -33.14)
 
 [node name="Bottom" type="Marker2D" parent="TankBody"]
 position = Vector2(0, 13)
+
+[node name="Top" type="Marker2D" parent="TankBody"]
+position = Vector2(0, -13)
 
 [node name="FiredWeaponContainer" type="Node" parent="."]

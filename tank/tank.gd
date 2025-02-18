@@ -14,7 +14,7 @@ signal tank_took_damage(
 
 @export var weapon_max_power_health_mult:float = 10
 @export var max_health:float = 100
-@export var ground_trace_distance:float = 500
+@export var ground_trace_distance:float = 1000
 
 @export var turret_shot_angle_offset:float = -90
 
@@ -29,6 +29,7 @@ signal tank_took_damage(
 @onready var fired_weapon_container = $FiredWeaponContainer
 
 @onready var bottom_reference_point = $TankBody/Bottom
+@onready var top_reference_point = $TankBody/Top
 
 # This is called a packed scene
 # Calling "instantiate" on it is equivalent to an instanced scene
@@ -130,7 +131,7 @@ func snap_to_ground():
 	# in 2D positive y goes down
 	
 	var query_params = PhysicsRayQueryParameters2D.create(
-		global_position, global_position + Vector2(0, ground_trace_distance),
+		top_reference_point.global_position, top_reference_point.global_position + Vector2(0, ground_trace_distance),
 		 Collisions.Layers.terrain)
 		
 	query_params.exclude = [self]
@@ -147,5 +148,5 @@ func snap_to_ground():
 	print("tank.snap_to_ground(" + name + "): adjusting from " + str(global_position) + " to " + str(adjusted_ground_position))
 	global_position = adjusted_ground_position
 	
-func _on_reset_orientation(tankBody: TankBody) -> void:
+func _on_reset_orientation(_tankBody: TankBody) -> void:
 	snap_to_ground()

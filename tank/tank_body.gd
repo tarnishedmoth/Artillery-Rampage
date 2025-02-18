@@ -3,6 +3,7 @@ class_name TankBody extends RigidBody2D
 var orig_gravity:float
 var queue_reset_orientation: bool = false
 
+@warning_ignore("unused_signal")
 signal on_reset_orientation(tankBody: TankBody)
 
 func _ready() -> void:
