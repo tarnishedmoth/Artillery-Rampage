@@ -28,6 +28,7 @@ func _physics_process(delta: float) -> void:
 	var overlaps = overlap.get_overlapping_areas()
 	for overlap in overlaps:
 		if overlap.collision_layer == Collisions.Layers.terrain:
+			owner.merge_chunks(overlap.get_parent(), self)
 			falling = false
 			return
 
@@ -51,10 +52,20 @@ func get_terrain_global() -> PackedVector2Array:
 	var terrain_global_transform: Transform2D = terrainMesh.global_transform
 	return terrain_global_transform * terrainMesh.polygon
 
+func get_terrain_local() -> PackedVector2Array:
+	return terrainMesh.polygon
+	
+func delete() -> void:
+	queue_free.call_deferred()
+	
 # Based on https://www.youtube.com/watch?v=FiKsyOLacwA
 # poly_scale will determine the size of the explosion that destroys the terrain
 func damage(projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1,1)):
 	owner.damage(self, projectile_poly, poly_scale)
+	
+# Sort by largest first
+func compare(other: TerrainChunk) -> bool:
+	return terrainMesh.polygon.size() > other.terrainMesh.polygon.size()
 	
 func print_poly(poly: PackedVector2Array):
 	for i in range(poly.size()):

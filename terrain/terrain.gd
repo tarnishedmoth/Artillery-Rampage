@@ -2,12 +2,18 @@ class_name Terrain extends Node2D
 
 const TerrainChunkScene = preload("res://terrain/terrain_chunk.tscn")
 
+@export var smooth_offset: float = 3
+@export var falling_offset: float = 3
+
 var initial_chunk_name: String
-# Based on https://www.youtube.com/watch?v=FiKsyOLacwA
-# poly_scale will determine the size of the explosion that destroys the terrain
+var first_child_chunk: TerrainChunk
 
 func _ready():
-	initial_chunk_name = get_child(0).name
+	first_child_chunk = get_child(0)
+	initial_chunk_name = first_child_chunk.name
+
+# Based on https://www.youtube.com/watch?v=FiKsyOLacwA
+# poly_scale will determine the size of the explosion that destroys the terrain
 	
 func damage(terrainChunk: TerrainChunk, projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1,1)):
 	
@@ -30,7 +36,7 @@ func damage(terrainChunk: TerrainChunk, projectile_poly: CollisionPolygon2D, pol
 	# This means the chunk was destroyed so we need to queue_free
 	if clipping_results.is_empty():
 		print("damage(" + name + ") completely destroyed by poly=" + projectile_poly.owner.name)
-		terrainChunk.queue_free()
+		terrainChunk.delete()
 		return
 	
 	var updated_terrain_poly = clipping_results[0]
@@ -48,14 +54,17 @@ func damage(terrainChunk: TerrainChunk, projectile_poly: CollisionPolygon2D, pol
 	if clipping_results.size() == 1:
 		return
 		
-	# Create additional terrain pieces for the remaining clipping results
-	# iterate through the remaining clipping results
+	_add_new_chunks(first_child_chunk, clipping_results, 1)
 	
-	for i in range(1, clipping_results.size()):
-		var new_clip_poly = clipping_results[i]
+func _add_new_chunks(first_chunk: TerrainChunk,
+ geometry_results: Array[PackedVector2Array], start_index: int) -> void:
+	# Create additional terrain pieces for the remaining geometry results
+	
+	for i in range(start_index, geometry_results.size()):
+		var new_clip_poly = geometry_results[i]
 
 		# Ignore clockwise results as these are "holes" and need to handle these differently later
-		if Geometry2D.is_polygon_clockwise(new_clip_poly):
+		if _is_invisible(new_clip_poly):
 			print("damage(" + name + ") Ignoring 'hole' polygon for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
 			continue
 			
@@ -63,10 +72,16 @@ func damage(terrainChunk: TerrainChunk, projectile_poly: CollisionPolygon2D, pol
 		var new_chunk_name = initial_chunk_name + str(i + current_child_count)
 		
 		print("damage(" + name + ") Creating new terrain chunk(" + new_chunk_name + ") for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
-		_add_new_chunk(terrainChunk, new_chunk_name, new_clip_poly)
-	
+		_add_new_chunk(first_chunk, new_chunk_name, new_clip_poly)
+		
 
-func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_poly: PackedVector2Array):
+static func _is_invisible(poly: Array[PackedVector2Array]) -> bool:
+	return Geometry2D.is_polygon_clockwise(poly)
+
+static func _is_visible(poly: Array[PackedVector2Array]) -> bool:
+	return !_is_invisible(poly)
+	
+func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_poly: PackedVector2Array) -> void:
 	var new_chunk = TerrainChunkScene.instantiate()
 	new_chunk.name = chunk_name
 	# By definition a disconnected chunk could be falling so we will let it test for that
@@ -81,3 +96,54 @@ func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_
 	new_chunk.z_index = prototype_chunk.z_index
 
 	new_chunk.replace_contents(new_clip_poly)
+
+static func _largest_poly_first(a: PackedVector2Array, b: PackedVector2Array) -> bool:
+	return a.size() > b.size()
+
+
+func _morph_falling_chunk(chunk: TerrainChunk) -> PackedVector2Array:
+	var falling_transform: Transform2D = Transform2D(0, Vector2(0, falling_offset))
+	var chunk_poly = falling_transform * chunk.get_terrain_global()
+
+	# now apply the smoothing offset
+	# TODO: This causes way too many polygons to be generated and the frame rate craters
+	# var results := Geometry2D.offset_polygon(chunk_poly, smooth_offset, Geometry2D.JOIN_ROUND)
+	# return results[0] if results.size() >= 1 else []
+	return chunk_poly
+
+func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -> void:
+	var largest_is_first := in_first_chunk.compare(in_second_chunk)
+	var first_chunk := in_first_chunk if largest_is_first else in_second_chunk
+	var second_chunk := in_second_chunk if largest_is_first else in_first_chunk
+		
+	var first_poly: PackedVector2Array
+	var second_poly: PackedVector2Array 
+	
+	# If the chunk is falling then need to offset it
+	if first_chunk.falling:
+		first_poly = _morph_falling_chunk(first_chunk)
+	else:
+		first_poly = first_chunk.get_terrain_global()
+	
+	if second_chunk.falling:
+		second_poly = _morph_falling_chunk(second_chunk)
+	else:
+		second_poly = second_chunk.get_terrain_global()
+
+	var results: Array[PackedVector2Array] = Geometry2D.merge_polygons(first_poly, second_poly)
+
+	# Sort by size so we can keep the largest
+	results.sort_custom(_largest_poly_first)
+	
+	if results.size() >= 1 and _is_visible(results[0]):
+		first_chunk.replace_contents(results[0])
+	else:
+		first_chunk.delete()
+	
+	if results.size() >= 2 and _is_visible(results[1]):
+		second_chunk.replace_contents(results[1])
+	else:
+		second_chunk.delete()
+		
+	if results.size() >= 3:
+		_add_new_chunks(first_child_chunk, results, 2)
