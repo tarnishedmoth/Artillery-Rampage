@@ -21,6 +21,8 @@ func _ready() -> void:
 	# Make sure the collision and visual polygon the same
 	collisionMesh.polygon = terrainMesh.polygon
 	
+	print_poly("_ready", collisionMesh.polygon)
+	
 func _physics_process(delta: float) -> void:
 	if !falling: return
 	
@@ -36,11 +38,17 @@ func _physics_process(delta: float) -> void:
 	global_position += _velocity * delta
 	
 func _replace_contents_local(new_poly: PackedVector2Array) -> void:
+	
+	print_poly("_replace_contents_local", new_poly)
+
 	terrainMesh.set_deferred("polygon", new_poly)
 	collisionMesh.set_deferred("polygon", new_poly)
 	overlapMesh.set_deferred("polygon", new_poly)
 
 func replace_contents(new_poly_global: PackedVector2Array) -> void:
+	
+	print_poly("replace_contents", new_poly_global)
+
 	# Transform updated polygon back to local space
 	var terrain_global_inv_transform: Transform2D = terrainMesh.global_transform.affine_inverse()
 	var updated_terrain_poly_local: PackedVector2Array = terrain_global_inv_transform * new_poly_global
@@ -56,6 +64,7 @@ func get_terrain_local() -> PackedVector2Array:
 	return terrainMesh.polygon
 	
 func delete() -> void:
+	print("TerrainChunk(%s) - delete" % [name])
 	queue_free.call_deferred()
 	
 # Based on https://www.youtube.com/watch?v=FiKsyOLacwA
@@ -67,6 +76,13 @@ func damage(projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1
 func compare(other: TerrainChunk) -> bool:
 	return terrainMesh.polygon.size() > other.terrainMesh.polygon.size()
 	
-func print_poly(poly: PackedVector2Array):
-	for i in range(poly.size()):
-		print("poly[" + str(i) + "]=" + str(poly[i]))
+func print_poly(context: String, poly: PackedVector2Array) -> void:
+	var values: Array[Vector2] = []
+	for vector in poly:
+		values.push_back(vector)
+		
+	print("TerrainChunk(%s) - %s: %d: [%s]"
+	 % [name, context, values.size(),
+	 ",".join(values.map(func(v : Vector2): return str(v)))])
+	#for i in range(poly.size()):
+		#print("poly[" + str(i) + "]=" + str(poly[i]))

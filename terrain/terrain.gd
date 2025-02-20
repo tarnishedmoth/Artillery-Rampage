@@ -65,20 +65,20 @@ func _add_new_chunks(first_chunk: TerrainChunk,
 
 		# Ignore clockwise results as these are "holes" and need to handle these differently later
 		if _is_invisible(new_clip_poly):
-			print("damage(" + name + ") Ignoring 'hole' polygon for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
+			print("_add_new_chunks(" + name + ") Ignoring 'hole' polygon for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
 			continue
 			
 		var current_child_count: int = get_child_count()		
 		var new_chunk_name = initial_chunk_name + str(i + current_child_count)
 		
-		print("damage(" + name + ") Creating new terrain chunk(" + new_chunk_name + ") for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
+		print("_add_new_chunks(" + name + ") Creating new terrain chunk(" + new_chunk_name + ") for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
 		_add_new_chunk(first_chunk, new_chunk_name, new_clip_poly)
 		
 
-static func _is_invisible(poly: Array[PackedVector2Array]) -> bool:
-	return Geometry2D.is_polygon_clockwise(poly)
+static func _is_invisible(poly: PackedVector2Array) -> bool:
+	return poly.size() < 3 or Geometry2D.is_polygon_clockwise(poly)
 
-static func _is_visible(poly: Array[PackedVector2Array]) -> bool:
+static func _is_visible(poly: PackedVector2Array) -> bool:
 	return !_is_invisible(poly)
 	
 func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_poly: PackedVector2Array) -> void:
@@ -132,6 +132,10 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 
 	var results: Array[PackedVector2Array] = Geometry2D.merge_polygons(first_poly, second_poly)
 
+	print("merge_chunks: first(%d) + second(%d) -> %d: [%s]"
+	 % [first_poly.size(), second_poly.size(), results.size(),
+	 ",".join(results.map(func(x : PackedVector2Array): return x.size()))])
+	
 	# Sort by size so we can keep the largest
 	results.sort_custom(_largest_poly_first)
 	
@@ -147,3 +151,5 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 		
 	if results.size() >= 3:
 		_add_new_chunks(first_child_chunk, results, 2)
+		
+	print("merge_chunks: final terrain chunk count=%d" % [get_child_count()])
