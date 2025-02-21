@@ -1,7 +1,6 @@
 class_name GameLevel extends Node2D
 
 var round_director : RoundDirector
-var is_restarting: bool
 
 func _ready() -> void:
 	GameEvents.connect("round_ended", _on_round_ended)
@@ -33,18 +32,7 @@ func _on_player_player_killed(in_player: Player) -> void:
 	print("Game Over!")
 	in_player.queue_free()
 	
-	restart_game()
+	SceneManager.restart_level()
 
 func _on_round_ended() -> void:
-	restart_game()
-	
-func restart_game():
-	if is_restarting:
-		return
-	
-	# Avoid two events causing a restart in the same game (e.g. player dies and leaves 1 player remaining)
-	is_restarting = true
-	await get_tree().create_timer(1).timeout
-	
-	# Restart the game 
-	get_tree().reload_current_scene()
+	SceneManager.restart_level()

@@ -23,6 +23,7 @@ AITypes="*res://controller/ai/behaviors/ai_types.gd"
 RuntimeDebugTools="*res://addons/runtime_debug_tools/scenes/remote_inspector.tscn"
 Collisions="*res://utils/collisions.gd"
 Groups="*res://utils/groups.gd"
+SceneManager="*res://utils/scene_manager.gd"
 
 [display]
 
