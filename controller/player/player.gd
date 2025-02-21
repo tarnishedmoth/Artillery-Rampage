@@ -20,6 +20,7 @@ func _ready() -> void:
 # like the player or the AI
 func begin_turn():
 	super.begin_turn()
+	
 	can_shoot = true
 	can_aim = true
 

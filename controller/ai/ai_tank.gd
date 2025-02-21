@@ -22,6 +22,8 @@ func _ready() -> void:
 	super._ready()
 
 func begin_turn():
+	super.begin_turn()
+	
 	print("AI began turn")
 	target_result = ai_decision_state_machine.execute(tank)
 	current_action_state = AIWaitingState.new(self)

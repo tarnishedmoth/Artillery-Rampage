@@ -113,6 +113,7 @@ func take_damage(instigatorController: Node2D, weapon: WeaponProjectile, amount:
 
 func _update_max_power():
 	max_power = health * weapon_max_power_health_mult
+	power = minf(power, max_power)
 	
 func _update_visuals_after_damage():
 	# TODO: This is placeholder but right now just darkening the tanks accordingly
