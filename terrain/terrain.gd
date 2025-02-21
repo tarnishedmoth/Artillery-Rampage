@@ -53,7 +53,7 @@ func damage(terrainChunk: TerrainChunk, projectile_poly: CollisionPolygon2D, pol
 	#print("new poly (WORLD):")
 	#print_poly(updated_terrain_poly)
 	
-	terrainChunk.replace_contents(updated_terrain_poly)
+	terrainChunk.replace_contents(updated_terrain_poly, projectile_poly_global)
 	
 	# We updated the current chunk and no more chunks to add 
 	if clipping_results.size() == 1:

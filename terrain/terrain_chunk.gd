@@ -5,12 +5,14 @@ class_name TerrainChunk extends StaticBody2D
 @onready var collisionMesh = $CollisionPolygon2D
 @onready var overlapMesh = $Overlap/CollisionPolygon2D
 
-@export var gravity:float = 9.8
+@export var gravity:float = 20
 
 @export var smooth_y_threshold_pct: float = 0.5
 
 # Sometimes the algorithm flags things incorrectly that are essentially vertical drops near the left of screen
 @export var smooth_x_threshold_diff: float = 10
+
+@export var smooth_influence_scale: float = 1.5
 
 var falling:bool = false:
 	set(value):
@@ -50,9 +52,12 @@ func _replace_contents_local(new_poly: PackedVector2Array) -> void:
 	collisionMesh.set_deferred("polygon", new_poly)
 	overlapMesh.set_deferred("polygon", new_poly)
 
-func _smooth() -> bool:
-	var poly: PackedVector2Array = get_terrain_local()
+func _smooth(poly: PackedVector2Array, influence_poly: PackedVector2Array) -> PackedVector2Array:
 	
+	# Don't smooth unless given an influence area
+	if influence_poly.is_empty():
+		return poly
+		
 	# Polygon is actually stored clockwise. Look at vertices and see where x decreases indicating a dent until we start winding around
 	# Don't modify the interior of the terrain. Detect this by looking at the maximum y (bottom-most point)
 	var bottom_y: float = -1e12
@@ -63,13 +68,14 @@ func _smooth() -> bool:
 	var threshold_y: float = (bottom_y - top_y) * smooth_y_threshold_pct + bottom_y
 	
 	var smooth_updates: int = 0
-	
+	var bounds:Circle = Circle.create_from_points(influence_poly).scale(smooth_influence_scale)
+ 	
 	for i in range(1, poly.size()):
 		var current := poly[i]
 		var prev := poly[i - 1]
 
 		# Don't modify the bottom
-		if current.x - prev.x < -smooth_x_threshold_diff and current.y < prev.y and current.y < threshold_y:
+		if current.x - prev.x < -smooth_x_threshold_diff and current.y < prev.y and current.y < threshold_y and bounds.contains(current):
 			poly[i] = (prev + current) * 0.5
 			smooth_updates += 1
 	#		if i > 1 and absf(poly[i - 1].y - bottom_y) > smooth_y_threshold_value:
@@ -78,20 +84,19 @@ func _smooth() -> bool:
 	
 	if smooth_updates:
 		print("TerrainChunk(%s) - _smooth: Changed %d verticies" % [name, smooth_updates])
-		_replace_contents_local(poly)
 		
-	return smooth_updates
+	return poly
 		
-func replace_contents(new_poly_global: PackedVector2Array) -> void:
+func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global: PackedVector2Array = []) -> void:
 	
 	print_poly("replace_contents", new_poly_global)
 
 	# Transform updated polygon back to local space
 	var terrain_global_inv_transform: Transform2D = terrainMesh.global_transform.affine_inverse()
 	var updated_terrain_poly_local: PackedVector2Array = terrain_global_inv_transform * new_poly_global
+	var influence_poly_local: PackedVector2Array = terrain_global_inv_transform * influence_poly_global
 	
-	if !_smooth():
-		_replace_contents_local(updated_terrain_poly_local)
+	_replace_contents_local(_smooth(updated_terrain_poly_local, influence_poly_local))
 
 func get_terrain_global() -> PackedVector2Array:
 	# Transform terrain polygon to world space
