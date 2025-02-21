@@ -150,5 +150,6 @@ func _calculate_point_damage(pos: Vector2) -> float:
 		_:
 			push_error("Unrecognized damage type: " + str(damage_falloff_type))
 			return max_damage
+			
 func _calculate_dist_frac(dist: float):
-	return  (1.0 - (dist - min_falloff_distance) / (max_falloff_distance - min_falloff_distance))
+	return  (1.0 - (dist - min_falloff_distance) / (max_falloff_distance - min_falloff_distance))	

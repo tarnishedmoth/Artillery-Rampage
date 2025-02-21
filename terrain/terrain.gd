@@ -2,8 +2,17 @@ class_name Terrain extends Node2D
 
 const TerrainChunkScene = preload("res://terrain/terrain_chunk.tscn")
 
+@export_category("Smoothing")
 @export var smooth_offset: float = 3
+
+@export_category("Collapsing")
 @export var falling_offset: float = 3
+
+@export_category("Projectile")
+@export var min_damage_shape_offset: float = 0
+
+@export_category("Projectile")
+@export var max_damage_shape_offset: float = 1
 
 var initial_chunk_name: String
 var first_child_chunk: TerrainChunk
@@ -18,11 +27,7 @@ func _ready():
 func damage(terrainChunk: TerrainChunk, projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1,1)):
 	
 	#print("Clipping terrain with polygon:", projectile_poly.polygon)
-	var scale_transform: Transform2D = Transform2D(0, poly_scale, 0, Vector2())
-	# Combine the scale transform with the world (global) transform
-	var combined_transform: Transform2D = projectile_poly.global_transform * scale_transform
-	
-	var projectile_poly_global: PackedVector2Array = combined_transform * projectile_poly.polygon
+	var projectile_poly_global: PackedVector2Array = _get_projectile_poly_global(projectile_poly, poly_scale)
 	
 	# Transform terrain polygon to world space
 	var terrain_poly_global: PackedVector2Array = terrainChunk.get_terrain_global()
@@ -55,7 +60,33 @@ func damage(terrainChunk: TerrainChunk, projectile_poly: CollisionPolygon2D, pol
 		return
 		
 	_add_new_chunks(first_child_chunk, clipping_results, 1)
+
+func _get_projectile_poly_global(projectile_poly: CollisionPolygon2D, poly_scale: Vector2) -> PackedVector2Array:
+	var scale_transform: Transform2D = Transform2D(0, poly_scale, 0, Vector2())
+	# Combine the scale transform with the world (global) transform
+	var combined_transform: Transform2D = projectile_poly.global_transform * scale_transform
 	
+	var projectile_poly_global: PackedVector2Array = combined_transform * projectile_poly.polygon
+	
+	_randomize_damage_polygon(projectile_poly_global, poly_scale)
+	
+	return projectile_poly_global
+
+func _randomize_damage_polygon(projectile_damage_global: PackedVector2Array, poly_scale: Vector2) -> void:
+	var poly_scale_size:= poly_scale.length()
+	var scaled_min_offset := min_damage_shape_offset * poly_scale_size
+	var scaled_max_offset := max_damage_shape_offset * poly_scale_size
+	
+	for i in range(0, projectile_damage_global.size()):
+		projectile_damage_global[i] += _get_offset_damage_poly_vertex()
+			
+func _get_offset_damage_poly_vertex() -> Vector2:
+	# TODO: This sometimes creates a non-viable polygon
+	return Vector2(0, _get_random_damage_offset())
+	
+func _get_random_damage_offset() -> float:
+	return randf_range(min_damage_shape_offset, max_damage_shape_offset) * (1 if randf() >= 0.5 else -1)
+			
 func _add_new_chunks(first_chunk: TerrainChunk,
  geometry_results: Array[PackedVector2Array], start_index: int) -> void:
 	# Create additional terrain pieces for the remaining geometry results
