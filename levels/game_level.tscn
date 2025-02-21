@@ -1,0 +1,49 @@
+[gd_scene load_steps=8 format=3 uid="uid://uaih1d1o2vd7"]
+
+[ext_resource type="Script" path="res://levels/game_level.gd" id="1_c8wet"]
+[ext_resource type="PackedScene" uid="uid://bg64wc8fibctr" path="res://ui/hud.tscn" id="2_pmdi8"]
+[ext_resource type="PackedScene" uid="uid://l1x5kvupj7so" path="res://terrain/terrain.tscn" id="3_nb1rg"]
+[ext_resource type="PackedScene" uid="uid://b7vpl03hcrs3e" path="res://walls/walls.tscn" id="4_h0s8o"]
+
+[sub_resource type="Gradient" id="Gradient_h05uu"]
+colors = PackedColorArray(0, 0, 1, 1, 0.866667, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0l652"]
+gradient = SubResource("Gradient_h05uu")
+width = 2048
+height = 2048
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_60ghs"]
+size = Vector2(1248, 688)
+
+[node name="GameLevel" type="Node2D"]
+script = ExtResource("1_c8wet")
+
+[node name="UI" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+
+[node name="HUD" parent="UI" instance=ExtResource("2_pmdi8")]
+unique_name_in_owner = true
+
+[node name="Background" type="TextureRect" parent="."]
+z_index = -100
+offset_right = 2048.0
+offset_bottom = 2048.0
+scale = Vector2(0.64, 0.36)
+texture = SubResource("GradientTexture2D_0l652")
+stretch_mode = 1
+
+[node name="Terrain" parent="." instance=ExtResource("3_nb1rg")]
+z_index = -10
+position = Vector2(118, 444)
+scale = Vector2(1.28, 0.68)
+
+[node name="Walls" parent="." instance=ExtResource("4_h0s8o")]
+unique_name_in_owner = true
+
+[node name="CollisionShape2D" parent="Walls/PlayableArea" index="0"]
+visible = false
+position = Vector2(636, 358)
+shape = SubResource("RectangleShape2D_60ghs")
+
+[editable path="Walls"]

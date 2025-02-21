@@ -1,10 +1,6 @@
-class_name Game extends Node2D
+class_name GameLevel extends Node2D
 
 var round_director : RoundDirector
-
-#TODO: These will be instantiated from the "players data" 
-@onready var player = $Player
-
 var is_restarting: bool
 
 func _ready() -> void:
@@ -23,11 +19,14 @@ func begin_round():
 	# TODO: This is where we will use the global "players data" auto-load singleton
 	# to then create the necessary controllers and tanks from it
 	# For now just loading in the instance from the scene
-	round_director.add_controller(player)
-	# TODO: Temporarily adding in fixed enemies from scene
-	round_director.add_controller($Enemy1)
-	round_director.add_controller($Enemy2)
-	
+	# Discover any placed child controller nodes
+	for child in get_children():
+		if child is TankController:
+			round_director.add_controller(child)
+			
+			if child is Player:
+				child.connect("player_killed", _on_player_player_killed)
+				
 	round_director.begin_round()
 
 func _on_player_player_killed(in_player: Player) -> void:
