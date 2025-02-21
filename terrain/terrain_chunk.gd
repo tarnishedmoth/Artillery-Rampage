@@ -6,6 +6,7 @@ class_name TerrainChunk extends StaticBody2D
 @onready var overlapMesh = $Overlap/CollisionPolygon2D
 
 @export var gravity:float = 20
+@export var initially_falling:bool = false
 
 @export var smooth_y_threshold_pct: float = 0.5
 
@@ -27,6 +28,10 @@ var _velocity:Vector2
 func _ready() -> void:
 	# Make sure the collision and visual polygon the same
 	collisionMesh.polygon = terrainMesh.polygon
+	overlapMesh.polygon = terrainMesh.polygon
+	
+	if !falling:
+		falling = initially_falling
 	
 	print_poly("_ready", collisionMesh.polygon)
 	

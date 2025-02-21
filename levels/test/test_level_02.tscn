@@ -1,0 +1,54 @@
+[gd_scene load_steps=5 format=3 uid="uid://biawana6kfqa2"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_a26vb"]
+[ext_resource type="PackedScene" uid="uid://dmbj0iglwwo7x" path="res://terrain/terrain_chunk.tscn" id="2_drvfr"]
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_lx6f5"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="3_anthh"]
+
+[node name="TestLevel01" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_a26vb")]
+
+[node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk" index="0"]
+polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 459.375, -182.353, 609, -8, 937, -3, 945, 445, -103, 448)
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 459.375, -182.353, 609, -8, 937, -3, 945, 445, -103, 448)
+
+[node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk/Overlap" index="0"]
+polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 459.375, -182.353, 609, -8, 937, -3, 945, 445, -103, 448)
+
+[node name="TerrainChunk2" parent="GameLevel/Terrain" index="1" instance=ExtResource("2_drvfr")]
+initially_falling = true
+
+[node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk2" index="0"]
+polygon = PackedVector2Array(427.344, -451.471, 482.031, -577.941, 553.906, -532.353, 564.063, -435.294, 506.25, -423.529, 446.094, -404.412)
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk2" index="1"]
+polygon = PackedVector2Array(427.344, -451.471, 482.031, -577.941, 553.906, -532.353, 564.063, -435.294, 506.25, -423.529, 446.094, -404.412)
+
+[node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk2/Overlap" index="0"]
+polygon = PackedVector2Array(427.344, -451.471, 482.031, -577.941, 553.906, -532.353, 564.063, -435.294, 506.25, -423.529, 446.094, -404.412)
+
+[node name="Enemy1" parent="GameLevel" instance=ExtResource("2_lx6f5")]
+position = Vector2(479, 278)
+
+[node name="Tank" parent="GameLevel/Enemy1" index="0"]
+color = Color(0.682353, 0.713726, 0.219608, 1)
+
+[node name="Enemy2" parent="GameLevel" instance=ExtResource("2_lx6f5")]
+position = Vector2(1100, 426)
+
+[node name="Tank" parent="GameLevel/Enemy2" index="0"]
+color = Color(0.137255, 0.180392, 0.701961, 1)
+
+[node name="Player" parent="GameLevel" instance=ExtResource("3_anthh")]
+position = Vector2(120, 427)
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
+[editable path="GameLevel/Terrain/TerrainChunk2"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/Enemy1"]
+[editable path="GameLevel/Enemy2"]

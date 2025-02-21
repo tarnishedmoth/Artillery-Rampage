@@ -18,8 +18,12 @@ var initial_chunk_name: String
 var first_child_chunk: TerrainChunk
 
 func _ready():
-	first_child_chunk = get_child(0)
-	initial_chunk_name = first_child_chunk.name
+	for chunk in get_children():
+		if chunk is TerrainChunk:
+			if !first_child_chunk:
+				first_child_chunk = chunk
+				initial_chunk_name = first_child_chunk.name
+			chunk.owner = self
 
 # Based on https://www.youtube.com/watch?v=FiKsyOLacwA
 # poly_scale will determine the size of the explosion that destroys the terrain
