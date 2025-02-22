@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="ArtilleryRampage"
-run/main_scene="res://levels/test/test_level_01.tscn"
+run/main_scene="res://ui/story/story_sequence.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -23,7 +23,7 @@ AITypes="*res://controller/ai/behaviors/ai_types.gd"
 RuntimeDebugTools="*res://addons/runtime_debug_tools/scenes/remote_inspector.tscn"
 Collisions="*res://utils/collisions.gd"
 Groups="*res://utils/groups.gd"
-SceneManager="*res://utils/scene_manager.gd"
+SceneManager="*res://utils/scene_manager.tscn"
 
 [display]
 

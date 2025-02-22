@@ -35,4 +35,4 @@ func _on_player_player_killed(in_player: Player) -> void:
 	SceneManager.restart_level()
 
 func _on_round_ended() -> void:
-	SceneManager.restart_level()
+	SceneManager.next_level()

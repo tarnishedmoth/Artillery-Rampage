@@ -1,0 +1,88 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2y0ohhcprxun"]
+
+[ext_resource type="Script" path="res://ui/story/story_sequence.gd" id="1_n5gvg"]
+[ext_resource type="Theme" uid="uid://ddklgnmfj25sv" path="res://ui/story/story_theme.tres" id="2_l35kj"]
+
+[node name="StorySequence" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_n5gvg")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.290196, 0.172549, 0.0509804, 1)
+
+[node name="Container" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StorySlide" type="Control" parent="Container"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="Container/StorySlide"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -512.0
+offset_top = -50.0
+offset_right = 512.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StoryText" type="RichTextLabel" parent="Container/StorySlide/CenterContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1024, 0)
+layout_mode = 2
+theme = ExtResource("2_l35kj")
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+fit_content = true
+visible_characters_behavior = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Container"]
+layout_direction = 2
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Container/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Container/HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="SkipButton" type="Button" parent="Container/HBoxContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "Skip"
+
+[node name="Spacer" type="Control" parent="Container/HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NextButton" type="Button" parent="Container/HBoxContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+text = "Next"
