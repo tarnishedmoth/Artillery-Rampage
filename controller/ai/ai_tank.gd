@@ -40,12 +40,12 @@ func _process(delta: float) -> void:
 	
 	current_action_state = current_action_state.execute(delta)
 
-func _on_tank_tank_killed(tank: Tank, instigatorController: Node2D, weapon: WeaponProjectile) -> void:
+func _on_tank_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2D) -> void:
 	tank.kill()
 	queue_free()
 
 
-func _on_tank_tank_took_damage(tank: Tank, instigatorController: Node2D, weapon: WeaponProjectile, amount: float) -> void:
+func _on_tank_tank_took_damage(tank: Tank, instigatorController: Node2D, instigator: Node2D, amount: float) -> void:
 	pass # Replace with function body.
 
 class AIActionState:

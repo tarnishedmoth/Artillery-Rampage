@@ -59,8 +59,7 @@ func shoot() -> void:
 		can_shoot = false
 		can_aim = false
 
-
-func _on_tank_tank_killed(tank: Tank, instigatorController: Node2D, weapon: WeaponProjectile) -> void:
+func _on_tank_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2D) -> void:
 	# player tank killed
 	tank.kill()
 	emit_signal("player_killed", self)

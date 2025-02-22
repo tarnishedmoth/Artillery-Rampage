@@ -24,11 +24,11 @@ func begin_round():
 			round_director.add_controller(child)
 			
 			if child is Player:
-				child.connect("player_killed", _on_player_player_killed)
+				child.connect("player_killed", _on_player_killed)
 				
 	round_director.begin_round()
 
-func _on_player_player_killed(in_player: Player) -> void:
+func _on_player_killed(in_player: Player) -> void:
 	print("Game Over!")
 	in_player.queue_free()
 	

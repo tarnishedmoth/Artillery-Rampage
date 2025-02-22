@@ -3,11 +3,11 @@ class_name Tank extends Node2D
 # TODO: These maybe should be global events
 
 @warning_ignore("unused_signal")
-signal tank_killed(tank: Tank, instigatorController: Node2D, weapon: WeaponProjectile)
+signal tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2D)
 
 @warning_ignore("unused_signal")
 signal tank_took_damage(
-	tank: Tank, instigatorController: Node2D, weapon: WeaponProjectile, amount: float)
+	tank: Tank, instigatorController: Node2D, instigator: Node2D, amount: float)
 
 @export var min_angle:float = -90
 @export var max_angle:float = 90
@@ -20,6 +20,16 @@ signal tank_took_damage(
 
 @export var color: Color = Color.WHITE
 @export var turret_color_value: float = 0.7
+
+@export_category("Damage")
+@export_range(0, 1000) var min_damage_distance: float = 10
+
+# 300^x = 1000 -> Want to lose all health if fall > 300 units
+@export_category("Damage")
+@export_range(1, 10) var damage_exponent: float = 1.2
+
+@export_category("Damage")
+@export_range(0.1, 100) var damage_distance_multiplier: float = 1.0
 
 @onready var tankBody: TankBody = $TankBody
 @onready var turret = $TankBody/TankTurret
@@ -92,7 +102,7 @@ func shoot() -> void:
 	# Add the instance to the game
 	fired_weapon_container.add_child(fired_weapon_instance)
 
-func take_damage(instigatorController: Node2D, weapon: WeaponProjectile, amount: float) -> void:
+func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float) -> void:
 	var orig_health = health
 	health = clampf(health - amount, 0, max_health)
 	var actual_damage = orig_health - health
@@ -107,9 +117,9 @@ func take_damage(instigatorController: Node2D, weapon: WeaponProjectile, amount:
 		_update_visuals_after_damage()
 	
 	print("Tank " + name + " took " + str(actual_damage) + " damage; health=" + str(health))
-	emit_signal("tank_took_damage", self, instigatorController, weapon, actual_damage)
+	emit_signal("tank_took_damage", self, instigatorController, instigator, actual_damage)
 	if health <= 0:
-		emit_signal("tank_killed", self, instigatorController, weapon)
+		emit_signal("tank_killed", self, instigatorController, instigator)
 
 func _update_max_power():
 	max_power = health * weapon_max_power_health_mult
@@ -147,7 +157,22 @@ func snap_to_ground():
 	var adjusted_ground_position = ground_position - bottom_reference_point.position
 	
 	print("tank.snap_to_ground(" + name + "): adjusting from " + str(global_position) + " to " + str(adjusted_ground_position))
+	
+	var fall_damage := _calculate_fall_damage(adjusted_ground_position)
+	if fall_damage > 0:
+		self.take_damage(owner, self, fall_damage)
 	global_position = adjusted_ground_position
 	
 func _on_reset_orientation(_tankBody: TankBody) -> void:
 	snap_to_ground()
+	
+func _calculate_fall_damage(new_position: Vector2) -> float:
+	var dist = (new_position - global_position).length()
+	if dist < min_damage_distance:
+		print("tank(%s): _calculate_fall_damage - %f < %f -> 0" % [name, dist, min_damage_distance])
+		return 0.0
+	
+	var damage := pow(dist * damage_distance_multiplier, damage_exponent)
+	print("tank(%s): _calculate_fall_damage: %f -> %f" % [name, dist, damage])
+	
+	return damage
