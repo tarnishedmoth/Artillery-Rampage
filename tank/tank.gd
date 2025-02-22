@@ -24,12 +24,12 @@ signal tank_took_damage(
 @export_category("Damage")
 @export_range(0, 1000) var min_damage_distance: float = 10
 
-# 300^x = 1000 -> Want to lose all health if fall > 300 units
+# (300*0.1)^x = 100 -> Want to lose all health if fall > 300 units
 @export_category("Damage")
-@export_range(1, 10) var damage_exponent: float = 1.2
+@export_range(1, 10) var damage_exponent: float = 1.36
 
 @export_category("Damage")
-@export_range(0.1, 100) var damage_distance_multiplier: float = 1.0
+@export_range(0.01, 100) var damage_distance_multiplier: float = 0.1
 
 @onready var tankBody: TankBody = $TankBody
 @onready var turret = $TankBody/TankTurret
