@@ -18,13 +18,22 @@ var initial_chunk_name: String
 var first_child_chunk: TerrainChunk
 
 func _ready():
+	first_child_chunk = get_first_chunk()
+	initial_chunk_name = first_child_chunk.name
+	
 	for chunk in get_children():
 		if chunk is TerrainChunk:
-			if !first_child_chunk:
-				first_child_chunk = chunk
-				initial_chunk_name = first_child_chunk.name
 			chunk.owner = self
 
+#TODO: We should never delete the first chunk but sometimes this is happening
+func get_first_chunk() -> TerrainChunk:
+	if is_instance_valid(first_child_chunk):
+		return first_child_chunk
+	for chunk in get_children():
+		if chunk is TerrainChunk:
+			first_child_chunk = chunk
+			return chunk
+	return null
 # Based on https://www.youtube.com/watch?v=FiKsyOLacwA
 # poly_scale will determine the size of the explosion that destroys the terrain
 	
@@ -57,13 +66,16 @@ func damage(terrainChunk: TerrainChunk, projectile_poly: CollisionPolygon2D, pol
 	#print("new poly (WORLD):")
 	#print_poly(updated_terrain_poly)
 	
-	terrainChunk.replace_contents(updated_terrain_poly, projectile_poly_global)
-	
+	# This could result in new chunks breaking off
+	var terrain_chunk_results := terrainChunk.replace_contents(updated_terrain_poly, projectile_poly_global)
+	if !terrain_chunk_results.is_empty():
+		_add_new_chunks(get_first_chunk(), terrain_chunk_results, 0)
+		
 	# We updated the current chunk and no more chunks to add 
 	if clipping_results.size() == 1:
 		return
 		
-	_add_new_chunks(first_child_chunk, clipping_results, 1)
+	_add_new_chunks(get_first_chunk(), clipping_results, 1)
 
 func _get_projectile_poly_global(projectile_poly: CollisionPolygon2D, poly_scale: Vector2) -> PackedVector2Array:
 	var scale_transform: Transform2D = Transform2D(0, poly_scale, 0, Vector2())
@@ -99,7 +111,7 @@ func _add_new_chunks(first_chunk: TerrainChunk,
 		var new_clip_poly = geometry_results[i]
 
 		# Ignore clockwise results as these are "holes" and need to handle these differently later
-		if _is_invisible(new_clip_poly):
+		if TerrainUtils.is_invisible(new_clip_poly):
 			print("_add_new_chunks(" + name + ") Ignoring 'hole' polygon for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
 			continue
 			
@@ -108,13 +120,6 @@ func _add_new_chunks(first_chunk: TerrainChunk,
 		
 		print("_add_new_chunks(" + name + ") Creating new terrain chunk(" + new_chunk_name + ") for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
 		_add_new_chunk(first_chunk, new_chunk_name, new_clip_poly)
-		
-
-static func _is_invisible(poly: PackedVector2Array) -> bool:
-	return poly.size() < 3 or Geometry2D.is_polygon_clockwise(poly)
-
-static func _is_visible(poly: PackedVector2Array) -> bool:
-	return !_is_invisible(poly)
 	
 func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_poly: PackedVector2Array) -> void:
 	var new_chunk = TerrainChunkScene.instantiate()
@@ -131,10 +136,6 @@ func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_
 	new_chunk.z_index = prototype_chunk.z_index
 
 	new_chunk.replace_contents(new_clip_poly)
-
-static func _largest_poly_first(a: PackedVector2Array, b: PackedVector2Array) -> bool:
-	return a.size() > b.size()
-
 
 func _morph_falling_chunk(chunk: TerrainChunk) -> PackedVector2Array:
 	var falling_transform: Transform2D = Transform2D(0, Vector2(0, falling_offset))
@@ -172,19 +173,19 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 	 ",".join(results.map(func(x : PackedVector2Array): return x.size()))])
 	
 	# Sort by size so we can keep the largest
-	results.sort_custom(_largest_poly_first)
+	results.sort_custom(TerrainUtils.largest_poly_first)
 	
-	if results.size() >= 1 and _is_visible(results[0]):
+	if results.size() >= 1 and TerrainUtils.is_visible(results[0]):
 		first_chunk.replace_contents(results[0])
 	else:
 		first_chunk.delete()
 	
-	if results.size() >= 2 and _is_visible(results[1]):
+	if results.size() >= 2 and TerrainUtils.is_visible(results[1]):
 		second_chunk.replace_contents(results[1])
 	else:
 		second_chunk.delete()
 		
 	if results.size() >= 3:
-		_add_new_chunks(first_child_chunk, results, 2)
+		_add_new_chunks(get_first_chunk(), results, 2)
 		
 	print("merge_chunks: final terrain chunk count=%d" % [get_child_count()])
