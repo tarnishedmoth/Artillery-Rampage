@@ -45,6 +45,7 @@ func _ready() -> void:
 	modulate = color
 	
 	overlap.connect("body_entered", on_body_entered)
+	GameEvents.emit_weapon_fired(self)
 	
 func on_body_entered(_body: Node2D):
 	# Need to do a sweep to see all the things we have influenced

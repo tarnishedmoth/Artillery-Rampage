@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://61mrf0y3km52"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_rtaad"]
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_ngl55"]
+[ext_resource type="Texture2D" uid="uid://dk1mpcpnq71qd" path="res://background_items/city_building.png" id="3_cas8m"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="4_bc8yg"]
+
+[node name="TestLevel01" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_rtaad")]
+
+[node name="Wind" parent="GameLevel" index="4"]
+wind_scale = 500.0
+wind_min = 100
+
+[node name="Enemy1" parent="GameLevel" instance=ExtResource("2_ngl55")]
+position = Vector2(479, 278)
+
+[node name="Tank" parent="GameLevel/Enemy1" index="0"]
+color = Color(0.682353, 0.713726, 0.219608, 1)
+
+[node name="Enemy2" parent="GameLevel" instance=ExtResource("2_ngl55")]
+position = Vector2(1100, 426)
+
+[node name="Tank" parent="GameLevel/Enemy2" index="0"]
+color = Color(0.137255, 0.180392, 0.701961, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="GameLevel"]
+position = Vector2(38, 418)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("3_cas8m")
+
+[node name="Player" parent="GameLevel" instance=ExtResource("4_bc8yg")]
+position = Vector2(120, 427)
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/Enemy1"]
+[editable path="GameLevel/Enemy2"]

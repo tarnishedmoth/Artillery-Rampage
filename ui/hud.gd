@@ -14,6 +14,7 @@ func init_signals():
 	GameEvents.connect("turn_started", _on_turn_started);
 	GameEvents.connect("aim_updated", _on_aim_updated);
 	GameEvents.connect("power_updated", _on_power_updated)
+	GameEvents.connect("wind_updated", _on_wind_updated)
 
 func _on_turn_started(player: TankController) -> void:
 	active_player_text.text = player.name
@@ -26,7 +27,20 @@ func _on_aim_updated(player: TankController) -> void:
 	var angleRads = player.tank.get_turret_rotation()
 	
 	angle_text.set_value(int(abs(rad_to_deg(angleRads))))
-	aim_direction_text.set_value("->" if angleRads >= 0 else "<-")
+	aim_direction_text.set_value(_get_direction_string(angleRads))
 
 func _on_power_updated(player: TankController) -> void:
 	power_text.set_value(int(player.tank.power))
+
+func _on_wind_updated(wind: Wind) -> void:
+	var vector := wind.wind
+	var value := vector.length()
+	
+	var direction := vector.x
+	wind_text.set_value("%d %s" % [_fmt_wind_value(value), _get_direction_string(direction)])
+
+func _fmt_wind_value(value: float) -> int:
+	return int(abs(value))
+
+func _get_direction_string(value: float) -> String:
+	return "->" if value >= 0 else "<-"
