@@ -5,8 +5,8 @@ class_name Wind extends Node
 var wind_scale:float = 1.0
 
 @export_category("Wind")
-@export_range(0.0, 1e9, 1, "or_greater")
-var wind_min:int = 0
+@export_range(-100, 1e9, 1, "or_greater")
+var wind_min:int = -100
 
 @export_category("Wind")
 @export_range(0.0, 1e9, 1, "or_greater")
@@ -14,10 +14,9 @@ var wind_max:int = 100
 
 var wind: Vector2 = Vector2():
 	set(value):
-		if value != wind:
-			wind = value
-			print("Wind(%s): set to %s" % [name, str(value)])
-			GameEvents.emit_wind_updated(self)
+		wind = value
+		print("Wind(%s): set to %s" % [name, str(value)])
+		GameEvents.emit_wind_updated(self)
 	get:
 		return wind
 		
@@ -28,7 +27,8 @@ func _ready() -> void:
 	GameEvents.connect("weapon_fired", _on_weapon_fired)
 
 func _randomize_wind() -> int:
-	return randi_range(wind_min, wind_max) * (1 if randf() <= 0.5 else -1)
+	# Increase "no-wind" probability by allowing negative and then clamping to zero if the random number is < 0
+	return max(randi_range(wind_min, wind_max), 0) * (1 if randf() <= 0.5 else -1)
 
 func _physics_process(delta: float) -> void:
 	if !is_instance_valid(_active_weapon):

@@ -10,7 +10,6 @@
 [node name="GameLevel" parent="." instance=ExtResource("1_rtaad")]
 
 [node name="Wind" parent="GameLevel" index="4"]
-wind_scale = 500.0
 wind_min = 100
 
 [node name="Enemy1" parent="GameLevel" instance=ExtResource("2_ngl55")]
