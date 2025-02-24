@@ -1,7 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://bg64wc8fibctr"]
+[gd_scene load_steps=7 format=3 uid="uid://bg64wc8fibctr"]
 
 [ext_resource type="PackedScene" uid="uid://csk42q7q75rcy" path="res://ui/hud_value.tscn" id="1_iign6"]
 [ext_resource type="Script" path="res://ui/hud.gd" id="1_qwt2x"]
+[ext_resource type="Texture2D" uid="uid://dpfc8uwt8aa7v" path="res://ui/hud_bg_topleft.png" id="2_2w7a5"]
+[ext_resource type="Texture2D" uid="uid://d4l0fjsjek7l8" path="res://ui/hud_bg_topright.png" id="4_fd2cg"]
+[ext_resource type="Texture2D" uid="uid://c746m7aq2phfe" path="res://ui/hud_bg_center.png" id="5_toij6"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ln601"]
 font_size = 24
@@ -26,6 +29,11 @@ offset_top = 20.0
 offset_right = 159.0
 offset_bottom = 92.0
 
+[node name="background" type="Sprite2D" parent="VBoxContainer"]
+position = Vector2(-20, -20)
+texture = ExtResource("2_2w7a5")
+centered = false
+
 [node name="Angle" parent="VBoxContainer" instance=ExtResource("1_iign6")]
 layout_mode = 2
 
@@ -45,6 +53,11 @@ offset_left = 1099.0
 offset_top = 20.0
 offset_right = 1238.0
 offset_bottom = 92.0
+
+[node name="background" type="Sprite2D" parent="VBoxContainer2"]
+position = Vector2(-80, -20)
+texture = ExtResource("4_fd2cg")
+centered = false
 
 [node name="AimDirection" parent="VBoxContainer2" instance=ExtResource("1_iign6")]
 layout_mode = 2
@@ -75,6 +88,11 @@ offset_top = 20.0
 offset_right = 72.0
 offset_bottom = 92.0
 grow_horizontal = 2
+
+[node name="background" type="Sprite2D" parent="VBoxContainer3"]
+position = Vector2(-52, -10)
+texture = ExtResource("5_toij6")
+centered = false
 
 [node name="ActivePlayer" type="Label" parent="VBoxContainer3"]
 layout_mode = 2
