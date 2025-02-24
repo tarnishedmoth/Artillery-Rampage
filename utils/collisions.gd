@@ -7,6 +7,7 @@ class Layers:
 	const projectile: int = 1 << 1
 	const wall:int = 1 << 2
 	const terrain: int = 1 << 3
+	const world_body: int = 1 << 4
 	
 class CompositeMasks:
 	const damageable: int = Layers.tank | Layers.terrain

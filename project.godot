@@ -83,3 +83,4 @@ power_decrease={
 2d_physics/layer_2="Projectile"
 2d_physics/layer_3="Wall"
 2d_physics/layer_4="Terrain"
+2d_physics/layer_5="WorldBody"
