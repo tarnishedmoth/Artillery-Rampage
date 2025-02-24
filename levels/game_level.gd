@@ -1,11 +1,10 @@
 class_name GameLevel extends Node2D
 
-var round_director : RoundDirector
+@onready var round_director : RoundDirector = %RoundDirector
 
 func _ready() -> void:
 	GameEvents.connect("round_ended", _on_round_ended)
 	
-	round_director = RoundDirector.new()
 	begin_round()
 
 # This is called at the start of the round to enable input for players

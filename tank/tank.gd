@@ -52,6 +52,9 @@ var health: float
 var power:float
 var max_power:float
 
+var fall_start_position: Vector2
+var mark_falling: bool
+
 func _ready() -> void:
 	modulate = color
 	turret.modulate = color.darkened(1 - turret_color_value)
@@ -138,36 +141,47 @@ func kill():
 	queue_free()
 
 func snap_to_ground():
-	var space_state = get_world_2d().direct_space_state
-	# in 2D positive y goes down
+	# Setting the position here will put the center of the tank at the position. Need to offset by the bottom offset
+	var ground_position = get_ground_snap_position()
+		
+	print("tank.snap_to_ground(" + name + "): adjusting from " + str(global_position) + " to " + str(ground_position))
 	
+	_check_and_emit_fall_damage(global_position, ground_position)
+	global_position = ground_position
+	
+func get_ground_snap_position() -> Vector2:
+	var space_state = get_world_2d().direct_space_state
+	
+	# in 2D positive y goes down
 	var query_params = PhysicsRayQueryParameters2D.create(
 		top_reference_point.global_position, top_reference_point.global_position + Vector2(0, ground_trace_distance),
-		 Collisions.Layers.terrain)
+		 Collisions.CompositeMasks.tank_snap)
 		
 	query_params.exclude = [self]
 	
 	var result = space_state.intersect_ray(query_params)
 	if !result:
-		print("tank.snap_to_ground(" + name + "): cannot find ground")
-		return 
+		push_warning("tank.get_ground_snap_position(" + name + "): cannot find ground")
+		return global_position
 		
 	# Setting the position here will put the center of the tank at the position. Need to offset by the bottom offset
 	var ground_position = result["position"]
 	var adjusted_ground_position = ground_position - bottom_reference_point.position
-	
-	print("tank.snap_to_ground(" + name + "): adjusting from " + str(global_position) + " to " + str(adjusted_ground_position))
-	
-	var fall_damage := _calculate_fall_damage(adjusted_ground_position)
-	if fall_damage > 0:
-		self.take_damage(owner, self, fall_damage)
-	global_position = adjusted_ground_position
+		
+	return adjusted_ground_position
 	
 func _on_reset_orientation(_tankBody: TankBody) -> void:
-	snap_to_ground()
-	
-func _calculate_fall_damage(new_position: Vector2) -> float:
-	var dist = (new_position - global_position).length()
+	# TODO: Removing this temporarily as it is proving buggy
+	# snap_to_ground()
+	pass
+
+func _check_and_emit_fall_damage(start_position: Vector2, end_position: Vector2) -> void:
+	var fall_damage := _calculate_fall_damage(start_position, end_position)
+	if fall_damage > 0:
+		self.take_damage(owner, self, fall_damage)
+		
+func _calculate_fall_damage(start_position: Vector2, end_position: Vector2) -> float:
+	var dist = (end_position - start_position).length()
 	if dist < min_damage_distance:
 		print("tank(%s): _calculate_fall_damage - %f < %f -> 0" % [name, dist, min_damage_distance])
 		return 0.0
@@ -176,3 +190,15 @@ func _calculate_fall_damage(new_position: Vector2) -> float:
 	print("tank(%s): _calculate_fall_damage: %f -> %f" % [name, dist, damage])
 	
 	return damage
+
+func started_falling() -> void:
+	if mark_falling:
+		return
+	fall_start_position = global_position
+	mark_falling = true
+
+func stopped_falling() -> void:
+	if !mark_falling:
+		return
+	_check_and_emit_fall_damage(fall_start_position, global_position)
+	mark_falling = false

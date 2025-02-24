@@ -32,10 +32,16 @@ func _do_reset_orientation(state: PhysicsDirectBodyState2D) -> void:
 	emit_signal("on_reset_orientation", self)
 	
 func is_falling() -> bool:
+	# TODO: May want to do raycast instead (See parent tank script "get_ground_position"
 	# This seems to always return true as they are slightly in motion
 	# return !linear_velocity.is_zero_approx() || !is_zero_approx(angular_velocity)
 	var result:bool =  abs(angular_velocity) >= 0.1 || linear_velocity.length_squared() >= 1.0
 	
 	print("tank: " + name + " (is_falling=" + str(result) + ") - angular_velocity=" + str(angular_velocity) + ";linear_velocity=" + str(linear_velocity.length()))
 
+	# FIXME: Hack because snap_to_ground not working as expected
+	if result:
+		get_parent().started_falling()
+	else:
+		get_parent().stopped_falling()
 	return result

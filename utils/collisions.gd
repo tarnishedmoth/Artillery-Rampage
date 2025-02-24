@@ -11,3 +11,6 @@ class Layers:
 	
 class CompositeMasks:
 	const damageable: int = Layers.tank | Layers.terrain
+	
+	# Tanks are staggered so shouldn't need to snap down on top of other tanks
+	const tank_snap: int = Layers.terrain | Layers.world_body

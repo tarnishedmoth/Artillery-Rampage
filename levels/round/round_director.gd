@@ -1,13 +1,32 @@
-class_name RoundDirector
+class_name RoundDirector extends Node
 
 var tank_controllers: Array = []
 var active_player_index: int = -1
 var physics_sim_time: float = 5.0
-var physics_check_time: float = 0.2
+var physics_check_time: float = 0.5
 
+var fall_check_timer: Timer
+
+signal tanks_stopped_falling
+
+func _ready():
+	fall_check_timer = Timer.new()
+	fall_check_timer.set_wait_time(0.1)
+	fall_check_timer.set_one_shot(false)
+	fall_check_timer.connect("timeout", _on_fall_check_timeout)
+	fall_check_timer.autostart = false
+	
+	add_child(fall_check_timer)
+	
 func add_controller(tank_controller) -> void:
 	tank_controllers.append(tank_controller)
 	
+func _on_fall_check_timeout():
+	if !is_any_tank_falling():
+		print("_on_fall_check_timeout: Stopping fall_check_timer")
+		fall_check_timer.stop()
+		emit_signal("tanks_stopped_falling")
+
 func begin_round() -> bool:
 	
 	GameEvents.connect("turn_ended", _on_turn_ended)
@@ -17,6 +36,10 @@ func begin_round() -> bool:
 		
 	# Order of tanks is always random per original "Tank Wars"
 	tank_controllers.shuffle()
+	
+	# Await at start in case tanks are falling at start
+	# TODO: Maybe remove this before release
+	await _async_check_and_await_falling()
 	
 	GameEvents.emit_round_started()
 	
@@ -36,24 +59,27 @@ func next_player() -> bool:
 	
 	return true
 	
-func _on_turn_ended(controller: TankController):
+func _on_turn_ended(controller: TankController) -> void:
 	print("Turn ended for " + controller.name)
-	 # Wait for physics to settle prior to allowing next player to start
-	# TODO: use an AutoLoad SceneManager to get the current tree 
-	# or just make this class a Node and add to tree from Game
-	# Making this class a node would allow export properties to be set from the editor
-	var scene_tree = controller.get_tree()
-
-	# Wait a smidge and then check if any tank is falling and give time for physics to settle
-	await scene_tree.create_timer(physics_check_time).timeout
-	
-	if is_any_tank_falling():
-		await controller.get_tree().create_timer(physics_sim_time).timeout
+	await _async_check_and_await_falling()
 	
 	if !next_player():
 		GameEvents.emit_round_ended()
 		return
 
+func _async_check_and_await_falling() -> void:
+	 # Wait for physics to settle prior to allowing next player to start
+	# or just make this class a Node and add to tree from Game
+	var scene_tree = get_tree()
+
+	# Wait a smidge and then check if any tank is falling and give time for physics to settle
+	await scene_tree.create_timer(physics_check_time).timeout
+	
+	if is_any_tank_falling():
+		print("_on_turn_ended: At least one tank falling - Starting fall_check_timer")
+		fall_check_timer.start()
+		await tanks_stopped_falling
+		
 func is_any_tank_falling() -> bool:
 	for controller in tank_controllers:
 		if is_instance_valid(controller) && controller.tank.is_falling():
