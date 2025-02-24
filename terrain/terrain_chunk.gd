@@ -256,7 +256,12 @@ func delete() -> void:
 # poly_scale will determine the size of the explosion that destroys the terrain
 func damage(projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1,1)):
 	owner.damage(self, projectile_poly, poly_scale)
+
+func contains_point(point: Vector2) -> bool:
+	var terrain_global_inv_transform: Transform2D = terrainMesh.global_transform.affine_inverse()
+	var point_local := terrain_global_inv_transform * point
 	
+	return Geometry2D.is_point_in_polygon(point_local, get_terrain_local())
 # Sort by largest first
 func compare(other: TerrainChunk) -> bool:
 	return terrainMesh.polygon.size() > other.terrainMesh.polygon.size()

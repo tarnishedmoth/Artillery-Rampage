@@ -189,3 +189,10 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 		_add_new_chunks(get_first_chunk(), results, 2)
 		
 	print("merge_chunks: final terrain chunk count=%d" % [get_child_count()])
+
+func contains_point(point: Vector2) -> bool:
+	for chunk in get_children():
+		if chunk is TerrainChunk:
+			if chunk.contains_point(point):
+				return true
+	return false
