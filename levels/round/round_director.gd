@@ -3,7 +3,7 @@ class_name RoundDirector extends Node
 var tank_controllers: Array = []
 var active_player_index: int = -1
 var physics_sim_time: float = 5.0
-var physics_check_time: float = 0.5
+var physics_check_time: float = 0.25
 
 var fall_check_timer: Timer
 
@@ -11,7 +11,7 @@ signal tanks_stopped_falling
 
 func _ready():
 	fall_check_timer = Timer.new()
-	fall_check_timer.set_wait_time(0.1)
+	fall_check_timer.set_wait_time(0.5)
 	fall_check_timer.set_one_shot(false)
 	fall_check_timer.connect("timeout", _on_fall_check_timeout)
 	fall_check_timer.autostart = false
@@ -53,6 +53,8 @@ func next_player() -> bool:
 		
 	active_player_index = (active_player_index + 1) % tank_controllers.size()
 	var active_player = tank_controllers[active_player_index]
+	
+	print("Turn beginning for %s" % [active_player.name])
 	
 	active_player.begin_turn()
 	GameEvents.emit_turn_started(active_player)

@@ -15,7 +15,7 @@ var tank: Tank:
 func _get_tank() -> Tank:
 	push_error("abstract function")
 	return null
-	
+
 func _on_turn_ended(_player: TankController) -> void:
 	# On any player turn ended, simulate physics	
 	tank.toggle_gravity(true)

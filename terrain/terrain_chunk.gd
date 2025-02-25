@@ -48,8 +48,8 @@ var _velocity:Vector2
 
 func _ready() -> void:
 	# Make sure the collision and visual polygon the same
-	collisionMesh.polygon = terrainMesh.polygon
-	overlapMesh.polygon = terrainMesh.polygon
+	collisionMesh.set_deferred("polygon", terrainMesh.polygon)
+	overlapMesh.set_deferred("polygon", terrainMesh.polygon)
 	
 	if !falling:
 		falling = initially_falling
