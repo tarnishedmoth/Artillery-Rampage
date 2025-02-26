@@ -57,12 +57,19 @@ func _populate_specified_positions() -> void:
 func _instantiate_controller_scene_at(scene: PackedScene, position: Vector2) -> TankController:
 	if !scene:
 		push_error("ArtillerySpawner(%s): Unable to create TankController from NULL scene" % [name])
+		return null
 	var instance := scene.instantiate() as TankController
-	if !instance:
+	if instance:
+		instance.global_position = position
+	else:
 		push_error("ArtillerySpawner(%s): Unable to create TankController from packed scene=%s" % [name, scene])
-	instance.global_position = position
+	
 	return instance
 
+func init_controller_props(controller: TankController) -> void:
+	if controller is AITank:
+		controller.set_color(Color(randf(), randf(), randf()))
+		
 func _calculate_spawn_positions(terrain: Terrain, count: int) -> bool:
 	var success:bool = true
 	# TODO: Implement spreading out and adding additional random positions based on terrain
@@ -100,7 +107,10 @@ func _spawn_units(num_human: int) -> Array[TankController]:
 			if is_ai:
 				spawned.name = enemy_names[ (ai_count - 1) % enemy_names.size()]
 			add_child(spawned)
+			# Child nodes are null until added to the scene
+			init_controller_props(spawned)
+			
 			all_spawned.push_back(spawned)
 	
 	return all_spawned
-	
+		

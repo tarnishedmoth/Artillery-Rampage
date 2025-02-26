@@ -18,7 +18,6 @@ signal tank_took_damage(
 
 @export var turret_shot_angle_offset:float = -90
 
-@export var color: Color = Color.WHITE
 @export var turret_color_value: float = 0.7
 
 @export_category("Damage")
@@ -55,9 +54,21 @@ var max_power:float
 var fall_start_position: Vector2
 var mark_falling: bool
 
-func _ready() -> void:
+@export var color: Color = Color.WHITE:
+	set(value):
+		color = value
+		_on_update_color()
+	get:
+		return color
+
+func _on_update_color():
 	modulate = color
-	turret.modulate = color.darkened(1 - turret_color_value)
+	# TODO: Setter is not supposed to be called for @onready or initial value but it is so guard against initial nil
+	if turret:
+		turret.modulate = color.darkened(1 - turret_color_value)
+
+func _ready() -> void:
+	_on_update_color()
 	
 	health = max_health
 	_update_max_power()
