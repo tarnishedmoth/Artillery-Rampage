@@ -1,6 +1,8 @@
 class_name GameLevel extends Node2D
 
 @onready var round_director : RoundDirector = %RoundDirector
+@onready var spawner: ArtillerySpawner = %ArtillerySpawner
+@onready var terrain: Terrain = %Terrain
 
 func _ready() -> void:
 	GameEvents.connect("round_ended", _on_round_ended)
@@ -18,12 +20,8 @@ func begin_round():
 	# to then create the necessary controllers and tanks from it
 	# For now just loading in the instance from the scene
 	# Discover any placed child controller nodes
-	for child in get_children():
-		if child is TankController:
-			round_director.add_controller(child)
-			
-			if child is Player:
-				child.connect("player_killed", _on_player_killed)
+	_add_manually_placed_units()
+	spawner.spawn_all(terrain)
 				
 	round_director.begin_round()
 
@@ -35,3 +33,18 @@ func _on_player_killed(in_player: Player) -> void:
 
 func _on_round_ended() -> void:
 	SceneManager.next_level()
+
+func _add_manually_placed_units():
+	for child in get_children():
+		if child is TankController:
+			round_director.add_controller(child)
+			connect_events(child)
+
+func _add_spawned_units():
+	for controller in spawner.spawn_all(terrain):
+		round_director.add_controller(controller)
+		connect_events(controller)
+		
+func connect_events(controller: TankController) -> void:
+	if controller is Player:
+		controller.connect("player_killed", _on_player_killed)

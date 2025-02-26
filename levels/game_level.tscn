@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://uaih1d1o2vd7"]
+[gd_scene load_steps=11 format=3 uid="uid://uaih1d1o2vd7"]
 
 [ext_resource type="Script" path="res://levels/game_level.gd" id="1_c8wet"]
 [ext_resource type="PackedScene" uid="uid://bg64wc8fibctr" path="res://ui/hud.tscn" id="2_pmdi8"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://b7vpl03hcrs3e" path="res://walls/walls.tscn" id="4_h0s8o"]
 [ext_resource type="PackedScene" uid="uid://no0hhhxjq8ql" path="res://effects/wind.tscn" id="5_5ytpt"]
 [ext_resource type="Script" path="res://levels/round/round_director.gd" id="6_fyk6u"]
+[ext_resource type="PackedScene" uid="uid://d3q2cfp8mqu2x" path="res://tank/artillery_spawner.tscn" id="7_f5i3m"]
 
 [sub_resource type="Gradient" id="Gradient_h05uu"]
 colors = PackedColorArray(0, 0, 1, 1, 0.866667, 0, 0, 1)
@@ -36,6 +37,7 @@ texture = SubResource("GradientTexture2D_0l652")
 stretch_mode = 1
 
 [node name="Terrain" parent="." instance=ExtResource("3_nb1rg")]
+unique_name_in_owner = true
 z_index = -10
 position = Vector2(118, 444)
 scale = Vector2(1.28, 0.68)
@@ -53,5 +55,8 @@ shape = SubResource("RectangleShape2D_60ghs")
 [node name="RoundDirector" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("6_fyk6u")
+
+[node name="ArtillerySpawner" parent="." instance=ExtResource("7_f5i3m")]
+unique_name_in_owner = true
 
 [editable path="Walls"]
