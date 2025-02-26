@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://d3q2cfp8mqu2x"]
+
+[ext_resource type="Script" path="res://tank/artillery_spawner.gd" id="1_2ysy7"]
+
+[node name="ArtillerySpawner" type="Node"]
+script = ExtResource("1_2ysy7")
+artillery_ai_types = null
