@@ -21,7 +21,7 @@ func begin_round():
 	# For now just loading in the instance from the scene
 	# Discover any placed child controller nodes
 	_add_manually_placed_units()
-	spawner.spawn_all(terrain)
+	_add_spawned_units()
 				
 	round_director.begin_round()
 

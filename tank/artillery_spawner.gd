@@ -10,8 +10,15 @@ var _specified_positions: Array[Marker2D] = []
 var _all_positions: Array[Vector2] = []
 var _used_positions: Array[Vector2] = []
 
+var enemy_names: Array[String] = [
+	"Billy", "Rob", "Don", "Jerry", "Peter", "Amanda", "Alex", "Alexa", 
+	"Betty", "Suzy", "Ann", "Andy", "Mike", "Becky", "Molly", "Erica", "Eric",
+	"Harry", "Ian", "Fred", "Phil", "Cindy", "Daisy", "Tanky", "Arty"
+]
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	enemy_names.shuffle()
 	_populate_specified_positions()
 
 # Vector2i has [min,max] for each type
@@ -32,12 +39,13 @@ func spawn_all(terrain: Terrain, ai_players: Vector2i = Vector2i(), human_player
 		print("ArtillerySpawner(%s): No spawning requested - returning []" % [name])
 		return []
 	
-	print("ArtillerySpawner(%s): Requesting spawning - num_ai=%d; num_human=%d" % [name, num_ai, num_human])
+	print("ArtillerySpawner(%s): Requesting spawning - num_ai=%d [%d-%d]; num_human=%d [%d-%d]" 
+	% [name, num_ai, ai_players.x, ai_players.y, num_human, human_players.x, human_players.y])
 	
 	if !_calculate_spawn_positions(terrain, total_spawns):
 		push_warning("ArtillerySpawner(%s): Unable to generate requested spawn count=%d; generated=%d" % [name, total_spawns, _used_positions.size()])
 		
-	var spawned_list := _spawn_units(num_ai, num_human)
+	var spawned_list := _spawn_units(num_human)
 	
 	return spawned_list
 
@@ -71,17 +79,26 @@ func _calculate_spawn_positions(terrain: Terrain, count: int) -> bool:
 		
 	return success
 
-func _spawn_units(num_ai: int, num_human: int) -> Array[TankController]:
+func _spawn_units(num_human: int) -> Array[TankController]:
 	var all_spawned : Array[TankController] = []
+	
+	var ai_count:int = 0
 	
 	for i in range(0, _used_positions.size()):
 		var scene:PackedScene
+		var is_ai:bool = false
+		
 		if i < num_human:
 			scene = player_type
 		else:
+			is_ai = true
+			ai_count += 1
 			scene = artillery_ai_types.pick_random()
 		var spawned := _instantiate_controller_scene_at(scene, _used_positions[i])
 		if spawned:
+			# Give AI random names
+			if is_ai:
+				spawned.name = enemy_names[ (ai_count - 1) % enemy_names.size()]
 			add_child(spawned)
 			all_spawned.push_back(spawned)
 	

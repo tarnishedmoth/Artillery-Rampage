@@ -17,7 +17,8 @@ mono_crash.*.json
 
 /android/
 
-/Build/
+/build/
+/logs/
 
 # Mac OS ignores
 .DS_Store
