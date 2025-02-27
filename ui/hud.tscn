@@ -8,8 +8,7 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_ln601"]
 font_size = 24
-font_color = Color(0.03, 0.03, 0.03, 1)
-outline_size = 5
+outline_size = 8
 outline_color = Color(0.14, 0.14, 0.14, 1)
 shadow_size = 0
 
@@ -37,11 +36,14 @@ centered = false
 [node name="Angle" parent="VBoxContainer" instance=ExtResource("1_iign6")]
 layout_mode = 2
 
+[node name="Label" parent="VBoxContainer/Angle" index="0"]
+text = "⊾ Angle:"
+
 [node name="Power" parent="VBoxContainer" instance=ExtResource("1_iign6")]
 layout_mode = 2
 
 [node name="Label" parent="VBoxContainer/Power" index="0"]
-text = "Power:"
+text = "✹ Power:"
 
 [node name="Value" parent="VBoxContainer/Power" index="1"]
 text = "1000
@@ -49,13 +51,13 @@ text = "1000
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 1099.0
+offset_left = 1080.0
 offset_top = 20.0
-offset_right = 1238.0
+offset_right = 1263.0
 offset_bottom = 92.0
 
 [node name="background" type="Sprite2D" parent="VBoxContainer2"]
-position = Vector2(-80, -20)
+position = Vector2(-60, -20)
 texture = ExtResource("4_fd2cg")
 centered = false
 
@@ -63,16 +65,16 @@ centered = false
 layout_mode = 2
 
 [node name="Label" parent="VBoxContainer2/AimDirection" index="0"]
-text = "Direction: "
+text = "⛯ Direction: "
 
 [node name="Value" parent="VBoxContainer2/AimDirection" index="1"]
-text = "->"
+text = "▶"
 
 [node name="Health" parent="VBoxContainer2" instance=ExtResource("1_iign6")]
 layout_mode = 2
 
 [node name="Label" parent="VBoxContainer2/Health" index="0"]
-text = "Health:"
+text = "⛨ Health:"
 
 [node name="Value" parent="VBoxContainer2/Health" index="1"]
 text = "100
@@ -90,7 +92,7 @@ offset_bottom = 92.0
 grow_horizontal = 2
 
 [node name="background" type="Sprite2D" parent="VBoxContainer3"]
-position = Vector2(-52, -10)
+position = Vector2(-52, -6)
 texture = ExtResource("5_toij6")
 centered = false
 
@@ -104,10 +106,11 @@ horizontal_alignment = 1
 layout_mode = 2
 
 [node name="Label" parent="VBoxContainer3/Wind" index="0"]
-text = "Wind:"
+text = "☁ Wind:"
 
 [node name="Value" parent="VBoxContainer3/Wind" index="1"]
-text = "50 ->"
+text = "50 ◀
+"
 
 [editable path="VBoxContainer/Angle"]
 [editable path="VBoxContainer/Power"]

@@ -26,7 +26,7 @@ func _on_turn_started(player: TankController) -> void:
 func _on_aim_updated(player: TankController) -> void:
 	var angleRads = player.tank.get_turret_rotation()
 	
-	angle_text.set_value(int(abs(rad_to_deg(angleRads))))
+	angle_text.set_value(str(int(abs(rad_to_deg(angleRads))))+"°") 
 	aim_direction_text.set_value(_get_direction_string(angleRads))
 
 func _on_power_updated(player: TankController) -> void:
@@ -43,4 +43,4 @@ func _fmt_wind_value(value: float) -> int:
 	return int(abs(value))
 
 func _get_direction_string(value: float) -> String:
-	return "->" if value >= 0 else "<-"
+	return "▶" if value >= 0 else "◀"
