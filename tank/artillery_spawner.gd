@@ -4,6 +4,8 @@ class_name ArtillerySpawner extends Node
 @export var default_ai_players: Vector2i = Vector2i()
 @export var default_human_players: Vector2i = Vector2i()
 
+@export_range(0, 100) var terrain_y_offset: float = 20.0
+
 const player_type : PackedScene = preload("res://controller/player/player.tscn")
 
 var _specified_positions: Array[Marker2D] = []
@@ -80,12 +82,37 @@ func _calculate_spawn_positions(terrain: Terrain, count: int) -> bool:
 		push_warning("ArtillerySpawner(%s): Requesting %d spawns but only %d available" % [name, count, _all_positions.size()])
 		success = false
 		count = _all_positions.size()
-		
-	_all_positions.shuffle()
-	_used_positions = _all_positions.slice(0, count)
-		
+	
+	# Sort positions by x
+	_all_positions.sort_custom(func(a:Vector2, b:Vector2) -> bool: return a.x < b.x)	
+	_choose_positions(count)
+			
 	return success
 
+func _choose_positions(count: int) -> void:
+	if count < _all_positions.size():
+		# Assuming the points are evenly distributed
+		var max_position:int = _all_positions.size() - 1
+		var stride:float = float(_all_positions.size()) / count
+		
+		var _used_indices:Array[int] = []
+		
+		for i in range(0, count):
+			var index:int = mini(roundi(randf_range(i * stride, (i + 1) * stride)), max_position)
+			# Already guarded against infinite loop as clamp count to max positions
+			# This shouldn't happen much - only in cases of player count to 
+			while index in _used_indices:
+				index -= 1
+				if index < 0:
+					index = max_position
+			_used_indices.push_back(index)
+			_used_positions.push_back(_all_positions[index])
+	else: 	# Special case of total positions available is count
+		_used_positions.append_array(_all_positions)
+	
+	# Shuffle final positions since the AI to player ratio is based on the index
+	_used_positions.shuffle()
+	
 func _spawn_units(num_human: int) -> Array[TankController]:
 	var all_spawned : Array[TankController] = []
 	
