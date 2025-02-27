@@ -19,7 +19,7 @@ class_name Weapon extends Node2D
 @export var use_ammo: bool = false ## Whether to check and track ammo.
 @export var current_ammo: int = 16 ## Starting ammo.
 @export var ammo_used_per_shot: int = 1.0
-@export var use_magazines: bool = false
+@export var use_magazines: bool = false ## If true, use a finite ammo supply.
 @export var magazines: int = 3
 @export var magazine_capacity: int = 16
 @export var reload_delay_time: float = 2.0 ## Seconds it takes to reload a mag.
@@ -34,8 +34,8 @@ class_name Weapon extends Node2D
 @export var sfx_idle: AudioStreamPlayer2D
 
 var is_reloading: bool = false
-var is_cycling: bool = false
-var is_equipped: bool = false
+var is_cycling: bool = false ## Weapon won't fire while cycling--see fire rate
+var is_equipped: bool = false ## Used for SFX, also the weapon won't fire if unequipped.
 
 @export var barrels: Array[Marker2D] = []
 var barrels_sfx_fire: Array[AudioStreamPlayer2D] = []
@@ -77,9 +77,8 @@ func shoot(power:float = fire_velocity) -> void:
 		if sfx_dry_fire: sfx_dry_fire.play()
 		cycle() ## To PUNISH them...
 		return
-	if use_magazines == true && current_ammo <= 0:
+	if use_ammo == true && current_ammo <= 0:
 		if sfx_dry_fire: sfx_dry_fire.play()
-		#EventBus.weapon_failed_fired.emit()
 		cycle()
 		return ## We can't shoot.
 		
@@ -92,16 +91,18 @@ func shoot(power:float = fire_velocity) -> void:
 		## Alternative handling for continuous weapons
 		pass
 		
-	if use_magazines: current_ammo -= 1
+	if use_ammo: current_ammo -= 1
 	
 func reload(immediate: bool = false) -> void:
 	if not is_equipped: return
 	if is_reloading: return
-	if use_magazines:
+	if use_magazines && magazines < 1: return ## Out of magazines/ammo.
+	if use_ammo:
 		is_reloading = true
 		if not immediate: ## Instant reloading
 			await get_tree().create_timer(reload_delay_time).timeout ## Reload Timer
 		current_ammo = magazine_capacity ## Reset ammo
+		if use_magazines: magazines -= 1
 	else:
 		pass
 	is_reloading = false ## Finished reloading.
@@ -127,7 +128,7 @@ func spawn_projectile(power: float = fire_velocity) -> void:
 		var velocity = Vector2(power, 0.0)
 		new_shot.linear_velocity = velocity.rotated(direction)
 		container.add_child(new_shot)
-		print("Shot fired with ", velocity, " at ", direction)
+		print_debug("Shot fired with ", velocity, " at ", direction)
 
 func configure_barrels() -> void:
 	current_barrel = 0
