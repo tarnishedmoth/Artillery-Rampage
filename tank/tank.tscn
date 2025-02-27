@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dvr6bm2hlj5h4"]
+[gd_scene load_steps=8 format=3 uid="uid://dvr6bm2hlj5h4"]
 
 [ext_resource type="Script" path="res://tank/tank.gd" id="1_0iy80"]
 [ext_resource type="Script" path="res://tank/tank_body.gd" id="2_o5qn2"]
 [ext_resource type="Texture2D" uid="uid://banqgk8hu7ykt" path="res://tank/tank_placeholder_texture.tres" id="3_t17rk"]
+[ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_tankshot.tscn" id="4_1i1mw"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1pofo"]
 friction = 100.0
@@ -49,6 +50,13 @@ shape = SubResource("RectangleShape2D_bbvof")
 
 [node name="WeaponFireLocation" type="Marker2D" parent="TankBody/TankTurret"]
 position = Vector2(0, -33.14)
+
+[node name="Weapons" type="Node2D" parent="TankBody/TankTurret"]
+
+[node name="WeaponTankshot" parent="TankBody/TankTurret/Weapons" node_paths=PackedStringArray("parent_tank", "barrels") instance=ExtResource("4_1i1mw")]
+parent_tank = NodePath("../../../..")
+fire_velocity = 100.0
+barrels = [NodePath("../../WeaponFireLocation")]
 
 [node name="Bottom" type="Marker2D" parent="TankBody"]
 position = Vector2(0, 13)

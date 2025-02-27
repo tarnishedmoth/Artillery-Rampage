@@ -33,14 +33,14 @@ signal tank_took_damage(
 @export_range(0.01, 100) var damage_distance_multiplier: float = 0.1
 
 @onready var tankBody: TankBody = $TankBody
-@onready var turret = $TankBody/TankTurret
-@onready var weapon_fire_location = $TankBody/TankTurret/WeaponFireLocation
-
-# Contains fired projectiles for scene management
-@onready var fired_weapon_container = $FiredWeaponContainer
-
 @onready var bottom_reference_point = $TankBody/Bottom
 @onready var top_reference_point = $TankBody/Top
+@onready var turret = $TankBody/TankTurret
+@onready var weapon_fire_location = $TankBody/TankTurret/WeaponFireLocation
+@onready var fired_weapon_container = $FiredWeaponContainer ## Contains fired projectiles for scene management
+
+@onready var weapons: Array[Weapon]
+var current_equipped_weapon: Weapon
 
 # This is called a packed scene
 # Calling "instantiate" on it is equivalent to an instanced scene
@@ -71,6 +71,7 @@ func _on_update_color():
 
 func _ready() -> void:
 	_on_update_color()
+	scan_available_weapons()
 	
 	health = max_health
 	_update_max_power()
@@ -132,6 +133,13 @@ func get_turret_rotation() -> float:
 	return turret.rotation
 	
 func shoot() -> void:
+	var weapon: Weapon = get_equipped_weapon()
+	if not weapon == null:
+		weapon.shoot(power)
+	else:
+		print_debug(self,"Tried to shoot, but no equipped weapon.")
+	
+func shoot_deprecated() -> void:
 	# Create a scene instance (Spawn)
 	var fired_weapon_instance = weapon_project_scene.instantiate()
 	
@@ -270,3 +278,26 @@ func stopped_falling() -> void:
 	print("tank(%s) stopped falling at position=%s" % [get_parent().name, str(tankBody.global_position)])
 	_check_and_emit_fall_damage(fall_start_position, tankBody.global_position)
 	mark_falling = false
+
+## Perhaps a single one of these globally, registered to the level or game autoload, would be ideal.
+func get_fired_weapon_container() -> Node:
+	return fired_weapon_container
+	
+func set_equipped_weapon(index:int) -> void:
+	if current_equipped_weapon:
+		current_equipped_weapon.unequip()
+	current_equipped_weapon = weapons[index]
+	current_equipped_weapon.equip()
+
+func get_equipped_weapon() -> Weapon:
+	if current_equipped_weapon: return current_equipped_weapon
+	else: return null
+
+func scan_available_weapons() -> void:
+	weapons.clear()
+	var weapons_container = $TankBody/TankTurret/Weapons
+	var number:int = 0
+	for w in weapons_container.get_children():
+		weapons.append(w)
+		number+=1
+	if number > 0: set_equipped_weapon(0) ## Equip the first weapon.
