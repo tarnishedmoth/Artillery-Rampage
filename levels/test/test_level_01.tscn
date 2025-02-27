@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://cminvc7kxh00u"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_1c8ff"]
-[ext_resource type="Texture2D" uid="uid://dk1mpcpnq71qd" path="res://background_items/city_building.png" id="2_mi0nb"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_xlxda"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="3_oxojq"]
+[ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="4_ojhj1"]
 
 [node name="TestLevel01" type="Node2D"]
 
@@ -21,10 +21,11 @@ position = Vector2(1100, 426)
 [node name="Tank" parent="GameLevel/Enemy2" index="0"]
 color = Color(0.137255, 0.180392, 0.701961, 1)
 
-[node name="Sprite2D" type="Sprite2D" parent="GameLevel"]
-position = Vector2(38, 418)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("2_mi0nb")
+[node name="House1" parent="GameLevel" instance=ExtResource("4_ojhj1")]
+position = Vector2(43, 409)
+
+[node name="House2" parent="GameLevel" instance=ExtResource("4_ojhj1")]
+position = Vector2(934, 407)
 
 [node name="Player" parent="GameLevel" instance=ExtResource("3_oxojq")]
 position = Vector2(120, 427)
