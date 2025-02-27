@@ -40,6 +40,9 @@ func _process(delta: float) -> void:
 		set_power(delta * power_pct_per_sec)
 	if Input.is_action_pressed("power_decrease"):
 		set_power(-delta * power_pct_per_sec)
+	if Input.is_action_just_pressed("cycle_next_weapon"):
+		cycle_next_weapon()
+		
 		
 func aim(delta: float) -> void:
 	if !can_aim : return
@@ -63,3 +66,7 @@ func _on_tank_tank_killed(tank: Tank, instigatorController: Node2D, instigator: 
 	# player tank killed
 	tank.kill()
 	emit_signal("player_killed", self)
+
+func cycle_next_weapon() -> void:
+	# Super simple for testing multiple weapons for now.
+	tank.equip_next_weapon()

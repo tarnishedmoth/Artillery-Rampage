@@ -310,3 +310,4 @@ func equip_next_weapon() -> void:
 	if next_index >= weapons.size(): # Index 0 would be size of 1.
 		next_index = 0
 	set_equipped_weapon(next_index)
+	print_debug("Cycled weapon to ", current_equipped_weapon.display_name)
