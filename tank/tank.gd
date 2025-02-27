@@ -20,6 +20,8 @@ signal tank_took_damage(
 
 @export var turret_color_value: float = 0.7
 
+@export var enable_fall_damage:bool = true
+
 @export_category("Damage")
 @export_range(0, 1000) var min_damage_distance: float = 10
 
@@ -197,7 +199,7 @@ func _ground_trace(trace_distance: float) -> Vector2:
 		#print("tank._ground_trace(%s): already colliding with body %s" % [get_parent().name, tankBody.get_colliding_bodies()[0].name])
 		return bottom_reference_point.global_position 
 		
-	var space_state = get_world_2d().direct_space_state
+	var space_state := get_world_2d().direct_space_state
 	
 	# in 2D positive y goes down
 	var query_params = PhysicsRayQueryParameters2D.create(
@@ -236,6 +238,9 @@ func _on_reset_orientation(_tankBody: TankBody) -> void:
 	pass
 
 func _check_and_emit_fall_damage(start_position: Vector2, end_position: Vector2) -> void:
+	if !enable_fall_damage:
+		print("tank(%s): _check_and_emit_fall_damage - fall damage disabled" % [get_parent().name])
+		return
 	var fall_damage := _calculate_fall_damage(start_position, end_position)
 	if fall_damage > 0:
 		self.take_damage(owner, self, fall_damage)

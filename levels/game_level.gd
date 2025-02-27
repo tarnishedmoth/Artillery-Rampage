@@ -21,10 +21,10 @@ func begin_round():
 	# For now just loading in the instance from the scene
 	# Discover any placed child controller nodes
 	_add_manually_placed_units()
-	_add_spawned_units()
+	await _add_spawned_units()
 				
 	round_director.begin_round()
-
+		
 func _on_player_killed(in_player: Player) -> void:
 	print("Game Over!")
 	in_player.queue_free()
@@ -41,7 +41,7 @@ func _add_manually_placed_units():
 			connect_events(child)
 
 func _add_spawned_units():
-	for controller in spawner.spawn_all(terrain):
+	for controller in await spawner.spawn_all(terrain):
 		round_director.add_controller(controller)
 		connect_events(controller)
 		

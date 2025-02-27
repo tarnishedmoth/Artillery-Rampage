@@ -4,9 +4,13 @@ class_name ArtillerySpawner extends Node
 @export var default_ai_players: Vector2i = Vector2i()
 @export var default_human_players: Vector2i = Vector2i()
 
-@export_range(0, 100) var terrain_y_offset: float = 20.0
+@export_range(-100, 100) var spawn_y_offset: float = -10.0
+@export_range(20, 250) var ideal_min_spawn_separation: float = 100.0
 
 const player_type : PackedScene = preload("res://controller/player/player.tscn")
+
+# Need to wait for the terrain to finish building before doing raycasts
+const spawn_delay:float = 0.2
 
 var _specified_positions: Array[Marker2D] = []
 var _all_positions: Array[Vector2] = []
@@ -44,7 +48,7 @@ func spawn_all(terrain: Terrain, ai_players: Vector2i = Vector2i(), human_player
 	print("ArtillerySpawner(%s): Requesting spawning - num_ai=%d [%d-%d]; num_human=%d [%d-%d]" 
 	% [name, num_ai, ai_players.x, ai_players.y, num_human, human_players.x, human_players.y])
 	
-	if !_calculate_spawn_positions(terrain, total_spawns):
+	if !await _calculate_spawn_positions(terrain, total_spawns):
 		push_warning("ArtillerySpawner(%s): Unable to generate requested spawn count=%d; generated=%d" % [name, total_spawns, _used_positions.size()])
 		
 	var spawned_list := _spawn_units(num_human)
@@ -69,14 +73,17 @@ func _instantiate_controller_scene_at(scene: PackedScene, position: Vector2) -> 
 	return instance
 
 func init_controller_props(controller: TankController) -> void:
+	# Disable fall damage - important especially for the procedural spawning as right now we generate points on a slant
+	controller.enable_damage_before_first_turn = false
 	if controller is AITank:
 		controller.set_color(Color(randf(), randf(), randf()))
 		
 func _calculate_spawn_positions(terrain: Terrain, count: int) -> bool:
 	var success:bool = true
-	# TODO: Implement spreading out and adding additional random positions based on terrain
 	for marker in _specified_positions:
 		_all_positions.push_back(marker.global_position)
+	
+	await _generate_spawns(terrain, count - _all_positions.size())
 	
 	if count > _all_positions.size():
 		push_warning("ArtillerySpawner(%s): Requesting %d spawns but only %d available" % [name, count, _all_positions.size()])
@@ -88,6 +95,30 @@ func _calculate_spawn_positions(terrain: Terrain, count: int) -> bool:
 	_choose_positions(count)
 			
 	return success
+	
+func _generate_spawns(terrain: Terrain, requested_count: int) -> void:
+	if requested_count <= 0:
+		return
+	
+	await get_tree().create_timer(spawn_delay).timeout
+
+	var spawn_bounds := terrain.get_bounds_global()
+	
+	var stride:float = spawn_bounds.size.x / requested_count
+	var min_x:float = spawn_bounds.position.x
+	var size_x:float = spawn_bounds.size.x
+	var min_spawn_separation:float = min(ideal_min_spawn_separation, stride)
+	
+	var last_x:float = min_x
+	
+	for i in range(0, requested_count):
+		var x:float = max(min_x + randf_range(i * stride, (i + 1) * stride),
+		 last_x + min_spawn_separation)
+		
+		var pos := _get_spawn_position(terrain, x)
+		last_x = pos.x
+		
+		_all_positions.push_back(pos)
 
 func _choose_positions(count: int) -> void:
 	if count < _all_positions.size():
@@ -141,3 +172,18 @@ func _spawn_units(num_human: int) -> Array[TankController]:
 	
 	return all_spawned
 		
+func _get_spawn_position(terrain: Terrain, x: float) -> Vector2:
+	var from:Vector2 = Vector2(x, 0)
+	var to:Vector2 = Vector2(x, get_viewport().size.y)
+	
+	var query_params = PhysicsRayQueryParameters2D.create(from, to,
+	 Collisions.CompositeMasks.tank_snap)
+	
+	var space_state := terrain.get_world_2d().direct_space_state
+	var result = space_state.intersect_ray(query_params)
+
+	if !result:
+		push_error("ArtillerySpawner(%s): _get_spawn_position could not find y - x=%f" % [name, x])
+		return from
+		
+	return result["position"] + Vector2(0, spawn_y_offset)

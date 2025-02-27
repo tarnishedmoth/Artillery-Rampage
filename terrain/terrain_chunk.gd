@@ -276,3 +276,14 @@ func print_poly(context: String, poly: PackedVector2Array) -> void:
 	 ",".join(values.map(func(v : Vector2): return str(v)))])
 	#for i in range(poly.size()):
 		#print("poly[" + str(i) + "]=" + str(poly[i]))
+
+func get_bounds_global():
+	var bounds:Rect2 = Rect2()
+	var viewport_width:float = get_viewport_rect().size.x
+	
+	for vertex in get_terrain_global():
+		# Clamp any negative vertices or those outside the viewport
+		vertex.x = clampf(vertex.x, 0.0, viewport_width)
+		bounds = bounds.expand(vertex)
+	return bounds
+	
