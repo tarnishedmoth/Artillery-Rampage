@@ -41,6 +41,7 @@ signal tank_took_damage(
 
 @onready var weapons: Array[Weapon]
 var current_equipped_weapon: Weapon
+var current_equipped_weapon_index: int
 
 # This is called a packed scene
 # Calling "instantiate" on it is equivalent to an instanced scene
@@ -286,6 +287,7 @@ func get_fired_weapon_container() -> Node:
 func set_equipped_weapon(index:int) -> void:
 	if current_equipped_weapon:
 		current_equipped_weapon.unequip()
+	current_equipped_weapon_index = index
 	current_equipped_weapon = weapons[index]
 	current_equipped_weapon.equip()
 
@@ -301,3 +303,10 @@ func scan_available_weapons() -> void:
 		weapons.append(w)
 		number+=1
 	if number > 0: set_equipped_weapon(0) ## Equip the first weapon.
+
+func equip_next_weapon() -> void:
+	if weapons.is_empty(): return
+	var next_index = current_equipped_weapon_index + 1
+	if next_index >= weapons.size(): # Index 0 would be size of 1.
+		next_index = 0
+	set_equipped_weapon(next_index)
