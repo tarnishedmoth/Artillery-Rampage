@@ -140,6 +140,17 @@ func spawn_projectile(power: float = fire_velocity) -> void:
 		new_shot.linear_velocity = velocity.rotated(direction)
 		container.add_child(new_shot)
 		print_debug("Shot fired with ", velocity, " at ", direction)
+		
+func restock() -> void:
+	restock_ammo()
+	if use_magazines: restock_magazines()
+	print_debug(display_name," ammo restocked.")
+
+func restock_magazines(new_magazines:int = 1) -> void:
+	magazines += new_magazines
+
+func restock_ammo(ammo:int = magazine_capacity) -> void:
+	current_ammo += ammo
 
 func configure_barrels() -> void:
 	current_barrel = 0
