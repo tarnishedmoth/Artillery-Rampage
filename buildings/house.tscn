@@ -4,5 +4,12 @@
 
 [node name="House" type="Node2D"]
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="HouseBody" type="RigidBody2D" parent="."]
+collision_mask = 31
+
+[node name="HouseBodySprite" type="Sprite2D" parent="HouseBody"]
 texture = ExtResource("1_gx8ve")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="HouseBody"]
+visible = false
+polygon = PackedVector2Array(-15, -32, -26, -15, -26, 31, 27, 31, 27, -14, 16, -32)
