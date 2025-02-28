@@ -2,13 +2,13 @@ class_name Weapon extends Node2D
 ## To use: attach script to a Node2D and configure in the Inspector panel.
 ## Contains functionality for ammo based weapons, magazines, fire rate (cycling), and reloading.
 ## Also TODO provide support for continuous fire weapons like a laser beam etc.
-## If provided Marker2D nodes in the barrels array, shots will spawn from each point, in order.
-## Otherwise the self forward vector is used.
+## Provide Marker2D nodes in the barrels array, shots will spawn from each point, in order.
 
 #enum WeaponType{}
 signal weapon_actions_completed(weapon: Weapon) ## Emits once all the projectiles have completed their lifespans.
 signal weapon_destroyed(weapon: Weapon)
 
+#region Variables
 @export var scene_to_spawn: PackedScene ## This is the projectile or shoot effect.
 @export var parent_tank: Tank ## Right now, the tank script has methods we need.
 @export var display_name: String ## Not implemented
@@ -62,7 +62,9 @@ var current_barrel: int = 0
 		sfx_unequip,
 		sfx_idle
 	]
+#endregion
 
+#region Virtuals
 func _ready() -> void:
 	weapon_actions_completed.connect(_on_weapon_actions_completed)
 	weapon_destroyed.connect(parent_tank._on_weapon_destroyed)
@@ -72,7 +74,9 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if is_shooting: ## Shooting for duration or count.
 		_shoot(_shoot_for_duration_power)
+#endregion
 	
+#region Public Methods
 func equip() -> void:
 	if not is_equipped:
 		is_equipped = true
@@ -170,8 +174,9 @@ func stop_all_sounds(only_looping: bool = true) -> void:
 func destroy() -> void:
 	weapon_destroyed.emit(self)
 	queue_free()
+#endregion
 
-## Private methods
+#region Private Methods
 func _shoot(power:float = fire_velocity) -> void:
 	if not is_equipped: return
 	if is_cycling: return
@@ -235,3 +240,4 @@ func _on_weapon_actions_completed(weapon: Weapon) -> void:
 			if magazines < 1 or not use_magazines:
 				destroy()
 	GameEvents.emit_turn_ended(parent_tank.owner)
+#endregion
