@@ -27,6 +27,9 @@ signal aim_updated(player: TankController)
 @warning_ignore("unused_signal")
 signal power_updated(player: TankController)
 
+@warning_ignore("unused_signal")
+signal collectible_collected(collected: CollectibleItem)
+
 func emit_turn_started(player: TankController):
 	emit_signal("turn_started", player)
 

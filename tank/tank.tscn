@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://dvr6bm2hlj5h4"]
+[gd_scene load_steps=12 format=3 uid="uid://dvr6bm2hlj5h4"]
 
 [ext_resource type="Script" path="res://tank/tank.gd" id="1_0iy80"]
 [ext_resource type="Script" path="res://tank/tank_body.gd" id="2_o5qn2"]
+[ext_resource type="PackedScene" uid="uid://bfovdi5eowpoe" path="res://items/collectible_item.tscn" id="2_qlwk0"]
 [ext_resource type="Texture2D" uid="uid://banqgk8hu7ykt" path="res://tank/tank_placeholder_texture.tres" id="3_t17rk"]
 [ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="4_1i1mw"]
 [ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="5_ujlt3"]
@@ -19,6 +20,7 @@ size = Vector2(6, 30.8)
 
 [node name="Tank" type="Node2D" groups=["Damageable", "Unit"]]
 script = ExtResource("1_0iy80")
+drop_on_death = ExtResource("2_qlwk0")
 turret_color_value = 0.5
 
 [node name="TankBody" type="RigidBody2D" parent="."]

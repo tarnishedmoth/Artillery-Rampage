@@ -227,7 +227,7 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 		new_shot.linear_velocity = velocity.rotated(aim_angle)
 		
 		container.add_child(new_shot)
-		print_debug("Shot fired with ", velocity, " at ", aim_angle)
+		#print_debug("Shot fired with ", velocity, " at ", aim_angle)
 
 func _on_projectile_completed_lifespan() -> void:
 	_awaiting_lifespan_completion -= 1

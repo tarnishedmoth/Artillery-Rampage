@@ -1,5 +1,6 @@
 extends Node
 
+const Collectible:StringName = &"Collectible"
 const Destructible:StringName = &"Destructible"
 const Damageable:StringName = &"Damageable"
 const Unit:StringName = &"Unit"

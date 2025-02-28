@@ -1,6 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cyyjrnc2x0nsx"]
+[gd_scene load_steps=6 format=3 uid="uid://cyyjrnc2x0nsx"]
 
 [ext_resource type="Script" path="res://personnel/personnel_retrieval.gd" id="1_7nawh"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_l3fr7"]
+rough = true
 
 [sub_resource type="Gradient" id="Gradient_o2cvn"]
 interpolation_mode = 2
@@ -18,9 +21,12 @@ radius = 6.0
 height = 24.0
 
 [node name="PersonnelRetrieval" type="RigidBody2D"]
-collision_layer = 11
-collision_mask = 11
+collision_layer = 267
+collision_mask = 267
+physics_material_override = SubResource("PhysicsMaterial_l3fr7")
 lock_rotation = true
+contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_7nawh")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

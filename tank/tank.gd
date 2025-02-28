@@ -9,6 +9,8 @@ signal tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2D)
 signal tank_took_damage(
 	tank: Tank, instigatorController: Node2D, instigator: Node2D, amount: float)
 
+@export var drop_on_death:PackedScene
+
 @export var min_angle:float = -90
 @export var max_angle:float = 90
 
@@ -184,7 +186,15 @@ func _update_visuals_after_damage():
 
 func kill():
 	print("Tank: " + name + " Killed")
+	if drop_on_death:
+		spawn_death_drop()
 	queue_free()
+
+func spawn_death_drop() -> void:
+	var spawn = drop_on_death.instantiate()
+	spawn.global_position = global_position
+	var container = get_tree().current_scene ## Change later if wanted
+	container.add_child(spawn)
 
 func snap_to_ground():
 	# Setting the position here will put the center of the tank at the position. Need to offset by the bottom offset

@@ -43,6 +43,7 @@ Unit="a controllable unit in the game like an artillery"
 Damageable="Supports the \"take_damage\" function to affect the health of a unit and respond to collision queries"
 Player="Player unit"
 Bot="AI-controlled unit"
+Collectible="Retrievable pickups--see Personnel"
 
 [input]
 
