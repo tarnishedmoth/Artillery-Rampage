@@ -85,6 +85,7 @@ func _ready() -> void:
 	tankBody.contact_monitor = true
 	tankBody.max_contacts_reported = 1
 
+@warning_ignore("unused_parameter")
 func _physics_process(delta: float) -> void:
 	if !tankBody.is_gravity_enabled():
 		return
@@ -138,7 +139,7 @@ func shoot() -> void:
 	if not weapon == null:
 		weapon.shoot(power)
 	else:
-		print_debug(self,"Tried to shoot, but no equipped weapon.")
+		print_debug(self,"Tried to shoot, but no weapons.")
 	
 func shoot_deprecated() -> void:
 	# Create a scene instance (Spawn)
@@ -293,8 +294,15 @@ func set_equipped_weapon(index:int) -> void:
 	current_equipped_weapon.equip()
 
 func get_equipped_weapon() -> Weapon:
-	if current_equipped_weapon: return current_equipped_weapon
-	else: return null
+	if current_equipped_weapon in weapons:
+		return current_equipped_weapon
+	
+	# Our last weapon was lost/destroyed
+	equip_next_weapon()
+	if not current_equipped_weapon in weapons:
+		return null
+	else:
+		return current_equipped_weapon # Ugly but rather this than recursion
 
 func scan_available_weapons() -> void:
 	weapons.clear()
@@ -306,7 +314,9 @@ func scan_available_weapons() -> void:
 	if number > 0: set_equipped_weapon(0) ## Equip the first weapon.
 
 func equip_next_weapon() -> void:
-	if weapons.is_empty(): return
+	if weapons.is_empty():
+		print_debug("No weapons available to equip.")
+		return
 	var next_index = current_equipped_weapon_index + 1
 	if next_index >= weapons.size(): # Index 0 would be size of 1.
 		next_index = 0
