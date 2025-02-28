@@ -13,6 +13,7 @@ use_fire_rate = true
 fire_rate = 2.0
 always_shoot_for_count = 3
 retain_when_empty = false
+use_ammo = true
 current_ammo = 9
 sfx_fire = NodePath("Fire")
 
