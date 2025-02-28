@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://cyyjrnc2x0nsx"]
+
+[ext_resource type="Script" path="res://personnel/personnel_retrieval.gd" id="1_7nawh"]
+
+[sub_resource type="Gradient" id="Gradient_o2cvn"]
+interpolation_mode = 2
+colors = PackedColorArray(0.135, 0.156, 0.45, 1, 0.427451, 0.552941, 0.984314, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mqu8b"]
+gradient = SubResource("Gradient_o2cvn")
+width = 12
+height = 24
+fill_from = Vector2(0, 1)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ams05"]
+radius = 6.0
+height = 24.0
+
+[node name="PersonnelRetrieval" type="RigidBody2D"]
+collision_layer = 11
+collision_mask = 11
+lock_rotation = true
+script = ExtResource("1_7nawh")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("GradientTexture2D_mqu8b")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_ams05")
+debug_color = Color(0.391468, 0.483477, 0.966482, 0.42)
