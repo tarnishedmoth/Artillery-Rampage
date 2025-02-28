@@ -187,7 +187,7 @@ func _shoot(power:float = fire_velocity) -> void:
 		return ## We can't shoot.
 		
 	if not fires_continuously:
-		if not barrels_sfx_fire.is_empty: barrels_sfx_fire[current_barrel].play()
+		if not barrels_sfx_fire.is_empty(): barrels_sfx_fire[current_barrel].play()
 		spawn_projectile(power)
 		cycle()
 		#GameEvents.weapon_fired.emit(self) ## TODO This signal wants a WeaponProjectile. Could integrate this later.
