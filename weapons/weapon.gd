@@ -13,6 +13,7 @@ signal weapon_actions_completed(weapon: Weapon) ## Emits once all the projectile
 @export var display_name: String ## Not implemented
 
 @export_category("Behavior")
+@export var accuracy_angle_spread: float = 0.0 ## Radians.
 @export var fire_velocity: float = 100.0 ## Initial speed of the projectile.
 @export var fires_continuously: bool = false ## Continuous-fire weapons don't use fire rate.
 @export var use_fire_rate: bool = false ## Prevents shooting while cycling.
@@ -130,25 +131,6 @@ func cycle() -> void:
 	current_barrel += 1
 	if current_barrel+1 > barrels.size():
 		current_barrel = 0
-	
-func spawn_projectile(power: float = fire_velocity) -> void:
-	var barrel = barrels[current_barrel]
-	if scene_to_spawn:
-		var new_shot = scene_to_spawn.instantiate() as Node2D
-		var container = parent_tank.get_fired_weapon_container() ## TODO Refactor
-		
-		if new_shot is WeaponProjectile:
-			new_shot.owner_tank = parent_tank
-			new_shot.completed_lifespan.connect(_on_projectile_completed_lifespan) # So we know when the projectile is finished.
-			_awaiting_lifespan_completion += 1
-		
-		new_shot.global_transform = barrel.global_transform
-		var direction = barrel.global_rotation - PI/2
-		var velocity = Vector2(power, 0.0)
-		new_shot.linear_velocity = velocity.rotated(direction)
-		
-		container.add_child(new_shot)
-		print_debug("Shot fired with ", velocity, " at ", direction)
 		
 func restock() -> void:
 	restock_ammo()
@@ -197,7 +179,7 @@ func _shoot(power:float = fire_velocity) -> void:
 		
 	if not fires_continuously:
 		if not barrels_sfx_fire.is_empty(): barrels_sfx_fire[current_barrel].play()
-		spawn_projectile(power)
+		_spawn_projectile(power)
 		cycle()
 		GameEvents.emit_weapon_fired(self) # This has no game effects right now.
 	else:
@@ -205,17 +187,40 @@ func _shoot(power:float = fire_velocity) -> void:
 		print_debug("Continuous fire is not yet supported")
 		pass
 		
-	if use_ammo: current_ammo -= 1
+	if use_ammo: current_ammo -= ammo_used_per_shot
 	if _shoot_for_count_remaining > 0:
 		_shoot_for_count_remaining -= 1
 		if _shoot_for_count_remaining == 0:
 			is_shooting = false
+			
+func _spawn_projectile(power: float = fire_velocity) -> void:
+	var barrel = barrels[current_barrel]
+	if scene_to_spawn:
+		var new_shot = scene_to_spawn.instantiate() as Node2D
+		var container = parent_tank.get_fired_weapon_container() ## TODO Refactor
+		
+		if new_shot is WeaponProjectile:
+			new_shot.owner_tank = parent_tank
+			new_shot.completed_lifespan.connect(_on_projectile_completed_lifespan) # So we know when the projectile is finished.
+			_awaiting_lifespan_completion += 1
+		
+		new_shot.global_transform = barrel.global_transform
+		var aim_angle = barrel.global_rotation - PI/2 # 90 degrees offset
+		if accuracy_angle_spread != 0.0:
+			var deviation = randf_range(-accuracy_angle_spread,accuracy_angle_spread) / 2
+			aim_angle += deviation
+		
+		var velocity = Vector2(power, 0.0)
+		new_shot.linear_velocity = velocity.rotated(aim_angle)
+		
+		container.add_child(new_shot)
+		print_debug("Shot fired with ", velocity, " at ", aim_angle)
 
 func _on_projectile_completed_lifespan() -> void:
 	_awaiting_lifespan_completion -= 1
 	if _awaiting_lifespan_completion < 1:
 		weapon_actions_completed.emit(self)
 
-func _on_weapon_actions_completed() -> void:
+func _on_weapon_actions_completed(weapon: Weapon) -> void:
 	## Eventually this belongs elsewhere.
 	GameEvents.emit_turn_ended(parent_tank.owner)

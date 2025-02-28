@@ -8,6 +8,7 @@
 script = ExtResource("1_e16fc")
 scene_to_spawn = ExtResource("2_12bd1")
 display_name = "Three Shot Burst"
+accuracy_angle_spread = 0.262
 use_fire_rate = true
 fire_rate = 2.0
 always_shoot_for_count = 3
