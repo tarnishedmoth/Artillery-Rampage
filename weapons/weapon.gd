@@ -22,6 +22,7 @@ signal weapon_actions_completed(weapon: Weapon) ## Emits once all the projectile
 @export var always_shoot_for_count:int = 1.0 ## When fired, weapon will shoot this many times, separated by fire rate delay.
 
 @export_category("Ammo")
+@export var retain_when_empty: bool = true ## If false, destroy the Weapon once out of ammo.
 @export var use_ammo: bool = false ## Whether to check and track ammo.
 @export var current_ammo: int = 16 ## Starting ammo.
 @export var ammo_used_per_shot: int = 1.0
@@ -164,6 +165,9 @@ func stop_all_sounds(only_looping: bool = true) -> void:
 		#if it's a looping sound...
 		if s.playing: s.stop()
 
+func destroy() -> void:
+	queue_free()
+
 ## Private methods
 func _shoot(power:float = fire_velocity) -> void:
 	if not is_equipped: return
@@ -185,6 +189,7 @@ func _shoot(power:float = fire_velocity) -> void:
 	else:
 		## Alternative handling for continuous weapons
 		print_debug("Continuous fire is not yet supported")
+		cycle()
 		pass
 		
 	if use_ammo: current_ammo -= ammo_used_per_shot
@@ -222,5 +227,8 @@ func _on_projectile_completed_lifespan() -> void:
 		weapon_actions_completed.emit(self)
 
 func _on_weapon_actions_completed(weapon: Weapon) -> void:
-	## Eventually this belongs elsewhere.
+	if not retain_when_empty:
+		if current_ammo < 1:
+			if magazines < 1 or not use_magazines:
+				destroy()
 	GameEvents.emit_turn_ended(parent_tank.owner)
