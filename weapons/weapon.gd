@@ -42,6 +42,7 @@ var is_equipped: bool = false ## Used for SFX, also the weapon won't fire if une
 var is_shooting: bool = false
 var _shoot_for_duration_power: float
 var _shoot_for_count_remaining: int
+var _awaiting_lifespan_completion: int
 
 @export var barrels: Array[Marker2D] = []
 var barrels_sfx_fire: Array[AudioStreamPlayer2D] = []
@@ -133,11 +134,16 @@ func spawn_projectile(power: float = fire_velocity) -> void:
 		var new_shot = scene_to_spawn.instantiate() as Node2D
 		var container = parent_tank.get_fired_weapon_container() ## TODO Refactor
 		
-		if new_shot is WeaponProjectile: new_shot.owner_tank = parent_tank
+		if new_shot is WeaponProjectile:
+			new_shot.owner_tank = parent_tank
+			new_shot.completed_lifespan.connect(_on_projectile_completed_lifespan) # So we know when the projectile is finished.
+			_awaiting_lifespan_completion += 1
+		
 		new_shot.global_transform = barrel.global_transform
 		var direction = barrel.global_rotation - PI/2
 		var velocity = Vector2(power, 0.0)
 		new_shot.linear_velocity = velocity.rotated(direction)
+		
 		container.add_child(new_shot)
 		print_debug("Shot fired with ", velocity, " at ", direction)
 		
@@ -200,3 +206,8 @@ func _shoot(power:float = fire_velocity) -> void:
 		_shoot_for_count_remaining -= 1
 		if _shoot_for_count_remaining == 0:
 			is_shooting = false
+
+func _on_projectile_completed_lifespan() -> void:
+	_awaiting_lifespan_completion -= 1
+	if _awaiting_lifespan_completion < 1:
+		GameEvents.emit_turn_ended(parent_tank.owner)

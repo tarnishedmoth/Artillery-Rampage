@@ -9,6 +9,8 @@ enum DamageFalloffType
 	InverseSquare
 }
 
+signal completed_lifespan ## Tracked by Weapon class for GameEvents.turn_ended
+
 # The idea here is that we are using RigidBody2D for the physics behavior
 # and the Area2D as the overlap detection for detecting hits
 @export var power_velocity_mult:float = 1
@@ -45,7 +47,7 @@ func _ready() -> void:
 	modulate = color
 	
 	overlap.connect("body_entered", on_body_entered)
-	GameEvents.emit_weapon_fired(self)
+	GameEvents.emit_projectile_fired(self)
 	
 func on_body_entered(_body: Node2D):
 	# Need to do a sweep to see all the things we have influenced
@@ -91,7 +93,8 @@ func get_parent_in_group(node: Node, group: String) -> Node:
 	return get_parent_in_group(node.get_parent(), group)
 
 func destroy():
-	GameEvents.emit_turn_ended(owner_tank.owner)
+	#GameEvents.emit_turn_ended(owner_tank.owner) ## Moved to Weapon class.
+	completed_lifespan.emit()
 	queue_free()
 	
 func _find_interaction_overlaps() -> Array[Node2D]:

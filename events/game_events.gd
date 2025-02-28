@@ -16,7 +16,10 @@ signal round_ended()
 signal wind_updated(wind: Wind)
 
 @warning_ignore("unused_signal")
-signal weapon_fired(weapon : WeaponProjectile)
+signal weapon_fired(weapon : Weapon)
+
+@warning_ignore("unused_signal")
+signal projectile_fired(projectile : WeaponProjectile)
 
 @warning_ignore("unused_signal")
 signal aim_updated(player: TankController)
@@ -42,8 +45,8 @@ func emit_round_started():
 func emit_round_ended():
 	emit_signal("round_ended")
 
-func emit_weapon_fired(weapon : WeaponProjectile):
-	emit_signal("weapon_fired", weapon)
+func emit_projectile_fired(weapon : WeaponProjectile):
+	emit_signal("projectile_fired", weapon)
 
 func emit_wind_updated(wind: Wind):
 	emit_signal("wind_updated", wind)
