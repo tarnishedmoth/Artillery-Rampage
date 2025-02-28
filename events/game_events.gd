@@ -44,9 +44,12 @@ func emit_round_started():
 
 func emit_round_ended():
 	emit_signal("round_ended")
+	
+func emit_weapon_fired(weapon : Weapon):
+	emit_signal("weapon_fired", weapon)
 
-func emit_projectile_fired(weapon : WeaponProjectile):
-	emit_signal("projectile_fired", weapon)
+func emit_projectile_fired(projectile : WeaponProjectile):
+	emit_signal("projectile_fired", projectile)
 
 func emit_wind_updated(wind: Wind):
 	emit_signal("wind_updated", wind)
