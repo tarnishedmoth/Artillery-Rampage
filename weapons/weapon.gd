@@ -6,6 +6,8 @@ class_name Weapon extends Node2D
 ## Otherwise the self forward vector is used.
 
 #enum WeaponType{}
+signal weapon_actions_completed(weapon: Weapon) ## Emits once all the projectiles have completed their lifespans.
+
 @export var scene_to_spawn: PackedScene ## This is the projectile or shoot effect.
 @export var parent_tank: Tank ## Right now, the tank script has methods we need.
 @export var display_name: String ## Not implemented
@@ -59,6 +61,7 @@ var current_barrel: int = 0
 	]
 
 func _ready() -> void:
+	weapon_actions_completed.connect(_on_weapon_actions_completed) # To be removed
 	configure_barrels()
 	reload()
 	
@@ -196,7 +199,7 @@ func _shoot(power:float = fire_velocity) -> void:
 		if not barrels_sfx_fire.is_empty(): barrels_sfx_fire[current_barrel].play()
 		spawn_projectile(power)
 		cycle()
-		GameEvents.weapon_fired.emit(self) ## This has no game effects right now.
+		GameEvents.emit_weapon_fired(self) # This has no game effects right now.
 	else:
 		## Alternative handling for continuous weapons
 		print_debug("Continuous fire is not yet supported")
@@ -211,4 +214,8 @@ func _shoot(power:float = fire_velocity) -> void:
 func _on_projectile_completed_lifespan() -> void:
 	_awaiting_lifespan_completion -= 1
 	if _awaiting_lifespan_completion < 1:
-		GameEvents.emit_turn_ended(parent_tank.owner)
+		weapon_actions_completed.emit(self)
+
+func _on_weapon_actions_completed() -> void:
+	## Eventually this belongs elsewhere.
+	GameEvents.emit_turn_ended(parent_tank.owner)
