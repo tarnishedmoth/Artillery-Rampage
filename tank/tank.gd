@@ -285,8 +285,9 @@ func get_fired_weapon_container() -> Node:
 	return fired_weapon_container
 	
 func set_equipped_weapon(index:int) -> void:
-	if current_equipped_weapon:
+	if current_equipped_weapon in weapons:
 		current_equipped_weapon.unequip()
+		
 	current_equipped_weapon_index = index
 	current_equipped_weapon = weapons[index]
 	current_equipped_weapon.equip()
@@ -311,3 +312,6 @@ func equip_next_weapon() -> void:
 		next_index = 0
 	set_equipped_weapon(next_index)
 	print_debug("Cycled weapon to ", current_equipped_weapon.display_name)
+
+func _on_weapon_destroyed(weapon: Weapon) -> void:
+	weapons.erase(weapon)

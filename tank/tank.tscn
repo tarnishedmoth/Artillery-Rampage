@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://dvr6bm2hlj5h4"]
+[gd_scene load_steps=10 format=3 uid="uid://dvr6bm2hlj5h4"]
 
 [ext_resource type="Script" path="res://tank/tank.gd" id="1_0iy80"]
 [ext_resource type="Script" path="res://tank/tank_body.gd" id="2_o5qn2"]
 [ext_resource type="Texture2D" uid="uid://banqgk8hu7ykt" path="res://tank/tank_placeholder_texture.tres" id="3_t17rk"]
-[ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_tankshot.tscn" id="4_1i1mw"]
-[ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_tankburst.tscn" id="5_qhwqc"]
+[ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="4_1i1mw"]
+[ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="5_ujlt3"]
+[ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="6_gd0o0"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1pofo"]
 friction = 100.0
@@ -54,11 +55,15 @@ position = Vector2(0, -33.14)
 
 [node name="Weapons" type="Node2D" parent="TankBody/TankTurret"]
 
-[node name="WeaponTankshot" parent="TankBody/TankTurret/Weapons" node_paths=PackedStringArray("parent_tank", "barrels") instance=ExtResource("4_1i1mw")]
+[node name="WeaponLeadBall" parent="TankBody/TankTurret/Weapons" node_paths=PackedStringArray("parent_tank", "barrels") instance=ExtResource("4_1i1mw")]
 parent_tank = NodePath("../../../..")
 barrels = [NodePath("../../WeaponFireLocation")]
 
-[node name="WeaponTankburst" parent="TankBody/TankTurret/Weapons" node_paths=PackedStringArray("parent_tank", "barrels") instance=ExtResource("5_qhwqc")]
+[node name="WeaponLeadballBurst" parent="TankBody/TankTurret/Weapons" node_paths=PackedStringArray("parent_tank", "barrels") instance=ExtResource("5_ujlt3")]
+parent_tank = NodePath("../../../..")
+barrels = [NodePath("../../WeaponFireLocation")]
+
+[node name="WeaponKilonuke" parent="TankBody/TankTurret/Weapons" node_paths=PackedStringArray("parent_tank", "barrels") instance=ExtResource("6_gd0o0")]
 parent_tank = NodePath("../../../..")
 barrels = [NodePath("../../WeaponFireLocation")]
 

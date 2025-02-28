@@ -7,6 +7,7 @@ class_name Weapon extends Node2D
 
 #enum WeaponType{}
 signal weapon_actions_completed(weapon: Weapon) ## Emits once all the projectiles have completed their lifespans.
+signal weapon_destroyed(weapon: Weapon)
 
 @export var scene_to_spawn: PackedScene ## This is the projectile or shoot effect.
 @export var parent_tank: Tank ## Right now, the tank script has methods we need.
@@ -63,7 +64,8 @@ var current_barrel: int = 0
 	]
 
 func _ready() -> void:
-	weapon_actions_completed.connect(_on_weapon_actions_completed) # To be removed
+	weapon_actions_completed.connect(_on_weapon_actions_completed)
+	weapon_destroyed.connect(parent_tank._on_weapon_destroyed)
 	configure_barrels()
 	reload()
 	
@@ -166,6 +168,7 @@ func stop_all_sounds(only_looping: bool = true) -> void:
 		if s.playing: s.stop()
 
 func destroy() -> void:
+	weapon_destroyed.emit(self)
 	queue_free()
 
 ## Private methods

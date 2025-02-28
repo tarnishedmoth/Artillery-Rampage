@@ -9,12 +9,14 @@ enum DamageFalloffType
 	InverseSquare
 }
 
-signal completed_lifespan ## Tracked by Weapon class for GameEvents.turn_ended
+signal completed_lifespan ## Tracked by Weapon class
 
 # The idea here is that we are using RigidBody2D for the physics behavior
 # and the Area2D as the overlap detection for detecting hits
 @export var power_velocity_mult:float = 1
 @export var color: Color = Color.BLACK
+
+@export var max_lifetime: float = 10.0 ## Self destroys once this time has passed.
 
 @export_category("Damage")
 @export var damage_falloff_type: DamageFalloffType = DamageFalloffType.Linear
@@ -45,7 +47,7 @@ func set_spawn_parameters(in_owner_tank: Tank, power:float, angle:float):
 	
 func _ready() -> void:
 	modulate = color
-	
+	if max_lifetime > 0.0: destroy_after_lifetime()
 	overlap.connect("body_entered", on_body_entered)
 	GameEvents.emit_projectile_fired(self)
 	
@@ -96,6 +98,12 @@ func destroy():
 	#GameEvents.emit_turn_ended(owner_tank.owner) ## Moved to Weapon class.
 	completed_lifespan.emit()
 	queue_free()
+	
+func destroy_after_lifetime(lifetime:float = max_lifetime) -> void:
+	var timer = Timer.new()
+	add_child(timer)
+	timer.timeout.connect(destroy)
+	timer.start(lifetime)
 	
 func _find_interaction_overlaps() -> Array[Node2D]:
 	var space_state = get_world_2d().direct_space_state
