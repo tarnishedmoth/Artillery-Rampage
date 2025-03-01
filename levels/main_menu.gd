@@ -21,6 +21,8 @@ var _current_credits_list_line:int = 0
 # @onready
 @onready var credits_list: RichTextLabel = %CreditsList
 @onready var credits_list_line_count = credits_list.get_line_count()
+
+@onready var options_menu: Control = %Options
 #endregion
 
 
@@ -70,13 +72,14 @@ func clear_all_text(text_nodes:Array) -> void:
 #endregion
 #region--Private Methods
 func _on_start_pressed() -> void:
-	pass # Replace with function body.
+	SceneManager.next_level()
 
 func _on_level_select_pressed() -> void:
-	pass # Replace with function body.
+	print_debug("I hear you... we don't have that yet")
 
 func _on_options_pressed() -> void:
-	pass # Replace with function body.
+	print_debug("I hear you... we don't have that yet")
+	options_menu.show()
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()

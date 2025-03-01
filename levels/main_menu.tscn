@@ -1,26 +1,32 @@
-[gd_scene load_steps=3 format=3 uid="uid://bpy071ovoevnq"]
+[gd_scene load_steps=4 format=3 uid="uid://bpy071ovoevnq"]
 
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/control_theme_main_menu.tres" id="1_1lcqw"]
 [ext_resource type="Script" path="res://levels/main_menu.gd" id="1_3vdg5"]
+[ext_resource type="Script" path="res://levels/options.gd" id="3_f4ud1"]
 
 [node name="MainMenu" type="Node2D" node_paths=PackedStringArray("revealables")]
 script = ExtResource("1_3vdg5")
-revealables = [NodePath("Control/Columns/CenterColumn/MainMenuHeader"), NodePath("Control/Columns/RightColumn/CreditsHeader"), NodePath("Control/Columns/RightColumn/CreditsList")]
+revealables = [NodePath("Controls/Menu/Columns/CenterColumn/MainMenuHeader"), NodePath("Controls/Menu/Columns/RightColumn/CreditsHeader"), NodePath("Controls/Menu/Columns/RightColumn/CreditsList")]
 
-[node name="Control" type="Control" parent="."]
+[node name="Controls" type="Control" parent="."]
+custom_minimum_size = Vector2(1280, 720)
 layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("1_1lcqw")
+
+[node name="Menu" type="Control" parent="Controls"]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 1280.0
-offset_bottom = 720.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("1_1lcqw")
 
-[node name="Columns" type="HBoxContainer" parent="Control"]
+[node name="Columns" type="HBoxContainer" parent="Controls/Menu"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,91 +34,91 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Spacer" type="Control" parent="Control/Columns"]
+[node name="Spacer" type="Control" parent="Controls/Menu/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.25
 
-[node name="LeftColumn" type="VBoxContainer" parent="Control/Columns"]
+[node name="LeftColumn" type="VBoxContainer" parent="Controls/Menu/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Spacer2" type="Control" parent="Control/Columns"]
+[node name="Spacer2" type="Control" parent="Controls/Menu/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.13
 
-[node name="CenterColumn" type="VBoxContainer" parent="Control/Columns"]
+[node name="CenterColumn" type="VBoxContainer" parent="Controls/Menu/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SpacerTop" type="Control" parent="Control/Columns/CenterColumn"]
+[node name="SpacerTop" type="Control" parent="Controls/Menu/Columns/CenterColumn"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="MainMenuHeader" type="Label" parent="Control/Columns/CenterColumn"]
+[node name="MainMenuHeader" type="Label" parent="Controls/Menu/Columns/CenterColumn"]
 layout_mode = 2
 text = "Artillery Rampage"
 horizontal_alignment = 1
 
-[node name="Divider" type="Panel" parent="Control/Columns/CenterColumn"]
+[node name="Divider" type="Panel" parent="Controls/Menu/Columns/CenterColumn"]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="Spacer" type="Control" parent="Control/Columns/CenterColumn"]
+[node name="Spacer" type="Control" parent="Controls/Menu/Columns/CenterColumn"]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 size_flags_stretch_ratio = 0.13
 
-[node name="Buttons" type="VBoxContainer" parent="Control/Columns/CenterColumn"]
+[node name="Buttons" type="VBoxContainer" parent="Controls/Menu/Columns/CenterColumn"]
 layout_mode = 2
 
-[node name="Start" type="Button" parent="Control/Columns/CenterColumn/Buttons"]
+[node name="Start" type="Button" parent="Controls/Menu/Columns/CenterColumn/Buttons"]
 layout_mode = 2
 text = "Start"
 
-[node name="LevelSelect" type="Button" parent="Control/Columns/CenterColumn/Buttons"]
+[node name="LevelSelect" type="Button" parent="Controls/Menu/Columns/CenterColumn/Buttons"]
 layout_mode = 2
 text = "Level Select"
 
-[node name="Options" type="Button" parent="Control/Columns/CenterColumn/Buttons"]
+[node name="Options" type="Button" parent="Controls/Menu/Columns/CenterColumn/Buttons"]
 layout_mode = 2
 text = "Options"
 
-[node name="Spacer" type="Control" parent="Control/Columns/CenterColumn/Buttons"]
+[node name="Spacer" type="Control" parent="Controls/Menu/Columns/CenterColumn/Buttons"]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 size_flags_stretch_ratio = 0.13
 
-[node name="Quit" type="Button" parent="Control/Columns/CenterColumn/Buttons"]
+[node name="Quit" type="Button" parent="Controls/Menu/Columns/CenterColumn/Buttons"]
 layout_mode = 2
 text = "Quit"
 
-[node name="SpacerBottom" type="Control" parent="Control/Columns/CenterColumn"]
+[node name="SpacerBottom" type="Control" parent="Controls/Menu/Columns/CenterColumn"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Spacer3" type="Control" parent="Control/Columns"]
+[node name="Spacer3" type="Control" parent="Controls/Menu/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.13
 
-[node name="RightColumn" type="VBoxContainer" parent="Control/Columns"]
+[node name="RightColumn" type="VBoxContainer" parent="Controls/Menu/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Spacer" type="Control" parent="Control/Columns/RightColumn"]
+[node name="Spacer" type="Control" parent="Controls/Menu/Columns/RightColumn"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="CreditsHeader" type="Label" parent="Control/Columns/RightColumn"]
+[node name="CreditsHeader" type="Label" parent="Controls/Menu/Columns/RightColumn"]
 layout_mode = 2
 text = "Credits"
 horizontal_alignment = 1
 
-[node name="CreditsList" type="RichTextLabel" parent="Control/Columns/RightColumn"]
+[node name="CreditsList" type="RichTextLabel" parent="Controls/Menu/Columns/RightColumn"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -147,17 +153,101 @@ N Facilisis turpis finibus sit rutrum enim consectetur ultrices ridiculus. Himen
 scroll_active = false
 shortcut_keys_enabled = false
 
-[node name="Spacer2" type="Control" parent="Control/Columns/RightColumn"]
+[node name="Spacer2" type="Control" parent="Controls/Menu/Columns/RightColumn"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="Spacer4" type="Control" parent="Control/Columns"]
+[node name="Spacer4" type="Control" parent="Controls/Menu/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.25
 
-[connection signal="pressed" from="Control/Columns/CenterColumn/Buttons/Start" to="." method="_on_start_pressed"]
-[connection signal="pressed" from="Control/Columns/CenterColumn/Buttons/LevelSelect" to="." method="_on_level_select_pressed"]
-[connection signal="pressed" from="Control/Columns/CenterColumn/Buttons/Options" to="." method="_on_options_pressed"]
-[connection signal="pressed" from="Control/Columns/CenterColumn/Buttons/Quit" to="." method="_on_quit_pressed"]
+[node name="Options" type="PanelContainer" parent="Controls"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_f4ud1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Controls/Options"]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="Controls/Options/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.13
+
+[node name="Label" type="Label" parent="Controls/Options/VBoxContainer"]
+layout_mode = 2
+text = "Options Menu"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Controls/Options/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Spacer" type="Control" parent="Controls/Options/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Controls/Options/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="TopSpacer" type="Control" parent="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.13
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... "
+
+[node name="MiddleSpacer" type="Control" parent="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.13
+
+[node name="ConfirmButtons" type="HBoxContainer" parent="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Apply" type="Button" parent="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons"]
+layout_mode = 2
+text = "Apply"
+
+[node name="Cancel" type="Button" parent="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons"]
+layout_mode = 2
+text = "Cancel"
+
+[node name="BottomSpacer" type="Control" parent="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.13
+
+[node name="Spacer2" type="Control" parent="Controls/Options/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="BoxContainer" type="BoxContainer" parent="Controls/Options/VBoxContainer"]
+layout_mode = 2
+
+[connection signal="pressed" from="Controls/Menu/Columns/CenterColumn/Buttons/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="Controls/Menu/Columns/CenterColumn/Buttons/LevelSelect" to="." method="_on_level_select_pressed"]
+[connection signal="pressed" from="Controls/Menu/Columns/CenterColumn/Buttons/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Controls/Menu/Columns/CenterColumn/Buttons/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Apply" to="Controls/Options" method="_on_apply_pressed"]
+[connection signal="pressed" from="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Cancel" to="Controls/Options" method="_on_cancel_pressed"]
