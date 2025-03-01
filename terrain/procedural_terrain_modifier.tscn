@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://ftti54qs3g8c"]
+
+[ext_resource type="Script" path="res://terrain/procedural_terrain_modifier.gd" id="1_1ovtg"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_b3hvl"]
+
+[node name="ProceduralTerrainModifier" type="Node"]
+script = ExtResource("1_1ovtg")
+noise_template = SubResource("FastNoiseLite_b3hvl")
