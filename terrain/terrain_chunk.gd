@@ -56,6 +56,15 @@ func _ready() -> void:
 	if !falling:
 		falling = initially_falling
 	
+	# give the terrain a texture like rock or grass
+	# idea: we could load multiple textures!
+	# maybe texture chosen by chunk size (big=grass, small=blackened)
+	# maybe texture chosen by by altitude (rock->grass->mud->lava)
+	var tex = load("res://terrain/terrain-green.png") 
+	terrainMesh.set_texture(tex)
+	terrainMesh.texture_repeat = TextureRepeat.TEXTURE_REPEAT_ENABLED
+
+	
 	print_poly("_ready", collisionMesh.polygon)
 	
 func _physics_process(delta: float) -> void:
