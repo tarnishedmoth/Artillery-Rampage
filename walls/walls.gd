@@ -21,15 +21,14 @@ func on_body_exited(_body : Node2D):
 func _physics_process(_delta: float) -> void:
 	if !tracked_projectile:
 		return
-	projectile_warp(tracked_projectile)
+	check_projectile_wall_interaction(tracked_projectile)
 	
 func on_area_exited(area: Node2D):
 	if area.owner is WeaponProjectile:
-		handle_projectile_wall_collision(area.owner)
-		
+		check_projectile_wall_interaction(area.owner)
 		
 #TODO: Implement Warp, elastic, accelerate, sticky, and none behaviors
-func handle_projectile_wall_collision(projectile: WeaponProjectile):
+func check_projectile_wall_interaction(projectile: WeaponProjectile):
 	projectile_warp(projectile)
 	
 func projectile_warp(projectile: WeaponProjectile):
