@@ -9,9 +9,14 @@ extends Node2D
 # Enums
 # constants
 # @exports
+@export var reveal_speed: float = 0.15
 @export var credits_line_scroll_frequency:float = 0.9 ## In seconds, advances credits one line.
+
+@export var revealables:Array[Control] ## Will reveal their text as determined by reveal_speed
 # public
+var revealer_timer:Timer
 # _private
+var _text_controls:Array
 var _current_credits_list_line:int = 0
 # @onready
 @onready var credits_list: RichTextLabel = %CreditsList
@@ -23,6 +28,7 @@ var _current_credits_list_line:int = 0
 #func _init() -> void: pass
 #func _enter_tree() -> void: pass
 func _ready() -> void:
+	per_character_full_reveal()
 	per_line_scroll_credits()
 #func _input(event: InputEvent) -> void: pass
 #func _unhandled_input(event: InputEvent) -> void: pass
@@ -30,15 +36,37 @@ func _ready() -> void:
 #func _process(delta: float) -> void: pass
 #endregion
 #region--Public Methods
-func scroll_credits(delta: float) -> void:
-	pass
-	
 func per_line_scroll_credits() -> void:
 	var scroller = Timer.new()
 	scroller.timeout.connect(_on_scroller_timeout)
 	add_child(scroller)
 	scroller.start(credits_line_scroll_frequency)
+	
+func per_character_full_reveal() -> void:
+	#_text_controls = find_text_controls()
+	_text_controls = revealables
+	clear_all_text(_text_controls)
+	
+	revealer_timer = Timer.new()
+	revealer_timer.one_shot = true
+	revealer_timer.timeout.connect(_on_reveal_timeout)
+	add_child(revealer_timer)
+	revealer_timer.start(reveal_speed)
+	
+func clear_all_text(text_nodes:Array) -> void:
+	for node in text_nodes:
+		node.set_visible_characters(0)
 
+#func find_text_controls() -> Array[Control]:
+	#var controls:Array[Control]
+	#var children_and_children_of_children_etc = _recursive_find_children(self)
+	#
+	#for node in children_and_children_of_children_etc:
+		#if node.has_method("set_visible_characters"):
+			#controls.append(node)
+	#
+	#print_debug("Found ", children_and_children_of_children_etc.size()," text controls in main menu.")
+	#return controls
 #endregion
 #region--Private Methods
 func _on_start_pressed() -> void:
@@ -52,9 +80,27 @@ func _on_options_pressed() -> void:
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()
+	
+#func _recursive_find_children(node:Node) -> Array:
+	#var children:Array = node.get_children()
+	#
+	#if not children.is_empty():
+		#for child in children:
+			#var child_children = _recursive_find_children(child)
+			#children.append_array(child_children)
+	#return children
 
 func _on_scroller_timeout() -> void:
 	_current_credits_list_line += 1
 	if _current_credits_list_line > credits_list_line_count:
 		_current_credits_list_line = 0
 	credits_list.scroll_to_line(_current_credits_list_line)
+
+func _on_reveal_timeout() -> void:
+	for node in _text_controls:
+		node.set_visible_characters(node.visible_characters + 1)
+		if node.visible_ratio >= 1.00:
+			_text_controls.erase(node)
+			print_debug("Fully revealed; to reveal: ",_text_controls.size()," controls.")
+			break # Godot documentation says not to erase while iterating
+	revealer_timer.start(clampf(revealer_timer.wait_time - 0.003, 0.01, 2.0)) # Accelerate

@@ -3,8 +3,9 @@
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/control_theme_main_menu.tres" id="1_1lcqw"]
 [ext_resource type="Script" path="res://levels/main_menu.gd" id="1_3vdg5"]
 
-[node name="MainMenu" type="Node2D"]
+[node name="MainMenu" type="Node2D" node_paths=PackedStringArray("revealables")]
 script = ExtResource("1_3vdg5")
+revealables = [NodePath("Control/Columns/CenterColumn/MainMenuHeader"), NodePath("Control/Columns/RightColumn/CreditsHeader"), NodePath("Control/Columns/RightColumn/CreditsList")]
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -45,19 +46,24 @@ size_flags_stretch_ratio = 0.13
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Spacer" type="Control" parent="Control/Columns/CenterColumn"]
+[node name="SpacerTop" type="Control" parent="Control/Columns/CenterColumn"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="Label" type="Label" parent="Control/Columns/CenterColumn"]
+[node name="MainMenuHeader" type="Label" parent="Control/Columns/CenterColumn"]
 layout_mode = 2
 text = "Artillery Rampage"
 horizontal_alignment = 1
 
-[node name="Panel" type="Panel" parent="Control/Columns/CenterColumn"]
+[node name="Divider" type="Panel" parent="Control/Columns/CenterColumn"]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
+
+[node name="Spacer" type="Control" parent="Control/Columns/CenterColumn"]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_stretch_ratio = 0.13
 
 [node name="Buttons" type="VBoxContainer" parent="Control/Columns/CenterColumn"]
 layout_mode = 2
@@ -74,11 +80,16 @@ text = "Level Select"
 layout_mode = 2
 text = "Options"
 
+[node name="Spacer" type="Control" parent="Control/Columns/CenterColumn/Buttons"]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_stretch_ratio = 0.13
+
 [node name="Quit" type="Button" parent="Control/Columns/CenterColumn/Buttons"]
 layout_mode = 2
 text = "Quit"
 
-[node name="Spacer2" type="Control" parent="Control/Columns/CenterColumn"]
+[node name="SpacerBottom" type="Control" parent="Control/Columns/CenterColumn"]
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -96,7 +107,7 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="Label" type="Label" parent="Control/Columns/RightColumn"]
+[node name="CreditsHeader" type="Label" parent="Control/Columns/RightColumn"]
 layout_mode = 2
 text = "Credits"
 horizontal_alignment = 1
@@ -105,17 +116,18 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-text = "Person: thing 1
+bbcode_enabled = true
+text = "Person: thing 1, lorem ipsum sunum prepsim, trena ligshim son jeff.
 
 Person: thing 2
 
-Person: thing 3
+Person: thing 3  ipsum sunum prepsim, trena ligshim
 
 Person: thing 4
 
-Person: thing 5 
+Person: thing 5 sunum prepsim, trena ligshim son jeff.
 
-Person: thing6
+Person: thing6 sunum prepsim, trena ligshim son sunum prepsim, trena ligshim son jeff sunum prepsim, trena ligshim son jeff.
 
 Person: thing 7
 
@@ -125,7 +137,7 @@ Person: thing 8
 
 Person: thing 9
 
-Person: thing 10
+Person: thing 10 ipsum sunum prepsim sunum godot goose.
 
 Person: thing 11
 
@@ -147,7 +159,6 @@ Person: thing 17
 
 "
 scroll_active = false
-scroll_following = true
 shortcut_keys_enabled = false
 
 [node name="Spacer2" type="Control" parent="Control/Columns/RightColumn"]
