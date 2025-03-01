@@ -63,13 +63,15 @@ func _physics_process(delta: float) -> void:
 	var overlaps = overlap.get_overlapping_areas()
 	for overlap in overlaps:
 		if overlap.collision_layer == Collisions.Layers.terrain:
-			owner.merge_chunks(overlap.get_parent(), self)
-			falling = false
-			return
+			if owner.merge_chunks(overlap.get_parent(), self):
+				falling = false
+				return
+			else:
+				break
 
 	_velocity += Vector2(0, gravity) * delta
 	global_position += _velocity * delta
-	
+
 func _replace_contents_local(new_poly: PackedVector2Array) -> void:
 	
 	print_poly("_replace_contents_local", new_poly)
@@ -209,7 +211,6 @@ func _create_break_polyline(poly: PackedVector2Array, first_index: int) -> Packe
 	return polyline
 	
 func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global: PackedVector2Array = []) -> Array[PackedVector2Array]:
-	
 	print_poly("replace_contents", new_poly_global)
 
 	# Transform updated polygon back to local space
@@ -267,16 +268,17 @@ func compare(other: TerrainChunk) -> bool:
 	return terrainMesh.polygon.size() > other.terrainMesh.polygon.size()
 	
 func print_poly(context: String, poly: PackedVector2Array) -> void:
+	if !OS.is_debug_build():
+		return
+		
 	var values: Array[Vector2] = []
 	for vector in poly:
 		values.push_back(vector)
 		
-	print("TerrainChunk(%s) - %s: %d: [%s]"
+	print_debug("TerrainChunk(%s) - %s: %d: [%s]"
 	 % [name, context, values.size(),
 	 ",".join(values.map(func(v : Vector2): return str(v)))])
-	#for i in range(poly.size()):
-		#print("poly[" + str(i) + "]=" + str(poly[i]))
-
+	
 func get_bounds_global():
 	var bounds:Rect2 = Rect2()
 	var viewport_width:float = get_viewport_rect().size.x

@@ -14,6 +14,15 @@ const TerrainChunkScene = preload("res://terrain/terrain_chunk.tscn")
 @export_category("Projectile")
 @export var max_damage_shape_offset: float = 1
 
+@export_category("Crushing")
+@export var max_overlap_distance: float = 5
+
+@export_category("Crushing")
+@export var max_overlap_association_distance: float = 10
+
+@export_category("Crushing")
+@export var max_crush_triangle_delete_size: float = 10
+
 var initial_chunk_name: String
 var first_child_chunk: TerrainChunk
 
@@ -147,7 +156,7 @@ func _morph_falling_chunk(chunk: TerrainChunk) -> PackedVector2Array:
 	# return results[0] if results.size() >= 1 else []
 	return chunk_poly
 
-func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -> void:
+func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -> bool:
 	var largest_is_first := in_first_chunk.compare(in_second_chunk)
 	var first_chunk := in_first_chunk if largest_is_first else in_second_chunk
 	var second_chunk := in_second_chunk if largest_is_first else in_first_chunk
@@ -155,25 +164,35 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 	var first_poly: PackedVector2Array
 	var second_poly: PackedVector2Array 
 	
+	var falling:bool = false
 	# If the chunk is falling then need to offset it
 	if first_chunk.falling:
 		first_poly = _morph_falling_chunk(first_chunk)
+		falling = true
 	else:
 		first_poly = first_chunk.get_terrain_global()
 	
 	if second_chunk.falling:
 		second_poly = _morph_falling_chunk(second_chunk)
+		falling = true
 	else:
 		second_poly = second_chunk.get_terrain_global()
-
-	var results: Array[PackedVector2Array] = Geometry2D.merge_polygons(first_poly, second_poly)
-
-	print("merge_chunks: first(%d) + second(%d) -> %d: [%s]"
-	 % [first_poly.size(), second_poly.size(), results.size(),
-	 ",".join(results.map(func(x : PackedVector2Array): return x.size()))])
 	
-	# Sort by size so we can keep the largest
-	results.sort_custom(TerrainUtils.largest_poly_first)
+	#  Want to crush small pieces that get merged
+	var results: Array[PackedVector2Array]
+	
+	if falling:
+		results = _crush(first_chunk, first_poly, second_chunk, second_poly)
+	else:
+		results = [first_poly, second_poly]
+	
+	if results.size() >= 2:	
+		results = Geometry2D.merge_polygons(results[0], results[1])
+		print("merge_chunks: first(%d) + second(%d) -> %d: [%s]"
+		 % [first_poly.size(), second_poly.size(), results.size(),
+		 ",".join(results.map(func(x : PackedVector2Array): return x.size()))])
+		# Sort by size so we can keep the largest
+		results.sort_custom(TerrainUtils.largest_poly_first)
 	
 	if results.size() >= 1 and TerrainUtils.is_visible(results[0]):
 		first_chunk.replace_contents(results[0])
@@ -189,7 +208,34 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 		_add_new_chunks(get_first_chunk(), results, 2)
 		
 	print("merge_chunks: final terrain chunk count=%d" % [get_child_count()])
+	
+	return true
+	
+# Need to specify which poly is falling and if so check delta y down and up to see which vertices will get merged and then
+# any other vertex within a sq dist influence of that will be also considered for "crushing" by testing the area of those polygons
+# if for some reason no vertices match then just return the original poly arrays without triangulation
+func _crush(first_chunk: TerrainChunk, first_poly: PackedVector2Array,
+	 second_chunk: TerrainChunk, second_poly: PackedVector2Array) -> Array[PackedVector2Array]:
+	
+	var results: Array[PackedVector2Array] = [first_poly, second_poly]
 
+	if !first_chunk.falling and !second_chunk.falling:
+		return results
+		
+	# Determine the candidate vertices
+	var overlap_index_arrays :  Array[PackedInt32Array] = TerrainUtils.determine_overlap_vertices(first_poly, second_poly, max_overlap_association_distance, max_overlap_distance)
+	
+	TerrainUtils.prune_small_area_poly(first_poly, overlap_index_arrays[0], max_crush_triangle_delete_size)
+	TerrainUtils.prune_small_area_poly(second_poly, overlap_index_arrays[1], max_crush_triangle_delete_size)
+
+	# Filter results to visible
+	results = results.filter(func(r : PackedVector2Array): return TerrainUtils.is_visible(r))
+	results.sort_custom(TerrainUtils.largest_poly_first)
+
+	if results.size() <= 2:
+		return results
+	return results.slice(0, 2)
+	
 func contains_point(point: Vector2) -> bool:
 	for chunk in get_children():
 		if chunk is TerrainChunk:
