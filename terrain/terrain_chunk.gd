@@ -84,11 +84,14 @@ func _physics_process(delta: float) -> void:
 	_velocity += Vector2(0, gravity) * delta
 	global_position += _velocity * delta
 
-func _replace_contents_local(new_poly: PackedVector2Array) -> void:
+func _replace_contents_local(new_poly: PackedVector2Array, immediate:bool) -> void:
 	
 	print_poly("_replace_contents_local", new_poly)
 
-	terrainMesh.set_deferred("polygon", new_poly)
+	if(immediate):
+		terrainMesh.polygon = new_poly
+	else:
+		terrainMesh.set_deferred("polygon", new_poly)
 	collisionMesh.set_deferred("polygon", new_poly)
 	overlapMesh.set_deferred("polygon", new_poly)
 
@@ -222,7 +225,7 @@ func _create_break_polyline(poly: PackedVector2Array, first_index: int) -> Packe
 	
 	return polyline
 	
-func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global: PackedVector2Array = []) -> Array[PackedVector2Array]:
+func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global: PackedVector2Array = [], immediate:bool = false) -> Array[PackedVector2Array]:
 	print_poly("replace_contents", new_poly_global)
 
 	# Transform updated polygon back to local space
@@ -244,7 +247,7 @@ func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global
 			replacement_poly_local = final_polys[0]
 			additional_chunk_polys = final_polys.slice(1)
 		
-	_replace_contents_local(replacement_poly_local)
+	_replace_contents_local(replacement_poly_local, immediate)
 	
 	# Convert additional chunks to global
 	for i in range(0, additional_chunk_polys.size()):
