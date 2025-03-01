@@ -99,18 +99,16 @@ func _get_projectile_poly_global(projectile_poly: CollisionPolygon2D, poly_scale
 
 func _randomize_damage_polygon(projectile_damage_global: PackedVector2Array, poly_scale: Vector2) -> void:
 	var poly_scale_size:= poly_scale.length()
-	var scaled_min_offset := min_damage_shape_offset * poly_scale_size
-	var scaled_max_offset := max_damage_shape_offset * poly_scale_size
 	
 	for i in range(0, projectile_damage_global.size()):
-		projectile_damage_global[i] += _get_offset_damage_poly_vertex()
+		projectile_damage_global[i] += _get_offset_damage_poly_vertex(poly_scale_size)
 			
-func _get_offset_damage_poly_vertex() -> Vector2:
+func _get_offset_damage_poly_vertex(scale: float) -> Vector2:
 	# TODO: This sometimes creates a non-viable polygon
-	return Vector2(0, _get_random_damage_offset())
+	return Vector2(0, _get_random_damage_offset(scale))
 	
-func _get_random_damage_offset() -> float:
-	return randf_range(min_damage_shape_offset, max_damage_shape_offset) * (1 if randf() >= 0.5 else -1)
+func _get_random_damage_offset(scale: float) -> float:
+	return randf_range(min_damage_shape_offset * scale, max_damage_shape_offset * scale) * (1 if randf() >= 0.5 else -1)
 			
 func _add_new_chunks(first_chunk: TerrainChunk,
  geometry_results: Array[PackedVector2Array], start_index: int) -> void:
