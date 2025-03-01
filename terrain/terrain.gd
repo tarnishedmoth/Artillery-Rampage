@@ -259,7 +259,7 @@ func contains_point(point: Vector2) -> bool:
 				return true
 	return false
 
-func _get_chunks() -> Array[TerrainChunk]:
+func get_chunks() -> Array[TerrainChunk]:
 	var chunks : Array[TerrainChunk] = []
 	for child in get_children():
 		if child is TerrainChunk:
@@ -269,6 +269,6 @@ func _get_chunks() -> Array[TerrainChunk]:
 func get_bounds_global() -> Rect2:
 	var bounds:Rect2 = Rect2()
 	
-	for chunk in _get_chunks():
+	for chunk in get_chunks():
 		bounds = bounds.merge(chunk.get_bounds_global())
 	return bounds

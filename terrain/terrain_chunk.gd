@@ -36,6 +36,8 @@ class_name TerrainChunk extends StaticBody2D
 @export_category("Crumbling")
 @export_range(0, 100) var crumble_x_jitter: float = 10
 
+const surface_delta_y: float = 1
+
 var falling:bool = false:
 	set(value):
 		if value != falling:
@@ -259,11 +261,22 @@ func delete() -> void:
 func damage(projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1,1)):
 	owner.damage(self, projectile_poly, poly_scale)
 
+func is_surface_point(vertex: Vector2) -> bool:
+	var test_point: Vector2 = vertex + Vector2(0, surface_delta_y)
+	return _is_in_terrain(test_point)
+
+func is_surface_point_global(vertex: Vector2) -> bool:
+	return contains_point(vertex + Vector2(0, surface_delta_y))
+
 func contains_point(point: Vector2) -> bool:
 	var terrain_global_inv_transform: Transform2D = terrainMesh.global_transform.affine_inverse()
 	var point_local := terrain_global_inv_transform * point
 	
+	return _is_in_terrain(point_local)
+
+func _is_in_terrain(point_local: Vector2) -> bool:
 	return Geometry2D.is_point_in_polygon(point_local, get_terrain_local())
+
 # Sort by largest first
 func compare(other: TerrainChunk) -> bool:
 	return terrainMesh.polygon.size() > other.terrainMesh.polygon.size()
