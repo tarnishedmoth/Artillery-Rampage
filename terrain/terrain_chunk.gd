@@ -63,7 +63,8 @@ func _physics_process(delta: float) -> void:
 	var overlaps = overlap.get_overlapping_areas()
 	for overlap in overlaps:
 		if overlap.collision_layer == Collisions.Layers.terrain:
-			if owner.merge_chunks(overlap.get_parent(), self):
+			# Also stop falling if merge said we shouldn't but we are the bigger chunk
+			if owner.merge_chunks(overlap.get_parent(), self) or self.get_bounds_global().get_area() > overlap.get_parent().get_bounds_global().get_area():
 				falling = false
 				return
 			else:
@@ -222,7 +223,7 @@ func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global
 	var replacement_poly_local := updated_terrain_poly_local
 	var additional_chunk_polys: Array[PackedVector2Array] = []
 	
-	if !influence_poly_local.is_empty():
+	if influence_poly_local.size() > 1:
 		var bounds:Circle = Circle.create_from_points(influence_poly_local).scale(smooth_influence_scale)
 		replacement_poly_local = _smooth(updated_terrain_poly_local, bounds)
 		

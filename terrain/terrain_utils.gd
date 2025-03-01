@@ -55,18 +55,26 @@ static func _determine_source_overlaps_target_vertices(source_poly: PackedVector
 	
 	# Now look for other vertices nearby to those that are directly near the target polygon
 	for i in range(0, source_poly.size()):
-		if direct_results.get(i):
+		if direct_results.has(i):
 			continue
 		var vertex := source_poly[i]
 		for contained_index in direct_results:
 			var dist_sq := vertex.distance_squared_to(source_poly[contained_index])
 			if dist_sq <= association_dist_sq:
 				all_results.push_back(i)
+
+	if OS.is_debug_build():
+		var values: Array[int] = []
+		for index in all_results:
+			values.push_back(index)
+		print_debug("determine_overlap_vertices: source(%d), target(%d), results=%d - %s" 
+		% [source_poly.size(), target_poly.size(), all_results.size(), ",".join(values.map(func(idx : int): return str(idx)))])
+	
 	return all_results
 	
-static func prune_small_area_poly(poly: PackedVector2Array, pruning_index_candidates: PackedInt32Array, threshold_area: float) -> void:
+static func prune_small_area_poly(poly: PackedVector2Array, pruning_index_candidates: PackedInt32Array, threshold_area: float) -> int:
 	if !pruning_index_candidates:
-		return
+		return 0
 	
 	# each triangle consists of three consecutive point indices into polygon (i.e. the returned array will have n * 3 elements, 
 	# with n being the number of found triangles). Output triangles will always be counter clockwise, 
@@ -75,7 +83,7 @@ static func prune_small_area_poly(poly: PackedVector2Array, pruning_index_candid
 	
 	if !triangle_list_indices:	
 		push_warning("prune_small_area_poly: Unable to triangulate poly with size=%d" % [poly.size()])
-		return
+		return 0
 		
 	var removal_indices: PackedInt32Array = []
 	
@@ -93,10 +101,11 @@ static func prune_small_area_poly(poly: PackedVector2Array, pruning_index_candid
 	for index in removal_indices:
 		poly.remove_at(index)
 	
+	return removal_indices.size()
+	
 static func is_exclusive_small_area_poly_index(triangle_list_indices: PackedInt32Array, poly: PackedVector2Array, index: int, threshold_area: float) -> bool:
 	# Check that all triangles that are involved with the index meet the threshold_area
 	var search_index: int = 0
-	
 	var triangle_indices: PackedInt32Array = [0, 0, 0]
 	
 	while search_index < triangle_list_indices.size():
@@ -105,7 +114,9 @@ static func is_exclusive_small_area_poly_index(triangle_list_indices: PackedInt3
 			break
 		
 		# Need to test the triangle area and immediately return false if the triangle its involved in is larger than the threshold area
-		match search_index % 3:
+		# The triangle list packs the indices in groups of 3
+		var triangle_index := search_index % 3
+		match triangle_index:
 			0:
 				triangle_indices[0] = triangle_list_indices[search_index]
 				triangle_indices[1] = triangle_list_indices[search_index + 1]
@@ -120,9 +131,14 @@ static func is_exclusive_small_area_poly_index(triangle_list_indices: PackedInt3
 				triangle_indices[2] = triangle_list_indices[search_index]
 				
 		var area := calculate_triangle_area(poly[triangle_indices[0]], poly[triangle_indices[1]], poly[triangle_indices[2]])
+
+		print_debug("is_exclusive_small_area_poly_index: index=%d (%d,%d,%d) -> [%s,%s,%s], area=%f -> %s" 
+			% [index, triangle_indices[0], triangle_indices[1], triangle_indices[2],
+			 str(poly[triangle_indices[0]]), str(poly[triangle_indices[1]]), str(poly[triangle_indices[2]]), area, str(area < threshold_area)])
+
 		if area >= threshold_area:
 			return false
-		# Start the find from next vertex
-		search_index += 1
+		# Start the find from next triangle group
+		search_index += 3 - triangle_index
 	# All areas the index is involved in are less than threshold area or it dosen't have a triangle all
 	return true

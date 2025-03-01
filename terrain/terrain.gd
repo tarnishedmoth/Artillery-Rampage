@@ -18,10 +18,10 @@ const TerrainChunkScene = preload("res://terrain/terrain_chunk.tscn")
 @export var max_overlap_distance: float = 5
 
 @export_category("Crushing")
-@export var max_overlap_association_distance: float = 10
+@export var max_overlap_association_distance: float = 30
 
 @export_category("Crushing")
-@export var max_crush_triangle_delete_size: float = 10
+@export var max_crush_triangle_delete_size: float = 200
 
 var initial_chunk_name: String
 var first_child_chunk: TerrainChunk
@@ -179,8 +179,14 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 	#  Want to crush small pieces that get merged
 	var results: Array[PackedVector2Array]
 	
+	var influence_vertices: PackedVector2Array = []
+
+	var stop_falling:bool = true
+	
 	if falling:
-		results = _crush(first_chunk, first_poly, second_chunk, second_poly)
+		var crush_results := _crush(first_chunk, first_poly, second_chunk, second_poly, influence_vertices)
+		results = crush_results["results"]
+		stop_falling = crush_results["pruned"] == 0
 	else:
 		results = [first_poly, second_poly]
 	
@@ -193,12 +199,12 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 		results.sort_custom(TerrainUtils.largest_poly_first)
 	
 	if results.size() >= 1 and TerrainUtils.is_visible(results[0]):
-		first_chunk.replace_contents(results[0])
+		first_chunk.replace_contents(results[0], influence_vertices)
 	else:
 		first_chunk.delete()
 	
 	if results.size() >= 2 and TerrainUtils.is_visible(results[1]):
-		second_chunk.replace_contents(results[1])
+		second_chunk.replace_contents(results[1], influence_vertices)
 	else:
 		second_chunk.delete()
 		
@@ -213,26 +219,38 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 # any other vertex within a sq dist influence of that will be also considered for "crushing" by testing the area of those polygons
 # if for some reason no vertices match then just return the original poly arrays without triangulation
 func _crush(first_chunk: TerrainChunk, first_poly: PackedVector2Array,
-	 second_chunk: TerrainChunk, second_poly: PackedVector2Array) -> Array[PackedVector2Array]:
+	 second_chunk: TerrainChunk, second_poly: PackedVector2Array, out_influence_vertices: PackedVector2Array) -> Dictionary:
 	
 	var results: Array[PackedVector2Array] = [first_poly, second_poly]
 
 	if !first_chunk.falling and !second_chunk.falling:
-		return results
+		return { "results" : results, "pruned" : 0 }
 		
 	# Determine the candidate vertices
-	var overlap_index_arrays :  Array[PackedInt32Array] = TerrainUtils.determine_overlap_vertices(first_poly, second_poly, max_overlap_association_distance, max_overlap_distance)
+	var overlap_index_arrays : Array[PackedInt32Array] = TerrainUtils.determine_overlap_vertices(first_poly, second_poly, max_overlap_association_distance, max_overlap_distance)
 	
-	TerrainUtils.prune_small_area_poly(first_poly, overlap_index_arrays[0], max_crush_triangle_delete_size)
-	TerrainUtils.prune_small_area_poly(second_poly, overlap_index_arrays[1], max_crush_triangle_delete_size)
+	# influence vertices doesn't have to be a true polygon - we create a bounding circle around the vertices
+	# Calculate the influence area before pruning
+	for index in overlap_index_arrays[0]:
+		out_influence_vertices.push_back(first_poly[index])
+	for index in overlap_index_arrays[1]:
+		out_influence_vertices.push_back(second_poly[index])
+
+	var pruned: int = TerrainUtils.prune_small_area_poly(first_poly, overlap_index_arrays[0], max_crush_triangle_delete_size)
+	pruned += TerrainUtils.prune_small_area_poly(second_poly, overlap_index_arrays[1], max_crush_triangle_delete_size)
 
 	# Filter results to visible
 	results = results.filter(func(r : PackedVector2Array): return TerrainUtils.is_visible(r))
 	results.sort_custom(TerrainUtils.largest_poly_first)
 
 	if results.size() <= 2:
-		return results
-	return results.slice(0, 2)
+		return { "results" : results, "pruned" : pruned }
+		
+	# Take largest two
+	return {
+		"results" : results.slice(0, 2),
+		"pruned" : pruned
+	}
 	
 func contains_point(point: Vector2) -> bool:
 	for chunk in get_children():
