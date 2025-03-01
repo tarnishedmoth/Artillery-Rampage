@@ -12,6 +12,10 @@ var wind_min:int = -100
 @export_range(0.0, 1e9, 1, "or_greater")
 var wind_max:int = 100
 
+@export_category("Wind")
+@export_range(-1.0, 1.0, 0.01, "or_greater")
+var wind_sign_bias:float = 0
+
 var wind: Vector2 = Vector2():
 	set(value):
 		wind = value
@@ -28,7 +32,7 @@ func _ready() -> void:
 
 func _randomize_wind() -> int:
 	# Increase "no-wind" probability by allowing negative and then clamping to zero if the random number is < 0
-	return max(randi_range(wind_min, wind_max), 0) * (1 if randf() <= 0.5 else -1)
+	return max(randi_range(wind_min, wind_max), 0) * (1 if randf() <= 0.5 + wind_sign_bias * 0.5 else -1)
 
 func _physics_process(delta: float) -> void:
 	if !is_instance_valid(_active_projectile):

@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://c2fx2mtqraags"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_d8x3v"]
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_ypt0n"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="4_6dllr"]
+
+[node name="TestWindBug" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_d8x3v")]
+
+[node name="Wind" parent="GameLevel" index="4"]
+wind_min = 100
+wind_sign_bias = -1.0
+
+[node name="Enemy1" parent="GameLevel" instance=ExtResource("2_ypt0n")]
+position = Vector2(479, 278)
+
+[node name="Tank" parent="GameLevel/Enemy1" index="0"]
+color = Color(0.682353, 0.713726, 0.219608, 1)
+
+[node name="Player" parent="GameLevel" instance=ExtResource("4_6dllr")]
+position = Vector2(120, 427)
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/Wind"]
+[editable path="GameLevel/Enemy1"]
