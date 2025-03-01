@@ -9,7 +9,7 @@ extends Node2D
 # Enums
 # constants
 # @exports
-@export var reveal_speed: float = 0.15
+@export var reveal_speed: float = 0.5
 @export var credits_line_scroll_frequency:float = 0.9 ## In seconds, advances credits one line.
 
 @export var revealables:Array[Control] ## Will reveal their text as determined by reveal_speed
@@ -103,4 +103,4 @@ func _on_reveal_timeout() -> void:
 			_text_controls.erase(node)
 			print_debug("Fully revealed; to reveal: ",_text_controls.size()," controls.")
 			break # Godot documentation says not to erase while iterating
-	revealer_timer.start(clampf(revealer_timer.wait_time - 0.003, 0.01, 2.0)) # Accelerate
+	revealer_timer.start(clampf(revealer_timer.wait_time * 0.90, 0.01, 2.0)) # Accelerate
