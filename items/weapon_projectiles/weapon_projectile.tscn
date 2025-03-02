@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://c7jh5lsef6gd1"]
+[gd_scene load_steps=5 format=3 uid="uid://c7jh5lsef6gd1"]
 
 [ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile.gd" id="1_01gh6"]
 [ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="2_l4fkv"]
+[ext_resource type="PackedScene" uid="uid://gj55bahvsd7g" path="res://items/weapon_projectiles/explosions/explosion_leadball.tscn" id="2_mc0vs"]
 [ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="3_0q2o4"]
 
 [node name="WeaponProjectile" type="RigidBody2D"]
@@ -9,6 +10,7 @@ collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_01gh6")
 power_velocity_mult = 0.9
+explosion_to_spawn = ExtResource("2_mc0vs")
 min_falloff_distance = 5.0
 max_falloff_distance = 45.0
 destructible_scale_multiplier = Vector2(7, 7)

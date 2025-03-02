@@ -17,6 +17,7 @@ signal completed_lifespan ## Tracked by Weapon class
 @export var color: Color = Color.BLACK
 
 @export var max_lifetime: float = 10.0 ## Self destroys once this time has passed.
+@export var explosion_to_spawn:PackedScene
 
 @export_category("Damage")
 @export var damage_falloff_type: DamageFalloffType = DamageFalloffType.Linear
@@ -97,6 +98,9 @@ func get_parent_in_group(node: Node, group: String) -> Node:
 
 func destroy():
 	#GameEvents.emit_turn_ended(owner_tank.owner) ## Moved to Weapon class.
+	if explosion_to_spawn:
+		spawn_explosion(explosion_to_spawn)
+		
 	completed_lifespan.emit()
 	queue_free()
 	
@@ -105,6 +109,13 @@ func destroy_after_lifetime(lifetime:float = max_lifetime) -> void:
 	add_child(timer)
 	timer.timeout.connect(destroy)
 	timer.start(lifetime)
+	
+func spawn_explosion(scene:PackedScene) -> void:
+	var instance
+	if scene.can_instantiate():
+		instance = scene.instantiate()
+		instance.global_position = global_position
+		get_tree().current_scene.add_child(instance) # Could put into a container
 	
 func _find_interaction_overlaps() -> Array[Node2D]:
 	var space_state = get_world_2d().direct_space_state
