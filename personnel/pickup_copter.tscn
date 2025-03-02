@@ -1,0 +1,259 @@
+[gd_scene load_steps=28 format=3 uid="uid://bogp8cydgto88"]
+
+[ext_resource type="Script" path="res://personnel/pickup_copter.gd" id="1_ohviw"]
+[ext_resource type="AudioStream" uid="uid://bxqicyawwef5m" path="res://personnel/copter.wav" id="2_pqhqg"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2ekh2"]
+radius = 16.0
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_ut1u5"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4l74l"]
+animation = &"hover_leftright"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_t404e"]
+animation = &"arrive"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_m56mo"]
+graph_offset = Vector2(-1043, -24)
+nodes/Add2/node = SubResource("AnimationNodeAdd2_ut1u5")
+nodes/Add2/position = Vector2(-60, 20)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_t404e")
+nodes/Animation/position = Vector2(-320, 40)
+"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_4l74l")
+"nodes/Animation 2/position" = Vector2(-320, 260)
+nodes/output/position = Vector2(160, 20)
+node_connections = [&"Add2", 0, &"Animation", &"Add2", 1, &"Animation 2", &"output", 0, &"Add2"]
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_sike1"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_o3x73"]
+animation = &"hover_updown"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xm6jp"]
+animation = &"hover_leftright"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_w87nm"]
+graph_offset = Vector2(-825.364, 63.0909)
+nodes/Add2/node = SubResource("AnimationNodeAdd2_sike1")
+nodes/Add2/position = Vector2(280, 100)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_xm6jp")
+nodes/Animation/position = Vector2(40, 120)
+"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_o3x73")
+"nodes/Animation 2/position" = Vector2(40, 340)
+nodes/output/position = Vector2(800, 140)
+node_connections = [&"Add2", 0, &"Animation", &"Add2", 1, &"Animation 2", &"output", 0, &"Add2"]
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_b7b4j"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ct5i4"]
+animation = &"hover_leftright"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_m6r2i"]
+animation = &"leave"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_3kyny"]
+graph_offset = Vector2(-67.8627, 89.1845)
+nodes/Add2/node = SubResource("AnimationNodeAdd2_b7b4j")
+nodes/Add2/position = Vector2(820, 160)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_m6r2i")
+nodes/Animation/position = Vector2(580, 160)
+"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_ct5i4")
+"nodes/Animation 2/position" = Vector2(580, 380)
+nodes/output/position = Vector2(1060, 140)
+node_connections = [&"Add2", 0, &"Animation", &"Add2", 1, &"Animation 2", &"output", 0, &"Add2"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_uy84j"]
+xfade_time = 0.7
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2lp6l"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_br2mc"]
+xfade_time = 3.0
+switch_mode = 1
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_y6wmy"]
+states/Arriving/node = SubResource("AnimationNodeBlendTree_m56mo")
+states/Arriving/position = Vector2(344, 89)
+states/End/position = Vector2(1156, 89)
+states/Hovering/node = SubResource("AnimationNodeBlendTree_w87nm")
+states/Hovering/position = Vector2(642, 89)
+states/Leaving/node = SubResource("AnimationNodeBlendTree_3kyny")
+states/Leaving/position = Vector2(960, 89)
+states/Start/position = Vector2(163, 89)
+transitions = ["Arriving", "Hovering", SubResource("AnimationNodeStateMachineTransition_uy84j"), "Leaving", "End", SubResource("AnimationNodeStateMachineTransition_2lp6l"), "Hovering", "Leaving", SubResource("AnimationNodeStateMachineTransition_br2mc")]
+graph_offset = Vector2(-510, -18)
+
+[sub_resource type="Animation" id="Animation_y08e2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SFX:volume_db")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_m68qb"]
+resource_name = "arrive"
+length = 6.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 4, 5, 6),
+"transitions": PackedFloat32Array(1, 1.23114, 1, 1.51572),
+"update": 0,
+"values": [Vector2(0, -2000), Vector2(0, 64), Vector2(0, -6), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SFX:volume_db")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-50.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_qs5qh"]
+resource_name = "hover_leftright"
+length = 5.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5, 4.26667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(24, 0), Vector2(-24, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_rwwf7"]
+resource_name = "hover"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.03333, 3.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 16), Vector2(0, -8)]
+}
+
+[sub_resource type="Animation" id="Animation_qfxhq"]
+resource_name = "leave"
+length = 10.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5, 10),
+"transitions": PackedFloat32Array(1, 1, 4.92458),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 16), Vector2(0, -2000)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SFX:volume_db")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(8, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, -55.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j4rpa"]
+_data = {
+"RESET": SubResource("Animation_y08e2"),
+"arrive": SubResource("Animation_m68qb"),
+"hover_leftright": SubResource("Animation_qs5qh"),
+"hover_updown": SubResource("Animation_rwwf7"),
+"leave": SubResource("Animation_qfxhq")
+}
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_tuaom"]
+size = Vector2(16, 16)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_acmdu"]
+size = Vector2(6, 32)
+
+[node name="PickupCopter" type="Node2D"]
+script = ExtResource("1_ohviw")
+
+[node name="PickupCopter" type="CharacterBody2D" parent="."]
+modulate = Color(0, 0, 0, 1)
+collision_layer = 9
+collision_mask = 9
+motion_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupCopter"]
+shape = SubResource("CircleShape2D_2ekh2")
+
+[node name="SFX" type="AudioStreamPlayer2D" parent="PickupCopter"]
+stream = ExtResource("2_pqhqg")
+
+[node name="AnimationTree" type="AnimationTree" parent="PickupCopter"]
+tree_root = SubResource("AnimationNodeStateMachine_y6wmy")
+anim_player = NodePath("AnimationPlayer")
+parameters/Arriving/Add2/add_amount = 1.0
+parameters/Hovering/Add2/add_amount = 1.0
+parameters/Leaving/Add2/add_amount = 1.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PickupCopter/AnimationTree"]
+root_node = NodePath("../..")
+libraries = {
+"": SubResource("AnimationLibrary_j4rpa")
+}
+next/arrive = &"hover"
+
+[node name="Body" type="Sprite2D" parent="PickupCopter"]
+texture = SubResource("PlaceholderTexture2D_tuaom")
+
+[node name="Rotors" type="Node2D" parent="PickupCopter"]
+rotation = 0.236509
+
+[node name="Sprite2D" type="Sprite2D" parent="PickupCopter/Rotors"]
+texture = SubResource("PlaceholderTexture2D_acmdu")

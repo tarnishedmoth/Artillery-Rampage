@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://c5xgv7bgvn642"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_2pbg1"]
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_w0o7s"]
+[ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="3_n5e16"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="4_p6mcx"]
+[ext_resource type="PackedScene" uid="uid://bogp8cydgto88" path="res://personnel/pickup_copter.tscn" id="5_dad6q"]
+
+[node name="TestLevel01" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_2pbg1")]
+
+[node name="Enemy1" parent="GameLevel" instance=ExtResource("2_w0o7s")]
+position = Vector2(479, 278)
+
+[node name="Tank" parent="GameLevel/Enemy1" index="0"]
+color = Color(0.682353, 0.713726, 0.219608, 1)
+
+[node name="House1" parent="GameLevel" instance=ExtResource("3_n5e16")]
+position = Vector2(43, 409)
+
+[node name="House2" parent="GameLevel" instance=ExtResource("3_n5e16")]
+position = Vector2(934, 407)
+
+[node name="Player" parent="GameLevel" instance=ExtResource("4_p6mcx")]
+position = Vector2(120, 427)
+
+[node name="PickupCopter" parent="GameLevel" instance=ExtResource("5_dad6q")]
+position = Vector2(320, -120)
+
+[editable path="GameLevel/Enemy1"]

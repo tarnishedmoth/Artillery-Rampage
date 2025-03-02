@@ -30,6 +30,9 @@ signal power_updated(player: TankController)
 @warning_ignore("unused_signal")
 signal collectible_collected(collected: CollectibleItem)
 
+@warning_ignore("unused_signal")
+signal personnel_requested_pickup(unit: PersonnelUnit)
+
 func emit_turn_started(player: TankController):
 	emit_signal("turn_started", player)
 

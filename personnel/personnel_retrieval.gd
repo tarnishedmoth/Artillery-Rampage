@@ -15,7 +15,7 @@ signal died()
 
 @export var jump_impulse_strength: float = 350.0
 @export var jump_impulse_angle_limit: float = 0.24 ## Radians
-@export var min_distance_traveled_or_stuck: float = 8.0
+@export var min_distance_traveled_or_stuck: float = 12.0
 @export var get_unstuck_frequency: int = 3 ## If stuck for this many cycles, changes logic
 @export var unstuck_extra_force: float = 25.0 ## Adds more jumping force when very stuck.
 # public
@@ -49,7 +49,7 @@ func start_logic_cycle(cycle_time:float = logic_cycle_time) -> void:
 	
 	var cycle_timer = Timer.new()
 	add_child(cycle_timer)
-	cycle_timer.timeout.connect(_cycle_timer_timeout)
+	cycle_timer.timeout.connect(_logic_cycle_timer_timeout)
 	cycle_timer.one_shot = false
 	cycle_timer.start(cycle_time)
 
@@ -62,28 +62,12 @@ func destroy_after_lifetime(lifetime:float = max_lifetime) -> void:
 	add_child(timer)
 	timer.timeout.connect(destroy)
 	timer.start(lifetime) 
+	
+func request_pickup() -> void:
+	GameEvents.personnel_requested_pickup.emit(self)
+	
 #endregion
 #region--Private Methods
-func _find_nearest_collectible() -> Node2D:
-	var collectibles:Array = get_tree().get_nodes_in_group(Groups.Collectible)
-	if collectibles.is_empty(): return null
-	
-	var nearest_collectible:Node2D
-	var nearest_distance:float
-	
-	for collectible in collectibles:
-		var distance = (collectible.global_position - global_position).length()
-		
-		if nearest_collectible == null:
-			nearest_collectible = collectible
-			nearest_distance = distance
-			continue
-		
-		if distance < nearest_distance:
-			nearest_collectible = collectible
-			nearest_distance = distance
-	return nearest_collectible
-
 func _get_goal_oriented_impulse(objective:Node2D) -> Vector2:
 	var impulse = -transform.y * jump_impulse_strength
 	if objective == null:
@@ -102,14 +86,37 @@ func _get_goal_oriented_impulse(objective:Node2D) -> Vector2:
 		jump_impulse_angle_limit/2)
 		
 	if _stuck_counter > get_unstuck_frequency:
-		impulse += _stuck_counter * 10
+		impulse += _stuck_counter * unstuck_extra_force
 		tilt = -tilt # Go backwards
 	impulse = impulse.rotated(tilt)
 	return impulse
+	
+func _find_nearest_collectible() -> Node2D:
+	if get_tree().get_node_count_in_group(Groups.Collectible) == 0: request_pickup()
+	var collectibles:Array = get_tree().get_nodes_in_group(Groups.Collectible)
+	#if collectibles.is_empty(): return null
+	
+	var nearest_collectible:Node2D
+	var nearest_distance:float
+	
+	for collectible in collectibles:
+		var distance = (collectible.global_position - global_position).length()
+		
+		if nearest_collectible == null:
+			nearest_collectible = collectible
+			nearest_distance = distance
+			continue
+		
+		if distance < nearest_distance:
+			nearest_collectible = collectible
+			nearest_distance = distance
+	return nearest_collectible
 
-func _cycle_timer_timeout() -> void:
+func _logic_cycle_timer_timeout() -> void:
 	if not is_instance_valid(goal_object) or goal_object.is_queued_for_deletion():
 		goal_object = null
+	if goal_object == null:
+		_find_nearest_collectible()
 	var impulse = _get_goal_oriented_impulse(goal_object) as Vector2
 	apply_central_impulse(impulse)
 
@@ -117,7 +124,6 @@ func _cycle_timer_timeout() -> void:
 func _on_collectible_touched(collectible: CollectibleItem) -> void: # Codependence, refactor later
 	print_debug("On body entered collectible")
 	collectible.collect()
-	destroy()
 	
 func _on_collectible_collected(collected: CollectibleItem) -> void:
 	_find_nearest_collectible()
