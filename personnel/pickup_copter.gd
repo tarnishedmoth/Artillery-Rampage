@@ -84,6 +84,7 @@ func reposition() -> void: # Always in the air
 func land() -> void:
 	#print_debug("Landing")
 	reset_idle_time()
+	fire_flares()
 	
 	var tween = create_tween()
 	var distance = (current_pickup.global_position - global_position).length()
@@ -165,7 +166,6 @@ func _on_arrived() -> void:
 	check_queue()
 
 func _on_repositioned() -> void:
-	fire_flares()
 	if current_pickup != null:
 		land()
 	else:
