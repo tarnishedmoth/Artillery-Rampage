@@ -1,8 +1,8 @@
 extends Node2D
 
-@export var rotors_rotate_speed:float = TAU ## Radians per second
+@export var rotors_rotate_speed:float = TAU*3 ## Radians per second
 @export var move_speed:float = 150.0
-@export var hover_altitude:float = 150.0
+@export var hover_altitude:float = 130.0
 @export var wait_range:float = 10.0 ## Copter will wait at landing sites for personnel within this radius.
 
 @onready var copter = $PickupCopter
@@ -11,7 +11,6 @@ extends Node2D
 @onready var animation_tree: AnimationTree = $PickupCopter/AnimationTree
 @onready var state_machine:AnimationNodeStateMachinePlayback = animation_tree["parameters/playback"]
 
-var target:Vector2
 var current_pickup:PersonnelUnit = null
 var pickup_queue:Array
 
@@ -37,6 +36,7 @@ func arrive() -> void:
 
 func leave() -> void:
 	_is_operating = false
+	pickup_queue.clear()
 	state_machine.travel("Leaving")
 	var animation_length = 10.0
 	await get_tree().create_timer(animation_length).timeout
@@ -70,7 +70,7 @@ func hover() -> void:
 	tween.tween_property(self, "global_position:y", hover_altitude, distance/speed).set_trans(Tween.TRANS_CUBIC)
 	tween.tween_callback(reposition)
 	
-func wait() ->  void:
+func wait() -> void:
 	#print_debug("Waiting")
 	await get_tree().create_timer(2.25).timeout
 	check_queue()
@@ -87,7 +87,7 @@ func load_passenger(passenger:PersonnelUnit) -> void:
 		pickup_queue.erase(passenger)
 		print_debug("...and was a valid pickup order!")
 	passenger.destroy()
-	check_queue()
+	wait()
 		
 func check_queue() -> void:
 	print("Pickup Copter checking pickup queue")
