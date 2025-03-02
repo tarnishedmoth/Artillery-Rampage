@@ -10,12 +10,12 @@ signal died()
 # Enums
 # constants
 # @exports
-@export var max_lifetime:float = 20.0
-@export var logic_cycle_time:float = 0.75
+@export var max_lifetime:float = 55.0
+@export var logic_cycle_time:float = 0.85
 
 @export var jump_impulse_strength: float = 350.0
 @export var jump_impulse_angle_limit: float = 0.24 ## Radians
-@export var min_distance_traveled_or_stuck: float = 12.0
+@export var min_distance_traveled_or_stuck: float = 15.0
 @export var get_unstuck_frequency: int = 3 ## If stuck for this many cycles, changes logic
 @export var unstuck_extra_force: float = 25.0 ## Adds more jumping force when very stuck.
 # public
@@ -23,6 +23,7 @@ var goal_object
 # _private
 var _last_position:Vector2
 var _stuck_counter:int = 0
+var _is_dead:bool = false
 # @onready
 #endregion
 
@@ -36,7 +37,7 @@ func _ready() -> void:
 	goal_object = _find_nearest_collectible()
 	start_logic_cycle()
 	if max_lifetime > 0.0:
-		destroy_after_lifetime(max_lifetime)
+		die_after_lifetime(max_lifetime)
 	
 #func _input(event: InputEvent) -> void: pass
 #func _unhandled_input(event: InputEvent) -> void: pass
@@ -45,6 +46,7 @@ func _ready() -> void:
 #endregion
 #region--Public Methods
 func start_logic_cycle(cycle_time:float = logic_cycle_time) -> void:
+	if _is_dead: return
 	cycle_time = randfn(cycle_time, 0.1)
 	
 	var cycle_timer = Timer.new()
@@ -54,14 +56,27 @@ func start_logic_cycle(cycle_time:float = logic_cycle_time) -> void:
 	cycle_timer.start(cycle_time)
 
 func destroy() -> void:
-	died.emit()
-	queue_free()
+	if _is_dead: return
 	
-func destroy_after_lifetime(lifetime:float = max_lifetime) -> void:
+	var tween = create_tween()
+	tween.tween_property(self, "modulate", Color.TRANSPARENT, 1.0)
+	tween.tween_callback(queue_free)
+	
+func die_after_lifetime(lifetime:float = max_lifetime) -> void:
 	var timer = Timer.new()
 	add_child(timer)
-	timer.timeout.connect(destroy)
+	timer.timeout.connect(die)
 	timer.start(lifetime) 
+	
+func die() -> void:
+	if _is_dead: return
+	_is_dead = true
+	lock_rotation = false
+	
+	died.emit()
+	var tween = create_tween()
+	tween.tween_property(self, "modulate", Color.TRANSPARENT, 3.0)
+	tween.tween_callback(queue_free)
 	
 func request_pickup() -> void:
 	GameEvents.personnel_requested_pickup.emit(self)
@@ -113,14 +128,17 @@ func _find_nearest_collectible() -> Node2D:
 	return nearest_collectible
 
 func _logic_cycle_timer_timeout() -> void:
+	if _is_dead: return
+	
 	if not is_instance_valid(goal_object) or goal_object.is_queued_for_deletion():
 		goal_object = null
 	if goal_object == null:
 		_find_nearest_collectible()
 		
+	# Pickup Copter
 	if goal_object.has_method("load_passenger"):
 		var distance = (goal_object.global_position - global_position).length()
-		if distance < 40.0:
+		if distance < 48.0:
 			goal_object.load_passenger(self)
 			
 	var impulse = _get_goal_oriented_impulse(goal_object) as Vector2
