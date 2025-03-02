@@ -7,3 +7,4 @@
 [node name="ProceduralTerrainModifier" type="Node"]
 script = ExtResource("1_1ovtg")
 noise_template = SubResource("FastNoiseLite_b3hvl")
+max_height_clearance = 100.0
