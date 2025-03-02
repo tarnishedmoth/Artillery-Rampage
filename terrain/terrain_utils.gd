@@ -31,6 +31,18 @@ static func calculate_polygon_area(polygon: PackedVector2Array) -> float:
 	area = abs(area) * 0.5
 	return area
 
+# Triangulate always produces counter clockwise triangles so can simplify the checks
+
+static func is_adjacent_triangle(i00: int, i01: int, i02: int, i10: int, i11: int, i12: int) -> bool:
+	# Need exactly two vertices to be the same as they need to share a common edge
+	return ((i00 == i10 and i01 == i11) or (i00 == i11 and i01 == i12) or (i00 == i12 and i01 == i10) or
+			(i01 == i10 and i02 == i11) or (i01 == i11 and i02 == i12) or (i01 == i12 and i02 == i10) or
+			(i02 == i10 and i00 == i11) or (i02 == i11 and i00 == i12) or (i02 == i12 and i00 == i10)) and \
+			!is_same_triangle(i00, i01, i02, i10, i11, i12)
+
+static func is_same_triangle(i00: int, i01: int, i02: int, i10: int, i11: int, i12: int) -> bool:
+	return i00 == i10 and i01 == i11 and i02 == i12
+
 static func determine_overlap_vertices(first_poly: PackedVector2Array, second_poly: PackedVector2Array, association_dist: float, overlap_dist: float) -> Array[PackedInt32Array]:
 	var assoc_dist_sq := association_dist * association_dist
 	var overlap_dist_sq := overlap_dist * overlap_dist
@@ -96,13 +108,193 @@ static func prune_small_area_poly(poly: PackedVector2Array, pruning_index_candid
 		var values: Array[int] = []
 		for index in removal_indices:
 			values.push_back(index)
-		print_debug("poly size=%d, pruning(%d)=%s" % [poly.size(), values.size(), ",".join(values.map(func(idx : int): return str(idx)))])
+		print_debug("poly size=%d, raw pruning(%d)=%s" % [poly.size(), values.size(), ",".join(values.map(func(idx : int): return str(idx)))])
+	
+	# Need to combine areas of adjacent triangles
+	# Since removing from array iterate in reverse as it is more efficient
+	# TODO: Uncomment once had a chance to test as this code is pretty crazy
+	# removal_indices = _get_pruned_isolated_vertices(poly, triangle_list_indices, removal_indices)
+
+	# if OS.is_debug_build():
+	# 	var values: Array[int] = []
+	# 	for index in removal_indices:
+	# 		values.push_back(index)
+	# 	print_debug("poly size=%d, final pruning(%d)=%s" % [poly.size(), values.size(), ",".join(values.map(func(idx : int): return str(idx)))])
 		
-	for index in removal_indices:
+
+	for index in range(removal_indices.size() - 1, -1, -1):
 		poly.remove_at(index)
 	
 	return removal_indices.size()
+
+
+static func _get_all_triangles(triangle_list_indices: PackedInt32Array, indices: PackedInt32Array) -> PackedInt32Array:
+	var all_triangles: PackedInt32Array = []
 	
+	for index in indices:
+		var search_index: int = 0
+		while search_index < triangle_list_indices.size():
+			search_index = triangle_list_indices.find(index, search_index)
+			if search_index == -1:
+				break
+			
+			# The triangle list packs the indices in groups of 3
+			var triangle_index := search_index % 3
+			match triangle_index:
+				0:
+					all_triangles.push_back(triangle_list_indices[search_index])
+					all_triangles.push_back(triangle_list_indices[search_index + 1])
+					all_triangles.push_back(triangle_list_indices[search_index + 2])
+				1:
+					all_triangles.push_back(triangle_list_indices[search_index - 1])
+					all_triangles.push_back(triangle_list_indices[search_index])
+					all_triangles.push_back(triangle_list_indices[search_index + 1])
+				_: # 2
+					all_triangles.push_back(triangle_list_indices[search_index - 2])
+					all_triangles.push_back(triangle_list_indices[search_index - 1])
+					all_triangles.push_back(triangle_list_indices[search_index])
+			
+			# Start the find from next triangle group
+			search_index += 3 - triangle_index
+	
+	return all_triangles
+
+static func _get_pruned_isolated_vertices(poly: PackedVector2Array, triangle_list_indices: PackedInt32Array, candidate_indices: PackedInt32Array) -> PackedInt32Array:
+	
+	if(candidate_indices.is_empty()):
+		return candidate_indices
+
+	var candidate_indices_list := _get_all_triangles(triangle_list_indices, candidate_indices)
+
+	var adjacent_triangles: Array[PackedInt32Array] = get_all_adjacent_polygons(candidate_indices_list)
+
+	adjacent_triangles = _collapse_adjacent_triangles(adjacent_triangles)
+
+	var final_indices: PackedInt32Array = []
+	for index in candidate_indices:
+		for component in adjacent_triangles:
+			if component.has(index):
+				final_indices.push_back(index)
+				break
+
+	return final_indices
+
+static func _prune_large_area_connected_components(poly: PackedVector2Array, components: Array[PackedInt32Array], threshold_area: float) -> Array[PackedInt32Array]:
+	var pruned_components: Array[PackedInt32Array] = []
+	
+	for component in components:
+		var area_sum: float = 0.0
+		for i in range(0, component.size(), 3):
+			var area : float = calculate_triangle_area(poly[component[i]], poly[component[i + 1]], poly[component[i + 2]])
+			area_sum += area
+		if area_sum < threshold_area:
+			pruned_components.push_back(component)
+	
+	return pruned_components
+
+# TODO: This is kind of madness - maybe just create a tuple class to hold the indices
+# Also, can cache the area of triangle already computed and hide that behind a separate abstraction
+
+static func get_all_adjacent_polygons(triangle_list_indices: PackedInt32Array) -> Array[PackedInt32Array]:
+	var all_adjacent: Array[PackedInt32Array] = []
+	
+	var triangle_indices: PackedInt32Array = [0, 0, 0]
+
+	for i in range(0, triangle_list_indices.size(), 3):
+		triangle_indices[0] = triangle_list_indices[i]
+		triangle_indices[1] = triangle_list_indices[i + 1]
+		triangle_indices[2] = triangle_list_indices[i + 2]
+
+		var adjacent: PackedInt32Array = []
+		for j in range(0, triangle_list_indices.size(), 3):
+			if i == j:
+				continue
+			
+			if is_adjacent_triangle(triangle_indices[0], triangle_indices[1], triangle_indices[2],
+			 		triangle_list_indices[j], triangle_list_indices[j + 1], triangle_list_indices[j + 2]):
+				if adjacent.is_empty():
+					adjacent.push_back(i)
+					adjacent.push_back(i + 1)
+					adjacent.push_back(i + 2)
+				adjacent.push_back(j)
+				adjacent.push_back(j + 1)
+				adjacent.push_back(j + 2)
+
+				# Can only have 3 adjacent triangles as only three edges + the original "node" triangle so 12 indices
+				if adjacent.size() == 12:
+					break
+		
+		if(!adjacent.is_empty()):
+			all_adjacent.push_back(adjacent)
+	# Want to combine contiguous adjacent triangles
+	# Treat the arrays as a graph and need to find the spanning forests
+
+	return all_adjacent	
+
+static func _collapse_adjacent_triangles(nodes_edges : Array[PackedInt32Array]) -> Array[PackedInt32Array]:
+	var components: Array[PackedInt32Array] = []
+	
+	var visited: Dictionary = {}
+	var adjaceny_list_graph: Dictionary = _make_graph(nodes_edges)
+
+	for node in adjaceny_list_graph:
+		if visited.has(node):
+			continue
+		var comp := _dfs_adjacent_triangles(adjaceny_list_graph, node, visited)
+		components.push_back(comp)
+			
+	return components
+
+static func _make_graph(nodes_edges : Array[PackedInt32Array]) -> Dictionary:
+	var adjacency_list_graph: Dictionary = {}
+
+	for edge_list in nodes_edges:
+		var node := _get_node_id(edge_list)
+		adjacency_list_graph[node].append(edge_list)
+
+	return adjacency_list_graph
+
+static func _get_node_id_tri_indices(i0 : int, i1 : int, i2 : int) -> int:
+	# combine to use the full range of int64 
+	return i0 | (i1 << 21) | (i2 << 42)
+
+static func _unpack_node_id_to_indices(node_id : int, index_array: PackedInt32Array) -> void:
+	# 0x1FFFFF is a 21-bit mask
+	var i0 := node_id & 0x1FFFFF
+	var i1 := (node_id >> 21) & 0x1FFFFF
+	var i2 := (node_id >> 42) & 0x1FFFFF
+	index_array.push_back(i0)
+	index_array.push_back(i1)
+	index_array.push_back(i2)
+
+static func _get_node_id(edge_list : PackedInt32Array) -> int:
+	# First edge is actually the triangles of the node itself
+	return _get_node_id_tri_indices(edge_list[0], edge_list[1], edge_list[2])
+
+static func _dfs_adjacent_triangles(graph: Dictionary, node: int, visited: Dictionary) -> PackedInt32Array:
+	var stack: Array[int] = []
+	var component: PackedInt32Array = []
+	
+	stack.append(node)
+	
+	while stack.size() > 0:
+		var current_node = stack.pop_back()
+		
+		if current_node not in visited:
+			visited[current_node] = true
+			_unpack_node_id_to_indices(current_node, component)
+			
+			var edge_list = graph[current_node]
+			if !edge_list:
+				continue
+			# Node itself is the first triangle which is 0,1,2 in the PackedInt32Array
+			for neighbor_index_start in range(3, edge_list.size(), 3):
+				var neighbor = _get_node_id_tri_indices(
+					edge_list[neighbor_index_start], edge_list[neighbor_index_start + 1], edge_list[neighbor_index_start + 2])
+				if neighbor not in visited:
+					stack.append(neighbor)
+	return component
+
 static func is_exclusive_small_area_poly_index(triangle_list_indices: PackedInt32Array, poly: PackedVector2Array, index: int, threshold_area: float) -> bool:
 	# Check that all triangles that are involved with the index meet the threshold_area
 	var search_index: int = 0
