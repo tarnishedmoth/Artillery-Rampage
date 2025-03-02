@@ -117,6 +117,12 @@ func _logic_cycle_timer_timeout() -> void:
 		goal_object = null
 	if goal_object == null:
 		_find_nearest_collectible()
+		
+	if goal_object.has_method("load_passenger"):
+		var distance = (goal_object.global_position - global_position).length()
+		if distance < 40.0:
+			goal_object.load_passenger(self)
+			
 	var impulse = _get_goal_oriented_impulse(goal_object) as Vector2
 	apply_central_impulse(impulse)
 

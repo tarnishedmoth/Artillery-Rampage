@@ -1,9 +1,9 @@
 extends Node2D
 
 @export var rotors_rotate_speed:float = TAU ## Radians per second
-@export var move_speed:float = 100.0
-@export var hover_altitude:float = 140.0
-@export var wait_range:float = 5.0 ## Copter will wait at landing sites for personnel within this radius.
+@export var move_speed:float = 150.0
+@export var hover_altitude:float = 150.0
+@export var wait_range:float = 10.0 ## Copter will wait at landing sites for personnel within this radius.
 
 @onready var copter = $PickupCopter
 @onready var rotors = $PickupCopter/Rotors
@@ -48,31 +48,31 @@ func reposition() -> void: # Always in the air
 		var tween = create_tween()
 		var distance = (current_pickup.global_position - global_position).length()
 		var speed = move_speed
-		tween.tween_property(self, "global_position:x", current_pickup.global_position.x, distance/speed)
+		tween.tween_property(self, "global_position:x", current_pickup.global_position.x, distance/speed).set_trans(Tween.TRANS_CUBIC)
 		tween.tween_callback(_on_repositioned)
-		print_debug("Repositioning")
+		#print_debug("Repositioning")
 	else: check_queue()
 		
 func land() -> void:
-	print_debug("Landing")
+	#print_debug("Landing")
 	var tween = create_tween()
 	var distance = (current_pickup.global_position - global_position).length()
 	var speed = move_speed
-	tween.tween_property(self, "global_position:y", current_pickup.global_position.y, distance/speed)
+	tween.tween_property(self, "global_position:y", current_pickup.global_position.y, distance/speed).set_trans(Tween.TRANS_CIRC)
 	tween.tween_callback(_on_landed)
 
 func hover() -> void:
-	print_debug("Hovering")
-	var tween = create_tween()
-	var distance = (current_pickup.global_position - global_position).length()
-	var speed = move_speed
-	tween.tween_property(self, "global_position:y", hover_altitude, distance/speed)
-	tween.tween_callback(reposition)
+	#print_debug("Hovering")
 	_is_landed = false
+	var tween = create_tween()
+	var distance = global_position.y - hover_altitude
+	var speed = move_speed
+	tween.tween_property(self, "global_position:y", hover_altitude, distance/speed).set_trans(Tween.TRANS_CUBIC)
+	tween.tween_callback(reposition)
 	
 func wait() ->  void:
-	print_debug("Waiting")
-	await get_tree().create_timer(3.0).timeout
+	#print_debug("Waiting")
+	await get_tree().create_timer(2.25).timeout
 	check_queue()
 	
 func travel_to_pickup() -> void:
@@ -81,14 +81,31 @@ func travel_to_pickup() -> void:
 	else:
 		reposition()
 		
+func load_passenger(passenger:PersonnelUnit) -> void:
+	print_debug("Passenger loaded...")
+	if passenger in pickup_queue:
+		pickup_queue.erase(passenger)
+		print_debug("...and was a valid pickup order!")
+	passenger.destroy()
+	check_queue()
+		
 func check_queue() -> void:
-	print_debug("Pickup Copter checking pickup queue")
-	if current_pickup != null:
+	print("Pickup Copter checking pickup queue")
+	
+	if pickup_queue.is_empty(): leave()
+	
+	if is_instance_valid(current_pickup) and not current_pickup.is_queued_for_deletion():
 		print_debug("Pickup already on order for ",current_pickup)
 		return
 	else:
+		current_pickup = null
+		
 		var nearby:int
-		for queued:Node2D in pickup_queue:
+		for queued in pickup_queue:
+			if not is_instance_valid(queued) or queued.is_queued_for_deletion() or queued == null:
+				pickup_queue.erase(queued)
+				check_queue()
+				break
 			var distance = (queued.global_position - global_position).length()
 			if distance < wait_range:
 				nearby += 1
@@ -115,6 +132,7 @@ func _on_landed() -> void:
 	wait()
 
 func _on_personnel_requested_pickup(unit: PersonnelUnit) -> void:
+	unit.goal_object = self
 	pickup_queue.append(unit)
 	if not _is_operating: arrive()
 
