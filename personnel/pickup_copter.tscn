@@ -1,10 +1,13 @@
-[gd_scene load_steps=28 format=3 uid="uid://bogp8cydgto88"]
+[gd_scene load_steps=31 format=3 uid="uid://bogp8cydgto88"]
 
 [ext_resource type="Script" path="res://personnel/pickup_copter.gd" id="1_ohviw"]
 [ext_resource type="AudioStream" uid="uid://bxqicyawwef5m" path="res://personnel/copter.wav" id="2_pqhqg"]
+[ext_resource type="Script" path="res://weapons/weapon.gd" id="3_oxyy2"]
+[ext_resource type="PackedScene" uid="uid://dm223lhar2pup" path="res://items/weapon_projectiles/weapon_projectile_flare.tscn" id="4_fs2kr"]
+[ext_resource type="AudioStream" uid="uid://cgac4miv6d3uq" path="res://weapons/sounds/sfx_weapon_singleshot15.wav" id="5_yb673"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2ekh2"]
-radius = 16.0
+radius = 12.0
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_ut1u5"]
 
@@ -220,8 +223,9 @@ size = Vector2(16, 16)
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_acmdu"]
 size = Vector2(6, 32)
 
-[node name="PickupCopter" type="Node2D"]
+[node name="PickupCopter" type="Node2D" node_paths=PackedStringArray("weapon_flare_cannon")]
 script = ExtResource("1_ohviw")
+weapon_flare_cannon = NodePath("PickupCopter/WeaponFlares")
 
 [node name="PickupCopter" type="CharacterBody2D" parent="."]
 modulate = Color(0, 0, 0, 1)
@@ -257,3 +261,28 @@ rotation = 0.236509
 
 [node name="Sprite2D" type="Sprite2D" parent="PickupCopter/Rotors"]
 texture = SubResource("PlaceholderTexture2D_acmdu")
+
+[node name="WeaponFlares" type="Node2D" parent="PickupCopter" node_paths=PackedStringArray("sfx_fire", "barrels")]
+script = ExtResource("3_oxyy2")
+scene_to_spawn = ExtResource("4_fs2kr")
+display_name = "Flare Cannon"
+accuracy_angle_spread = 0.2
+fire_velocity = 400.0
+use_fire_rate = true
+fire_rate = 10.0
+always_shoot_for_count = 10
+sfx_fire = NodePath("Fire")
+barrels = [NodePath("LeftBarrel"), NodePath("RightBarrel")]
+
+[node name="LeftBarrel" type="Marker2D" parent="PickupCopter/WeaponFlares"]
+position = Vector2(-8, 0)
+rotation = -1.5708
+
+[node name="RightBarrel" type="Marker2D" parent="PickupCopter/WeaponFlares"]
+position = Vector2(8, 0)
+rotation = 1.5708
+
+[node name="Fire" type="AudioStreamPlayer2D" parent="PickupCopter/WeaponFlares"]
+stream = ExtResource("5_yb673")
+volume_db = -4.0
+pitch_scale = 2.0

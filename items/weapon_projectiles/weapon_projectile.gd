@@ -48,7 +48,8 @@ func set_spawn_parameters(in_owner_tank: Tank, power:float, angle:float):
 func _ready() -> void:
 	modulate = color
 	if max_lifetime > 0.0: destroy_after_lifetime()
-	overlap.connect("body_entered", on_body_entered)
+	if overlap is Area2D:
+		overlap.connect("body_entered", on_body_entered)
 	GameEvents.emit_projectile_fired(self)
 	
 func on_body_entered(_body: Node2D):

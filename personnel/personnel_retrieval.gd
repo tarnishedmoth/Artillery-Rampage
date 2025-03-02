@@ -24,6 +24,7 @@ var goal_object
 var _last_position:Vector2
 var _stuck_counter:int = 0
 var _is_dead:bool = false
+var _full_pockets:bool = false
 # @onready
 #endregion
 
@@ -57,6 +58,7 @@ func start_logic_cycle(cycle_time:float = logic_cycle_time) -> void:
 
 func destroy() -> void:
 	if _is_dead: return
+	_full_pockets = true
 	
 	var tween = create_tween()
 	tween.tween_property(self, "modulate", Color.TRANSPARENT, 1.0)
@@ -75,7 +77,7 @@ func die() -> void:
 	
 	died.emit()
 	var tween = create_tween()
-	tween.tween_property(self, "modulate", Color.TRANSPARENT, 3.0)
+	tween.tween_property(self, "modulate", Color.TRANSPARENT, 10.0)
 	tween.tween_callback(queue_free)
 	
 func request_pickup() -> void:
@@ -133,22 +135,28 @@ func _logic_cycle_timer_timeout() -> void:
 	if not is_instance_valid(goal_object) or goal_object.is_queued_for_deletion():
 		goal_object = null
 	if goal_object == null:
-		_find_nearest_collectible()
-		
-	# Pickup Copter
-	if goal_object.has_method("load_passenger"):
-		var distance = (goal_object.global_position - global_position).length()
-		if distance < 48.0:
-			goal_object.load_passenger(self)
+		goal_object = _find_nearest_collectible()
+		if goal_object == null:
+			request_pickup()
+	else:
+		# Pickup Copter
+		if goal_object.has_method("load_passenger"):
+			var distance = (goal_object.global_position - global_position).length()
+			if distance < 48.0:
+				goal_object.load_passenger(self)
 			
 	var impulse = _get_goal_oriented_impulse(goal_object) as Vector2
 	apply_central_impulse(impulse)
 
 # Can't seem to get PhysicsBody2D to interact naturally with Area2D
 func _on_collectible_touched(collectible: CollectibleItem) -> void: # Codependence, refactor later
-	print_debug("On body entered collectible")
+	#print_debug("On body entered collectible")
+	_full_pockets = true
 	collectible.collect()
+	request_pickup()
 	
 func _on_collectible_collected(collected: CollectibleItem) -> void:
-	_find_nearest_collectible()
+	if _full_pockets or _is_dead: return
+	_find_nearest_collectible() # We could go again but typically it's a waste of time
+	
 #endregion

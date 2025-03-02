@@ -9,6 +9,8 @@ signal loaded_passenger
 
 @export var idle_cleanup_time:float = 7.0 ## Because it keeps breaking and I'm not sure why yet.
 
+@export var weapon_flare_cannon:Weapon
+
 @onready var copter = $PickupCopter
 @onready var rotors = $PickupCopter/Rotors
 @onready var sfx: AudioStreamPlayer2D = $PickupCopter/SFX
@@ -39,17 +41,26 @@ func arrive() -> void:
 	reset_idle_time(-6.0)
 	_is_operating = true
 	
+	global_position.x = randf_range(0.0,1280.0)
 	global_position.y = hover_altitude
 	state_machine.travel("Arriving")
 	var animation_length = 6.0
 	show()
 	sfx.play(12.0)
 	await get_tree().create_timer(animation_length).timeout
-	check_queue()
+	_on_arrived()
+	
+func fire_flares() -> void:
+	if weapon_flare_cannon is Weapon:
+		if not weapon_flare_cannon.is_equipped:
+			weapon_flare_cannon.equip()
+		
+		weapon_flare_cannon.shoot()
 
 func leave() -> void:
 	reset_idle_time()
 	_is_operating = false
+	fire_flares()
 	
 	pickup_queue.clear()
 	state_machine.travel("Leaving")
@@ -147,7 +158,14 @@ func check_queue() -> void:
 			leave()
 			
 #region Private Methods
+func _on_arrived() -> void:
+	reset_idle_time()
+	print_debug("_on_arrived")
+	fire_flares()
+	check_queue()
+
 func _on_repositioned() -> void:
+	fire_flares()
 	if current_pickup != null:
 		land()
 	else:

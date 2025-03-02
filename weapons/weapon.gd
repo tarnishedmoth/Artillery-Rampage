@@ -67,7 +67,8 @@ var current_barrel: int = 0
 #region Virtuals
 func _ready() -> void:
 	weapon_actions_completed.connect(_on_weapon_actions_completed)
-	weapon_destroyed.connect(parent_tank._on_weapon_destroyed)
+	if parent_tank:
+		weapon_destroyed.connect(parent_tank._on_weapon_destroyed)
 	configure_barrels()
 	reload()
 	
@@ -210,7 +211,9 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 	var barrel = barrels[current_barrel]
 	if scene_to_spawn:
 		var new_shot = scene_to_spawn.instantiate() as Node2D
-		var container = parent_tank.get_fired_weapon_container() ## TODO Refactor
+		
+		#var container = parent_tank.get_fired_weapon_container() ## TODO Refactor
+		var container = get_tree().current_scene
 		
 		if new_shot is WeaponProjectile:
 			new_shot.owner_tank = parent_tank
@@ -239,5 +242,6 @@ func _on_weapon_actions_completed(weapon: Weapon) -> void:
 		if current_ammo < 1:
 			if magazines < 1 or not use_magazines:
 				destroy()
-	GameEvents.emit_turn_ended(parent_tank.owner)
+	if parent_tank is Tank:
+		GameEvents.emit_turn_ended(parent_tank.owner)
 #endregion
