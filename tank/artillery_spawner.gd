@@ -7,6 +7,9 @@ class_name ArtillerySpawner extends Node
 @export_range(-100, 100) var spawn_y_offset: float = -10.0
 @export_range(20, 250) var ideal_min_spawn_separation: float = 100.0
 
+@export_range(0, 1e9, 1, "or_greater")
+var min_boundary_x_distance: float = 40
+
 const player_type : PackedScene = preload("res://controller/player/player.tscn")
 
 # Need to wait for the terrain to finish building before doing raycasts
@@ -104,16 +107,17 @@ func _generate_spawns(terrain: Terrain, requested_count: int) -> void:
 
 	var spawn_bounds := terrain.get_bounds_global()
 	
-	var stride:float = spawn_bounds.size.x / requested_count
-	var min_x:float = spawn_bounds.position.x
-	var size_x:float = spawn_bounds.size.x
+	# Subtract out the safe bounds on either side
+	var spawnable_size: float = spawn_bounds.size.x - (min_boundary_x_distance * 2)
+	var stride:float = spawnable_size / requested_count
+	var min_x:float = spawn_bounds.position.x + min_boundary_x_distance
 	var min_spawn_separation:float = min(ideal_min_spawn_separation, stride)
 	
 	var last_x:float = min_x
 	
 	for i in range(0, requested_count):
 		var x:float = max(min_x + randf_range(i * stride, (i + 1) * stride),
-		 last_x + min_spawn_separation)
+			last_x + min_spawn_separation)
 		
 		var pos := _get_spawn_position(terrain, x)
 		last_x = pos.x
