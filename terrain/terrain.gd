@@ -21,7 +21,7 @@ const TerrainChunkScene = preload("res://terrain/terrain_chunk.tscn")
 @export var max_overlap_association_distance: float = 30
 
 @export_category("Crushing")
-@export var max_crush_triangle_delete_size: float = 200
+@export var max_crush_triangle_delete_size: float = 150
 
 var initial_chunk_name: String
 var first_child_chunk: TerrainChunk
@@ -213,7 +213,7 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 		
 	print("merge_chunks: final terrain chunk count=%d" % [get_child_count()])
 	
-	return true
+	return stop_falling
 	
 # Need to specify which poly is falling and if so check delta y down and up to see which vertices will get merged and then
 # any other vertex within a sq dist influence of that will be also considered for "crushing" by testing the area of those polygons
