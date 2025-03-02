@@ -36,6 +36,8 @@ class_name TerrainChunk extends StaticBody2D
 @export_category("Crumbling")
 @export_range(0, 100) var crumble_x_jitter: float = 10
 
+const surface_delta_y: float = 1
+
 var falling:bool = false:
 	set(value):
 		if value != falling:
@@ -53,6 +55,15 @@ func _ready() -> void:
 	
 	if !falling:
 		falling = initially_falling
+	
+	# give the terrain a texture like rock or grass
+	# idea: we could load multiple textures!
+	# maybe texture chosen by chunk size (big=grass, small=blackened)
+	# maybe texture chosen by by altitude (rock->grass->mud->lava)
+	var tex = load("res://terrain/terrain-green.png") 
+	terrainMesh.set_texture(tex)
+	terrainMesh.texture_repeat = TextureRepeat.TEXTURE_REPEAT_ENABLED
+
 	
 	print_poly("_ready", collisionMesh.polygon)
 	
@@ -73,11 +84,14 @@ func _physics_process(delta: float) -> void:
 	_velocity += Vector2(0, gravity) * delta
 	global_position += _velocity * delta
 
-func _replace_contents_local(new_poly: PackedVector2Array) -> void:
+func _replace_contents_local(new_poly: PackedVector2Array, immediate:bool) -> void:
 	
 	print_poly("_replace_contents_local", new_poly)
 
-	terrainMesh.set_deferred("polygon", new_poly)
+	if(immediate):
+		terrainMesh.polygon = new_poly
+	else:
+		terrainMesh.set_deferred("polygon", new_poly)
 	collisionMesh.set_deferred("polygon", new_poly)
 	overlapMesh.set_deferred("polygon", new_poly)
 
@@ -211,7 +225,7 @@ func _create_break_polyline(poly: PackedVector2Array, first_index: int) -> Packe
 	
 	return polyline
 	
-func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global: PackedVector2Array = []) -> Array[PackedVector2Array]:
+func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global: PackedVector2Array = [], immediate:bool = false) -> Array[PackedVector2Array]:
 	print_poly("replace_contents", new_poly_global)
 
 	# Transform updated polygon back to local space
@@ -233,7 +247,7 @@ func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global
 			replacement_poly_local = final_polys[0]
 			additional_chunk_polys = final_polys.slice(1)
 		
-	_replace_contents_local(replacement_poly_local)
+	_replace_contents_local(replacement_poly_local, immediate)
 	
 	# Convert additional chunks to global
 	for i in range(0, additional_chunk_polys.size()):
@@ -259,11 +273,22 @@ func delete() -> void:
 func damage(projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1,1)):
 	owner.damage(self, projectile_poly, poly_scale)
 
+func is_surface_point(vertex: Vector2) -> bool:
+	var test_point: Vector2 = vertex + Vector2(0, surface_delta_y)
+	return _is_in_terrain(test_point)
+
+func is_surface_point_global(vertex: Vector2) -> bool:
+	return contains_point(vertex + Vector2(0, surface_delta_y))
+
 func contains_point(point: Vector2) -> bool:
 	var terrain_global_inv_transform: Transform2D = terrainMesh.global_transform.affine_inverse()
 	var point_local := terrain_global_inv_transform * point
 	
+	return _is_in_terrain(point_local)
+
+func _is_in_terrain(point_local: Vector2) -> bool:
 	return Geometry2D.is_point_in_polygon(point_local, get_terrain_local())
+
 # Sort by largest first
 func compare(other: TerrainChunk) -> bool:
 	return terrainMesh.polygon.size() > other.terrainMesh.polygon.size()

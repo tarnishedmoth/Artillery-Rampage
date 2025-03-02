@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://c28jyv737dg8r"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_xiutw"]
+[ext_resource type="Script" path="res://terrain/procedural_terrain_modifier.gd" id="2_65ppx"]
+
+[node name="TestLevelProcGen" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_xiutw")]
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 195.313, 152.941, 204.688, 5.88232, 245.313, -1.47058, 272.656, -119.118, 277.344, -264.706, 352.344, -272.059, 405.469, -322.059, 475, -4.41174, 609, -8, 624.219, -161.765, 714.063, -155.882, 783.594, 127.941, 852.344, 130.882, 903.125, 138.235, 905.458, -3.48077, 937, -3, 945, 445, -103, 448)
+
+[node name="ProceduralTerrainModifier" type="Node" parent="GameLevel/Terrain" index="1"]
+script = ExtResource("2_65ppx")
+additional_vertices = 100
+replace_existing_heights = true
+
+[node name="ArtillerySpawner" parent="GameLevel" index="6"]
+default_ai_players = Vector2i(1, 4)
+default_human_players = Vector2i(1, 1)
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/ArtillerySpawner"]
