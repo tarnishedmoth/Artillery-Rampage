@@ -219,8 +219,8 @@ func _shoot(power:float = fire_velocity) -> void:
 	if use_ammo: current_ammo -= ammo_used_per_shot
 	if _shoot_for_count_remaining > 0:
 		_shoot_for_count_remaining -= 1
-		if _shoot_for_count_remaining == 0:
-			is_shooting = false
+	if _shoot_for_count_remaining == 0 or current_ammo == 0:
+		is_shooting = false
 			
 func _spawn_projectile(power: float = fire_velocity) -> void:
 	var barrel = barrels[current_barrel]
