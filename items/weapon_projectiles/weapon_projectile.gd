@@ -37,21 +37,33 @@ signal completed_lifespan ## Tracked by Weapon class
 @export_category("Destructible")
 @export var destructible_scale_multiplier:Vector2 = Vector2(10 , 10)
 
-@onready var overlap = $Overlap
+var overlap # $Overlap
 
 var calculated_hit: bool
 var owner_tank: Tank;
+var source_weapon: Weapon # The weapon we came from
+var firing_container
 
-func set_spawn_parameters(in_owner_tank: Tank, power:float, angle:float):
-	self.owner_tank = in_owner_tank
-	linear_velocity = Vector2.from_angle(angle) * power * power_velocity_mult
+#func set_spawn_parameters(in_owner_tank: Tank, power:float, angle:float):
+	#self.owner_tank = in_owner_tank
+	#linear_velocity = Vector2.from_angle(angle) * power * power_velocity_mult
 	
 func _ready() -> void:
+	if has_node("Overlap"):
+		overlap = $Overlap # Some projectiles might not need this collision
+		if overlap is Area2D:
+			overlap.connect("body_entered", on_body_entered)
 	modulate = color
 	if max_lifetime > 0.0: destroy_after_lifetime()
-	if overlap is Area2D:
-		overlap.connect("body_entered", on_body_entered)
 	GameEvents.emit_projectile_fired(self)
+	
+func set_sources(tank:Tank,weapon:Weapon) -> void:
+	owner_tank = tank
+	source_weapon = weapon
+	if explosion_to_spawn:
+		firing_container = SceneManager.get_current_level_root()
+		if firing_container.has_method("get_container"):
+			firing_container = firing_container.get_container()
 	
 func on_body_entered(_body: Node2D):
 	# Need to do a sweep to see all the things we have influenced
@@ -115,7 +127,7 @@ func spawn_explosion(scene:PackedScene) -> void:
 	if scene.can_instantiate():
 		instance = scene.instantiate()
 		instance.global_position = global_position
-		get_tree().current_scene.add_child(instance) # Could put into a container
+		firing_container.add_child(instance)
 	
 func _find_interaction_overlaps() -> Array[Node2D]:
 	var space_state = get_world_2d().direct_space_state

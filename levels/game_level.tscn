@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://uaih1d1o2vd7"]
+[gd_scene load_steps=13 format=3 uid="uid://uaih1d1o2vd7"]
 
 [ext_resource type="Script" path="res://levels/game_level.gd" id="1_c8wet"]
 [ext_resource type="PackedScene" uid="uid://bg64wc8fibctr" path="res://ui/hud.tscn" id="2_pmdi8"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://b7vpl03hcrs3e" path="res://walls/walls.tscn" id="4_h0s8o"]
 [ext_resource type="PackedScene" uid="uid://no0hhhxjq8ql" path="res://effects/wind.tscn" id="5_5ytpt"]
 [ext_resource type="Script" path="res://levels/round/round_director.gd" id="6_fyk6u"]
+[ext_resource type="PackedScene" uid="uid://bogp8cydgto88" path="res://personnel/pickup_copter.tscn" id="6_jdphu"]
 [ext_resource type="PackedScene" uid="uid://d3q2cfp8mqu2x" path="res://tank/artillery_spawner.tscn" id="7_f5i3m"]
 
 [sub_resource type="Gradient" id="Gradient_h05uu"]
@@ -52,6 +53,9 @@ unique_name_in_owner = true
 visible = false
 position = Vector2(636, 358)
 shape = SubResource("RectangleShape2D_60ghs")
+
+[node name="PickupCopter" parent="Walls" instance=ExtResource("6_jdphu")]
+position = Vector2(640, -192)
 
 [node name="Wind" parent="." instance=ExtResource("5_5ytpt")]
 

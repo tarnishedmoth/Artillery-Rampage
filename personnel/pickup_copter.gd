@@ -41,7 +41,7 @@ func arrive() -> void:
 	reset_idle_time(-6.0)
 	_is_operating = true
 	
-	global_position.x = randf_range(0.0,1280.0)
+	global_position.x = randf_range(64.0,1200.0) ## Should automatically adjust to map size
 	global_position.y = hover_altitude
 	state_machine.travel("Arriving")
 	var animation_length = 6.0

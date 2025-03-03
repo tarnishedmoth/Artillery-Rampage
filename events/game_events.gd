@@ -1,5 +1,7 @@
 extends Node
 
+var current_level:GameLevel
+
 @warning_ignore("unused_signal")
 signal turn_started(player: TankController)
 
@@ -11,6 +13,9 @@ signal round_started()
 
 @warning_ignore("unused_signal")
 signal round_ended()
+
+@warning_ignore("unused_signal")
+signal level_loaded(level: GameLevel)
 
 @warning_ignore("unused_signal")
 signal wind_updated(wind: Wind)

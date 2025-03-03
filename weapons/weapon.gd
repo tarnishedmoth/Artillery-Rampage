@@ -210,12 +210,14 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 	var barrel = barrels[current_barrel]
 	if scene_to_spawn and scene_to_spawn.can_instantiate():
 		var new_shot = scene_to_spawn.instantiate() as Node2D
-		
+		#var container = get_tree().current_scene
 		#var container = parent_tank.get_fired_weapon_container() ## TODO Refactor
-		var container = get_tree().current_scene
+		var container = SceneManager.get_current_level_root()
+		if container.has_method("get_container"):
+			container = container.get_container()
 		
 		if new_shot is WeaponProjectile:
-			new_shot.owner_tank = parent_tank
+			new_shot.set_sources(parent_tank,self)
 			new_shot.completed_lifespan.connect(_on_projectile_completed_lifespan) # So we know when the projectile is finished.
 			_awaiting_lifespan_completion += 1
 		
@@ -235,13 +237,13 @@ func _on_projectile_completed_lifespan() -> void:
 	_awaiting_lifespan_completion -= 1
 	if not is_shooting: # Wait til we've fired all our shots this action
 		if _awaiting_lifespan_completion < 1:
-			weapon_actions_completed.emit(self)
+			weapon_actions_completed.emit(self) # If this doesn't emit, the game turn will be stuck.
 
 func _on_weapon_actions_completed(weapon: Weapon) -> void:
 	if not retain_when_empty:
 		if current_ammo < 1:
 			if magazines < 1 or not use_magazines:
 				destroy()
-	if parent_tank is Tank:
+	if parent_tank is Tank: ## This is when Turn Changeover happens. It should signal to Player or AI not the game manager directly, then we could have multiple actions per turn.
 		GameEvents.emit_turn_ended(parent_tank.owner)
 #endregion

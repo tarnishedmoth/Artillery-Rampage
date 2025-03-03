@@ -4,8 +4,12 @@ class_name GameLevel extends Node2D
 @onready var spawner: ArtillerySpawner = %ArtillerySpawner
 @onready var terrain: Terrain = %Terrain
 
+var container_for_spawnables
+
 func _ready() -> void:
 	GameEvents.connect("round_ended", _on_round_ended)
+	container_for_spawnables = make_container_node() # For spawnables
+	GameEvents.level_loaded.emit(self)
 	
 	begin_round()
 
@@ -48,3 +52,16 @@ func _add_spawned_units():
 func connect_events(controller: TankController) -> void:
 	if controller is Player:
 		controller.connect("player_killed", _on_player_killed)
+		
+func make_container_node() -> Node2D:
+	var container = Node2D.new()
+	if has_node("%Walls"):
+		%Walls.add_child(container)
+	else:
+		add_child(container)
+	return container
+
+func get_container() -> Node2D:
+	if not container_for_spawnables.is_inside_tree():
+		container_for_spawnables = make_container_node()
+	return container_for_spawnables

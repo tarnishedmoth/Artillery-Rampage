@@ -39,17 +39,11 @@ signal tank_took_damage(
 @onready var top_reference_point = $TankBody/Top
 @onready var turret = $TankBody/TankTurret
 @onready var weapon_fire_location = $TankBody/TankTurret/WeaponFireLocation
-@onready var fired_weapon_container = $FiredWeaponContainer ## Contains fired projectiles for scene management
+#@onready var fired_weapon_container = $FiredWeaponContainer # MOVED TO SCENEMANAGER/GAMELEVEL
 
 @onready var weapons: Array[Weapon]
 var current_equipped_weapon: Weapon
 var current_equipped_weapon_index: int
-
-# This is called a packed scene
-# Calling "instantiate" on it is equivalent to an instanced scene
-# TODO: This need to be loaded from an inventory component and selected at time of shoot
-# for the active weapon
-const weapon_project_scene = preload("res://items/weapon_projectiles/weapon_projectile.tscn")
 
 var health: float
 
@@ -116,6 +110,7 @@ func is_falling() -> bool:
 func reset_orientation() -> void:
 	tankBody.reset_orientation()
 		
+#region Aim and Power
 func aim_at(angle_rads: float) -> void:
 	turret.rotation = clampf(angle_rads, deg_to_rad(min_angle), deg_to_rad(max_angle))
 	GameEvents.emit_aim_updated(owner)
@@ -125,34 +120,30 @@ func aim_delta(angle_rads_delta: float) -> void:
 	
 func set_power_percent(power_pct: float) -> void:
 	power = clampf(power_pct * max_power / 100.0, 0.0, max_power)
-	print("power_pct=" + str(power_pct) + "; power=" + str(power))
+	#print("power_pct=" + str(power_pct) + "; power=" + str(power))
 	GameEvents.emit_power_updated(owner)
 	
 func set_power_delta(power_pct_delta: float) -> void:
-	print("set_power_delta=" + str(power_pct_delta))
+	#print("set_power_delta=" + str(power_pct_delta))
 	set_power_percent(power / max_power * 100 + power_pct_delta)
 	GameEvents.emit_power_updated(owner)
-
+	
 func get_turret_rotation() -> float:
 	return turret.rotation
+	
+func _update_max_power():
+	max_power = health * weapon_max_power_health_mult
+	power = minf(power, max_power)
+#endregion
 	
 func shoot() -> void:
 	var weapon: Weapon = get_equipped_weapon()
 	if not weapon == null:
 		weapon.shoot(power)
 	else:
-		print_debug(self,"Tried to shoot, but no weapons.")
-	
-func shoot_deprecated() -> void:
-	# Create a scene instance (Spawn)
-	var fired_weapon_instance = weapon_project_scene.instantiate()
-	
-	fired_weapon_instance.global_position = weapon_fire_location.global_position
-	fired_weapon_instance.set_spawn_parameters(self, power, turret.global_rotation + deg_to_rad(turret_shot_angle_offset))
-	
-	# Add the instance to the game
-	fired_weapon_container.add_child(fired_weapon_instance)
+		push_warning(str(self)+": Tried to shoot, but no weapons.")
 
+#region Damage and Death
 func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float) -> void:
 	var orig_health = health
 	health = clampf(health - amount, 0, max_health)
@@ -171,19 +162,7 @@ func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float
 	emit_signal("tank_took_damage", self, instigatorController, instigator, actual_damage)
 	if health <= 0:
 		emit_signal("tank_killed", self, instigatorController, instigator)
-
-func _update_max_power():
-	max_power = health * weapon_max_power_health_mult
-	power = minf(power, max_power)
-	
-func _update_visuals_after_damage():
-	# TODO: This is placeholder but right now just darkening the tanks accordingly
-	var health_pct = health / max_health
-	var dark_pct = 1 - health_pct
-	
-	modulate = modulate.darkened(dark_pct)
-	turret.modulate = turret.modulate.darkened(dark_pct)
-
+		
 func kill():
 	print("Tank: " + name + " Killed")
 	if drop_on_death:
@@ -195,7 +174,17 @@ func spawn_death_drop() -> void:
 	spawn.global_position = global_position
 	var container = get_tree().current_scene ## Change later if wanted
 	container.add_child(spawn)
+	
+func _update_visuals_after_damage():
+	# TODO: This is placeholder but right now just darkening the tanks accordingly
+	var health_pct = health / max_health
+	var dark_pct = 1 - health_pct
+	
+	modulate = modulate.darkened(dark_pct)
+	turret.modulate = turret.modulate.darkened(dark_pct)
+#endregion
 
+#region Movement
 func snap_to_ground():
 	# Setting the position here will put the center of the tank at the position. Need to offset by the bottom offset
 	var ground_position = get_ground_snap_position()
@@ -290,10 +279,14 @@ func stopped_falling() -> void:
 	print("tank(%s) stopped falling at position=%s" % [get_parent().name, str(tankBody.global_position)])
 	_check_and_emit_fall_damage(fall_start_position, tankBody.global_position)
 	mark_falling = false
+#endregion
 
-## Perhaps a single one of these globally, registered to the level or game autoload, would be ideal.
+## Moved to SceneManager / GameLevel
 func get_fired_weapon_container() -> Node:
-	return fired_weapon_container
+	var root = SceneManager.get_current_level_root()
+	if root.has_method("get_container"):
+		return root.get_container()
+	else: return self
 	
 func set_equipped_weapon(index:int) -> void:
 	if current_equipped_weapon in weapons:
@@ -331,7 +324,7 @@ func equip_next_weapon() -> void:
 	if next_index >= weapons.size(): # Index 0 would be size of 1.
 		next_index = 0
 	set_equipped_weapon(next_index)
-	print_debug("Cycled weapon to ", current_equipped_weapon.display_name)
+	prints("Cycled weapon to", current_equipped_weapon.display_name)
 
 func _on_weapon_destroyed(weapon: Weapon) -> void:
 	weapons.erase(weapon)

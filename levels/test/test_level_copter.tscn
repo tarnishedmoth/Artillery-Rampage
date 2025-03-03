@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c5xgv7bgvn642"]
+[gd_scene load_steps=8 format=3 uid="uid://c5xgv7bgvn642"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_2pbg1"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_w0o7s"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="4_p6mcx"]
 [ext_resource type="PackedScene" uid="uid://bogp8cydgto88" path="res://personnel/pickup_copter.tscn" id="5_dad6q"]
 [ext_resource type="PackedScene" uid="uid://bfovdi5eowpoe" path="res://items/collectible_item.tscn" id="6_e63dt"]
+[ext_resource type="PackedScene" uid="uid://btemialk4ka7v" path="res://items/weapon_projectiles/weapon_projectile_deployable.tscn" id="7_fw45c"]
 
 [node name="TestLevel01" type="Node2D"]
 
@@ -40,6 +41,30 @@ position = Vector2(1056, 392)
 
 [node name="CollectibleItem2" parent="." instance=ExtResource("6_e63dt")]
 position = Vector2(184, 408)
+
+[node name="CollectibleItem3" parent="." instance=ExtResource("6_e63dt")]
+position = Vector2(400, 336)
+
+[node name="CollectibleItem4" parent="." instance=ExtResource("6_e63dt")]
+position = Vector2(616, 112)
+
+[node name="CollectibleItem5" parent="." instance=ExtResource("6_e63dt")]
+position = Vector2(808, 264)
+
+[node name="CollectibleItem6" parent="." instance=ExtResource("6_e63dt")]
+position = Vector2(1192, 392)
+
+[node name="CollectibleItem7" parent="." instance=ExtResource("6_e63dt")]
+position = Vector2(48, 344)
+
+[node name="WeaponProjectileDeployable" parent="." instance=ExtResource("7_fw45c")]
+position = Vector2(832, -64)
+
+[node name="WeaponProjectileDeployable2" parent="." instance=ExtResource("7_fw45c")]
+position = Vector2(320, -648)
+
+[node name="WeaponProjectileDeployable3" parent="." instance=ExtResource("7_fw45c")]
+position = Vector2(960, -1344)
 
 [editable path="GameLevel/Enemy1"]
 [editable path="GameLevel/Enemy2"]

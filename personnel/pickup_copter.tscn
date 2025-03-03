@@ -262,7 +262,7 @@ rotation = 0.236509
 [node name="Sprite2D" type="Sprite2D" parent="PickupCopter/Rotors"]
 texture = SubResource("PlaceholderTexture2D_acmdu")
 
-[node name="WeaponFlares" type="Node2D" parent="PickupCopter" node_paths=PackedStringArray("sfx_fire", "barrels")]
+[node name="WeaponFlares" type="Node2D" parent="PickupCopter" node_paths=PackedStringArray("barrels", "sfx_fire")]
 script = ExtResource("3_oxyy2")
 scene_to_spawn = ExtResource("4_fs2kr")
 display_name = "Flare Cannon"
@@ -271,8 +271,8 @@ fire_velocity = 400.0
 use_fire_rate = true
 fire_rate = 10.0
 always_shoot_for_count = 10
-sfx_fire = NodePath("Fire")
 barrels = [NodePath("LeftBarrel"), NodePath("RightBarrel")]
+sfx_fire = NodePath("Fire")
 
 [node name="LeftBarrel" type="Marker2D" parent="PickupCopter/WeaponFlares"]
 position = Vector2(-8, 0)
