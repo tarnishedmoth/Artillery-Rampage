@@ -13,16 +13,19 @@ signal weapon_destroyed(weapon: Weapon)
 @export var parent_tank: Tank ## Right now, the tank script has methods we need.
 @export var display_name: String ## Not implemented
 
-@export_category("Behavior")
-@export var accuracy_angle_spread: float = 0.0 ## Radians.
+@export_group("Behavior")
+@export_range(-360,360,0.0001,"radians_as_degrees") var accuracy_angle_spread: float = 0.0 ## Radians.
 @export var fire_velocity: float = 100.0 ## Initial speed of the projectile.
 @export var fires_continuously: bool = false ## Continuous-fire weapons don't use fire rate.
 @export var use_fire_rate: bool = false ## Prevents shooting while cycling.
 @export var fire_rate: float = 4.0 ## Rate of fire per second. 4.0 would fire once every quarter-second.
 @export var always_shoot_for_duration:float = 0.0 ## If greater than zero, when Shoot() is called, weapon will fire as frequently as it can based on fire-rate for this duration in seconds.
 @export var always_shoot_for_count:int = 1.0 ## When fired, weapon will shoot this many times, separated by fire rate delay.
+@export var barrels: Array[Marker2D] = [] ## 
+var barrels_sfx_fire: Array[AudioStreamPlayer2D] = []
+var current_barrel: int = 0
 
-@export_category("Ammo")
+@export_group("Ammo")
 @export var retain_when_empty: bool = true ## If false, destroy the Weapon once out of ammo.
 @export var use_ammo: bool = false ## Whether to check and track ammo.
 @export var current_ammo: int = 16 ## Starting ammo.
@@ -33,7 +36,7 @@ signal weapon_destroyed(weapon: Weapon)
 @export var reload_delay_time: float = 2.0 ## Seconds it takes to reload a mag.
 
 ## Sound Effects
-@export_category("Sounds")
+@export_group("Sounds")
 @export var sfx_fire: AudioStreamPlayer2D
 @export var sfx_dry_fire: AudioStreamPlayer2D
 @export var sfx_reload: AudioStreamPlayer2D
@@ -48,10 +51,6 @@ var is_shooting: bool = false
 var _shoot_for_duration_power: float
 var _shoot_for_count_remaining: int
 var _awaiting_lifespan_completion: int
-
-@export var barrels: Array[Marker2D] = []
-var barrels_sfx_fire: Array[AudioStreamPlayer2D] = []
-var current_barrel: int = 0
 
 @onready var parent = get_parent()
 @onready var sounds = [

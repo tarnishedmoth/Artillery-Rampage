@@ -8,7 +8,7 @@
 script = ExtResource("1_ajd5j")
 scene_to_spawn = ExtResource("2_j34sk")
 display_name = "Lead Ball Burst"
-accuracy_angle_spread = 0.262
+accuracy_angle_spread = 0.20944
 use_fire_rate = true
 fire_rate = 2.0
 always_shoot_for_count = 3
