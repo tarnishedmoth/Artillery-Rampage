@@ -27,12 +27,13 @@ func _ready() -> void:
 	pass # Replace with function body.
 	
 func get_current_level_root() -> Node:
+	assert(is_instance_valid(_current_level_root_node), "Trying to access root outside of game level.")
 	if is_instance_valid(_current_level_root_node):
 		if _current_level_root_node.is_inside_tree():
 			return _current_level_root_node
 	else:
 		_current_level_root_node = null
-	return self
+	return null
 
 func quit() -> void:
 	get_tree().quit()

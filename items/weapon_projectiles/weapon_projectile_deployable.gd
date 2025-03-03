@@ -38,7 +38,9 @@ func _ready() -> void:
 	#overlap.connect("body_entered", on_body_entered)
 	#GameEvents.emit_projectile_fired(self)
 	
-	deployed_container = get_tree().current_scene
+	deployed_container = SceneManager.get_current_level_root() if not null else get_tree().current_scene
+	if deployed_container.has_method("get_container"):
+			deployed_container = deployed_container.get_container()
 	
 #func _input(event: InputEvent) -> void: pass
 #func _unhandled_input(event: InputEvent) -> void: pass

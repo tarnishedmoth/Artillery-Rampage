@@ -283,7 +283,7 @@ func stopped_falling() -> void:
 
 ## Moved to SceneManager / GameLevel
 func get_fired_weapon_container() -> Node:
-	var root = SceneManager.get_current_level_root()
+	var root = SceneManager.get_current_level_root() if not null else get_tree().current_scene
 	if root.has_method("get_container"):
 		return root.get_container()
 	else: return self

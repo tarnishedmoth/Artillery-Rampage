@@ -61,7 +61,7 @@ func set_sources(tank:Tank,weapon:Weapon) -> void:
 	owner_tank = tank
 	source_weapon = weapon
 	if explosion_to_spawn:
-		firing_container = SceneManager.get_current_level_root()
+		firing_container = SceneManager.get_current_level_root() if not null else get_tree().current_scene
 		if firing_container.has_method("get_container"):
 			firing_container = firing_container.get_container()
 	
