@@ -64,6 +64,7 @@ func shoot() -> void:
 		
 func cycle_next_weapon() -> void:
 	# Super simple for testing multiple weapons for now.
+	if !can_shoot: return
 	tank.equip_next_weapon()
 
 func _on_tank_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2D) -> void:
