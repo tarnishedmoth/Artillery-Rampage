@@ -34,6 +34,17 @@ func get_weapons() -> Array[Weapon]:
 			weapons.append(w)
 			number+=1
 	return weapons
+	
+func attach_weapons(weapons: Array[Weapon]) -> void:
+	for w in weapons:
+		weapons_container.add_child(w)
+		w.global_position = tank.global_position # Probably not necessary but Weapon is a Node2D and should be simplified if so.
+	tank.scan_available_weapons()
+	
+func remove_all_weapons() -> void:
+	for w in weapons_container.get_children():
+		if w is Weapon:
+			w.destroy()
 
 func set_color(value: Color) -> void:
 	tank.color = value

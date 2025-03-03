@@ -10,7 +10,6 @@ script = ExtResource("1_x14qc")
 weapons_container = NodePath("Weapons")
 
 [node name="Tank" parent="." groups=["Bot"] instance=ExtResource("2_1btk6")]
-turret_color_value = 0.7
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("3_7xwap")

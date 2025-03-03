@@ -1,6 +1,8 @@
 class_name ArtillerySpawner extends Node
 
 @export var artillery_ai_types: Array[PackedScene] = []
+@export var artillery_ai_starting_weapons: Array[PackedScene] ## These must be of class Weapon
+#@export var artillery_ai_upgrade_weapons: Array[PackedScene] # Could go this route
 @export var default_ai_players: Vector2i = Vector2i()
 @export var default_human_players: Vector2i = Vector2i()
 
@@ -148,6 +150,20 @@ func _choose_positions(count: int) -> void:
 	# Shuffle final positions since the AI to player ratio is based on the index
 	_used_positions.shuffle()
 	
+func _choose_starting_weapon(weapon_scenes:Array = artillery_ai_starting_weapons) -> PackedScene: # This will need to be refactored for multiple weapons but the other methods are ready
+	var choice = weapon_scenes.pick_random()
+	return choice
+	
+func _attach_weapons(attach_to:TankController,weapon_scenes:Array[PackedScene]) -> void:
+	# TankController will update each call because it expects them all at once.
+	var weapons: Array[Weapon]
+	for w in weapon_scenes:
+		if w.can_instantiate():
+			var instance = w.instantiate() as Weapon
+			instance.use_ammo = false ## TODO Temporary
+			weapons.append(instance)
+	attach_to.attach_weapons(weapons)
+	
 func _spawn_units(num_human: int) -> Array[TankController]:
 	var all_spawned : Array[TankController] = []
 	
@@ -165,10 +181,13 @@ func _spawn_units(num_human: int) -> Array[TankController]:
 			scene = artillery_ai_types.pick_random()
 		var spawned := _instantiate_controller_scene_at(scene, _used_positions[i])
 		if spawned:
-			# Give AI random names
-			if is_ai:
-				spawned.name = enemy_names[ (ai_count - 1) % enemy_names.size()]
 			add_child(spawned)
+			if is_ai:
+				spawned.name = enemy_names[ (ai_count - 1) % enemy_names.size()] # Give AI random names
+				if artillery_ai_starting_weapons:
+					var weapons_to_attach:Array[PackedScene]
+					weapons_to_attach.append(_choose_starting_weapon())
+					_attach_weapons(spawned, weapons_to_attach)
 			# Child nodes are null until added to the scene
 			init_controller_props(spawned)
 			
