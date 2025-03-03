@@ -5,7 +5,7 @@ signal loaded_passenger
 @export var rotors_rotate_speed:float = TAU*3 ## Radians per second
 @export var move_speed:float = 150.0
 @export var hover_altitude:float = 130.0
-@export var wait_range:float = 10.0 ## Copter will wait at landing sites for personnel within this radius.
+@export var wait_range:float = 7.0 ## Copter will wait at landing sites for personnel within this radius.
 
 @export var idle_cleanup_time:float = 7.0 ## Because it keeps breaking and I'm not sure why yet.
 
@@ -89,7 +89,8 @@ func land() -> void:
 	var tween = create_tween()
 	var distance = (current_pickup.global_position - global_position).length()
 	var speed = move_speed
-	tween.tween_property(self, "global_position:y", current_pickup.global_position.y, distance/speed).set_trans(Tween.TRANS_SINE)
+	var height_offset = 12.0
+	tween.tween_property(self, "global_position:y", current_pickup.global_position.y-height_offset, distance/speed).set_trans(Tween.TRANS_SINE)
 	tween.tween_callback(_on_landed)
 
 func hover() -> void:
