@@ -44,6 +44,12 @@ signal personnel_requested_pickup(unit: PersonnelUnit)
 @warning_ignore("unused_signal")
 signal personnel_requested_delivery(unit: PersonnelUnit)
 
+@warning_ignore("unused_signal")
+signal copter_arrived_for_pickups(copter)
+
+@warning_ignore("unused_signal") 
+signal copter_left_airspace(copter)
+
 func emit_turn_started(player: TankController):
 	emit_signal("turn_started", player)
 

@@ -19,7 +19,7 @@ var wind_sign_bias:float = 0
 var wind: Vector2 = Vector2():
 	set(value):
 		wind = value
-		print("Wind(%s): set to %s" % [name, str(value)])
+		#print("Wind(%s): set to %s" % [name, str(value)])
 		GameEvents.emit_wind_updated(self)
 	get:
 		return wind
@@ -40,7 +40,7 @@ func _physics_process(delta: float) -> void:
 	_apply_wind_to_active_weapon(delta)
 
 func _on_projectile_fired(projectile: WeaponProjectile) -> void:
-	print("Wind(%s): on_projectile_fired: %s" % [name, projectile.name])
+	#print("Wind(%s): on_projectile_fired: %s" % [name, projectile.name])
 	_active_projectile = projectile
 	
 func _apply_wind_to_active_weapon(delta: float) -> void:

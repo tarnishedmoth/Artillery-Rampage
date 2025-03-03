@@ -5,7 +5,7 @@ signal loaded_passenger
 @export var rotors_rotate_speed:float = TAU*3 ## Radians per second
 @export var move_speed:float = 150.0
 @export var hover_altitude:float = 130.0
-@export var wait_range:float = 7.0 ## Copter will wait at landing sites for personnel within this radius.
+@export var wait_range:float = 32.0 ## Copter will wait at landing sites for personnel within this radius.
 
 @export var idle_cleanup_time:float = 7.0 ## Because it keeps breaking and I'm not sure why yet.
 
@@ -23,6 +23,7 @@ var delivery_target
 
 var _is_operating:bool = false
 var _is_landed:bool = false
+var _is_doing_pickups:bool = false
 var _is_delivering: bool = false
 
 var _time_since_action_taken:float
@@ -52,7 +53,8 @@ func arrive() -> void:
 	await get_tree().create_timer(animation_length).timeout
 	_on_arrived()
 	
-func fire_flares() -> void:
+func fire_flares(delay:float = 0.0) -> void:
+	if delay > 0.0: await get_tree().create_timer(delay).timeout
 	if weapon_flare_cannon is Weapon:
 		if not weapon_flare_cannon.is_equipped:
 			weapon_flare_cannon.equip()
@@ -61,15 +63,16 @@ func fire_flares() -> void:
 
 func leave() -> void:
 	reset_idle_time()
+	_is_doing_pickups = false
+	_is_delivering = false
 	_is_operating = false
-	fire_flares()
+	fire_flares(1.0+randf())
 	
 	pickup_queue.clear()
 	state_machine.travel("Leaving")
 	var animation_length = 10.0
 	await get_tree().create_timer(animation_length).timeout
-	sfx.stop()
-	hide()
+	_on_left_airspace()
 	
 func reposition(location) -> void: # Always in the air
 	reset_idle_time()
@@ -120,10 +123,10 @@ func travel_to_location(location:Vector2) -> void:
 		reposition(location)
 		
 func load_passenger(passenger:PersonnelUnit) -> void:
-	print_debug("Passenger loaded...")
+	#print_debug("Passenger loaded...")
 	if passenger in pickup_queue:
 		pickup_queue.erase(passenger)
-		print_debug("...and was a valid pickup order!")
+		#print_debug("...and was a valid pickup order!")
 	passenger.destroy()
 	loaded_passenger.emit()
 	wait()
@@ -135,12 +138,15 @@ func check_queue() -> void:
 		next_delivery_logic()
 		
 func check_pickup_queue() -> void:
-	print("Pickup Copter checking pickup queue")
+	#print("Pickup Copter checking pickup queue")
 	
 	if pickup_queue.is_empty(): leave()
 	
 	if is_instance_valid(current_pickup) and not current_pickup.is_queued_for_deletion():
-		print_debug("Pickup already on order for ",current_pickup)
+		#print_debug("Pickup already on order for ",current_pickup)
+		var distance = (current_pickup.global_position - global_position).length()
+		if distance > wait_range*2:
+			travel_to_location(current_pickup.global_position)
 		return
 	else:
 		current_pickup = null
@@ -155,6 +161,7 @@ func check_pickup_queue() -> void:
 			if distance < wait_range:
 				nearby += 1
 				
+		#print_debug("Found queue nearby: ",nearby)
 		current_pickup = pickup_queue.pop_front()
 		if current_pickup != null:
 			if nearby > 0:
@@ -170,8 +177,10 @@ func next_delivery_logic() -> void:
 			
 #region Private Methods
 func _on_arrived() -> void:
+	_is_doing_pickups = true
+	GameEvents.copter_arrived_for_pickups.emit(self)
 	reset_idle_time()
-	print_debug("_on_arrived")
+	#print_debug("_on_arrived")
 	fire_flares()
 	check_pickup_queue()
 
@@ -184,9 +193,14 @@ func _on_repositioned() -> void:
 func _on_landed() -> void:
 	_is_landed = true
 	wait()
+	
+func _on_left_airspace() -> void:
+	GameEvents.copter_left_airspace.emit(self)
+	sfx.stop()
+	hide()
 
 func _on_personnel_requested_pickup(unit: PersonnelUnit) -> void:
-	unit.goal_object = self
+	#unit.goal_object = self ## This got broken I'm not sure why, switched to a signal approach
 	pickup_queue.append(unit)
 	if not _is_operating: arrive()
 

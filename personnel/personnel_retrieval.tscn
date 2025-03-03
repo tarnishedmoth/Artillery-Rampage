@@ -1,6 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://cyyjrnc2x0nsx"]
+[gd_scene load_steps=9 format=3 uid="uid://cyyjrnc2x0nsx"]
 
 [ext_resource type="Script" path="res://personnel/personnel_retrieval.gd" id="1_7nawh"]
+[ext_resource type="Script" path="res://weapons/weapon.gd" id="2_uxgqu"]
+[ext_resource type="PackedScene" uid="uid://dm223lhar2pup" path="res://items/weapon_projectiles/weapon_projectile_flare.tscn" id="3_peud5"]
+[ext_resource type="AudioStream" uid="uid://cgac4miv6d3uq" path="res://weapons/sounds/sfx_weapon_singleshot15.wav" id="4_qecgk"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_l3fr7"]
 rough = true
@@ -21,7 +24,7 @@ radius = 6.0
 height = 24.0
 
 [node name="PersonnelRetrieval" type="RigidBody2D"]
-collision_layer = 264
+collision_layer = 256
 collision_mask = 264
 physics_material_override = SubResource("PhysicsMaterial_l3fr7")
 lock_rotation = true
@@ -35,3 +38,22 @@ texture = SubResource("GradientTexture2D_mqu8b")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_ams05")
 debug_color = Color(0.391468, 0.483477, 0.966482, 0.42)
+
+[node name="Weapons" type="Node" parent="."]
+
+[node name="FlareGun" type="Node2D" parent="Weapons" node_paths=PackedStringArray("barrels", "sfx_fire")]
+script = ExtResource("2_uxgqu")
+scene_to_spawn = ExtResource("3_peud5")
+display_name = "Flare Gun"
+accuracy_angle_spread = 0.20944
+fire_velocity = 500.0
+barrels = [NodePath("../../Barrel")]
+sfx_fire = NodePath("Fire")
+
+[node name="Fire" type="AudioStreamPlayer2D" parent="Weapons/FlareGun"]
+stream = ExtResource("4_qecgk")
+volume_db = -9.0
+pitch_scale = 1.5
+
+[node name="Barrel" type="Marker2D" parent="."]
+position = Vector2(0, -8)

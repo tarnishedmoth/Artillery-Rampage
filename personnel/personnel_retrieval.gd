@@ -18,12 +18,16 @@ signal died()
 @export var min_distance_traveled_or_stuck: float = 15.0
 @export var get_unstuck_frequency: int = 3 ## If stuck for this many cycles, changes logic
 @export var unstuck_extra_force: float = 25.0 ## Adds more jumping force when very stuck.
+
+@onready var flare_gun: Weapon = $Weapons/FlareGun
+
 # public
 var goal_object
 # _private
 var _last_position:Vector2
 var _stuck_counter:int = 0
 var _is_dead:bool = false
+var _requested_pickup:bool = false
 var _full_pockets:bool = false
 # @onready
 #endregion
@@ -34,8 +38,9 @@ var _full_pockets:bool = false
 #func _enter_tree() -> void: pass
 func _ready() -> void:
 	GameEvents.collectible_collected.connect(_on_collectible_collected)
+	GameEvents.copter_arrived_for_pickups.connect(_on_copter_arrived_for_pickups)
 	
-	goal_object = _find_nearest_collectible()
+	#goal_object = _find_nearest_collectible()
 	start_logic_cycle()
 	if max_lifetime > 0.0:
 		die_after_lifetime(max_lifetime)
@@ -47,13 +52,14 @@ func _ready() -> void:
 #endregion
 #region--Public Methods
 func start_logic_cycle(cycle_time:float = logic_cycle_time) -> void:
-	if _is_dead: return
+	#if _is_dead: return
 	cycle_time = randfn(cycle_time, 0.1)
 	
 	var cycle_timer = Timer.new()
 	add_child(cycle_timer)
 	cycle_timer.timeout.connect(_logic_cycle_timer_timeout)
 	cycle_timer.one_shot = false
+	await get_tree().create_timer(randf()).timeout
 	cycle_timer.start(cycle_time)
 
 func destroy() -> void:
@@ -81,8 +87,15 @@ func die() -> void:
 	tween.tween_callback(queue_free)
 	
 func request_pickup() -> void:
+	if _requested_pickup: return
+	_requested_pickup = true
+	shoot_flare()
 	GameEvents.personnel_requested_pickup.emit(self)
 	
+func shoot_flare() -> void:
+	if not flare_gun.is_equipped:
+		flare_gun.equip()
+	flare_gun.shoot()
 #endregion
 #region--Private Methods
 func _get_goal_oriented_impulse(objective:Node2D) -> Vector2:
@@ -109,7 +122,10 @@ func _get_goal_oriented_impulse(objective:Node2D) -> Vector2:
 	return impulse
 	
 func _find_nearest_collectible() -> Node2D:
-	if get_tree().get_node_count_in_group(Groups.Collectible) == 0: request_pickup()
+	if get_tree().get_node_count_in_group(Groups.Collectible) == 0:
+		request_pickup()
+		if is_instance_valid(goal_object):
+			return
 	var collectibles:Array = get_tree().get_nodes_in_group(Groups.Collectible)
 	#if collectibles.is_empty(): return null
 	
@@ -131,7 +147,7 @@ func _find_nearest_collectible() -> Node2D:
 
 func _logic_cycle_timer_timeout() -> void:
 	if _is_dead: return
-	
+	#print(goal_object)
 	if not is_instance_valid(goal_object) or goal_object.is_queued_for_deletion():
 		goal_object = null
 	if goal_object == null:
@@ -142,7 +158,7 @@ func _logic_cycle_timer_timeout() -> void:
 		# Pickup Copter
 		if goal_object.has_method("load_passenger"):
 			var distance = (goal_object.global_position - global_position).length()
-			if distance < 48.0:
+			if distance < 64.0:
 				goal_object.load_passenger(self)
 			
 	var impulse = _get_goal_oriented_impulse(goal_object) as Vector2
@@ -156,7 +172,13 @@ func _on_collectible_touched(collectible: CollectibleItem) -> void: # Codependen
 	request_pickup()
 	
 func _on_collectible_collected(collected: CollectibleItem) -> void:
-	if _full_pockets or _is_dead: return
+	if _full_pockets or _is_dead or _requested_pickup: return
 	_find_nearest_collectible() # We could go again but typically it's a waste of time
 	
+func _on_copter_arrived_for_pickups(copter) -> void:
+	if _requested_pickup: goal_object = copter
+	
+func _on_copter_left_airspace(copter) -> void:
+	#cry
+	pass
 #endregion
