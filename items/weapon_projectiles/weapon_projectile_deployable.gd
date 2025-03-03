@@ -53,9 +53,9 @@ func deploy() -> void:
 	for i in deploy_number:
 		var deployable = scene_to_spawn.instantiate()
 		if deployable is RigidBody2D:
-			_spawn_and_setup(i, deploy_number, true)
+			_setup_deployable(deployable, true)
 		else:
-			_spawn_and_setup(i, deploy_number, false)
+			_setup_deployable(deployable, false)
 	
 	if destroy_after_deployed: destroy()
 	
@@ -66,21 +66,21 @@ func destroy():
 	
 #endregion
 #region--Private Methods
-func _spawn_and_setup(index:int, size:int, physics:bool = true) -> void:
-	var new_spawn = scene_to_spawn.instantiate()
-	var aim_angle = Vector2.UP.angle()
+func _setup_deployable(deployable:Node2D, physics:bool = true) -> void:
+	#var new_spawn = scene_to_spawn.instantiate()
+	var aim_angle = Vector2.UP.angle() # This is a mess what was I thinking lol
 	
-	new_spawn.global_position = self.global_position
+	deployable.global_position = self.global_position
 	if physics:
 		var spawn_velocity = Vector2(deploy_velocity_impulse, 0.0)
-		new_spawn.linear_velocity = spawn_velocity.rotated(aim_angle)
+		deployable.linear_velocity = spawn_velocity.rotated(aim_angle)
 	else:
 		var initial_offset = deploy_velocity_impulse
-		new_spawn.position += initial_offset * aim_angle
+		deployable.position += initial_offset * aim_angle
 	
 	if not deployed_container: deployed_container = self
-	deployed_container.add_child(new_spawn)
-	deployed.append(new_spawn)
+	deployed_container.add_child(deployable)
+	deployed.append(deployable)
 #endregion
 
 
