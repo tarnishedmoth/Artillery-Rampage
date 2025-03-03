@@ -20,7 +20,7 @@ var parent_tank: Tank
 @export var use_fire_rate: bool = false ## Prevents shooting while cycling.
 @export var fire_rate: float = 4.0 ## Rate of fire per second. 4.0 would fire once every quarter-second.
 @export var always_shoot_for_duration:float = 0.0 ## If greater than zero, when Shoot() is called, weapon will fire as frequently as it can based on fire-rate for this duration in seconds.
-@export var always_shoot_for_count:int = 1.0 ## When fired, weapon will shoot this many times, separated by fire rate delay.
+@export var always_shoot_for_count:int = 1 ## When fired, weapon will shoot this many times, separated by fire rate delay.
 @export var barrels: Array[Marker2D] = [] ## 
 var barrels_sfx_fire: Array[AudioStreamPlayer2D] = [] ## Automatically assigned through code with TankController, but can be manually specified.
 var current_barrel: int = 0
@@ -29,7 +29,7 @@ var current_barrel: int = 0
 @export var retain_when_empty: bool = true ## If false, destroy the Weapon once out of ammo.
 @export var use_ammo: bool = false ## Whether to check and track ammo.
 @export var current_ammo: int = 16 ## Starting ammo.
-@export var ammo_used_per_shot: int = 1.0
+@export var ammo_used_per_shot: int = 1
 @export var use_magazines: bool = false ## If true, use a finite ammo supply.
 @export var magazines: int = 3
 @export var magazine_capacity: int = 16
@@ -66,14 +66,13 @@ var _awaiting_lifespan_completion: int
 
 #region Virtuals
 func _ready() -> void:
-	#weapon_actions_completed.connect(_on_weapon_actions_completed)
-	#if parent_tank:
+	weapon_actions_completed.connect(_on_weapon_actions_completed)
+	#if parent_tank: # Moved to connect_to_tank
 		#weapon_destroyed.connect(parent_tank._on_weapon_destroyed)
 	#configure_barrels()
 	#reload()
-	pass
 	
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if is_shooting: ## Shooting for duration or count.
 		_shoot(_shoot_for_duration_power)
 #endregion
@@ -81,8 +80,6 @@ func _process(delta: float) -> void:
 #region Public Methods
 func connect_to_tank(tank: Tank) -> void:
 	parent_tank = tank
-	if not weapon_actions_completed.is_connected(_on_weapon_actions_completed): # Will push error
-		weapon_actions_completed.connect(_on_weapon_actions_completed)
 	if not weapon_destroyed.is_connected(parent_tank._on_weapon_destroyed): # Will push error
 		weapon_destroyed.connect(parent_tank._on_weapon_destroyed)
 	barrels.append(parent_tank.get_weapon_fire_locations())
@@ -182,7 +179,7 @@ func configure_barrels() -> void:
 			add_child(new_fire_sfx)
 			barrels_sfx_fire.append(new_fire_sfx)
 
-func stop_all_sounds(only_looping: bool = true) -> void:
+func stop_all_sounds(_only_looping: bool = true) -> void: # TODO args
 	for s: AudioStreamPlayer2D in sounds:
 		#if it's a looping sound...
 		if s.playing: s.stop()
@@ -194,7 +191,9 @@ func destroy() -> void:
 
 #region Private Methods
 func _shoot(power:float = fire_velocity) -> void:
-	if not is_equipped: return
+	if not is_equipped:
+		push_warning("Tried to shoot weapon that is not equipped.")
+		return
 	if is_cycling: return
 	if is_reloading:
 		if sfx_dry_fire: sfx_dry_fire.play()
@@ -255,7 +254,7 @@ func _on_projectile_completed_lifespan() -> void:
 		if _awaiting_lifespan_completion < 1:
 			weapon_actions_completed.emit(self) # If this doesn't emit, the game turn will be stuck.
 
-func _on_weapon_actions_completed(weapon: Weapon) -> void:
+func _on_weapon_actions_completed(_weapon: Weapon) -> void:
 	if not retain_when_empty:
 		if current_ammo < 1:
 			if magazines < 1 or not use_magazines:
