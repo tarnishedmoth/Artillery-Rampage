@@ -10,7 +10,7 @@ signal weapon_destroyed(weapon: Weapon)
 
 #region Variables
 @export var scene_to_spawn: PackedScene ## This is the projectile or shoot effect.
-@export var parent_tank: Tank ## Right now, the tank script has methods we need.
+var parent_tank: Tank
 @export var display_name: String ## Not implemented
 
 @export_group("Behavior")
@@ -44,6 +44,7 @@ var current_barrel: int = 0
 @export var sfx_unequip: AudioStreamPlayer2D
 @export var sfx_idle: AudioStreamPlayer2D
 
+var is_configured: bool = false
 var is_reloading: bool = false
 var is_cycling: bool = false ## Weapon won't fire while cycling--see fire rate
 var is_equipped: bool = false ## Used for SFX, also the weapon won't fire if unequipped.
@@ -104,6 +105,9 @@ func unequip() -> void:
 	
 func shoot(power:float = fire_velocity) -> void:
 	if is_shooting: return
+	if not is_configured:
+		configure_barrels()
+		reload()
 	if always_shoot_for_duration > 0.0:
 		shoot_for_duration(always_shoot_for_duration, power)
 	elif always_shoot_for_count > 1:
@@ -162,6 +166,7 @@ func restock_ammo(ammo:int = magazine_capacity) -> void:
 	current_ammo += ammo
 
 func configure_barrels() -> void:
+	is_configured = true
 	current_barrel = 0
 	barrels_sfx_fire.clear()
 	#print_debug(display_name," found ", barrels.size()," barrels.")

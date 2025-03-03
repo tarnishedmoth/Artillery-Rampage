@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=3 uid="uid://b5qb8k2xaexhf"]
+
+[ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile.gd" id="1_gtnid"]
+[ext_resource type="PackedScene" uid="uid://gj55bahvsd7g" path="res://items/weapon_projectiles/explosions/explosion_leadball.tscn" id="2_vq1ap"]
+[ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="3_jc7pl"]
+[ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="4_ly0mj"]
+
+[node name="WeaponProjectile" type="RigidBody2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_gtnid")
+max_lifetime = 8.0
+explosion_to_spawn = ExtResource("2_vq1ap")
+min_falloff_distance = 5.0
+max_falloff_distance = 20.0
+min_damage = 1.0
+max_damage = 10.0
+destructible_scale_multiplier = Vector2(1.5, 1.5)
+
+[node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="."]
+z_index = 20
+scale = Vector2(0.183745, 0.183745)
+amount = 100
+lifetime = 5.0
+gravity = Vector2(0, 0)
+scale_amount_min = 4.0
+scale_amount_max = 4.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.183745, 0.183745)
+texture = ExtResource("3_jc7pl")
+
+[node name="PhysicsShape" type="CollisionShape2D" parent="."]
+shape = ExtResource("4_ly0mj")
+
+[node name="Overlap" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 31
+
+[node name="OverlapCollisionShape" type="CollisionShape2D" parent="Overlap"]
+shape = ExtResource("4_ly0mj")
+
+[node name="Destructible" type="CollisionPolygon2D" parent="."]
+scale = Vector2(1.07263, 1.07263)
+polygon = PackedVector2Array(-5.59373, 1.86458, -5.59373, 0, -4.66144, -2.79687, -2.79687, -4.66144, 0, -5.59373, 2.79687, -4.66144, 4.66144, -2.79687, 5.59373, 0, 4.66144, 2.79687, 2.79687, 4.66144, 0, 5.59373, -2, 5, -4, 4)

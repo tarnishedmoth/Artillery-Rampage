@@ -19,9 +19,11 @@ signal loaded_passenger
 
 var current_pickup:PersonnelUnit = null
 var pickup_queue:Array
+var delivery_target
 
 var _is_operating:bool = false
 var _is_landed:bool = false
+var _is_delivering: bool = false
 
 var _time_since_action_taken:float
 
@@ -35,7 +37,7 @@ func _process(delta: float) -> void:
 	if _is_operating:
 		_time_since_action_taken += delta
 		if _time_since_action_taken > idle_cleanup_time:
-			check_queue()
+			check_pickup_queue()
 	
 func arrive() -> void:
 	reset_idle_time(-6.0)
@@ -69,17 +71,15 @@ func leave() -> void:
 	sfx.stop()
 	hide()
 	
-func reposition() -> void: # Always in the air
+func reposition(location) -> void: # Always in the air
 	reset_idle_time()
 	
-	if current_pickup != null:
-		var tween = create_tween()
-		var distance = (current_pickup.global_position - global_position).length()
-		var speed = move_speed
-		tween.tween_property(self, "global_position:x", current_pickup.global_position.x, distance/speed).set_trans(Tween.TRANS_SINE)
-		tween.tween_callback(_on_repositioned)
-		#print_debug("Repositioning")
-	else: check_queue()
+	var tween = create_tween()
+	var distance = (location - global_position).length()
+	var speed = move_speed
+	tween.tween_property(self, "global_position:x", location.x, distance/speed).set_trans(Tween.TRANS_SINE)
+	tween.tween_callback(_on_repositioned)
+	#print_debug("Repositioning")
 		
 func land() -> void:
 	#print_debug("Landing")
@@ -108,16 +108,16 @@ func wait() -> void:
 	reset_idle_time()
 	#print_debug("Waiting")
 	await get_tree().create_timer(2.25).timeout
-	check_queue()
+	check_pickup_queue()
 	
 func reset_idle_time(value:float = 0.0) -> void:
 	_time_since_action_taken = value
 	
-func travel_to_pickup() -> void:
+func travel_to_location(location:Vector2) -> void:
 	if _is_landed:
 		hover()
 	else:
-		reposition()
+		reposition(location)
 		
 func load_passenger(passenger:PersonnelUnit) -> void:
 	print_debug("Passenger loaded...")
@@ -127,8 +127,14 @@ func load_passenger(passenger:PersonnelUnit) -> void:
 	passenger.destroy()
 	loaded_passenger.emit()
 	wait()
-		
+	
 func check_queue() -> void:
+	if not _is_delivering:
+		check_pickup_queue()
+	else:
+		next_delivery_logic()
+		
+func check_pickup_queue() -> void:
 	print("Pickup Copter checking pickup queue")
 	
 	if pickup_queue.is_empty(): leave()
@@ -143,7 +149,7 @@ func check_queue() -> void:
 		for queued in pickup_queue:
 			if not is_instance_valid(queued) or queued.is_queued_for_deletion() or queued == null:
 				pickup_queue.erase(queued)
-				check_queue()
+				check_pickup_queue()
 				break
 			var distance = (queued.global_position - global_position).length()
 			if distance < wait_range:
@@ -155,22 +161,25 @@ func check_queue() -> void:
 				wait()
 				return
 			else:
-				travel_to_pickup()
+				travel_to_location(current_pickup.global_position)
 		else:
 			leave()
+			
+func next_delivery_logic() -> void:
+	pass
 			
 #region Private Methods
 func _on_arrived() -> void:
 	reset_idle_time()
 	print_debug("_on_arrived")
 	fire_flares()
-	check_queue()
+	check_pickup_queue()
 
 func _on_repositioned() -> void:
 	if current_pickup != null:
 		land()
 	else:
-		check_queue()
+		check_pickup_queue()
 	
 func _on_landed() -> void:
 	_is_landed = true
@@ -182,5 +191,15 @@ func _on_personnel_requested_pickup(unit: PersonnelUnit) -> void:
 	if not _is_operating: arrive()
 
 func _on_pickup_completed() -> void:
-	check_queue()
+	check_pickup_queue()
+	
+func _on_personnel_requested_delivery(unit: PersonnelUnit) -> void:
+	delivery_target = unit.global_position
+	if not _is_operating:
+		arrive()
+	else:
+		next_delivery_logic()
+	
+func _on_delivery_delivered() -> void:
+	_is_delivering = false
 #endregion

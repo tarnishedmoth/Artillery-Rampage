@@ -13,7 +13,7 @@ signal completed_lifespan ## Tracked by Weapon class
 
 # The idea here is that we are using RigidBody2D for the physics behavior
 # and the Area2D as the overlap detection for detecting hits
-@export var power_velocity_mult:float = 1
+#@export var power_velocity_mult:float = 1 # Not used
 @export var color: Color = Color.BLACK
 
 @export var max_lifetime: float = 10.0 ## Self destroys once this time has passed.

@@ -1,20 +1,21 @@
 [gd_scene load_steps=4 format=3 uid="uid://45gqgsjcmu2i"]
 
 [ext_resource type="Script" path="res://weapons/weapon.gd" id="1_ajd5j"]
-[ext_resource type="PackedScene" uid="uid://c7jh5lsef6gd1" path="res://items/weapon_projectiles/weapon_projectile.tscn" id="2_j34sk"]
+[ext_resource type="PackedScene" uid="uid://b5qb8k2xaexhf" path="res://items/weapon_projectiles/weapon_projectile_leadballburst.tscn" id="2_u3ymg"]
 [ext_resource type="AudioStream" uid="uid://cgac4miv6d3uq" path="res://weapons/sounds/sfx_weapon_singleshot15.wav" id="3_ckpgp"]
 
 [node name="WeaponLeadballBurst" type="Node2D" node_paths=PackedStringArray("sfx_fire")]
 script = ExtResource("1_ajd5j")
-scene_to_spawn = ExtResource("2_j34sk")
+scene_to_spawn = ExtResource("2_u3ymg")
 display_name = "Lead Ball Burst"
-accuracy_angle_spread = 0.20944
+accuracy_angle_spread = 0.0872665
+fire_velocity = 250.0
 use_fire_rate = true
-fire_rate = 2.0
-always_shoot_for_count = 3
+fire_rate = 12.0
+always_shoot_for_count = 5
 retain_when_empty = false
 use_ammo = true
-current_ammo = 9
+current_ammo = 12
 sfx_fire = NodePath("Fire")
 
 [node name="Fire" type="AudioStreamPlayer2D" parent="."]
