@@ -208,7 +208,7 @@ func _shoot(power:float = fire_velocity) -> void:
 			
 func _spawn_projectile(power: float = fire_velocity) -> void:
 	var barrel = barrels[current_barrel]
-	if scene_to_spawn:
+	if scene_to_spawn and scene_to_spawn.can_instantiate():
 		var new_shot = scene_to_spawn.instantiate() as Node2D
 		
 		#var container = parent_tank.get_fired_weapon_container() ## TODO Refactor
@@ -233,8 +233,9 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 
 func _on_projectile_completed_lifespan() -> void:
 	_awaiting_lifespan_completion -= 1
-	if _awaiting_lifespan_completion < 1:
-		weapon_actions_completed.emit(self)
+	if not is_shooting: # Wait til we've fired all our shots this action
+		if _awaiting_lifespan_completion < 1:
+			weapon_actions_completed.emit(self)
 
 func _on_weapon_actions_completed(weapon: Weapon) -> void:
 	if not retain_when_empty:
