@@ -229,8 +229,8 @@ weapon_flare_cannon = NodePath("PickupCopter/WeaponFlares")
 
 [node name="PickupCopter" type="CharacterBody2D" parent="."]
 modulate = Color(0, 0, 0, 1)
-collision_layer = 9
-collision_mask = 9
+collision_layer = 0
+collision_mask = 0
 motion_mode = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PickupCopter"]

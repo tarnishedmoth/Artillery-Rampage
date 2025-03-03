@@ -21,10 +21,8 @@ const default_delay: float = 1.0
 var _current_level_index:int = 0
 var _current_level_root_node:GameLevel
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
+func _init() -> void:
 	GameEvents.level_loaded.connect(_on_GameLevel_loaded)
-	pass # Replace with function body.
 	
 func get_current_level_root() -> Node:
 	assert(is_instance_valid(_current_level_root_node), "Trying to access root outside of game level.")

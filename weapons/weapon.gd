@@ -22,7 +22,7 @@ signal weapon_destroyed(weapon: Weapon)
 @export var always_shoot_for_duration:float = 0.0 ## If greater than zero, when Shoot() is called, weapon will fire as frequently as it can based on fire-rate for this duration in seconds.
 @export var always_shoot_for_count:int = 1.0 ## When fired, weapon will shoot this many times, separated by fire rate delay.
 @export var barrels: Array[Marker2D] = [] ## 
-var barrels_sfx_fire: Array[AudioStreamPlayer2D] = []
+var barrels_sfx_fire: Array[AudioStreamPlayer2D] = [] ## Automatically assigned through code with TankController, but can be manually specified.
 var current_barrel: int = 0
 
 @export_group("Ammo")
@@ -65,11 +65,12 @@ var _awaiting_lifespan_completion: int
 
 #region Virtuals
 func _ready() -> void:
-	weapon_actions_completed.connect(_on_weapon_actions_completed)
-	if parent_tank:
-		weapon_destroyed.connect(parent_tank._on_weapon_destroyed)
-	configure_barrels()
-	reload()
+	#weapon_actions_completed.connect(_on_weapon_actions_completed)
+	#if parent_tank:
+		#weapon_destroyed.connect(parent_tank._on_weapon_destroyed)
+	#configure_barrels()
+	#reload()
+	pass
 	
 func _process(delta: float) -> void:
 	if is_shooting: ## Shooting for duration or count.
@@ -77,6 +78,16 @@ func _process(delta: float) -> void:
 #endregion
 	
 #region Public Methods
+func connect_to_tank(tank: Tank) -> void:
+	parent_tank = tank
+	if not weapon_actions_completed.is_connected(_on_weapon_actions_completed): # Will push error
+		weapon_actions_completed.connect(_on_weapon_actions_completed)
+	if not weapon_destroyed.is_connected(parent_tank._on_weapon_destroyed): # Will push error
+		weapon_destroyed.connect(parent_tank._on_weapon_destroyed)
+	barrels.append(parent_tank.get_weapon_fire_locations())
+	configure_barrels()
+	reload()
+
 func equip() -> void:
 	if not is_equipped:
 		is_equipped = true

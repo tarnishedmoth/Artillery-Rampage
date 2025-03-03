@@ -61,12 +61,12 @@ func shoot() -> void:
 	if(!debug_controls):
 		can_shoot = false
 		can_aim = false
+		
+func cycle_next_weapon() -> void:
+	# Super simple for testing multiple weapons for now.
+	tank.equip_next_weapon()
 
 func _on_tank_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2D) -> void:
 	# player tank killed
 	tank.kill()
 	emit_signal("player_killed", self)
-
-func cycle_next_weapon() -> void:
-	# Super simple for testing multiple weapons for now.
-	tank.equip_next_weapon()

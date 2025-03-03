@@ -21,16 +21,19 @@ signal level_loaded(level: GameLevel)
 signal wind_updated(wind: Wind)
 
 @warning_ignore("unused_signal")
-signal weapon_fired(weapon : Weapon)
+signal aim_updated(player: TankController)
+
+@warning_ignore("unused_signal")
+signal power_updated(player: TankController)
+
+@warning_ignore("unused_signal")
+signal weapon_updated(weapon: Weapon)
 
 @warning_ignore("unused_signal")
 signal projectile_fired(projectile : WeaponProjectile)
 
 @warning_ignore("unused_signal")
-signal aim_updated(player: TankController)
-
-@warning_ignore("unused_signal")
-signal power_updated(player: TankController)
+signal weapon_fired(weapon : Weapon)
 
 @warning_ignore("unused_signal")
 signal collectible_collected(collected: CollectibleItem)

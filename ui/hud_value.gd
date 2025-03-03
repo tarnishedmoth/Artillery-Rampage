@@ -1,9 +1,10 @@
 class_name HUDElement extends HBoxContainer
 
+@onready var label: Label = $Label
 @onready var value: Label = $Value
 
 func set_value(input_value):
 	value.text = str(input_value)
 	
-func _ready() -> void:
-	pass # Replace with function body.
+func set_label(input_value):
+	label.text = str(input_value)

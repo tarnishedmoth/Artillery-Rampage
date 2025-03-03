@@ -6,6 +6,7 @@ extends Control
 @onready var wind_text = $VBoxContainer3/Wind
 @onready var health_text = $VBoxContainer2/Health
 @onready var aim_direction_text = $VBoxContainer2/AimDirection
+@onready var weapon_text = $VBoxContainer3/Weapon
 
 func _ready() -> void:
 	init_signals()
@@ -15,6 +16,7 @@ func init_signals():
 	GameEvents.connect("aim_updated", _on_aim_updated);
 	GameEvents.connect("power_updated", _on_power_updated)
 	GameEvents.connect("wind_updated", _on_wind_updated)
+	GameEvents.connect("weapon_updated", _on_weapon_updated)
 
 func _on_turn_started(player: TankController) -> void:
 	active_player_text.text = player.name
@@ -44,3 +46,7 @@ func _fmt_wind_value(value: float) -> int:
 
 func _get_direction_string(value: float) -> String:
 	return "▶" if value >= 0 else "◀"
+	
+func _on_weapon_updated(weapon: Weapon) -> void:
+	weapon_text.set_label(weapon.display_name)
+	weapon_text.set_value(weapon.current_ammo if weapon.use_ammo else char(9854))

@@ -43,7 +43,7 @@ signal tank_took_damage(
 
 @onready var weapons: Array[Weapon]
 var current_equipped_weapon: Weapon
-var current_equipped_weapon_index: int
+var current_equipped_weapon_index: int = -1
 
 var health: float
 
@@ -173,7 +173,7 @@ func spawn_death_drop() -> void:
 	var spawn = drop_on_death.instantiate()
 	spawn.global_position = global_position
 	var container = get_tree().current_scene ## Change later if wanted
-	container.add_child(spawn)
+	container.add_child.call_deferred(spawn)
 	
 func _update_visuals_after_damage():
 	# TODO: This is placeholder but right now just darkening the tanks accordingly
@@ -281,7 +281,10 @@ func stopped_falling() -> void:
 	mark_falling = false
 #endregion
 
-## Moved to SceneManager / GameLevel
+#region Weapon Use
+func get_weapon_fire_locations() -> Marker2D:
+	return weapon_fire_location
+
 func get_fired_weapon_container() -> Node:
 	var root = SceneManager.get_current_level_root() if not null else get_tree().current_scene
 	if root.has_method("get_container"):
@@ -295,6 +298,7 @@ func set_equipped_weapon(index:int) -> void:
 	current_equipped_weapon_index = index
 	current_equipped_weapon = weapons[index]
 	current_equipped_weapon.equip()
+	_on_weapon_changed(current_equipped_weapon)
 
 func get_equipped_weapon() -> Weapon:
 	if current_equipped_weapon in weapons:
@@ -307,24 +311,46 @@ func get_equipped_weapon() -> Weapon:
 	else:
 		return current_equipped_weapon # Ugly but rather this than recursion
 
+#func scan_available_weapons() -> void:
+	#weapons.clear()
+	##var weapons_container = $TankBody/TankTurret/Weapons
+	#var weapons_container
+	#var parent = get_parent()
+	#if parent is TankController:
+		#weapons_container = parent
+	#var number:int = 0
+	#for w in weapons_container.get_children():
+		#weapons.append(w)
+		#number+=1
+	#if number > 0: set_equipped_weapon(0) ## Equip the first weapon.
+	
 func scan_available_weapons() -> void:
 	weapons.clear()
-	var weapons_container = $TankBody/TankTurret/Weapons
-	var number:int = 0
-	for w in weapons_container.get_children():
-		weapons.append(w)
-		number+=1
-	if number > 0: set_equipped_weapon(0) ## Equip the first weapon.
+	
+	var parent = get_parent()
+	if parent is TankController:
+		weapons = parent.get_weapons()
+	for w in weapons:
+		#w.barrels.append(weapon_fire_location) # Moved to Weapon class
+		w.connect_to_tank(self)
+	equip_next_weapon()
 
 func equip_next_weapon() -> void:
 	if weapons.is_empty():
-		print_debug("No weapons available to equip.")
+		printt(self,"No weapons available to equip.")
 		return
 	var next_index = current_equipped_weapon_index + 1
 	if next_index >= weapons.size(): # Index 0 would be size of 1.
 		next_index = 0
 	set_equipped_weapon(next_index)
-	prints("Cycled weapon to", current_equipped_weapon.display_name)
+	prints(self,"cycled weapon to", current_equipped_weapon.display_name)
+	
+func push_weapon_update_to_hud(weapon: Weapon = get_equipped_weapon()) -> void:
+	GameEvents.weapon_updated.emit(weapon)
 
 func _on_weapon_destroyed(weapon: Weapon) -> void:
 	weapons.erase(weapon)
+	
+func _on_weapon_changed(new_weapon: Weapon) -> void:
+	push_weapon_update_to_hud(new_weapon)
+#endregion

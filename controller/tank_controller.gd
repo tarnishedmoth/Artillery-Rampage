@@ -1,8 +1,8 @@
 # Abstract base class for AI and player controllers
 class_name TankController extends Node2D
-
 @export var enable_damage_before_first_turn:bool = true 
 var _initial_fall_damage:bool
+@export var weapons_container:Node = self ## Keep all Weapon components in here. If unassigned, self is used.
 
 func _ready() -> void:
 	GameEvents.connect("turn_ended", _on_turn_ended)
@@ -17,6 +17,7 @@ func _ready() -> void:
 func begin_turn() -> void:
 	#tank.reset_orientation()
 	tank.enable_fall_damage = _initial_fall_damage
+	tank.push_weapon_update_to_hud()
 	
 var tank: Tank:
 	get: return _get_tank()
@@ -24,6 +25,15 @@ var tank: Tank:
 func _get_tank() -> Tank:
 	push_error("abstract function")
 	return null
+	
+func get_weapons() -> Array[Weapon]:
+	var weapons:Array[Weapon]
+	var number:int = 0
+	for w in weapons_container.get_children():
+		if w is Weapon:
+			weapons.append(w)
+			number+=1
+	return weapons
 
 func set_color(value: Color) -> void:
 	tank.color = value
