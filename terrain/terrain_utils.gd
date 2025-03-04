@@ -132,12 +132,31 @@ static func prune_small_area_poly(poly: PackedVector2Array, pruning_index_candid
 			values.push_back(index)
 		print_debug("poly size=%d, final pruning(%d)=%s" % [poly.size(), values.size(), ",".join(values.map(func(idx : int): return str(idx)))])
 		
+	# Need to avoid error message "convex decomposing failed!" otherwise the an empty polygon returned and the terrain will disappear
+	# This is in Geometry2D::decompose_polygon_in_convex in Godot source 
+	if poly.size() - removal_indices.size() <= 2:
+		# Special case we are deleting the polygon or it only has two points and will be detected as invalid anyways
+		var poly_size : int = poly.size()
+		poly.clear()
+		return poly_size
+	else:
+		# Make a copy first and check if polygon will be valid
+		var modified_poly := poly.duplicate()
+		_remove_indices_from_poly(modified_poly, removal_indices)
+		# When decomposition fails an empty array is returned
+		var decomposed_poly := Geometry2D.decompose_polygon_in_convex(modified_poly)
+		if !decomposed_poly.is_empty():
+			# Proceed as planned
+			_remove_indices_from_poly(poly, removal_indices)
+			return removal_indices.size()
+		else:
+			push_warning("prune_small_area_poly: convex decomposition failed - not pruning any vertices")
+			return 0
+
+static func _remove_indices_from_poly(poly: PackedVector2Array, removal_indices: PackedInt32Array) -> void:
 	# Since removing from array iterate in reverse as it is more efficient
 	for index in range(removal_indices.size() - 1, -1, -1):
 		poly.remove_at(index)
-	
-	return removal_indices.size()
-
 
 static func _get_all_triangles(triangle_list_indices: PackedInt32Array, indices: PackedInt32Array) -> PackedInt32Array:
 	var all_triangles: PackedInt32Array = []
