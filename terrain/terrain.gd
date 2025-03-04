@@ -148,6 +148,8 @@ func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_
 
 	new_chunk.replace_contents(new_clip_poly)
 
+	print_debug("added new chunk=%s - chunk count=%d" % [new_chunk.name, get_child_count()])
+
 func _morph_falling_chunk(chunk: TerrainChunk) -> PackedVector2Array:
 	var falling_transform: Transform2D = Transform2D(0, Vector2(0, falling_offset))
 	var chunk_poly = falling_transform * chunk.get_terrain_global()
@@ -200,22 +202,24 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 		 % [first_poly.size(), second_poly.size(), results.size(),
 		 ",".join(results.map(func(x : PackedVector2Array): return x.size()))])
 		# Sort by size so we can keep the largest
+		results = results.filter(func(r : PackedVector2Array): return TerrainUtils.is_visible(r))
 		results.sort_custom(TerrainUtils.largest_poly_first)
 	
-	if results.size() >= 1 and TerrainUtils.is_visible(results[0]):
+	if results.size() >= 1:
 		first_chunk.replace_contents(results[0], influence_vertices)
 	else:
 		first_chunk.delete()
 	
-	if results.size() >= 2 and TerrainUtils.is_visible(results[1]):
+	if results.size() >= 2:
 		second_chunk.replace_contents(results[1], influence_vertices)
 	else:
 		second_chunk.delete()
 		
 	if results.size() >= 3:
+		# Children added deferred so printing will happen on the add
 		_add_new_chunks(get_first_chunk(), results, 2)
-		
-	print("merge_chunks: final terrain chunk count=%d" % [get_child_count()])
+	else:
+		print("merge_chunks: final terrain chunk count=%d" % [get_child_count()])
 	
 	return stop_falling
 	
@@ -240,7 +244,10 @@ func _crush(first_chunk: TerrainChunk, first_poly: PackedVector2Array,
 	for index in overlap_index_arrays[1]:
 		out_influence_vertices.push_back(second_poly[index])
 
+	print_debug("pruning terrainChunk(%s)" % [first_chunk.name])
 	var pruned: int = TerrainUtils.prune_small_area_poly(first_poly, overlap_index_arrays[0], max_crush_triangle_delete_size)
+
+	print_debug("pruning terrainChunk(%s)" % [second_chunk.name])
 	pruned += TerrainUtils.prune_small_area_poly(second_poly, overlap_index_arrays[1], max_crush_triangle_delete_size)
 
 	# Filter results to visible
@@ -250,7 +257,7 @@ func _crush(first_chunk: TerrainChunk, first_poly: PackedVector2Array,
 	if results.size() <= 2:
 		return { "results" : results, "pruned" : pruned }
 		
-	# Take largest two
+	# Take largest two - though right now we will always have two at this point
 	return {
 		"results" : results.slice(0, 2),
 		"pruned" : pruned
