@@ -126,7 +126,9 @@ func _add_new_chunks(first_chunk: TerrainChunk,
 		var new_chunk_name = initial_chunk_name + str(i + current_child_count)
 		
 		print("_add_new_chunks(" + name + ") Creating new terrain chunk(" + new_chunk_name + ") for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
-		_add_new_chunk(first_chunk, new_chunk_name, new_clip_poly)
+		
+		# Must be called deferred - see additional comment in _add_new_chunk as to why
+		call_deferred("_add_new_chunk", first_chunk, new_chunk_name, new_clip_poly)
 	
 func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_poly: PackedVector2Array) -> void:
 	var new_chunk = TerrainChunkScene.instantiate()
@@ -134,6 +136,8 @@ func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_
 	# By definition a disconnected chunk could be falling so we will let it test for that
 	new_chunk.falling = true
 	
+	# Get an error when this is called upstream from weapon_projectile.on_body_entered() -
+	# E 0:00:34:0608   terrain.gd:137 @ _add_new_chunk(): Can't change this state while flushing queries. Use call_deferred() or set_deferred() to change monitoring state instead.
 	add_child(new_chunk)
 	# Must be done after adding as a child
 	new_chunk.owner = self
