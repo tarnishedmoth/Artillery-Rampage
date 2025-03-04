@@ -16,14 +16,12 @@
 position = Vector2(479, 278)
 
 [node name="Tank" parent="GameLevel/Enemy1" index="0"]
-turret_color_value = 0.7
 color = Color(0.682353, 0.713726, 0.219608, 1)
 
 [node name="Enemy2" parent="GameLevel" instance=ExtResource("2_w0o7s")]
 position = Vector2(936, 344)
 
 [node name="Tank" parent="GameLevel/Enemy2" index="0"]
-turret_color_value = 0.7
 color = Color(0.682353, 0.713726, 0.219608, 1)
 
 [node name="House1" parent="GameLevel" instance=ExtResource("3_n5e16")]
