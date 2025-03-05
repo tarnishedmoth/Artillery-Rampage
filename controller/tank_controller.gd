@@ -28,11 +28,9 @@ func _get_tank() -> Tank:
 	
 func get_weapons() -> Array[Weapon]:
 	var weapons:Array[Weapon]
-	var number:int = 0
 	for w in weapons_container.get_children():
 		if w is Weapon:
 			weapons.append(w)
-			number+=1
 	return weapons
 	
 func attach_weapons(weapons: Array[Weapon]) -> void:

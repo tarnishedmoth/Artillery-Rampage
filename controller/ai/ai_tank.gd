@@ -132,5 +132,6 @@ class AIShootingState extends AIActionState:
 		total_time = randf_range(parent.min_ai_shoot_delay_time, parent.max_ai_shoot_delay_time)
 		
 	func _exit():
+		parent.tank.set_equipped_weapon(parent.target_result.weapon_index)
 		parent.tank.shoot()	
 	# Last state

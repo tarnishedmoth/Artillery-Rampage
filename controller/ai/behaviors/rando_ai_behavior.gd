@@ -13,5 +13,6 @@ class RandomActionState extends AIState:
 	func execute(tank: Tank) -> TankActionResult:
 		return TankActionResult.new(
 			 randf_range(0, tank.max_power),
-			 randf_range(tank.min_angle, tank.max_angle)
+			 randf_range(tank.min_angle, tank.max_angle),
+			 randi_range(0, tank.weapons.size() - 1)
 		)
