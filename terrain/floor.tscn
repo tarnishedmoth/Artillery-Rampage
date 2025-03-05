@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://boa5a2v0w2ag0"]
+
+[ext_resource type="Script" path="res://terrain/floor.gd" id="1_qlbuv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_spwod"]
+size = Vector2(1302, 124)
+
+[node name="Floor" type="StaticBody2D"]
+collision_layer = 32
+collision_mask = 9
+script = ExtResource("1_qlbuv")
+
+[node name="FloorCollision" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(641, 52)
+shape = SubResource("RectangleShape2D_spwod")
+
+[node name="FloorOverlap" type="Area2D" parent="."]
+visible = false
+collision_layer = 32
+collision_mask = 9
+
+[node name="FloorCollisionOverlap" type="CollisionShape2D" parent="FloorOverlap"]
+visible = false

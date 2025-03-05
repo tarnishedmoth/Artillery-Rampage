@@ -9,6 +9,9 @@ class Layers:
 	const terrain: int = 1 << 3
 	const world_body: int = 1 << 4
 	
+	# This is the world bottom
+	const floor:int = 1 << 5
+	
 class CompositeMasks:
 	const damageable: int = Layers.tank | Layers.terrain
 	

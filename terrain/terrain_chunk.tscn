@@ -4,7 +4,7 @@
 
 [node name="TerrainChunk" type="StaticBody2D" groups=["Destructible"]]
 collision_layer = 8
-collision_mask = 11
+collision_mask = 43
 script = ExtResource("1_m7lgb")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
@@ -18,7 +18,7 @@ polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300
 [node name="Overlap" type="Area2D" parent="."]
 visible = false
 collision_layer = 8
-collision_mask = 10
+collision_mask = 42
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Overlap"]
 visible = false

@@ -80,7 +80,11 @@ func _physics_process(delta: float) -> void:
 				return
 			else:
 				break
-
+		elif overlap.collision_layer == Collisions.Layers.floor:
+			print_debug("TerrainChunk(%s) - stop falling as hit the floor: %s" % [name, overlap.get_parent().name])
+			falling = false
+			return
+			
 	_velocity += Vector2(0, gravity) * delta
 	global_position += _velocity * delta
 
