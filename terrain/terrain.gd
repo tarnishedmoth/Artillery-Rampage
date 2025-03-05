@@ -18,7 +18,7 @@ const TerrainChunkScene = preload("res://terrain/terrain_chunk.tscn")
 @export var max_overlap_distance: float = 5
 
 @export_category("Crushing")
-@export var max_overlap_association_distance: float = 30
+@export var max_overlap_association_distance: float = 15
 
 @export_category("Crushing")
 @export var max_crush_triangle_delete_size: float = 150
@@ -198,20 +198,21 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 	
 	if results.size() >= 2:	
 		results = Geometry2D.merge_polygons(results[0], results[1])
-		print("merge_chunks: first(%d) + second(%d) -> %d: [%s]"
-		 % [first_poly.size(), second_poly.size(), results.size(),
+		print("merge_chunks: first=%s(%d) + second=%s(%d) -> %d: [%s]"
+		 % [first_chunk.name, first_poly.size(), second_chunk.name, second_poly.size(), results.size(),
 		 ",".join(results.map(func(x : PackedVector2Array): return x.size()))])
 		# Sort by size so we can keep the largest
 		results = results.filter(func(r : PackedVector2Array): return TerrainUtils.is_visible(r))
 		results.sort_custom(TerrainUtils.largest_poly_first)
 	
+	# Don't do crumbling when merging - pass 0 for flags
 	if results.size() >= 1:
-		first_chunk.replace_contents(results[0], influence_vertices)
+		first_chunk.replace_contents(results[0], influence_vertices, 0)
 	else:
 		first_chunk.delete()
 	
 	if results.size() >= 2:
-		second_chunk.replace_contents(results[1], influence_vertices)
+		second_chunk.replace_contents(results[1], influence_vertices, 0)
 	else:
 		second_chunk.delete()
 		
@@ -219,7 +220,8 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 		# Children added deferred so printing will happen on the add
 		_add_new_chunks(get_first_chunk(), results, 2)
 	else:
-		print("merge_chunks: final terrain chunk count=%d" % [get_child_count()])
+		print("merge_chunks: size=%d -> [%s]" % [results.size(),
+		 ",".join([first_chunk.name, second_chunk.name]) if results.size() == 2 else first_chunk.name if results.size() == 1 else ""])
 	
 	return stop_falling
 	
@@ -244,8 +246,17 @@ func _crush(first_chunk: TerrainChunk, first_poly: PackedVector2Array,
 	for index in overlap_index_arrays[1]:
 		out_influence_vertices.push_back(second_poly[index])
 
-	print_debug("pruning terrainChunk(%s)" % [first_chunk.name])
-	var pruned: int = TerrainUtils.prune_small_area_poly(first_poly, overlap_index_arrays[0], max_crush_triangle_delete_size)
+	# Modifying the main terrain chunk by pruning vertices ends up causing unintended side effects like having unrelated terrain become angular and
+	# cause artillery and houses to "pop up" on top as they end up inside so disabling modifying that
+	var pruned: int = 0
+	
+	# Not modifying the initial terrain chunk causes weird stems still - compensate with smaller overlap association distance
+	#if first_chunk != first_child_chunk:
+	if true:
+		print_debug("pruning terrainChunk(%s)" % [first_chunk.name])
+		pruned += TerrainUtils.prune_small_area_poly(first_poly, overlap_index_arrays[0], max_crush_triangle_delete_size)
+	else:
+		print_debug("pruning terrainChunk(%s) - SKIP as this is main terrain" % [first_chunk.name])
 
 	print_debug("pruning terrainChunk(%s)" % [second_chunk.name])
 	pruned += TerrainUtils.prune_small_area_poly(second_poly, overlap_index_arrays[1], max_crush_triangle_delete_size)

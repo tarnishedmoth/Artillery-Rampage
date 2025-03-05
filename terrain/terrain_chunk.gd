@@ -121,7 +121,7 @@ func _smooth(poly: PackedVector2Array, bounds: Circle) -> PackedVector2Array:
 	#			smooth_updates += 1
 	
 	if smooth_updates:
-		print("TerrainChunk(%s) - _smooth: Changed %d verticies" % [name, smooth_updates])
+		print_debug("TerrainChunk(%s) - _smooth: Changed %d verticies" % [name, smooth_updates])
 		
 	return poly
 
@@ -173,6 +173,9 @@ func _crumble(poly: PackedVector2Array, bounds: Circle) -> Array[PackedVector2Ar
 	return final_chunk_polys
 
 func _calculate_crumble(poly: PackedVector2Array, first_index: int, count: int) -> Array[PackedVector2Array]:
+
+	print_debug("TerrainChunk(%s) - poly=%d; first_index=%d; count=%d" % [name, poly.size(), first_index, count])
+
 	# See https://forum.godotengine.org/t/cut-a-polygon-with-a-polyline-not-the-contrary/17710/3
 	# See https://github.com/goostengine/goost/discussions/132
 	var polyline := _create_break_polyline(poly, first_index)
@@ -186,16 +189,23 @@ func _calculate_crumble(poly: PackedVector2Array, first_index: int, count: int) 
 	var crack_delta: float = randf_range(crack_delta_min, crack_delta_max)
 	var polygon_cut := Geometry2D.offset_polyline(polyline, crack_delta, Geometry2D.JOIN_SQUARE)
 	if polygon_cut.is_empty():
+		print_debug("TerrainChunk(%s) - Could not crumble as polyline was invalid" % [name])
 		return []
 	
-	var clip_results = Geometry2D.clip_polygons(poly, polygon_cut[0])
+	var clip_results := Geometry2D.clip_polygons(poly, polygon_cut[0])
 	 
+	print_debug("TerrainChunk(%s) - raw clip result - %d:[%s]" % 
+		[name, clip_results.size(), ",".join(clip_results.map(func(c : PackedVector2Array): return c.size()))])
+
 	clip_results = clip_results.filter(
 		func(result:PackedVector2Array):
 			return TerrainUtils.is_visible(result)
 	)
 	clip_results.sort_custom(TerrainUtils.largest_poly_first)
 	
+	print_debug("TerrainChunk(%s) - final clip result - %d:[%s]" % 
+	[name, clip_results.size(), ",".join(clip_results.map(func(c : PackedVector2Array): return c.size()))])
+
 	return clip_results
 	
 func _create_break_polyline(poly: PackedVector2Array, first_index: int) -> PackedVector2Array:
@@ -224,8 +234,12 @@ func _create_break_polyline(poly: PackedVector2Array, first_index: int) -> Packe
 			-delta_y)
 	
 	return polyline
-	
-func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global: PackedVector2Array = [], immediate:bool = false) -> Array[PackedVector2Array]:
+
+class UpdateFlags:
+	const Immediate:int = 1
+	const Crumble:int = 1 << 1
+
+func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global: PackedVector2Array = [], update_flags:int = UpdateFlags.Crumble) -> Array[PackedVector2Array]:
 	print_poly("replace_contents", new_poly_global)
 
 	# Transform updated polygon back to local space
@@ -242,12 +256,12 @@ func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global
 		replacement_poly_local = _smooth(updated_terrain_poly_local, bounds)
 		
 		# Now apply crumbling on top and return any new polygons to be added to other chunks if not falling
-		if !falling:
+		if !falling and update_flags & UpdateFlags.Crumble:
 			var final_polys := _crumble(replacement_poly_local, bounds)
 			replacement_poly_local = final_polys[0]
 			additional_chunk_polys = final_polys.slice(1)
 		
-	_replace_contents_local(replacement_poly_local, immediate)
+	_replace_contents_local(replacement_poly_local, update_flags & UpdateFlags.Immediate)
 	
 	# Convert additional chunks to global
 	for i in range(0, additional_chunk_polys.size()):

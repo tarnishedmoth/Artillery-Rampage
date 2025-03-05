@@ -94,7 +94,7 @@ func _modify_chunk(chunk: TerrainChunk, viewport_bounds: Rect2, _terrain_bounds:
 			new_terrain = true
 			_seed_terrain(terrain_vertices, viewport_bounds, 4)
 			# HACK:
-			chunk.replace_contents(terrain_vertices, [], true)
+			chunk.replace_contents(terrain_vertices, [], TerrainChunk.UpdateFlags.Immediate)
 		else:
 			new_terrain = false
 			
