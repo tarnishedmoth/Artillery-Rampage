@@ -37,6 +37,8 @@ func quit() -> void:
 	get_tree().quit()
 	
 func restart_level(delay: float = default_delay) -> void:
+	print_debug("restart_level: %s, delay=%f" % [_current_level_root_node.name if _current_level_root_node else "NULL", delay])
+
 	_switch_scene(func(): get_tree().reload_current_scene(), delay)
 	
 func next_level(delay: float = default_delay) -> void:
@@ -53,9 +55,11 @@ func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 	await next_level(delay)
 	
 func switch_scene(scene: PackedScene, delay: float = default_delay) -> void:
+	print_debug("switch_scene: %s, delay=%f" % [scene.name, delay])
 	_switch_scene(func(): get_tree().change_scene_to_packed(scene), delay)
 	
 func switch_scene_file(scene: String, delay: float = default_delay) -> void:
+	print_debug("switch_scene_file: %s, delay=%f" % [scene, delay])
 	_switch_scene(func(): get_tree().change_scene_to_file(scene), delay)
 
 func _switch_scene(switchFunc: Callable, delay: float) -> void:
@@ -72,4 +76,6 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	switchFunc.call()
 
 func _on_GameLevel_loaded(level:GameLevel) -> void:
+	print_debug("_on_GameLevel_loaded: level=%s" % [level.name if level else "NULL"])
+	
 	_current_level_root_node = level

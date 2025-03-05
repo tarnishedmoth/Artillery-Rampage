@@ -198,7 +198,7 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 	
 	if results.size() >= 2:	
 		results = Geometry2D.merge_polygons(results[0], results[1])
-		print("merge_chunks: first=%s(%d) + second=%s(%d) -> %d: [%s]"
+		print_debug("merge_chunks(merge_polygons): first=%s(%d) + second=%s(%d) -> %d: [%s]"
 		 % [first_chunk.name, first_poly.size(), second_chunk.name, second_poly.size(), results.size(),
 		 ",".join(results.map(func(x : PackedVector2Array): return x.size()))])
 		# Sort by size so we can keep the largest
@@ -253,17 +253,19 @@ func _crush(first_chunk: TerrainChunk, first_poly: PackedVector2Array,
 	# Not modifying the initial terrain chunk causes weird stems still - compensate with smaller overlap association distance
 	#if first_chunk != first_child_chunk:
 	if true:
-		print_debug("pruning terrainChunk(%s)" % [first_chunk.name])
+		print_debug("pruning terrainChunk(%s): %d" % [first_chunk.name, first_poly.size()])
 		pruned += TerrainUtils.prune_small_area_poly(first_poly, overlap_index_arrays[0], max_crush_triangle_delete_size)
 	else:
 		print_debug("pruning terrainChunk(%s) - SKIP as this is main terrain" % [first_chunk.name])
 
-	print_debug("pruning terrainChunk(%s)" % [second_chunk.name])
+	print_debug("pruning terrainChunk(%s): %d" % [second_chunk.name, second_poly.size()])
 	pruned += TerrainUtils.prune_small_area_poly(second_poly, overlap_index_arrays[1], max_crush_triangle_delete_size)
 
 	# Filter results to visible
 	results = results.filter(func(r : PackedVector2Array): return TerrainUtils.is_visible(r))
 	results.sort_custom(TerrainUtils.largest_poly_first)
+
+	print_debug("pruning: final_results=%d; pruned=%d" % [results.size(), pruned])
 
 	if results.size() <= 2:
 		return { "results" : results, "pruned" : pruned }

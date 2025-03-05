@@ -143,15 +143,18 @@ static func prune_small_area_poly(poly: PackedVector2Array, pruning_index_candid
 		# Make a copy first and check if polygon will be valid
 		var modified_poly := poly.duplicate()
 		_remove_indices_from_poly(modified_poly, removal_indices)
-		# When decomposition fails an empty array is returned
-		var decomposed_poly := Geometry2D.decompose_polygon_in_convex(modified_poly)
-		if !decomposed_poly.is_empty():
+		
+		if _is_visible_polygon(modified_poly):
 			# Proceed as planned
 			_remove_indices_from_poly(poly, removal_indices)
 			return removal_indices.size()
 		else:
-			push_warning("prune_small_area_poly: convex decomposition failed - not pruning any vertices")
+			push_warning("prune_small_area_poly: convex decomposition/ccw test failed - not pruning any vertices")
 			return 0
+
+static func _is_visible_polygon(poly: PackedVector2Array) -> bool:
+	# When decomposition fails an empty array is returned
+	return !Geometry2D.is_polygon_clockwise(poly) and !Geometry2D.decompose_polygon_in_convex(poly).is_empty()
 
 static func _remove_indices_from_poly(poly: PackedVector2Array, removal_indices: PackedInt32Array) -> void:
 	# Since removing from array iterate in reverse as it is more efficient
