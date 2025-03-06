@@ -13,7 +13,7 @@ class_name AITank extends TankController
 @export var max_ai_power_per_sec: float = 500
 
 @export var min_ai_shoot_delay_time = 0.2
-@export var max_ai_shoot_delay_time = 1.5
+@export var max_ai_shoot_delay_time = 1.8
 
 var current_action_state: AIActionState
 var target_result: TankActionResult
@@ -43,7 +43,6 @@ func _process(delta: float) -> void:
 func _on_tank_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2D) -> void:
 	tank.kill()
 	queue_free()
-
 
 func _on_tank_tank_took_damage(tank: Tank, instigatorController: Node2D, instigator: Node2D, amount: float) -> void:
 	pass # Replace with function body.
@@ -83,7 +82,6 @@ class AIWaitingState extends AIActionState:
 		total_time = randf_range(parent.min_ai_start_delay, parent.max_ai_start_delay)
 		
 	func _next_state() -> AIActionState: return AIAimingState.new(parent)
-		
 
 # Aiming at target
 class AIAimingState extends AIActionState:
@@ -106,7 +104,7 @@ class AIAimingState extends AIActionState:
 
 	func _do_execute(delta: float) -> void:
 		parent.tank.aim_delta(rads_sec * delta)
-		
+	
 # Setting power
 class AIPoweringState extends AIActionState:
 	var power_sec: float
@@ -120,11 +118,25 @@ class AIPoweringState extends AIActionState:
 		power_sec = randf_range(parent.min_ai_power_per_sec, parent.max_ai_power_per_sec) * sign(total_delta)
 		total_time = total_delta / abs(power_sec)
 		
-	func _next_state() -> AIActionState: return AIShootingState.new(parent)
+	func _next_state() -> AIActionState: return AISelectWeaponState.new(parent)
 
 	func _do_execute(delta: float) -> void:
 		parent.tank.set_power_delta(power_sec * delta)
-	
+
+# Selecting weapon to use
+class AISelectWeaponState extends AIActionState:
+	func _init(parent: AITank):
+		super(parent)
+		# Already waiting in AIShootingState
+		total_time = 0.0
+
+	func _exit():
+		var tank := parent.tank
+		tank.set_equipped_weapon(parent.target_result.weapon_index)
+		tank.push_weapon_update_to_hud()
+		
+	func _next_state() -> AIActionState: return AIShootingState.new(parent)
+
 # Delay time after ready to shoot to actually shooting
 class AIShootingState extends AIActionState:
 	func _init(parent: AITank):
@@ -132,6 +144,5 @@ class AIShootingState extends AIActionState:
 		total_time = randf_range(parent.min_ai_shoot_delay_time, parent.max_ai_shoot_delay_time)
 		
 	func _exit():
-		parent.tank.set_equipped_weapon(parent.target_result.weapon_index)
 		parent.tank.shoot()	
 	# Last state

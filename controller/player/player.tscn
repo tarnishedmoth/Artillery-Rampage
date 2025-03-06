@@ -12,7 +12,6 @@ script = ExtResource("1_t03mm")
 weapons_container = NodePath("Weapons")
 
 [node name="Tank" parent="." groups=["Player"] instance=ExtResource("2_3s1jp")]
-turret_color_value = 0.7
 color = Color(0.145098, 0.227451, 0.00392157, 1)
 
 [node name="Weapons" type="Node" parent="."]
