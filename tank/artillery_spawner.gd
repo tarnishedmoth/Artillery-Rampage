@@ -203,7 +203,7 @@ func _get_spawn_position(terrain: Terrain, x: float) -> Vector2:
 	 Collisions.CompositeMasks.tank_snap)
 	
 	var space_state := terrain.get_world_2d().direct_space_state
-	var result = space_state.intersect_ray(query_params)
+	var result: Dictionary = space_state.intersect_ray(query_params)
 
 	if !result:
 		push_error("ArtillerySpawner(%s): _get_spawn_position could not find y - x=%f" % [name, x])

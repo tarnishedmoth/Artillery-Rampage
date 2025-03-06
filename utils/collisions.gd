@@ -17,3 +17,5 @@ class CompositeMasks:
 	
 	# Tanks are staggered so shouldn't need to snap down on top of other tanks
 	const tank_snap: int = Layers.terrain | Layers.world_body
+
+	const visibility: int = Layers.tank | Layers.terrain | Layers.world_body

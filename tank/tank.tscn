@@ -54,6 +54,12 @@ position = Vector2(0, -33.14)
 [node name="Bottom" type="Marker2D" parent="TankBody"]
 position = Vector2(0, 13)
 
+[node name="Left" type="Marker2D" parent="TankBody"]
+position = Vector2(-13, 0)
+
+[node name="Right" type="Marker2D" parent="TankBody"]
+position = Vector2(13, 0)
+
 [node name="Top" type="Marker2D" parent="TankBody"]
 position = Vector2(0, -13)
 

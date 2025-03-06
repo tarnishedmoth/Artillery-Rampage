@@ -35,8 +35,12 @@ signal tank_took_damage(
 @export_range(0.01, 100) var damage_distance_multiplier: float = 0.1
 
 @onready var tankBody: TankBody = $TankBody
+
 @onready var bottom_reference_point = $TankBody/Bottom
 @onready var top_reference_point = $TankBody/Top
+@onready var left_reference_point = $TankBody/Left
+@onready var right_reference_point = $TankBody/Right
+
 @onready var turret = $TankBody/TankTurret
 @onready var weapon_fire_location = $TankBody/TankTurret/WeaponFireLocation
 #@onready var fired_weapon_container = $FiredWeaponContainer # MOVED TO SCENEMANAGER/GAMELEVEL
@@ -211,7 +215,7 @@ func _ground_trace(trace_distance: float) -> Vector2:
 	var space_state := get_world_2d().direct_space_state
 	
 	# in 2D positive y goes down
-	var query_params = PhysicsRayQueryParameters2D.create(
+	var query_params := PhysicsRayQueryParameters2D.create(
 		top_reference_point.global_position, top_reference_point.global_position + Vector2(0, trace_distance),
 		 Collisions.CompositeMasks.tank_snap)
 		
@@ -353,4 +357,16 @@ func _on_weapon_destroyed(weapon: Weapon) -> void:
 	
 func _on_weapon_changed(new_weapon: Weapon) -> void:
 	push_weapon_update_to_hud(new_weapon)
+#endregion
+
+#region AI Helpers
+
+func get_body_reference_points_global() -> PackedVector2Array:
+	return [
+		top_reference_point.global_position,
+		right_reference_point.global_position,
+		left_reference_point.global_position,
+		bottom_reference_point.global_position
+	]
+
 #endregion
