@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://kgy6jgf0n1qg"]
+[gd_scene load_steps=5 format=3 uid="uid://kgy6jgf0n1qg"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_j3o20"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="2_gemlh"]
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="3_c3ams"]
+[ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="4_18hgv"]
 
 [node name="TestLevelProcGen" type="Node2D"]
 
@@ -15,6 +17,7 @@ additional_vertices = 100
 replace_existing_heights = true
 
 [node name="ArtillerySpawner" parent="GameLevel" index="7"]
+artillery_ai_types = Array[PackedScene]([ExtResource("3_c3ams"), ExtResource("4_18hgv")])
 default_ai_players = Vector2i(1, 4)
 default_human_players = Vector2i(1, 1)
 
