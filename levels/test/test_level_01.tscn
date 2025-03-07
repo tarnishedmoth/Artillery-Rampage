@@ -21,10 +21,10 @@ position = Vector2(1100, 426)
 [node name="Tank" parent="GameLevel/Enemy2" index="0"]
 color = Color(0.137255, 0.180392, 0.701961, 1)
 
-[node name="House1" parent="GameLevel" instance=ExtResource("4_ojhj1")]
+[node name="House1" parent="GameLevel" groups=["Damageable"] instance=ExtResource("4_ojhj1")]
 position = Vector2(43, 409)
 
-[node name="House2" parent="GameLevel" instance=ExtResource("4_ojhj1")]
+[node name="House2" parent="GameLevel" groups=["Damageable"] instance=ExtResource("4_ojhj1")]
 position = Vector2(934, 407)
 
 [node name="Player" parent="GameLevel" instance=ExtResource("3_oxojq")]
