@@ -2,5 +2,6 @@ class_name Enums
 
 enum AIType
 {
-	Rando
+	Rando,
+	Brute
 }

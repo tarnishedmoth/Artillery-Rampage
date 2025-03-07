@@ -98,7 +98,8 @@ class AIAimingState extends AIActionState:
 		# No need for abs as they will have the same sign
 		total_time = total_delta / rads_sec
 		
-		print("AI Aim: rads_sec=" + str(rads_sec) + "; total_time=" + str(total_time))
+		print_debug("AI Aim: degrees_sec=%f; target_angle=%f; total_delta=%f; total_time=%f"
+		 % [deg_to_rad(rads_sec), rad_to_deg(total_delta), rad_to_deg(total_delta), total_time])
 		
 	func _next_state() -> AIActionState: return AIPoweringState.new(parent)
 
@@ -115,8 +116,11 @@ class AIPoweringState extends AIActionState:
 		var target_power = parent.target_result.power
 		var total_delta = target_power - parent.tank.power
 	
-		power_sec = randf_range(parent.min_ai_power_per_sec, parent.max_ai_power_per_sec) * sign(total_delta)
-		total_time = total_delta / abs(power_sec)
+		if is_zero_approx(total_delta):
+			total_time = 0.0
+		else:
+			power_sec = randf_range(parent.min_ai_power_per_sec, parent.max_ai_power_per_sec) * sign(total_delta)
+			total_time = total_delta / abs(power_sec)
 		
 	func _next_state() -> AIActionState: return AISelectWeaponState.new(parent)
 
