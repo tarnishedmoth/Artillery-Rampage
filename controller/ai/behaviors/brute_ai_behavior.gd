@@ -6,6 +6,9 @@ class_name BruteAIBehavior extends AIBehavior
 @export_group("Config")
 @export var aim_deviation_degrees: float = 15.0
 
+@export_group("Config")
+@export var forces_mask: int = Forces.Gravity
+
 func _ready() -> void:
 	pass
 
@@ -54,7 +57,7 @@ func _select_best_opponent() -> Dictionary:
 
 	# If there is no direct shot opponent, then we will just return the closest opponent
 	for opponent in opponents:
-		var result: Dictionary = has_direct_shot_to(opponent)
+		var result: Dictionary = has_direct_shot_to(opponent, forces_mask)
 
 		var distance: float = tank.global_position.distance_squared_to(opponent.tank.global_position)
 

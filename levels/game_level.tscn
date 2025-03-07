@@ -69,6 +69,7 @@ unique_name_in_owner = true
 position = Vector2(-2, 731)
 
 [node name="Wind" parent="." instance=ExtResource("5_5ytpt")]
+unique_name_in_owner = true
 
 [node name="RoundDirector" type="Node" parent="."]
 unique_name_in_owner = true

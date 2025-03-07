@@ -38,7 +38,7 @@ func has_line_of_sight_to(start_pos: Vector2, end_pos: Vector2) -> Dictionary:
 
 	return { test = false, position = result.position }
 
-func get_direct_aim_angle_to(opponent: TankController) -> float:
+func get_direct_aim_angle_to(opponent: TankController, forces: int = 0) -> float:
 	var turret_position: Vector2 = tank.turret.global_position
 	# Needs to be relative to turret neutral position which is up
 	var up_vector: Vector2 = Vector2.UP.rotated(tank.tankBody.global_rotation)
@@ -46,18 +46,32 @@ func get_direct_aim_angle_to(opponent: TankController) -> float:
 	# By default aim to the center of the opponent
 	var opponent_position: Vector2 = opponent.tank.tankBody.global_position
 
-	var to_opponent := turret_position.direction_to(opponent_position)
+	var to_opponent: Vector2 = opponent_position - turret_position
+	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, forces)
+	var aim_pos: Vector2 = opponent_position + pos_offset
+	
+	var to_opponent_dir = turret_position.direction_to(aim_pos)
 	var angle := up_vector.angle_to(to_opponent)
 
 	return clampf(rad_to_deg(angle), tank.min_angle, tank.max_angle)
 
-func has_direct_shot_to(opponent : TankController) -> Dictionary:
+func has_direct_shot_to(opponent : TankController, forces: int = 0) -> Dictionary:
 	# Test from barrel to test points on artillery
 	var turret_position: Vector2 = tank.turret.global_position
+	var opponent_position:Vector2 = opponent.tank.tankBody.global_position
+
 	var up_vector: Vector2 = Vector2.UP.rotated(tank.tankBody.global_rotation)
 	
 	var opponent_tank: Tank = opponent.tank
 	var test_positions: PackedVector2Array = opponent_tank.get_body_reference_points_global()
+
+	var to_opponent: Vector2 = opponent_position - turret_position
+	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, forces)
+
+	print_debug("%s: LOS opponent=%s; calculated pos_offset=%s -> %f"  % [tank.owner.name, opponent.name, pos_offset, pos_offset.length()])
+
+	for i in range(test_positions.size()):
+		test_positions[i] += pos_offset
 	
 	# First check that we can even aim directly at the opponent and limit to those viable positions
 	var viable_positions: PackedVector2Array = []
@@ -104,3 +118,36 @@ func has_direct_shot_to(opponent : TankController) -> Dictionary:
 		% [tank.owner.name, opponent.name, str(max_position), viable_positions.size()])
 	
 	return { test = false, position = max_position }
+
+#region Forces
+class Forces:
+	const Gravity:int = 1
+	const Wind:int = 1 << 1
+	
+	const All: int = Gravity | Wind
+	
+func _get_active_forces_offset(aim_trajectory: Vector2, forces: int) -> Vector2:
+	var total_offset: Vector2 = Vector2.ZERO
+	
+	if forces & Forces.Gravity:
+		total_offset += _get_gravity_offset(aim_trajectory)
+	if forces & Forces.Wind:
+		total_offset += _get_wind_offset(aim_trajectory)
+	
+	return total_offset
+	
+func _get_gravity_offset(aim_trajectory: Vector2) -> Vector2:
+	# TODO: Determine how best to read this - maybe its a setting passed down from the game level?
+	# Power value chosen will also influence the gravity effect
+	# Gravity acceleration is based on project settings DefaultGravity multiplied by GravityScale from WeaponProjectile clsas
+	# Need fire_velocity from weapon to be able to calculate the offset
+	# Right now just apply a multiplier based on the delta y
+	# We need to consider the projectile motion physics and the kinematic equations
+	return Vector2(0.0, aim_trajectory.y * absf(aim_trajectory.x) * 0.002 )
+
+func _get_wind_offset(aim_trajectory: Vector2) -> Vector2:
+	# TODO: Compensate for Wind which is always horizontal
+	return Vector2()
+	
+#endregion
+	

@@ -3,6 +3,7 @@ class_name GameLevel extends Node2D
 @onready var round_director : RoundDirector = %RoundDirector
 @onready var spawner: ArtillerySpawner = %ArtillerySpawner
 @onready var terrain: Terrain = %Terrain
+@onready var wind: Wind = %Wind
 
 var container_for_spawnables
 

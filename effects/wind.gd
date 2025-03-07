@@ -23,7 +23,11 @@ var wind: Vector2 = Vector2():
 		GameEvents.emit_wind_updated(self)
 	get:
 		return wind
-		
+
+var force: Vector2:
+	get:
+		return wind * wind_scale
+				
 var _active_projectile: WeaponProjectile
 
 func _ready() -> void:
@@ -44,4 +48,4 @@ func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 	_active_projectile = projectile
 	
 func _apply_wind_to_active_weapon(delta: float) -> void:
-	_active_projectile.apply_central_force(wind * wind_scale * delta)
+	_active_projectile.apply_central_force(force * delta)
