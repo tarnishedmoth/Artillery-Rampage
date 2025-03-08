@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://158k4fde7cpd"]
+
+[ext_resource type="Script" path="res://controller/ai/behaviors/brute_ai_behavior.gd" id="1_8y0hy"]
+
+[node name="BruteAiBehavior" type="Node"]
+script = ExtResource("1_8y0hy")
+aim_error_chance = 0.5

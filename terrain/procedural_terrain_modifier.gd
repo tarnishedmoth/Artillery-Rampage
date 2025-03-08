@@ -197,4 +197,6 @@ func _generate_noise() -> FastNoiseLite:
 	if randomize_seed:
 		noise.seed = randi()
 	
+	print_debug("%s - Using seed=%d for noise" % [name, noise.seed])
+	
 	return noise

@@ -1,13 +1,13 @@
 class_name BruteAIBehavior extends AIBehavior
 
 @export_group("Config")
-@export var aim_error_chance: float = 0.0
+@export_range(0.0, 1.0, 0.01) var aim_error_chance: float = 0.0
 
 @export_group("Config")
-@export var aim_deviation_degrees: float = 15.0
+@export_range(0.0, 60.0, 1.0) var aim_deviation_degrees: float = 15.0
 
 @export_group("Config")
-@export var forces_mask: int = Forces.Gravity
+@export_flags("Gravity", "Wind") var forces_mask: int = Forces.Gravity
 
 func _ready() -> void:
 	pass
