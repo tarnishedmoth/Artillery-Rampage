@@ -19,7 +19,7 @@ func execute(_tank: Tank) -> AIState:
 	var weapon_infos := get_weapon_infos()
 	
 	var best_opponent_data: Dictionary = _select_best_opponent()
-	var best_weapon: int = _select_best_weapon(best_opponent_data.opponent, weapon_infos)
+	var best_weapon: int = _select_best_weapon(best_opponent_data, weapon_infos)
 
 	var perfect_shot_angle: float = best_opponent_data.angle
 	var angle_deviation: float = 0.0 if randf() > aim_error_chance else perfect_shot_angle + randf_range(-aim_deviation_degrees, aim_deviation_degrees)
@@ -83,18 +83,62 @@ func _select_best_opponent() -> Dictionary:
 	
 	if closest_direct_opponent:
 		return { opponent = closest_direct_opponent, angle = closest_direct_angle }
+
+	# Need to determine where we will hit with the fallback approach as this needs to be taken into account with weapon selection
 	else:
-		return { opponent = closest_opponent, angle = get_direct_aim_angle_to(closest_opponent, launch_props) }
+		var angle : float = get_direct_aim_angle_to(closest_opponent, launch_props)
+		var dir: Vector2 = aim_angle_to_world_direction(angle)
+		# Determine point we hit in that direction
+		var ray_cast_result: Dictionary = check_world_collision(tank.turret.global_position, tank.turret.global_position + dir * 10000.0)
 
-func _select_best_weapon(opponent: TankController, weapon_infos: Array[AIBehavior.WeaponInfo]) -> int:
-	# TODO: Favor powerful weapons for opponents further away or when it is next to other opponents
-	# Consider self splash damage if opponent too close
-	# Use a scoring system (utility AI) to determine best weapon
-	# Possibly the scoring system needs to influence both best opponent and best weapon
-	# E.g. We select further opponents because there is a cluster further away and we have a nuke
-	# There is an opponent right next to us but we don't want to shoot them as we expect to do more total damage
-	# and threat of close opponent does not outweight that
-	# Variables to take into account: distance to target, threat of target, weapon self damage, total expected damage
+		var result : Dictionary =  { opponent = closest_opponent, angle = get_direct_aim_angle_to(closest_opponent, launch_props) }
 
-	# Select most powerful weapon that won't cause self-damage which can be checked with projectile_prototype.max_falloff_distance
+		if ray_cast_result:
+			result.hit_position = ray_cast_result.position
+
+		return result
+
+func _select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavior.WeaponInfo]) -> int:
+	
+	# If only have one weapon then immediately return
+	if tank.weapons.is_empty():
+		push_warning("BruteAI(%s): No weapons available! - returning 0" % [tank.name])
+		# Return 0 instead of -1 in case issue resolves itself by the time we try to shoot
+		return 0
+	if tank.weapons.size() == 1:
+		print_debug("BruteAI(%s): Only 1 weapon available - returning 0" % [tank.name])
+		return 0
+	
+	var target_distance: float
+
+	# We are going to hit something other than opponent tank first
+	if opponent_data.has("hit_position"):
+		target_distance = tank.global_position.distance_to(opponent_data.hit_position)
+	else:
+		target_distance = tank.global_position.distance_to(opponent_data.opponent.tank.global_position)
+
+
+	# Select most powerful available weapon that won't cause self-damage
+	var best_weapon:int = -1
+	var best_score:float = 0.0
+
+	for i in range(weapon_infos.size()):
+		var weapon_info: AIBehavior.WeaponInfo = weapon_infos[i]
+		var weapon: Weapon = weapon_info.weapon
+		var projectile : WeaponProjectile = weapon_info.projectile_prototype
+		
+		if projectile and target_distance > projectile.max_falloff_distance:
+			var score : float = projectile.max_damage * projectile.max_damage * projectile.min_falloff_distance * projectile.max_falloff_distance * weapon.ammo_used_per_shot
+			print_debug("BruteAI(%s): weapon(%d)=%s; score=%f" % [tank.name, i, weapon.name, score])
+			if score > best_score:
+				best_score = score
+				best_weapon = i
+
+	if best_weapon != -1:
+		print_debug("BruteAI(%s): selected best_weapon=%d/%d; score=%f" % [tank.name, best_weapon, weapon_infos.size(), best_score])
+		return best_weapon
+	
+	# Fallback to random weapon
+	print_debug("BruteAI(%s): Could not find viable weapon - falling back to random selection out of %d candidates" % [tank.name, tank.weapons.size()])
+
 	return randi_range(0, tank.weapons.size() - 1)

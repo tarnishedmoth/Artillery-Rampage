@@ -34,13 +34,7 @@ func get_opponents() -> Array[TankController]:
 	return opponents
 		
 func has_line_of_sight_to(start_pos: Vector2, end_pos: Vector2) -> Dictionary:
-	var space_state := tank.get_world_2d().direct_space_state
-
-	var query_params := PhysicsRayQueryParameters2D.create(
-		start_pos, end_pos,
-		Collisions.CompositeMasks.obstacle)
-
-	var result: Dictionary = space_state.intersect_ray(query_params)
+	var result: Dictionary = check_world_collision(start_pos, end_pos)
 
 	if !result:
 		print_debug("%s: start_pos=%s; end_pos=%s -> TRUE" % [tank.owner.name, str(start_pos), str(end_pos)])
@@ -51,6 +45,16 @@ func has_line_of_sight_to(start_pos: Vector2, end_pos: Vector2) -> Dictionary:
 
 	return { test = false, position = result.position }
 
+func check_world_collision(start_pos: Vector2, end_pos: Vector2) -> Dictionary:
+	var space_state := tank.get_world_2d().direct_space_state
+
+	var query_params := PhysicsRayQueryParameters2D.create(
+		start_pos, end_pos,
+		Collisions.CompositeMasks.obstacle)
+
+	var result: Dictionary = space_state.intersect_ray(query_params)
+
+	return result
 func get_direct_aim_angle_to(opponent: TankController, launch_props: LaunchProperties, forces: int = 0) -> float:
 	var turret_position: Vector2 = tank.turret.global_position
 	# By default aim to the center of the opponent
@@ -61,9 +65,9 @@ func get_direct_aim_angle_to(opponent: TankController, launch_props: LaunchPrope
 	
 	var aim_pos: Vector2 = opponent_position + pos_offset
 
-	return _get_direct_aim_angle_to(turret_position, launch_props, aim_pos)
+	return _get_direct_aim_angle_to(turret_position, aim_pos)
 
-func _get_direct_aim_angle_to(from_pos: Vector2, launch_props: LaunchProperties, to_pos: Vector2) -> float:
+func _get_direct_aim_angle_to(from_pos: Vector2, to_pos: Vector2) -> float:
 	# Needs to be relative to turret neutral position which is up
 	var up_vector: Vector2 = Vector2.UP.rotated(tank.tankBody.global_rotation)
 	
@@ -72,6 +76,12 @@ func _get_direct_aim_angle_to(from_pos: Vector2, launch_props: LaunchProperties,
 
 	return clampf(rad_to_deg(angle), tank.min_angle, tank.max_angle)
 	
+func aim_angle_to_world_direction(angle: float) -> Vector2:
+	var turret_angle: float = tank.turret.global_rotation
+	var world_angle: float = turret_angle + rad_to_deg(angle)
+	
+	return Vector2.UP.rotated(rad_to_deg(world_angle))
+
 func has_direct_shot_to(opponent : TankController, launch_props: LaunchProperties, forces: int = 0) -> Dictionary:
 	# Test from barrel to test points on artillery
 	var turret_position: Vector2 = tank.turret.global_position
