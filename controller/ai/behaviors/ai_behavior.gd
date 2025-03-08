@@ -143,30 +143,22 @@ func _get_active_forces_offset(aim_trajectory: Vector2, launch_speed: float, for
 func _get_gravity_offset(aim_trajectory: Vector2, launch_speed: float) -> Vector2:
 	if is_zero_approx(launch_speed):
 		return Vector2.ZERO
-		
-	# TODO: Determine how best to read this - maybe its a setting passed down from the game level?
-	# Power value chosen will also influence the gravity effect
-	# Gravity acceleration is based on project settings DefaultGravity multiplied by GravityScale from WeaponProjectile clsas
-	# Need fire_velocity from weapon to be able to calculate the offset
-	# Right now just apply a multiplier based on the delta y
-	# We need to consider the projectile motion physics and the kinematic equations
-	# TODO: This may be affected by the wind though we are calculating that contribution separately
-	
-	var launch_angle: float = absf(aim_trajectory.angle())
-	var vx: float = launch_speed * cos(launch_angle)
-	if is_zero_approx(vx):
+
+	var aim_trajectory_dir: Vector2 = aim_trajectory.normalized()
+
+	var launch_velocity: Vector2 = aim_trajectory_dir * launch_speed
+	if is_zero_approx(launch_velocity.x):
 		return Vector2.ZERO
 		
-	var vy: float = launch_speed * sin(launch_angle)
 	# Calculate time from horizontal component
 	# x = v*cos(a)  * t
-	var flight_time: float =  aim_trajectory.x / vx
+	var flight_time: float =  aim_trajectory.x / launch_velocity.x
 	
 	# dy = 1/2 * a * t^2 + voy * t
-	var delta_y : float = 0.5 * PhysicsUtils.get_gravity_vector().y * flight_time * flight_time + vy * flight_time
+	var delta_y : float = 0.5 * PhysicsUtils.get_gravity_vector().y * flight_time * flight_time + launch_velocity.y * flight_time
 	
-	# Negate aim_trajectory_y since y coords inverted meaning bigger y is down
-	var additional_y: float = -delta_y - aim_trajectory.y
+	# Determine how much additional y we need to hit the delta_y of the parabolic flight
+	var additional_y: float = aim_trajectory.y - delta_y
 	return Vector2(0.0, additional_y)
 
 func _get_wind_offset(aim_trajectory: Vector2, launch_speed: float) -> Vector2:
