@@ -1,5 +1,9 @@
 class_name AIBehavior extends Node
 
+class LaunchProperties:
+	var speed: float
+	var mass: float = 1.0
+	 
 var tank: Tank
 
 func _ready() -> void:
@@ -38,19 +42,19 @@ func has_line_of_sight_to(start_pos: Vector2, end_pos: Vector2) -> Dictionary:
 
 	return { test = false, position = result.position }
 
-func get_direct_aim_angle_to(opponent: TankController, launch_speed: float, forces: int = 0) -> float:
+func get_direct_aim_angle_to(opponent: TankController, launch_props: LaunchProperties, forces: int = 0) -> float:
 	var turret_position: Vector2 = tank.turret.global_position
 	# By default aim to the center of the opponent
 	var opponent_position: Vector2 = opponent.tank.tankBody.global_position
 
 	var to_opponent: Vector2 = opponent_position - turret_position
-	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, launch_speed, forces)
+	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, launch_props, forces)
 	
 	var aim_pos: Vector2 = opponent_position + pos_offset
 
-	return _get_direct_aim_angle_to(turret_position, launch_speed, aim_pos)
+	return _get_direct_aim_angle_to(turret_position, launch_props, aim_pos)
 
-func _get_direct_aim_angle_to(from_pos: Vector2, launch_speed: float, to_pos: Vector2) -> float:
+func _get_direct_aim_angle_to(from_pos: Vector2, launch_props: LaunchProperties, to_pos: Vector2) -> float:
 	# Needs to be relative to turret neutral position which is up
 	var up_vector: Vector2 = Vector2.UP.rotated(tank.tankBody.global_rotation)
 	
@@ -59,7 +63,7 @@ func _get_direct_aim_angle_to(from_pos: Vector2, launch_speed: float, to_pos: Ve
 
 	return clampf(rad_to_deg(angle), tank.min_angle, tank.max_angle)
 	
-func has_direct_shot_to(opponent : TankController, launch_speed: float, forces: int = 0) -> Dictionary:
+func has_direct_shot_to(opponent : TankController, launch_props: LaunchProperties, forces: int = 0) -> Dictionary:
 	# Test from barrel to test points on artillery
 	var turret_position: Vector2 = tank.turret.global_position
 	var opponent_position:Vector2 = opponent.tank.tankBody.global_position
@@ -70,7 +74,7 @@ func has_direct_shot_to(opponent : TankController, launch_speed: float, forces: 
 	var test_positions: PackedVector2Array = opponent_tank.get_body_reference_points_global()
 
 	var to_opponent: Vector2 = opponent_position - turret_position
-	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, launch_speed, forces)
+	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, launch_props, forces)
 
 	print_debug("%s: LOS opponent=%s; calculated pos_offset=%s -> %f"  % [tank.owner.name, opponent.name, pos_offset, pos_offset.length()])
 
@@ -130,17 +134,33 @@ class Forces:
 	
 	const All: int = Gravity | Wind
 	
-func _get_active_forces_offset(aim_trajectory: Vector2, launch_speed: float, forces: int) -> Vector2:
+func _get_active_forces_offset(aim_trajectory: Vector2, launch_props: LaunchProperties, forces: int) -> Vector2:
 	var total_offset: Vector2 = Vector2.ZERO
 	
 	if forces & Forces.Gravity:
-		total_offset += _get_gravity_offset(aim_trajectory, launch_speed)
+		total_offset += _get_gravity_offset(aim_trajectory, launch_props)
 	if forces & Forces.Wind:
-		total_offset += _get_wind_offset(aim_trajectory, launch_speed)
+		total_offset += _get_wind_offset(aim_trajectory, launch_props)
 	
 	return total_offset
 	
-func _get_gravity_offset(aim_trajectory: Vector2, launch_speed: float) -> Vector2:
+func _get_gravity_offset(aim_trajectory: Vector2, launch_props: LaunchProperties) -> Vector2:
+	return _get_force_accel_offset(aim_trajectory, launch_props.speed, PhysicsUtils.get_gravity_vector())
+
+func _get_wind_offset(aim_trajectory: Vector2, launch_props: LaunchProperties) -> Vector2:
+	if is_zero_approx(launch_props.speed) or is_zero_approx(launch_props.mass):
+		return Vector2.ZERO
+	
+	var wind_force: Vector2 = _get_wind_force()
+	if wind_force.is_zero_approx():
+		return Vector2.ZERO
+		
+	# F = m * a
+	var wind_accel : Vector2 = wind_force / launch_props.mass / 100
+	# Negate to compensate for the wind
+	return _get_force_accel_offset(aim_trajectory, launch_props.speed, -wind_accel)
+	
+func _get_force_accel_offset(aim_trajectory: Vector2, launch_speed: float, acceleration: Vector2) -> Vector2:
 	if is_zero_approx(launch_speed):
 		return Vector2.ZERO
 
@@ -151,20 +171,18 @@ func _get_gravity_offset(aim_trajectory: Vector2, launch_speed: float) -> Vector
 		return Vector2.ZERO
 		
 	# Calculate time from horizontal component
-	# x = v*cos(a)  * t
+	# x = vx  * t
 	var flight_time: float =  aim_trajectory.x / launch_velocity.x
 	
-	# dy = 1/2 * a * t^2 + voy * t
-	var delta_y : float = 0.5 * PhysicsUtils.get_gravity_vector().y * flight_time * flight_time + launch_velocity.y * flight_time
+	# d = 1/2 * a * t^2 + voy * t
+	var final_pos : Vector2 = 0.5 * acceleration * flight_time * flight_time + launch_velocity * flight_time
 	
-	# Determine how much additional y we need to hit the delta_y of the parabolic flight
-	var additional_y: float = aim_trajectory.y - delta_y
-	return Vector2(0.0, additional_y)
-
-func _get_wind_offset(aim_trajectory: Vector2, launch_speed: float) -> Vector2:
-	# TODO: Compensate for Wind which is always horizontal
-	# For this one we will use F = m * a but need the mass of the projectile and then can use x 
-	return Vector2()
+	# Determine how much additional pos we need to hit the final pos of the flight
+	var additional_pos: Vector2 = aim_trajectory - final_pos
+	return additional_pos
 	
+func _get_wind_force() -> Vector2:
+	var wind: Wind = game_level.wind
+	return wind.force if wind else Vector2.ZERO
 #endregion
 	

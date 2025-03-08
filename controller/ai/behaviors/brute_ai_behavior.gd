@@ -7,7 +7,7 @@ class_name BruteAIBehavior extends AIBehavior
 @export_range(0.0, 60.0, 1.0) var aim_deviation_degrees: float = 15.0
 
 @export_group("Config")
-@export_flags("Gravity", "Wind") var forces_mask: int = Forces.Gravity
+@export_flags("Gravity", "Wind") var forces_mask: int = Forces.All
 
 func _ready() -> void:
 	pass
@@ -57,11 +57,14 @@ func _select_best_opponent() -> Dictionary:
 	var closest_direct_angle:float = 0.0
 	
 	# TODO: May need to take into account weapon modifiers for launch speed but right now launch speed == power
-	var launch_speed: float = tank.max_power
+	var launch_props = AIBehavior.LaunchProperties.new()
+	launch_props.speed = tank.max_power
+	# TODO: if we change the mass of the projectiles will need to figure out how to read that here which would require selecting a weapon first
+	launch_props.mass = 1.0
 
 	# If there is no direct shot opponent, then we will just return the closest opponent
 	for opponent in opponents:
-		var result: Dictionary = has_direct_shot_to(opponent, launch_speed, forces_mask)
+		var result: Dictionary = has_direct_shot_to(opponent, launch_props, forces_mask)
 
 		var distance: float = tank.global_position.distance_squared_to(opponent.tank.global_position)
 
@@ -77,7 +80,7 @@ func _select_best_opponent() -> Dictionary:
 	if closest_direct_opponent:
 		return { opponent = closest_direct_opponent, angle = closest_direct_angle }
 	else:
-		return { opponent = closest_opponent, angle = get_direct_aim_angle_to(closest_opponent, launch_speed) }
+		return { opponent = closest_opponent, angle = get_direct_aim_angle_to(closest_opponent, launch_props) }
 
 func _select_best_weapon(opponent: TankController) -> int:
 	# TODO: Favor powerful weapons for opponents further away or when it is next to other opponents

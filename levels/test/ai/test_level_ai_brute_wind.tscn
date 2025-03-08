@@ -1,13 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://wc7c6wxgdvy1"]
+[gd_scene load_steps=5 format=3 uid="uid://dyvsitpgxp67l"]
 
-[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_erkfw"]
-[ext_resource type="PackedScene" uid="uid://158k4fde7cpd" path="res://controller/ai/behaviors/brute_ai_behavior.tscn" id="3_0gf5d"]
-[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="3_3b267"]
-[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="4_shpuv"]
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_5qxa3"]
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_ea2dd"]
+[ext_resource type="PackedScene" uid="uid://158k4fde7cpd" path="res://controller/ai/behaviors/brute_ai_behavior.tscn" id="3_8vqet"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="4_0oqly"]
 
-[node name="TestLevelAIBrute" type="Node2D"]
+[node name="TestLevelAIBruteWind" type="Node2D"]
 
-[node name="GameLevel" parent="." instance=ExtResource("1_erkfw")]
+[node name="GameLevel" parent="." instance=ExtResource("1_5qxa3")]
 
 [node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk" index="0"]
 polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 459.375, -182.353, 609, -8, 937, -3, 945, 445, -103, 448)
@@ -18,7 +18,10 @@ polygon = PackedVector2Array(-104, -8, -10.1562, -16.1765, 158.594, 145.588, 229
 [node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk/Overlap" index="0"]
 polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 459.375, -182.353, 609, -8, 937, -3, 945, 445, -103, 448)
 
-[node name="Enemy1" parent="GameLevel" instance=ExtResource("3_3b267")]
+[node name="Wind" parent="GameLevel" index="5"]
+wind_min = 100
+
+[node name="Enemy1" parent="GameLevel" instance=ExtResource("2_ea2dd")]
 position = Vector2(494, 500)
 
 [node name="Tank" parent="GameLevel/Enemy1" index="0"]
@@ -27,10 +30,10 @@ color = Color(0.682353, 0.713726, 0.219608, 1)
 [node name="StateMachine" parent="GameLevel/Enemy1" index="1"]
 behavior_type = 1
 
-[node name="BruteAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_0gf5d")]
+[node name="BruteAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_8vqet")]
 aim_error_chance = 0.0
 
-[node name="Enemy2" parent="GameLevel" instance=ExtResource("3_3b267")]
+[node name="Enemy2" parent="GameLevel" instance=ExtResource("2_ea2dd")]
 position = Vector2(1100, 426)
 
 [node name="Tank" parent="GameLevel/Enemy2" index="0"]
@@ -39,10 +42,10 @@ color = Color(0.137255, 0.180392, 0.701961, 1)
 [node name="StateMachine" parent="GameLevel/Enemy2" index="1"]
 behavior_type = 1
 
-[node name="BruteAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_0gf5d")]
+[node name="BruteAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_8vqet")]
 aim_error_chance = 0.0
 
-[node name="Player" parent="GameLevel" instance=ExtResource("4_shpuv")]
+[node name="Player" parent="GameLevel" instance=ExtResource("4_0oqly")]
 position = Vector2(81, 418)
 
 [node name="Marker2D" type="Marker2D" parent="."]
