@@ -16,6 +16,7 @@ var parent_tank: Tank
 @export_group("Behavior")
 @export_range(-360,360,0.0001,"radians_as_degrees") var accuracy_angle_spread: float = 0.0 ## Radians.
 @export var fire_velocity: float = 100.0 ## Initial speed of the projectile.
+@export_range(0.01, 10.0, 0.01) var power_launch_speed_mult: float = 1.0 ## Tune the initial velocity given the power
 @export var fires_continuously: bool = false ## Continuous-fire weapons don't use fire rate.
 @export var use_fire_rate: bool = false ## Prevents shooting while cycling.
 @export var fire_rate: float = 4.0 ## Rate of fire per second. 4.0 would fire once every quarter-second.
@@ -105,12 +106,14 @@ func shoot(power:float = fire_velocity) -> void:
 	if not is_configured:
 		configure_barrels()
 		reload()
+	var scaled_speed := power * power_launch_speed_mult
+
 	if always_shoot_for_duration > 0.0:
-		shoot_for_duration(always_shoot_for_duration, power)
+		shoot_for_duration(always_shoot_for_duration, scaled_speed)
 	elif always_shoot_for_count > 1:
-		shoot_for_count(always_shoot_for_count, power)
+		shoot_for_count(always_shoot_for_count, scaled_speed)
 	else:
-		_shoot(power)
+		_shoot(scaled_speed)
 	
 func shoot_for_duration(duration:float = always_shoot_for_duration, power:float = fire_velocity) -> void:
 	if is_shooting: return
