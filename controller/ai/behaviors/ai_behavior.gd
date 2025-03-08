@@ -3,7 +3,16 @@ class_name AIBehavior extends Node
 class LaunchProperties:
 	var speed: float
 	var mass: float = 1.0
-	 
+
+class WeaponInfo:
+	var weapon: Weapon
+	var projectile_prototype: WeaponProjectile
+	
+	func delete() -> void:
+		if projectile_prototype:
+			projectile_prototype.queue_free()
+			projectile_prototype = null
+
 var tank: Tank
 
 func _ready() -> void:
@@ -119,7 +128,7 @@ func has_direct_shot_to(opponent : TankController, launch_props: LaunchPropertie
 	
 	if has_los:
 		print_debug("%s: LOS to opponent=%s -> TRUE; tested_positions=%d"
-		 % [tank.owner.name, opponent.name, str(has_los), str(viable_positions.size())])
+		 % [tank.owner.name, opponent.name, viable_positions.size()])
 		return { test = true, position = aim_position, aim_angle = aim_angle }
 		
 	print_debug("%s: LOS to opponent=%s -> FALSE -> %s; tested_positions=%d" 
@@ -186,3 +195,24 @@ func _get_wind_force() -> Vector2:
 	return wind.force if wind else Vector2.ZERO
 #endregion
 	
+#region Weapons
+func get_weapon_infos() -> Array[WeaponInfo]:
+	var weapon_infos: Array[WeaponInfo] = []
+	
+	for weapon in tank.weapons:
+		var weapon_info: WeaponInfo = WeaponInfo.new()
+		weapon_info.weapon = weapon
+		
+		var scene_to_spawn: PackedScene = weapon.scene_to_spawn
+		if scene_to_spawn and scene_to_spawn.can_instantiate():
+			weapon_info.projectile_prototype = scene_to_spawn.instantiate() as WeaponProjectile
+			
+		weapon_infos.push_back(weapon_info)
+		
+	return weapon_infos
+	
+func delete_weapon_infos(weapon_infos: Array[WeaponInfo]) -> void:
+	for info in weapon_infos:
+		info.delete()
+	weapon_infos.clear()
+#endregion

@@ -16,8 +16,10 @@ func _ready() -> void:
 func execute(_tank: Tank) -> AIState:
 	super.execute(_tank)
 	
+	var weapon_infos := get_weapon_infos()
+	
 	var best_opponent_data: Dictionary = _select_best_opponent()
-	var best_weapon: int = _select_best_weapon(best_opponent_data.opponent)
+	var best_weapon: int = _select_best_weapon(best_opponent_data.opponent, weapon_infos)
 
 	var perfect_shot_angle: float = best_opponent_data.angle
 	var angle_deviation: float = 0.0 if randf() > aim_error_chance else perfect_shot_angle + randf_range(-aim_deviation_degrees, aim_deviation_degrees)
@@ -27,6 +29,8 @@ func execute(_tank: Tank) -> AIState:
 	print_debug("Brute AI(%s): best_opponent=%s; best_weapon=%d; perfect_shot_angle=%f; angle_deviation=%f" 
 		% [tank.name, best_opponent_data.opponent.name, best_weapon, perfect_shot_angle, angle_deviation])
 
+	delete_weapon_infos(weapon_infos)
+	
 	return TargetActionState.new(best_opponent_data.opponent, best_weapon, angle)
 	
 class TargetActionState extends AIState:
@@ -82,7 +86,7 @@ func _select_best_opponent() -> Dictionary:
 	else:
 		return { opponent = closest_opponent, angle = get_direct_aim_angle_to(closest_opponent, launch_props) }
 
-func _select_best_weapon(opponent: TankController) -> int:
+func _select_best_weapon(opponent: TankController, weapon_infos: Array[AIBehavior.WeaponInfo]) -> int:
 	# TODO: Favor powerful weapons for opponents further away or when it is next to other opponents
 	# Consider self splash damage if opponent too close
 	# Use a scoring system (utility AI) to determine best weapon
@@ -91,4 +95,6 @@ func _select_best_weapon(opponent: TankController) -> int:
 	# There is an opponent right next to us but we don't want to shoot them as we expect to do more total damage
 	# and threat of close opponent does not outweight that
 	# Variables to take into account: distance to target, threat of target, weapon self damage, total expected damage
+
+	# Select most powerful weapon that won't cause self-damage which can be checked with projectile_prototype.max_falloff_distance
 	return randi_range(0, tank.weapons.size() - 1)
