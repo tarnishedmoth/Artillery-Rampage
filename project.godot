@@ -24,6 +24,7 @@ RuntimeDebugTools="*res://addons/runtime_debug_tools/scenes/remote_inspector.tsc
 Collisions="*res://utils/collisions.gd"
 Groups="*res://utils/groups.gd"
 SceneManager="*res://utils/scene_manager.tscn"
+PhysicsUtils="*res://utils/physics_utils.gd"
 
 [display]
 

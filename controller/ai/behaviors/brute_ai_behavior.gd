@@ -20,12 +20,13 @@ func execute(_tank: Tank) -> AIState:
 	var best_weapon: int = _select_best_weapon(best_opponent_data.opponent)
 
 	var perfect_shot_angle: float = best_opponent_data.angle
-	var angle_deviation: float = 0 if randf() > aim_error_chance else perfect_shot_angle + randf_range(-aim_deviation_degrees, aim_deviation_degrees)
+	var angle_deviation: float = 0.0 if randf() > aim_error_chance else perfect_shot_angle + randf_range(-aim_deviation_degrees, aim_deviation_degrees)
 	
 	var angle := clampf(perfect_shot_angle + angle_deviation, _tank.min_angle, _tank.max_angle)
 	
 	print_debug("Brute AI(%s): best_opponent=%s; best_weapon=%d; perfect_shot_angle=%f; angle_deviation=%f" 
 		% [tank.name, best_opponent_data.opponent.name, best_weapon, perfect_shot_angle, angle_deviation])
+
 	return TargetActionState.new(best_opponent_data.opponent, best_weapon, angle)
 	
 class TargetActionState extends AIState:
@@ -54,10 +55,13 @@ func _select_best_opponent() -> Dictionary:
 	var closest_direct_shot_distance: float = 1e9
 	var closest_distance:float = 1e9
 	var closest_direct_angle:float = 0.0
+	
+	# TODO: May need to take into account weapon modifiers for launch speed but right now launch speed == power
+	var launch_speed: float = tank.max_power
 
 	# If there is no direct shot opponent, then we will just return the closest opponent
 	for opponent in opponents:
-		var result: Dictionary = has_direct_shot_to(opponent, forces_mask)
+		var result: Dictionary = has_direct_shot_to(opponent, launch_speed, forces_mask)
 
 		var distance: float = tank.global_position.distance_squared_to(opponent.tank.global_position)
 
@@ -73,7 +77,7 @@ func _select_best_opponent() -> Dictionary:
 	if closest_direct_opponent:
 		return { opponent = closest_direct_opponent, angle = closest_direct_angle }
 	else:
-		return { opponent = closest_opponent, angle = get_direct_aim_angle_to(closest_opponent) }
+		return { opponent = closest_opponent, angle = get_direct_aim_angle_to(closest_opponent, launch_speed) }
 
 func _select_best_weapon(opponent: TankController) -> int:
 	# TODO: Favor powerful weapons for opponents further away or when it is next to other opponents

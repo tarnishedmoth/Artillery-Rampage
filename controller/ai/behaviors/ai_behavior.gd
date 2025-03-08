@@ -38,24 +38,28 @@ func has_line_of_sight_to(start_pos: Vector2, end_pos: Vector2) -> Dictionary:
 
 	return { test = false, position = result.position }
 
-func get_direct_aim_angle_to(opponent: TankController, forces: int = 0) -> float:
+func get_direct_aim_angle_to(opponent: TankController, launch_speed: float, forces: int = 0) -> float:
 	var turret_position: Vector2 = tank.turret.global_position
-	# Needs to be relative to turret neutral position which is up
-	var up_vector: Vector2 = Vector2.UP.rotated(tank.tankBody.global_rotation)
-
 	# By default aim to the center of the opponent
 	var opponent_position: Vector2 = opponent.tank.tankBody.global_position
 
 	var to_opponent: Vector2 = opponent_position - turret_position
-	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, forces)
-	var aim_pos: Vector2 = opponent_position + pos_offset
+	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, launch_speed, forces)
 	
-	var to_opponent_dir = turret_position.direction_to(aim_pos)
-	var angle := up_vector.angle_to(to_opponent)
+	var aim_pos: Vector2 = opponent_position + pos_offset
+
+	return _get_direct_aim_angle_to(turret_position, launch_speed, aim_pos)
+
+func _get_direct_aim_angle_to(from_pos: Vector2, launch_speed: float, to_pos: Vector2) -> float:
+	# Needs to be relative to turret neutral position which is up
+	var up_vector: Vector2 = Vector2.UP.rotated(tank.tankBody.global_rotation)
+	
+	var dir := from_pos.direction_to(to_pos)
+	var angle := up_vector.angle_to(dir)
 
 	return clampf(rad_to_deg(angle), tank.min_angle, tank.max_angle)
-
-func has_direct_shot_to(opponent : TankController, forces: int = 0) -> Dictionary:
+	
+func has_direct_shot_to(opponent : TankController, launch_speed: float, forces: int = 0) -> Dictionary:
 	# Test from barrel to test points on artillery
 	var turret_position: Vector2 = tank.turret.global_position
 	var opponent_position:Vector2 = opponent.tank.tankBody.global_position
@@ -66,7 +70,7 @@ func has_direct_shot_to(opponent : TankController, forces: int = 0) -> Dictionar
 	var test_positions: PackedVector2Array = opponent_tank.get_body_reference_points_global()
 
 	var to_opponent: Vector2 = opponent_position - turret_position
-	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, forces)
+	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, launch_speed, forces)
 
 	print_debug("%s: LOS opponent=%s; calculated pos_offset=%s -> %f"  % [tank.owner.name, opponent.name, pos_offset, pos_offset.length()])
 
@@ -126,27 +130,48 @@ class Forces:
 	
 	const All: int = Gravity | Wind
 	
-func _get_active_forces_offset(aim_trajectory: Vector2, forces: int) -> Vector2:
+func _get_active_forces_offset(aim_trajectory: Vector2, launch_speed: float, forces: int) -> Vector2:
 	var total_offset: Vector2 = Vector2.ZERO
 	
 	if forces & Forces.Gravity:
-		total_offset += _get_gravity_offset(aim_trajectory)
+		total_offset += _get_gravity_offset(aim_trajectory, launch_speed)
 	if forces & Forces.Wind:
-		total_offset += _get_wind_offset(aim_trajectory)
+		total_offset += _get_wind_offset(aim_trajectory, launch_speed)
 	
 	return total_offset
 	
-func _get_gravity_offset(aim_trajectory: Vector2) -> Vector2:
+func _get_gravity_offset(aim_trajectory: Vector2, launch_speed: float) -> Vector2:
+	if is_zero_approx(launch_speed):
+		return Vector2.ZERO
+		
 	# TODO: Determine how best to read this - maybe its a setting passed down from the game level?
 	# Power value chosen will also influence the gravity effect
 	# Gravity acceleration is based on project settings DefaultGravity multiplied by GravityScale from WeaponProjectile clsas
 	# Need fire_velocity from weapon to be able to calculate the offset
 	# Right now just apply a multiplier based on the delta y
 	# We need to consider the projectile motion physics and the kinematic equations
-	return Vector2(0.0, aim_trajectory.y * absf(aim_trajectory.x) * 0.002 )
+	# TODO: This may be affected by the wind though we are calculating that contribution separately
+	
+	var launch_angle: float = absf(aim_trajectory.angle())
+	var vx: float = launch_speed * cos(launch_angle)
+	if is_zero_approx(vx):
+		return Vector2.ZERO
+		
+	var vy: float = launch_speed * sin(launch_angle)
+	# Calculate time from horizontal component
+	# x = v*cos(a)  * t
+	var flight_time: float =  aim_trajectory.x / vx
+	
+	# dy = 1/2 * a * t^2 + voy * t
+	var delta_y : float = 0.5 * PhysicsUtils.get_gravity_vector().y * flight_time * flight_time + vy * flight_time
+	
+	# Negate aim_trajectory_y since y coords inverted meaning bigger y is down
+	var additional_y: float = -delta_y - aim_trajectory.y
+	return Vector2(0.0, additional_y)
 
-func _get_wind_offset(aim_trajectory: Vector2) -> Vector2:
+func _get_wind_offset(aim_trajectory: Vector2, launch_speed: float) -> Vector2:
 	# TODO: Compensate for Wind which is always horizontal
+	# For this one we will use F = m * a but need the mass of the projectile and then can use x 
 	return Vector2()
 	
 #endregion
