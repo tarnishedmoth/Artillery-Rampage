@@ -1,4 +1,4 @@
-class_name BruteAIBehavior extends AIBehavior
+class_name LobberAIBehavior extends AIBehavior
 
 @export_group("Config")
 @export_range(0.0, 1.0, 0.01) var aim_error_chance: float = 0.0
@@ -7,10 +7,20 @@ class_name BruteAIBehavior extends AIBehavior
 @export_range(0.0, 60.0, 1.0) var aim_deviation_degrees: float = 15.0
 
 @export_group("Config")
+@export_range(0.0, 1.0, 0.05) var aim_power_pct: float = 0.2
+
+@export_group("Config")
+@export_range(0.0, 1.0, 0.05) var min_power_pct: float = 0.1
+
+@export_group("Config")
+@export_range(0.0, 1.0, 0.05) var angles: Array[float] = [80.0, 75.0, 70.0, 65.0, 60.0, 55.0, 50.0, 45.0]
+
+@export_group("Config")
 @export_flags("Gravity", "Wind") var forces_mask: int = Forces.All
 
+func _ready() -> void:
+	pass
 
-# TODO: Maybe don't need the tank parameter
 func execute(_tank: Tank) -> AIState:
 	super.execute(_tank)
 	
@@ -22,28 +32,34 @@ func execute(_tank: Tank) -> AIState:
 	var perfect_shot_angle: float = best_opponent_data.angle
 	var angle_deviation: float = 0.0 if randf() > aim_error_chance else perfect_shot_angle + randf_range(-aim_deviation_degrees, aim_deviation_degrees)
 	
+	var perfect_shot_power: float = best_opponent_data.power
+	var power_deviation: float = 0.0 if randf() > aim_error_chance else perfect_shot_power + randf_range(-aim_power_pct, aim_power_pct)
+
 	var angle := clampf(perfect_shot_angle + angle_deviation, _tank.min_angle, _tank.max_angle)
+	var power := clampf(perfect_shot_power + power_deviation, tank.max_power * min_power_pct, _tank.max_power)
 	
-	print_debug("Brute AI(%s): best_opponent=%s; best_weapon=%d; perfect_shot_angle=%f; angle_deviation=%f" 
-		% [tank.name, best_opponent_data.opponent.name, best_weapon, perfect_shot_angle, angle_deviation])
+	print_debug("Brute AI(%s): best_opponent=%s; best_weapon=%d; perfect_shot_angle=%f; angle_deviation=%f; perfect_shot_power=%f; power_deviation=%f"
+		% [tank.name, best_opponent_data.opponent.name, best_weapon, perfect_shot_angle, angle_deviation, perfect_shot_power, power_deviation])
 
 	delete_weapon_infos(weapon_infos)
 	
-	return TargetActionState.new(best_opponent_data.opponent, best_weapon, angle)
-	
+	return TargetActionState.new(best_opponent_data.opponent, best_weapon, power, angle)
+
 class TargetActionState extends AIState:
 	var _opponent: TankController
 	var _weapon:int 
+	var _power:float
 	var _angle:float
 
-	func _init(opponent: TankController, weapon: int, angle: float):
+	func _init(opponent: TankController, weapon: int, power:float,  angle: float):
 		self._opponent = opponent
 		self._weapon = weapon
+		self._power = power
 		self._angle = angle
 
 	func execute(tank: Tank) -> TankActionResult:
 		return TankActionResult.new(
-			 tank.max_power,
+			 _power,
 			 _angle,
 			 _weapon
 		)
@@ -56,47 +72,60 @@ func _select_best_opponent() -> Dictionary:
 
 	var closest_direct_shot_distance: float = 1e9
 	var closest_distance:float = 1e9
-	var closest_direct_angle:float = 0.0
+	var closest_targeting_values: Dictionary = {}
 	
 	# TODO: May need to take into account weapon modifiers for launch speed but right now launch speed == power
 	var launch_props = AIBehavior.LaunchProperties.new()
 	launch_props.power_speed_mult = 1.0
-	launch_props.speed = tank.max_power
 	# TODO: if we change the mass of the projectiles will need to figure out how to read that here which would require selecting a weapon first
 	launch_props.mass = 1.0
 
 	# If there is no direct shot opponent, then we will just return the closest opponent
 	for opponent in opponents:
-		var result: Dictionary = has_direct_shot_to(opponent, launch_props, forces_mask)
-
 		var distance: float = tank.global_position.distance_squared_to(opponent.tank.global_position)
 
 		if distance < closest_distance:
 			closest_distance = distance
 			closest_opponent = opponent
 
-		if result.test and distance < closest_direct_shot_distance:
+		var targeting_values: Dictionary = _get_power_and_angle_to_opponent(opponent, launch_props)
+		if targeting_values and distance < closest_direct_shot_distance:
 			closest_direct_shot_distance = distance
 			closest_direct_opponent = opponent
-			closest_direct_angle = result.aim_angle
+			closest_targeting_values = targeting_values
 	
 	if closest_direct_opponent:
-		return { opponent = closest_direct_opponent, angle = closest_direct_angle }
+		var transformed_angle = global_angle_to_turret_angle(closest_targeting_values.angle)
+		var angle: float = transformed_angle if closest_direct_opponent.tank.global_position.x >= tank.global_position.x else -transformed_angle
+
+		return { opponent = closest_direct_opponent, angle = angle, power = closest_targeting_values.power }
 
 	# Need to determine where we will hit with the fallback approach as this needs to be taken into account with weapon selection
 	else:
-		var angle : float = get_direct_aim_angle_to(closest_opponent, launch_props)
+		var transformed_angle = global_angle_to_turret_angle(angles.min())
+
+		var angle: float = transformed_angle if closest_opponent.tank.global_position.x >= tank.global_position.x else -transformed_angle
 		var dir: Vector2 = aim_angle_to_world_direction(angle)
 		# Determine point we hit in that direction
 		var ray_cast_result: Dictionary = check_world_collision(tank.turret.global_position, tank.turret.global_position + dir * 10000.0)
 
-		var result : Dictionary =  { opponent = closest_opponent, angle = angle }
+		var result : Dictionary =  { opponent = closest_opponent, angle = angle, power = tank.max_power }
 
 		if ray_cast_result:
 			result.hit_position = ray_cast_result.position
 
 		return result
 
+func _get_power_and_angle_to_opponent(opponent: TankController, launch_props: AIBehavior.LaunchProperties) -> Dictionary:
+	var target: Vector2 = opponent.tank.global_position
+
+	for angle in angles:
+		var power := get_power_for_target_and_angle(target, angle, launch_props, forces_mask)
+		if power > 0.0:
+			return { angle = angle, power = power }
+	return {}
+
+# TODO: Copying initially from brute_ai - if this is what we want to do for most AI we can push up to base class
 func _select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavior.WeaponInfo]) -> int:
 	
 	# If only have one weapon then immediately return
@@ -115,7 +144,6 @@ func _select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavi
 		target_distance = tank.global_position.distance_to(opponent_data.hit_position)
 	else:
 		target_distance = tank.global_position.distance_to(opponent_data.opponent.tank.global_position)
-
 
 	# Select most powerful available weapon that won't cause self-damage
 	var best_weapon:int = -1

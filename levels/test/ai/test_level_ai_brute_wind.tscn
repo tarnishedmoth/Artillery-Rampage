@@ -19,7 +19,8 @@ polygon = PackedVector2Array(-104, -8, -10.1562, -16.1765, 158.594, 145.588, 229
 polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 459.375, -182.353, 609, -8, 937, -3, 945, 445, -103, 448)
 
 [node name="Wind" parent="GameLevel" index="5"]
-wind_min = 100
+wind_min = 25
+wind_max = 25
 
 [node name="Enemy1" parent="GameLevel" instance=ExtResource("2_ea2dd")]
 position = Vector2(494, 500)

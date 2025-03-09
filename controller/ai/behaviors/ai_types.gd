@@ -6,11 +6,13 @@ var _ai_behaviors: Dictionary = {}
 # If defaults should be configurable then wrap in a scene
 const RandoAiBehavior = preload("res://controller/ai/behaviors/rando_ai_behavior.gd")
 const BruteAiBehavior = preload("res://controller/ai/behaviors/brute_ai_behavior.tscn")
+const LobberAibehavior = preload("res://controller/ai/behaviors/lobber_ai_behavior.tscn")
 
 func _ready():
 	# Add the behavior type mappings to the dictionary
 	_ai_behaviors[Enums.AIType.Rando] = RandoAiBehavior
 	_ai_behaviors[Enums.AIType.Brute] = BruteAiBehavior
+	_ai_behaviors[Enums.AIType.Lobber] = LobberAibehavior
 	
 func new_ai_behavior(type: Enums.AIType) -> AIBehavior:
 	var behavior = _ai_behaviors.get(type)

@@ -2,6 +2,7 @@ class_name AIBehavior extends Node
 
 class LaunchProperties:
 	var speed: float
+	var power_speed_mult: float = 1.0
 	var mass: float = 1.0
 
 class WeaponInfo:
@@ -32,7 +33,49 @@ func get_opponents() -> Array[TankController]:
 		if controller != tank.owner:
 			opponents.push_back(controller)
 	return opponents
-		
+	
+#region Aim and LOS	
+
+func get_power_for_target_and_angle(target: Vector2, angle: float, launch_props: LaunchProperties, forces: int = 0) -> float:
+	# See https://en.wikipedia.org/wiki/Range_of_a_projectile
+	var turret_position: Vector2 = tank.turret.global_position
+
+	# Adjusting target for max power if wind should be taken into account
+	if forces & Forces.Wind:
+		var orig_launch_speed := launch_props.speed
+		launch_props.speed = tank.max_power * launch_props.power_speed_mult
+		target += _get_wind_offset(target - turret_position, launch_props)
+		launch_props.speed = orig_launch_speed
+
+	# Wolfram Alpha: Solve d = v * cos(theta) / g * (v * sin(theta) + sqrt(v ^ 2 * sin(theta)^2 + 2 * g * y)) for v
+	# v = d * sqrt(g) / (sqrt(2 * d * sin(theta) + 2 * y * cos(theta)) * sqrt(cos(theta))
+
+	# Y should be positive for targets below, since y increases going down this works out
+	var y: float = target.y - turret_position.y
+	var x: float = absf(target.x - turret_position.x)
+
+	var g : float = PhysicsUtils.get_gravity_vector().y
+
+	var sin_angle: float = sin(deg_to_rad(angle))
+	var cos_angle: float = cos(deg_to_rad(angle))
+
+	var sqrt_term: float = 2 * x * sin_angle + 2 * y * cos_angle
+	if sqrt_term <= 0:
+		print_debug("%s: Unreachable target=%s; angle=%f" % [tank.owner.name, target, angle])
+		return -1
+
+	var speed: float = x * sqrt(g) / (sqrt(sqrt_term) * sqrt(cos_angle))
+
+	# If speed is greater than max power then angle is not viable
+	var target_power = speed / launch_props.power_speed_mult
+
+	print_debug("%s: target=%s; angle=%f; required power=%f - %s" % [tank.owner.name, target, angle, target_power, str(target_power <= tank.max_power)])
+
+	if target_power > tank.max_power:
+		return -1
+
+	return target_power
+
 func has_line_of_sight_to(start_pos: Vector2, end_pos: Vector2) -> Dictionary:
 	var result: Dictionary = check_world_collision(start_pos, end_pos)
 
@@ -55,6 +98,7 @@ func check_world_collision(start_pos: Vector2, end_pos: Vector2) -> Dictionary:
 	var result: Dictionary = space_state.intersect_ray(query_params)
 
 	return result
+
 func get_direct_aim_angle_to(opponent: TankController, launch_props: LaunchProperties, forces: int = 0) -> float:
 	var turret_position: Vector2 = tank.turret.global_position
 	# By default aim to the center of the opponent
@@ -81,6 +125,9 @@ func aim_angle_to_world_direction(angle: float) -> Vector2:
 	var world_angle: float = turret_angle + rad_to_deg(angle)
 	
 	return Vector2.UP.rotated(rad_to_deg(world_angle))
+
+func global_angle_to_turret_angle(global_angle: float) -> float:
+	return 90 - global_angle
 
 func has_direct_shot_to(opponent : TankController, launch_props: LaunchProperties, forces: int = 0) -> Dictionary:
 	# Test from barrel to test points on artillery
@@ -146,6 +193,8 @@ func has_direct_shot_to(opponent : TankController, launch_props: LaunchPropertie
 	
 	return { test = false, position = max_position }
 
+#endregion
+
 #region Forces
 class Forces:
 	const Gravity:int = 1
@@ -175,9 +224,9 @@ func _get_wind_offset(aim_trajectory: Vector2, launch_props: LaunchProperties) -
 		return Vector2.ZERO
 		
 	# F = m * a
-	var wind_accel : Vector2 = wind_force / launch_props.mass / 100
-	# Negate to compensate for the wind
-	return _get_force_accel_offset(aim_trajectory, launch_props.speed, -wind_accel)
+	var wind_accel : Vector2 = _get_wind_accel(wind_force, launch_props)
+
+	return _get_force_accel_offset(aim_trajectory, launch_props.speed, wind_accel)
 	
 func _get_force_accel_offset(aim_trajectory: Vector2, launch_speed: float, acceleration: Vector2) -> Vector2:
 	if is_zero_approx(launch_speed):
@@ -203,6 +252,11 @@ func _get_force_accel_offset(aim_trajectory: Vector2, launch_speed: float, accel
 func _get_wind_force() -> Vector2:
 	var wind: Wind = game_level.wind
 	return wind.force if wind else Vector2.ZERO
+
+func _get_wind_accel(wind_force: Vector2, launch_props: LaunchProperties) -> Vector2:
+	# F = m * a
+	var wind_accel : Vector2 = wind_force / launch_props.mass / 100
+	return wind_accel
 #endregion
 	
 #region Weapons
