@@ -119,7 +119,7 @@ func _randomize_damage_polygon(projectile_damage_global: PackedVector2Array, pol
 			break
 		else:
 			scale_value -= scale_decrements
-			print_debug("%s: Created non-viable damage result with damage polygon of size %d, trying again and reducing scale to %f" % [name, projectile_damage_test_polygon.size(), scale])
+			print_debug("%s: Created non-viable damage result with damage polygon of size %d, trying again and reducing scale to %f" % [name, projectile_damage_test_polygon.size(), scale_value])
 
 	if success:
 		# copy the test polygon changes over to the original
