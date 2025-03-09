@@ -90,6 +90,7 @@ func on_body_entered(_body: Node2D):
 		if root_node:
 			if root_node in processed_set:
 				continue
+			center_destructible_on_impact_point($Destructible)
 			root_node.damage($Destructible, destructible_scale_multiplier)
 			had_interaction = true
 		processed_set[root_node] = root_node
@@ -100,6 +101,19 @@ func on_body_entered(_body: Node2D):
 	if had_interaction:
 		destroy()
 		
+func center_destructible_on_impact_point(destructible: CollisionPolygon2D) -> void:
+	var destructible_polygon: PackedVector2Array = destructible.polygon
+	# Get velocity vector direction to determine translation direction
+	var movement_dir : Vector2 = linear_velocity.normalized()
+	var circle : Circle = Circle.create_from_points(destructible_polygon)
+	
+	var contact_point: Vector2 = _determine_contact_point(movement_dir, circle.radius)
+	
+	var translation_radius: float = circle.radius * destructible_scale_multiplier.length()
+	var translation: Vector2 = contact_point - global_position + translation_radius * movement_dir
+	
+	for i in range(destructible_polygon.size()):
+		destructible_polygon[i] += translation
 
 func get_parent_in_group(node: Node, group: String) -> Node:
 	if node.is_in_group(group):
@@ -128,7 +142,24 @@ func spawn_explosion(scene:PackedScene) -> void:
 		instance = scene.instantiate()
 		instance.global_position = global_position
 		firing_container.add_child(instance)
+
+func _determine_contact_point(movement_dir: Vector2, radius: float) -> Vector2:
+	var space_state = get_world_2d().direct_space_state
+
+	var extent: Vector2 = movement_dir * radius * 2.0
+
+	var query_params := PhysicsRayQueryParameters2D.create(
+		global_position - extent, global_position + extent,
+		 Collisions.CompositeMasks.damageable)
+		
+	query_params.exclude = [self]
 	
+	var result: Dictionary = space_state.intersect_ray(query_params)
+	if !result:
+		push_warning("WeaponProjectile(%s): No contact point found for projectile - returning default position=%s" % [name, global_position])
+		return global_position
+	return result["position"]
+
 func _find_interaction_overlaps() -> Array[Node2D]:
 	var space_state = get_world_2d().direct_space_state
 	
