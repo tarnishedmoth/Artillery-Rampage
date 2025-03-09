@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="3_cux4m"]
 [ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="4_yj63s"]
 [ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="5_3ktnp"]
-[ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="6_btvt0"]
+[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="6_5mc2f"]
 
 [node name="TestLevelProcGen" type="Node2D"]
 
@@ -21,7 +21,7 @@ additional_vertices = 100
 visible = false
 
 [node name="ArtillerySpawner" parent="GameLevel" index="7"]
-artillery_ai_types = Array[PackedScene]([ExtResource("3_cux4m"), ExtResource("4_yj63s"), ExtResource("5_3ktnp"), ExtResource("6_btvt0")])
+artillery_ai_types = Array[PackedScene]([ExtResource("3_cux4m"), ExtResource("4_yj63s"), ExtResource("5_3ktnp"), ExtResource("6_5mc2f")])
 default_ai_players = Vector2i(1, 4)
 default_human_players = Vector2i(1, 1)
 

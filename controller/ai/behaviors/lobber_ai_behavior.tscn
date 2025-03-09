@@ -4,4 +4,4 @@
 
 [node name="LobberAiBehavior" type="Node"]
 script = ExtResource("1_v83to")
-aim_error_chance = 0.5
+aim_error_chance = 0.25
