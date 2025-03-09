@@ -24,3 +24,7 @@ func pauseMenu():
 func _on_button_pressed():
 	if paused:
 		pauseMenu()
+
+
+func _on_main_menu_pressed() -> void:
+	get_tree().change_scene_to_file("res://levels/main_menu.tscn")
