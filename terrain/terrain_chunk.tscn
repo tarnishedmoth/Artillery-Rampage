@@ -12,7 +12,6 @@ visible = false
 polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 390, -447, 609, -8, 937, -3, 945, 445, -103, 448)
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
-color = Color(0, 0.368627, 0, 1)
 polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 390, -447, 609, -8, 937, -3, 945, 445, -103, 448)
 
 [node name="Overlap" type="Area2D" parent="."]
