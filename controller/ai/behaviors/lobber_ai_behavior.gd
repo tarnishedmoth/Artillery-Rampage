@@ -18,8 +18,23 @@ class_name LobberAIBehavior extends AIBehavior
 @export_group("Config")
 @export_flags("Gravity", "Wind") var forces_mask: int = Forces.All
 
+class OpponentTargetHistory:
+	var opponent: TankController
+	var hit_location: Vector2 = Vector2.ZERO
+	var hit_count: int # For multi-shot
+	var power: float
+	var max_power: float
+	var angle: float
+
+# Dictionary of opponent to Array[OpponentTargetHistory]
+var _opponent_target_history: Dictionary = {}
+var last_opponent_history_entry: OpponentTargetHistory
+
 func _ready() -> void:
-	pass
+	super._ready()
+
+	# Listen to track opponent targeting feedback
+	GameEvents.projectile_fired.connect(_on_projectile_fired)
 
 func execute(_tank: Tank) -> AIState:
 	super.execute(_tank)
@@ -27,6 +42,8 @@ func execute(_tank: Tank) -> AIState:
 	var weapon_infos := get_weapon_infos()
 	
 	var best_opponent_data: Dictionary = _select_best_opponent()
+	_add_opponent_target_entry(best_opponent_data)
+
 	var best_weapon: int = _select_best_weapon(best_opponent_data, weapon_infos)
 
 	var perfect_shot_angle: float = best_opponent_data.angle
@@ -98,7 +115,7 @@ func _select_best_opponent() -> Dictionary:
 		var transformed_angle = global_angle_to_turret_angle(closest_targeting_values.angle)
 		var angle: float = transformed_angle if closest_direct_opponent.tank.global_position.x >= tank.global_position.x else -transformed_angle
 
-		return { opponent = closest_direct_opponent, angle = angle, power = closest_targeting_values.power }
+		return { direct = true, opponent = closest_direct_opponent, angle = angle, power = closest_targeting_values.power }
 
 	# Need to determine where we will hit with the fallback approach as this needs to be taken into account with weapon selection
 	else:
@@ -109,7 +126,7 @@ func _select_best_opponent() -> Dictionary:
 		# Determine point we hit in that direction
 		var ray_cast_result: Dictionary = check_world_collision(tank.turret.global_position, tank.turret.global_position + dir * 10000.0)
 
-		var result : Dictionary =  { opponent = closest_opponent, angle = angle, power = tank.max_power }
+		var result : Dictionary =  { direct = false, opponent = closest_opponent, angle = angle, power = tank.max_power }
 
 		if ray_cast_result:
 			result.hit_position = ray_cast_result.position
@@ -169,3 +186,50 @@ func _select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavi
 	print_debug("BruteAI(%s): Could not find viable weapon - falling back to random selection out of %d candidates" % [tank.name, tank.weapons.size()])
 
 	return randi_range(0, tank.weapons.size() - 1)
+
+func _add_opponent_target_entry(opponent_data: Dictionary) -> void:
+	# Even blind shots may provide useful data for power and angle feedback
+	# if !opponent_data.direct:
+	# 	return
+	
+	var opponent: TankController = opponent_data.opponent
+	var power: float = opponent_data.power
+	var max_power: float = tank.max_power
+	var angle: float = opponent_data.angle
+
+	var opponent_target_history = _opponent_target_history.get(opponent)
+	if !opponent_target_history:
+		opponent_target_history = []
+		_opponent_target_history[opponent] = opponent_target_history
+
+	var target_data = OpponentTargetHistory.new()
+	target_data.opponent = opponent
+	target_data.power = power
+	target_data.angle = angle
+	target_data.max_power = max_power
+
+	last_opponent_history_entry = target_data
+
+	opponent_target_history.append(target_data)
+
+func _on_projectile_fired(projectile: WeaponProjectile) -> void:
+	if projectile.owner_tank != tank:
+		return
+	
+	print_debug("LobberAIBehavior(%s): Projectile Fired=%s" % [tank.name, projectile.name])
+
+	# Need to bind the extra projectile argument to connect
+	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind([projectile]))
+
+# Bind arguments are passed as an array
+func _on_projectile_destroyed(args: Array) -> void:
+	var projectile: WeaponProjectile = args[0]
+	print_debug("LobberAIBehavior(%s): Projectile Destroyed=%s" % [tank.name, projectile.name])
+
+	# TODO: May be an edge case where another projectile with a different target is fired before last one is destroyed?
+	if !last_opponent_history_entry:
+		push_warning("LobberAIBehavior(%s): No last opponent history entry" % [tank.name])
+		return
+
+	last_opponent_history_entry.hit_count += 1
+	last_opponent_history_entry.hit_location += projectile.global_position
