@@ -219,17 +219,14 @@ func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 	print_debug("LobberAIBehavior(%s): Projectile Fired=%s" % [tank.name, projectile.name])
 
 	# Need to bind the extra projectile argument to connect
-	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind([projectile]))
+	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind([projectile, last_opponent_history_entry]))
 
 # Bind arguments are passed as an array
 func _on_projectile_destroyed(args: Array) -> void:
 	var projectile: WeaponProjectile = args[0]
+	var opponent_history_entry: OpponentTargetHistory = args[1]
+
 	print_debug("LobberAIBehavior(%s): Projectile Destroyed=%s" % [tank.name, projectile.name])
 
-	# TODO: May be an edge case where another projectile with a different target is fired before last one is destroyed?
-	if !last_opponent_history_entry:
-		push_warning("LobberAIBehavior(%s): No last opponent history entry" % [tank.name])
-		return
-
-	last_opponent_history_entry.hit_count += 1
-	last_opponent_history_entry.hit_location += projectile.global_position
+	opponent_history_entry.hit_count += 1
+	opponent_history_entry.hit_location += projectile.global_position
