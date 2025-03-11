@@ -57,7 +57,6 @@ scale = Vector2(1.28, 0.68)
 unique_name_in_owner = true
 
 [node name="CollisionShape2D" parent="Walls/PlayableArea" index="0"]
-visible = false
 position = Vector2(636, 358)
 shape = SubResource("RectangleShape2D_60ghs")
 

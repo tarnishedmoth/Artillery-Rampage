@@ -29,7 +29,14 @@ func on_area_exited(area: Node2D):
 		
 #TODO: Implement Warp, elastic, accelerate, sticky, and none behaviors
 func check_projectile_wall_interaction(projectile: WeaponProjectile):
-	projectile_warp(projectile)
+	#projectile_warp(projectile)
+	projectile_elastic(projectile)
+	
+func projectile_elastic(projectile: WeaponProjectile):
+	var movement_dir : Vector2 = projectile.linear_velocity.normalized()
+	movement_dir.x = -movement_dir.x
+	projectile.linear_velocity = movement_dir
+
 	
 func projectile_warp(projectile: WeaponProjectile):
 	var pos = projectile.global_position
