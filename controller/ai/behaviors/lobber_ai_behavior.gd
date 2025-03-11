@@ -28,15 +28,15 @@ class_name LobberAIBehavior extends AIBehavior
 
 @export_group("Config")
 @export_category("Hone")
-@export_range(0.1, 1.0, 0.01) var power_dist_exp: float = 0.9
+@export_range(0.1, 1.0, 0.01) var power_dist_exp: float = 0.85
 
 @export_group("Config")
 @export_category("Hone")
-@export_range(0.0, 1e9, 1.0, "or_greater") var angle_per_dist: float = 45.0 / 1000.0
+@export_range(0.0, 1e9, 1.0, "or_greater") var angle_per_power: float = 35.0 / 250.0
 
 @export_group("Config")
 @export_category("Hone")
-@export_range(0.1, 1.0, 0.01) var angle_dist_exp: float = 0.75
+@export_range(0.1, 1.0, 0.01) var angle_power_exp: float = 0.8
 
 # TODO: May push this up to base class and have it toggleable on/off to be reusable for other AI types (except Rando one)
 class OpponentTargetHistory:
@@ -123,8 +123,9 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 	# Positive angles are CW which would point right in the direction of positive x 
 	var to_opp_aim:Vector2 = to_opp * signf(last_entry.angle) * signf(to_opp.x)
 	
-	var shot_deviation: Vector2 = last_entry.hit_location - last_entry.opp_position
-	var shot_deviation_dist : float = shot_deviation.length()
+	var last_avg_hit_location: Vector2 = last_entry.hit_location / last_entry.hit_count
+	var shot_deviation: Vector2 = last_avg_hit_location - last_entry.opp_position
+	var shot_deviation_dist : float = absf(shot_deviation.x)
 	
 	var is_long: bool = shot_deviation.dot(to_opp_aim) > 0.0
 	
@@ -139,18 +140,21 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 
 	var angle_change:int = 0
 	var angle_dev:float = 0.0
-
+	var power_wrap:float = 0.0
+	
 	if new_power > tank.max_power:
+		power_wrap = new_power - tank.max_power
 		new_power = tank.max_power
 		# Also decrease_angle
 		angle_change = -1
 	elif new_power < min_power:
+		power_wrap = min_power - new_power
 		new_power = min_power
 		# Also increase angle
 		angle_change = 1
 	
 	if angle_change:
-		angle_dev = angle_per_dist * pow(shot_deviation_dist, angle_dist_exp)
+		angle_dev = angle_per_power * pow(power_wrap, angle_power_exp)
 		if angle_change < 0:
 			angle_dev *= -1.0
 		var current_angle_sgn: float = signf(current_angle)
@@ -169,8 +173,8 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 	# TODO: The convenience function should handle the sign-ing for us
 	new_angle = global_angle_to_turret_angle(absf(new_angle)) * signf(new_angle)
 	
-	print_debug("Lobber AI(%s): Adjusting shot based on history - last_pos_delta=%f; orig_power=%f; new_power=%f; orig_angle=%f; new_angle=%f; last_opp_pos_delta=%f; shot_deviation=%s; is_long=%s; power_dev=%f; angle_change=%d; angle_dev=%f"
-		% [name, last_pos_delta, current_power, new_power, current_angle, new_angle, last_opp_pos_delta, shot_deviation, str(is_long), power_dev, angle_change, angle_dev])
+	print_debug("Lobber AI(%s): Adjusting shot based on history - orig_power=%f; new_power=%f; orig_angle=%f; new_angle=%f; shot_deviation=%s; is_long=%s; power_dev=%f; angle_change=%d; angle_dev=%f; power_wrap=%f"
+		% [name, current_power, new_power, last_entry.angle, new_angle, shot_deviation, str(is_long), power_dev, angle_change, angle_dev, power_wrap])
 
 	shot.power = new_power
 	shot.angle = new_angle
