@@ -60,17 +60,11 @@ func _ready() -> void:
 	# idea: we could load multiple textures!
 	# maybe texture chosen by chunk size (big=grass, small=blackened)
 	# maybe texture chosen by by altitude (rock->grass->mud->lava)
-	# nice simple green grass tile:
-	# var tex = load("res://terrain/terrain-green.png") 
-	#FIXME: this seems to only repeat a small portion of the texture!!!
-	var tex = load("res://terrain/terrain-grass-to-dirt.png")
-	terrainMesh.texture_repeat = TextureRepeat.TEXTURE_REPEAT_ENABLED
-	# terrainMesh.texture_repeat = TextureRepeat.TEXTURE_REPEAT_MIRROR
-	terrainMesh.set_texture_offset(Vector2(0,2000)) # ensure we never go past the top - NOPE: something is wrong here
+	var tex = load("res://terrain/terrain-strata.png")
 	terrainMesh.set_texture(tex)
-	
-	#FIXME: the terrain is tinted dark green somewhere and should be pure white tint so textures look the way they were designed
-
+	# terrainMesh.texture_repeat = TextureRepeat.TEXTURE_REPEAT_ENABLED
+	terrainMesh.texture_repeat = TextureRepeat.TEXTURE_REPEAT_MIRROR
+	terrainMesh.texture_offset = Vector2(0,400)
 	
 	print_poly("_ready", collisionMesh.polygon)
 	
