@@ -22,6 +22,10 @@ func _ready() -> void:
 var game_level: GameLevel:
 	get: return SceneManager.get_current_level_root()
 	
+
+var aim_fulcrum_position: Vector2:
+	get: return  tank.turret.global_position
+	
 func execute(tank: Tank) -> AIState:
 	self.tank = tank
 	return null
@@ -38,21 +42,21 @@ func get_opponents() -> Array[TankController]:
 
 func get_power_for_target_and_angle(target: Vector2, angle: float, launch_props: LaunchProperties, forces: int = 0) -> float:
 	# See https://en.wikipedia.org/wiki/Range_of_a_projectile
-	var turret_position: Vector2 = tank.turret.global_position
+	var source: Vector2 = aim_fulcrum_position
 
 	# Adjusting target for max power if wind should be taken into account
 	if forces & Forces.Wind:
 		var orig_launch_speed := launch_props.speed
 		launch_props.speed = tank.max_power * launch_props.power_speed_mult
-		target += _get_wind_offset(target - turret_position, launch_props)
+		target += _get_wind_offset(target - source, launch_props)
 		launch_props.speed = orig_launch_speed
 
 	# Wolfram Alpha: Solve d = v * cos(theta) / g * (v * sin(theta) + sqrt(v ^ 2 * sin(theta)^2 + 2 * g * y)) for v
 	# v = d * sqrt(g) / (sqrt(2 * d * sin(theta) + 2 * y * cos(theta)) * sqrt(cos(theta))
 
 	# Y should be positive for targets below, since y increases going down this works out
-	var y: float = target.y - turret_position.y
-	var x: float = absf(target.x - turret_position.x)
+	var y: float = target.y - source.y
+	var x: float = absf(target.x - source.x)
 
 	var g : float = PhysicsUtils.get_gravity_vector().y
 
@@ -99,17 +103,19 @@ func check_world_collision(start_pos: Vector2, end_pos: Vector2) -> Dictionary:
 
 	return result
 
+
 func get_direct_aim_angle_to(opponent: TankController, launch_props: LaunchProperties, forces: int = 0) -> float:
-	var turret_position: Vector2 = tank.turret.global_position
+	var aim_source_pos: Vector2 = aim_fulcrum_position
+
 	# By default aim to the center of the opponent
 	var opponent_position: Vector2 = opponent.tank.tankBody.global_position
 
-	var to_opponent: Vector2 = opponent_position - turret_position
+	var to_opponent: Vector2 = opponent_position - aim_source_pos
 	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, launch_props, forces)
 	
-	var aim_pos: Vector2 = opponent_position + pos_offset
+	var aim_target_pos: Vector2 = opponent_position + pos_offset
 
-	return _get_direct_aim_angle_to(turret_position, aim_pos)
+	return _get_direct_aim_angle_to(aim_source_pos, aim_target_pos)
 
 func _get_direct_aim_angle_to(from_pos: Vector2, to_pos: Vector2) -> float:
 	# Needs to be relative to turret neutral position which is up
@@ -128,10 +134,12 @@ func aim_angle_to_world_direction(angle: float) -> Vector2:
 
 func global_angle_to_turret_angle(global_angle: float) -> float:
 	return 90 - global_angle
+func turret_angle_to_global_angle(turret_angle: float) -> float:
+	return 90 - turret_angle
 
 func has_direct_shot_to(opponent : TankController, launch_props: LaunchProperties, forces: int = 0) -> Dictionary:
 	# Test from barrel to test points on artillery
-	var turret_position: Vector2 = tank.turret.global_position
+	var aim_source_position: Vector2 = aim_fulcrum_position
 	var opponent_position:Vector2 = opponent.tank.tankBody.global_position
 
 	var up_vector: Vector2 = Vector2.UP.rotated(tank.tankBody.global_rotation)
@@ -139,7 +147,7 @@ func has_direct_shot_to(opponent : TankController, launch_props: LaunchPropertie
 	var opponent_tank: Tank = opponent.tank
 	var test_positions: PackedVector2Array = opponent_tank.get_body_reference_points_global()
 
-	var to_opponent: Vector2 = opponent_position - turret_position
+	var to_opponent: Vector2 = opponent_position - aim_source_position
 	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, launch_props, forces)
 
 	print_debug("%s: LOS opponent=%s; calculated pos_offset=%s -> %f"  % [tank.owner.name, opponent.name, pos_offset, pos_offset.length()])
@@ -152,7 +160,7 @@ func has_direct_shot_to(opponent : TankController, launch_props: LaunchPropertie
 	var viable_angles : PackedFloat32Array = []
 
 	for position in test_positions:
-		var to_pos := turret_position.direction_to(position)
+		var to_pos := aim_source_position.direction_to(position)
 		var angle := rad_to_deg(up_vector.angle_to(to_pos))
 		
 		print_debug("%s: LOS opponent=%s; pos=%s; angle=%f"  % [tank.owner.name, opponent.name, position, angle])

@@ -18,8 +18,31 @@ class_name LobberAIBehavior extends AIBehavior
 @export_group("Config")
 @export_flags("Gravity", "Wind") var forces_mask: int = Forces.All
 
+@export_group("Config")
+@export_category("Hone")
+@export_range(0.0, 1e9, 1.0, "or_greater") var max_pos_delta_history_usage: float = 10.0
+
+@export_group("Config")
+@export_category("Hone")
+@export_range(0.0, 1e9, 1.0, "or_greater") var pow_per_dist: float = 3.0
+
+@export_group("Config")
+@export_category("Hone")
+@export_range(0.1, 1.0, 0.01) var power_dist_exp: float = 0.9
+
+@export_group("Config")
+@export_category("Hone")
+@export_range(0.0, 1e9, 1.0, "or_greater") var angle_per_dist: float = 45.0 / 1000.0
+
+@export_group("Config")
+@export_category("Hone")
+@export_range(0.1, 1.0, 0.01) var angle_dist_exp: float = 0.75
+
+# TODO: May push this up to base class and have it toggleable on/off to be reusable for other AI types (except Rando one)
 class OpponentTargetHistory:
 	var opponent: TankController
+	var my_position: Vector2
+	var opp_position: Vector2
 	var hit_location: Vector2 = Vector2.ZERO
 	var hit_count: int # For multi-shot
 	var power: float
@@ -42,7 +65,9 @@ func execute(_tank: Tank) -> AIState:
 	var weapon_infos := get_weapon_infos()
 	
 	var best_opponent_data: Dictionary = _select_best_opponent()
-	_add_opponent_target_entry(best_opponent_data)
+	_modify_shot_based_on_history(best_opponent_data)
+
+	last_opponent_history_entry = _add_opponent_target_entry(best_opponent_data)
 
 	var best_weapon: int = _select_best_weapon(best_opponent_data, weapon_infos)
 
@@ -55,13 +80,101 @@ func execute(_tank: Tank) -> AIState:
 	var angle := clampf(perfect_shot_angle + angle_deviation, _tank.min_angle, _tank.max_angle)
 	var power := clampf(perfect_shot_power + power_deviation, tank.max_power * min_power_pct, _tank.max_power)
 	
-	print_debug("Brute AI(%s): best_opponent=%s; best_weapon=%d; perfect_shot_angle=%f; angle_deviation=%f; perfect_shot_power=%f; power_deviation=%f"
-		% [tank.name, best_opponent_data.opponent.name, best_weapon, perfect_shot_angle, angle_deviation, perfect_shot_power, power_deviation])
+	print_debug("Lobber AI(%s): best_opponent=%s; best_weapon=%d; perfect_shot_angle=%f; angle_deviation=%f; perfect_shot_power=%f; power_deviation=%f"
+		% [name, best_opponent_data.opponent.name, best_weapon, perfect_shot_angle, angle_deviation, perfect_shot_power, power_deviation])
 
 	delete_weapon_infos(weapon_infos)
 	
 	return TargetActionState.new(best_opponent_data.opponent, best_weapon, power, angle)
 
+func _modify_shot_based_on_history(shot: Dictionary) -> void:
+	if !shot.direct:
+		print_debug("Lobber AI(%s): No direct shot to %s - Ignoring shot history" % [name, shot.opponent.name])
+		return
+	
+	var opponent = shot.opponent
+	var opponent_target_history = _opponent_target_history.get(opponent)
+	if !opponent_target_history:
+		print_debug("Lobber AI(%s): No direct shot - Ignoring shot history" % [name])
+		return
+
+	var my_pos:Vector2 = aim_fulcrum_position
+	var opp_pos:Vector2 = shot.opponent.tank.global_position
+
+	var to_opp:Vector2 = opp_pos - my_pos
+
+	# Compensate based on last shot but ignore if delta is too large
+	var last_entry: OpponentTargetHistory = opponent_target_history.back()
+	var last_pos_delta: float = last_entry.my_position.distance_to(my_pos)
+	if last_pos_delta > max_pos_delta_history_usage:
+		print_debug("Lobber AI(%s): Ignoring shot history - last_pos_delta=%f" % [name, last_pos_delta])
+		return
+	
+	var last_opp_pos_delta: float = last_entry.opp_position.distance_to(opp_pos)
+	if last_opp_pos_delta > max_pos_delta_history_usage:
+		print_debug("Lobber AI(%s): Ignoring shot history - last_opp_pos_delta=%f" % [name, last_opp_pos_delta])
+		return
+	
+	# Feed in last entry data
+	var current_power: float = last_entry.power
+	var current_angle: float = turret_angle_to_global_angle(absf(last_entry.angle)) * signf(last_entry.angle)
+	
+	# Also consider angle sign alignment with shot direction
+	# Positive angles are CW which would point right in the direction of positive x 
+	var to_opp_aim:Vector2 = to_opp * signf(last_entry.angle) * signf(to_opp.x)
+	
+	var shot_deviation: Vector2 = last_entry.hit_location - last_entry.opp_position
+	var shot_deviation_dist : float = shot_deviation.length()
+	
+	var is_long: bool = shot_deviation.dot(to_opp_aim) > 0.0
+	
+	# TODO: Easing?
+	var power_dev: float = pow_per_dist * pow(shot_deviation_dist, power_dist_exp)
+	if is_long:
+		power_dev *= -1.0
+	
+	var min_power:float = tank.max_power * min_power_pct
+	var new_power: float = current_power + power_dev
+	var new_angle:float = current_angle
+
+	var angle_change:int = 0
+	var angle_dev:float = 0.0
+
+	if new_power > tank.max_power:
+		new_power = tank.max_power
+		# Also decrease_angle
+		angle_change = -1
+	elif new_power < min_power:
+		new_power = min_power
+		# Also increase angle
+		angle_change = 1
+	
+	if angle_change:
+		angle_dev = angle_per_dist * pow(shot_deviation_dist, angle_dist_exp)
+		if angle_change < 0:
+			angle_dev *= -1.0
+		var current_angle_sgn: float = signf(current_angle)
+		new_angle = current_angle + current_angle_sgn * angle_dev
+		var new_angle_abs: float = absf(new_angle)
+		
+		var max_angle: float = angles.max()
+		var min_angle: float = angles.min()
+		
+		# Wrap around - assuming don't need to do it multiple times
+		if new_angle_abs > max_angle:
+			new_angle = -current_angle_sgn * (max_angle - (new_angle_abs - max_angle))
+		elif new_angle_abs < min_angle:
+			new_angle = -current_angle_sgn * (max_angle - (min_angle - new_angle_abs))
+
+	# TODO: The convenience function should handle the sign-ing for us
+	new_angle = global_angle_to_turret_angle(absf(new_angle)) * signf(new_angle)
+	
+	print_debug("Lobber AI(%s): Adjusting shot based on history - last_pos_delta=%f; orig_power=%f; new_power=%f; orig_angle=%f; new_angle=%f; last_opp_pos_delta=%f; shot_deviation=%s; is_long=%s; power_dev=%f; angle_change=%d; angle_dev=%f"
+		% [name, last_pos_delta, current_power, new_power, current_angle, new_angle, last_opp_pos_delta, shot_deviation, str(is_long), power_dev, angle_change, angle_dev])
+
+	shot.power = new_power
+	shot.angle = new_angle
+	
 class TargetActionState extends AIState:
 	var _opponent: TankController
 	var _weapon:int 
@@ -74,7 +187,7 @@ class TargetActionState extends AIState:
 		self._power = power
 		self._angle = angle
 
-	func execute(tank: Tank) -> TankActionResult:
+	func execute(_tank: Tank) -> TankActionResult:
 		return TankActionResult.new(
 			 _power,
 			 _angle,
@@ -147,11 +260,11 @@ func _select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavi
 	
 	# If only have one weapon then immediately return
 	if tank.weapons.is_empty():
-		push_warning("BruteAI(%s): No weapons available! - returning 0" % [tank.name])
+		push_warning("Lobber AI(%s): No weapons available! - returning 0" % [name])
 		# Return 0 instead of -1 in case issue resolves itself by the time we try to shoot
 		return 0
 	if tank.weapons.size() == 1:
-		print_debug("BruteAI(%s): Only 1 weapon available - returning 0" % [tank.name])
+		print_debug("Lobber AI(%s): Only 1 weapon available - returning 0" % [name])
 		return 0
 	
 	var target_distance: float
@@ -173,24 +286,23 @@ func _select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavi
 		
 		if projectile and target_distance > projectile.max_falloff_distance:
 			var score : float = projectile.max_damage * projectile.max_damage * projectile.min_falloff_distance * projectile.max_falloff_distance * weapon.ammo_used_per_shot
-			print_debug("BruteAI(%s): weapon(%d)=%s; score=%f" % [tank.name, i, weapon.name, score])
+			print_debug("Lobber AI(%s): weapon(%d)=%s; score=%f" % [name, i, weapon.name, score])
 			if score > best_score:
 				best_score = score
 				best_weapon = i
 
 	if best_weapon != -1:
-		print_debug("BruteAI(%s): selected best_weapon=%d/%d; score=%f" % [tank.name, best_weapon, weapon_infos.size(), best_score])
+		print_debug("Lobber AI(%s): selected best_weapon=%d/%d; score=%f" % [name, best_weapon, weapon_infos.size(), best_score])
 		return best_weapon
 	
 	# Fallback to random weapon
-	print_debug("BruteAI(%s): Could not find viable weapon - falling back to random selection out of %d candidates" % [tank.name, tank.weapons.size()])
+	print_debug("Lobber AI(%s): Could not find viable weapon - falling back to random selection out of %d candidates" % [name, tank.weapons.size()])
 
 	return randi_range(0, tank.weapons.size() - 1)
 
-func _add_opponent_target_entry(opponent_data: Dictionary) -> void:
-	# Even blind shots may provide useful data for power and angle feedback
-	# if !opponent_data.direct:
-	# 	return
+func _add_opponent_target_entry(opponent_data: Dictionary) -> OpponentTargetHistory:
+	if !opponent_data.direct:
+		return null
 	
 	var opponent: TankController = opponent_data.opponent
 	var power: float = opponent_data.power
@@ -204,19 +316,25 @@ func _add_opponent_target_entry(opponent_data: Dictionary) -> void:
 
 	var target_data = OpponentTargetHistory.new()
 	target_data.opponent = opponent
+	target_data.my_position = aim_fulcrum_position
+	target_data.opp_position = opponent.tank.global_position
 	target_data.power = power
 	target_data.angle = angle
 	target_data.max_power = max_power
 
-	last_opponent_history_entry = target_data
-
 	opponent_target_history.append(target_data)
+
+	return target_data
 
 func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 	if projectile.owner_tank != tank:
 		return
 	
-	print_debug("LobberAIBehavior(%s): Projectile Fired=%s" % [tank.name, projectile.name])
+	print_debug("Lobber AIBehavior(%s): Projectile Fired=%s" % [name, projectile.name])
+
+	if !last_opponent_history_entry:
+		print_debug("Lobber AIBehavior(%s): Ignoring blind fire shot for projectile=%s" % [name, projectile.name])
+		return
 
 	# Need to bind the extra projectile argument to connect
 	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind([projectile, last_opponent_history_entry]))
@@ -226,7 +344,7 @@ func _on_projectile_destroyed(args: Array) -> void:
 	var projectile: WeaponProjectile = args[0]
 	var opponent_history_entry: OpponentTargetHistory = args[1]
 
-	print_debug("LobberAIBehavior(%s): Projectile Destroyed=%s" % [tank.name, projectile.name])
+	print_debug("Lobber AIBehavior(%s): Projectile Destroyed=%s" % [name, projectile.name])
 
 	opponent_history_entry.hit_count += 1
 	opponent_history_entry.hit_location += projectile.global_position
