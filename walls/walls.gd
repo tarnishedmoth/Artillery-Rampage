@@ -33,7 +33,7 @@ func check_projectile_wall_interaction(projectile: WeaponProjectile):
 	projectile_elastic(projectile)
 	
 func projectile_elastic(projectile: WeaponProjectile):
-	var movement_dir : Vector2 = projectile.linear_velocity.normalized()
+	var movement_dir : Vector2 = projectile.linear_velocity
 	movement_dir.x = -movement_dir.x
 	projectile.linear_velocity = movement_dir
 
