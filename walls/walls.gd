@@ -33,11 +33,20 @@ func check_projectile_wall_interaction(projectile: WeaponProjectile):
 	projectile_elastic(projectile)
 	
 func projectile_elastic(projectile: WeaponProjectile):
+	var pos = projectile.global_position
 	var movement_dir : Vector2 = projectile.linear_velocity
-	movement_dir.x = -movement_dir.x
-	projectile.linear_velocity = movement_dir
-
 	
+	if(pos.x <= bounds.position.x):
+		pos.x = bounds.position.x
+		if(movement_dir.x < 0):
+			movement_dir.x = -movement_dir.x
+			projectile.linear_velocity = movement_dir
+	elif pos.x >= bounds.position.x + bounds.size.x:
+		pos.x = bounds.position.x + bounds.size.x
+		if(movement_dir.x > 0):
+			movement_dir.x = -movement_dir.x
+			projectile.linear_velocity = movement_dir
+
 func projectile_warp(projectile: WeaponProjectile):
 	var pos = projectile.global_position
 	if(pos.x <= bounds.position.x):
