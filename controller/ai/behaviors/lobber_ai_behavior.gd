@@ -38,12 +38,30 @@ class_name LobberAIBehavior extends AIBehavior
 @export_category("Hone")
 @export_range(0.1, 1.0, 0.01) var angle_power_exp: float = 0.8
 
+@export_group("Config")
+@export_category("Hone")
+@export_range(1.0, 2.0, 0.01) var time_exp: float = 2.0
+
+@export_group("Config")
+@export_category("Hone")
+@export_range(0.1, 10.0, 0.01) var time_mult: float = 1.1
+
+@export_group("Config")
+@export_category("Hone")
+@export_range(0.1, 2.0, 0.01) var delta_y_exp: float = 0.85
+
+@export_group("Config")
+@export_category("Hone")
+@export_range(0.1, 1.0, 0.01) var max_dist_x_reduction_frac: float = 0.5
+
 # TODO: May push this up to base class and have it toggleable on/off to be reusable for other AI types (except Rando one)
 class OpponentTargetHistory:
 	var opponent: TankController
 	var my_position: Vector2
 	var opp_position: Vector2
 	var hit_location: Vector2 = Vector2.ZERO
+	var fire_time: float
+	var hit_time: float
 	var hit_count: int # For multi-shot
 	var power: float
 	var max_power: float
@@ -115,6 +133,8 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 		print_debug("Lobber AI(%s): Ignoring shot history - last_opp_pos_delta=%f" % [name, last_opp_pos_delta])
 		return
 	
+	var delta_time: float = (last_entry.hit_time - last_entry.fire_time * last_entry.hit_count) / 1000.0
+
 	# Feed in last entry data
 	var current_power: float = last_entry.power
 	var current_angle: float = turret_angle_to_global_angle(absf(last_entry.angle)) * signf(last_entry.angle)
@@ -125,12 +145,18 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 	
 	var last_avg_hit_location: Vector2 = last_entry.hit_location / last_entry.hit_count
 	var shot_deviation: Vector2 = last_avg_hit_location - last_entry.opp_position
-	var shot_deviation_dist : float = absf(shot_deviation.x)
+	
+	# Take into account the delta_y from hit point to target since if it hits higher up we probably are obstructed by terrain and so the actual x difference should be nerfed
+	# Ideally too the angle should be increased to get over the hump - this should be handled ideally by the initial shot set up to do a raycast for different angles as well as the 
+	# normal projectile simulation so that we have a good starting point that doesn't pound into a hill
+	var shot_deviation_x: float = absf(shot_deviation.x)
+	var shot_deviation_dist : float = maxf(shot_deviation_x - pow(absf(shot_deviation.y), delta_y_exp), shot_deviation_x * max_dist_x_reduction_frac)
 	
 	var is_long: bool = shot_deviation.dot(to_opp_aim) > 0.0
 	
 	# TODO: Easing?
-	var power_dev: float = pow_per_dist * pow(shot_deviation_dist, power_dist_exp)
+	var power_dev: float = pow_per_dist * pow(shot_deviation_dist, power_dist_exp) / pow(time_mult * delta_time, time_exp)
+
 	if is_long:
 		power_dev *= -1.0
 	
@@ -155,8 +181,10 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 	
 	if angle_change:
 		angle_dev = angle_per_power * pow(power_wrap, angle_power_exp)
+
 		if angle_change < 0:
 			angle_dev *= -1.0
+		
 		var current_angle_sgn: float = signf(current_angle)
 		new_angle = current_angle + current_angle_sgn * angle_dev
 		var new_angle_abs: float = absf(new_angle)
@@ -173,8 +201,8 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 	# TODO: The convenience function should handle the sign-ing for us
 	new_angle = global_angle_to_turret_angle(absf(new_angle)) * signf(new_angle)
 	
-	print_debug("Lobber AI(%s): Adjusting shot based on history - orig_power=%f; new_power=%f; orig_angle=%f; new_angle=%f; shot_deviation=%s; is_long=%s; power_dev=%f; angle_change=%d; angle_dev=%f; power_wrap=%f"
-		% [name, current_power, new_power, last_entry.angle, new_angle, shot_deviation, str(is_long), power_dev, angle_change, angle_dev, power_wrap])
+	print_debug("Lobber AI(%s): Adjusting shot based on history - dt=%f; orig_power=%f; new_power=%f; orig_angle=%f; new_angle=%f; shot_deviation=%s; is_long=%s; power_dev=%f; angle_change=%d; angle_dev=%f; power_wrap=%f"
+		% [name, delta_time, current_power, new_power, last_entry.angle, new_angle, shot_deviation, str(is_long), power_dev, angle_change, angle_dev, power_wrap])
 
 	shot.power = new_power
 	shot.angle = new_angle
@@ -340,6 +368,7 @@ func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 		print_debug("Lobber AIBehavior(%s): Ignoring blind fire shot for projectile=%s" % [name, projectile.name])
 		return
 
+	last_opponent_history_entry.fire_time = _get_current_time_ms()
 	# Need to bind the extra projectile argument to connect
 	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind([projectile, last_opponent_history_entry]))
 
@@ -352,3 +381,7 @@ func _on_projectile_destroyed(args: Array) -> void:
 
 	opponent_history_entry.hit_count += 1
 	opponent_history_entry.hit_location += projectile.global_position
+	opponent_history_entry.hit_time += _get_current_time_ms()
+
+func _get_current_time_ms() -> float:
+	return Time.get_ticks_msec()
