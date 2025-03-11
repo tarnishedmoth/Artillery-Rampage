@@ -3,7 +3,11 @@ extends Node2D
 @onready var playableArea = $PlayableArea
 @onready var shape = $PlayableArea/CollisionShape2D
 @export var warp_offset: float = 10
-
+enum WallType {
+	WARP, 
+	ELASTIC
+}
+var wall_mode = WallType.WARP
 var bounds: Rect2;
 
 var tracked_projectile: WeaponProjectile
@@ -29,8 +33,11 @@ func on_area_exited(area: Node2D):
 		
 #TODO: Implement Warp, elastic, accelerate, sticky, and none behaviors
 func check_projectile_wall_interaction(projectile: WeaponProjectile):
-	#projectile_warp(projectile)
-	projectile_elastic(projectile)
+	match wall_mode:
+		WallType.WARP:
+			projectile_warp(projectile)
+		WallType.ELASTIC:
+			projectile_elastic(projectile)
 	
 func projectile_elastic(projectile: WeaponProjectile):
 	var pos = projectile.global_position
