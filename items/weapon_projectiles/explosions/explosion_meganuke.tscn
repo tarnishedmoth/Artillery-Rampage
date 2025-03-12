@@ -1,0 +1,67 @@
+[gd_scene load_steps=8 format=3 uid="uid://70ea023qffgt"]
+
+[ext_resource type="Script" path="res://items/weapon_projectiles/explosions/explosion.gd" id="1_a1bo2"]
+[ext_resource type="AudioStream" uid="uid://dgebyjcrmxrr7" path="res://items/weapon_projectiles/explosions/sounds/sfx_medium_explosion.wav" id="2_ur366"]
+
+[sub_resource type="Curve" id="Curve_ogmm5"]
+max_value = 100.0
+_data = [Vector2(0, 0), 0.0, 546.832, 0, 0, Vector2(1, 49.631), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_cqwh4"]
+_data = [Vector2(0, 1), 0.0, -2.69133, 0, 0, Vector2(1, 0), -2.93262, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_gugk1"]
+interpolation_color_space = 1
+offsets = PackedFloat32Array(0.0736842, 0.271579, 0.738947)
+colors = PackedColorArray(0.755934, 0.394078, 0.254461, 1, 0.970102, 0.829246, 0, 1, 0, 0, 0, 0.380392)
+
+[sub_resource type="Gradient" id="Gradient_uthto"]
+interpolation_mode = 2
+interpolation_color_space = 1
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_f3b2q"]
+gradient = SubResource("Gradient_uthto")
+width = 256
+height = 256
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.9, 0.9)
+
+[node name="ExplosionMeganuke" type="Node2D" node_paths=PackedStringArray("particles", "sfx", "lights")]
+script = ExtResource("1_a1bo2")
+particles = [NodePath("CPUParticles2D")]
+sfx = [NodePath("AudioStreamPlayer2D")]
+lights = [NodePath("PointLight2D")]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_ur366")
+area_mask = 2
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+amount = 32
+lifetime = 1.5
+explosiveness = 1.0
+direction = Vector2(0, -1)
+spread = 110.0
+gravity = Vector2(0, 180)
+initial_velocity_min = 280.0
+initial_velocity_max = 480.0
+damping_min = 3.0
+damping_max = 4.0
+damping_curve = SubResource("Curve_ogmm5")
+scale_amount_min = 32.0
+scale_amount_max = 64.0
+scale_amount_curve = SubResource("Curve_cqwh4")
+color_ramp = SubResource("Gradient_gugk1")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(0.904395, 0.905264, 0.840633, 1)
+shadow_enabled = true
+shadow_filter = 1
+texture = SubResource("GradientTexture2D_f3b2q")
+texture_scale = 3.0
+height = 8.0

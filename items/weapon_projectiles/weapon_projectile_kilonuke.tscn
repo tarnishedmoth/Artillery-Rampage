@@ -16,7 +16,7 @@ min_falloff_distance = 40.0
 max_falloff_distance = 120.0
 min_damage = 15.0
 max_damage = 125.0
-destructible_scale_multiplier = Vector2(18, 13)
+destructible_scale_multiplier = Vector2(16, 11)
 
 [node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="."]
 z_index = 20
