@@ -12,6 +12,7 @@ class_name Explosion extends Node2D
 # AudioStreamPlayer and AudioStreamPlayer2D are not related
 # Also we could use the type of Player that layers sounds itself.
 @export var sfx:Array[AudioStreamPlayer2D] ## Will wait until all emit finished to queue_free
+@export var lights:Array[PointLight2D]
 
 var _finished_sfx:int = 0
 var _finished_particles:int = 0
@@ -22,9 +23,14 @@ func _ready() -> void:
 func play_all() -> void:
 	var emitted:int = 0
 	for effect in particles:
+		effect.emitting = false
+		effect.one_shot = true
 		effect.finished.connect(_on_particles_finished)
-		effect.emitting = true # We could just set the nodes themselves to autoplay & not intervene
+		effect.restart() # We could just set the nodes themselves to autoplay & not intervene
 		emitted += 1
+		
+	for light in lights:
+		fade_light(light)
 	
 	var started:int = 0
 	for player in sfx:
@@ -43,6 +49,11 @@ func check_all_finished() -> void:
 func free_after_delay() -> void:
 	await get_tree().create_timer(5.0).timeout
 	queue_free()
+	
+func fade_light(light: PointLight2D) -> void:
+	var light_tween = create_tween()
+	light_tween.tween_property(light, "energy", 0.0, 1.0)
+	light_tween.set_ease(Tween.EASE_IN)
 
 func _on_sfx_finished() -> void:
 	_finished_sfx += 1
