@@ -186,6 +186,10 @@ func stop_all_sounds(_only_looping: bool = true) -> void: # TODO args
 	for s: AudioStreamPlayer2D in sounds:
 		#if it's a looping sound...
 		if s.playing: s.stop()
+		
+func add_projectile_awaiting(projectile: WeaponProjectile) -> void:
+	projectile.completed_lifespan.connect(_on_projectile_completed_lifespan) # So we know when the projectile is finished.
+	_awaiting_lifespan_completion += 1
 
 func destroy() -> void:
 	weapon_destroyed.emit(self)
@@ -236,8 +240,7 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 		
 		if new_shot is WeaponProjectile:
 			new_shot.set_sources(parent_tank,self)
-			new_shot.completed_lifespan.connect(_on_projectile_completed_lifespan) # So we know when the projectile is finished.
-			_awaiting_lifespan_completion += 1
+			add_projectile_awaiting(new_shot)
 		
 		new_shot.global_transform = barrel.global_transform
 		var aim_angle = barrel.global_rotation - PI/2 # 90 degrees offset

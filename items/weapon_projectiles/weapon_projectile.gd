@@ -44,6 +44,8 @@ var owner_tank: Tank;
 var source_weapon: Weapon # The weapon we came from
 var firing_container
 
+var can_explode:bool = true # used by MIRV
+
 #func set_spawn_parameters(in_owner_tank: Tank, power:float, angle:float):
 	#self.owner_tank = in_owner_tank
 	#linear_velocity = Vector2.from_angle(angle) * power * power_velocity_mult
@@ -69,6 +71,8 @@ func on_body_entered(_body: Node2D):
 	# Need to do a sweep to see all the things we have influenced
 	# Need to be sure not to "double-damage" things both from influence and from direct hit
 	# The body here is the direct hit body that will trigger the projectile to explode if an interaction happens
+	if not can_explode:
+		return
 	if calculated_hit:
 		return
 	var affected_nodes = _find_interaction_overlaps()
