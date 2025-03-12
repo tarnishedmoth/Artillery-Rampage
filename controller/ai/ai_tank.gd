@@ -9,8 +9,8 @@ class_name AITank extends TankController
 @export var min_ai_degrees_sec: float = 30
 @export var max_ai_degrees_sec: float = 45
 
-@export var min_ai_power_per_sec: float = 200
-@export var max_ai_power_per_sec: float = 500
+@export var min_ai_power_per_sec: float = 20
+@export var max_ai_power_per_sec: float = 50
 
 @export var min_ai_shoot_delay_time = 0.2
 @export var max_ai_shoot_delay_time = 1.8
@@ -87,46 +87,76 @@ class AIWaitingState extends AIActionState:
 class AIAimingState extends AIActionState:
 	
 	var rads_sec: float
+	var delta_sum: float = 0.0
+	var total_delta: float
 	
 	func _init(parent: AITank):
 		super(parent)
 		
 		var target_rads = parent.target_result.angle
-		var total_delta = target_rads - parent.tank.get_turret_rotation()
+		total_delta = target_rads - parent.tank.get_turret_rotation()
 	
 		rads_sec = deg_to_rad(randf_range(parent.min_ai_degrees_sec, parent.max_ai_degrees_sec)) * sign(total_delta)
 		# No need for abs as they will have the same sign
 		total_time = total_delta / rads_sec
 		
 		print_debug("AI Aim: degrees_sec=%f; target_angle=%f; total_delta=%f; total_time=%f"
-		 % [deg_to_rad(rads_sec), rad_to_deg(total_delta), rad_to_deg(total_delta), total_time])
+		 % [deg_to_rad(rads_sec), rad_to_deg(target_rads), rad_to_deg(total_delta), total_time])
 		
 	func _next_state() -> AIActionState: return AIPoweringState.new(parent)
 
 	func _do_execute(delta: float) -> void:
-		parent.tank.aim_delta(rads_sec * delta)
-	
+		var delta_sgn:float = signf(total_delta)
+		var max_delta:float = total_delta - delta_sum
+		if max_delta * delta_sgn < 0:
+			return
+			
+		var calc_delta:float = rads_sec * delta		
+		var aim_delta:float = delta_sgn * minf(delta_sgn * max_delta, delta_sgn * calc_delta)
+		
+		#print("AIAimingState: aim_delta=%f; delta_sgn=%f; max_delta=%f; calc_delta=%f" % [aim_delta,delta_sgn,max_delta,calc_delta])
+
+		if not is_zero_approx(aim_delta):
+			parent.tank.aim_delta(aim_delta)
+			delta_sum += aim_delta
+
 # Setting power
 class AIPoweringState extends AIActionState:
 	var power_sec: float
+	var delta_sum: float = 0.0
+	var total_delta: float
 	
 	func _init(parent: AITank):
 		super(parent)
 		
 		var target_power = parent.target_result.power
-		var total_delta = target_power - parent.tank.power
+		# Power is set as a percent [0-100]
+		total_delta = (target_power - parent.tank.power) / parent.tank.max_power * 100.0
 	
 		if is_zero_approx(total_delta):
 			total_time = 0.0
 		else:
 			power_sec = randf_range(parent.min_ai_power_per_sec, parent.max_ai_power_per_sec) * sign(total_delta)
-			total_time = total_delta / abs(power_sec)
-		
+			total_time = total_delta / power_sec
+			
+		print_debug("AI Power: power_sec=%f; target_power=%f; total_delta=%f; total_time=%f"
+		 % [power_sec, target_power, total_delta, total_time])
 	func _next_state() -> AIActionState: return AISelectWeaponState.new(parent)
 
 	func _do_execute(delta: float) -> void:
-		parent.tank.set_power_delta(power_sec * delta)
-
+		var delta_sgn:float = signf(total_delta)
+		var max_delta:float = total_delta - delta_sum
+		if max_delta * delta_sgn < 0:
+			return
+		
+		var calc_delta:float = power_sec * delta
+		var power_delta:float = delta_sgn * minf(delta_sgn * max_delta, delta_sgn * calc_delta)
+		
+		#print("AIPoweringState: power_delta=%f; delta_sgn=%f; max_delta=%f; calc_delta=%f" % [power_delta,delta_sgn,max_delta,calc_delta])
+		if not is_zero_approx(power_delta):
+			parent.tank.set_power_delta(power_delta)
+			delta_sum += power_delta
+			
 # Selecting weapon to use
 class AISelectWeaponState extends AIActionState:
 	func _init(parent: AITank):
