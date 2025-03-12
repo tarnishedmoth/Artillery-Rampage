@@ -105,7 +105,7 @@ func hover() -> void:
 	var distance = global_position.y - hover_altitude
 	var speed = move_speed
 	tween.tween_property(self, "global_position:y", hover_altitude, distance/speed).set_trans(Tween.TRANS_CUBIC)
-	tween.tween_callback(reposition)
+	tween.tween_callback(check_queue)
 	
 func wait() -> void:
 	reset_idle_time()
