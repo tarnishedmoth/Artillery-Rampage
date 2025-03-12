@@ -141,7 +141,7 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 	
 	# Also consider angle sign alignment with shot direction
 	# Positive angles are CW which would point right in the direction of positive x 
-	var to_opp_aim:Vector2 = to_opp * signf(last_entry.angle) * signf(to_opp.x)
+	var to_opp_aim:float = signf(last_entry.angle)
 	
 	var last_avg_hit_location: Vector2 = last_entry.hit_location / last_entry.hit_count
 	var shot_deviation: Vector2 = last_avg_hit_location - last_entry.opp_position
@@ -152,7 +152,7 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 	var shot_deviation_x: float = absf(shot_deviation.x)
 	var shot_deviation_dist : float = maxf(shot_deviation_x - pow(absf(shot_deviation.y), delta_y_exp), shot_deviation_x * max_dist_x_reduction_frac)
 	
-	var is_long: bool = shot_deviation.dot(to_opp_aim) > 0.0
+	var is_long: bool = shot_deviation.x * to_opp_aim > 0.0
 	
 	# TODO: Easing?
 	var power_dev: float = pow_per_dist * pow(shot_deviation_dist, power_dist_exp) / pow(time_mult * delta_time, time_exp)
