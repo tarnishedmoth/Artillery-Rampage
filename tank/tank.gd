@@ -169,7 +169,7 @@ func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float
 		emit_signal("tank_killed", self, instigatorController, instigator)
 		
 func kill():
-	print("Tank: " + name + " Killed")
+	print("Tank: " + get_parent().name + " Killed")
 	if drop_on_death:
 		spawn_death_drop()
 	queue_free()

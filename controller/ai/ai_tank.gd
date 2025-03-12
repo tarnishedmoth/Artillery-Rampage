@@ -9,7 +9,7 @@ class_name AITank extends TankController
 @export var min_ai_degrees_sec: float = 30
 @export var max_ai_degrees_sec: float = 45
 
-@export var min_ai_power_per_sec: float = 20
+@export var min_ai_power_per_sec: float = 33
 @export var max_ai_power_per_sec: float = 50
 
 @export var min_ai_shoot_delay_time = 0.2
@@ -24,7 +24,7 @@ func _ready() -> void:
 func begin_turn():
 	super.begin_turn()
 	
-	print("AI began turn")
+	print_debug("%s - AI began turn" % [get_parent()])
 	target_result = ai_decision_state_machine.execute(tank)
 	current_action_state = AIWaitingState.new(self)
 	
@@ -100,8 +100,8 @@ class AIAimingState extends AIActionState:
 		# No need for abs as they will have the same sign
 		total_time = total_delta / rads_sec
 		
-		print_debug("AI Aim: degrees_sec=%f; target_angle=%f; total_delta=%f; total_time=%f"
-		 % [deg_to_rad(rads_sec), rad_to_deg(target_rads), rad_to_deg(total_delta), total_time])
+		print_debug("%s - AI Aim: degrees_sec=%f; target_angle=%f; total_delta=%f; total_time=%f"
+		 % [parent.get_parent().name, deg_to_rad(rads_sec), rad_to_deg(target_rads), rad_to_deg(total_delta), total_time])
 		
 	func _next_state() -> AIActionState: return AIPoweringState.new(parent)
 
@@ -139,8 +139,8 @@ class AIPoweringState extends AIActionState:
 			power_sec = randf_range(parent.min_ai_power_per_sec, parent.max_ai_power_per_sec) * sign(total_delta)
 			total_time = total_delta / power_sec
 			
-		print_debug("AI Power: power_sec=%f; target_power=%f; total_delta=%f; total_time=%f"
-		 % [power_sec, target_power, total_delta, total_time])
+		print_debug("%s - AI Power: power_sec=%f; target_power=%f; total_delta=%f; total_time=%f"
+		 % [parent.get_parent().name, power_sec, target_power, total_delta, total_time])
 	func _next_state() -> AIActionState: return AISelectWeaponState.new(parent)
 
 	func _do_execute(delta: float) -> void:
