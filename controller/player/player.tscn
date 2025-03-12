@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="5_arar1"]
 [ext_resource type="PackedScene" uid="uid://bx3va4wmvmw4o" path="res://weapons/weapon_MIRV.tscn" id="7_8sa47"]
 [ext_resource type="PackedScene" uid="uid://dnc0x4uvh6tq8" path="res://weapons/weapon_meganuke.tscn" id="7_dhpe0"]
-[ext_resource type="PackedScene" uid="uid://whswocs0q861" path="res://weapons/weapon_deployable_personnelretrieval.tscn" id="8_ijdyd"]
+[ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="8_j0lm5"]
 
 [node name="Player" type="Node2D" node_paths=PackedStringArray("weapons_container")]
 script = ExtResource("1_t03mm")
@@ -29,6 +29,6 @@ current_ammo = 3
 
 [node name="WeaponDeployableMIRV" parent="Weapons" instance=ExtResource("7_8sa47")]
 
-[node name="WeaponDeployablePersonnelRetrieval" parent="Weapons" instance=ExtResource("8_ijdyd")]
+[node name="WeaponMissile" parent="Weapons" instance=ExtResource("8_j0lm5")]
 
 [connection signal="tank_killed" from="Tank" to="." method="_on_tank_tank_killed"]
