@@ -82,52 +82,61 @@ text = "⛨ Health:"
 text = "100
 "
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="."]
+[node name="CenterBackground" type="TextureRect" parent="."]
+layout_mode = 2
+offset_left = 389.5
+offset_top = 20.0
+offset_right = 890.5
+offset_bottom = 148.0
+texture = ExtResource("5_toij6")
+stretch_mode = 3
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="CenterBackground"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -72.0
-offset_top = 20.0
-offset_right = 72.0
-offset_bottom = 92.0
+offset_left = -250.5
+offset_right = 250.5
+offset_bottom = 110.0
 grow_horizontal = 2
 
-[node name="background" type="Sprite2D" parent="VBoxContainer3"]
-position = Vector2(-52, -6)
-texture = ExtResource("5_toij6")
-centered = false
-
-[node name="ActivePlayer" type="Label" parent="VBoxContainer3"]
+[node name="ActivePlayer" type="Label" parent="CenterBackground/VBoxContainer3"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "Bill"
 label_settings = SubResource("LabelSettings_ln601")
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Wind" parent="VBoxContainer3" instance=ExtResource("1_iign6")]
+[node name="Wind" parent="CenterBackground/VBoxContainer3" instance=ExtResource("1_iign6")]
 layout_mode = 2
+alignment = 1
 
-[node name="Label" parent="VBoxContainer3/Wind" index="0"]
+[node name="Label" parent="CenterBackground/VBoxContainer3/Wind" index="0"]
 text = "☁ Wind:"
 
-[node name="Value" parent="VBoxContainer3/Wind" index="1"]
+[node name="Value" parent="CenterBackground/VBoxContainer3/Wind" index="1"]
 text = "50 ◀
 "
 
-[node name="Weapon" type="HBoxContainer" parent="VBoxContainer3"]
+[node name="Weapon" type="HBoxContainer" parent="CenterBackground/VBoxContainer3"]
 layout_mode = 2
+alignment = 1
 script = ExtResource("6_t13h5")
 
-[node name="Label" type="Label" parent="VBoxContainer3/Weapon"]
+[node name="Label" type="Label" parent="CenterBackground/VBoxContainer3/Weapon"]
 layout_mode = 2
+text = "Weapon"
 label_settings = ExtResource("7_y12xy")
 
-[node name="Value" type="Label" parent="VBoxContainer3/Weapon"]
+[node name="Value" type="Label" parent="CenterBackground/VBoxContainer3/Weapon"]
 layout_mode = 2
+text = "Ammo"
 label_settings = ExtResource("7_y12xy")
 
 [editable path="VBoxContainer/Angle"]
 [editable path="VBoxContainer/Power"]
 [editable path="VBoxContainer2/AimDirection"]
 [editable path="VBoxContainer2/Health"]
-[editable path="VBoxContainer3/Wind"]
+[editable path="CenterBackground/VBoxContainer3/Wind"]

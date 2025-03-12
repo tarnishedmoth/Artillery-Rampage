@@ -2,11 +2,11 @@ extends Control
 
 @onready var angle_text = $VBoxContainer/Angle
 @onready var power_text = $VBoxContainer/Power
-@onready var active_player_text = $VBoxContainer3/ActivePlayer
-@onready var wind_text = $VBoxContainer3/Wind
 @onready var health_text = $VBoxContainer2/Health
 @onready var aim_direction_text = $VBoxContainer2/AimDirection
-@onready var weapon_text = $VBoxContainer3/Weapon
+@onready var active_player_text = $CenterBackground/VBoxContainer3/ActivePlayer
+@onready var wind_text = $CenterBackground/VBoxContainer3/Wind
+@onready var weapon_text = $CenterBackground/VBoxContainer3/Weapon
 
 func _ready() -> void:
 	init_signals()
