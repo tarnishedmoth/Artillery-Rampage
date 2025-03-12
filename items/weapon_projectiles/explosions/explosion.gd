@@ -1,14 +1,14 @@
 class_name Explosion extends Node2D
 
 ## Starts SFX and Particles and frees itself once all are finished.
-## This class only handles GPUParticles2D and AudioStreamPlayer2D at this time.
+## This class only handles CPUParticles2D and AudioStreamPlayer2D at this time.
 ## It will wait until all nodes assigned in the Inspector export properties have
 ## emitted their finished signal. Assigning a node that loops will prevent this
 ## node from queue_free().
 ## It might make sense for this to also have the functionality for damage, if we
 ## move it from the WeaponProjectile class.
 
-@export var particles:Array[GPUParticles2D] ## Will wait until all emit finished to queue_free
+@export var particles:Array[CPUParticles2D] ## Will wait until all emit finished to queue_free
 # AudioStreamPlayer and AudioStreamPlayer2D are not related
 # Also we could use the type of Player that layers sounds itself.
 @export var sfx:Array[AudioStreamPlayer2D] ## Will wait until all emit finished to queue_free

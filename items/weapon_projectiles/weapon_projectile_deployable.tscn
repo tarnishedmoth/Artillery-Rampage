@@ -9,12 +9,13 @@
 [node name="WeaponProjectileDeployable" type="RigidBody2D" node_paths=PackedStringArray("sfx_trigger")]
 collision_layer = 9
 collision_mask = 9
+mass = 2.0
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_rlat4")
 scene_to_spawn = ExtResource("2_p7lln")
-deploy_number = 3
-deploy_velocity_impulse = 2.0
+deploy_number = 2
+deploy_velocity_impulse = 10.0
 sfx_trigger = NodePath("Trigger")
 min_falloff_distance = 1.0
 max_falloff_distance = 100.0
