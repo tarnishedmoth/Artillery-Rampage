@@ -12,7 +12,7 @@ height = 32.0
 
 [node name="WeaponProjectile" type="RigidBody2D" node_paths=PackedStringArray("thrust_sfx")]
 collision_layer = 2
-collision_mask = 31
+collision_mask = 29
 continuous_cd = 2
 contact_monitor = true
 max_contacts_reported = 1

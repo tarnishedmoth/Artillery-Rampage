@@ -7,18 +7,18 @@
 
 [node name="WeaponProjectile" type="RigidBody2D"]
 collision_layer = 2
-collision_mask = 31
+collision_mask = 29
 continuous_cd = 2
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_gtnid")
 max_lifetime = 8.0
 explosion_to_spawn = ExtResource("2_7f66c")
-min_falloff_distance = 5.0
-max_falloff_distance = 20.0
+min_falloff_distance = 8.0
+max_falloff_distance = 28.0
 min_damage = 1.0
-max_damage = 10.0
-destructible_scale_multiplier = Vector2(2.25, 2.25)
+max_damage = 12.0
+destructible_scale_multiplier = Vector2(3, 3)
 
 [node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="."]
 z_index = 20

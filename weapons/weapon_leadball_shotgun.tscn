@@ -9,7 +9,6 @@ script = ExtResource("1_78ohm")
 scene_to_spawn = ExtResource("2_flncf")
 display_name = "Shot Gun"
 accuracy_angle_spread = 0.314159
-fire_velocity = 32000.0
 always_shoot_for_count = 8
 retain_when_empty = false
 use_ammo = true
