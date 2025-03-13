@@ -377,7 +377,7 @@ func _add_opponent_target_entry(opponent_data: Dictionary) -> OpponentTargetHist
 func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 	super._on_projectile_fired(projectile)
 
-	if projectile.owner_tank != tank:
+	if !tank or projectile.owner_tank != tank:
 		return
 	
 	print_debug("Lobber AIBehavior(%s): Projectile Fired=%s" % [tank.owner.name, projectile.name])
