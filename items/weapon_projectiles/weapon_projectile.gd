@@ -90,23 +90,30 @@ func on_body_entered(_body: Node2D):
 		if root_node:
 			if root_node in processed_set:
 				continue
+			# FIXME: We should be using the impact point now that we are using RigidBody collisions to detect the impact
+			# Otherwise it will calculate the damage radius from the node center instead which isn't accurate, especially for the lead ball
 			var damage_amount = _calculate_damage(node)
 			if damage_amount > 0:
 				root_node.take_damage(owner_tank, self, damage_amount)
 				had_interaction = true
-		root_node = get_parent_in_group(node, Groups.Destructible)
-		if root_node:
-			if root_node in processed_set:
-				continue
-			center_destructible_on_impact_point($Destructible)
-			root_node.damage($Destructible, destructible_scale_multiplier)
-			had_interaction = true
+		# Some projectiles don't have a destructible node, e.g. MIRV
+		if $Destructible:
+			root_node = get_parent_in_group(node, Groups.Destructible)
+			if root_node:
+				if root_node in processed_set:
+					continue
+				center_destructible_on_impact_point($Destructible)
+				root_node.damage($Destructible, destructible_scale_multiplier)
+				had_interaction = true
 		processed_set[root_node] = root_node
 	# end for
 	
+	# FIXME: Technically shouldn't do this and should set to true and also always call destroy but MIRV doesn't work correctly without it
 	calculated_hit = not affected_nodes.is_empty()
 
-	if had_interaction:
+	# Always explode on impact
+	#if had_interaction:
+	if calculated_hit:
 		destroy()
 		
 func center_destructible_on_impact_point(destructible: CollisionPolygon2D) -> void:
