@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://whswocs0q861" path="res://weapons/weapon_deployable_personnelretrieval.tscn" id="5_73mjw"]
 [ext_resource type="PackedScene" uid="uid://bogp8cydgto88" path="res://personnel/pickup_copter.tscn" id="5_dad6q"]
 [ext_resource type="PackedScene" uid="uid://bfovdi5eowpoe" path="res://items/collectible_item.tscn" id="6_e63dt"]
-[ext_resource type="PackedScene" uid="uid://btemialk4ka7v" path="res://items/weapon_projectiles/weapon_projectile_deployable.tscn" id="7_fw45c"]
+[ext_resource type="PackedScene" uid="uid://btemialk4ka7v" path="res://items/weapon_projectiles/weapon_projectile_deployable_personnelretrieval.tscn" id="7_fw45c"]
 
 [node name="TestLevel01" type="Node2D"]
 
