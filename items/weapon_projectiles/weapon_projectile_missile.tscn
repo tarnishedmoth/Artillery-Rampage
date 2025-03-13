@@ -15,7 +15,6 @@ collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_asd6x")
 thrust_sfx = NodePath("MissileThruster/Thruster")
-max_thrust = 1000.0
 explosion_to_spawn = ExtResource("2_f5fls")
 min_falloff_distance = 5.0
 max_falloff_distance = 45.0

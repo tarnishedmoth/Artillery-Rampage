@@ -1,9 +1,9 @@
 extends WeaponProjectile
 
 @export var thrust_sfx:AudioStreamPlayer2D
-@export var max_thrust:float = 750.0
-@export var delay_before_targeting:float = 0.75
-@export var delay_before_thrusting:float = 1.0
+@export var max_thrust:float = 1500.0
+@export var delay_before_targeting:float = 0.6
+@export var delay_before_thrusting:float = 0.8
 @export var thrust_decay_time:float = 1.5
 @export var show_debug_targets:bool = false
 @onready var debug_target = $Debug_Target
