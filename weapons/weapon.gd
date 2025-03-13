@@ -243,7 +243,7 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 			add_projectile_awaiting(new_shot)
 		
 		new_shot.global_transform = barrel.global_transform
-		var aim_angle = barrel.global_rotation - PI/2 # 90 degrees offset
+		var aim_angle = barrel.global_rotation
 		if accuracy_angle_spread != 0.0:
 			var deviation = randf_range(-accuracy_angle_spread,accuracy_angle_spread) / 2
 			aim_angle += deviation

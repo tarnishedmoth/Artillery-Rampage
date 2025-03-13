@@ -50,6 +50,7 @@ shape = SubResource("RectangleShape2D_bbvof")
 
 [node name="WeaponFireLocation" type="Marker2D" parent="TankBody/TankTurret"]
 position = Vector2(0, -33.14)
+rotation = -1.5708
 
 [node name="Bottom" type="Marker2D" parent="TankBody"]
 position = Vector2(0, 13)
