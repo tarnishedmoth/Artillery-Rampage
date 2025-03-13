@@ -1,10 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://rvjcwiafo8ut"]
+[gd_scene load_steps=7 format=3 uid="uid://bb7kpruyfrk8b"]
 
-[ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile_missile.gd" id="1_asd6x"]
-[ext_resource type="PackedScene" uid="uid://ctbymmvkiyfhu" path="res://items/weapon_projectiles/explosions/explosion_kilonuke.tscn" id="2_274w3"]
-[ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="3_q6rmh"]
-[ext_resource type="Texture2D" uid="uid://c737fmtapano1" path="res://items/weapon_projectiles/missiles/g14.png" id="3_x8060"]
-[ext_resource type="AudioStream" uid="uid://clcb4lxiicjhg" path="res://items/weapon_projectiles/missiles/missile_thruster.wav" id="4_mo65d"]
+[ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile_missile.gd" id="1_i33yu"]
+[ext_resource type="PackedScene" uid="uid://ctbymmvkiyfhu" path="res://items/weapon_projectiles/explosions/explosion_kilonuke.tscn" id="2_4tg6q"]
+[ext_resource type="Texture2D" uid="uid://c737fmtapano1" path="res://items/weapon_projectiles/missiles/g14.png" id="3_4iye4"]
+[ext_resource type="AudioStream" uid="uid://clcb4lxiicjhg" path="res://items/weapon_projectiles/missiles/missile_thruster.wav" id="4_37o5p"]
+[ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="5_rhfto"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ojyh2"]
 radius = 4.0
@@ -16,21 +16,17 @@ collision_mask = 29
 continuous_cd = 2
 contact_monitor = true
 max_contacts_reported = 1
-script = ExtResource("1_asd6x")
+script = ExtResource("1_i33yu")
+behavior = 1
 thrust_sfx = NodePath("MissileThruster/Thruster")
-max_thrust = 1750.0
-delay_before_targeting = 0.35
-delay_before_thrusting = 0.55
-thrust_decay_time = 0.96
-max_lifetime = 4.0
-explosion_to_spawn = ExtResource("2_274w3")
-min_falloff_distance = 30.0
-max_falloff_distance = 90.0
-max_damage = 90.0
+explosion_to_spawn = ExtResource("2_4tg6q")
+min_falloff_distance = 20.0
+max_damage = 80.0
+destructible_scale_multiplier = Vector2(8, 8)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.183745, 0.183745)
-texture = ExtResource("3_x8060")
+texture = ExtResource("3_4iye4")
 
 [node name="PhysicsShape" type="CollisionShape2D" parent="."]
 rotation = 1.5708
@@ -45,7 +41,7 @@ position = Vector2(-18, 0)
 gizmo_extents = 120.0
 
 [node name="Thruster" type="AudioStreamPlayer2D" parent="MissileThruster"]
-stream = ExtResource("4_mo65d")
+stream = ExtResource("4_37o5p")
 
 [node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="MissileThruster"]
 z_index = 20
@@ -58,11 +54,11 @@ scale_amount_max = 4.0
 [node name="Debug_Target" type="Sprite2D" parent="."]
 visible = false
 scale = Vector2(0.2, 0.2)
-texture = ExtResource("3_q6rmh")
+texture = ExtResource("5_rhfto")
 
 [node name="Debug_Target2" type="Sprite2D" parent="."]
 visible = false
 modulate = Color(1, 0.601318, 0.368341, 1)
 top_level = true
 scale = Vector2(0.2, 0.2)
-texture = ExtResource("3_q6rmh")
+texture = ExtResource("5_rhfto")

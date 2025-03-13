@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://do2r411gtohhx"]
+
+[ext_resource type="Script" path="res://weapons/weapon.gd" id="1_44n5j"]
+[ext_resource type="PackedScene" uid="uid://bb7kpruyfrk8b" path="res://items/weapon_projectiles/weapon_projectile_missile_homing.tscn" id="2_8f5ta"]
+[ext_resource type="AudioStream" uid="uid://cgac4miv6d3uq" path="res://weapons/sounds/sfx_weapon_singleshot15.wav" id="3_a1dk7"]
+
+[node name="WeaponMissileHoming" type="Node2D" node_paths=PackedStringArray("sfx_fire")]
+script = ExtResource("1_44n5j")
+scene_to_spawn = ExtResource("2_8f5ta")
+display_name = "Homing Missile"
+use_ammo = true
+current_ammo = 5
+use_magazines = true
+magazines = 1
+magazine_capacity = 5
+reload_delay_time = 0.4
+sfx_fire = NodePath("Fire")
+
+[node name="Fire" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_a1dk7")
+pitch_scale = 0.65

@@ -15,11 +15,11 @@ script = ExtResource("1_2tiaa")
 color = Color(0.269993, 0.362554, 0.0951998, 1)
 explosion_to_spawn = ExtResource("2_a22a1")
 damage_falloff_type = 2
-min_falloff_distance = 40.0
-max_falloff_distance = 120.0
+min_falloff_distance = 60.0
+max_falloff_distance = 160.0
 min_damage = 15.0
 max_damage = 125.0
-destructible_scale_multiplier = Vector2(16, 11)
+destructible_scale_multiplier = Vector2(17, 12)
 
 [node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="."]
 z_index = 20

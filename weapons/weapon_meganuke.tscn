@@ -9,6 +9,7 @@ script = ExtResource("1_p5vaj")
 scene_to_spawn = ExtResource("2_lsqi5")
 display_name = "Mega Nuke"
 accuracy_angle_spread = 0.0872665
+fire_velocity = 150.0
 retain_when_empty = false
 use_ammo = true
 current_ammo = 1

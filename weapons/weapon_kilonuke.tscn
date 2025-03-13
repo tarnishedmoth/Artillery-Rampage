@@ -9,6 +9,7 @@ script = ExtResource("1_miv0k")
 scene_to_spawn = ExtResource("2_pqsvc")
 display_name = "Kilo Nuke"
 accuracy_angle_spread = 0.0523599
+fire_velocity = 125.0
 retain_when_empty = false
 use_ammo = true
 current_ammo = 1

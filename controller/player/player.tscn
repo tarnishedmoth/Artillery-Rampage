@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dps6lqs28tqa1"]
+[gd_scene load_steps=11 format=3 uid="uid://dps6lqs28tqa1"]
 
 [ext_resource type="Script" path="res://controller/player/player.gd" id="1_t03mm"]
 [ext_resource type="PackedScene" uid="uid://dvr6bm2hlj5h4" path="res://tank/tank.tscn" id="2_3s1jp"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://bx3va4wmvmw4o" path="res://weapons/weapon_MIRV.tscn" id="7_8sa47"]
 [ext_resource type="PackedScene" uid="uid://dnc0x4uvh6tq8" path="res://weapons/weapon_meganuke.tscn" id="7_dhpe0"]
 [ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="8_j0lm5"]
+[ext_resource type="PackedScene" uid="uid://do2r411gtohhx" path="res://weapons/weapon_missile_homing.tscn" id="10_lvkgb"]
 
 [node name="Player" type="Node2D" node_paths=PackedStringArray("weapons_container")]
 script = ExtResource("1_t03mm")
@@ -34,5 +35,7 @@ current_ammo = 3
 [node name="WeaponDeployableMIRV" parent="Weapons" instance=ExtResource("7_8sa47")]
 
 [node name="WeaponMissile" parent="Weapons" instance=ExtResource("8_j0lm5")]
+
+[node name="WeaponMissileHoming" parent="Weapons" instance=ExtResource("10_lvkgb")]
 
 [connection signal="tank_killed" from="Tank" to="." method="_on_tank_tank_killed"]
