@@ -4,7 +4,8 @@ var is_switching_scene: bool
 
 class SceneKeys:
 	const MainMenu:StringName = &"MainMenu"
-	const PauseMenu:StringName = &"PauseMenu"
+	#const PauseMenu:StringName = &"PauseMenu"
+	const RandomStart:StringName = &"RandomStart"
 
 # We expect to reference the above keys with a const "preload" of a packed scene 
 # or reference to a unique name (possibly for pause menu)
@@ -17,6 +18,8 @@ class SceneKeys:
 @export var level_names: Dictionary = {}
 
 const default_delay: float = 1.0
+
+const main_menu_scene_file = "res://levels/main_menu.tscn"
 
 var _current_level_index:int = 0
 var _current_level_root_node:GameLevel
@@ -47,12 +50,18 @@ func next_level(delay: float = default_delay) -> void:
 	# TODO: When using procedural maps may need a different strategy or may want to shuffle the levels on start
 	# The procedural map could just be a specific scene that has some base configuration and then generates on ready
 	# Or we could start proc-gening the next scene during current scene and then just keep in memory and present it here
+	print_debug("Loading")
 	await switch_scene_file(levels[_current_level_index], delay)
 	_current_level_index = (_current_level_index + 1) % levels.size()
 		
 func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 	# TODO: Loading main menu and pause menu
-	await next_level(delay)
+	match key:
+		SceneKeys.MainMenu:
+			switch_scene_file(main_menu_scene_file)
+			return
+		SceneKeys.RandomStart:
+			next_level(delay)
 	
 func switch_scene(scene: PackedScene, delay: float = default_delay) -> void:
 	print_debug("switch_scene: %s, delay=%f" % [scene.name, delay])
@@ -74,6 +83,7 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	
 	# TODO: Consider using resource loader to load async during the delay period
 	switchFunc.call()
+	get_tree().paused = false
 
 func _on_GameLevel_loaded(level:GameLevel) -> void:
 	print_debug("_on_GameLevel_loaded: level=%s" % [level.name if level else "NULL"])

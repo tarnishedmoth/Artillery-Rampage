@@ -14,4 +14,5 @@ func _on_next() -> void:
 	
 func _on_skip() -> void:
 	print("on_skip")
-	await SceneManager.switch_scene_keyed(SceneManager.SceneKeys.MainMenu, 0)
+	#SceneManager.switch_scene_keyed(SceneManager.SceneKeys.RandomStart, 0)
+	SceneManager.next_level()

@@ -72,13 +72,15 @@ func clear_all_text(text_nodes:Array) -> void:
 #endregion
 #region--Private Methods
 func _on_start_pressed() -> void:
+	print_debug("Start button")
 	SceneManager.next_level()
 
 func _on_level_select_pressed() -> void:
-	print_debug("I hear you... we don't have that yet")
+	print_debug("Level select button")
+	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.RandomStart)
 
 func _on_options_pressed() -> void:
-	print_debug("I hear you... we don't have that yet")
+	print_debug("Options button")
 	options_menu.show()
 
 func _on_quit_pressed() -> void:
