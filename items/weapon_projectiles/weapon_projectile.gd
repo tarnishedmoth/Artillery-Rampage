@@ -37,13 +37,19 @@ signal completed_lifespan ## Tracked by Weapon class
 @export_category("Destructible")
 @export var destructible_scale_multiplier:Vector2 = Vector2(10 , 10)
 
-var overlap # $Overlap
+## Indicate whether need to explode on impact with supported collision layers and cause damage
+## This replaces the "Overlap" concept
+@export_category("Destructible")
+@export var should_explode_on_impact:bool = true
 
 var calculated_hit: bool
 var owner_tank: Tank;
 var source_weapon: Weapon # The weapon we came from
 var firing_container
 
+# TODO: We can probably combine this with above should_explode_on_impact
+# Removed the Overlap concept as can handle the overlap interaction through the rigid body
+# This also allows us to use continuous collision detection to fix the tunneling problem we see with projectiles going through the terrain
 var can_explode:bool = true # used by MIRV
 
 #func set_spawn_parameters(in_owner_tank: Tank, power:float, angle:float):
@@ -51,10 +57,8 @@ var can_explode:bool = true # used by MIRV
 	#linear_velocity = Vector2.from_angle(angle) * power * power_velocity_mult
 	
 func _ready() -> void:
-	if has_node("Overlap"):
-		overlap = $Overlap # Some projectiles might not need this collision
-		if overlap is Area2D:
-			overlap.connect("body_entered", on_body_entered)
+	if should_explode_on_impact:
+		connect("body_entered", on_body_entered)
 	modulate = color
 	if max_lifetime > 0.0: destroy_after_lifetime()
 	GameEvents.emit_projectile_fired(self)
@@ -100,7 +104,7 @@ func on_body_entered(_body: Node2D):
 		processed_set[root_node] = root_node
 	# end for
 	
-	calculated_hit = true
+	calculated_hit = not affected_nodes.is_empty()
 
 	if had_interaction:
 		destroy()

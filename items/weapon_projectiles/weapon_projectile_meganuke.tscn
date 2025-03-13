@@ -6,9 +6,12 @@
 [ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="4_u3320"]
 
 [node name="WeaponProjectile" type="RigidBody2D"]
-collision_layer = 0
-collision_mask = 0
+collision_layer = 2
+collision_mask = 31
 mass = 3.0
+continuous_cd = 2
+contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_yknii")
 color = Color(0.640316, 0.443355, 0.0227013, 1)
 explosion_to_spawn = ExtResource("2_gjd3c")

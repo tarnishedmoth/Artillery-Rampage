@@ -19,8 +19,9 @@ func _ready() -> void:
 	bounds = shape.shape.get_rect()
 	bounds = Rect2(shape.to_global(bounds.position), bounds.size)
 		
-func on_body_exited(_body : Node2D):	
-	pass
+func on_body_exited(body : Node2D):
+	if body is WeaponProjectile:
+		check_projectile_wall_interaction(body)
 
 func _physics_process(_delta: float) -> void:
 	if !tracked_projectile:
@@ -28,8 +29,7 @@ func _physics_process(_delta: float) -> void:
 	check_projectile_wall_interaction(tracked_projectile)
 	
 func on_area_exited(area: Node2D):
-	if area.owner is WeaponProjectile:
-		check_projectile_wall_interaction(area.owner)
+	pass
 		
 #TODO: Implement Warp, elastic, accelerate, sticky, and none behaviors
 func check_projectile_wall_interaction(projectile: WeaponProjectile):

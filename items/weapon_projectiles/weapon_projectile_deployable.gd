@@ -38,14 +38,18 @@ var _explosion_played:bool = false
 #func _init() -> void: pass
 #func _enter_tree() -> void: pass
 func _ready() -> void:
+	super._ready()
 	modulate = color
 	if max_lifetime > 0.0: destroy_after_lifetime()
 	#overlap.connect("body_entered", on_body_entered)
 	#GameEvents.emit_projectile_fired(self)
 	
-	deployed_container = SceneManager.get_current_level_root() if not null else get_tree().current_scene
+	# FIXME: Cannot call SceneManager in ready on game start as ready is called in DFS manner so SceneManager won't be initialized yet
+	# JM: Kept getting assertion triggered on start of level where player had deployable personnel in their inventory
+	#deployed_container = SceneManager.get_current_level_root() if not null else get_tree().current_scene
+	deployed_container = get_tree().current_scene
 	if deployed_container.has_method("get_container"):
-			deployed_container = deployed_container.get_container()
+		deployed_container = deployed_container.get_container()
 	
 #func _input(event: InputEvent) -> void: pass
 #func _unhandled_input(event: InputEvent) -> void: pass

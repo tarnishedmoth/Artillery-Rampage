@@ -9,9 +9,10 @@
 [ext_resource type="Script" path="res://items/weapon_projectiles/apex_sensor.gd" id="7_v0wp2"]
 
 [node name="WeaponProjectileDeployableMIRV" type="RigidBody2D" node_paths=PackedStringArray("sfx_trigger")]
-collision_layer = 9
-collision_mask = 9
+collision_layer = 2
+collision_mask = 29
 mass = 2.0
+continuous_cd = 2
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_wgrqp")

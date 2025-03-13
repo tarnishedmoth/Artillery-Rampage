@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://wxeq5pbpjm78"]
+[gd_scene load_steps=7 format=3 uid="uid://rvjcwiafo8ut"]
 
 [ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile_missile.gd" id="1_asd6x"]
 [ext_resource type="PackedScene" uid="uid://gj55bahvsd7g" path="res://items/weapon_projectiles/explosions/explosion_leadball.tscn" id="2_f5fls"]
@@ -11,8 +11,11 @@ radius = 4.0
 height = 32.0
 
 [node name="WeaponProjectile" type="RigidBody2D" node_paths=PackedStringArray("thrust_sfx")]
-collision_layer = 0
-collision_mask = 0
+collision_layer = 2
+collision_mask = 31
+continuous_cd = 2
+contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_asd6x")
 thrust_sfx = NodePath("MissileThruster/Thruster")
 explosion_to_spawn = ExtResource("2_f5fls")
@@ -26,14 +29,6 @@ scale = Vector2(0.183745, 0.183745)
 texture = ExtResource("3_x8060")
 
 [node name="PhysicsShape" type="CollisionShape2D" parent="."]
-rotation = 1.5708
-shape = SubResource("CapsuleShape2D_ojyh2")
-
-[node name="Overlap" type="Area2D" parent="."]
-collision_layer = 2
-collision_mask = 31
-
-[node name="OverlapCollisionShape" type="CollisionShape2D" parent="Overlap"]
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_ojyh2")
 
