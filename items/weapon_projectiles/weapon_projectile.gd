@@ -9,7 +9,13 @@ enum DamageFalloffType
 	InverseSquare
 }
 
+class CollisionResult:
+	var game_time_seconds:float
+	var global_position: Vector2
+	var collider: Node2D
+
 signal completed_lifespan ## Tracked by Weapon class
+
 
 # The idea here is that we are using RigidBody2D for the physics behavior
 # and the Area2D as the overlap detection for detecting hits
@@ -34,6 +40,9 @@ signal completed_lifespan ## Tracked by Weapon class
 @export_category("Damage")
 @export var max_damage: float = 100
 
+#@export_category("Damage")
+#@export var last_collider_time_tolerance: float = 0.1
+
 @export_category("Destructible")
 @export var destructible_scale_multiplier:Vector2 = Vector2(10 , 10)
 
@@ -56,6 +65,11 @@ var can_explode:bool = true # used by MIRV
 	#self.owner_tank = in_owner_tank
 	#linear_velocity = Vector2.from_angle(angle) * power * power_velocity_mult
 	
+var last_collision:CollisionResult
+# Avoid problems with game pauses as _integrate_forces is called
+# before on_body_entered and we only need to read the result then
+var current_collision:CollisionResult
+
 func _ready() -> void:
 	if should_explode_on_impact:
 		connect("body_entered", on_body_entered)
@@ -70,7 +84,27 @@ func set_sources(tank:Tank,weapon:Weapon) -> void:
 		firing_container = SceneManager.get_current_level_root() if not null else get_tree().current_scene
 		if firing_container.has_method("get_container"):
 			firing_container = firing_container.get_container()
-	
+
+func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
+	# Store any collision results for later access
+	if state.get_contact_count() >= 1:
+		# It says "local position" in function name but the docs say it is global position
+		# and this agrees with empirical results
+		var pos: Vector2 = state.get_contact_local_position(0)
+		current_collision = CollisionResult.new()
+		# TODO: This will not work with pause
+		# Time.get_ticks_msec is not like Unreal's UWorld::GetTimeSeconds that
+		# tracks actual game time when the game isn't paused and responds to time dilation
+		# To do this we can create a singleton that keeps track of game time and tracks pause state to
+		# subtract out those intervals
+		current_collision.game_time_seconds = Time.get_ticks_msec() / 1000.0
+		current_collision.global_position = pos
+		current_collision.collider = state.get_contact_collider_object(0) as Node2D
+
+		last_collision = current_collision
+	else:
+		current_collision = null
+
 func on_body_entered(_body: Node2D):
 	# Need to do a sweep to see all the things we have influenced
 	# Need to be sure not to "double-damage" things both from influence and from direct hit
@@ -90,8 +124,6 @@ func on_body_entered(_body: Node2D):
 		if root_node:
 			if root_node in processed_set:
 				continue
-			# FIXME: We should be using the impact point now that we are using RigidBody collisions to detect the impact
-			# Otherwise it will calculate the damage radius from the node center instead which isn't accurate, especially for the lead ball
 			var damage_amount = _calculate_damage(node)
 			if damage_amount > 0:
 				root_node.take_damage(owner_tank, self, damage_amount)
@@ -212,10 +244,27 @@ func _find_interaction_overlaps() -> Array[Node2D]:
 	return collision_results
 
 func _calculate_damage(target: Node2D) -> float:
-	return _calculate_point_damage(target.global_position)
+	return _calculate_point_damage(_get_node_impact_position(target))
+
+func _get_impact_point() -> Vector2:
+	if _is_last_collision_relevant():
+		return last_collision.global_position
+	return global_position
+
+func _get_node_impact_position(node: Node2D) -> Vector2:
+	if _is_last_collision_relevant() and last_collision.collider == node:
+		return last_collision.global_position
+	return node.global_position
+
+func _is_last_collision_relevant() -> bool:
+	return is_instance_valid(last_collision)
+	#return last_collision and \
+	#	Time.get_ticks_msec() / 1000.0 - last_collision.game_time_seconds <= last_collider_time_tolerance
 
 func _calculate_point_damage(pos: Vector2) -> float:
-	var dist = (pos - global_position).length()
+	var impact_point:Vector2 = _get_impact_point()
+
+	var dist = (pos - impact_point).length()
 	if dist >= max_falloff_distance:
 		return 0.0
 	if dist <= min_falloff_distance:
