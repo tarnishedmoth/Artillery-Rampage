@@ -84,8 +84,8 @@ func _setup_deployable(deployable:Node2D, physics:bool = true) -> void:
 		var spawn_velocity = Vector2(deploy_velocity_impulse, 0.0)
 		deployable.linear_velocity = spawn_velocity.rotated(aim_angle)
 	else:
-		var initial_offset = deploy_velocity_impulse
-		deployable.position += initial_offset * aim_angle
+		var initial_offset = Vector2(0.0,-deploy_velocity_impulse)
+		deployable.position += initial_offset.rotated(aim_angle)
 	
 	if destroy_after_deployables_destroyed:
 		deployable.completed_lifespan.connect(_on_deployable_lifetime_completed)

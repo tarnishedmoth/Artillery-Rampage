@@ -1,13 +1,36 @@
-[gd_scene load_steps=3 format=3 uid="uid://crngia488dkhe"]
+[gd_scene load_steps=6 format=3 uid="uid://crngia488dkhe"]
 
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="1_kttku"]
-[ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="2_heem8"]
+[ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="3_o8b2v"]
+[ext_resource type="PackedScene" uid="uid://dbri5g6b11myc" path="res://weapons/weapon_deployable_aitank.tscn" id="3_ptkwk"]
+[ext_resource type="PackedScene" uid="uid://bx3va4wmvmw4o" path="res://weapons/weapon_MIRV.tscn" id="4_pjv5s"]
+[ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="5_1fa1h"]
 
-[node name="AITank" instance=ExtResource("1_kttku")]
+[node name="AITankBoss" instance=ExtResource("1_kttku")]
 enable_damage_before_first_turn = false
 
 [node name="Tank" parent="." index="0"]
 drop_on_death = null
 max_health = 1000.0
 
-[node name="LobberAiBehavior" parent="StateMachine" index="0" instance=ExtResource("2_heem8")]
+[node name="TankBodySprite" parent="Tank/TankBody" index="0"]
+scale = Vector2(0.35, 0.28)
+
+[node name="TurretSprite" parent="Tank/TankBody/TankTurret" index="0"]
+scale = Vector2(0.08, 0.247)
+
+[node name="WeaponDeployableAITank" parent="Weapons" index="0" node_paths=PackedStringArray("barrels") instance=ExtResource("3_ptkwk")]
+fire_velocity = 250.0
+barrels = [NodePath("../../Tank/TankBody/TankTurret/WeaponFireLocation")]
+
+[node name="WeaponMissile" parent="Weapons" index="1" instance=ExtResource("3_o8b2v")]
+retain_when_empty = false
+use_magazines = false
+
+[node name="WeaponDeployableMIRV" parent="Weapons" index="2" instance=ExtResource("4_pjv5s")]
+
+[node name="WeaponLeadballBurst" parent="Weapons" index="3" instance=ExtResource("5_1fa1h")]
+fire_rate = 16.0
+always_shoot_for_count = 3
+
+[editable path="Tank"]

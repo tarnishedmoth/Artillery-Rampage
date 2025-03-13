@@ -231,7 +231,7 @@ func _shoot(power:float = fire_velocity) -> void:
 func _spawn_projectile(power: float = fire_velocity) -> void:
 	var barrel = barrels[current_barrel]
 	if scene_to_spawn and scene_to_spawn.can_instantiate():
-		var new_shot = scene_to_spawn.instantiate() as Node2D
+		var new_shot = scene_to_spawn.instantiate() as RigidBody2D
 		#var container = get_tree().current_scene
 		#var container = parent_tank.get_fired_weapon_container()
 		var container = SceneManager.get_current_level_root() if not null else get_tree().current_scene
