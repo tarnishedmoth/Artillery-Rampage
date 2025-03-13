@@ -16,8 +16,11 @@ class WeaponInfo:
 
 var tank: Tank
 
+var has_player_fired: bool = false
+
 func _ready() -> void:
-	pass
+	# Listen to track opponent targeting feedback and if player has fired
+	GameEvents.projectile_fired.connect(_on_projectile_fired)
 
 var game_level: GameLevel:
 	get: return SceneManager.get_current_level_root()
@@ -287,4 +290,16 @@ func delete_weapon_infos(weapon_infos: Array[WeaponInfo]) -> void:
 	for info in weapon_infos:
 		info.delete()
 	weapon_infos.clear()
+#endregion
+
+#region Miss tracking
+
+func _target_is_player_and_has_not_fired(target: TankController) -> bool:
+	return !has_player_fired and target is Player
+
+func _on_projectile_fired(projectile: WeaponProjectile) -> void:
+	if projectile.owner_tank.owner is Player:
+		print_debug("%s: Player has fired - %s" % [name, projectile.owner_tank.owner.name])
+		has_player_fired = true
+
 #endregion

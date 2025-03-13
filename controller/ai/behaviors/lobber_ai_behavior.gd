@@ -77,9 +77,6 @@ var last_opponent_history_entry: OpponentTargetHistory
 func _ready() -> void:
 	super._ready()
 
-	# Listen to track opponent targeting feedback
-	GameEvents.projectile_fired.connect(_on_projectile_fired)
-
 func execute(_tank: Tank) -> AIState:
 	super.execute(_tank)
 	
@@ -95,7 +92,8 @@ func execute(_tank: Tank) -> AIState:
 	var perfect_shot_angle: float = best_opponent_data.angle
 	var perfect_shot_power: float = best_opponent_data.power
 	
-	var is_perfect_shot:bool = randf() > aim_error_chance	
+	# Always try to miss on first shot at player if they have not taken a shot yet
+	var is_perfect_shot:bool = not _target_is_player_and_has_not_fired(best_opponent_data.opponent) or randf() > aim_error_chance
 
 	var angle_deviation: float = 0.0 if is_perfect_shot else randf_range(-aim_deviation_degrees, aim_deviation_degrees)
 	var power_deviation: float = 0.0 if is_perfect_shot else perfect_shot_power * randf_range(-aim_power_pct, aim_power_pct)
@@ -131,8 +129,6 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 	var my_pos:Vector2 = aim_fulcrum_position
 	var opp_pos:Vector2 = shot.opponent.tank.global_position
 
-	var to_opp:Vector2 = opp_pos - my_pos
-
 	# Compensate based on last shot but ignore if delta is too large
 	var last_entry: OpponentTargetHistory = opponent_target_history.back()
 	var last_pos_delta: float = last_entry.my_position.distance_to(my_pos)
@@ -162,9 +158,17 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 	# Ideally too the angle should be increased to get over the hump - this should be handled ideally by the initial shot set up to do a raycast for different angles as well as the 
 	# normal projectile simulation so that we have a good starting point that doesn't pound into a hill
 	var shot_deviation_x: float = absf(shot_deviation.x)
-	var shot_deviation_dist : float = maxf(shot_deviation_x - pow(absf(shot_deviation.y), delta_y_exp), shot_deviation_x * max_dist_x_reduction_frac)
 	
-	var is_long: bool = shot_deviation.x * to_opp_aim > 0.0
+	# y sign is negative if hit above target
+	# Compensating for hitting early or late based on terrain elevation differences
+	# Allow flipping the sign on the min side if end up "tunneling under" the enemy when underhitting as it will 
+	# eventually report an incorrect "long shot".  Maybe capturing the x at the height of the target would be a better approach
+	var shot_deviation_sign_y:float = signf(shot_deviation.y)
+	var adjusted_shot_y:float = pow(shot_deviation_sign_y * shot_deviation.y, delta_y_exp)
+	var raw_adjustment_value:float = shot_deviation_x - shot_deviation_sign_y * adjusted_shot_y
+	var shot_deviation_dist : float = maxf(shot_deviation_x - adjusted_shot_y, shot_deviation_x * max_dist_x_reduction_frac)
+	
+	var is_long: bool = shot_deviation.x * signf(raw_adjustment_value) * to_opp_aim > 0.0
 	
 	# TODO: Easing?
 	var power_dev: float = pow_per_dist * pow(shot_deviation_dist, power_dist_exp) / pow(time_mult * delta_time, time_exp)
@@ -371,6 +375,8 @@ func _add_opponent_target_entry(opponent_data: Dictionary) -> OpponentTargetHist
 	return target_data
 
 func _on_projectile_fired(projectile: WeaponProjectile) -> void:
+	super._on_projectile_fired(projectile)
+
 	if projectile.owner_tank != tank:
 		return
 	

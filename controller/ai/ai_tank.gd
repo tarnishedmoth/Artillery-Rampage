@@ -133,7 +133,7 @@ class AIPoweringState extends AIActionState:
 		# Power is set as a percent [0-100]
 		total_delta = (target_power - parent.tank.power) / parent.tank.max_power * 100.0
 	
-		if is_zero_approx(total_delta):
+		if is_zero_approx(total_delta) or is_nan(total_delta):
 			total_time = 0.0
 		else:
 			power_sec = randf_range(parent.min_ai_power_per_sec, parent.max_ai_power_per_sec) * sign(total_delta)

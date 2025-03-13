@@ -20,7 +20,10 @@ func execute(_tank: Tank) -> AIState:
 	var best_weapon: int = _select_best_weapon(best_opponent_data, weapon_infos)
 
 	var perfect_shot_angle: float = best_opponent_data.angle
-	var angle_deviation: float = 0.0 if randf() > aim_error_chance else perfect_shot_angle + randf_range(-aim_deviation_degrees, aim_deviation_degrees)
+
+	var is_perfect_shot:bool = not _target_is_player_and_has_not_fired(best_opponent_data.opponent) or randf() > aim_error_chance
+
+	var angle_deviation: float = 0.0 if is_perfect_shot else perfect_shot_angle + randf_range(-aim_deviation_degrees, aim_deviation_degrees)
 	
 	var angle := clampf(perfect_shot_angle + angle_deviation, _tank.min_angle, _tank.max_angle)
 	
