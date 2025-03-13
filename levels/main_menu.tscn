@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bpy071ovoevnq"]
+[gd_scene load_steps=6 format=3 uid="uid://bpy071ovoevnq"]
 
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/control_theme_main_menu.tres" id="1_1lcqw"]
 [ext_resource type="Script" path="res://levels/main_menu.gd" id="1_3vdg5"]
-[ext_resource type="Script" path="res://levels/options.gd" id="3_f4ud1"]
 [ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="3_tkm84"]
+[ext_resource type="Script" path="res://levels/mainmenu_level_select.gd" id="4_ryopc"]
+[ext_resource type="Script" path="res://levels/mainmenu_options.gd" id="5_kab65"]
 
 [node name="MainMenu" type="Node2D" node_paths=PackedStringArray("revealables")]
 script = ExtResource("1_3vdg5")
@@ -171,7 +172,6 @@ L Nullam enim magna semper efficitur vestibulum
 M convallis pulvinar habitasse laoreet. Eros sapien quisque elit laoreet mattis non ultricies. Feugiat id quis; mi imperdiet eu fringilla.
 
 N Facilisis turpis finibus sit rutrum enim consectetur ultrices ridiculus. Himenaeos"
-scroll_active = false
 shortcut_keys_enabled = false
 
 [node name="Spacer2" type="Control" parent="Controls/Menu/Columns/RightColumn"]
@@ -189,6 +189,96 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.05
 
+[node name="LevelSelect" type="PanelContainer" parent="Controls" node_paths=PackedStringArray("levels_list", "level_template_button")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("4_ryopc")
+levels_list = NodePath("VBoxContainer/HBoxContainer/VBoxContainer/Buttons")
+level_template_button = NodePath("VBoxContainer/HBoxContainer/VBoxContainer/Buttons/LevelButtonTemplate")
+scan_all_levels = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Controls/LevelSelect"]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="Controls/LevelSelect/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.13
+
+[node name="Label" type="Label" parent="Controls/LevelSelect/VBoxContainer"]
+layout_mode = 2
+text = "Level Select"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Controls/LevelSelect/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Spacer" type="Control" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="TopSpacer" type="Control" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.13
+
+[node name="Buttons" type="VBoxContainer" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="LevelButtonTemplate" type="Button" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Level Name"
+
+[node name="MiddleSpacer" type="Control" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.13
+
+[node name="ConfirmButtons" type="HBoxContainer" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Apply" type="Button" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons"]
+layout_mode = 2
+text = "Apply"
+
+[node name="Cancel" type="Button" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons"]
+layout_mode = 2
+text = "Cancel"
+
+[node name="BottomSpacer" type="Control" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.13
+
+[node name="Spacer2" type="Control" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="BoxContainer" type="BoxContainer" parent="Controls/LevelSelect/VBoxContainer"]
+layout_mode = 2
+
 [node name="Options" type="PanelContainer" parent="Controls"]
 unique_name_in_owner = true
 visible = false
@@ -200,7 +290,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("3_f4ud1")
+script = ExtResource("5_kab65")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Controls/Options"]
 layout_mode = 2
@@ -275,5 +365,9 @@ layout_mode = 2
 [connection signal="pressed" from="Controls/Menu/Columns/CenterColumn/Buttons/LevelSelect" to="." method="_on_level_select_pressed"]
 [connection signal="pressed" from="Controls/Menu/Columns/CenterColumn/Buttons/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="Controls/Menu/Columns/CenterColumn/Buttons/Quit" to="." method="_on_quit_pressed"]
+[connection signal="mouse_entered" from="Controls/Menu/Columns/RightColumn/CreditsList" to="." method="_on_credits_list_mouse_entered"]
+[connection signal="mouse_exited" from="Controls/Menu/Columns/RightColumn/CreditsList" to="." method="_on_credits_list_mouse_exited"]
+[connection signal="pressed" from="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Apply" to="Controls/LevelSelect" method="_on_apply_pressed"]
+[connection signal="pressed" from="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Cancel" to="Controls/LevelSelect" method="_on_cancel_pressed"]
 [connection signal="pressed" from="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Apply" to="Controls/Options" method="_on_apply_pressed"]
 [connection signal="pressed" from="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Cancel" to="Controls/Options" method="_on_cancel_pressed"]

@@ -21,8 +21,10 @@ var _current_credits_list_line:int = 0
 # @onready
 @onready var credits_list: RichTextLabel = %CreditsList
 @onready var credits_list_line_count = credits_list.get_line_count()
+var credits_list_is_focused:bool = false
 
 @onready var options_menu: Control = %Options
+@onready var level_select_menu: Control = %LevelSelect
 #endregion
 
 
@@ -77,7 +79,7 @@ func _on_start_pressed() -> void:
 
 func _on_level_select_pressed() -> void:
 	print_debug("Level select button")
-	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.RandomStart)
+	level_select_menu.show()
 
 func _on_options_pressed() -> void:
 	print_debug("Options button")
@@ -96,6 +98,7 @@ func _on_quit_pressed() -> void:
 	#return children
 
 func _on_scroller_timeout() -> void:
+	if credits_list_is_focused: return
 	_current_credits_list_line += 1
 	if _current_credits_list_line > credits_list_line_count:
 		_current_credits_list_line = 0
@@ -109,3 +112,10 @@ func _on_reveal_timeout() -> void:
 			print_debug("Fully revealed; to reveal: ",_text_controls.size()," controls.")
 			break # Godot documentation says not to erase while iterating
 	revealer_timer.start(clampf(revealer_timer.wait_time * 0.95, 0.012, 2.0)) # Accelerate
+
+
+func _on_credits_list_mouse_entered() -> void:
+	credits_list_is_focused = true
+
+func _on_credits_list_mouse_exited() -> void:
+	credits_list_is_focused = false
