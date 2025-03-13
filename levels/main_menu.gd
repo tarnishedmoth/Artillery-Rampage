@@ -23,6 +23,7 @@ var _current_credits_list_line:int = 0
 @onready var credits_list_line_count = credits_list.get_line_count()
 var credits_list_is_focused:bool = false
 
+@onready var main_menu: VBoxContainer = %MainMenu
 @onready var options_menu: Control = %Options
 @onready var level_select_menu: Control = %LevelSelect
 #endregion
@@ -80,10 +81,12 @@ func _on_start_pressed() -> void:
 func _on_level_select_pressed() -> void:
 	print_debug("Level select button")
 	level_select_menu.show()
+	main_menu.hide()
 
 func _on_options_pressed() -> void:
 	print_debug("Options button")
 	options_menu.show()
+	main_menu.hide()
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()

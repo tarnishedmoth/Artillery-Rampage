@@ -2,6 +2,7 @@ extends PanelContainer
 
 @export_dir var levels_folders_paths: Array[String]
 @onready var menu_levels_list: VBoxContainer = %Buttons
+@onready var main_menu: VBoxContainer = %MainMenu
 
 var selected_level:String
 var scan_all_levels:bool
@@ -74,6 +75,7 @@ func _on_level_selected(button:ButtonLevel) -> void: #Expects file path
 
 func _on_cancel_pressed() -> void:
 	hide()
+	main_menu.show()
 
 func _on_apply_pressed() -> void:
 	if not selected_level.is_empty():

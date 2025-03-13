@@ -8,7 +8,7 @@
 
 [node name="MainMenu" type="Node2D" node_paths=PackedStringArray("revealables")]
 script = ExtResource("1_3vdg5")
-revealables = [NodePath("Controls/Menu/Columns/CenterColumn/MainMenuHeader"), NodePath("Controls/Menu/Columns/RightColumn/CreditsHeader"), NodePath("Controls/Menu/Columns/RightColumn/CreditsList")]
+revealables = [NodePath("Controls/MainMenu/Columns/CenterColumn/MainMenuHeader"), NodePath("Controls/MainMenu/Columns/RightColumn/CreditsHeader"), NodePath("Controls/MainMenu/Columns/RightColumn/CreditsList")]
 
 [node name="Controls" type="Control" parent="."]
 custom_minimum_size = Vector2(1280, 720)
@@ -29,7 +29,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource("3_tkm84")
 
-[node name="Menu" type="VBoxContainer" parent="Controls"]
+[node name="MainMenu" type="VBoxContainer" parent="Controls"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -39,108 +40,108 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TopSpacer" type="Control" parent="Controls/Menu"]
+[node name="TopSpacer" type="Control" parent="Controls/MainMenu"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.05
 
-[node name="Columns" type="HBoxContainer" parent="Controls/Menu"]
+[node name="Columns" type="HBoxContainer" parent="Controls/MainMenu"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Spacer" type="Control" parent="Controls/Menu/Columns"]
+[node name="Spacer" type="Control" parent="Controls/MainMenu/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.25
 
-[node name="LeftColumn" type="VBoxContainer" parent="Controls/Menu/Columns"]
+[node name="LeftColumn" type="VBoxContainer" parent="Controls/MainMenu/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PanelContainer" type="PanelContainer" parent="Controls/Menu/Columns/LeftColumn"]
+[node name="PanelContainer" type="PanelContainer" parent="Controls/MainMenu/Columns/LeftColumn"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ColorRect" type="ColorRect" parent="Controls/Menu/Columns/LeftColumn/PanelContainer"]
+[node name="ColorRect" type="ColorRect" parent="Controls/MainMenu/Columns/LeftColumn/PanelContainer"]
 layout_mode = 2
 color = Color(0.0907759, 0.251854, 0.506566, 1)
 
-[node name="Spacer2" type="Control" parent="Controls/Menu/Columns"]
+[node name="Spacer2" type="Control" parent="Controls/MainMenu/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.13
 
-[node name="CenterColumn" type="VBoxContainer" parent="Controls/Menu/Columns"]
+[node name="CenterColumn" type="VBoxContainer" parent="Controls/MainMenu/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SpacerTop" type="Control" parent="Controls/Menu/Columns/CenterColumn"]
+[node name="SpacerTop" type="Control" parent="Controls/MainMenu/Columns/CenterColumn"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="MainMenuHeader" type="Label" parent="Controls/Menu/Columns/CenterColumn"]
+[node name="MainMenuHeader" type="Label" parent="Controls/MainMenu/Columns/CenterColumn"]
 layout_mode = 2
 text = "Artillery Rampage"
 horizontal_alignment = 1
 
-[node name="Divider" type="Panel" parent="Controls/Menu/Columns/CenterColumn"]
+[node name="Divider" type="Panel" parent="Controls/MainMenu/Columns/CenterColumn"]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="Spacer" type="Control" parent="Controls/Menu/Columns/CenterColumn"]
+[node name="Spacer" type="Control" parent="Controls/MainMenu/Columns/CenterColumn"]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 size_flags_stretch_ratio = 0.13
 
-[node name="Buttons" type="VBoxContainer" parent="Controls/Menu/Columns/CenterColumn"]
+[node name="Buttons" type="VBoxContainer" parent="Controls/MainMenu/Columns/CenterColumn"]
 layout_mode = 2
 
-[node name="Start" type="Button" parent="Controls/Menu/Columns/CenterColumn/Buttons"]
+[node name="Start" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/Buttons"]
 layout_mode = 2
 text = "Start"
 
-[node name="LevelSelect" type="Button" parent="Controls/Menu/Columns/CenterColumn/Buttons"]
+[node name="LevelSelect" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/Buttons"]
 layout_mode = 2
 text = "Level Select"
 
-[node name="Options" type="Button" parent="Controls/Menu/Columns/CenterColumn/Buttons"]
+[node name="Options" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/Buttons"]
 layout_mode = 2
 text = "Options"
 
-[node name="Spacer" type="Control" parent="Controls/Menu/Columns/CenterColumn/Buttons"]
+[node name="Spacer" type="Control" parent="Controls/MainMenu/Columns/CenterColumn/Buttons"]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 size_flags_stretch_ratio = 0.13
 
-[node name="Quit" type="Button" parent="Controls/Menu/Columns/CenterColumn/Buttons"]
+[node name="Quit" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/Buttons"]
 layout_mode = 2
 text = "Quit"
 
-[node name="SpacerBottom" type="Control" parent="Controls/Menu/Columns/CenterColumn"]
+[node name="SpacerBottom" type="Control" parent="Controls/MainMenu/Columns/CenterColumn"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Spacer3" type="Control" parent="Controls/Menu/Columns"]
+[node name="Spacer3" type="Control" parent="Controls/MainMenu/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.13
 
-[node name="RightColumn" type="VBoxContainer" parent="Controls/Menu/Columns"]
+[node name="RightColumn" type="VBoxContainer" parent="Controls/MainMenu/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Spacer" type="Control" parent="Controls/Menu/Columns/RightColumn"]
+[node name="Spacer" type="Control" parent="Controls/MainMenu/Columns/RightColumn"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="CreditsHeader" type="Label" parent="Controls/Menu/Columns/RightColumn"]
+[node name="CreditsHeader" type="Label" parent="Controls/MainMenu/Columns/RightColumn"]
 layout_mode = 2
 text = "Credits"
 horizontal_alignment = 1
 
-[node name="CreditsList" type="RichTextLabel" parent="Controls/Menu/Columns/RightColumn"]
+[node name="CreditsList" type="RichTextLabel" parent="Controls/MainMenu/Columns/RightColumn"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -174,17 +175,17 @@ M convallis pulvinar habitasse laoreet. Eros sapien quisque elit laoreet mattis 
 N Facilisis turpis finibus sit rutrum enim consectetur ultrices ridiculus. Himenaeos"
 shortcut_keys_enabled = false
 
-[node name="Spacer2" type="Control" parent="Controls/Menu/Columns/RightColumn"]
+[node name="Spacer2" type="Control" parent="Controls/MainMenu/Columns/RightColumn"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="Spacer4" type="Control" parent="Controls/Menu/Columns"]
+[node name="Spacer4" type="Control" parent="Controls/MainMenu/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.25
 
-[node name="BottomSpacer" type="Control" parent="Controls/Menu"]
+[node name="BottomSpacer" type="Control" parent="Controls/MainMenu"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.05
@@ -368,12 +369,12 @@ size_flags_stretch_ratio = 0.5
 [node name="BoxContainer" type="BoxContainer" parent="Controls/Options/VBoxContainer"]
 layout_mode = 2
 
-[connection signal="pressed" from="Controls/Menu/Columns/CenterColumn/Buttons/Start" to="." method="_on_start_pressed"]
-[connection signal="pressed" from="Controls/Menu/Columns/CenterColumn/Buttons/LevelSelect" to="." method="_on_level_select_pressed"]
-[connection signal="pressed" from="Controls/Menu/Columns/CenterColumn/Buttons/Options" to="." method="_on_options_pressed"]
-[connection signal="pressed" from="Controls/Menu/Columns/CenterColumn/Buttons/Quit" to="." method="_on_quit_pressed"]
-[connection signal="mouse_entered" from="Controls/Menu/Columns/RightColumn/CreditsList" to="." method="_on_credits_list_mouse_entered"]
-[connection signal="mouse_exited" from="Controls/Menu/Columns/RightColumn/CreditsList" to="." method="_on_credits_list_mouse_exited"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/Buttons/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/Buttons/LevelSelect" to="." method="_on_level_select_pressed"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/Buttons/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/Buttons/Quit" to="." method="_on_quit_pressed"]
+[connection signal="mouse_entered" from="Controls/MainMenu/Columns/RightColumn/CreditsList" to="." method="_on_credits_list_mouse_entered"]
+[connection signal="mouse_exited" from="Controls/MainMenu/Columns/RightColumn/CreditsList" to="." method="_on_credits_list_mouse_exited"]
 [connection signal="pressed" from="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Start" to="Controls/LevelSelect" method="_on_apply_pressed"]
 [connection signal="pressed" from="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Cancel" to="Controls/LevelSelect" method="_on_cancel_pressed"]
 [connection signal="pressed" from="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Apply" to="Controls/Options" method="_on_apply_pressed"]
