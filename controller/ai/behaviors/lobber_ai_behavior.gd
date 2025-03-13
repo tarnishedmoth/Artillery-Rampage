@@ -77,9 +77,6 @@ var last_opponent_history_entry: OpponentTargetHistory
 func _ready() -> void:
 	super._ready()
 
-	# Listen to track opponent targeting feedback
-	GameEvents.projectile_fired.connect(_on_projectile_fired)
-
 func execute(_tank: Tank) -> AIState:
 	super.execute(_tank)
 	
@@ -95,7 +92,8 @@ func execute(_tank: Tank) -> AIState:
 	var perfect_shot_angle: float = best_opponent_data.angle
 	var perfect_shot_power: float = best_opponent_data.power
 	
-	var is_perfect_shot:bool = randf() > aim_error_chance	
+	# Always try to miss on first shot at player if they have not taken a shot yet
+	var is_perfect_shot:bool = not _target_is_player_and_has_not_fired(best_opponent_data.opponent) or randf() > aim_error_chance
 
 	var angle_deviation: float = 0.0 if is_perfect_shot else randf_range(-aim_deviation_degrees, aim_deviation_degrees)
 	var power_deviation: float = 0.0 if is_perfect_shot else perfect_shot_power * randf_range(-aim_power_pct, aim_power_pct)
@@ -371,6 +369,8 @@ func _add_opponent_target_entry(opponent_data: Dictionary) -> OpponentTargetHist
 	return target_data
 
 func _on_projectile_fired(projectile: WeaponProjectile) -> void:
+	super._on_projectile_fired(projectile)
+
 	if projectile.owner_tank != tank:
 		return
 	
