@@ -109,7 +109,7 @@ func _on_reveal_timeout() -> void:
 		node.set_visible_characters(node.visible_characters + 1)
 		if node.visible_ratio >= 1.00:
 			_text_controls.erase(node)
-			print_debug("Fully revealed; to reveal: ",_text_controls.size()," controls.")
+			print_debug("Typewriter reveal: an item fully revealed; items remaining to reveal: ",_text_controls.size()," controls.")
 			break # Godot documentation says not to erase while iterating
 	revealer_timer.start(clampf(revealer_timer.wait_time * 0.95, 0.012, 2.0)) # Accelerate
 

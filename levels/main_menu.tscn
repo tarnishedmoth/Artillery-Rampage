@@ -189,7 +189,7 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.05
 
-[node name="LevelSelect" type="PanelContainer" parent="Controls" node_paths=PackedStringArray("levels_list", "level_template_button")]
+[node name="LevelSelect" type="PanelContainer" parent="Controls"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -201,9 +201,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("4_ryopc")
-levels_list = NodePath("VBoxContainer/HBoxContainer/VBoxContainer/Buttons")
-level_template_button = NodePath("VBoxContainer/HBoxContainer/VBoxContainer/Buttons/LevelButtonTemplate")
-scan_all_levels = true
+levels_folders_paths = Array[String](["res://levels", "res://levels/test"])
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Controls/LevelSelect"]
 layout_mode = 2
@@ -238,15 +236,24 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.13
 
-[node name="Buttons" type="VBoxContainer" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
-[node name="LevelButtonTemplate" type="Button" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/Buttons"]
+[node name="Buttons" type="VBoxContainer" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Level Name"
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="MiddleSpacer" type="Control" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -257,9 +264,9 @@ size_flags_stretch_ratio = 0.13
 layout_mode = 2
 alignment = 1
 
-[node name="Apply" type="Button" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons"]
+[node name="Start" type="Button" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons"]
 layout_mode = 2
-text = "Apply"
+text = "Start Selected Level"
 
 [node name="Cancel" type="Button" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons"]
 layout_mode = 2
@@ -367,7 +374,7 @@ layout_mode = 2
 [connection signal="pressed" from="Controls/Menu/Columns/CenterColumn/Buttons/Quit" to="." method="_on_quit_pressed"]
 [connection signal="mouse_entered" from="Controls/Menu/Columns/RightColumn/CreditsList" to="." method="_on_credits_list_mouse_entered"]
 [connection signal="mouse_exited" from="Controls/Menu/Columns/RightColumn/CreditsList" to="." method="_on_credits_list_mouse_exited"]
-[connection signal="pressed" from="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Apply" to="Controls/LevelSelect" method="_on_apply_pressed"]
+[connection signal="pressed" from="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Start" to="Controls/LevelSelect" method="_on_apply_pressed"]
 [connection signal="pressed" from="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Cancel" to="Controls/LevelSelect" method="_on_cancel_pressed"]
 [connection signal="pressed" from="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Apply" to="Controls/Options" method="_on_apply_pressed"]
 [connection signal="pressed" from="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Cancel" to="Controls/Options" method="_on_cancel_pressed"]
