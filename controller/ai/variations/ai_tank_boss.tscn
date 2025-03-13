@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://crngia488dkhe"]
+
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="1_kttku"]
+[ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="2_heem8"]
+
+[node name="AITank" instance=ExtResource("1_kttku")]
+enable_damage_before_first_turn = false
+
+[node name="Tank" parent="." index="0"]
+drop_on_death = null
+max_health = 1000.0
+
+[node name="LobberAiBehavior" parent="StateMachine" index="0" instance=ExtResource("2_heem8")]
