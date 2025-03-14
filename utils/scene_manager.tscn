@@ -4,7 +4,7 @@
 
 [node name="SceneManager" type="Node"]
 script = ExtResource("1_olrhd")
-levels = Array[String](["res://levels/test/test_level_01.tscn", "res://levels/test/test_level_02.tscn"])
+levels = Array[String](["res://levels/test/test_level_01.tscn", "res://levels/test/test_level_02.tscn", "res://levels/test/test_level_terrain_proc_gen.tscn", "res://levels/test/test_level_terrain_proc_gen_fresh.tscn"])
 level_names = {
 "res://levels/test/test_level_01.tscn": "Level 1"
 }
