@@ -22,8 +22,9 @@ DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 RuntimeDebugTools="*res://addons/runtime_debug_tools/scenes/remote_inspector.tscn"
 Collisions="*res://utils/collisions.gd"
 Groups="*res://utils/groups.gd"
-SceneManager="*res://utils/scene_manager.tscn"
 PhysicsUtils="*res://utils/physics_utils.gd"
+AITypes="*res://controller/ai/ai_types.gd"
+SceneManager="*res://utils/scene_manager.tscn"
 
 [display]
 

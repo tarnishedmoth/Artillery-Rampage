@@ -5,6 +5,14 @@ class NullAIBehavior extends AIBehavior:
 
 var ai_behavior: AIBehavior
 var active_state: AIState
+	
+func _ready() -> void:
+	ai_behavior = _find_existing_behavior()
+	if ai_behavior:
+		print_debug("%s - %s: Found existing behavior instance=%s", [get_parent().name, name, ai_behavior.name])
+	else:
+		push_error("%s - No AI Behavior found! AI will self-destruct by default!" % [get_parent().name])
+		ai_behavior = NullAIBehavior.new()
 
 func execute(tank: Tank) -> TankActionResult:
 	var state = ai_behavior.execute(tank)
@@ -20,14 +28,17 @@ func execute(tank: Tank) -> TankActionResult:
 	
 	return active_state.execute(tank)
 
-func _ready() -> void:
-	ai_behavior = _find_existing_behavior()
+func change_behavior(type: Enums.AIBehaviorType) -> void:
+	var new_behavior : AIBehavior = AITypes.new_ai_behavior(type)
+	if not new_behavior:
+		return
 	if ai_behavior:
-		print_debug("%s - %s: Found existing behavior instance=%s", [get_parent().name, name, ai_behavior.name])
-	else:
-		push_error("%s - No AI Behavior found! AI will self-destruct by default!" % [get_parent().name])
-		ai_behavior = NullAIBehavior.new()
-
+		remove_child(ai_behavior)
+		ai_behavior.queue_free()
+	
+	ai_behavior = new_behavior
+	add_child(new_behavior)
+	
 func _find_existing_behavior() -> AIBehavior:
 	for child in get_children():
 		if child is AIBehavior:
