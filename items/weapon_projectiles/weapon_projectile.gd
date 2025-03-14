@@ -49,12 +49,13 @@ signal completed_lifespan ## Tracked by Weapon class
 ## Indicate whether need to explode on impact with supported collision layers and cause damage
 ## This replaces the "Overlap" concept
 @export_category("Destructible")
-@export var should_explode_on_impact:bool = true
+@export var should_explode_on_impact:bool = true ## Deployable weapons should have this set to False.
 
 var calculated_hit: bool
 var owner_tank: Tank;
 var source_weapon: Weapon # The weapon we came from
 var firing_container
+var destructible_component:CollisionPolygon2D
 
 # TODO: We can probably combine this with above should_explode_on_impact
 # Removed the Overlap concept as can handle the overlap interaction through the rigid body
@@ -73,8 +74,10 @@ var current_collision:CollisionResult
 func _ready() -> void:
 	if should_explode_on_impact:
 		connect("body_entered", on_body_entered)
-	modulate = color
+	if has_node('Destructible'):
+		destructible_component = get_node('Destructible')
 	if max_lifetime > 0.0: destroy_after_lifetime()
+	modulate = color
 	GameEvents.emit_projectile_fired(self)
 	
 func set_sources(tank:Tank,weapon:Weapon) -> void:
@@ -129,13 +132,13 @@ func on_body_entered(_body: Node2D):
 				root_node.take_damage(owner_tank, self, damage_amount)
 				had_interaction = true
 		# Some projectiles don't have a destructible node, e.g. MIRV
-		if $Destructible:
+		if destructible_component:
 			root_node = get_parent_in_group(node, Groups.Destructible)
 			if root_node:
 				if root_node in processed_set:
 					continue
-				center_destructible_on_impact_point($Destructible)
-				root_node.damage($Destructible, destructible_scale_multiplier)
+				center_destructible_on_impact_point(destructible_component)
+				root_node.damage(destructible_component, destructible_scale_multiplier)
 				had_interaction = true
 		processed_set[root_node] = root_node
 	# end for

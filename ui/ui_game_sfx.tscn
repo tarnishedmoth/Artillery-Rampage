@@ -1,21 +1,21 @@
-[gd_scene load_steps=5 format=3 uid="uid://dgmcs2um4230a"]
+[gd_scene load_steps=2 format=3 uid="uid://dgmcs2um4230a"]
 
 [ext_resource type="Script" path="res://ui/ui_game_sfx.gd" id="1_f7f20"]
-[ext_resource type="AudioStream" uid="uid://b5hpfn0aw82lo" path="res://ui/sounds/SynthStab.wav" id="2_6ljig"]
-[ext_resource type="AudioStream" uid="uid://c0h4bta0hm7s1" path="res://ui/sounds/SynthStab27.wav" id="3_gecra"]
-[ext_resource type="AudioStream" uid="uid://dfefdm54rlgyt" path="res://ui/sounds/SynthStab2.wav" id="4_dt27c"]
 
-[node name="UI_Game_SFX" type="Node" node_paths=PackedStringArray("sfx_round_started", "sfx_round_ended", "sfx_turn_started")]
+[node name="UI_Game_SFX" type="Node" node_paths=PackedStringArray("sfx_round_started", "sfx_round_ended", "sfx_turn_started", "sfx_turn_ended", "sfx_weapon_updated")]
 script = ExtResource("1_f7f20")
 sfx_round_started = NodePath("Round Start")
 sfx_round_ended = NodePath("Round End")
 sfx_turn_started = NodePath("Turn Start")
+sfx_turn_ended = NodePath("Turn End")
+sfx_weapon_updated = NodePath("Weapon Updated")
 
 [node name="Round Start" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_6ljig")
 
 [node name="Round End" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_gecra")
 
 [node name="Turn Start" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_dt27c")
+
+[node name="Turn End" type="AudioStreamPlayer" parent="."]
+
+[node name="Weapon Updated" type="AudioStreamPlayer" parent="."]

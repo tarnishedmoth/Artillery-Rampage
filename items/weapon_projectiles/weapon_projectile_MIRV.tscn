@@ -25,6 +25,7 @@ explosion_to_spawn = ExtResource("3_riydy")
 min_damage = 2.0
 max_damage = 15.0
 destructible_scale_multiplier = Vector2(1, 1)
+should_explode_on_impact = false
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.184, 0.184)
