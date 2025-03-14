@@ -1,4 +1,4 @@
-extends StaticBody2D
+class_name WorldFloor extends StaticBody2D
 
 @onready var _floorCollision: CollisionShape2D = $FloorCollision
 @onready var _overlapCollision: CollisionShape2D = $FloorOverlap/FloorCollisionOverlap
