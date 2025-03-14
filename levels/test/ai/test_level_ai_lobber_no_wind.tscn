@@ -28,9 +28,6 @@ enable_damage_before_first_turn = false
 [node name="Tank" parent="GameLevel/Enemy1" index="0"]
 color = Color(0.682353, 0.713726, 0.219608, 1)
 
-[node name="StateMachine" parent="GameLevel/Enemy1" index="1"]
-behavior_type = 1
-
 [node name="LobberAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_7lcg8")]
 aim_error_chance = 0.0
 
@@ -40,9 +37,6 @@ enable_damage_before_first_turn = false
 
 [node name="Tank" parent="GameLevel/Enemy2" index="0"]
 color = Color(0.137255, 0.180392, 0.701961, 1)
-
-[node name="StateMachine" parent="GameLevel/Enemy2" index="1"]
-behavior_type = 1
 
 [node name="LobberAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_7lcg8")]
 aim_error_chance = 0.0

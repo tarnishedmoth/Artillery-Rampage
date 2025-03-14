@@ -29,9 +29,6 @@ enable_damage_before_first_turn = false
 [node name="Tank" parent="GameLevel/Enemy2" index="0"]
 color = Color(0.137255, 0.180392, 0.701961, 1)
 
-[node name="StateMachine" parent="GameLevel/Enemy2" index="1"]
-behavior_type = 1
-
 [node name="LobberAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_irich")]
 aim_error_chance = 0.0
 

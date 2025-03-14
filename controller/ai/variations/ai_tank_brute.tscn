@@ -1,8 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://sthucbuglqt5"]
+[gd_scene load_steps=3 format=3 uid="uid://sthucbuglqt5"]
 
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="1_noyvk"]
+[ext_resource type="PackedScene" uid="uid://158k4fde7cpd" path="res://controller/ai/behaviors/brute_ai_behavior.tscn" id="2_nn2t6"]
 
 [node name="AITank" instance=ExtResource("1_noyvk")]
 
 [node name="StateMachine" parent="." index="1"]
 behavior_type = 1
+
+[node name="BruteAiBehavior" parent="StateMachine" index="0" instance=ExtResource("2_nn2t6")]

@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://5tt4q4rs2fkg"]
+
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="1_4fg4j"]
+[ext_resource type="PackedScene" uid="uid://6b6y8xulf247" path="res://controller/ai/behaviors/rando_ai_behavior.tscn" id="2_ml7k8"]
+
+[node name="AITank" instance=ExtResource("1_4fg4j")]
+
+[node name="RandoAiBehavior" parent="StateMachine" index="0" instance=ExtResource("2_ml7k8")]

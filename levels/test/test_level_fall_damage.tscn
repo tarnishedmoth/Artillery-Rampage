@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://da5nobsfmb01f"]
+[gd_scene load_steps=5 format=3 uid="uid://da5nobsfmb01f"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_gnoni"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_mj57f"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="3_4hqwb"]
+[ext_resource type="PackedScene" uid="uid://6b6y8xulf247" path="res://controller/ai/behaviors/rando_ai_behavior.tscn" id="3_mdsnb"]
 
 [node name="TestLevel01" type="Node2D"]
 
@@ -14,17 +15,23 @@ position = Vector2(479, 178)
 [node name="Tank" parent="GameLevel/Enemy1" index="0"]
 color = Color(0.682353, 0.713726, 0.219608, 1)
 
+[node name="RandoAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_mdsnb")]
+
 [node name="Enemy2" parent="GameLevel" instance=ExtResource("2_mj57f")]
 position = Vector2(1100, 126)
 
 [node name="Tank" parent="GameLevel/Enemy2" index="0"]
 color = Color(0.137255, 0.180392, 0.701961, 1)
 
+[node name="RandoAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_mdsnb")]
+
 [node name="Enemy3" parent="GameLevel" instance=ExtResource("2_mj57f")]
 position = Vector2(955.14, 226)
 
 [node name="Tank" parent="GameLevel/Enemy3" index="0"]
 color = Color(0.137255, 0.180392, 0.701961, 1)
+
+[node name="RandoAiBehavior" parent="GameLevel/Enemy3/StateMachine" index="0" instance=ExtResource("3_mdsnb")]
 
 [node name="Player" parent="GameLevel" instance=ExtResource("3_4hqwb")]
 position = Vector2(120, 427)

@@ -13,7 +13,6 @@ weapons_container = NodePath("Weapons")
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("3_7xwap")
-behavior_type = 2
 
 [node name="Weapons" type="Node" parent="."]
 

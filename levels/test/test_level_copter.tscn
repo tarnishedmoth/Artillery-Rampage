@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://c5xgv7bgvn642"]
+[gd_scene load_steps=10 format=3 uid="uid://c5xgv7bgvn642"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_2pbg1"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_w0o7s"]
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="3_n5e16"]
+[ext_resource type="PackedScene" uid="uid://6b6y8xulf247" path="res://controller/ai/behaviors/rando_ai_behavior.tscn" id="3_tifwg"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="4_p6mcx"]
 [ext_resource type="PackedScene" uid="uid://whswocs0q861" path="res://weapons/weapon_deployable_personnelretrieval.tscn" id="5_73mjw"]
 [ext_resource type="PackedScene" uid="uid://bogp8cydgto88" path="res://personnel/pickup_copter.tscn" id="5_dad6q"]
@@ -19,11 +20,15 @@ position = Vector2(479, 278)
 [node name="Tank" parent="GameLevel/Enemy1" index="0"]
 color = Color(0.682353, 0.713726, 0.219608, 1)
 
+[node name="RandoAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_tifwg")]
+
 [node name="Enemy2" parent="GameLevel" instance=ExtResource("2_w0o7s")]
 position = Vector2(936, 344)
 
 [node name="Tank" parent="GameLevel/Enemy2" index="0"]
 color = Color(0.682353, 0.713726, 0.219608, 1)
+
+[node name="RandoAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_tifwg")]
 
 [node name="House1" parent="GameLevel" instance=ExtResource("3_n5e16")]
 position = Vector2(43, 409)
