@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://ct7ax8u2uxeeb"]
 
 [ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile_deployable.gd" id="1_6sst8"]
-[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_rbpx8"]
+[ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="2_mfriq"]
 [ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="3_jc62i"]
 [ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="4_3782q"]
 [ext_resource type="AudioStream" uid="uid://cgac4miv6d3uq" path="res://weapons/sounds/sfx_weapon_singleshot15.wav" id="5_d5bl0"]
@@ -14,7 +14,7 @@ contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_6sst8")
 sfx_trigger = NodePath("Trigger")
-deploy_scene_to_spawn = ExtResource("2_rbpx8")
+deploy_scene_to_spawn = ExtResource("2_mfriq")
 min_falloff_distance = 1.0
 max_falloff_distance = 100.0
 min_damage = 0.0

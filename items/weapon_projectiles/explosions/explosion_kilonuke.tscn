@@ -34,7 +34,7 @@ fill_to = Vector2(0.9, 0.9)
 
 [node name="ExplosionKilonuke" type="Node2D" node_paths=PackedStringArray("particles", "sfx", "lights")]
 script = ExtResource("1_7v7m5")
-particles = [NodePath("CPUParticles2D"), NodePath("")]
+particles = [NodePath("CPUParticles2D"), NodePath("Dust")]
 sfx = [NodePath("AudioStreamPlayer2D")]
 lights = [NodePath("PointLight2D")]
 

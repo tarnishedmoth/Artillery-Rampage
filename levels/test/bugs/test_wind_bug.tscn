@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://c2fx2mtqraags"]
+[gd_scene load_steps=7 format=3 uid="uid://c2fx2mtqraags"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_d8x3v"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_ypt0n"]
 [ext_resource type="PackedScene" uid="uid://6b6y8xulf247" path="res://controller/ai/behaviors/rando_ai_behavior.tscn" id="3_dslen"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="4_6dllr"]
+[ext_resource type="PackedScene" uid="uid://btemialk4ka7v" path="res://items/weapon_projectiles/weapon_projectile_deployable_personnelretrieval.tscn" id="5_85a2f"]
+[ext_resource type="PackedScene" uid="uid://ct7ax8u2uxeeb" path="res://items/weapon_projectiles/weapon_projectile_deployable_aitank.tscn" id="6_des8a"]
 
 [node name="TestWindBug" type="Node2D"]
 
@@ -24,7 +26,12 @@ color = Color(0.682353, 0.713726, 0.219608, 1)
 [node name="Player" parent="GameLevel" instance=ExtResource("4_6dllr")]
 position = Vector2(120, 427)
 
+[node name="WeaponProjectileDeployable" parent="GameLevel/Player/Weapons" index="8" instance=ExtResource("5_85a2f")]
+
+[node name="WeaponProjectileDeployable2" parent="GameLevel/Player/Weapons" index="9" instance=ExtResource("6_des8a")]
+
 [editable path="GameLevel"]
 [editable path="GameLevel/Walls"]
 [editable path="GameLevel/Wind"]
 [editable path="GameLevel/Enemy1"]
+[editable path="GameLevel/Player"]
