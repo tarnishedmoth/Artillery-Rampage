@@ -24,8 +24,8 @@ delay_before_thrusting = 0.55
 thrust_decay_time = 0.96
 max_lifetime = 4.0
 explosion_to_spawn = ExtResource("2_274w3")
-min_falloff_distance = 30.0
-max_falloff_distance = 90.0
+min_falloff_distance = 40.0
+max_falloff_distance = 150.0
 max_damage = 90.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

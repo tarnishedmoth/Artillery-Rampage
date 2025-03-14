@@ -21,6 +21,8 @@ behavior = 1
 thrust_sfx = NodePath("MissileThruster/Thruster")
 explosion_to_spawn = ExtResource("2_4tg6q")
 min_falloff_distance = 20.0
+max_falloff_distance = 150.0
+min_damage = 15.0
 max_damage = 80.0
 destructible_scale_multiplier = Vector2(8, 8)
 
