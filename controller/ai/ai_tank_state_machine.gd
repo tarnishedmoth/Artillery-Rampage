@@ -1,7 +1,7 @@
 class_name AITankStateMachine extends Node
 
 class NullAIBehavior extends AIBehavior:
-	func execute(tank: Tank) -> AIState: return AIState.NullState.new()
+	func execute(_tank: Tank) -> AIState: return AIState.NullState.new()
 
 var ai_behavior: AIBehavior
 var active_state: AIState

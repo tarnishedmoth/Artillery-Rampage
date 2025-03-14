@@ -8,8 +8,8 @@ var active_state: AIState;
 func _ready() -> void:
 	active_state = RandomActionState.new(self)
 
-func execute(tank: Tank) -> AIState:
-	super.execute(tank)
+func execute(_tank: Tank) -> AIState:
+	super.execute(_tank)
 	return active_state
 	
 # Classic "Mr. Stupid" AI :) 	
