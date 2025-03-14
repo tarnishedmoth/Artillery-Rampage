@@ -188,7 +188,8 @@ func spawn_explosion(scene:PackedScene) -> void:
 	if scene.can_instantiate():
 		instance = scene.instantiate()
 		instance.global_position = global_position
-		firing_container.add_child(instance)
+		# Per - weapon_projectile.gd:191 @ spawn_explosion(): Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.
+		firing_container.add_child.call_deferred(instance)
 
 func _determine_contact_point(movement_dir: Vector2, radius: float) -> Vector2:
 	var space_state = get_world_2d().direct_space_state

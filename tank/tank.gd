@@ -351,6 +351,12 @@ func push_weapon_update_to_hud(weapon: Weapon = get_equipped_weapon()) -> void:
 func _on_weapon_destroyed(weapon: Weapon) -> void:
 	weapons.erase(weapon)
 	
+	# Guard against errors similar to the following:
+	# Tank.gd:304 @ get_equipped_weapon(): Attempted to find an invalid (previously freed?) object instance into a 'TypedArray.
+	# Could check is_instance_valid but simpler and more idomatic to just set to null after free
+	if weapon == current_equipped_weapon:
+		current_equipped_weapon = null
+	
 func _on_weapon_changed(new_weapon: Weapon) -> void:
 	push_weapon_update_to_hud(new_weapon)
 #endregion
