@@ -17,13 +17,13 @@ interpolation_color_space = 1
 offsets = PackedFloat32Array(0.0736842, 0.271579, 0.738947)
 colors = PackedColorArray(0.755934, 0.394078, 0.254461, 1, 0.970102, 0.829246, 0, 1, 0, 0, 0, 0.380392)
 
-[sub_resource type="Gradient" id="Gradient_uthto"]
+[sub_resource type="Gradient" id="Gradient_exqmd"]
 interpolation_mode = 2
 interpolation_color_space = 1
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_f3b2q"]
-gradient = SubResource("Gradient_uthto")
+gradient = SubResource("Gradient_exqmd")
 width = 256
 height = 256
 use_hdr = true
