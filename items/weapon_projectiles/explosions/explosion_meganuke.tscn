@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://70ea023qffgt"]
+[gd_scene load_steps=9 format=3 uid="uid://70ea023qffgt"]
 
 [ext_resource type="Script" path="res://items/weapon_projectiles/explosions/explosion.gd" id="1_a1bo2"]
 [ext_resource type="AudioStream" uid="uid://dgebyjcrmxrr7" path="res://items/weapon_projectiles/explosions/sounds/sfx_medium_explosion.wav" id="2_ur366"]
+[ext_resource type="PackedScene" uid="uid://cjk1xlwijbmno" path="res://items/weapon_projectiles/explosions/dust.tscn" id="3_37xti"]
 
 [sub_resource type="Curve" id="Curve_ogmm5"]
 max_value = 100.0
@@ -33,7 +34,7 @@ fill_to = Vector2(0.9, 0.9)
 
 [node name="ExplosionMeganuke" type="Node2D" node_paths=PackedStringArray("particles", "sfx", "lights")]
 script = ExtResource("1_a1bo2")
-particles = [NodePath("CPUParticles2D")]
+particles = [NodePath("CPUParticles2D"), NodePath("Dust")]
 sfx = [NodePath("AudioStreamPlayer2D")]
 lights = [NodePath("PointLight2D")]
 
@@ -57,6 +58,12 @@ scale_amount_min = 32.0
 scale_amount_max = 64.0
 scale_amount_curve = SubResource("Curve_cqwh4")
 color_ramp = SubResource("Gradient_gugk1")
+
+[node name="Dust" parent="." instance=ExtResource("3_37xti")]
+amount = 16
+emission_sphere_radius = 84.0
+spread = 80.0
+initial_velocity_min = 64.0
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 color = Color(0.904395, 0.905264, 0.840633, 1)
