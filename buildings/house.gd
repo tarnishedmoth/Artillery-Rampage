@@ -9,11 +9,19 @@ extends Node
 
 var health: float
 
+var image = Image.load_from_file("res://buildings/house.png")
+var texture = ImageTexture.create_from_image(image)
+
 func _ready() -> void:
 	health = max_health
+	# replace CompressedTexture2D with an editable texture
+	$HouseBody/HouseBodySprite.texture = texture
 
 #region Damage and Death
 func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float) -> void:
+	# dampen damage taken so the house lasts longer
+	amount = amount / 2
+
 	var orig_health = health
 	health = clampf(health - amount, 0, max_health)
 	var actual_damage = orig_health - health
@@ -30,5 +38,14 @@ func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float
 	
 	if health <= 0:
 		queue_free()
-		
+	else:
+		# randomly erase pixels from the image
+		# eventually these will be shingle-sized rects rather than individual pixels
+		for x in range(0,image.get_width()):
+			for y in range(0,image.get_height()):
+				var chance_to_erase = 0.525 * (1 - (randf() * health / max_health))
+				if chance_to_erase > 0.5:
+					image.set_pixel(x, y, Color(0, 0, 0, 0))
+		$HouseBody/HouseBodySprite.texture.update(image)
+
 #endregion
