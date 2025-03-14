@@ -12,7 +12,8 @@ class_name Explosion extends Node2D
 # AudioStreamPlayer and AudioStreamPlayer2D are not related
 # Also we could use the type of Player that layers sounds itself.
 @export var sfx:Array[AudioStreamPlayer2D] ## Will wait until all emit finished to queue_free
-@export var lights:Array[PointLight2D]
+@export var lights:Array[PointLight2D] ## Will fade out the light's energy property to 0.
+@export_range(0.1, 10.0, 0.05,"or_greater","suffix:seconds") var lights_fade_time:float = 1.0
 
 var _finished_sfx:int = 0
 var _finished_particles:int = 0
@@ -52,7 +53,7 @@ func free_after_delay() -> void:
 	
 func fade_light(light: PointLight2D) -> void:
 	var light_tween = create_tween()
-	light_tween.tween_property(light, "energy", 0.0, 1.0)
+	light_tween.tween_property(light, "energy", 0.0, lights_fade_time)
 	light_tween.set_ease(Tween.EASE_IN)
 
 func _on_sfx_finished() -> void:
