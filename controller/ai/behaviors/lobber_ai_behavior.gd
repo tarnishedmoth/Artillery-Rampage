@@ -223,9 +223,9 @@ class TargetActionState extends AIState:
 		self._angle = angle
 
 		priority = default_priority
-		if opponent_data.direct:
+		if opponent_data.get("direct", false):
 			priority += 100
-		elif !opponent_data.hit_position:
+		elif !opponent_data.has("hit_position"):
 			priority += 10
 
 

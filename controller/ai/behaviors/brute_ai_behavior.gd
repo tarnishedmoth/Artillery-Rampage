@@ -31,7 +31,7 @@ func execute(_tank: Tank) -> AIState:
 	var weapon_infos := get_weapon_infos()
 	
 	var best_opponent_data: Dictionary = _select_best_opponent()
-	var power: float = _modify_power(best_opponent_data.opponent)
+	var power: float = _modify_power(best_opponent_data)
 
 	best_opponent_data.power = power
 	_add_opponent_target_entry(best_opponent_data)
@@ -53,10 +53,11 @@ func execute(_tank: Tank) -> AIState:
 	
 	return TargetActionState.new(best_opponent_data.opponent, best_weapon, angle, power, best_opponent_data, default_priority)
 
-func _modify_power(opponent: TankController) -> float:
-	if ! track_shot_history:
+func _modify_power(opponent_data: Dictionary) -> float:
+	if not track_shot_history or not opponent_data.get("direct", false):
 		return tank.max_power
-
+		
+	var opponent: TankController = opponent_data.opponent
 	var opponent_history: Array = get_opponent_target_history(opponent)
 	if !opponent_history:
 		print_debug("Brute AI(%s): No direct shot - Ignoring shot history" % [tank.owner.name])
@@ -108,9 +109,9 @@ class TargetActionState extends AIState:
 		self._power = power
 
 		priority = default_priority
-		if opponent_data.direct:
+		if opponent_data.get("direct", false):
 			priority += 100
-		elif !opponent_data.hit_position:
+		elif !opponent_data.has("hit_position"):
 			priority += 10
 
 	func execute(tank: Tank) -> TankActionResult:
