@@ -39,6 +39,7 @@ position = Vector2(479, 278)
 color = Color(0.682353, 0.713726, 0.219608, 1)
 
 [node name="LobberAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("4_mwsln")]
+forces_mask = 15
 
 [node name="Enemy2" parent="GameLevel" instance=ExtResource("2_lx6f5")]
 position = Vector2(1100, 426)

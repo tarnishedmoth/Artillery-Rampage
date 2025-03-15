@@ -47,19 +47,22 @@ func get_power_for_target_and_angle(target: Vector2, angle: float, launch_props:
 	# See https://en.wikipedia.org/wiki/Range_of_a_projectile
 	var source: Vector2 = aim_fulcrum_position
 
+	# If adjusting for walls then get the adjusted target
+	var adjusted_target: Vector2 = get_target_end_walls(source, target, forces)
+
 	# Adjusting target for max power if wind should be taken into account
 	if forces & Forces.Wind:
 		var orig_launch_speed := launch_props.speed
 		launch_props.speed = tank.max_power * launch_props.power_speed_mult
-		target += _get_wind_offset(target - source, launch_props)
+		target += _get_wind_offset(adjusted_target - source, launch_props)
 		launch_props.speed = orig_launch_speed
 
 	# Wolfram Alpha: Solve d = v * cos(theta) / g * (v * sin(theta) + sqrt(v ^ 2 * sin(theta)^2 + 2 * g * y)) for v
 	# v = d * sqrt(g) / (sqrt(2 * d * sin(theta) + 2 * y * cos(theta)) * sqrt(cos(theta))
 
 	# Y should be positive for targets below, since y increases going down this works out
-	var y: float = target.y - source.y
-	var x: float = absf(target.x - source.x)
+	var y: float = adjusted_target.y - source.y
+	var x: float = absf(adjusted_target.x - source.x)
 
 	var g : float = PhysicsUtils.get_gravity_vector().y
 
@@ -106,11 +109,11 @@ func check_world_collision(start_pos: Vector2, end_pos: Vector2) -> Dictionary:
 
 	return result
 
-
 func get_direct_aim_angle_to(opponent: TankController, launch_props: LaunchProperties, forces: int = 0) -> float:
 	var aim_source_pos: Vector2 = aim_fulcrum_position
 
 	# By default aim to the center of the opponent
+	# TODO: get_shortest_path_walls should be used here for opponent_position
 	var opponent_position: Vector2 = opponent.tank.tankBody.global_position
 
 	var to_opponent: Vector2 = opponent_position - aim_source_pos
@@ -150,6 +153,7 @@ func has_direct_shot_to(opponent : TankController, launch_props: LaunchPropertie
 	var opponent_tank: Tank = opponent.tank
 	var test_positions: PackedVector2Array = opponent_tank.get_body_reference_points_global()
 
+	# TODO: to_opponent should take into account walls using get_shortest_path_walls
 	var to_opponent: Vector2 = opponent_position - aim_source_position
 	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, launch_props, forces)
 
@@ -182,6 +186,7 @@ func has_direct_shot_to(opponent : TankController, launch_props: LaunchPropertie
 	
 	for i in range(viable_positions.size()):
 		var position: Vector2 = viable_positions[i]
+		# TODO: Account for pairwise (0, 1), (1, 2) positions that take into account walls using get_line_of_sight_positions
 		var result : Dictionary = has_line_of_sight_to(fire_position, position)
 		if result.test:
 			has_los = true
@@ -210,8 +215,12 @@ func has_direct_shot_to(opponent : TankController, launch_props: LaunchPropertie
 class Forces:
 	const Gravity:int = 1
 	const Wind:int = 1 << 1
-	
-	const All: int = Gravity | Wind
+
+	const Walls_Warp:int = 1 << 2
+	const Walls_Elastic:int = 1 << 3
+
+	const Walls: int = Walls_Warp | Walls_Elastic
+	const All: int = Gravity | Wind | Walls_Warp | Walls_Elastic
 	
 func _get_active_forces_offset(aim_trajectory: Vector2, launch_props: LaunchProperties, forces: int) -> Vector2:
 	var total_offset: Vector2 = Vector2.ZERO
@@ -302,4 +311,100 @@ func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 		print_debug("%s: Player has fired - %s" % [name, projectile.owner_tank.owner.name])
 		has_player_fired = true
 
+#endregion
+
+#region Walls
+
+func should_wall_compensate(forces: int) -> bool:
+	var walls: Walls = game_level.walls
+	if !walls:
+		return false
+	match walls.wall_mode:
+		Walls.WallType.WARP:
+			return forces & Forces.Walls_Warp != 0
+		Walls.WallType.ELASTIC:
+			return forces & Forces.Walls_Elastic != 0
+	return false
+
+func get_target_end_walls(start_pos: Vector2, end_pos: Vector2, forces: int) -> Vector2:
+	return get_shortest_path_walls(start_pos, end_pos).end if should_wall_compensate(forces) else end_pos
+
+func get_shortest_path_walls(start_pos: Vector2, end_pos: Vector2) -> Dictionary:
+	# return all points along the path
+	# TODO: May break this out into a separate class
+	# TODO: May want to pass in velocities too as these are affected by the elastic mode and may need to loop through certain simulations
+	# To get the full result
+	# for example for warp you may get 4 results - start -> right wall -> left wall -> end
+	# for elastic you may get 4 results - start -> right_wall -> bounce -> end
+	# for none you may get 2 results - start -> end
+	# TODO: We should calculate this just once and store on this AIBehavior
+
+	# For being determine los and collisions, need to return the intermediate test points when there are walls
+	var results: Dictionary = {}
+	results.use_walls = false
+
+	var walls: Walls = game_level.walls
+	if !walls or walls.wall_mode != Walls.WallType.WARP:
+		results.end = end_pos
+		return results
+	
+	# Compare distance squared direct to target and distance squared using walls
+	var direction: Vector2 = end_pos - start_pos
+	var direct_distance: float = absf(direction.x)
+
+	# Determine direction and need to flip if using walls
+	# We will assume they aren't there and just extend the x distance
+	var dir_sign: float = signf(direction.x)
+	var wall_x_positions: PackedFloat32Array = []
+
+	if dir_sign > 0: # Aiming to right want to check left
+		wall_x_positions.push_back(walls.min_extent.x)
+		wall_x_positions.push_back(walls.max_extent.x)
+	else: # Aiming to left
+		wall_x_positions.push_back(walls.max_extent.x)
+		wall_x_positions.push_back(walls.min_extent.x)
+
+	var adjusted_end_pos: float = (wall_x_positions[0] - start_pos.x) + (end_pos.x - wall_x_positions[1])
+	var wall_distance: float = absf(adjusted_end_pos - start_pos.x)
+
+	if wall_distance < direct_distance:
+		results.use_walls = true
+		results.end = Vector2(start_pos.x + adjusted_end_pos, end_pos.y)
+		results.wall_x_positions = wall_x_positions
+	else:
+		results.end = end_pos
+
+	return results
+
+func get_line_of_sight_positions(start_pos: Vector2, end_pos: Vector2, forces: int) -> PackedVector2Array:
+
+	var results: PackedVector2Array = []
+	if !should_wall_compensate(forces):
+		results.push_back(start_pos)
+		results.push_back(end_pos)
+		return results
+
+	var wall_results: Dictionary = get_shortest_path_walls(start_pos, end_pos)
+	if !wall_results.use_walls:
+		results.push_back(start_pos)
+		results.push_back(end_pos)
+		return results
+
+	# Need to interpolate the y between the walls
+	var wall_x_positions: PackedFloat32Array = wall_results.wall_x_positions
+	var adjusted_end_pos: Vector2 = wall_results.end
+
+	var total_distance: float = absf(adjusted_end_pos.x - start_pos.x)
+	var accum_distance: float = 0.0
+
+	results.push_back(start_pos)
+	accum_distance += absf(wall_x_positions[0] - start_pos.x)
+	var first_wall: Vector2 = Vector2(wall_x_positions[0], lerpf(start_pos.y, adjusted_end_pos.y, accum_distance / total_distance))
+	results.push_back(first_wall)
+
+	if wall_x_positions.size() > 1: # Warp
+		results.push_back(Vector2(wall_x_positions[1], first_wall.y))
+
+	results.push_back(end_pos)
+	return results
 #endregion

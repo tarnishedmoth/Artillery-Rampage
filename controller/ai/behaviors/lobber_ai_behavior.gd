@@ -19,7 +19,7 @@ class_name LobberAIBehavior extends AIBehavior
 @export_range(0.0, 1.0, 0.05) var angles: Array[float] = [80.0, 75.0, 70.0, 65.0, 60.0, 55.0, 50.0, 45.0]
 
 @export_group("Config")
-@export_flags("Gravity", "Wind") var forces_mask: int = Forces.All
+@export_flags("Gravity", "Wind", "Warp Walls", "Elastic Walls") var forces_mask: int = Forces.Gravity | Forces.Wind
 
 @export_group("Config")
 @export_category("Hone")
@@ -93,7 +93,7 @@ func execute(_tank: Tank) -> AIState:
 	var perfect_shot_power: float = best_opponent_data.power
 	
 	# Always try to miss on first shot at player if they have not taken a shot yet
-	var is_perfect_shot:bool = not _target_is_player_and_has_not_fired(best_opponent_data.opponent) or randf() > aim_error_chance
+	var is_perfect_shot:bool = not _target_is_player_and_has_not_fired(best_opponent_data.opponent) and randf() > aim_error_chance
 
 	var angle_deviation: float = 0.0 if is_perfect_shot else randf_range(-aim_deviation_degrees, aim_deviation_degrees)
 	var power_deviation: float = 0.0 if is_perfect_shot else perfect_shot_power * randf_range(-aim_power_pct, aim_power_pct)
@@ -120,6 +120,7 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 		print_debug("Lobber AI(%s): No direct shot to %s - Ignoring shot history" % [tank.owner.name, shot.opponent.name])
 		return
 	
+	# TODO: May need to make adjustements for walls based on adjusted_position from _select_best_opponent
 	var opponent = shot.opponent
 	var opponent_target_history = _opponent_target_history.get(opponent)
 	if !opponent_target_history:
@@ -246,7 +247,10 @@ func _select_best_opponent() -> Dictionary:
 	var opponents: Array[TankController] = get_opponents()
 
 	var closest_direct_opponent: TankController = null
+	var closest_direct_opponent_pos: Vector2 = Vector2.ZERO
+
 	var closest_opponent: TankController = null
+	var closest_opponent_position: Vector2 = Vector2.ZERO
 
 	var closest_direct_shot_distance: float = 1e9
 	var closest_distance:float = 1e9
@@ -260,34 +264,38 @@ func _select_best_opponent() -> Dictionary:
 
 	# If there is no direct shot opponent, then we will just return the closest opponent
 	for opponent in opponents:
-		var distance: float = tank.global_position.distance_squared_to(opponent.tank.global_position)
+		var adjusted_opponent_position: Vector2 = get_target_end_walls(tank.global_position, opponent.tank.global_position, forces_mask)
+
+		var distance: float = tank.global_position.distance_squared_to(adjusted_opponent_position)
 
 		if distance < closest_distance:
 			closest_distance = distance
 			closest_opponent = opponent
+			closest_opponent_position = adjusted_opponent_position
 
 		var targeting_values: Dictionary = _get_power_and_angle_to_opponent(opponent, launch_props)
 		if targeting_values and distance < closest_direct_shot_distance:
 			closest_direct_shot_distance = distance
 			closest_direct_opponent = opponent
+			closest_direct_opponent_pos = adjusted_opponent_position
 			closest_targeting_values = targeting_values
 	
 	if closest_direct_opponent:
 		var transformed_angle = global_angle_to_turret_angle(closest_targeting_values.angle)
-		var angle: float = transformed_angle if closest_direct_opponent.tank.global_position.x >= tank.global_position.x else -transformed_angle
+		var angle: float = transformed_angle if closest_direct_opponent_pos.x >= tank.global_position.x else -transformed_angle
 
-		return { direct = true, opponent = closest_direct_opponent, angle = angle, power = closest_targeting_values.power }
+		return { direct = true, opponent = closest_direct_opponent, angle = angle, power = closest_targeting_values.power, adjusted_position = closest_direct_opponent_pos }
 
 	# Need to determine where we will hit with the fallback approach as this needs to be taken into account with weapon selection
 	else:
 		var transformed_angle = global_angle_to_turret_angle(angles.min())
 
-		var angle: float = transformed_angle if closest_opponent.tank.global_position.x >= tank.global_position.x else -transformed_angle
+		var angle: float = transformed_angle if closest_opponent_position.x >= tank.global_position.x else -transformed_angle
 		var dir: Vector2 = aim_angle_to_world_direction(angle)
 		# Determine point we hit in that direction
 		var ray_cast_result: Dictionary = check_world_collision(tank.turret.global_position, tank.turret.global_position + dir * 10000.0)
 
-		var result : Dictionary =  { direct = false, opponent = closest_opponent, angle = angle, power = tank.max_power }
+		var result : Dictionary =  { direct = false, opponent = closest_opponent, angle = angle, power = tank.max_power, adjusted_position = closest_opponent_position }
 
 		if ray_cast_result:
 			result.hit_position = ray_cast_result.position
