@@ -8,7 +8,7 @@
 script = ExtResource("1_bbd4g")
 scene_to_spawn = ExtResource("2_cm802")
 display_name = "Hellfire"
-fire_velocity = 160.0
+fire_velocity = 1200.0
 use_ammo = true
 current_ammo = 5
 use_magazines = true

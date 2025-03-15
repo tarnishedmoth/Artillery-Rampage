@@ -16,7 +16,7 @@ func _physics_process(delta: float) -> void:
 	if difference < y_velocity_min_threshold:
 		_low_velocity_frames += 1
 		if _low_velocity_frames >= low_vel_frames_to_detonate:
-			deployable.deploy()
+			deployable.trigger()
 			queue_free()
 	else:
 		_low_velocity_frames = 0

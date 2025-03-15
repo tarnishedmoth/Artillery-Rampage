@@ -18,9 +18,9 @@ max_contacts_reported = 1
 script = ExtResource("1_wgrqp")
 sfx_trigger = NodePath("TriggerSFX")
 deploy_scene_to_spawn = ExtResource("2_e33fd")
-deploy_number = 2
-deploy_velocity_impulse = 200.0
-deploy_delay = 0.0
+deploy_number = 3
+deploy_velocity_impulse = 300.0
+deploy_delay = 0.25
 explosion_to_spawn = ExtResource("3_riydy")
 min_damage = 2.0
 max_damage = 15.0
@@ -28,7 +28,7 @@ destructible_scale_multiplier = Vector2(1, 1)
 should_explode_on_impact = false
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.184, 0.184)
+scale = Vector2(0.25, 0.25)
 texture = ExtResource("3_3drbo")
 
 [node name="CollisionShade2D" type="CollisionShape2D" parent="."]
@@ -37,7 +37,7 @@ shape = ExtResource("4_trup7")
 [node name="TriggerSFX" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_544do")
 volume_db = -6.0
-pitch_scale = 4.0
+pitch_scale = 2.0
 
 [node name="ApexSensor" type="Node2D" parent="." node_paths=PackedStringArray("tracking", "deployable")]
 script = ExtResource("7_v0wp2")

@@ -8,9 +8,9 @@
 script = ExtResource("1_ij436")
 scene_to_spawn = ExtResource("2_fwcj5")
 display_name = "MIRV"
+fire_velocity = 400.0
 use_fire_rate = true
 fire_rate = 1.0
-always_shoot_for_count = 2
 retain_when_empty = false
 use_ammo = true
 ammo_used_per_shot = 2

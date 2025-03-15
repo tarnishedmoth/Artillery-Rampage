@@ -27,6 +27,7 @@ var deployed_container:Node2D
 var deployed:Array
 # _private
 var _impacted:bool = false
+var _triggered:bool = false
 var _deployed_lifespan_completed:int = 0
 
 var _explosion_played:bool = false
@@ -72,11 +73,20 @@ func deploy() -> void:
 	if destroy_after_deployed: destroy()
 	else: _fake_destroy()
 	
-#func destroy():
-	##GameEvents.emit_turn_ended(owner_tank.owner) ## Moved to Weapon class.
-	#completed_lifespan.emit()
-	#queue_free()
-	
+func trigger() -> void:
+	if _triggered: return
+	_triggered = true
+	#print_debug("Triggered to deploy")
+	if sfx_trigger:
+		sfx_trigger.play()
+	if deploy_delay > 0.0:
+		var timer = Timer.new()
+		add_child(timer)
+		timer.timeout.connect(deploy)
+		timer.start(deploy_delay)
+	else:
+		deploy()
+
 #endregion
 #region--Private Methods
 func _setup_deployable(deployable:Node2D, physics:bool = true) -> void:
@@ -101,14 +111,8 @@ func _setup_deployable(deployable:Node2D, physics:bool = true) -> void:
 func _on_body_entered(body: Node) -> void: ## Internal signal
 	if _impacted: return
 	_impacted = true
-	print_debug("Deployable body entered")
-	var timer = Timer.new()
-	add_child(timer)
-	timer.timeout.connect(deploy)
-	timer.start(deploy_delay)
-	
-	if sfx_trigger:
-		sfx_trigger.play()
+	#print_debug("Deployable body entered")
+	trigger()
 
 func _on_deployable_lifetime_completed() -> void:
 	_deployed_lifespan_completed += 1

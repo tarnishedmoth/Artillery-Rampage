@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://bfovdi5eowpoe"]
+[gd_scene load_steps=9 format=3 uid="uid://bfovdi5eowpoe"]
 
 [ext_resource type="Script" path="res://items/collectible_item.gd" id="1_4k6ar"]
 [ext_resource type="PackedScene" uid="uid://cjk1xlwijbmno" path="res://items/weapon_projectiles/explosions/dust.tscn" id="2_48q08"]
 [ext_resource type="PackedScene" uid="uid://cqbcgkw62vmhs" path="res://items/rubble/rubble_piece.tscn" id="2_yciuw"]
+[ext_resource type="Script" path="res://items/weapon_projectiles/explosions/autostart_oneshot.gd" id="3_oripr"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_f40h2"]
 radius = 16.0
@@ -66,6 +67,7 @@ damping_min = 5.0
 damping_max = 7.0
 scale_amount_min = 0.6
 scale_amount_max = 0.75
+script = ExtResource("3_oripr")
 
 [node name="Rubbles" parent="Rubbles" instance=ExtResource("2_yciuw")]
 position = Vector2(11, -6)
