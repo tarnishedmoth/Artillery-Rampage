@@ -3,24 +3,24 @@ class_name AITankStateMachine extends Node
 class NullAIBehavior extends AIBehavior:
 	func execute(_tank: Tank) -> AIState: return AIState.NullState.new()
 
-var ai_behavior: AIBehavior
+var ai_behaviors: Array[AIBehavior] = []
 var active_state: AIState
 	
 func _ready() -> void:
-	ai_behavior = _find_existing_behavior()
-	if ai_behavior:
-		print_debug("%s - %s: Found existing behavior instance=%s", [get_parent().name, name, ai_behavior.name])
+	ai_behaviors = _find_existing_behaviors()
+	if ai_behaviors:
+		print_debug("%s - %s: Found existing behavior instances=%s", [get_parent().name, name, ",".join(ai_behaviors.map(func(x): return x.name))])
 	else:
-		push_error("%s - No AI Behavior found! AI will self-destruct by default!" % [get_parent().name])
-		ai_behavior = NullAIBehavior.new()
+		push_error("%s - No AI Behaviors found! AI will self-destruct by default!" % [get_parent().name])
+		ai_behaviors = [NullAIBehavior.new()]
 
 func execute(tank: Tank) -> TankActionResult:
-	var state = ai_behavior.execute(tank)
+	var state: AIState = _get_best_state(tank)
 	if !is_instance_valid(state):
-		# TODO: Maybe returning a null state is something we want to handle with a default?
-		push_error("ai_behavior " + ai_behavior.name + " returned a null state!")
-		return
-	if(state != active_state):
+		push_error("%s - Could not determine an AI state!" % [get_parent().name])
+		if !is_instance_valid(active_state):
+			active_state = AIState.NullState.new()
+	elif(state != active_state):
 		if is_instance_valid(active_state):
 			active_state.exit()
 		state.enter()
@@ -28,19 +28,32 @@ func execute(tank: Tank) -> TankActionResult:
 	
 	return active_state.execute(tank)
 
+func _get_best_state(tank: Tank) -> AIState:
+	var best_state: AIState = null
+	var best_priority: int = -1
+	for behavior in ai_behaviors:
+		var state: AIState = behavior.execute(tank)
+		if state and state.priority > best_priority:
+			best_priority = state.priority
+			best_state = state
+	return best_state
+
 func change_behavior(type: Enums.AIBehaviorType) -> void:
 	var new_behavior : AIBehavior = AITypes.new_ai_behavior(type)
 	if not new_behavior:
 		return
-	if ai_behavior:
-		remove_child(ai_behavior)
-		ai_behavior.queue_free()
-	
-	ai_behavior = new_behavior
+		
+	for behavior in ai_behaviors:
+		remove_child(behavior)
+		behavior.queue_free()
+	ai_behaviors.clear()
+
+	ai_behaviors.push_back(new_behavior)
 	add_child(new_behavior)
 	
-func _find_existing_behavior() -> AIBehavior:
+func _find_existing_behaviors() -> Array[AIBehavior]:
+	var behaviors: Array[AIBehavior] = []
 	for child in get_children():
 		if child is AIBehavior:
-			return child
-	return null
+			behaviors.push_back(child)
+	return behaviors

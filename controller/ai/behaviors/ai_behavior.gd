@@ -1,5 +1,8 @@
 class_name AIBehavior extends Node
 
+## Set default priority returned when no other conditions match for state selection
+@export var default_priority:int = 1
+
 class LaunchProperties:
 	var speed: float
 	var power_speed_mult: float = 1.0

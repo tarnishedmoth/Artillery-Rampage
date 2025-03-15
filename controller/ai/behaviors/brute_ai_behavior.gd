@@ -32,17 +32,23 @@ func execute(_tank: Tank) -> AIState:
 
 	delete_weapon_infos(weapon_infos)
 	
-	return TargetActionState.new(best_opponent_data.opponent, best_weapon, angle)
+	return TargetActionState.new(best_opponent_data.opponent, best_weapon, angle, best_opponent_data, default_priority)
 	
 class TargetActionState extends AIState:
 	var _opponent: TankController
 	var _weapon:int 
 	var _angle:float
 
-	func _init(opponent: TankController, weapon: int, angle: float):
+	func _init(opponent: TankController, weapon: int, angle: float, opponent_data: Dictionary, default_priority: int):
 		self._opponent = opponent
 		self._weapon = weapon
 		self._angle = angle
+
+		priority = default_priority
+		if opponent_data.direct:
+			priority += 100
+		elif !opponent_data.hit_position:
+			priority += 10
 
 	func execute(tank: Tank) -> TankActionResult:
 		return TankActionResult.new(
@@ -84,7 +90,7 @@ func _select_best_opponent() -> Dictionary:
 			closest_direct_angle = result.aim_angle
 	
 	if closest_direct_opponent:
-		return { opponent = closest_direct_opponent, angle = closest_direct_angle }
+		return { direct = true, opponent = closest_direct_opponent, angle = closest_direct_angle }
 
 	# Need to determine where we will hit with the fallback approach as this needs to be taken into account with weapon selection
 	else:

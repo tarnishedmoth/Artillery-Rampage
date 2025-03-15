@@ -113,7 +113,7 @@ func execute(_tank: Tank) -> AIState:
 
 	delete_weapon_infos(weapon_infos)
 	
-	return TargetActionState.new(best_opponent_data.opponent, best_weapon, power, angle)
+	return TargetActionState.new(best_opponent_data.opponent, best_weapon, power, angle, best_opponent_data, default_priority)
 
 func _modify_shot_based_on_history(shot: Dictionary) -> void:
 	if !shot.direct:
@@ -230,11 +230,18 @@ class TargetActionState extends AIState:
 	var _power:float
 	var _angle:float
 
-	func _init(opponent: TankController, weapon: int, power:float,  angle: float):
+	func _init(opponent: TankController, weapon: int, power:float,  angle: float, opponent_data:Dictionary, default_priority: int):
 		self._opponent = opponent
 		self._weapon = weapon
 		self._power = power
 		self._angle = angle
+
+		priority = default_priority
+		if opponent_data.direct:
+			priority += 100
+		elif !opponent_data.hit_position:
+			priority += 10
+
 
 	func execute(_tank: Tank) -> TankActionResult:
 		return TankActionResult.new(

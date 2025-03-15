@@ -25,6 +25,7 @@ func begin_turn():
 	super.begin_turn()
 	
 	print_debug("%s - AI began turn" % [get_parent()])
+	
 	target_result = ai_decision_state_machine.execute(tank)
 	current_action_state = AIWaitingState.new(self)
 	
