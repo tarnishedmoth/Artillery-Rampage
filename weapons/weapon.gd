@@ -7,6 +7,8 @@ class_name Weapon extends Node2D
 #enum WeaponType{}
 signal weapon_actions_completed(weapon: Weapon) ## Emits once all the projectiles have completed their lifespans.
 signal weapon_destroyed(weapon: Weapon)
+signal ammo_changed(current_ammo:int)
+signal magazines_changed(current_magazines:int)
 
 #region Variables
 @export var scene_to_spawn: PackedScene ## This is the projectile or shoot effect.
@@ -83,6 +85,10 @@ func connect_to_tank(tank: Tank) -> void:
 	parent_tank = tank
 	if not weapon_destroyed.is_connected(parent_tank._on_weapon_destroyed): # Will push error
 		weapon_destroyed.connect(parent_tank._on_weapon_destroyed)
+		if use_ammo:
+			ammo_changed.connect(parent_tank._on_weapon_ammo_changed)
+		if use_magazines:
+			magazines_changed.connect(parent_tank._on_weapon_magazines_changed)
 	barrels.append(parent_tank.get_weapon_fire_locations())
 	configure_barrels()
 	reload()
@@ -161,9 +167,11 @@ func restock() -> void:
 
 func restock_magazines(new_magazines:int = 1) -> void:
 	magazines += new_magazines
+	magazines_changed.emit(magazines)
 
 func restock_ammo(ammo:int = magazine_capacity) -> void:
 	current_ammo += ammo
+	ammo_changed.emit(current_ammo)
 
 func configure_barrels() -> void:
 	is_configured = true
@@ -222,7 +230,9 @@ func _shoot(power:float = fire_velocity) -> void:
 		cycle()
 		pass
 		
-	if use_ammo: current_ammo -= ammo_used_per_shot
+	if use_ammo:
+		current_ammo -= ammo_used_per_shot
+		ammo_changed.emit(current_ammo)
 	if _shoot_for_count_remaining > 0:
 		_shoot_for_count_remaining -= 1
 	if _shoot_for_count_remaining == 0 or current_ammo == 0:

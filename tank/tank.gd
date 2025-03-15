@@ -310,19 +310,6 @@ func get_equipped_weapon() -> Weapon:
 		return null
 	else:
 		return current_equipped_weapon # Ugly but rather this than recursion
-
-#func scan_available_weapons() -> void:
-	#weapons.clear()
-	##var weapons_container = $TankBody/TankTurret/Weapons
-	#var weapons_container
-	#var parent = get_parent()
-	#if parent is TankController:
-		#weapons_container = parent
-	#var number:int = 0
-	#for w in weapons_container.get_children():
-		#weapons.append(w)
-		#number+=1
-	#if number > 0: set_equipped_weapon(0) ## Equip the first weapon.
 	
 func scan_available_weapons() -> void:
 	weapons.clear()
@@ -356,6 +343,12 @@ func _on_weapon_destroyed(weapon: Weapon) -> void:
 	# Could check is_instance_valid but simpler and more idomatic to just set to null after free
 	if weapon == current_equipped_weapon:
 		current_equipped_weapon = null
+
+func _on_weapon_ammo_changed(new_ammo:int) -> void:
+	push_weapon_update_to_hud()
+
+func _on_weapon_magazines_changed(new_mags:int) -> void:
+	push_weapon_update_to_hud()
 	
 func _on_weapon_changed(new_weapon: Weapon) -> void:
 	push_weapon_update_to_hud(new_weapon)
