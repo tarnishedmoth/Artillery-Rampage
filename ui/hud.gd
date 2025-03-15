@@ -8,6 +8,8 @@ extends Control
 @onready var wind_text = $CenterBackground/VBoxContainer3/Wind
 @onready var weapon_text = $CenterBackground/VBoxContainer3/Weapon
 
+@onready var debug_level_name: Label = %DebugLevelName
+
 func _ready() -> void:
 	init_signals()
 
@@ -17,6 +19,10 @@ func init_signals():
 	GameEvents.connect("power_updated", _on_power_updated)
 	GameEvents.connect("wind_updated", _on_wind_updated)
 	GameEvents.connect("weapon_updated", _on_weapon_updated)
+	GameEvents.connect("level_loaded", _on_level_changed)
+	
+	if OS.is_debug_build():
+		debug_level_name.show()
 
 func _on_turn_started(player: TankController) -> void:
 	active_player_text.text = player.name
@@ -50,3 +56,7 @@ func _get_direction_string(value: float) -> String:
 func _on_weapon_updated(weapon: Weapon) -> void:
 	weapon_text.set_label(weapon.display_name)
 	weapon_text.set_value(weapon.current_ammo if weapon.use_ammo else char(9854))
+
+func _on_level_changed(level: GameLevel) -> void:
+	var file_name = level.get_path()
+	debug_level_name.text = file_name
