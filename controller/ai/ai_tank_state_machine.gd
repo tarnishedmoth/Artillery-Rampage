@@ -5,6 +5,8 @@ class NullAIBehavior extends AIBehavior:
 
 var ai_behaviors: Array[AIBehavior] = []
 var active_state: AIState
+
+var priority_mappings: Dictionary = {}
 	
 func _ready() -> void:
 	ai_behaviors = _find_existing_behaviors()
@@ -28,6 +30,14 @@ func execute(tank: Tank) -> TankActionResult:
 	
 	return active_state.execute(tank)
 
+func change_default_priority(type: Enums.AIBehaviorType, priority: int) -> void:
+	for behavior in ai_behaviors:
+		if behavior.behavior_type == type:
+			priority_mappings[behavior] = behavior.default_priority
+			behavior.default_priority = priority
+		elif priority_mappings.has(behavior):
+			behavior.default_priority = priority_mappings[behavior]
+
 func _get_best_state(tank: Tank) -> AIState:
 	var best_state: AIState = null
 	var best_priority: int = -1
@@ -47,6 +57,7 @@ func change_behavior(type: Enums.AIBehaviorType) -> void:
 		remove_child(behavior)
 		behavior.queue_free()
 	ai_behaviors.clear()
+	priority_mappings.clear()
 
 	ai_behaviors.push_back(new_behavior)
 	add_child(new_behavior)

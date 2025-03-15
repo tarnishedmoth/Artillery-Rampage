@@ -26,11 +26,17 @@ func begin_turn():
 	
 	print_debug("%s - AI began turn" % [get_parent()])
 	
+	before_state_selection()
+	
 	target_result = ai_decision_state_machine.execute(tank)
 	current_action_state = AIWaitingState.new(self)
 	
 	tank.reset_orientation()
-	
+
+## Modify any ai_decision_state behaviors here
+func before_state_selection():
+	pass
+
 func _get_tank():
 	return _tank
 	

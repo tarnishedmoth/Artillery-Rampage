@@ -1,8 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://dtjulft5slr3v"]
+[gd_scene load_steps=5 format=3 uid="uid://dtjulft5slr3v"]
 
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="1_ectu6"]
+[ext_resource type="Script" path="res://controller/ai/variations/ai_tank_wallmaster.gd" id="2_rffm5"]
 [ext_resource type="PackedScene" uid="uid://ckpfbtl8xjgm8" path="res://controller/ai/behaviors/wallmaster_ai_behavior.tscn" id="2_sf1e8"]
+[ext_resource type="PackedScene" uid="uid://158k4fde7cpd" path="res://controller/ai/behaviors/brute_ai_behavior.tscn" id="3_0y6wd"]
 
 [node name="AITank" instance=ExtResource("1_ectu6")]
+script = ExtResource("2_rffm5")
+direct_fire_wind_threshold = 20.0
+preferred_ai_priority = 20
 
 [node name="WallmasterAiBehavior" parent="StateMachine" index="0" instance=ExtResource("2_sf1e8")]
+
+[node name="BruteAiBehavior" parent="StateMachine" index="1" instance=ExtResource("3_0y6wd")]
+forces_mask = 15

@@ -5,7 +5,4 @@
 
 [node name="AITank" instance=ExtResource("1_noyvk")]
 
-[node name="StateMachine" parent="." index="1"]
-behavior_type = 1
-
 [node name="BruteAiBehavior" parent="StateMachine" index="0" instance=ExtResource("2_nn2t6")]

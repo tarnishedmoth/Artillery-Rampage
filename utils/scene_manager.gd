@@ -27,7 +27,7 @@ var _current_level_root_node:GameLevel
 func _init() -> void:
 	GameEvents.level_loaded.connect(_on_GameLevel_loaded)
 	
-func get_current_level_root() -> Node:
+func get_current_level_root() -> GameLevel:
 	assert(is_instance_valid(_current_level_root_node), "Trying to access root outside of game level.")
 	if is_instance_valid(_current_level_root_node):
 		if _current_level_root_node.is_inside_tree():
@@ -40,7 +40,7 @@ func quit() -> void:
 	get_tree().quit()
 	
 func restart_level(delay: float = default_delay) -> void:
-	print_debug("restart_level: %s, delay=%f" % [_current_level_root_node.name if _current_level_root_node else "NULL", delay])
+	print_debug("restart_level: %s, delay=%f" % [str(_current_level_root_node.name) if _current_level_root_node else "NULL", delay])
 
 	_switch_scene(func(): get_tree().reload_current_scene(), delay)
 	
@@ -86,6 +86,6 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	get_tree().paused = false
 
 func _on_GameLevel_loaded(level:GameLevel) -> void:
-	print_debug("_on_GameLevel_loaded: level=%s" % [level.name if level else "NULL"])
+	print_debug("_on_GameLevel_loaded: level=%s" % [str(level.name) if level else "NULL"])
 	
 	_current_level_root_node = level

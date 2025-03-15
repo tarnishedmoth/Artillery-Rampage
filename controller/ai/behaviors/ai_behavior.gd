@@ -1,5 +1,7 @@
 class_name AIBehavior extends Node
 
+var behavior_type: Enums.AIBehaviorType
+
 ## Set default priority returned when no other conditions match for state selection
 @export var default_priority:int = 1
 
@@ -116,8 +118,7 @@ func get_direct_aim_angle_to(opponent: TankController, launch_props: LaunchPrope
 	var aim_source_pos: Vector2 = aim_fulcrum_position
 
 	# By default aim to the center of the opponent
-	# TODO: get_shortest_path_walls should be used here for opponent_position
-	var opponent_position: Vector2 = opponent.tank.tankBody.global_position
+	var opponent_position: Vector2 = get_target_end_walls(aim_source_pos, opponent.tank.tankBody.global_position, forces)
 
 	var to_opponent: Vector2 = opponent_position - aim_source_pos
 	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, launch_props, forces)
@@ -149,21 +150,22 @@ func turret_angle_to_global_angle(turret_angle: float) -> float:
 func has_direct_shot_to(opponent : TankController, launch_props: LaunchProperties, forces: int = 0) -> Dictionary:
 	# Test from barrel to test points on artillery
 	var aim_source_position: Vector2 = aim_fulcrum_position
-	var opponent_position:Vector2 = opponent.tank.tankBody.global_position
+	var opponent_position:Vector2 = get_target_end_walls(aim_source_position, opponent.tank.tankBody.global_position, forces)
 
 	var up_vector: Vector2 = Vector2.UP.rotated(tank.tankBody.global_rotation)
 	
 	var opponent_tank: Tank = opponent.tank
-	var test_positions: PackedVector2Array = opponent_tank.get_body_reference_points_global()
 
-	# TODO: to_opponent should take into account walls using get_shortest_path_walls
+	# Get local positions so can offset relative to the walls-adjusted opponent_position
+	var test_positions: PackedVector2Array = opponent_tank.get_body_reference_points_local()
+
 	var to_opponent: Vector2 = opponent_position - aim_source_position
 	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, launch_props, forces)
 
 	print_debug("%s: LOS opponent=%s; calculated pos_offset=%s -> %f"  % [tank.owner.name, opponent.name, pos_offset, pos_offset.length()])
 
 	for i in range(test_positions.size()):
-		test_positions[i] += pos_offset
+		test_positions[i] += opponent_position + pos_offset
 	
 	# First check that we can even aim directly at the opponent and limit to those viable positions
 	var viable_positions: PackedVector2Array = []
@@ -189,9 +191,21 @@ func has_direct_shot_to(opponent : TankController, launch_props: LaunchPropertie
 	
 	for i in range(viable_positions.size()):
 		var position: Vector2 = viable_positions[i]
-		# TODO: Account for pairwise (0, 1), (1, 2) positions that take into account walls using get_line_of_sight_positions
-		var result : Dictionary = has_line_of_sight_to(fire_position, position)
-		if result.test:
+		var line_of_sight_positions : PackedVector2Array = get_line_of_sight_positions(fire_position, position, forces)
+
+		var result : Dictionary
+		# line of sight positions are pairwise (0, 1), (1, 2), (2, 3), etc. starting with fire_position
+		var los_passed:bool = true
+		var j:int = 0
+		while j < line_of_sight_positions.size() - 1:
+			result = has_line_of_sight_to(line_of_sight_positions[j], line_of_sight_positions[j + 1])
+			if !result.test:
+				los_passed = false
+				# Need to compute last result for the position
+				j = line_of_sight_positions.size() - 2
+			j += 1
+
+		if los_passed:
 			has_los = true
 			aim_position = position
 			aim_angle = viable_angles[i]

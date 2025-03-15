@@ -76,6 +76,7 @@ var last_opponent_history_entry: OpponentTargetHistory
 
 func _ready() -> void:
 	super._ready()
+	behavior_type = Enums.AIBehaviorType.Lobber
 
 func execute(_tank: Tank) -> AIState:
 	super.execute(_tank)

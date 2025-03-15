@@ -356,6 +356,14 @@ func _on_weapon_changed(new_weapon: Weapon) -> void:
 
 #region AI Helpers
 
+func get_body_reference_points_local() -> PackedVector2Array:
+	return [
+		top_reference_point.position,
+		right_reference_point.position,
+		left_reference_point.position,
+		bottom_reference_point.position
+	]
+
 func get_body_reference_points_global() -> PackedVector2Array:
 	return [
 		top_reference_point.global_position,

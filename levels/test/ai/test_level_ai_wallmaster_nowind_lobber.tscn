@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3 uid="uid://bmp1gy4al8mq1"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_ewpo0"]
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_epc0n"]
+[ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_5efie"]
+[ext_resource type="Script" path="res://controller/ai/variations/ai_tank_wallmaster.gd" id="3_vmd4b"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="4_0qd6l"]
+
+[node name="TestLevelAIWallMaster" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_ewpo0")]
+
+[node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk" index="0"]
+polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 459.375, -182.353, 609, -8, 937, -3, 945, 445, -103, 448)
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+polygon = PackedVector2Array(-100.781, 17.647, 35.1563, 25, 158.594, 145.588, 229.688, 148.529, 390.625, 150, 475.781, -323.529, 525, -320.588, 668.75, -16.1765, 937, -3, 945, 445, -103, 448)
+
+[node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk/Overlap" index="0"]
+polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 459.375, -182.353, 609, -8, 937, -3, 945, 445, -103, 448)
+
+[node name="Wind" parent="GameLevel" index="5"]
+wind_max = 0
+
+[node name="Enemy1" parent="GameLevel" instance=ExtResource("2_epc0n")]
+position = Vector2(107, 430)
+
+[node name="Tank" parent="GameLevel/Enemy1" index="0"]
+color = Color(0.682353, 0.713726, 0.219608, 1)
+
+[node name="LobberAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_5efie")]
+
+[node name="Enemy2" parent="GameLevel" instance=ExtResource("2_epc0n")]
+position = Vector2(1099, 404)
+script = ExtResource("3_vmd4b")
+direct_fire_wind_threshold = 20.0
+preferred_ai_priority = 20
+enable_damage_before_first_turn = false
+
+[node name="Tank" parent="GameLevel/Enemy2" index="0"]
+color = Color(0.137255, 0.180392, 0.701961, 1)
+
+[node name="LobberAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_5efie")]
+
+[node name="Player" parent="GameLevel" instance=ExtResource("4_0qd6l")]
+position = Vector2(526, 528)
+enable_damage_before_first_turn = false
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/Enemy1"]
+[editable path="GameLevel/Enemy2"]

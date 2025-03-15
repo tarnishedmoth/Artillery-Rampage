@@ -6,6 +6,9 @@ class_name RandoAIBehavior extends AIBehavior
 var active_state: AIState;
 
 func _ready() -> void:
+	super._ready()
+	
+	behavior_type = Enums.AIBehaviorType.Rando
 	active_state = RandomActionState.new(self)
 
 func execute(_tank: Tank) -> AIState:

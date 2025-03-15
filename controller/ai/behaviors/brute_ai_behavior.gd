@@ -10,6 +10,10 @@ class_name BruteAIBehavior extends AIBehavior
 @export_flags("Gravity", "Wind", "Warp Walls", "Elastic Walls") var forces_mask: int = Forces.Gravity | Forces.Wind
 
 
+func _ready() -> void:
+	super._ready()
+	behavior_type = Enums.AIBehaviorType.Brute
+	
 # TODO: Maybe don't need the tank parameter
 func execute(_tank: Tank) -> AIState:
 	super.execute(_tank)
