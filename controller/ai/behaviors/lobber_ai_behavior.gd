@@ -93,7 +93,7 @@ func execute(_tank: Tank) -> AIState:
 	var perfect_shot_power: float = best_opponent_data.power
 	
 	# Always try to miss on first shot at player if they have not taken a shot yet
-	var is_perfect_shot:bool = not _target_is_player_and_has_not_fired(best_opponent_data.opponent) or randf() > aim_error_chance
+	var is_perfect_shot:bool = not _target_is_player_and_has_not_fired(best_opponent_data.opponent) and randf() > aim_error_chance
 
 	var angle_deviation: float = 0.0 if is_perfect_shot else randf_range(-aim_deviation_degrees, aim_deviation_degrees)
 	var power_deviation: float = 0.0 if is_perfect_shot else perfect_shot_power * randf_range(-aim_power_pct, aim_power_pct)
