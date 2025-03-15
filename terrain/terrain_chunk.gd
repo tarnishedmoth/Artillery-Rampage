@@ -75,15 +75,15 @@ func _physics_process(delta: float) -> void:
 	var overlaps = overlap.get_overlapping_areas()
 	var handled_merge:bool = false
 	
-	for overlap in overlaps:
-		if overlap.collision_layer == Collisions.Layers.terrain and not handled_merge:
+	for _overlap in overlaps:
+		if _overlap.collision_layer == Collisions.Layers.terrain and not handled_merge:
 			handled_merge = true
 			# Also stop falling if merge said we shouldn't but we are the bigger chunk
-			if owner.merge_chunks(overlap.get_parent(), self) or self.get_bounds_global().get_area() > overlap.get_parent().get_bounds_global().get_area():
+			if owner.merge_chunks(_overlap.get_parent(), self) or self.get_bounds_global().get_area() > _overlap.get_parent().get_bounds_global().get_area():
 				falling = false
 				return
-		elif overlap.collision_layer == Collisions.Layers.floor:
-			print_debug("TerrainChunk(%s) - stop falling as hit the floor: %s" % [name, overlap.get_parent().name])
+		elif _overlap.collision_layer == Collisions.Layers.floor:
+			print_debug("TerrainChunk(%s) - stop falling as hit the floor: %s" % [name, _overlap.get_parent().name])
 			falling = false
 			return
 			

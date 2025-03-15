@@ -21,6 +21,7 @@ func _ready() -> void:
 	GameEvents.round_ended.connect(_on_round_ended)
 	GameEvents.weapon_updated.connect(_on_weapon_updated)
 	
+@warning_ignore("unused_parameter")
 func check_cached_volume(audio_stream_player, override_volume_db:float = _volume_modifier) -> void:
 	if not audio_stream_player in initial_db_values:
 		initial_db_values[audio_stream_player] = audio_stream_player.get_volume_db()

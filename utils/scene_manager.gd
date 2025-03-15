@@ -58,18 +58,18 @@ func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 	# TODO: Loading main menu and pause menu
 	match key:
 		SceneKeys.MainMenu:
-			switch_scene_file(main_menu_scene_file)
+			await switch_scene_file(main_menu_scene_file)
 			return
 		SceneKeys.RandomStart:
-			next_level(delay)
+			await next_level(delay)
 	
 func switch_scene(scene: PackedScene, delay: float = default_delay) -> void:
 	print_debug("switch_scene: %s, delay=%f" % [scene.name, delay])
-	_switch_scene(func(): get_tree().change_scene_to_packed(scene), delay)
+	await _switch_scene(func(): get_tree().change_scene_to_packed(scene), delay)
 	
 func switch_scene_file(scene: String, delay: float = default_delay) -> void:
 	print_debug("switch_scene_file: %s, delay=%f" % [scene, delay])
-	_switch_scene(func(): get_tree().change_scene_to_file(scene), delay)
+	await _switch_scene(func(): get_tree().change_scene_to_file(scene), delay)
 
 func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	if is_switching_scene:

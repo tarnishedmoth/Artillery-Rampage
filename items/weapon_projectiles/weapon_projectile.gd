@@ -117,6 +117,7 @@ func on_body_entered(_body: Node2D):
 	if calculated_hit:
 		return
 	var affected_nodes = _find_interaction_overlaps()
+	@warning_ignore("unused_variable")
 	var had_interaction:bool = false
 	
 	var processed_set: Dictionary = {}

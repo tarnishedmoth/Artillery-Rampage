@@ -30,7 +30,7 @@ func _ready() -> void:
 	delay_targeting()
 	delay_thrusting()
 
-func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
+func _integrate_forces(_state: PhysicsDirectBodyState2D) -> void:
 	#super()
 	if not _thrusting: return
 	var force: Vector2
@@ -39,7 +39,7 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	apply_central_force(force)
 	_last_force = force
 	
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if _targeting:
 		targeting()
 
@@ -83,16 +83,16 @@ func _find_nearest_target() -> Vector2:
 	var nearest_target:Node2D
 	var nearest_distance:float
 	
-	for target in targets:
-		var distance = (target.global_position - global_position).length()
+	for foo in targets:
+		var distance = (foo.global_position - global_position).length()
 		
 		if nearest_target == null:
-			nearest_target = target
+			nearest_target = foo
 			nearest_distance = distance
 			continue
 		
 		if distance < nearest_distance:
-			nearest_target = target
+			nearest_target = foo
 			nearest_distance = distance
 			
 	if show_debug_targets:

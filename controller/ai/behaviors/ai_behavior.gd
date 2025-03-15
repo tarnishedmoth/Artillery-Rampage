@@ -29,8 +29,8 @@ var game_level: GameLevel:
 var aim_fulcrum_position: Vector2:
 	get: return  tank.turret.global_position
 	
-func execute(tank: Tank) -> AIState:
-	self.tank = tank
+func execute(tank_unit: Tank) -> AIState:
+	self.tank = tank_unit
 	return null
 
 func get_opponents() -> Array[TankController]:

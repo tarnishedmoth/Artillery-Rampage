@@ -151,7 +151,7 @@ func check_pickup_queue() -> void:
 	else:
 		current_pickup = null
 		
-		var nearby:int
+		var nearby:int = 0
 		for queued in pickup_queue:
 			if not is_instance_valid(queued) or queued.is_queued_for_deletion() or queued == null:
 				pickup_queue.erase(queued)

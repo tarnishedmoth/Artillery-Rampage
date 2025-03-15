@@ -108,7 +108,7 @@ func _setup_deployable(deployable:Node2D, physics:bool = true) -> void:
 	deployed_container.add_child(deployable)
 	deployed.append(deployable)
 	
-func _on_body_entered(body: Node) -> void: ## Internal signal
+func _on_body_entered(_body: Node) -> void: ## Internal signal
 	if _impacted: return
 	_impacted = true
 	#print_debug("Deployable body entered")

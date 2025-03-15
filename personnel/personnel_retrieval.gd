@@ -171,14 +171,14 @@ func _on_collectible_touched(collectible: CollectibleItem) -> void: # Codependen
 	collectible.collect()
 	request_pickup()
 	
-func _on_collectible_collected(collected: CollectibleItem) -> void:
+func _on_collectible_collected(_collected: CollectibleItem) -> void:
 	if _full_pockets or _is_dead or _requested_pickup: return
 	_find_nearest_collectible() # We could go again but typically it's a waste of time
 	
 func _on_copter_arrived_for_pickups(copter) -> void:
 	if _requested_pickup: goal_object = copter
 	
-func _on_copter_left_airspace(copter) -> void:
+func _on_copter_left_airspace(_copter) -> void:
 	#cry
 	pass
 #endregion

@@ -344,10 +344,10 @@ func _on_weapon_destroyed(weapon: Weapon) -> void:
 	if weapon == current_equipped_weapon:
 		current_equipped_weapon = null
 
-func _on_weapon_ammo_changed(new_ammo:int) -> void:
+func _on_weapon_ammo_changed(_new_ammo:int) -> void:
 	push_weapon_update_to_hud()
 
-func _on_weapon_magazines_changed(new_mags:int) -> void:
+func _on_weapon_magazines_changed(_new_mags:int) -> void:
 	push_weapon_update_to_hud()
 	
 func _on_weapon_changed(new_weapon: Weapon) -> void:

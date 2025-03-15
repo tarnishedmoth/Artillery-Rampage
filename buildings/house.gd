@@ -9,7 +9,9 @@ extends Node
 
 var health: float
 
-var image = Image.load_from_file("res://buildings/house.png")
+#var image = Image.load_from_file("res://buildings/house.png") # This method only works during development per ImageTexture documentation
+var image_resource = load("res://buildings/house.png")
+var image: Image = image_resource.get_image()
 var texture = ImageTexture.create_from_image(image)
 
 func _ready() -> void:
@@ -18,6 +20,7 @@ func _ready() -> void:
 	$HouseBody/HouseBodySprite.texture = texture
 
 #region Damage and Death
+@warning_ignore("unused_parameter")
 func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float) -> void:
 	# dampen damage taken so the house lasts longer
 	amount = amount / 2

@@ -1,5 +1,6 @@
 class_name Player extends TankController
 
+@warning_ignore("unused_signal")
 signal player_killed(player: Player)
 
 @onready var _tank = $Tank
@@ -67,7 +68,8 @@ func cycle_next_weapon() -> void:
 	if !can_shoot: return
 	tank.equip_next_weapon()
 
-func _on_tank_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2D) -> void:
+@warning_ignore("unused_parameter")
+func _on_tank_tank_killed(tank_unit: Tank, instigatorController: Node2D, instigator: Node2D) -> void:
 	# player tank killed
-	tank.kill()
+	tank_unit.kill()
 	emit_signal("player_killed", self)

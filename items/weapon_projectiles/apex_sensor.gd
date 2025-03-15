@@ -5,12 +5,12 @@ extends Node2D
 @export var deployable:WeaponProjectileDeployable
 ## Speeds below this number will begin the detonation process
 @export var y_velocity_min_threshold:float = 10.0
-@export var low_vel_frames_to_detonate:int = 2.0
+@export var low_vel_frames_to_detonate:int = 2
 
 @onready var _last_position:Vector2 = global_position
 var _low_velocity_frames:int = 0
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	var difference = absf(absf(tracking.global_position.y) - absf(_last_position.y))
 	#print(difference)
 	if difference < y_velocity_min_threshold:
