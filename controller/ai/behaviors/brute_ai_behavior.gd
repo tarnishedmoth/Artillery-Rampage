@@ -7,7 +7,7 @@ class_name BruteAIBehavior extends AIBehavior
 @export_range(0.0, 60.0, 1.0) var aim_deviation_degrees: float = 15.0
 
 @export_group("Config")
-@export_flags("Gravity", "Wind") var forces_mask: int = Forces.All
+@export_flags("Gravity", "Wind", "Warp Walls", "Elastic Walls") var forces_mask: int = Forces.Gravity | Forces.Wind
 
 
 # TODO: Maybe don't need the tank parameter

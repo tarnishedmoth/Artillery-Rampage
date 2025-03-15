@@ -17,6 +17,7 @@ position = Vector2(479, 278)
 color = Color(0.682353, 0.713726, 0.219608, 1)
 
 [node name="LobberAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_3amm6")]
+forces_mask = 15
 
 [node name="Enemy2" parent="GameLevel" instance=ExtResource("2_xlxda")]
 position = Vector2(1100, 426)
@@ -25,6 +26,7 @@ position = Vector2(1100, 426)
 color = Color(0.137255, 0.180392, 0.701961, 1)
 
 [node name="LobberAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_3amm6")]
+forces_mask = 15
 
 [node name="House1" parent="GameLevel" instance=ExtResource("4_ojhj1")]
 position = Vector2(43, 409)

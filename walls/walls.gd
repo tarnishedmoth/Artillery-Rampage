@@ -1,4 +1,4 @@
-extends Node2D
+class_name Walls extends Node2D
 
 @onready var playableArea = $PlayableArea
 @onready var shape = $PlayableArea/CollisionShape2D
@@ -13,6 +13,8 @@ enum WallType {
 var wall_mode = WallType.WARP
 
 var bounds: Rect2;
+var min_extent: Vector2
+var max_extent: Vector2
 
 var tracked_projectiles: Array[WeaponProjectile]
 
@@ -22,6 +24,9 @@ func _ready() -> void:
 
 	bounds = shape.shape.get_rect()
 	bounds = Rect2(shape.to_global(bounds.position), bounds.size)
+
+	min_extent = Vector2(bounds.position.x, bounds.size.y)
+	max_extent = Vector2(bounds.position.x + bounds.size.x, bounds.size.y)
 
 func _physics_process(_delta: float) -> void:
 	if !tracked_projectiles:

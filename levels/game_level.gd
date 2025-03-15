@@ -4,6 +4,7 @@ class_name GameLevel extends Node2D
 @onready var spawner: ArtillerySpawner = %ArtillerySpawner
 @onready var terrain: Terrain = %Terrain
 @onready var wind: Wind = %Wind
+@onready var walls: Walls = %Walls
 
 var container_for_spawnables
 
