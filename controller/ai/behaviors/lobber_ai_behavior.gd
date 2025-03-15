@@ -57,26 +57,11 @@ class_name LobberAIBehavior extends AIBehavior
 @export_category("Hone")
 @export_range(0.1, 1.0, 0.01) var max_dist_x_reduction_frac: float = 0.5
 
-# TODO: May push this up to base class and have it toggleable on/off to be reusable for other AI types (except Rando one)
-class OpponentTargetHistory:
-	var opponent: TankController
-	var my_position: Vector2
-	var opp_position: Vector2
-	var hit_location: Vector2 = Vector2.ZERO
-	var fire_time: float
-	var hit_time: float
-	var hit_count: int # For multi-shot
-	var power: float
-	var max_power: float
-	var angle: float
-
-# Dictionary of opponent to Array[OpponentTargetHistory]
-var _opponent_target_history: Dictionary = {}
-var last_opponent_history_entry: OpponentTargetHistory
-
 func _ready() -> void:
 	super._ready()
+
 	behavior_type = Enums.AIBehaviorType.Lobber
+	track_shot_history = true
 
 func execute(_tank: Tank) -> AIState:
 	super.execute(_tank)
@@ -84,9 +69,9 @@ func execute(_tank: Tank) -> AIState:
 	var weapon_infos := get_weapon_infos()
 	
 	var best_opponent_data: Dictionary = _select_best_opponent()
+	
 	_modify_shot_based_on_history(best_opponent_data)
-
-	last_opponent_history_entry = _add_opponent_target_entry(best_opponent_data)
+	_add_opponent_target_entry(best_opponent_data)
 
 	var best_weapon: int = _select_best_weapon(best_opponent_data, weapon_infos)
 
@@ -121,7 +106,7 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 		print_debug("Lobber AI(%s): No direct shot to %s - Ignoring shot history" % [tank.owner.name, shot.opponent.name])
 		return
 	
-	# TODO: May need to make adjustements for walls based on adjusted_position from _select_best_opponent
+	# TODO: May need to make adjustments for walls based on adjusted_position from _select_best_opponent
 	var opponent = shot.opponent
 	var opponent_target_history = _opponent_target_history.get(opponent)
 	if !opponent_target_history:
@@ -363,59 +348,3 @@ func _select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavi
 	print_debug("Lobber AI(%s): Could not find viable weapon - falling back to random selection out of %d candidates" % [tank.owner.name, tank.weapons.size()])
 
 	return randi_range(0, tank.weapons.size() - 1)
-
-func _add_opponent_target_entry(opponent_data: Dictionary) -> OpponentTargetHistory:
-	if !opponent_data.direct:
-		return null
-	
-	var opponent: TankController = opponent_data.opponent
-	var power: float = opponent_data.power
-	var max_power: float = tank.max_power
-	var angle: float = opponent_data.angle
-
-	var opponent_target_history = _opponent_target_history.get(opponent)
-	if !opponent_target_history:
-		opponent_target_history = []
-		_opponent_target_history[opponent] = opponent_target_history
-
-	var target_data = OpponentTargetHistory.new()
-	target_data.opponent = opponent
-	target_data.my_position = aim_fulcrum_position
-	target_data.opp_position = opponent.tank.global_position
-	target_data.power = power
-	target_data.angle = angle
-	target_data.max_power = max_power
-
-	opponent_target_history.append(target_data)
-
-	return target_data
-
-func _on_projectile_fired(projectile: WeaponProjectile) -> void:
-	super._on_projectile_fired(projectile)
-
-	if !tank or projectile.owner_tank != tank:
-		return
-	
-	print_debug("Lobber AIBehavior(%s): Projectile Fired=%s" % [tank.owner.name, projectile.name])
-
-	if !last_opponent_history_entry:
-		print_debug("Lobber AIBehavior(%s): Ignoring blind fire shot for projectile=%s" % [tank.owner.name, projectile.name])
-		return
-
-	last_opponent_history_entry.fire_time = _get_current_time_ms()
-	# Need to bind the extra projectile argument to connect
-	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind([projectile, last_opponent_history_entry]))
-
-# Bind arguments are passed as an array
-func _on_projectile_destroyed(args: Array) -> void:
-	var projectile: WeaponProjectile = args[0]
-	var opponent_history_entry: OpponentTargetHistory = args[1]
-
-	print_debug("Lobber AIBehavior(%s): Projectile Destroyed=%s" % [tank.owner.name, projectile.name])
-
-	opponent_history_entry.hit_count += 1
-	opponent_history_entry.hit_location += projectile.global_position
-	opponent_history_entry.hit_time += _get_current_time_ms()
-
-func _get_current_time_ms() -> float:
-	return Time.get_ticks_msec()

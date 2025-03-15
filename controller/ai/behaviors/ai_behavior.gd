@@ -5,6 +5,8 @@ var behavior_type: Enums.AIBehaviorType
 ## Set default priority returned when no other conditions match for state selection
 @export var default_priority:int = 1
 
+var track_shot_history:bool = false
+
 class LaunchProperties:
 	var speed: float
 	var power_speed_mult: float = 1.0
@@ -19,9 +21,26 @@ class WeaponInfo:
 			projectile_prototype.queue_free()
 			projectile_prototype = null
 
+class OpponentTargetHistory:
+	var opponent: TankController
+	var my_position: Vector2
+	var opp_position: Vector2
+	var hit_location: Vector2 = Vector2.ZERO
+	var fire_time: float
+	var hit_time: float
+	var hit_count: int # For multi-shot
+	var power: float
+	var max_power: float
+	var angle: float
+
 var tank: Tank
 
 var has_player_fired: bool = false
+
+# Dictionary of opponent to Array[OpponentTargetHistory]
+var _opponent_target_history: Dictionary = {}
+var last_opponent_history_entry: OpponentTargetHistory
+
 
 func _ready() -> void:
 	# Listen to track opponent targeting feedback and if player has fired
@@ -328,6 +347,30 @@ func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 		print_debug("%s: Player has fired - %s" % [name, projectile.owner_tank.owner.name])
 		has_player_fired = true
 
+	if !track_shot_history or !tank or projectile.owner_tank != tank:
+		return
+	
+	print_debug("AIBehavior(%s): Projectile Fired=%s" % [tank.owner.name, projectile.name])
+
+	if !last_opponent_history_entry:
+		print_debug("AIBehavior(%s): Ignoring blind fire shot for projectile=%s" % [tank.owner.name, projectile.name])
+		return
+
+	last_opponent_history_entry.fire_time = _get_current_time_ms()
+	# Need to bind the extra projectile argument to connect
+	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind([projectile, last_opponent_history_entry]))
+
+# Bind arguments are passed as an array
+func _on_projectile_destroyed(args: Array) -> void:
+	var projectile: WeaponProjectile = args[0]
+	var opponent_history_entry: OpponentTargetHistory = args[1]
+
+	print_debug("Lobber AIBehavior(%s): Projectile Destroyed=%s" % [tank.owner.name, projectile.name])
+
+	opponent_history_entry.hit_count += 1
+	opponent_history_entry.hit_location += projectile.global_position
+	opponent_history_entry.hit_time += _get_current_time_ms()
+
 #endregion
 
 #region Walls
@@ -424,4 +467,41 @@ func get_line_of_sight_positions(start_pos: Vector2, end_pos: Vector2, forces: i
 
 	results.push_back(end_pos)
 	return results
+#endregion
+
+#region Opponent History
+func _add_opponent_target_entry(opponent_data: Dictionary) -> OpponentTargetHistory:
+	if !track_shot_history or !opponent_data.direct:
+		return null
+	
+	var opponent: TankController = opponent_data.opponent
+	var power: float = opponent_data.power
+	var max_power: float = tank.max_power
+	var angle: float = opponent_data.angle
+
+	var opponent_target_history = _opponent_target_history.get_or_add(opponent.get_instance_id(), [])
+
+	var target_data = OpponentTargetHistory.new()
+	target_data.opponent = opponent
+	target_data.my_position = aim_fulcrum_position
+	target_data.opp_position = opponent.tank.global_position
+	target_data.power = power
+	target_data.angle = angle
+	target_data.max_power = max_power
+
+	last_opponent_history_entry = target_data
+	opponent_target_history.append(target_data)
+
+	return target_data
+
+func get_opponent_target_history(opponent: TankController) -> Array:
+	return _opponent_target_history.get(opponent.get_instance_id(), [])
+	
+#endregion
+
+#region Utils
+
+func _get_current_time_ms() -> float:
+	return Time.get_ticks_msec()
+
 #endregion

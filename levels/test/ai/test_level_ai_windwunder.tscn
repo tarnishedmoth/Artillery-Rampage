@@ -33,6 +33,9 @@ color = Color(0.682353, 0.713726, 0.219608, 1)
 [node name="WallmasterAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("4_hjnwt")]
 
 [node name="BruteAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="1" instance=ExtResource("5_sb5xx")]
+forces_mask = 15
+power_attempt_reduction = 0.1
+min_power_fraction = 0.1
 
 [node name="Enemy2" parent="GameLevel" instance=ExtResource("2_hw3pk")]
 position = Vector2(1099, 404)
@@ -47,6 +50,9 @@ color = Color(0.137255, 0.180392, 0.701961, 1)
 [node name="WallmasterAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("4_hjnwt")]
 
 [node name="BruteAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="1" instance=ExtResource("5_sb5xx")]
+forces_mask = 15
+power_attempt_reduction = 0.1
+min_power_fraction = 0.1
 
 [node name="Player" parent="GameLevel" instance=ExtResource("6_cbgy3")]
 position = Vector2(526, 528)

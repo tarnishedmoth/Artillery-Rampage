@@ -9,10 +9,20 @@ class_name BruteAIBehavior extends AIBehavior
 @export_group("Config")
 @export_flags("Gravity", "Wind", "Warp Walls", "Elastic Walls") var forces_mask: int = Forces.Gravity | Forces.Wind
 
+@export_group("Config")
+@export_range(0.0, 1.0, 0.01) var power_attempt_reduction: float = 0.0
+
+@export_group("Config")
+@export_range(0.1, 1.0, 0.01) var min_power_fraction: float = 1.0
+
+var opponent_power_history: Dictionary = {}
 
 func _ready() -> void:
 	super._ready()
 	behavior_type = Enums.AIBehaviorType.Brute
+
+	if power_attempt_reduction > 0.0:
+		track_shot_history = true
 	
 # TODO: Maybe don't need the tank parameter
 func execute(_tank: Tank) -> AIState:
@@ -21,6 +31,11 @@ func execute(_tank: Tank) -> AIState:
 	var weapon_infos := get_weapon_infos()
 	
 	var best_opponent_data: Dictionary = _select_best_opponent()
+	var power: float = _modify_power(best_opponent_data.opponent)
+
+	best_opponent_data.power = power
+	_add_opponent_target_entry(best_opponent_data)
+
 	var best_weapon: int = _select_best_weapon(best_opponent_data, weapon_infos)
 
 	var perfect_shot_angle: float = best_opponent_data.angle
@@ -31,22 +46,66 @@ func execute(_tank: Tank) -> AIState:
 	
 	var angle := clampf(perfect_shot_angle + angle_deviation, _tank.min_angle, _tank.max_angle)
 	
-	print_debug("Brute AI(%s): best_opponent=%s; best_weapon=%d; perfect_shot_angle=%f; angle_deviation=%f" 
-		% [tank.name, best_opponent_data.opponent.name, best_weapon, perfect_shot_angle, angle_deviation])
+	print_debug("Brute AI(%s): best_opponent=%s; best_weapon=%d; perfect_shot_angle=%f; angle_deviation=%f; power=%f" 
+		% [tank.name, best_opponent_data.opponent.name, best_weapon, perfect_shot_angle, angle_deviation, power])
 
 	delete_weapon_infos(weapon_infos)
 	
-	return TargetActionState.new(best_opponent_data.opponent, best_weapon, angle, best_opponent_data, default_priority)
+	return TargetActionState.new(best_opponent_data.opponent, best_weapon, angle, power, best_opponent_data, default_priority)
+
+func _modify_power(opponent: TankController) -> float:
+	if ! track_shot_history:
+		return tank.max_power
+
+	var opponent_history: Array = get_opponent_target_history(opponent)
+	if !opponent_history:
+		print_debug("Brute AI(%s): No direct shot - Ignoring shot history" % [tank.owner.name])
+		return tank.max_power
+
+	# Dumbed down version of lobber_ai_behavior
+	var last_entry: OpponentTargetHistory = opponent_history.back()
+	var last_avg_hit_location: Vector2 = last_entry.hit_location / last_entry.hit_count
+	var shot_deviation: Vector2 = last_avg_hit_location - last_entry.opp_position
+	# Positive angles are CW which would point right in the direction of positive x 
+	var to_opp_aim:float = signf(last_entry.angle)
+
+	var shot_deviation_x: float = absf(shot_deviation.x)
+	var is_long: bool = shot_deviation.x * signf(shot_deviation_x) * to_opp_aim > 0.0
+
+	var power_history: PackedFloat32Array = opponent_power_history.get_or_add(opponent.get_instance_id(), PackedFloat32Array())
+
+	var power:float
 	
+	if is_long:
+		var last_power:float = power_history[power_history.size() - 1] if !power_history.is_empty() else tank.max_power
+		power = maxf(last_power * power_attempt_reduction, tank.max_power * min_power_fraction)
+	else:
+		print_debug("Brute AI(%s): Shot missed close - not changing shot power" % [tank.owner.name])
+		# Interpolate last two values
+		var power_entry_count: int = power_history.size()
+		match power_entry_count:
+			0:
+				return tank.max_power
+			1:
+				power = lerpf(tank.max_power, power_history[0], 0.5)
+			_: # > 1
+				power = lerpf(power_history[power_entry_count - 2], power_history[power_entry_count - 1], 0.5)
+
+	power_history.push_back(power)
+
+	return power
+
 class TargetActionState extends AIState:
 	var _opponent: TankController
 	var _weapon:int 
 	var _angle:float
+	var _power: float
 
-	func _init(opponent: TankController, weapon: int, angle: float, opponent_data: Dictionary, default_priority: int):
+	func _init(opponent: TankController, weapon: int, angle: float, power:float, opponent_data: Dictionary, default_priority: int):
 		self._opponent = opponent
 		self._weapon = weapon
 		self._angle = angle
+		self._power = power
 
 		priority = default_priority
 		if opponent_data.direct:
@@ -56,7 +115,7 @@ class TargetActionState extends AIState:
 
 	func execute(tank: Tank) -> TankActionResult:
 		return TankActionResult.new(
-			 tank.max_power,
+			 _power,
 			 _angle,
 			 _weapon
 		)

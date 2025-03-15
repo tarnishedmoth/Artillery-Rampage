@@ -14,3 +14,5 @@ preferred_ai_priority = 20
 
 [node name="BruteAiBehavior" parent="StateMachine" index="1" instance=ExtResource("4_t8h2u")]
 forces_mask = 15
+power_attempt_reduction = 0.1
+min_power_fraction = 0.5
