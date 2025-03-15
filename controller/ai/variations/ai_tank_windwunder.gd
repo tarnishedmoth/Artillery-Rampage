@@ -1,4 +1,4 @@
-class_name AITankWallmaster extends AITank
+class_name AITankWindwunder extends AITank
 
 @export var direct_fire_wind_threshold:float = 20.0
 @export var preferred_ai_priority:int = 20
