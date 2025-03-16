@@ -1,7 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://closdtou4bbqf"]
+[gd_scene load_steps=3 format=3 uid="uid://closdtou4bbqf"]
 
 [ext_resource type="Script" path="res://controller/ai/variations/sniper/sniper_lobber_ai_behavior.gd" id="1_15mt4"]
+[ext_resource type="PackedScene" uid="uid://brdhgxtj0uff2" path="res://controller/ai/variations/sniper/sniper_error_calc.tscn" id="2_1ajj7"]
 
 [node name="SniperLobber" type="Node"]
 script = ExtResource("1_15mt4")
 aim_error_chance = 1.0
+
+[node name="SniperErrorCalc" parent="." instance=ExtResource("2_1ajj7")]

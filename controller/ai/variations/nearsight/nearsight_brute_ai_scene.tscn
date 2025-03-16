@@ -1,7 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://b4i0tj83cduv7"]
+[gd_scene load_steps=3 format=3 uid="uid://b4i0tj83cduv7"]
 
 [ext_resource type="Script" path="res://controller/ai/variations/nearsight/nearsight_brute_ai_behavior.gd" id="1_sko2s"]
+[ext_resource type="PackedScene" uid="uid://bqwipuud0pxsi" path="res://controller/ai/variations/nearsight/nearsight_error_calc.tscn" id="2_dt1mp"]
 
 [node name="NearsightBrute" type="Node"]
 script = ExtResource("1_sko2s")
 aim_error_chance = 1.0
+
+[node name="NearsightErrorCalculation" parent="." instance=ExtResource("2_dt1mp")]
