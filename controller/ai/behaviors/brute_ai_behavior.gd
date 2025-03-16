@@ -43,7 +43,9 @@ func execute(_tank: Tank) -> AIState:
 	var player_has_not_fired:bool = _target_is_player_and_has_not_fired(best_opponent_data.opponent)
 	var is_perfect_shot:bool = not player_has_not_fired and _is_perfect_shot(best_opponent_data)
 
-	var angle_deviation: float = 0.0 if is_perfect_shot else perfect_shot_angle + get_aim_error(perfect_shot_angle, best_opponent_data)
+	var angle_deviation: float = 0.0 if is_perfect_shot else perfect_shot_angle + \
+		(_default_get_aim_error(perfect_shot_angle, best_opponent_data) if player_has_not_fired \
+		else get_aim_error(perfect_shot_angle, best_opponent_data))
 	
 	var angle := clampf(perfect_shot_angle + angle_deviation, _tank.min_angle, _tank.max_angle)
 	
@@ -65,8 +67,11 @@ func _is_better_fallback_opponent(candidate: TankController, current_best: TankC
 func _is_better_viable_opponent(candidate: TankController, current_best: TankController, candidate_dist_sq: float, current_best_dist_sq) -> bool:
 	return candidate_dist_sq < current_best_dist_sq
 
-func get_aim_error(perfect_angle: float, opponent_data: Dictionary) -> float:
+func _default_get_aim_error(perfect_angle: float, opponent_data: Dictionary) -> float:
 	return randf_range(-aim_deviation_degrees, aim_deviation_degrees)
+
+func get_aim_error(perfect_angle: float, opponent_data: Dictionary) -> float:
+	return _default_get_aim_error(perfect_angle, opponent_data)
 
 #endregion
 

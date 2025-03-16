@@ -86,7 +86,8 @@ func execute(_tank: Tank) -> AIState:
 	var power_deviation: float = 0.0
 
 	if not is_perfect_shot:
-		var shot_error: Dictionary = _get_shot_error(perfect_shot_power, perfect_shot_angle, best_opponent_data)
+		var shot_error: Dictionary = _default_get_shot_error(perfect_shot_power, perfect_shot_angle, best_opponent_data) if player_has_not_fired \
+		 else _get_shot_error(perfect_shot_power, perfect_shot_angle, best_opponent_data)
 		angle_deviation = shot_error.angle
 		power_deviation = perfect_shot_power * shot_error.power_fraction
 	
@@ -118,11 +119,13 @@ func _is_better_fallback_opponent(candidate: TankController, current_best: TankC
 func _is_better_viable_opponent(candidate: TankController, current_best: TankController, candidate_dist_sq: float, current_best_dist_sq) -> bool:
 	return candidate_dist_sq < current_best_dist_sq
 
-func _get_shot_error(perfect_power: float, perfect_angle: float, opponent_data: Dictionary) -> Dictionary:
+func _default_get_shot_error(perfect_power: float, perfect_angle: float, opponent_data: Dictionary) -> Dictionary:
 	return {
 		angle = randf_range(-aim_deviation_degrees, aim_deviation_degrees),
 		power_fraction = randf_range(-aim_power_pct, aim_power_pct)
 	}
+func _get_shot_error(perfect_power: float, perfect_angle: float, opponent_data: Dictionary) -> Dictionary:
+	return _default_get_shot_error(perfect_power, perfect_angle, opponent_data)
 
 #endregion
 
