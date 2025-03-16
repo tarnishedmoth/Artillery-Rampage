@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://bad70clwv5pu3"]
+
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="1_cpbeo"]
+[ext_resource type="PackedScene" uid="uid://kiyo740x1l75" path="res://controller/ai/variations/nearsight/nearsight_lobber_ai_scene.tscn" id="2_3faeb"]
+[ext_resource type="PackedScene" uid="uid://b4i0tj83cduv7" path="res://controller/ai/variations/nearsight/nearsight_brute_ai_scene.tscn" id="3_fcmkc"]
+
+[node name="AITank" instance=ExtResource("1_cpbeo")]
+
+[node name="NearsightLobber" parent="StateMachine" index="0" instance=ExtResource("2_3faeb")]
+
+[node name="NearsightBrute" parent="StateMachine" index="1" instance=ExtResource("3_fcmkc")]

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dku7irydr1vm7"]
+
+[ext_resource type="Script" path="res://controller/ai/variations/sniper/sniper_brute_ai_behavior.gd" id="1_4g52i"]
+
+[node name="SniperBrute" type="Node"]
+script = ExtResource("1_4g52i")
+aim_error_chance = 1.0

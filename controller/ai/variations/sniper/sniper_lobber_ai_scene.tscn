@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://closdtou4bbqf"]
+
+[ext_resource type="Script" path="res://controller/ai/variations/sniper/sniper_lobber_ai_behavior.gd" id="1_15mt4"]
+
+[node name="SniperLobber" type="Node"]
+script = ExtResource("1_15mt4")
+aim_error_chance = 1.0

@@ -238,12 +238,12 @@ func has_direct_shot_to(opponent : TankController, launch_props: LaunchPropertie
 	if has_los:
 		print_debug("%s: LOS to opponent=%s -> TRUE; tested_positions=%d"
 		 % [tank.owner.name, opponent.name, viable_positions.size()])
-		return { test = true, position = aim_position, aim_angle = aim_angle }
+		return { test = true, position = aim_position, aim_angle = aim_angle, adjusted_opponent_position = opponent_position }
 		
 	print_debug("%s: LOS to opponent=%s -> FALSE -> %s; tested_positions=%d" 
 		% [tank.owner.name, opponent.name, str(max_position), viable_positions.size()])
 	
-	return { test = false, position = max_position }
+	return { test = false, position = max_position, adjusted_opponent_position = opponent_position }
 
 #endregion
 
@@ -471,7 +471,7 @@ func get_line_of_sight_positions(start_pos: Vector2, end_pos: Vector2, forces: i
 
 #region Opponent History
 func _add_opponent_target_entry(opponent_data: Dictionary) -> OpponentTargetHistory:
-	if !track_shot_history or !opponent_data.direct:
+	if !track_shot_history or !opponent_data.get("direct", false):
 		return null
 	
 	var opponent: TankController = opponent_data.opponent
@@ -503,5 +503,9 @@ func get_opponent_target_history(opponent: TankController) -> Array:
 
 func _get_current_time_ms() -> float:
 	return Time.get_ticks_msec()
+
+# TODO: This should be a helper on the game level and take into account walls
+func _get_playable_x_extent() -> float:
+	return get_viewport().get_visible_rect().size.x
 
 #endregion

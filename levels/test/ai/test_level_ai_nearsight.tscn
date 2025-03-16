@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=3 uid="uid://bscqxd216eo4a"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_b12vc"]
+[ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="3_j30dk"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="4_krocu"]
+
+[node name="TestLevelAIBrute" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_b12vc")]
+
+[node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk" index="0"]
+polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 459.375, -182.353, 609, -8, 937, -3, 945, 445, -103, 448)
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+polygon = PackedVector2Array(-104, -8, -10.1562, -16.1765, 158.594, 145.588, 229.688, 148.529, 285.938, 105.882, 417.188, 98.5294, 467.188, 5.88232, 609, -8, 937, -3, 945, 445, -103, 448)
+
+[node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk/Overlap" index="0"]
+polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 459.375, -182.353, 609, -8, 937, -3, 945, 445, -103, 448)
+
+[node name="Wind" parent="GameLevel" index="5"]
+wind_max = 0
+
+[node name="Player" parent="GameLevel" instance=ExtResource("4_krocu")]
+position = Vector2(81, 418)
+
+[node name="Nearsight1" parent="GameLevel" instance=ExtResource("3_j30dk")]
+position = Vector2(494, 500)
+
+[node name="Nearsight2" parent="GameLevel" instance=ExtResource("3_j30dk")]
+position = Vector2(1100, 426)
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(80, 407)
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
+[editable path="GameLevel/Walls"]

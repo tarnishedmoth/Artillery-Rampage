@@ -40,9 +40,10 @@ func execute(_tank: Tank) -> AIState:
 
 	var perfect_shot_angle: float = best_opponent_data.angle
 
-	var is_perfect_shot:bool = not _target_is_player_and_has_not_fired(best_opponent_data.opponent) and randf() > aim_error_chance
+	var player_has_not_fired:bool = _target_is_player_and_has_not_fired(best_opponent_data.opponent)
+	var is_perfect_shot:bool = not player_has_not_fired and _is_perfect_shot(best_opponent_data)
 
-	var angle_deviation: float = 0.0 if is_perfect_shot else perfect_shot_angle + randf_range(-aim_deviation_degrees, aim_deviation_degrees)
+	var angle_deviation: float = 0.0 if is_perfect_shot else perfect_shot_angle + get_aim_error(perfect_shot_angle, best_opponent_data)
 	
 	var angle := clampf(perfect_shot_angle + angle_deviation, _tank.min_angle, _tank.max_angle)
 	
@@ -52,6 +53,22 @@ func execute(_tank: Tank) -> AIState:
 	delete_weapon_infos(weapon_infos)
 	
 	return TargetActionState.new(best_opponent_data.opponent, best_weapon, angle, power, best_opponent_data, default_priority)
+
+#region Overridable hook functions
+
+func _is_perfect_shot(opponent_data: Dictionary) -> bool:
+	return randf() > aim_error_chance
+
+func _is_better_fallback_opponent(candidate: TankController, current_best: TankController, candidate_dist_sq: float, current_best_dist_sq) -> bool:
+	return candidate_dist_sq < current_best_dist_sq
+
+func _is_better_viable_opponent(candidate: TankController, current_best: TankController, candidate_dist_sq: float, current_best_dist_sq) -> bool:
+	return candidate_dist_sq < current_best_dist_sq
+
+func get_aim_error(perfect_angle: float, opponent_data: Dictionary) -> float:
+	return randf_range(-aim_deviation_degrees, aim_deviation_degrees)
+
+#endregion
 
 func _modify_power(opponent_data: Dictionary) -> float:
 	if not track_shot_history or not opponent_data.get("direct", false):
@@ -126,9 +143,12 @@ func _select_best_opponent() -> Dictionary:
 
 	var closest_direct_opponent: TankController = null
 	var closest_opponent: TankController = null
+	var closest_direct_opponent_pos: Vector2 = Vector2.ZERO
+	var closest_opponent_position: Vector2 = Vector2.ZERO
 
-	var closest_direct_shot_distance: float = 1e9
-	var closest_distance:float = 1e9
+	const sentinel_dist:float = 1e9
+	var closest_direct_shot_distance: float = sentinel_dist
+	var closest_distance:float = sentinel_dist
 	var closest_direct_angle:float = 0.0
 	
 	# TODO: May need to take into account weapon modifiers for launch speed but right now launch speed == power
@@ -142,19 +162,21 @@ func _select_best_opponent() -> Dictionary:
 	for opponent in opponents:
 		var result: Dictionary = has_direct_shot_to(opponent, launch_props, forces_mask)
 
-		var distance: float = tank.global_position.distance_squared_to(opponent.tank.global_position)
+		var distance: float = tank.global_position.distance_squared_to(result.adjusted_opponent_position)
 
-		if distance < closest_distance:
+		if is_equal_approx(closest_distance, sentinel_dist) or _is_better_fallback_opponent(opponent, closest_opponent, distance, closest_distance):
 			closest_distance = distance
 			closest_opponent = opponent
+			closest_opponent_position = result.adjusted_opponent_position
 
-		if result.test and distance < closest_direct_shot_distance:
+		if result.test and (is_equal_approx(closest_direct_shot_distance, sentinel_dist) or _is_better_viable_opponent(opponent, closest_direct_opponent, distance, closest_direct_shot_distance)):
 			closest_direct_shot_distance = distance
 			closest_direct_opponent = opponent
 			closest_direct_angle = result.aim_angle
+			closest_direct_opponent_pos = result.adjusted_opponent_position
 	
 	if closest_direct_opponent:
-		return { direct = true, opponent = closest_direct_opponent, angle = closest_direct_angle }
+		return { direct = true, opponent = closest_direct_opponent, angle = closest_direct_angle, adjusted_position = closest_direct_opponent_pos, distance = sqrt(closest_direct_shot_distance) }
 
 	# Need to determine where we will hit with the fallback approach as this needs to be taken into account with weapon selection
 	else:
@@ -163,7 +185,7 @@ func _select_best_opponent() -> Dictionary:
 		# Determine point we hit in that direction
 		var ray_cast_result: Dictionary = check_world_collision(tank.turret.global_position, tank.turret.global_position + dir * 10000.0)
 
-		var result : Dictionary =  { opponent = closest_opponent, angle = angle }
+		var result : Dictionary =  { opponent = closest_opponent, angle = angle, adjusted_position = closest_opponent_position, distance = sqrt(closest_distance) }
 
 		if ray_cast_result:
 			result.hit_position = ray_cast_result.position

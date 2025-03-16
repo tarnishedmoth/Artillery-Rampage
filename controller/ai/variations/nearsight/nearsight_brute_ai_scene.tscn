@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://b4i0tj83cduv7"]
+
+[ext_resource type="Script" path="res://controller/ai/variations/nearsight/nearsight_brute_ai_behavior.gd" id="1_sko2s"]
+
+[node name="NearsightBrute" type="Node"]
+script = ExtResource("1_sko2s")
+aim_error_chance = 1.0

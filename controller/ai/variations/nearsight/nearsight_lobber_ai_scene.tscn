@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://kiyo740x1l75"]
+
+[ext_resource type="Script" path="res://controller/ai/variations/nearsight/nearsight_lobber_ai_behavior.gd" id="1_jc52e"]
+
+[node name="NearsightLobber" type="Node"]
+script = ExtResource("1_jc52e")
