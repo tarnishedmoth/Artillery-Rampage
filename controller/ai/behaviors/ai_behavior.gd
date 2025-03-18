@@ -78,7 +78,7 @@ func get_power_for_target_and_angle(target: Vector2, angle: float, launch_props:
 	if forces & Forces.Wind:
 		var orig_launch_speed := launch_props.speed
 		launch_props.speed = tank.max_power * launch_props.power_speed_mult
-		target += _get_wind_offset(adjusted_target - source, launch_props)
+		adjusted_target += _get_wind_offset(adjusted_target - source, launch_props)
 		launch_props.speed = orig_launch_speed
 
 	# Wolfram Alpha: Solve d = v * cos(theta) / g * (v * sin(theta) + sqrt(v ^ 2 * sin(theta)^2 + 2 * g * y)) for v

@@ -92,8 +92,8 @@ func execute(_tank: Tank) -> AIState:
 		power_deviation = perfect_shot_power * shot_error.power_fraction
 	
 	# Max error decreases with each shot at opponent
-	var shot_history = _opponent_target_history.get(best_opponent_data.opponent)
-	if shot_history and shot_history.size() > 1:
+	var shot_history = get_opponent_target_history(best_opponent_data.opponent)
+	if shot_history.size() > 1:
 		var error_reduction: float = pow(shot_history.size(), error_reduction_exp)
 		angle_deviation /= error_reduction
 		power_deviation /= error_reduction
@@ -136,7 +136,7 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 	
 	# TODO: May need to make adjustments for walls based on adjusted_position from _select_best_opponent
 	var opponent = shot.opponent
-	var opponent_target_history = _opponent_target_history.get(opponent)
+	var opponent_target_history = get_opponent_target_history(opponent)
 	if !opponent_target_history:
 		print_debug("Lobber AI(%s): No direct shot - Ignoring shot history" % [tank.owner.name])
 		return
