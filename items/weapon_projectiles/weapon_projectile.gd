@@ -120,18 +120,17 @@ func on_body_entered(_body: Node2D):
 	@warning_ignore("unused_variable")
 	var had_interaction:bool = false
 	
-	var damaged_processed_set: Dictionary = {}
+	var damaged_processed_map: Dictionary = {}
 	var destructed_processed_set: Dictionary = {}
 
 	for node in affected_nodes:
 		# See if this node is a "Damageable" or a "Destructable"
-		var root_node = get_parent_in_group(node, Groups.Damageable)
-		if root_node and root_node not in damaged_processed_set:
+		var root_node: Node = get_parent_in_group(node, Groups.Damageable)
+		if root_node:
 			var damage_amount = _calculate_damage(node)
 			if damage_amount > 0:
-				root_node.take_damage(owner_tank, self, damage_amount)
 				had_interaction = true
-				damaged_processed_set[root_node] = root_node
+				damaged_processed_map[root_node] = maxf(damage_amount, damaged_processed_map.get(root_node, 0.0))
 		# Some projectiles don't have a destructible node, e.g. MIRV
 		if destructible_component:
 			root_node = get_parent_in_group(node, Groups.Destructible)
@@ -141,6 +140,12 @@ func on_body_entered(_body: Node2D):
 				had_interaction = true
 				destructed_processed_set[root_node] = root_node
 	# end for
+
+	# Process damage at end as took max damage if there were multiple collidors on single damageable root node
+	for damageable_node in damaged_processed_map:
+		var damage: float = damaged_processed_map[damageable_node]
+		damageable_node.take_damage(owner_tank, self, damage)
+
 	
 	# FIXME: Technically shouldn't do this and should set to true and also always call destroy but MIRV doesn't work correctly without it
 	calculated_hit = not affected_nodes.is_empty()
