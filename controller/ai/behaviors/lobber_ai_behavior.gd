@@ -199,6 +199,7 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 	var angle_dev:float = 0.0
 	var power_wrap:float = 0.0
 	
+	# This can also occur if tank becomes damaged since the last shot and now has a lower max power
 	if new_power > tank.max_power:
 		power_wrap = new_power - tank.max_power
 		new_power = tank.max_power
@@ -223,11 +224,11 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 		var max_angle: float = angles.max()
 		var min_angle: float = angles.min()
 		
-		# Wrap around - assuming don't need to do it multiple times
+		# Wrap around - assuming don't need to do it multiple times but clamp if that happens
 		if new_angle_abs > max_angle:
-			new_angle = -current_angle_sgn * (max_angle - (new_angle_abs - max_angle))
+			new_angle = -current_angle_sgn * clampf(max_angle - (new_angle_abs - max_angle), min_angle, max_angle)
 		elif new_angle_abs < min_angle:
-			new_angle = -current_angle_sgn * (max_angle - (min_angle - new_angle_abs))
+			new_angle = -current_angle_sgn * clampf(max_angle - (min_angle - new_angle_abs), min_angle, max_angle)
 
 	# TODO: The convenience function should handle the sign-ing for us
 	new_angle = global_angle_to_turret_angle(absf(new_angle)) * signf(new_angle)
