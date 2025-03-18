@@ -98,7 +98,7 @@ func execute(_tank: Tank) -> AIState:
 		angle_deviation /= error_reduction
 		power_deviation /= error_reduction
 	
-	var angle := clampf(perfect_shot_angle + angle_deviation, _tank.min_angle, _tank.max_angle)
+	var angle := _clamp_final_angle(perfect_shot_angle, angle_deviation)
 	var power := clampf(perfect_shot_power + power_deviation, tank.max_power * min_power_pct, _tank.max_power)
 	
 	print_debug("Lobber AI(%s): best_opponent=%s; best_weapon=%d; perfect_shot_angle=%f; angle_deviation=%f; perfect_shot_power=%f; power_deviation=%f"
@@ -128,6 +128,23 @@ func _get_shot_error(perfect_power: float, perfect_angle: float, opponent_data: 
 	return _default_get_shot_error(perfect_power, perfect_angle, opponent_data)
 
 #endregion
+
+func _clamp_final_angle(perfect_shot_angle: float, deviation:float) -> float:
+
+	var proposed_final_angle: float = perfect_shot_angle + deviation
+	var proposed_final_angle_sgn: float = signf(proposed_final_angle)
+	var perfect_shot_angle_sgn: float = signf(perfect_shot_angle)
+
+	if absf(proposed_final_angle) < 1.0 and absf(perfect_shot_angle) > 1.0:
+		# Invert the deviation so we don't nearly have a zero angle and possibly self destruct unintentionally
+		print_debug("Lobber AI(%s): Inverting deviation to avoid uintended zero angle - initial_angle=%f; new_angle=%f; perfect_shot_angle=%f; deviation=%f" % \
+			[tank.owner.name, proposed_final_angle, perfect_shot_angle - deviation, perfect_shot_angle, deviation])
+		proposed_final_angle = perfect_shot_angle - deviation
+
+	var final_angle: float = clampf(proposed_final_angle, tank.min_angle, tank.max_angle)
+	print_debug("Lobber AI(%s): Clamping angle=%f -> %f" % [tank.owner.name, perfect_shot_angle + deviation, final_angle])
+
+	return final_angle
 
 func _modify_shot_based_on_history(shot: Dictionary) -> void:
 	if !shot.direct:
