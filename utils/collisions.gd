@@ -1,6 +1,7 @@
 extends Node
 
 const default_collision_margin: float = 0.001
+const weapon_sweep_result_count:int = 256
 
 class Layers:
 	const tank: int = 1

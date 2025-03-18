@@ -120,28 +120,26 @@ func on_body_entered(_body: Node2D):
 	@warning_ignore("unused_variable")
 	var had_interaction:bool = false
 	
-	var processed_set: Dictionary = {}
-	
+	var damaged_processed_set: Dictionary = {}
+	var destructed_processed_set: Dictionary = {}
+
 	for node in affected_nodes:
 		# See if this node is a "Damageable" or a "Destructable"
 		var root_node = get_parent_in_group(node, Groups.Damageable)
-		if root_node:
-			if root_node in processed_set:
-				continue
+		if root_node and root_node not in damaged_processed_set:
 			var damage_amount = _calculate_damage(node)
 			if damage_amount > 0:
 				root_node.take_damage(owner_tank, self, damage_amount)
 				had_interaction = true
+				damaged_processed_set[root_node] = root_node
 		# Some projectiles don't have a destructible node, e.g. MIRV
 		if destructible_component:
 			root_node = get_parent_in_group(node, Groups.Destructible)
-			if root_node:
-				if root_node in processed_set:
-					continue
+			if root_node and root_node not in destructed_processed_set:
 				center_destructible_on_impact_point(destructible_component)
 				root_node.damage(destructible_component, destructible_scale_multiplier)
 				had_interaction = true
-		processed_set[root_node] = root_node
+				destructed_processed_set[root_node] = root_node
 	# end for
 	
 	# FIXME: Technically shouldn't do this and should set to true and also always call destroy but MIRV doesn't work correctly without it
@@ -230,7 +228,10 @@ func _find_interaction_overlaps() -> Array[Node2D]:
 	PhysicsServer2D.shape_set_data(shape_rid, max_falloff_distance)
 	params.shape_rid = shape_rid
 	
-	var results: Array[Dictionary] = space_state.intersect_shape(params)
+	# Note that each contact point is reported so for a large radius you may end up selecting the same collider multiple times
+	# Unfortunately no way to remove contact point info so we need to increase the max results (esp. for the mega nuke) and then 
+	# only append the unique colliders
+	var results: Array[Dictionary] = space_state.intersect_shape(params, Collisions.weapon_sweep_result_count)
 
 	var collision_results: Array[Node2D] = []
 
@@ -240,8 +241,9 @@ func _find_interaction_overlaps() -> Array[Node2D]:
 		if(!is_instance_valid(collider)):
 			push_warning("WeaponProjectile(" + name + " damage overlapped with non-Node2D" +  result["collider"].name)
 			continue
-		print("WeaponProjectile(" + name + " damage overlapped with " + collider.name)
-		collision_results.append(collider)
+		if not collider in collision_results:
+			print("WeaponProjectile(" + name + " damage overlapped with " + collider.name)
+			collision_results.append(collider)
 
 	# Release the shape when done with physics queries.
 	PhysicsServer2D.free_rid(shape_rid)
