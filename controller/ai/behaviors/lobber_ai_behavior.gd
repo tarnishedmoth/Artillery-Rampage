@@ -132,11 +132,10 @@ func _get_shot_error(perfect_power: float, perfect_angle: float, opponent_data: 
 func _clamp_final_angle(perfect_shot_angle: float, deviation:float) -> float:
 
 	var proposed_final_angle: float = perfect_shot_angle + deviation
-	var proposed_final_angle_sgn: float = signf(proposed_final_angle)
-	var perfect_shot_angle_sgn: float = signf(perfect_shot_angle)
+	var min_turret_angle: float = turret_angle_to_global_angle(angles.max())
 
-	if absf(proposed_final_angle) < 1.0 and absf(perfect_shot_angle) > 1.0:
-		# Invert the deviation so we don't nearly have a zero angle and possibly self destruct unintentionally
+	if absf(proposed_final_angle) < min_turret_angle:
+		# Invert the deviation so we don't fall below our minimum angle and possibly self destruct unintentionally
 		print_debug("Lobber AI(%s): Inverting deviation to avoid uintended zero angle - initial_angle=%f; new_angle=%f; perfect_shot_angle=%f; deviation=%f" % \
 			[tank.owner.name, proposed_final_angle, perfect_shot_angle - deviation, perfect_shot_angle, deviation])
 		proposed_final_angle = perfect_shot_angle - deviation
