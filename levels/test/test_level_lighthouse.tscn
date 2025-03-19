@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_v64ed"]
 [ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_y137s"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="5_4kkw6"]
-[ext_resource type="PackedScene" uid="uid://d32uo8rsaysp3" path="res://buildings/lighthouse/light_house.tscn" id="6_0ehpt"]
+[ext_resource type="PackedScene" uid="uid://sa0oyrt453vy" path="res://buildings/lighthouse/light_house.tscn" id="6_1yb0m"]
 
 [node name="TestLevelLighthouse" type="Node2D"]
 
@@ -31,11 +31,11 @@ forces_mask = 15
 [node name="Player" parent="GameLevel" instance=ExtResource("5_4kkw6")]
 position = Vector2(120, 427)
 
-[node name="Lighthouse" parent="GameLevel" instance=ExtResource("6_0ehpt")]
-position = Vector2(51, 441)
+[node name="Lighthouse" parent="GameLevel" instance=ExtResource("6_1yb0m")]
+position = Vector2(48, 442)
 
-[node name="Lighthouse2" parent="GameLevel" instance=ExtResource("6_0ehpt")]
-position = Vector2(984, 440)
+[node name="Lighthouse2" parent="GameLevel" instance=ExtResource("6_1yb0m")]
+position = Vector2(937, 443)
 
 [editable path="GameLevel"]
 [editable path="GameLevel/Terrain"]

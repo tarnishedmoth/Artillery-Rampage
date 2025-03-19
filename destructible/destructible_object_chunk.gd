@@ -9,7 +9,8 @@ func _ready() -> void:
 	_sync_polygons()
 
 func damage(projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1,1)):
-	print_debug("%s - damaged by %s with poly_scale=%s" % [self, projectile_poly, poly_scale])
+	owner.damage(self, projectile_poly, poly_scale)
+
 	
 func _sync_polygons() -> void:
 	if !use_mesh_as_collision:
