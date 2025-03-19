@@ -1,12 +1,12 @@
 [gd_scene load_steps=2 format=3 uid="uid://cklh78tsa5qcj"]
 
-[ext_resource type="Script" path="res://destructible/destructible_object.gd" id="1_hctre"]
+[ext_resource type="Script" path="res://destructible/destructible_object_chunk.gd" id="1_qicvu"]
 
-[node name="DestructibleObject" type="RigidBody2D" groups=["Destructible"]]
+[node name="DestructibleObjectChunk" type="RigidBody2D" groups=["Destructible"]]
 collision_layer = 16
 collision_mask = 315
 max_contacts_reported = 1
-script = ExtResource("1_hctre")
+script = ExtResource("1_qicvu")
 
 [node name="Mesh" type="Polygon2D" parent="."]
 

@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=3 uid="uid://d32uo8rsaysp3"]
 
-[ext_resource type="PackedScene" uid="uid://cklh78tsa5qcj" path="res://destructible/destructible_object.tscn" id="1_mko8r"]
+[ext_resource type="PackedScene" uid="uid://cklh78tsa5qcj" path="res://destructible/destructible_object_chunk.tscn" id="1_mko8r"]
 [ext_resource type="Texture2D" uid="uid://bpod8vvqfsct2" path="res://buildings/lighthouse/light_house.png" id="2_62cel"]
 
-[node name="DestructibleObject" instance=ExtResource("1_mko8r")]
+[node name="Lighthouse" instance=ExtResource("1_mko8r")]
 mass = 1000.0
 
 [node name="Mesh" parent="." index="0"]

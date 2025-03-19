@@ -1,4 +1,4 @@
-class_name DestructibleObject extends RigidBody2D
+class_name DestructibleObjectChunk extends RigidBody2D
 
 @onready var _mesh: Polygon2D = $Mesh
 @onready var _collision: CollisionPolygon2D = $Collision
