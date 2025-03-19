@@ -369,11 +369,22 @@ func _select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavi
 	if opponent_data.has("hit_position"):
 		target_distance = tank.global_position.distance_to(opponent_data.hit_position)
 	else:
-		target_distance = tank.global_position.distance_to(opponent_data.opponent.tank.global_position)
+		target_distance = tank.global_position.distance_to(opponent_data.adjusted_position)
 
 	# Select most powerful available weapon that won't cause self-damage
+	var player_has_not_fired:bool = _target_is_player_and_has_not_fired(opponent_data.opponent)
 	var best_weapon:int = -1
-	var best_score:float = 0.0
+
+	# Find the best weapon unless shooting at player and they haven't shot in which case we want the worst weapon
+	var best_score:float
+	var comparison_result: int
+
+	if player_has_not_fired:
+		best_score = 1e9
+		comparison_result = -1
+	else:
+		best_score = 0.0
+		comparison_result = 1
 
 	for i in range(weapon_infos.size()):
 		var weapon_info: AIBehavior.WeaponInfo = weapon_infos[i]
@@ -383,7 +394,7 @@ func _select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavi
 		if projectile and target_distance > projectile.max_falloff_distance:
 			var score : float = projectile.max_damage * projectile.max_damage * projectile.min_falloff_distance * projectile.max_falloff_distance * weapon.ammo_used_per_shot
 			print_debug("Lobber AI(%s): weapon(%d)=%s; score=%f" % [tank.owner.name, i, weapon.name, score])
-			if score > best_score:
+			if int(signf(score - best_score)) == comparison_result:
 				best_score = score
 				best_weapon = i
 
