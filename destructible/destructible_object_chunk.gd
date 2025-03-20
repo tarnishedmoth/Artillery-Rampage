@@ -17,7 +17,6 @@ func _ready() -> void:
 func damage(projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1,1)):
 	owner.damage(self, projectile_poly, poly_scale)
 
-
 # TODO: Collision will never update if set use_mesh_as_collision to false so maybe remove this option	
 func _sync_polygons() -> void:
 	if !use_mesh_as_collision:

@@ -4,22 +4,6 @@ class_name DestructibleObject extends Node2D
 @export
 var chunk_scene: PackedScene
 
-# TODO: Copied from Terrain
-@export_category("Smoothing")
-@export var smooth_offset: float = 3
-
-@export_category("Collapsing")
-@export var falling_offset: float = 3
-
-@export_category("Crushing")
-@export var max_overlap_distance: float = 5
-
-@export_category("Crushing")
-@export var max_overlap_association_distance: float = 15
-
-@export_category("Crushing")
-@export var max_crush_triangle_delete_size: float = 150
-
 var initial_chunk_name: String
 var first_child_chunk: DestructibleObjectChunk
 
@@ -100,7 +84,7 @@ func _add_new_chunks(first_chunk: DestructibleObjectChunk,
 		var current_child_count: int = get_chunk_count()		
 		var new_chunk_name = initial_chunk_name + str(i + current_child_count)
 		
-		print("_add_new_chunks(" + name + ") Creating new terrain chunk(" + new_chunk_name + ") for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
+		print("_add_new_chunks(" + name + ") Creating new chunk(" + new_chunk_name + ") for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
 		
 		# Must be called deferred - see additional comment in _add_new_chunk as to why
 		call_deferred("_add_new_chunk", first_chunk, new_chunk_name, new_clip_poly)
