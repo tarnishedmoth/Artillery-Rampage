@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cklh78tsa5qcj"]
+[gd_scene load_steps=3 format=3 uid="uid://cklh78tsa5qcj"]
 
 [ext_resource type="Script" path="res://destructible/destructible_object_chunk.gd" id="1_qicvu"]
+[ext_resource type="Script" path="res://destructible/destructible_poly_operations.gd" id="2_1266p"]
 
 [node name="DestructibleObjectChunk" type="RigidBody2D" groups=["Destructible"]]
 collision_layer = 16
@@ -11,3 +12,6 @@ script = ExtResource("1_qicvu")
 [node name="Mesh" type="Polygon2D" parent="."]
 
 [node name="Collision" type="CollisionPolygon2D" parent="."]
+
+[node name="DestructiblePolyOperations" type="Node" parent="."]
+script = ExtResource("2_1266p")

@@ -8,15 +8,6 @@ const TerrainChunkScene = preload("res://terrain/terrain_chunk.tscn")
 @export_category("Collapsing")
 @export var falling_offset: float = 3
 
-@export_category("Projectile")
-@export var min_damage_shape_offset: float = 0
-
-@export_category("Projectile")
-@export var max_damage_shape_offset: float = 1
-
-@export_category("Projectile")
-@export var damage_scale_failure_reduction_step: float = 10.0
-
 @export_category("Crushing")
 @export var max_overlap_distance: float = 5
 
@@ -29,7 +20,10 @@ const TerrainChunkScene = preload("res://terrain/terrain_chunk.tscn")
 var initial_chunk_name: String
 var first_child_chunk: TerrainChunk
 
+@onready var _destructible_shape_calculator: DestructibleShapeCalculator = $DestructibleShapeCalculator
+
 func _ready():
+
 	first_child_chunk = get_first_chunk()
 	initial_chunk_name = first_child_chunk.name
 	
@@ -46,13 +40,16 @@ func get_first_chunk() -> TerrainChunk:
 			first_child_chunk = chunk
 			return chunk
 	return null
+
 # Based on https://www.youtube.com/watch?v=FiKsyOLacwA
 # poly_scale will determine the size of the explosion that destroys the terrain
-	
+
+# TODO: Think projectile_poly should be a property of the WeaponProjectile and then can call .get_projectile_poly_global to
+# get the randomized damage polygon	
 func damage(terrainChunk: TerrainChunk, projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1,1)):
 	
 	#print("Clipping terrain with polygon:", projectile_poly.polygon)
-	var projectile_poly_global: PackedVector2Array = _get_projectile_poly_global(projectile_poly, poly_scale)
+	var projectile_poly_global: PackedVector2Array = _destructible_shape_calculator.get_projectile_poly_global(projectile_poly, poly_scale)
 	
 	# Transform terrain polygon to world space
 	var terrain_poly_global: PackedVector2Array = terrainChunk.get_terrain_global()
@@ -88,52 +85,6 @@ func damage(terrainChunk: TerrainChunk, projectile_poly: CollisionPolygon2D, pol
 		return
 		
 	_add_new_chunks(get_first_chunk(), clipping_results, 1)
-
-func _get_projectile_poly_global(projectile_poly: CollisionPolygon2D, poly_scale: Vector2) -> PackedVector2Array:
-	var scale_transform: Transform2D = Transform2D(0, poly_scale, 0, Vector2())
-	# Combine the scale transform with the world (global) transform
-	var combined_transform: Transform2D = projectile_poly.global_transform * scale_transform
-	
-	var projectile_poly_global: PackedVector2Array = combined_transform * projectile_poly.polygon
-	
-	_randomize_damage_polygon(projectile_poly_global, poly_scale)
-	
-	return projectile_poly_global
-
-func _randomize_damage_polygon(projectile_damage_global: PackedVector2Array, poly_scale: Vector2) -> void:
-	var poly_scale_size: float = poly_scale.length()
-	
-	var projectile_damage_test_polygon: PackedVector2Array
-	projectile_damage_test_polygon.resize(projectile_damage_global.size())
-
-	var scale_decrements: float = poly_scale_size / damage_scale_failure_reduction_step
-	var success:bool = false
-
-	var scale_value: float = poly_scale_size
-	while scale_value > 0:
-		for i in range(0, projectile_damage_global.size()):
-			projectile_damage_test_polygon[i] = projectile_damage_global[i] + _get_offset_damage_poly_vertex(scale_value)
-		
-		if TerrainUtils._is_visible_polygon(projectile_damage_test_polygon):
-			success = true
-			break
-		else:
-			scale_value -= scale_decrements
-			print_debug("%s: Created non-viable damage result with damage polygon of size %d, trying again and reducing scale to %f" % [name, projectile_damage_test_polygon.size(), scale_value])
-
-	if success:
-		# copy the test polygon changes over to the original
-		for i in range(0, projectile_damage_global.size()):
-			projectile_damage_global[i] = projectile_damage_test_polygon[i]
-	else:
-		push_warning("%s: Unable to create a viable damage polygon after %d attempts - removing randomization" % [name, ceili(poly_scale_size / scale_decrements)])
-		# Will use the default polygon vertices passed in that are already scaled
-
-func _get_offset_damage_poly_vertex(scale_value: float) -> Vector2:
-	return Vector2(0, _get_random_damage_offset(scale_value))
-	
-func _get_random_damage_offset(scale_value: float) -> float:
-	return randf_range(min_damage_shape_offset * scale_value, max_damage_shape_offset * scale_value) * (1 if randf() >= 0.5 else -1)
 			
 func _add_new_chunks(first_chunk: TerrainChunk,
  geometry_results: Array[PackedVector2Array], start_index: int) -> void:
@@ -147,13 +98,20 @@ func _add_new_chunks(first_chunk: TerrainChunk,
 			print("_add_new_chunks(" + name + ") Ignoring 'hole' polygon for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
 			continue
 			
-		var current_child_count: int = get_child_count()		
+		var current_child_count: int = get_chunk_count()		
 		var new_chunk_name = initial_chunk_name + str(i + current_child_count)
 		
 		print("_add_new_chunks(" + name + ") Creating new terrain chunk(" + new_chunk_name + ") for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
 		
 		# Must be called deferred - see additional comment in _add_new_chunk as to why
 		call_deferred("_add_new_chunk", first_chunk, new_chunk_name, new_clip_poly)
+
+func get_chunk_count() -> int:
+	var count:int = 0
+	for chunk in get_children():
+		if chunk is TerrainChunk:
+			count += 1
+	return count
 	
 func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_poly: PackedVector2Array) -> void:
 	var new_chunk = TerrainChunkScene.instantiate()
@@ -173,7 +131,7 @@ func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_
 
 	new_chunk.replace_contents(new_clip_poly)
 
-	print_debug("added new chunk=%s - chunk count=%d" % [new_chunk.name, get_child_count()])
+	print_debug("added new chunk=%s - chunk count=%d" % [new_chunk.name, get_chunk_count()])
 
 func _morph_falling_chunk(chunk: TerrainChunk) -> PackedVector2Array:
 	var falling_transform: Transform2D = Transform2D(0, Vector2(0, falling_offset))

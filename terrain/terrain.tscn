@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://l1x5kvupj7so"]
+[gd_scene load_steps=4 format=3 uid="uid://l1x5kvupj7so"]
 
 [ext_resource type="Script" path="res://terrain/terrain.gd" id="1_4p40s"]
+[ext_resource type="Script" path="res://destructible/destructible_shape_calculator.gd" id="1_cuql0"]
 [ext_resource type="PackedScene" uid="uid://dmbj0iglwwo7x" path="res://terrain/terrain_chunk.tscn" id="2_3bd8x"]
 
 [node name="Terrain" type="Node2D"]
@@ -8,3 +9,6 @@ z_index = -100
 script = ExtResource("1_4p40s")
 
 [node name="TerrainChunk" parent="." instance=ExtResource("2_3bd8x")]
+
+[node name="DestructibleShapeCalculator" type="Node" parent="."]
+script = ExtResource("1_cuql0")

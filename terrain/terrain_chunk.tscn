@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dmbj0iglwwo7x"]
+[gd_scene load_steps=3 format=3 uid="uid://dmbj0iglwwo7x"]
 
 [ext_resource type="Script" path="res://terrain/terrain_chunk.gd" id="1_m7lgb"]
+[ext_resource type="Script" path="res://destructible/destructible_poly_operations.gd" id="2_41dms"]
 
 [node name="TerrainChunk" type="StaticBody2D" groups=["Destructible"]]
 collision_layer = 8
@@ -22,3 +23,6 @@ collision_mask = 42
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Overlap"]
 visible = false
 polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 390, -447, 609, -8, 937, -3, 945, 445, -103, 448)
+
+[node name="DestructiblePolyOperations" type="Node" parent="."]
+script = ExtResource("2_41dms")
