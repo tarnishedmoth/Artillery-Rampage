@@ -73,8 +73,7 @@ func damage(chunk: DestructibleObjectChunk, projectile_poly: CollisionPolygon2D,
 	# This means the chunk was destroyed so we need to queue_free
 	if clipping_results.is_empty():
 		print("damage(" + name + ") completely destroyed by poly=" + projectile_poly.owner.name)
-		chunk_destroyed.emit(chunk)
-		chunk.delete()
+		delete_chunk(chunk)
 		return
 	
 	var updated_destructible_poly = clipping_results[0]
