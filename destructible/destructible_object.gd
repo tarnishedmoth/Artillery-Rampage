@@ -16,6 +16,15 @@ var initial_chunk_name: String
 var first_child_chunk: DestructibleObjectChunk
 var chunk_update_flags:int
 
+@warning_ignore("unused_signal")
+signal chunk_split(chunk: DestructibleObjectChunk,  new_chunk: DestructibleObjectChunk)
+
+@warning_ignore("unused_signal")
+signal destroyed(object: DestructibleObject)
+
+@warning_ignore("unused_signal")
+signal chunk_destroyed(object: DestructibleObjectChunk)
+
 @onready var _destructible_shape_calculator: DestructibleShapeCalculator = $DestructibleShapeCalculator
 
 func _ready() -> void:
@@ -64,6 +73,7 @@ func damage(chunk: DestructibleObjectChunk, projectile_poly: CollisionPolygon2D,
 	# This means the chunk was destroyed so we need to queue_free
 	if clipping_results.is_empty():
 		print("damage(" + name + ") completely destroyed by poly=" + projectile_poly.owner.name)
+		chunk_destroyed.emit(chunk)
 		chunk.delete()
 		return
 	
@@ -74,16 +84,21 @@ func damage(chunk: DestructibleObjectChunk, projectile_poly: CollisionPolygon2D,
 	# This could result in new chunks breaking off
 	var destructible_chunk_results := chunk.replace_contents(updated_destructible_poly, projectile_poly_global, chunk_update_flags)
 	if !destructible_chunk_results.is_empty():
-		_add_new_chunks(get_first_chunk(), destructible_chunk_results, 0)
+		_add_new_chunks(chunk, destructible_chunk_results, 0)
 		
 	# We updated the current chunk and no more chunks to add 
 	if clipping_results.size() == 1:
 		return
 		
-	_add_new_chunks(get_first_chunk(), clipping_results, 1)
+	_add_new_chunks(chunk, clipping_results, 1)
 
+func delete_chunk(chunk: DestructibleObjectChunk) -> void:
+	chunk_destroyed.emit(chunk)
+	chunk.delete()
+	if get_chunk_count() == 0:
+		delete()
 
-func _add_new_chunks(first_chunk: DestructibleObjectChunk,
+func _add_new_chunks(incident_chunk: DestructibleObjectChunk,
  geometry_results: Array[PackedVector2Array], start_index: int) -> void:
 	# Create additional chunk pieces for the remaining geometry results
 	if !create_new_chunks:
@@ -104,9 +119,9 @@ func _add_new_chunks(first_chunk: DestructibleObjectChunk,
 		print("_add_new_chunks(" + name + ") Creating new chunk(" + new_chunk_name + ") for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
 		
 		# Must be called deferred - see additional comment in _add_new_chunk as to why
-		call_deferred("_add_new_chunk", new_chunk_name, new_clip_poly)
+		call_deferred("_add_new_chunk", incident_chunk, new_chunk_name, new_clip_poly)
 	
-func _add_new_chunk(chunk_name: String = "", new_clip_poly: PackedVector2Array = []) -> DestructibleObjectChunk:
+func _add_new_chunk(incident_chunk: DestructibleObjectChunk = null, chunk_name: String = "", new_clip_poly: PackedVector2Array = []) -> DestructibleObjectChunk:
 	if not chunk_scene:
 		push_error("%s - No chunk_scene set" % [name])
 		return
@@ -121,7 +136,11 @@ func _add_new_chunk(chunk_name: String = "", new_clip_poly: PackedVector2Array =
 
 	# Will be empty if creating the first chunk as using the default values from the chunk_scene
 	if new_clip_poly:
+		chunk_split.emit()
 		new_chunk.replace_contents(new_clip_poly)
+
+		if incident_chunk:
+			chunk_split.emit(incident_chunk, new_chunk)
 
 	print_debug("added new chunk=%s - chunk count=%d" % [new_chunk.name, get_chunk_count()])
 
@@ -147,3 +166,9 @@ func get_bounds_global() -> Rect2:
 	for chunk in get_chunks():
 		bounds = bounds.merge(chunk.get_bounds_global())
 	return bounds
+
+func delete() -> void:
+	print("DestructibleObject(%s) - delete" % [name])
+	destroyed.emit(self)
+
+	queue_free.call_deferred()
