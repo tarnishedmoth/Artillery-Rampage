@@ -11,31 +11,52 @@ class_name DestructibleObjectChunk extends RigidBody2D
 
 const surface_delta_y: float = 1.0
 
+var _collision_dirty:bool
+
 func _ready() -> void:
-	_sync_polygons()
+	_request_sync_polygons()
 
 func damage(projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1,1)):
 	owner.damage(self, projectile_poly, poly_scale)
 
 # TODO: Collision will never update if set use_mesh_as_collision to false so maybe remove this option	
-func _sync_polygons() -> void:
+func _request_sync_polygons() -> void:
 	if !use_mesh_as_collision:
 		return
-		
 	# Make sure the collision and visual polygon the same
-	_collision.set_deferred("position", _mesh.position)
-	_collision.set_deferred("polygon", _mesh.polygon)
+	# Need to wake up the rigidt body if it is asleep so that these changes take immediate effect
+	sleeping = false
+	
+	# Wait until next frame to signal the collision update
+	await get_tree().physics_frame
+	_collision_dirty = true
+
+func _sync_polygons() -> void:
+	_collision.position = _mesh.position
+	_collision.polygon = _mesh.polygon
+
+	_collision_dirty = false
+
+func _integrate_forces(_state: PhysicsDirectBodyState2D) -> void:
+	# If the collision polygon is dirty, update the collision polygon
+	if _collision_dirty:
+		_sync_polygons()
 
 func _replace_contents_local(new_poly: PackedVector2Array, immediate:bool) -> void:
 	
 	print_poly("_replace_contents_local", new_poly)
 
+	# Delete ourselves if we aren't visible
+	if TerrainUtils.is_invisible(new_poly):
+		owner.delete_chunk(self)
+		return
+	
 	if(immediate):
 		_mesh.polygon = new_poly
 	else:
 		_mesh.set_deferred("polygon", new_poly)
 
-	_sync_polygons()
+	_request_sync_polygons()
 
 class UpdateFlags:
 	const Immediate:int = 1

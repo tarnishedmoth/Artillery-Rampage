@@ -94,6 +94,8 @@ func damage(chunk: DestructibleObjectChunk, projectile_poly: CollisionPolygon2D,
 func delete_chunk(chunk: DestructibleObjectChunk) -> void:
 	chunk_destroyed.emit(chunk)
 	chunk.delete()
+	await get_tree().process_frame
+	
 	if get_chunk_count() == 0:
 		delete()
 
