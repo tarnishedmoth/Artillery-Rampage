@@ -40,8 +40,9 @@ func _replace_contents_local(new_poly: PackedVector2Array, immediate:bool) -> vo
 class UpdateFlags:
 	const Immediate:int = 1
 	const Crumble:int = 1 << 1
+	const Smooth:int = 1 << 2
 
-func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global: PackedVector2Array = [], update_flags:int = UpdateFlags.Crumble) -> Array[PackedVector2Array]:
+func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global: PackedVector2Array = [], update_flags:int = UpdateFlags.Crumble | UpdateFlags.Smooth) -> Array[PackedVector2Array]:
 	print_poly("replace_contents", new_poly_global)
 
 	# Transform updated polygon back to local space
@@ -55,7 +56,9 @@ func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global
 	
 	if influence_poly_local.size() > 1:
 		var bounds:Circle = Circle.create_from_points(influence_poly_local).scale(smooth_influence_scale)
-		replacement_poly_local = destructiblePolyOperations.smooth(updated_destructible_poly_local, bounds)
+
+		if update_flags & UpdateFlags.Smooth:
+			replacement_poly_local = destructiblePolyOperations.smooth(updated_destructible_poly_local, bounds)
 		
 		# Now apply crumbling on top and return any new polygons to be added to other chunks if not falling
 		if !is_sleeping() and update_flags & UpdateFlags.Crumble:

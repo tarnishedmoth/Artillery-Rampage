@@ -1,11 +1,20 @@
 class_name DestructibleObject extends Node2D
 
 @export_category("Chunk")
-@export
-var chunk_scene: PackedScene
+@export var chunk_scene: PackedScene
+
+@export_category("Destruction")
+@export var crumbling:bool = false
+
+@export_category("Destruction")
+@export var create_new_chunks:bool = false
+
+@export_category("Smoothing")
+@export var smoothing:bool = true
 
 var initial_chunk_name: String
 var first_child_chunk: DestructibleObjectChunk
+var chunk_update_flags:int
 
 @onready var _destructible_shape_calculator: DestructibleShapeCalculator = $DestructibleShapeCalculator
 
@@ -19,6 +28,11 @@ func _ready() -> void:
 	for chunk in get_children():
 		if chunk is DestructibleObjectChunk:
 			chunk.owner = self
+
+	if crumbling:
+		chunk_update_flags |= DestructibleObjectChunk.UpdateFlags.Crumble
+	if smoothing:
+		chunk_update_flags |= DestructibleObjectChunk.UpdateFlags.Smooth
 
 func get_first_chunk() -> DestructibleObjectChunk:
 	if is_instance_valid(first_child_chunk):
@@ -58,7 +72,7 @@ func damage(chunk: DestructibleObjectChunk, projectile_poly: CollisionPolygon2D,
 	 " - Changing from size of " + str(destructible_poly_global.size()) + " to " + str(updated_destructible_poly.size()))
 	
 	# This could result in new chunks breaking off
-	var destructible_chunk_results := chunk.replace_contents(updated_destructible_poly, projectile_poly_global)
+	var destructible_chunk_results := chunk.replace_contents(updated_destructible_poly, projectile_poly_global, chunk_update_flags)
 	if !destructible_chunk_results.is_empty():
 		_add_new_chunks(get_first_chunk(), destructible_chunk_results, 0)
 		
@@ -72,7 +86,10 @@ func damage(chunk: DestructibleObjectChunk, projectile_poly: CollisionPolygon2D,
 func _add_new_chunks(first_chunk: DestructibleObjectChunk,
  geometry_results: Array[PackedVector2Array], start_index: int) -> void:
 	# Create additional chunk pieces for the remaining geometry results
-	
+	if !create_new_chunks:
+		print("_add_new_chunks(%s) New chunks disabled - ignoring additional %d chunk pieces" % [name, geometry_results.size() - start_index])
+		return
+
 	for i in range(start_index, geometry_results.size()):
 		var new_clip_poly = geometry_results[i]
 
