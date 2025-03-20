@@ -32,7 +32,7 @@ func get_first_chunk() -> DestructibleObjectChunk:
 func get_chunk_count() -> int:
 	var count:int = 0
 	for chunk in get_children():
-		if chunk is TerrainChunk:
+		if chunk is DestructibleObjectChunk:
 			count += 1
 	return count
 
@@ -87,7 +87,7 @@ func _add_new_chunks(first_chunk: DestructibleObjectChunk,
 		print("_add_new_chunks(" + name + ") Creating new chunk(" + new_chunk_name + ") for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
 		
 		# Must be called deferred - see additional comment in _add_new_chunk as to why
-		call_deferred("_add_new_chunk", first_chunk, new_chunk_name, new_clip_poly)
+		call_deferred("_add_new_chunk", new_chunk_name, new_clip_poly)
 	
 func _add_new_chunk(chunk_name: String = "", new_clip_poly: PackedVector2Array = []) -> DestructibleObjectChunk:
 	if not chunk_scene:
