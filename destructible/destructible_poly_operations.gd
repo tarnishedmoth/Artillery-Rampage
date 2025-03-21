@@ -5,7 +5,10 @@ class_name DestructiblePolyOperations extends Node
 
 @export_category("Smoothing")
 # Sometimes the algorithm flags things incorrectly that are essentially vertical drops near the left of screen
-@export var smooth_x_threshold_diff: float = 10
+@export_range(5.0, 1e9, 1.0, "or_greater") var smooth_x_threshold_diff: float = 10
+
+@export_category("Smoothing")
+@export_range(0.0, 1.0, 0.01) var smooth_x_frac_deadzone: float = 0.1
 
 @export_category("Crumbling")
 @export var crumble_y_min_dist: float = 1
@@ -56,15 +59,22 @@ func smooth(poly: PackedVector2Array, bounds: Circle) -> PackedVector2Array:
 
 		# Don't modify the bottom
 		if current.x - prev.x < -smooth_x_threshold_diff and current.y < prev.y and current.y < threshold_y and bounds.contains(current):
-			# Add a new vertex between prev and current that is lerped between them
-			var new_vertex: Vector2 = Vector2(lerpf(prev.x, current.x, randf()), lerpf(prev.y, current.y, randf()))
-			out_poly[j] = new_vertex
-			out_poly.resize(out_poly.size() + 1)
 
-			j += 2
-			smooth_updates += 1
-		else:
-			j += 1
+			var x_diff: float = current.x - prev.x
+			var new_vertex_count:int = int(-x_diff / smooth_x_threshold_diff)
+
+			out_poly.resize(out_poly.size() + new_vertex_count)
+			var last_vertex: Vector2 = prev
+			for k in range(0, new_vertex_count):
+				var new_vertex: Vector2 = Vector2(
+					lerpf(last_vertex.x, prev.x - smooth_x_threshold_diff * (k + 1), randf_range(smooth_x_frac_deadzone, 1.0 - smooth_x_frac_deadzone)),
+					lerpf(prev.y, current.y, randf())
+				)
+				out_poly[j] = new_vertex
+				last_vertex = new_vertex
+				j += 1
+				smooth_updates += 1
+		j += 1
 
 	# Assign last one
 	out_poly[j - 1] = poly[poly.size() - 1]
