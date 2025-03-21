@@ -30,7 +30,9 @@ class_name DestructiblePolyOperations extends Node
 
 
 func smooth(poly: PackedVector2Array, bounds: Circle) -> PackedVector2Array:
-		
+	if poly.size() < 3:
+		return poly
+
 	# Polygon is actually stored clockwise. Look at vertices and see where x decreases indicating a dent until we start winding around
 	# Don't modify the interior of the terrain. Detect this by looking at the maximum y (bottom-most point)
 	var bottom_y: float = -1e12
@@ -42,22 +44,35 @@ func smooth(poly: PackedVector2Array, bounds: Circle) -> PackedVector2Array:
 	
 	var smooth_updates: int = 0
  	
+	var out_poly:PackedVector2Array
+	out_poly.resize(poly.size())
+
+	var j:int = 1
 	for i in range(1, poly.size()):
 		var current := poly[i]
 		var prev := poly[i - 1]
 
+		out_poly[j - 1] = prev
+
 		# Don't modify the bottom
 		if current.x - prev.x < -smooth_x_threshold_diff and current.y < prev.y and current.y < threshold_y and bounds.contains(current):
-			poly[i].y = (prev.y + current.y) * 0.5
+			# Add a new vertex between prev and current that is lerped between them
+			var new_vertex: Vector2 = Vector2(lerpf(prev.x, current.x, randf()), lerpf(prev.y, current.y, randf()))
+			out_poly[j] = new_vertex
+			out_poly.resize(out_poly.size() + 1)
+
+			j += 2
 			smooth_updates += 1
-	#		if i > 1 and absf(poly[i - 1].y - bottom_y) > smooth_y_threshold_value:
-	#			poly[i - 1] = (prev + poly[i - 2]) * 0.5
-	#			smooth_updates += 1
+		else:
+			j += 1
+
+	# Assign last one
+	out_poly[j - 1] = poly[poly.size() - 1]
 	
 	if smooth_updates:
-		print_debug("Chunk(%s) - _smooth: Changed %d verticies" % [get_parent().name, smooth_updates])
+		print_debug("Chunk(%s) - smooth: Changed %d vertices" % [get_parent().name, smooth_updates])
 		
-	return poly
+	return out_poly
 
 # Always returns at least the input poly chunk in the returned array
 func crumble(poly: PackedVector2Array, bounds: Circle) -> Array[PackedVector2Array]:
