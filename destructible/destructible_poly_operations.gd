@@ -48,7 +48,7 @@ func smooth(poly: PackedVector2Array, bounds: Circle) -> PackedVector2Array:
 
 		# Don't modify the bottom
 		if current.x - prev.x < -smooth_x_threshold_diff and current.y < prev.y and current.y < threshold_y and bounds.contains(current):
-			poly[i] = (prev + current) * 0.5
+			poly[i].y = (prev.y + current.y) * 0.5
 			smooth_updates += 1
 	#		if i > 1 and absf(poly[i - 1].y - bottom_y) > smooth_y_threshold_value:
 	#			poly[i - 1] = (prev + poly[i - 2]) * 0.5
