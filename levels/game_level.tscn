@@ -55,6 +55,9 @@ unique_name_in_owner = true
 position = Vector2(636, 358)
 shape = SubResource("RectangleShape2D_60ghs")
 
+[node name="LeftBlockingWall" parent="Walls/BlockingAreas" index="0"]
+position = Vector2(-11, -2)
+
 [node name="PickupCopter" parent="Walls" instance=ExtResource("6_jdphu")]
 position = Vector2(640, -192)
 
