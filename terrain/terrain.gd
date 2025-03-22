@@ -94,7 +94,7 @@ func _add_new_chunks(first_chunk: TerrainChunk,
 		var new_clip_poly = geometry_results[i]
 
 		# Ignore clockwise results as these are "holes" and need to handle these differently later
-		if TerrainUtils.is_invisible(new_clip_poly):
+		if TerrainUtils.is_invisible_polygon(new_clip_poly, false):
 			print("_add_new_chunks(" + name + ") Ignoring 'hole' polygon for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
 			continue
 			
@@ -185,7 +185,7 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 		 % [first_chunk.name, first_poly.size(), second_chunk.name, second_poly.size(), results.size(),
 		 ",".join(results.map(func(x : PackedVector2Array): return x.size()))])
 		# Sort by size so we can keep the largest
-		results = results.filter(func(r : PackedVector2Array): return TerrainUtils.is_visible(r))
+		results = results.filter(func(r : PackedVector2Array): return TerrainUtils.is_visible_polygon(r, false))
 		results.sort_custom(TerrainUtils.largest_poly_first)
 	
 	# Don't do crumbling when merging - pass 0 for flags
@@ -245,7 +245,7 @@ func _crush(first_chunk: TerrainChunk, first_poly: PackedVector2Array,
 	pruned += TerrainUtils.prune_small_area_poly(second_poly, overlap_index_arrays[1], max_crush_triangle_delete_size)
 
 	# Filter results to visible
-	results = results.filter(func(r : PackedVector2Array): return TerrainUtils.is_visible(r))
+	results = results.filter(func(r : PackedVector2Array): return TerrainUtils.is_invisible_polygon(r, false))
 	results.sort_custom(TerrainUtils.largest_poly_first)
 
 	print_debug("pruning: final_results=%d; pruned=%d" % [results.size(), pruned])

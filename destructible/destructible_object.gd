@@ -13,7 +13,6 @@ class_name DestructibleObject extends Node2D
 @export var smoothing:bool = true
 
 var initial_chunk_name: String
-var first_child_chunk: DestructibleObjectChunk
 var chunk_update_flags:int
 
 @warning_ignore("unused_signal")
@@ -28,29 +27,20 @@ signal chunk_destroyed(object: DestructibleObjectChunk)
 @onready var _destructible_shape_calculator: DestructibleShapeCalculator = $DestructibleShapeCalculator
 
 func _ready() -> void:
-	first_child_chunk = get_first_chunk()
-	if !first_child_chunk:
+	var initial_chunks := get_chunks()
+	if !initial_chunks:
 		# Create the first chunk from scene
-		first_child_chunk = _add_new_chunk()
-	initial_chunk_name = first_child_chunk.name
+		initial_chunks.push_back(_add_new_chunk())
+
+	initial_chunk_name = initial_chunks[0].name
 	
-	for chunk in get_children():
-		if chunk is DestructibleObjectChunk:
-			chunk.owner = self
+	for chunk in initial_chunks:
+		chunk.owner = self
 
 	if crumbling:
 		chunk_update_flags |= DestructibleObjectChunk.UpdateFlags.Crumble
 	if smoothing:
 		chunk_update_flags |= DestructibleObjectChunk.UpdateFlags.Smooth
-
-func get_first_chunk() -> DestructibleObjectChunk:
-	if is_instance_valid(first_child_chunk):
-		return first_child_chunk
-	for chunk in get_children():
-		if chunk is DestructibleObjectChunk:
-			first_child_chunk = chunk
-			return chunk
-	return null
 
 func get_chunk_count() -> int:
 	var count:int = 0
@@ -110,7 +100,7 @@ func _add_new_chunks(incident_chunk: DestructibleObjectChunk,
 		var new_clip_poly = geometry_results[i]
 
 		# Ignore clockwise results as these are "holes" and need to handle these differently later
-		if TerrainUtils.is_invisible(new_clip_poly):
+		if TerrainUtils.is_invisible_polygon(new_clip_poly, false):
 			print("_add_new_chunks(" + name + ") Ignoring 'hole' polygon for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
 			continue
 			
@@ -130,6 +120,10 @@ func _add_new_chunk(incident_chunk: DestructibleObjectChunk = null, chunk_name: 
 
 	if chunk_name:
 		new_chunk.name = chunk_name
+
+	# Set the density of the new chunk to be same if we are splitting it from an existing chunk
+	if incident_chunk: 
+		new_chunk.density = incident_chunk.density
 	
 	add_child(new_chunk)
 	# Must be done after adding as a child

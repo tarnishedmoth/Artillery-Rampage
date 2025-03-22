@@ -5,6 +5,8 @@
 
 [node name="LighthouseChunk" instance=ExtResource("1_mko8r")]
 mass = 1000.0
+min_mass = 100.0
+destroy_below_min_mass = true
 
 [node name="Mesh" parent="." index="0"]
 position = Vector2(-26, -131)

@@ -34,7 +34,7 @@ func _randomize_damage_polygon(projectile_damage_global: PackedVector2Array, pol
 		for i in range(0, projectile_damage_global.size()):
 			projectile_damage_test_polygon[i] = projectile_damage_global[i] + _get_offset_damage_poly_vertex(scale_value)
 		
-		if TerrainUtils._is_visible_polygon(projectile_damage_test_polygon):
+		if TerrainUtils.is_visible_polygon(projectile_damage_test_polygon):
 			success = true
 			break
 		else:

@@ -9,11 +9,26 @@ class_name DestructibleObjectChunk extends RigidBody2D
 @export_category("Smoothing")
 @export var smooth_influence_scale: float = 1.5
 
+## Whether to reduce the mass of the chunk as it is damaged per initial calculated density
+@export_group("Damage")
+@export var reduce_mass_on_damage: bool = true
+
+## Minimum mass to allow to avoid physics instability
+@export_group("Damage")
+@export var min_mass: float
+
+@export_group("Damage")
+@export var destroy_below_min_mass: bool
+
+## Density in kg / p^2
+var density: float
+
 const surface_delta_y: float = 1.0
 
 var _collision_dirty:bool
 
 func _ready() -> void:
+	_set_initial_mass_and_density()
 	_request_sync_polygons()
 
 func damage(projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1,1)):
@@ -33,9 +48,58 @@ func _request_sync_polygons() -> void:
 
 func _sync_polygons() -> void:
 	_collision.position = _mesh.position
-	_collision.polygon = _mesh.polygon
+	
+	# Still need to defer this even in _integrate_forces to avoid errors
+	# Doesn't appear to introduce any new lag between mesh shape and collision shape in gameplay
+	_collision.set_deferred("polygon", _mesh.polygon)
+	
+	if reduce_mass_on_damage:
+		_recalculate_mass()
 
 	_collision_dirty = false
+
+func _set_initial_mass_and_density() -> void:
+	# If density already provided, set the mass based on density and area
+	if density > 0:
+		_recalculate_mass()
+	elif mass > 0:
+		_calculate_density()
+	else:
+		push_warning("DestructibleObjectChunk(%s) - Neither mass nor density provided, setting density to 1.0" % [name])
+		density = 1.0
+		_recalculate_mass()
+
+func _recalculate_mass() -> void:
+	# Calculate the mass based on the area of the polygon
+	var should_delete:bool = false
+	var area:float = TerrainUtils.calculate_polygon_area(_mesh.polygon)
+	
+	if is_zero_approx(area):
+		push_warning("DestructibleObjectChunk(%s) - Polygon area is zero" % [name])
+		mass = min_mass
+		should_delete = destroy_below_min_mass
+	else:
+		var new_mass := area * density
+		if new_mass < min_mass:
+			new_mass = min_mass
+			should_delete = destroy_below_min_mass
+		mass = new_mass
+		
+	print_debug("DestructibleObjectChunk(%s) - mass=%f; density=%f" % [name, mass, density])
+	
+	if should_delete:
+		owner.delete_chunk(self)
+
+func _calculate_density() -> void:
+	# Calculate the density based on the mass and area of the polygon
+	var area:float = TerrainUtils.calculate_polygon_area(_mesh.polygon)
+	if is_zero_approx(area):
+		push_warning("DestructibleObjectChunk(%s) - Polygon area is zero, setting density to 1" % [name])
+		density = 1
+	else:
+		density = mass / area
+
+	print_debug("DestructibleObjectChunk(%s) - mass=%f; density=%f" % [name, mass, density])
 
 func _integrate_forces(_state: PhysicsDirectBodyState2D) -> void:
 	# If the collision polygon is dirty, update the collision polygon
@@ -43,11 +107,10 @@ func _integrate_forces(_state: PhysicsDirectBodyState2D) -> void:
 		_sync_polygons()
 
 func _replace_contents_local(new_poly: PackedVector2Array, immediate:bool) -> void:
-	
 	print_poly("_replace_contents_local", new_poly)
 
 	# Delete ourselves if we aren't visible
-	if TerrainUtils.is_invisible(new_poly):
+	if TerrainUtils.is_invisible_polygon(new_poly):
 		owner.delete_chunk(self)
 		return
 	

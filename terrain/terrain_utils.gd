@@ -2,12 +2,6 @@ class_name TerrainUtils
 
 static func largest_poly_first(a: PackedVector2Array, b: PackedVector2Array) -> bool:
 	return a.size() > b.size()
-	
-static func is_invisible(poly: PackedVector2Array) -> bool:
-	return poly.size() < 3 or Geometry2D.is_polygon_clockwise(poly)
-
-static func is_visible(poly: PackedVector2Array) -> bool:
-	return !is_invisible(poly)
 
 # Calculate the area of a triangle using the Shoelace formula
 static func calculate_triangle_area(p1: Vector2, p2: Vector2, p3: Vector2) -> float:
@@ -144,7 +138,7 @@ static func prune_small_area_poly(poly: PackedVector2Array, pruning_index_candid
 		var modified_poly := poly.duplicate()
 		_remove_indices_from_poly(modified_poly, removal_indices)
 		
-		if _is_visible_polygon(modified_poly):
+		if is_visible_polygon(modified_poly):
 			# Proceed as planned
 			_remove_indices_from_poly(poly, removal_indices)
 			return removal_indices.size()
@@ -152,9 +146,12 @@ static func prune_small_area_poly(poly: PackedVector2Array, pruning_index_candid
 			push_warning("prune_small_area_poly: convex decomposition/ccw test failed - not pruning any vertices")
 			return 0
 
-static func _is_visible_polygon(poly: PackedVector2Array) -> bool:
+static func is_visible_polygon(poly: PackedVector2Array, check_decomposition: bool = true) -> bool:
 	# When decomposition fails an empty array is returned
-	return !Geometry2D.is_polygon_clockwise(poly) and !Geometry2D.decompose_polygon_in_convex(poly).is_empty()
+	return poly.size() >= 3 and not Geometry2D.is_polygon_clockwise(poly) and (not check_decomposition or not Geometry2D.decompose_polygon_in_convex(poly).is_empty())
+
+static func is_invisible_polygon(poly: PackedVector2Array, check_decomposition: bool = true) -> bool:
+	return not is_visible_polygon(poly, check_decomposition)
 
 static func _remove_indices_from_poly(poly: PackedVector2Array, removal_indices: PackedInt32Array) -> void:
 	# Since removing from array iterate in reverse as it is more efficient
@@ -178,7 +175,6 @@ static func _get_all_triangles(triangle_list_indices: PackedInt32Array, indices:
 	return all_triangles
 
 static func _get_pruned_isolated_vertices(poly: PackedVector2Array, candidate_indices_list: PackedInt32Array, candidate_indices: PackedInt32Array, threshold_area: float) -> PackedInt32Array:
-	
 	if(candidate_indices_list.is_empty()):
 		return candidate_indices
 

@@ -158,7 +158,7 @@ func _calculate_crumble(poly: PackedVector2Array, first_index: int, count: int) 
 
 	clip_results = clip_results.filter(
 		func(result:PackedVector2Array):
-			return TerrainUtils.is_visible(result)
+			return TerrainUtils.is_visible_polygon(result, false)
 	)
 	clip_results.sort_custom(TerrainUtils.largest_poly_first)
 	
