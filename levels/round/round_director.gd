@@ -2,12 +2,18 @@ class_name RoundDirector extends Node
 
 var tank_controllers: Array = []
 var active_player_index: int = -1
-var physics_sim_time: float = 5.0
+
+@export 
 var physics_check_time: float = 0.25
+
+@export
+var max_fall_check_time:float = 20.0
 
 var fall_check_timer: Timer
 
 signal tanks_stopped_falling
+
+var _fall_check_elapsed_time:float = 0.0
 
 func _ready():
 	fall_check_timer = Timer.new()
@@ -22,11 +28,20 @@ func add_controller(tank_controller) -> void:
 	tank_controllers.append(tank_controller)
 	
 func _on_fall_check_timeout():
+	_fall_check_elapsed_time += fall_check_timer.wait_time
+	
 	if !is_any_tank_falling():
 		print("_on_fall_check_timeout: Stopping fall_check_timer")
-		fall_check_timer.stop()
-		emit_signal("tanks_stopped_falling")
-
+		_stop_fall_check_timer()
+	elif _fall_check_elapsed_time >= max_fall_check_time:
+		push_warning("_on_fall_check_timeout: Fall check timer exceeded max time of %fs - Force stopping the timer")
+		_stop_fall_check_timer()
+		
+func _stop_fall_check_timer() -> void:
+	fall_check_timer.stop()
+	tanks_stopped_falling.emit()
+	_fall_check_elapsed_time = 0.0
+	
 func begin_round() -> bool:
 	
 	GameEvents.connect("turn_ended", _on_turn_ended)
@@ -80,7 +95,7 @@ func _async_check_and_await_falling() -> void:
 	if is_any_tank_falling():
 		print("_on_turn_ended: At least one tank falling - Starting fall_check_timer")
 		fall_check_timer.start()
-		await tanks_stopped_falling
+		await tanks_stopped_falling		
 		
 func is_any_tank_falling() -> bool:
 	for controller in tank_controllers:
