@@ -356,7 +356,7 @@ func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 		print_debug("AIBehavior(%s): Ignoring blind fire shot for projectile=%s" % [tank.owner.name, projectile.name])
 		return
 
-	last_opponent_history_entry.fire_time = _get_current_time_ms()
+	last_opponent_history_entry.fire_time = _get_current_time_seconds()
 	# Need to bind the extra projectile argument to connect
 	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind([projectile, last_opponent_history_entry]))
 
@@ -369,7 +369,7 @@ func _on_projectile_destroyed(args: Array) -> void:
 
 	opponent_history_entry.hit_count += 1
 	opponent_history_entry.hit_location += projectile.global_position
-	opponent_history_entry.hit_time += _get_current_time_ms()
+	opponent_history_entry.hit_time += _get_current_time_seconds()
 
 #endregion
 
@@ -501,8 +501,8 @@ func get_opponent_target_history(opponent: TankController) -> Array:
 
 #region Utils
 
-func _get_current_time_ms() -> float:
-	return Time.get_ticks_msec()
+func _get_current_time_seconds() -> float:
+	return game_level.game_timer.time_seconds
 
 # TODO: This should be a helper on the game level and take into account walls
 func _get_playable_x_extent() -> float:

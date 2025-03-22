@@ -172,7 +172,7 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 		print_debug("Lobber AI(%s): Ignoring shot history - last_opp_pos_delta=%f" % [tank.owner.name, last_opp_pos_delta])
 		return
 	
-	var delta_time: float = (last_entry.hit_time - last_entry.fire_time * last_entry.hit_count) / 1000.0
+	var delta_time: float = last_entry.hit_time - last_entry.fire_time * last_entry.hit_count
 
 	# Feed in last entry data
 	var current_power: float = last_entry.power

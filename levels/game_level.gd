@@ -5,6 +5,7 @@ class_name GameLevel extends Node2D
 @onready var terrain: Terrain = %Terrain
 @onready var wind: Wind = %Wind
 @onready var walls: Walls = %Walls
+@onready var game_timer:GameTimer = %GameTimer
 
 var container_for_spawnables
 

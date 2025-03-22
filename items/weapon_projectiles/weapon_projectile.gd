@@ -95,12 +95,8 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 		# and this agrees with empirical results
 		var pos: Vector2 = state.get_contact_local_position(0)
 		current_collision = CollisionResult.new()
-		# TODO: This will not work with pause
-		# Time.get_ticks_msec is not like Unreal's UWorld::GetTimeSeconds that
-		# tracks actual game time when the game isn't paused and responds to time dilation
-		# To do this we can create a singleton that keeps track of game time and tracks pause state to
-		# subtract out those intervals
-		current_collision.game_time_seconds = Time.get_ticks_msec() / 1000.0
+
+		current_collision.game_time_seconds = SceneManager.get_current_level_root().game_timer.time_seconds
 		current_collision.global_position = pos
 		current_collision.collider = state.get_contact_collider_object(0) as Node2D
 
@@ -271,7 +267,7 @@ func _get_node_impact_position(node: Node2D) -> Vector2:
 func _is_last_collision_relevant() -> bool:
 	return is_instance_valid(last_collision)
 	#return last_collision and \
-	#	Time.get_ticks_msec() / 1000.0 - last_collision.game_time_seconds <= last_collider_time_tolerance
+	#	 SceneManager.get_current_level_root().game_timer.time_seconds - last_collision.game_time_seconds <= last_collider_time_tolerance
 
 func _calculate_point_damage(pos: Vector2) -> float:
 	var impact_point:Vector2 = _get_impact_point()
