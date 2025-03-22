@@ -5,7 +5,7 @@
 
 [node name="DestructibleObjectChunk" type="RigidBody2D" groups=["Destructible"]]
 collision_layer = 16
-collision_mask = 379
+collision_mask = 315
 max_contacts_reported = 1
 script = ExtResource("1_qicvu")
 
