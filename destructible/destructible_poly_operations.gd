@@ -81,8 +81,15 @@ func smooth(poly: PackedVector2Array, bounds: Circle) -> PackedVector2Array:
 	
 	if smooth_updates:
 		print_debug("Chunk(%s) - smooth: Changed %d vertices" % [get_parent().name, smooth_updates])
-		
-	return out_poly
+
+	# out_poly could be self-intersecting so check this
+	if TerrainUtils.is_visible_polygon(out_poly):
+		return out_poly
+
+	push_warning("Chunk(%s) - smooth: Polygon is self-intersecting - returning original" % [get_parent().name])
+	TerrainUtils.print_poly("DestructiblePolyOperations(%s) - smooth(INVALID):" % [get_parent().name], poly)
+
+	return poly
 
 # Always returns at least the input poly chunk in the returned array
 func crumble(poly: PackedVector2Array, bounds: Circle) -> Array[PackedVector2Array]:
@@ -158,7 +165,7 @@ func _calculate_crumble(poly: PackedVector2Array, first_index: int, count: int) 
 
 	clip_results = clip_results.filter(
 		func(result:PackedVector2Array):
-			return TerrainUtils.is_visible_polygon(result, false)
+			return TerrainUtils.is_visible_polygon(result)
 	)
 	clip_results.sort_custom(TerrainUtils.largest_poly_first)
 	

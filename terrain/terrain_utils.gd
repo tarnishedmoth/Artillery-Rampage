@@ -347,3 +347,19 @@ static func _dfs_adjacent_triangles(graph: Dictionary, node: int, visited: Dicti
 	return component
 
 #endregion
+
+#region Debugging
+
+static func print_poly(context: String, poly: PackedVector2Array) -> void:
+	if !OS.is_debug_build():
+		return
+		
+	var values: Array[Vector2] = []
+	for vector in poly:
+		values.push_back(vector)
+		
+	print_debug("%s: %d: [%s]"
+	 % [context, values.size(),
+	 ",".join(values.map(func(v : Vector2): return str(v)))])
+
+#endregion

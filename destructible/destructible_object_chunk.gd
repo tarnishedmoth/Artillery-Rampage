@@ -175,13 +175,7 @@ func print_poly(context: String, poly: PackedVector2Array) -> void:
 	if !OS.is_debug_build():
 		return
 		
-	var values: Array[Vector2] = []
-	for vector in poly:
-		values.push_back(vector)
-		
-	print_debug("DestructibleObjectChunk(%s) - %s: %d: [%s]"
-	 % [name, context, values.size(),
-	 ",".join(values.map(func(v : Vector2): return str(v)))])
+	return TerrainUtils.print_poly("DestructibleObjectChunk(%s) - %s" % [name, context], poly)
 	
 func is_surface_point(vertex: Vector2) -> bool:
 	var test_point: Vector2 = vertex + Vector2(0, surface_delta_y)

@@ -151,14 +151,8 @@ func compare(other: TerrainChunk) -> bool:
 func print_poly(context: String, poly: PackedVector2Array) -> void:
 	if !OS.is_debug_build():
 		return
-		
-	var values: Array[Vector2] = []
-	for vector in poly:
-		values.push_back(vector)
-		
-	print_debug("TerrainChunk(%s) - %s: %d: [%s]"
-	 % [name, context, values.size(),
-	 ",".join(values.map(func(v : Vector2): return str(v)))])
+
+	return TerrainUtils.print_poly("TerrainChunk(%s) - %s" % [name, context], poly)
 	
 func get_bounds_global():
 	var bounds:Rect2 = Rect2()
@@ -169,4 +163,3 @@ func get_bounds_global():
 		vertex.x = clampf(vertex.x, 0.0, viewport_width)
 		bounds = bounds.expand(vertex)
 	return bounds
-	
