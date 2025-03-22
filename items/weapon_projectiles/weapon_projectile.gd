@@ -71,6 +71,8 @@ var last_collision:CollisionResult
 # before on_body_entered and we only need to read the result then
 var current_collision:CollisionResult
 
+var last_recorded_linear_velocity:Vector2
+
 func _ready() -> void:
 	if should_explode_on_impact:
 		connect("body_entered", on_body_entered)
@@ -154,7 +156,7 @@ func on_body_entered(_body: Node2D):
 func center_destructible_on_impact_point(destructible: CollisionPolygon2D) -> void:
 	var destructible_polygon: PackedVector2Array = destructible.polygon
 	# Get velocity vector direction to determine translation direction
-	var movement_dir : Vector2 = linear_velocity.normalized()
+	var movement_dir : Vector2 = last_recorded_linear_velocity.normalized()
 	var circle : Circle = Circle.create_from_points(destructible_polygon)
 	
 	var contact_point: Vector2 = _determine_contact_point(movement_dir, circle.radius)
@@ -194,10 +196,15 @@ func spawn_explosion(scene:PackedScene) -> void:
 		# Per - weapon_projectile.gd:191 @ spawn_explosion(): Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.
 		firing_container.add_child.call_deferred(instance)
 
+func _physics_process(delta: float) -> void:
+	# Need to record this for contact point determination on impact as the linear_velocity there is after the collision
+	last_recorded_linear_velocity = linear_velocity
+	# print_debug("LinearVelocity=%s" % [linear_velocity])
+	
 func _determine_contact_point(movement_dir: Vector2, radius: float) -> Vector2:
 	var space_state = get_world_2d().direct_space_state
 
-	var extent: Vector2 = movement_dir * radius * 2.0
+	var extent: Vector2 = movement_dir * radius * 4.0
 
 	var query_params := PhysicsRayQueryParameters2D.create(
 		global_position - extent, global_position + extent,
