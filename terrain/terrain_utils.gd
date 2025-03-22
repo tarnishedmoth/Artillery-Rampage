@@ -46,22 +46,21 @@ static func is_same_triangle(i00: int, i01: int, i02: int, i10: int, i11: int, i
 #region Determine Overlap Vertices
 static func determine_overlap_vertices(first_poly: PackedVector2Array, second_poly: PackedVector2Array, association_dist: float, overlap_dist: float) -> Array[PackedInt32Array]:
 	var assoc_dist_sq := association_dist * association_dist
-	var overlap_dist_sq := overlap_dist * overlap_dist
 	
 	return [
-		_determine_source_overlaps_target_vertices(first_poly, second_poly, assoc_dist_sq, overlap_dist_sq),
-		_determine_source_overlaps_target_vertices(second_poly, first_poly, assoc_dist_sq, overlap_dist_sq)
+		_determine_source_overlaps_target_vertices(first_poly, second_poly, assoc_dist_sq, overlap_dist),
+		_determine_source_overlaps_target_vertices(second_poly, first_poly, assoc_dist_sq, overlap_dist)
 	]
 
-static func _determine_source_overlaps_target_vertices(source_poly: PackedVector2Array, target_poly: PackedVector2Array, association_dist_sq: float, overlap_dist_sq: float) -> PackedInt32Array:
+static func _determine_source_overlaps_target_vertices(source_poly: PackedVector2Array, target_poly: PackedVector2Array, association_dist_sq: float, overlap_dist: float) -> PackedInt32Array:
 	var all_results : PackedInt32Array = []
 	var direct_results: Dictionary = {}
 	
 	for i in range(source_poly.size()):
 		var vertex := source_poly[i]
-		# TODO: Do we need to check left and right too?
-		var pos_down: Vector2 = Vector2(vertex.x, vertex.y + overlap_dist_sq)
-		var pos_up: Vector2 =  Vector2(vertex.x, vertex.y - overlap_dist_sq)
+		# Only check up or down as we are only considering gravity as the force to cause crushing
+		var pos_down: Vector2 = Vector2(vertex.x, vertex.y + overlap_dist)
+		var pos_up: Vector2 =  Vector2(vertex.x, vertex.y - overlap_dist)
 		if Geometry2D.is_point_in_polygon(pos_down, target_poly) or Geometry2D.is_point_in_polygon(pos_up, target_poly):
 			direct_results[i] = true
 			all_results.push_back(i)

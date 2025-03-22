@@ -65,7 +65,7 @@ func smooth(poly: PackedVector2Array, bounds: Circle) -> PackedVector2Array:
 
 			out_poly.resize(out_poly.size() + new_vertex_count)
 			var last_vertex: Vector2 = prev
-			for k in range(0, new_vertex_count):
+			for k in range(new_vertex_count):
 				var new_vertex: Vector2 = Vector2(
 					lerpf(last_vertex.x, prev.x - smooth_x_threshold_diff * (k + 1), randf_range(smooth_x_frac_deadzone, 1.0 - smooth_x_frac_deadzone)),
 					lerpf(prev.y, current.y, randf())
