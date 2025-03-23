@@ -57,11 +57,13 @@ func set_power(delta: float) -> void:
 func shoot() -> void:
 	if !can_shoot: return
 	
-	tank.shoot()
-	
-	if(!debug_controls):
+	var did_shoot = tank.shoot()
+	if did_shoot and not debug_controls:
 		can_shoot = false
 		can_aim = false
+	else:
+		# Didn't shoot.
+		pass
 		
 func cycle_next_weapon() -> void:
 	# Super simple for testing multiple weapons for now.

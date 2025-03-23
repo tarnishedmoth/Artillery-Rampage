@@ -143,6 +143,7 @@ func shoot() -> bool:
 		weapon.shoot(power)
 		return true
 	else:
+		weapon.dry_fire() # For sound effect (if assigned in Weapon scene)
 		return false
 
 #region Damage and Death

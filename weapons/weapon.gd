@@ -136,6 +136,9 @@ func shoot_for_count(count:int, power:float = fire_velocity) -> void:
 	is_shooting = true
 	_shoot(power)
 	
+func dry_fire() -> void:
+	if sfx_dry_fire: sfx_dry_fire.play()
+	
 func reload(immediate: bool = false) -> void:
 	if not is_equipped: return
 	if is_reloading: return
@@ -211,11 +214,11 @@ func _shoot(power:float = fire_velocity) -> void:
 		return
 	if is_cycling: return
 	if is_reloading:
-		if sfx_dry_fire: sfx_dry_fire.play()
+		dry_fire()
 		cycle() ## To PUNISH them...
 		return
 	if use_ammo == true && current_ammo <= 0:
-		if sfx_dry_fire: sfx_dry_fire.play()
+		dry_fire()
 		cycle()
 		return ## We can't shoot.
 		
