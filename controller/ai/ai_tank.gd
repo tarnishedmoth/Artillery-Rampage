@@ -62,8 +62,8 @@ class AIActionState:
 	
 	var elapsed_time: float = 0
 	
-	func _init(parent: AITank):
-		self.parent = parent
+	func _init(in_parent: AITank):
+		self.parent = in_parent
 	
 	func execute(delta: float) -> AIActionState:
 		elapsed_time += delta
@@ -86,8 +86,8 @@ class AIActionState:
 # Reaction time for start of turn
 class AIWaitingState extends AIActionState:
 	
-	func _init(parent: AITank):
-		super(parent)
+	func _init(in_parent: AITank):
+		super(in_parent)
 		total_time = randf_range(parent.min_ai_start_delay, parent.max_ai_start_delay)
 		
 	func _next_state() -> AIActionState: return AIAimingState.new(parent)
@@ -99,8 +99,8 @@ class AIAimingState extends AIActionState:
 	var delta_sum: float = 0.0
 	var total_delta: float
 	
-	func _init(parent: AITank):
-		super(parent)
+	func _init(in_parent: AITank):
+		super(in_parent)
 		
 		var target_rads = parent.target_result.angle
 		total_delta = target_rads - parent.tank.get_turret_rotation()
@@ -135,8 +135,8 @@ class AIPoweringState extends AIActionState:
 	var delta_sum: float = 0.0
 	var total_delta: float
 	
-	func _init(parent: AITank):
-		super(parent)
+	func _init(in_parent: AITank):
+		super(in_parent)
 		
 		var target_power = parent.target_result.power
 		# Power is set as a percent [0-100]
@@ -168,8 +168,8 @@ class AIPoweringState extends AIActionState:
 			
 # Selecting weapon to use
 class AISelectWeaponState extends AIActionState:
-	func _init(parent: AITank):
-		super(parent)
+	func _init(in_parent: AITank):
+		super(in_parent)
 		# Already waiting in AIShootingState
 		total_time = 0.0
 
@@ -182,8 +182,8 @@ class AISelectWeaponState extends AIActionState:
 
 # Delay time after ready to shoot to actually shooting
 class AIShootingState extends AIActionState:
-	func _init(parent: AITank):
-		super(parent)
+	func _init(in_parent: AITank):
+		super(in_parent)
 		total_time = randf_range(parent.min_ai_shoot_delay_time, parent.max_ai_shoot_delay_time)
 		
 	func _exit():

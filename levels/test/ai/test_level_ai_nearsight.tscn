@@ -17,7 +17,10 @@ polygon = PackedVector2Array(-104, -8, -10.1562, -16.1765, 158.594, 145.588, 229
 [node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk/Overlap" index="0"]
 polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 459.375, -182.353, 609, -8, 937, -3, 945, 445, -103, 448)
 
-[node name="Wind" parent="GameLevel" index="5"]
+[node name="CollisionShape2D" parent="GameLevel/Walls/PlayableArea" index="0"]
+position = Vector2(397, 333)
+
+[node name="Wind" parent="GameLevel" index="6"]
 wind_max = 0
 
 [node name="Player" parent="GameLevel" instance=ExtResource("4_krocu")]

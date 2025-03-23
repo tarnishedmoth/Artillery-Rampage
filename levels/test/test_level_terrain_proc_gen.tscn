@@ -21,10 +21,10 @@ polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 195.313, 152.941, 204.6
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("2_gbv1t")]
 additional_vertices = 100
 
-[node name="Floor" parent="GameLevel" index="4"]
+[node name="Floor" parent="GameLevel" index="5"]
 visible = false
 
-[node name="ArtillerySpawner" parent="GameLevel" index="7"]
+[node name="ArtillerySpawner" parent="GameLevel" index="8"]
 artillery_ai_types = Array[PackedScene]([ExtResource("3_xpgoa"), ExtResource("4_yj63s"), ExtResource("5_3ktnp"), ExtResource("6_5mc2f"), ExtResource("7_68bpi"), ExtResource("8_frsu6"), ExtResource("9_73t8d"), ExtResource("10_0irav")])
 default_ai_players = Vector2i(1, 4)
 default_human_players = Vector2i(1, 1)

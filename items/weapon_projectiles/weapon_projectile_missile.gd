@@ -80,7 +80,7 @@ func _find_nearest_target() -> Vector2:
 	else:
 		targets = get_tree().get_nodes_in_group(Groups.Player) # Target player units
 	
-	var nearest_target:Node2D
+	var nearest_target:Node2D = null
 	var nearest_distance:float
 	
 	for foo in targets:

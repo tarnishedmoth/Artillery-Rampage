@@ -221,6 +221,7 @@ static func _get_small_area_triangles(poly: PackedVector2Array, candidate_list_i
 	
 	return removal_indices
 
+@warning_ignore("integer_division")
 static func _prune_large_area_connected_components(poly: PackedVector2Array, components: Array[PackedInt32Array], threshold_area: float) -> Array[PackedInt32Array]:
 	var pruned_components: Array[PackedInt32Array] = []
 	

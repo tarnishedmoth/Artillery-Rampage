@@ -15,14 +15,14 @@ class_name SniperLobberAIBehavior extends LobberAIBehavior
 
 @onready var sniper_error_calc: SniperAIErrorCalculation = $SniperErrorCalc
 
-func _is_perfect_shot(opponent_data: Dictionary) -> bool:
+func _is_perfect_shot(_opponent_data: Dictionary) -> bool:
 	# Manually calculate the error
 	return false
 	
-func _is_better_fallback_opponent(candidate: TankController, current_best: TankController, candidate_dist_sq: float, current_best_dist_sq) -> bool:
+func _is_better_fallback_opponent(_candidate: TankController, _current_best: TankController, candidate_dist_sq: float, current_best_dist_sq) -> bool:
 	return candidate_dist_sq > current_best_dist_sq and candidate_dist_sq <= max_target_distance * max_target_distance
 
-func _is_better_viable_opponent(candidate: TankController, current_best: TankController, candidate_dist_sq: float, current_best_dist_sq) -> bool:
+func _is_better_viable_opponent(_candidate: TankController, _current_best: TankController, candidate_dist_sq: float, current_best_dist_sq) -> bool:
 	return candidate_dist_sq > current_best_dist_sq
 
 func _get_shot_error(perfect_power: float, perfect_angle: float, opponent_data: Dictionary) -> Dictionary:
@@ -31,7 +31,7 @@ func _get_shot_error(perfect_power: float, perfect_angle: float, opponent_data: 
 		power_fraction = get_power_error(perfect_power, opponent_data)
 	}
 
-func get_power_error(perfect_power: float, opponent_data: Dictionary) -> float:
+func get_power_error(_perfect_power: float, opponent_data: Dictionary) -> float:
 	# Power error increases with closer distance
 	var distance: float = opponent_data.distance
 

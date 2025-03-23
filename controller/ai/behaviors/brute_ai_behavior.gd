@@ -58,16 +58,16 @@ func execute(_tank: Tank) -> AIState:
 
 #region Overridable hook functions
 
-func _is_perfect_shot(opponent_data: Dictionary) -> bool:
+func _is_perfect_shot(_opponent_data: Dictionary) -> bool:
 	return randf() > aim_error_chance
 
-func _is_better_fallback_opponent(candidate: TankController, current_best: TankController, candidate_dist_sq: float, current_best_dist_sq) -> bool:
+func _is_better_fallback_opponent(_candidate: TankController, _current_best: TankController, candidate_dist_sq: float, current_best_dist_sq) -> bool:
 	return candidate_dist_sq < current_best_dist_sq
 
-func _is_better_viable_opponent(candidate: TankController, current_best: TankController, candidate_dist_sq: float, current_best_dist_sq) -> bool:
+func _is_better_viable_opponent(_candidate: TankController, _current_best: TankController, candidate_dist_sq: float, current_best_dist_sq) -> bool:
 	return candidate_dist_sq < current_best_dist_sq
 
-func _default_get_aim_error(perfect_angle: float, opponent_data: Dictionary) -> float:
+func _default_get_aim_error(_perfect_angle: float, _opponent_data: Dictionary) -> float:
 	return randf_range(-aim_deviation_degrees, aim_deviation_degrees)
 
 func get_aim_error(perfect_angle: float, opponent_data: Dictionary) -> float:
@@ -136,7 +136,7 @@ class TargetActionState extends AIState:
 		elif !opponent_data.has("hit_position"):
 			priority += 10
 
-	func execute(tank: Tank) -> TankActionResult:
+	func execute(_tank: Tank) -> TankActionResult:
 		return TankActionResult.new(
 			 _power,
 			 _angle,

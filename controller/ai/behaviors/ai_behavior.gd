@@ -250,11 +250,14 @@ func has_direct_shot_to(opponent : TankController, launch_props: LaunchPropertie
 #region Forces
 class Forces:
 	const Gravity:int = 1
+	
+	@warning_ignore("shadowed_global_identifier")
 	const Wind:int = 1 << 1
 
 	const Walls_Warp:int = 1 << 2
 	const Walls_Elastic:int = 1 << 3
 
+	@warning_ignore("shadowed_global_identifier")
 	const Walls: int = Walls_Warp | Walls_Elastic
 	const All: int = Gravity | Wind | Walls_Warp | Walls_Elastic
 	

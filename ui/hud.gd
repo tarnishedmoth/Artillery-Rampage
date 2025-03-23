@@ -55,9 +55,9 @@ func _get_direction_string(value: float) -> String:
 	
 func _on_weapon_updated(weapon: Weapon) -> void:
 	weapon_text.set_label(weapon.display_name)
-	weapon_text.set_value(weapon.current_ammo if weapon.use_ammo else char(9854))
+	weapon_text.set_value(str(weapon.current_ammo) if weapon.use_ammo else char(9854))
 
-func _on_level_changed(level: GameLevel) -> void:
+func _on_level_changed(_level: GameLevel) -> void:
 	if OS.is_debug_build():
 		var file_name = get_tree().current_scene.scene_file_path
 		debug_level_name.text = file_name

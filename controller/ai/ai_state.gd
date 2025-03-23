@@ -5,8 +5,8 @@ var priority: int = 0
 
 func enter(): pass
 func exit(): pass
-func execute(tank: Tank) -> TankActionResult: return null
+func execute(_tank: Tank) -> TankActionResult: return null
 
 class NullState extends AIState:
-	func execute(tank: Tank) -> TankActionResult:
+	func execute(_tank: Tank) -> TankActionResult:
 		return TankActionResult.new()

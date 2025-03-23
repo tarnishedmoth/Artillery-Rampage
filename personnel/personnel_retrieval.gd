@@ -129,7 +129,7 @@ func _find_nearest_collectible() -> Node2D:
 	var collectibles:Array = get_tree().get_nodes_in_group(Groups.Collectible)
 	#if collectibles.is_empty(): return null
 	
-	var nearest_collectible:Node2D
+	var nearest_collectible:Node2D = null
 	var nearest_distance:float
 	
 	for collectible in collectibles:

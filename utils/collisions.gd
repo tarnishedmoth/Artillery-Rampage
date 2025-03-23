@@ -11,6 +11,7 @@ class Layers:
 	const world_body: int = 1 << 4
 	
 	# This is the world bottom
+	@warning_ignore("shadowed_global_identifier")
 	const floor:int = 1 << 5
 	
 class CompositeMasks:

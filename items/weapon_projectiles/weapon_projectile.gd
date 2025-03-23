@@ -196,7 +196,7 @@ func spawn_explosion(scene:PackedScene) -> void:
 		# Per - weapon_projectile.gd:191 @ spawn_explosion(): Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.
 		firing_container.add_child.call_deferred(instance)
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	# Need to record this for contact point determination on impact as the linear_velocity there is after the collision
 	last_recorded_linear_velocity = linear_velocity
 	# print_debug("LinearVelocity=%s" % [linear_velocity])

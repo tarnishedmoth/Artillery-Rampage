@@ -204,7 +204,7 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 		_add_new_chunks(get_first_chunk(), results, 2)
 	else:
 		print("merge_chunks: size=%d -> [%s]" % [results.size(),
-		 ",".join([first_chunk.name, second_chunk.name]) if results.size() == 2 else first_chunk.name if results.size() == 1 else ""])
+		 ",".join([first_chunk.name, second_chunk.name]) if results.size() == 2 else str(first_chunk.name) if results.size() == 1 else ""])
 	
 	return stop_falling
 	

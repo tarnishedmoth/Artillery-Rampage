@@ -11,11 +11,11 @@ class_name NearsightLobberAIBehavior extends LobberAIBehavior
 
 @onready var nearsight_error_calc: NearsightAIErrorCalculation = $NearsightErrorCalculation
 
-func _is_perfect_shot(opponent_data: Dictionary) -> bool:
+func _is_perfect_shot(_opponent_data: Dictionary) -> bool:
 	# Manually calculate the error
 	return false
 	
-func get_power_error(perfect_power: float, opponent_data: Dictionary) -> float:
+func get_power_error(_perfect_power: float, opponent_data: Dictionary) -> float:
 	# Power error increases with closer distance
 	var distance: float = opponent_data.distance
 

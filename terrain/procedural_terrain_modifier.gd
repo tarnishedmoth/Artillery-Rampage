@@ -115,8 +115,8 @@ func _modify_chunk(chunk: TerrainChunk, viewport_bounds: Rect2, _terrain_bounds:
 			prev_point = terrain_vertices[i]
 			next_point = terrain_vertices[i+1]
 				
-			var total_to_add:int = 	mini(
-				next_point.distance_to(prev_point) / ideal_spacing, vertices_remaining)
+			var total_to_add:int = mini(
+				int(next_point.distance_to(prev_point) / ideal_spacing), vertices_remaining)
 			
 			if total_to_add == 0:
 				continue
