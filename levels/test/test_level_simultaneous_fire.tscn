@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://ymnwxe2jm0cj"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_vqxbj"]
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_fxd5w"]
+[ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_rvva5"]
+[ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="4_6o0xc"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="5_3u3bm"]
+
+[node name="TestLevel01" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_vqxbj")]
+
+[node name="RoundDirector" parent="GameLevel" index="7"]
+is_simultaneous_fire = true
+
+[node name="Enemy1" parent="GameLevel" instance=ExtResource("2_fxd5w")]
+position = Vector2(479, 278)
+
+[node name="Tank" parent="GameLevel/Enemy1" index="0"]
+color = Color(0.682353, 0.713726, 0.219608, 1)
+
+[node name="LobberAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_rvva5")]
+forces_mask = 15
+
+[node name="Enemy2" parent="GameLevel" instance=ExtResource("2_fxd5w")]
+position = Vector2(1100, 426)
+
+[node name="Tank" parent="GameLevel/Enemy2" index="0"]
+color = Color(0.137255, 0.180392, 0.701961, 1)
+
+[node name="LobberAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_rvva5")]
+forces_mask = 15
+
+[node name="House1" parent="GameLevel" instance=ExtResource("4_6o0xc")]
+position = Vector2(43, 409)
+
+[node name="House2" parent="GameLevel" instance=ExtResource("4_6o0xc")]
+position = Vector2(934, 407)
+
+[node name="Player" parent="GameLevel" instance=ExtResource("5_3u3bm")]
+position = Vector2(120, 427)
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/Enemy1"]
+[editable path="GameLevel/Enemy2"]
