@@ -13,7 +13,9 @@ signal magazines_changed(current_magazines:int)
 #region Variables
 @export var scene_to_spawn: PackedScene ## This is the projectile or shoot effect.
 var parent_tank: Tank
-@export var display_name: String ## Not implemented
+@export var display_name: String ## Used by HUD/UI
+
+@export var upgrades: Array[WeaponMod] ## For upgrades and nerfs at runtime
 
 @export_group("Behavior")
 @export_range(-360,360,0.0001,"radians_as_degrees") var accuracy_angle_spread: float = 0.0 ## Radians.
@@ -70,10 +72,7 @@ var _awaiting_lifespan_completion: int
 #region Virtuals
 func _ready() -> void:
 	weapon_actions_completed.connect(_on_weapon_actions_completed)
-	#if parent_tank: # Moved to connect_to_tank
-		#weapon_destroyed.connect(parent_tank._on_weapon_destroyed)
-	#configure_barrels()
-	#reload()
+	apply_all_mods() # This may not be desired but it probably is. If the weapon's stats are retained across matches, this could double the effect unintentionally
 	
 func _process(_delta: float) -> void:
 	if is_shooting: ## Shooting for duration or count.
@@ -192,6 +191,10 @@ func configure_barrels() -> void:
 			var new_fire_sfx = sfx_fire.duplicate()
 			add_child(new_fire_sfx)
 			barrels_sfx_fire.append(new_fire_sfx)
+			
+func apply_all_mods(mods: Array[WeaponMod] = upgrades) -> void:
+	for mod in mods:
+		mod.modify_weapon(self)
 
 func stop_all_sounds(_only_looping: bool = true) -> void: # TODO args
 	for s: AudioStreamPlayer2D in sounds:
