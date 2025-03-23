@@ -140,7 +140,9 @@ func _update_max_power():
 func shoot() -> bool:
 	var weapon: Weapon = get_equipped_weapon()
 	if check_can_shoot_weapon(weapon):
-		weapon.shoot(power)
+		var controller:TankController = get_parent()
+		controller.submit_intended_action(weapon.shoot.bind(power), controller)
+		#weapon.shoot(power)
 		return true
 	else:
 		weapon.dry_fire() # For sound effect (if assigned in Weapon scene)

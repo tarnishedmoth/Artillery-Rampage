@@ -16,6 +16,8 @@ signal tanks_stopped_falling
 var _fall_check_elapsed_time:float = 0.0
 
 var current_gamestate: GameState
+@export var is_simultaneous_fire: bool = false
+var awaiting_intentions:int = 0
 
 func _ready():
 	current_gamestate = create_new_gamestate() # TODO: loading saved gamestate
@@ -47,12 +49,11 @@ func _stop_fall_check_timer() -> void:
 	_fall_check_elapsed_time = 0.0
 	
 func begin_round() -> bool:
-	
-	GameEvents.connect("turn_ended", _on_turn_ended)
+	GameEvents.turn_ended.connect(_on_turn_ended)
 	
 	for controller: TankController in tank_controllers:
-		controller.tank.connect("tank_killed", _on_tank_killed)
-		controller.intent_to_act.connect(current_gamestate.queue_action)
+		controller.tank.tank_killed.connect(_on_tank_killed)
+		controller.intent_to_act.connect(_on_player_intent_to_act)
 		
 	# Order of tanks is always random per original "Tank Wars"
 	tank_controllers.shuffle()
@@ -63,31 +64,72 @@ func begin_round() -> bool:
 	
 	GameEvents.emit_round_started()
 	
-	return next_player()
-
-func next_player() -> bool:
+	#return next_player()
+	return next_turn()
+	
+func check_players() -> bool:
 	# If there are 1 or 0 players left then the round is over
 	if tank_controllers.size() <= 1:
 		active_player_index = -1
 		return false
+	else:
+		return true
+	
+#region Turn Based
+func next_turn() -> bool:
+	if not check_players(): return false
+	awaiting_intentions = 0
+	if not is_simultaneous_fire:
+		next_player() # Turn-based game
+	else:
+		# Simultaneous fire
+		all_players()
+		
+	return true
+
+func next_player():
+	## If there are 1 or 0 players left then the round is over
+	#if tank_controllers.size() <= 1:
+		#active_player_index = -1
+		#return false
 		
 	active_player_index = (active_player_index + 1) % tank_controllers.size()
 	var active_player = tank_controllers[active_player_index]
 	
-	print("Turn beginning for %s" % [active_player.name])
+	print_debug("Turn beginning for %s" % [active_player.name])
 	
+	awaiting_intentions += 1
 	active_player.begin_turn()
 	GameEvents.emit_turn_started(active_player)
 	
-	return true
+	#return true
+	
+func end_turn() -> void:
+	GameEvents.turn_ended.emit()
 	
 func _on_turn_ended(controller: TankController) -> void:
 	print("Turn ended for " + controller.name)
+	if awaiting_intentions > 0: return
+	
 	await _async_check_and_await_falling()
 	
-	if !next_player():
+	if !next_turn():
 		GameEvents.emit_round_ended()
-		return
+#endregion
+
+func all_players() -> void:
+	for player:TankController in tank_controllers:
+		print_debug("Turn beginning for %s" % [player.name])
+		awaiting_intentions += 1
+		player.begin_turn()
+		
+func execute_all_actions() -> void:
+	var actions = current_gamestate.get_actions()
+	var actions_taken: int
+	for i in actions.size():
+		current_gamestate.run_next_action()
+		actions_taken += 1
+	print_debug("Executed",actions_taken,"actions.")
 
 func _async_check_and_await_falling() -> void:
 	 # Wait for physics to settle prior to allowing next player to start
@@ -100,7 +142,7 @@ func _async_check_and_await_falling() -> void:
 	if is_any_tank_falling():
 		print("_on_turn_ended: At least one tank falling - Starting fall_check_timer")
 		fall_check_timer.start()
-		await tanks_stopped_falling		
+		await tanks_stopped_falling
 		
 func is_any_tank_falling() -> bool:
 	for controller in tank_controllers:
@@ -127,6 +169,12 @@ func _on_tank_killed(tank: Tank, _instigatorController: Node2D, _instigator: Nod
 		if active_player_index < 0:
 			active_player_index = tank_controllers.size() - 1
 			
+func _on_player_intent_to_act(action: Callable, owner: Object) -> void:
+	print_debug("Received action: ",action)
+	current_gamestate.queue_action(action, owner)
+	awaiting_intentions -= 1
+	if awaiting_intentions < 1:
+		execute_all_actions()
 
 #region Game State
 func create_new_gamestate() -> GameState:
@@ -135,39 +183,42 @@ func create_new_gamestate() -> GameState:
 class GameState extends Resource: # Resource supports save/load
 	class Action:
 		var action: Callable
-		var caller: Object
+		var caller: TankController
 		# I just realized I recreated the Callable class but maybe we'll extend it
 		
-	var action_queue:Array[Action]
+	var _action_queue:Array[Action]
+	var actions_taken_count:int
 	
 	func run_action(action: Action) -> void:
 		action.action.call()
+		actions_taken_count += 1
 		
 	func run_next_action() -> void:
 		pop_next_action().action.call_deferred()
+		actions_taken_count += 1
 	
-	func queue_action(action: Callable, caller: Object) -> void:
+	func queue_action(action: Callable, caller: TankController) -> void:
 		var new_action = Action.new()
 		new_action.action = action
-		new_action.owner = caller
-		action_queue.append(new_action)
+		new_action.caller = caller
+		_action_queue.append(new_action)
 		
 	func get_actions() -> Array[Action]:
-		return action_queue
+		return _action_queue
 	
 	func get_next_action() -> Action:
-		return action_queue.front()
+		return _action_queue.front()
 		
-	func get_actions_by_owner(action_owner: Object) -> Array[Action]:
-		return action_queue.filter(_check_action_owner.bind(action_owner))
+	func get_actions_by_owner(action_owner: TankController) -> Array[Action]:
+		return _action_queue.filter(_check_action_owner.bind(action_owner))
 	
-	func erase_actions_by_owner(action_owner: Object) -> void:
-		action_queue = action_queue.filter(_check_action_owner.bind(action_owner, true))
+	func erase_actions_by_owner(action_owner: TankController) -> void:
+		_action_queue = _action_queue.filter(_check_action_owner.bind(action_owner, true))
 		
 	func pop_next_action() -> Action:
-		return action_queue.pop_front()
+		return _action_queue.pop_front()
 	
-	func _check_action_owner(action: Action, check: Object, invert:bool = false) -> bool:
+	func _check_action_owner(action: Action, check: TankController, invert:bool = false) -> bool:
 		if action.caller == check: return true if not invert else false
 		else: return false if not invert else true
 #endregion

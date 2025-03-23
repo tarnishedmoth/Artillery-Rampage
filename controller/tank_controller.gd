@@ -19,7 +19,7 @@ func _ready() -> void:
 func begin_turn() -> void:
 	#tank.reset_orientation()
 	tank.enable_fall_damage = _initial_fall_damage
-	tank.push_weapon_update_to_hud()
+	tank.push_weapon_update_to_hud() # TODO: fix for simultaneous fire game
 	
 var tank: Tank:
 	get: return _get_tank()
@@ -57,5 +57,6 @@ func _on_turn_started(_player: TankController) -> void:
 	# Ony any player turn started, stop simulating physics
 	tank.reset_orientation()
 
-func submit_intended_action(action: Callable) -> void:
-	intent_to_act.emit(action, action.get_object())
+func submit_intended_action(action: Callable, player: TankController) -> void:
+	print_debug("Submitted action")
+	intent_to_act.emit(action, player)
