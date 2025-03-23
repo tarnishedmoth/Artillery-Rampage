@@ -19,7 +19,7 @@ script = ExtResource("1_0iy80")
 drop_on_death = ExtResource("2_qlwk0")
 
 [node name="TankBody" type="RigidBody2D" parent="."]
-collision_mask = 127
+collision_mask = 255
 mass = 1000.0
 physics_material_override = SubResource("PhysicsMaterial_1pofo")
 center_of_mass_mode = 1

@@ -101,4 +101,5 @@ pause={
 2d_physics/layer_5="WorldBody"
 2d_physics/layer_6="Floor"
 2d_physics/layer_7="InvisibleWall"
+2d_physics/layer_8="Hazard"
 2d_physics/layer_9="Collectibles"
