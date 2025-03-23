@@ -136,12 +136,14 @@ func _update_max_power():
 	power = minf(power, max_power)
 #endregion
 	
-func shoot() -> void:
+## If the weapon can be fired, return true, else false.
+func shoot() -> bool:
 	var weapon: Weapon = get_equipped_weapon()
-	if not weapon == null:
+	if check_can_shoot_weapon(weapon):
 		weapon.shoot(power)
+		return true
 	else:
-		push_warning(str(self)+": Tried to shoot, but no weapons.")
+		return false
 
 #region Damage and Death
 func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float) -> void:
@@ -310,6 +312,18 @@ func get_equipped_weapon() -> Weapon:
 		return null
 	else:
 		return current_equipped_weapon # Ugly but rather this than recursion
+		
+## Returns false if weapon can't shoot, or true if it can.
+func check_can_shoot_weapon(weapon: Weapon) -> bool:
+	if weapon == null:
+		push_warning(str(self)+": Tried to shoot, but equipped weapon is null.")
+		return false
+	else:
+		if weapon.current_ammo > 0:
+			return true
+		else:
+			# Out of ammo.
+			return false
 	
 func scan_available_weapons() -> void:
 	weapons.clear()
