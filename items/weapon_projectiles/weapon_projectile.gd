@@ -123,7 +123,7 @@ func on_body_entered(_body: Node2D):
 
 	for node in affected_nodes:
 		# See if this node is a "Damageable" or a "Destructable"
-		var root_node: Node = get_parent_in_group(node, Groups.Damageable)
+		var root_node: Node = Groups.get_parent_in_group(node, Groups.Damageable)
 		if root_node:
 			var damage_amount = _calculate_damage(node)
 			if damage_amount > 0:
@@ -131,7 +131,7 @@ func on_body_entered(_body: Node2D):
 				damaged_processed_map[root_node] = maxf(damage_amount, damaged_processed_map.get(root_node, 0.0))
 		# Some projectiles don't have a destructible node, e.g. MIRV
 		if destructible_component:
-			root_node = get_parent_in_group(node, Groups.Destructible)
+			root_node = Groups.get_parent_in_group(node, Groups.Destructible)
 			if root_node and root_node not in destructed_processed_set:
 				center_destructible_on_impact_point(destructible_component)
 				root_node.damage(destructible_component, destructible_scale_multiplier)
@@ -166,13 +166,6 @@ func center_destructible_on_impact_point(destructible: CollisionPolygon2D) -> vo
 	
 	for i in range(destructible_polygon.size()):
 		destructible_polygon[i] += translation
-
-func get_parent_in_group(node: Node, group: String) -> Node:
-	if node.is_in_group(group):
-		return node
-	if node.get_parent() == null:
-		return null
-	return get_parent_in_group(node.get_parent(), group)
 
 func destroy():
 	#GameEvents.emit_turn_ended(owner_tank.owner) ## Moved to Weapon class.

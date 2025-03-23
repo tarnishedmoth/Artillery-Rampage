@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://cmdqjyrjdgbl1"]
+
+[ext_resource type="Script" path="res://effects/hazard/water/water_hazard.gd" id="1_yswnd"]
+
+[sub_resource type="Gradient" id="Gradient_mvjr0"]
+offsets = PackedFloat32Array(0, 0.00248756)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_yxd2d"]
+gradient = SubResource("Gradient_mvjr0")
+width = 500
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t3upm"]
+
+[node name="WaterHazard" type="Node2D"]
+script = ExtResource("1_yswnd")
+
+[node name="Water" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0.878431, 0.490196)
+z_index = -100
+texture = SubResource("GradientTexture2D_yxd2d")
+
+[node name="WaterOverlap" type="Area2D" parent="."]
+collision_layer = 128
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WaterOverlap"]
+shape = SubResource("RectangleShape2D_t3upm")
