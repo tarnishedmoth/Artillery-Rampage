@@ -195,6 +195,10 @@ func configure_barrels() -> void:
 func apply_all_mods(mods: Array[WeaponMod] = upgrades) -> void:
 	for mod in mods:
 		mod.modify_weapon(self)
+		
+func apply_mod(mod: WeaponMod) -> void:
+	upgrades.append(mod)
+	mod.modify_weapon(self)
 
 func stop_all_sounds(_only_looping: bool = true) -> void: # TODO args
 	for s: AudioStreamPlayer2D in sounds:

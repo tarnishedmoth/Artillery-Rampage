@@ -6,6 +6,7 @@ enum Operations {
 	MULTIPLY,
 	ADD,
 	SUBTRACT,
+	SET,
 	SET_TRUE,
 	SET_FALSE
 }
@@ -47,6 +48,9 @@ func modify_weapon(weapon: Weapon) -> void:
 		Operations.SUBTRACT:
 			new_value = current_value - value
 			
+		Operations.SET:
+			new_value = value
+			
 		Operations.SET_TRUE:
 			if current_value is bool: # Catch designer error
 				new_value = true
@@ -67,3 +71,15 @@ func modify_weapon(weapon: Weapon) -> void:
 func get_property_key(modifiable: Modifiables) -> String:
 	var text_representation:String = Modifiables.find_key(modifiable)
 	return text_representation.to_lower()
+
+# Code constructors
+func configure_and_apply(weapon_to_attach_to: Weapon, property: Modifiables, operation: Operations, value:float) -> void:
+	property = property
+	operation = operation
+	value = value
+	weapon_to_attach_to.apply_mod(self)
+
+func _init(property: Modifiables = property, operation: Operations = operation, value:float = value) -> void:
+	property = property
+	operation = operation
+	value = value
