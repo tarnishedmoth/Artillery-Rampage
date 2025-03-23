@@ -15,7 +15,11 @@ signal tanks_stopped_falling
 
 var _fall_check_elapsed_time:float = 0.0
 
+var current_gamestate: GameState
+
 func _ready():
+	current_gamestate = create_new_gamestate() # TODO: loading saved gamestate
+	
 	fall_check_timer = Timer.new()
 	fall_check_timer.set_wait_time(0.5)
 	fall_check_timer.set_one_shot(false)
@@ -46,8 +50,9 @@ func begin_round() -> bool:
 	
 	GameEvents.connect("turn_ended", _on_turn_ended)
 	
-	for controller in tank_controllers:
+	for controller: TankController in tank_controllers:
 		controller.tank.connect("tank_killed", _on_tank_killed)
+		controller.intent_to_act.connect(current_gamestate.queue_action)
 		
 	# Order of tanks is always random per original "Tank Wars"
 	tank_controllers.shuffle()
@@ -121,3 +126,48 @@ func _on_tank_killed(tank: Tank, _instigatorController: Node2D, _instigator: Nod
 		active_player_index -= 1
 		if active_player_index < 0:
 			active_player_index = tank_controllers.size() - 1
+			
+
+#region Game State
+func create_new_gamestate() -> GameState:
+	return GameState.new()
+
+class GameState extends Resource: # Resource supports save/load
+	class Action:
+		var action: Callable
+		var caller: Object
+		# I just realized I recreated the Callable class but maybe we'll extend it
+		
+	var action_queue:Array[Action]
+	
+	func run_action(action: Action) -> void:
+		action.action.call()
+		
+	func run_next_action() -> void:
+		pop_next_action().action.call_deferred()
+	
+	func queue_action(action: Callable, caller: Object) -> void:
+		var new_action = Action.new()
+		new_action.action = action
+		new_action.owner = caller
+		action_queue.append(new_action)
+		
+	func get_actions() -> Array[Action]:
+		return action_queue
+	
+	func get_next_action() -> Action:
+		return action_queue.front()
+		
+	func get_actions_by_owner(action_owner: Object) -> Array[Action]:
+		return action_queue.filter(_check_action_owner.bind(action_owner))
+	
+	func erase_actions_by_owner(action_owner: Object) -> void:
+		action_queue = action_queue.filter(_check_action_owner.bind(action_owner, true))
+		
+	func pop_next_action() -> Action:
+		return action_queue.pop_front()
+	
+	func _check_action_owner(action: Action, check: Object, invert:bool = false) -> bool:
+		if action.caller == check: return true if not invert else false
+		else: return false if not invert else true
+#endregion

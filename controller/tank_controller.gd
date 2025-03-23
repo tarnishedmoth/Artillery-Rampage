@@ -4,6 +4,8 @@ class_name TankController extends Node2D
 var _initial_fall_damage:bool
 @export var weapons_container:Node = self ## Keep all Weapon components in here. If unassigned, self is used.
 
+signal intent_to_act(action: Callable, owner: Object)
+
 func _ready() -> void:
 	GameEvents.connect("turn_ended", _on_turn_ended)
 	GameEvents.connect("turn_started", _on_turn_started)
@@ -54,3 +56,6 @@ func _on_turn_ended(_player: TankController) -> void:
 func _on_turn_started(_player: TankController) -> void:
 	# Ony any player turn started, stop simulating physics
 	tank.reset_orientation()
+
+func submit_intended_action(action: Callable) -> void:
+	intent_to_act.emit(action, action.get_object())
