@@ -1,0 +1,58 @@
+[gd_scene load_steps=9 format=3 uid="uid://dcodor2ac45dx"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_15hwa"]
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_b4uer"]
+[ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_di33p"]
+[ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="4_igqu3"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="5_xjt6c"]
+[ext_resource type="Script" path="res://weapons/mods/weapon_mod.gd" id="6_vhdtx"]
+
+[sub_resource type="Resource" id="Resource_p6mtg"]
+script = ExtResource("6_vhdtx")
+property = 9
+operation = 0
+value = 1.5
+
+[sub_resource type="Resource" id="Resource_3bwyq"]
+script = ExtResource("6_vhdtx")
+property = 1
+operation = 3
+value = 2.0
+
+[node name="TestLevel01" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_15hwa")]
+
+[node name="Enemy1" parent="GameLevel" instance=ExtResource("2_b4uer")]
+position = Vector2(479, 278)
+
+[node name="Tank" parent="GameLevel/Enemy1" index="0"]
+color = Color(0.682353, 0.713726, 0.219608, 1)
+
+[node name="LobberAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_di33p")]
+forces_mask = 15
+
+[node name="Enemy2" parent="GameLevel" instance=ExtResource("2_b4uer")]
+position = Vector2(1100, 426)
+
+[node name="Tank" parent="GameLevel/Enemy2" index="0"]
+color = Color(0.137255, 0.180392, 0.701961, 1)
+
+[node name="LobberAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_di33p")]
+forces_mask = 15
+
+[node name="House1" parent="GameLevel" instance=ExtResource("4_igqu3")]
+position = Vector2(43, 409)
+
+[node name="House2" parent="GameLevel" instance=ExtResource("4_igqu3")]
+position = Vector2(934, 407)
+
+[node name="Player" parent="GameLevel" instance=ExtResource("5_xjt6c")]
+position = Vector2(120, 427)
+
+[node name="WeaponLeadBall" parent="GameLevel/Player/Weapons" index="0"]
+upgrades = Array[ExtResource("6_vhdtx")]([SubResource("Resource_p6mtg"), SubResource("Resource_3bwyq")])
+
+[editable path="GameLevel/Enemy1"]
+[editable path="GameLevel/Enemy2"]
+[editable path="GameLevel/Player"]

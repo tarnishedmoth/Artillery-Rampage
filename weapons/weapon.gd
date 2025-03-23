@@ -13,7 +13,11 @@ signal magazines_changed(current_magazines:int)
 #region Variables
 @export var scene_to_spawn: PackedScene ## This is the projectile or shoot effect.
 var parent_tank: Tank
-@export var display_name: String ## Used by HUD/UI
+@export var display_name: String: ## Used by HUD/UI
+	get:
+		if not upgrades.is_empty():
+			return str(display_name + ": Modified")
+		else: return display_name
 
 @export var upgrades: Array[WeaponMod] ## For upgrades and nerfs at runtime
 
