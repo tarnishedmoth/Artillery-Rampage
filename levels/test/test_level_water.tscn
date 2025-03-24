@@ -11,6 +11,13 @@
 
 [node name="GameLevel" parent="." instance=ExtResource("1_hr00p")]
 
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 209.375, 61.7647, 232.813, -132.353, 260.938, -132.353, 476.563, -407.353, 609, -8, 937, -3, 945, 445, -103, 448)
+
+[node name="RoundDirector" parent="GameLevel" index="7"]
+player_goes_first = true
+shuffle_order = false
+
 [node name="WaterHazard" parent="GameLevel" instance=ExtResource("6_scx2d")]
 position = Vector2(257, 488)
 
@@ -19,9 +26,10 @@ position = Vector2(389.75, 137)
 scale = Vector2(2.665, 5)
 
 [node name="Enemy1" parent="GameLevel" instance=ExtResource("2_aoyoi")]
-position = Vector2(479, 278)
+position = Vector2(434, 332)
 
 [node name="Tank" parent="GameLevel/Enemy1" index="0"]
+max_health = 1000.0
 color = Color(0.682353, 0.713726, 0.219608, 1)
 
 [node name="LobberAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_axj0u")]
@@ -46,6 +54,8 @@ position = Vector2(934, 407)
 position = Vector2(120, 427)
 
 [editable path="GameLevel"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]
 [editable path="GameLevel/WaterHazard"]
 [editable path="GameLevel/Enemy1"]
