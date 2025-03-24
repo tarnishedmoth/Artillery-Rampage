@@ -19,6 +19,13 @@ var current_gamestate: GameState
 @export var is_simultaneous_fire: bool = false
 var awaiting_intentions:int = 0
 
+## Set whether player always goes first in round 
+@export var player_goes_first:bool = false
+
+## Determine whether we shuffle the turn order or use the child order
+## player_goes_first will be honored if set
+@export var shuffle_order:bool = true
+
 func _ready():
 	current_gamestate = create_new_gamestate() # TODO: loading saved gamestate
 	
@@ -55,8 +62,7 @@ func begin_round() -> bool:
 		controller.tank.tank_killed.connect(_on_tank_killed)
 		controller.intent_to_act.connect(_on_player_intent_to_act)
 		
-	# Order of tanks is always random per original "Tank Wars"
-	tank_controllers.shuffle()
+	set_turn_order()
 	
 	# Await at start in case tanks are falling at start
 	# TODO: Maybe remove this before release
@@ -66,7 +72,32 @@ func begin_round() -> bool:
 	
 	#return next_player()
 	return next_turn()
+
+#region Turn Order
+func set_turn_order() -> void:
+	if shuffle_order:
+		print_debug("Shuffling turn order")
+		tank_controllers.shuffle()
+	if player_goes_first:
+		print_debug("Setting player to go first")
+		_swap_players(0, _get_player_index())
+		
+func _get_player_index() -> int:
+	for i in range(tank_controllers.size()):
+		if tank_controllers[i] is Player:
+			return i
+	return -1
 	
+func _swap_players(first_index: int, second_index: int) -> void:
+	if first_index < 0 or first_index >= tank_controllers.size() or second_index < 0 or second_index >= tank_controllers.size():
+		return
+	
+	var temp: TankController = tank_controllers[first_index]
+	tank_controllers[first_index] = tank_controllers[second_index]
+	tank_controllers[second_index] = temp
+
+#endregion
+
 func check_players() -> bool:
 	# If there are 1 or 0 players left then the round is over
 	if tank_controllers.size() <= 1:
@@ -74,7 +105,7 @@ func check_players() -> bool:
 		return false
 	else:
 		return true
-	
+		
 #region Turn Based
 func next_turn() -> bool:
 	if not check_players(): return false
@@ -134,7 +165,7 @@ func execute_all_actions() -> void:
 func _async_check_and_await_falling() -> void:
 	 # Wait for physics to settle prior to allowing next player to start
 	# or just make this class a Node and add to tree from Game
-	var scene_tree = get_tree()
+	var scene_tree := get_tree()
 
 	# Wait a smidge and then check if any tank is falling and give time for physics to settle
 	await scene_tree.create_timer(physics_check_time).timeout
