@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://b4hy7hmnoewje"]
+
+[ext_resource type="Script" path="res://narrative/auto_narrative.gd" id="1_qf8eq"]
+
+[node name="AutoNarrative" type="Node"]
+script = ExtResource("1_qf8eq")
+stories_miracles = Array[String](["Today was nothing short of a miracle!", "Your actions today have made an historic impact on the war!", "The morale around here has never been higher!", "The airwaves are filled with the news of what happened here today!", "People across the nation are celebrating your victory!"])
+stories_successes = Array[String](["Days like this are what win a war.", "A decisive victory.", "Keep up the good work.", "Onward!", "Things are going in our favor.", "Fate favors us today.", "They can't hold us back any more!"])
+stories_neutrals = Array[String](["We live to fight another day.", "It's hard to say where things are headed, but morale is solid.", "We've begun our contingency plans to hold our ground.", "Dig in for more of this tomorrow.", "They can't hold out like this for long.", "No ground gained, none lost.", "We're prepared to make headway despite the losses."])
+stories_failures = Array[String](["The sound of defeat rings over the battlefield.", "We're evacuating this sector.", "This land must be reclaimed if we're to win the war.", "No doubt the people will fight like hell to get back to their homes here.", "We're feeling this setback, but we've been through worse.", "The remnants of our units have evacuated or lost contact.", "Without this control point, we've been forced to retreat."])
+stories_catastrophies = Array[String](["The losses today are cataclysmic.", "We will feel today's loss for our whole future.", "Generations still to come will know the events that happened here.", "It isn't clear how we'll ever move forward from this.", "It's hard to imagine a way back after today.", "We suffered an immeasurable loss.", "Full retreat."])
