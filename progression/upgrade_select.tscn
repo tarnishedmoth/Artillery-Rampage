@@ -1,0 +1,81 @@
+[gd_scene load_steps=10 format=3 uid="uid://d2kx5hvsxsu7h"]
+
+[ext_resource type="Script" path="res://progression/upgrade_select.gd" id="1_dt2xf"]
+[ext_resource type="Script" path="res://progression/button_upgrade_selection.gd" id="2_qujwc"]
+[ext_resource type="Script" path="res://items/weapon_projectiles/mod_projectile.gd" id="3_83rhi"]
+[ext_resource type="Script" path="res://weapons/mod_weapon.gd" id="4_1lrpj"]
+[ext_resource type="Script" path="res://progression/mod_bundle.gd" id="5_d8jwv"]
+[ext_resource type="Script" path="res://progression/ui_upgrades_list.gd" id="6_qqn3m"]
+
+[sub_resource type="Resource" id="Resource_457dn"]
+script = ExtResource("3_83rhi")
+property = 3
+operation = 5
+value = 0.0
+
+[sub_resource type="Resource" id="Resource_i55pa"]
+script = ExtResource("4_1lrpj")
+projectile_mods = Array[ExtResource("3_83rhi")]([])
+target_weapon_name = "leadball"
+property = 1
+operation = 3
+value = 2.0
+
+[sub_resource type="Resource" id="Resource_tekog"]
+script = ExtResource("5_d8jwv")
+components_weapon_mods = Array[ExtResource("4_1lrpj")]([SubResource("Resource_i55pa")])
+components_projectile_mods = Array[ExtResource("3_83rhi")]([SubResource("Resource_457dn")])
+
+[node name="UpgradeSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dt2xf")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 64
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ButtonUpgradeA" type="Button" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Receive upgrade"
+script = ExtResource("2_qujwc")
+mod_bundle = SubResource("Resource_tekog")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Spacer" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ContinueButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Continue"
+
+[node name="UpgradesList" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Current Upgrades:"
+script = ExtResource("6_qqn3m")
+
+[connection signal="selected" from="MarginContainer/HBoxContainer/ButtonUpgradeA" to="." method="_on_button_upgrade_a_selected"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/ContinueButton" to="." method="_on_continue_button_pressed"]

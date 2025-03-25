@@ -60,7 +60,7 @@ func modify_projectile(projectile: WeaponProjectile) -> void:
 	# Set the property
 	projectile.set(property_string, new_value)
 
-func get_property_key(modifiable: Modifiables) -> String:
+func get_property_key(modifiable: Modifiables = property) -> String:
 	var text_representation:String = Modifiables.find_key(modifiable)
 	return text_representation.to_lower()
 

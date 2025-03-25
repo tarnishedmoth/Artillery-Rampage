@@ -2,6 +2,7 @@ class_name ModWeapon extends Resource
 
 ## Class for upgrading/modifying Weapon properties at runtime.
 @export var projectile_mods:Array[ModProjectile]
+@export var target_weapon_name:String
 
 enum Operations {
 	MULTIPLY,

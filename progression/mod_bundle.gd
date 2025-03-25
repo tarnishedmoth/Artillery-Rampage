@@ -9,13 +9,17 @@ class_name ModBundle extends Resource
 @export_group("Components", "component_")
 @export var components_weapon_mods:Array[ModWeapon]
 @export var components_projectile_mods:Array[ModProjectile]
+var target_weapon
 # ideas
 #@export var component_tank_mod:ModTank
 #@export var component_player_mod:ModPlayer
 #@export var component_world_mod:ModWorld
 
-func apply_all_mods(weapon: Weapon) -> void:
+func apply_all_mods(player:Player, weapons:Array[Weapon]) -> void:
 	# apply mods where they need to go
-	
 	# weapons hold projectile mods to apply at spawn time
-	weapon.apply_all_mods(components_weapon_mods)
+	var target_weapon
+	for mod in components_weapon_mods:
+		for weapon in weapons:
+			if mod.target_weapon_name.to_lower() == weapon.display_name.to_lower(): # this is lousy
+				weapon.apply_mod(mod)

@@ -15,6 +15,9 @@ var can_aim: bool = false
 
 func _ready() -> void:
 	super._ready()
+	load_and_apply_upgrades()
+	
+	PlayerUpgrades.acquired_upgrade.connect(_on_acquired_upgrade)
 
 # Called at the start of a turn
 # This will be a method available on all "tank controller" classes
@@ -69,9 +72,20 @@ func cycle_next_weapon() -> void:
 	# Super simple for testing multiple weapons for now.
 	if !can_shoot: return
 	tank.equip_next_weapon()
+	
+func load_and_apply_upgrades() -> void:
+	var mod_bundles:Array[ModBundle] = PlayerUpgrades.get_current_upgrades()
+	for bundle in mod_bundles:
+		bundle.apply_all_mods(self, get_weapons())
+		
+func load_new_upgrade(upgrade:ModBundle) -> void:
+	upgrade.apply_all_mods(self, get_weapons())
 
 @warning_ignore("unused_parameter")
 func _on_tank_tank_killed(tank_unit: Tank, instigatorController: Node2D, instigator: Node2D) -> void:
 	# player tank killed
 	tank_unit.kill()
 	emit_signal("player_killed", self)
+
+func _on_acquired_upgrade() -> void:
+	load_new_upgrade(PlayerUpgrades.get_current_upgrades().back()) # Get the newest item
