@@ -1,5 +1,11 @@
 class_name TerrainChunk extends StaticBody2D
 
+class TerrainTexture:
+	@export var texture: Texture2D
+	@export var repeat: CanvasItem.TextureRepeat = CanvasItem.TextureRepeat.TEXTURE_REPEAT_DISABLED
+	@export var offset: Vector2
+	
+	
 @onready var overlap = $Overlap
 @onready var terrainMesh = $Polygon2D
 @onready var collisionMesh = $CollisionPolygon2D
@@ -10,6 +16,9 @@ class_name TerrainChunk extends StaticBody2D
 @export var initially_falling:bool = false
 
 @export var smooth_influence_scale: float = 1.5
+
+@export_group("Textures")
+@export var texture_resources: Array[TerrainChunkTextureResource]
 
 const surface_delta_y: float = 1.0
 
@@ -31,17 +40,29 @@ func _ready() -> void:
 	if !falling:
 		falling = initially_falling
 	
+	_apply_textures()
+	
+	print_poly("_ready", collisionMesh.polygon)
+	
+func _apply_textures() -> void:
 	# give the terrain a texture like rock or grass
 	# idea: we could load multiple textures!
 	# maybe texture chosen by chunk size (big=grass, small=blackened)
 	# maybe texture chosen by by altitude (rock->grass->mud->lava)
-	var tex = load("res://terrain/terrain-strata.png")
-	terrainMesh.set_texture(tex)
-	# terrainMesh.texture_repeat = TextureRepeat.TEXTURE_REPEAT_ENABLED
-	terrainMesh.texture_repeat = TextureRepeat.TEXTURE_REPEAT_MIRROR
-	terrainMesh.texture_offset = Vector2(0,400)
 	
-	print_poly("_ready", collisionMesh.polygon)
+	# These are now set via the texture_resources array above
+	# We could add additional properties to the resource to describe matching criteria and then determine 
+	# matches or "best fit" via a script function on terrain_chunk_texture.gd
+	#var tex = load("res://terrain/terrain-strata.png")
+	#terrainMesh.set_texture(tex)
+	## terrainMesh.texture_repeat = TextureRepeat.TEXTURE_REPEAT_ENABLED
+	#terrainMesh.texture_repeat = TextureRepeat.TEXTURE_REPEAT_MIRROR
+	#terrainMesh.texture_offset = Vector2(0,400)
+	
+	for resource in texture_resources:
+		if resource.matches(self):
+			resource.apply_to(self)
+			break
 	
 func _physics_process(delta: float) -> void:
 	if !falling: return
