@@ -246,8 +246,7 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 		elif new_angle_abs < min_angle:
 			new_angle = -current_angle_sgn * clampf(max_angle - (min_angle - new_angle_abs), min_angle, max_angle)
 
-	# TODO: The convenience function should handle the sign-ing for us
-	new_angle = global_angle_to_turret_angle(absf(new_angle)) * signf(new_angle)
+	new_angle = global_signed_angle_to_turret_angle(new_angle)
 	
 	print_debug("Lobber AI(%s): Adjusting shot based on history - dt=%f; orig_power=%f; new_power=%f; orig_angle=%f; new_angle=%f; shot_deviation=%s; is_long=%s; power_dev=%f; angle_change=%d; angle_dev=%f; power_wrap=%f"
 		% [tank.owner.name, delta_time, current_power, new_power, last_entry.angle, new_angle, shot_deviation, str(is_long), power_dev, angle_change, angle_dev, power_wrap])
@@ -302,23 +301,28 @@ func _select_best_opponent() -> Dictionary:
 	launch_props.mass = 1.0
 
 	# If there is no direct shot opponent, then we will just return the closest opponent
-	for opponent in opponents:
-		var adjusted_opponent_position: Vector2 = get_target_end_walls(tank.global_position, opponent.tank.global_position, forces_mask)
+	# First try to test power and angle with a hit test and then try it without as can still try and destroy the object rather than take a blind shot
+	for hit_test in [true, false]:
+		for opponent in opponents:
+			var adjusted_opponent_position: Vector2 = get_target_end_walls(tank.global_position, opponent.tank.global_position, forces_mask)
 
-		var distance: float = tank.global_position.distance_squared_to(adjusted_opponent_position)
+			var distance: float = tank.global_position.distance_squared_to(adjusted_opponent_position)
 
-		if is_equal_approx(closest_distance, sentinel_dist) or _is_better_fallback_opponent(opponent, closest_opponent, distance, closest_distance):
-			closest_distance = distance
-			closest_opponent = opponent
-			closest_opponent_position = adjusted_opponent_position
+			if is_equal_approx(closest_distance, sentinel_dist) or _is_better_fallback_opponent(opponent, closest_opponent, distance, closest_distance):
+				closest_distance = distance
+				closest_opponent = opponent
+				closest_opponent_position = adjusted_opponent_position
 
-		var targeting_values: Dictionary = _get_power_and_angle_to_opponent(opponent, launch_props)
+			var targeting_values: Dictionary = _get_power_and_angle_to_opponent(opponent, launch_props, hit_test)
 
-		if targeting_values and (is_equal_approx(closest_direct_shot_distance, sentinel_dist) or _is_better_viable_opponent(opponent, closest_direct_opponent, distance, closest_direct_shot_distance)):
-			closest_direct_shot_distance = distance
-			closest_direct_opponent = opponent
-			closest_direct_opponent_pos = adjusted_opponent_position
-			closest_targeting_values = targeting_values
+			if targeting_values and (is_equal_approx(closest_direct_shot_distance, sentinel_dist) or _is_better_viable_opponent(opponent, closest_direct_opponent, distance, closest_direct_shot_distance)):
+				closest_direct_shot_distance = distance
+				closest_direct_opponent = opponent
+				closest_direct_opponent_pos = adjusted_opponent_position
+				closest_targeting_values = targeting_values
+
+		if closest_direct_opponent:
+			break
 	
 	if closest_direct_opponent:
 		var transformed_angle = global_angle_to_turret_angle(closest_targeting_values.angle)
@@ -342,11 +346,11 @@ func _select_best_opponent() -> Dictionary:
 
 		return result
 
-func _get_power_and_angle_to_opponent(opponent: TankController, launch_props: AIBehavior.LaunchProperties) -> Dictionary:
+func _get_power_and_angle_to_opponent(opponent: TankController, launch_props: AIBehavior.LaunchProperties, hit_test:bool = true) -> Dictionary:
 	var target: Vector2 = opponent.tank.global_position
 
 	for angle in angles:
-		var power := get_power_for_target_and_angle(target, angle, launch_props, forces_mask)
+		var power := get_power_for_target_and_angle(target, angle, launch_props, forces_mask, hit_test)
 		if power > 0.0:
 			return { angle = angle, power = power }
 	return {}
