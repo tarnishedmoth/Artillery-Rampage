@@ -5,6 +5,9 @@ var behavior_type: Enums.AIBehaviorType
 ## Set default priority returned when no other conditions match for state selection
 @export var default_priority:int = 1
 
+@export var launch_collision_linear_threshold:float = 0.1
+@export var min_collision_test_dist:float = 50
+
 var track_shot_history:bool = false
 
 class LaunchProperties:
@@ -67,7 +70,7 @@ func get_opponents() -> Array[TankController]:
 	
 #region Aim and LOS	
 
-func get_power_for_target_and_angle(target: Vector2, angle: float, launch_props: LaunchProperties, forces: int = 0) -> float:
+func get_power_for_target_and_angle(target: Vector2, angle: float, launch_props: LaunchProperties, forces: int = 0, hit_test:bool = true) -> float:
 	# See https://en.wikipedia.org/wiki/Range_of_a_projectile
 	var source: Vector2 = aim_fulcrum_position
 
@@ -108,7 +111,34 @@ func get_power_for_target_and_angle(target: Vector2, angle: float, launch_props:
 	if target_power > tank.max_power:
 		return -1
 
-	return target_power
+	# Since the ascent is half of the total flight time, this means the linear phase accounts for about 5–15% of the total flight time.
+	# vy = vo * sin(theta) - g * t
+	# Determine initial ratio of y / x and then deviation threshold to solve for time when it is no longer linear
+	# Once have the time the length of the hit test target is v * t
+	# if cos_angle is 0 then ignore the test
+
+	if not hit_test or is_zero_approx(cos_angle):
+		return target_power
+	
+	# Check that it won't collide with something in front of us
+	var aim_dir:Vector2 = Vector2(cos_angle, -sin_angle)
+	
+	var ratio:float = aim_dir.y / aim_dir.x
+	var deviation_threshold:float = ratio * launch_collision_linear_threshold
+
+	# y will increase toward zero on the upward trajectory
+	# Use v = vo + a * t and split into x and y components. Since vx doesn't change, it cancels out
+	# Want to solve for when vy decreases by 1 - deviation_threshold
+	var time_to_linear:float = -deviation_threshold * speed * sin_angle / g
+	var hit_test_dist:float = maxf(time_to_linear * speed, min_collision_test_dist)
+	var hit_test_target: Vector2 = source + aim_dir * hit_test_dist
+
+	var result: Dictionary = has_line_of_sight_to(source, hit_test_target)
+	if result.test:
+		return target_power
+	
+	print_debug("%s: target=%s; angle=%f; required power=%f; speed=%f; hit_test_dist=%f - HIT OBSTACLE at %s" % [tank.owner.name, target, angle, target_power, speed, hit_test_dist, result.position])
+	return -1
 
 func has_line_of_sight_to(start_pos: Vector2, end_pos: Vector2) -> Dictionary:
 	var result: Dictionary = check_world_collision(start_pos, end_pos)
@@ -161,8 +191,12 @@ func aim_angle_to_world_direction(angle: float) -> Vector2:
 	
 	return Vector2.UP.rotated(rad_to_deg(world_angle))
 
+func global_signed_angle_to_turret_angle(global_angle: float) -> float:
+	return global_angle_to_turret_angle(absf(global_angle)) * signf(global_angle)
+
 func global_angle_to_turret_angle(global_angle: float) -> float:
 	return 90 - global_angle
+
 func turret_angle_to_global_angle(turret_angle: float) -> float:
 	return 90 - turret_angle
 
