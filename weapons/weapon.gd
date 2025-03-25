@@ -19,7 +19,7 @@ var parent_tank: Tank
 			return str(display_name + ": Modified")
 		else: return display_name
 
-@export var upgrades: Array[WeaponMod] ## For upgrades and nerfs at runtime
+@export var upgrades: Array[ModWeapon] ## For upgrades and nerfs at runtime
 
 @export_group("Behavior")
 @export_range(-360,360,0.0001,"radians_as_degrees") var accuracy_angle_spread: float = 0.0 ## Radians.
@@ -196,11 +196,11 @@ func configure_barrels() -> void:
 			add_child(new_fire_sfx)
 			barrels_sfx_fire.append(new_fire_sfx)
 			
-func apply_all_mods(mods: Array[WeaponMod] = upgrades) -> void:
+func apply_all_mods(mods: Array[ModWeapon] = upgrades) -> void:
 	for mod in mods:
 		mod.modify_weapon(self)
 		
-func apply_mod(mod: WeaponMod) -> void:
+func apply_mod(mod: ModWeapon) -> void:
 	upgrades.append(mod)
 	mod.modify_weapon(self)
 

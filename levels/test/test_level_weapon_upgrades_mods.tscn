@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_di33p"]
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="4_igqu3"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="5_xjt6c"]
-[ext_resource type="Script" path="res://weapons/mods/weapon_mod.gd" id="6_vhdtx"]
+[ext_resource type="Script" path="res://weapons/mod_weapon.gd" id="6_vhdtx"]
 
 [sub_resource type="Resource" id="Resource_p6mtg"]
 script = ExtResource("6_vhdtx")

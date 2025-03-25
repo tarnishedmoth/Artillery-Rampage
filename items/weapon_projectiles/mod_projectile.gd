@@ -1,4 +1,4 @@
-class_name WeaponMod extends Resource
+class_name ModProjectile extends Resource
 
 ## Class for upgrading/modifying Weapon properties at runtime.
 
@@ -12,29 +12,21 @@ enum Operations {
 }
 
 enum Modifiables {
-	ACCURACY_ANGLE_SPREAD,
-	ALWAYS_SHOOT_FOR_COUNT,
-	ALWAYS_SHOOT_FOR_DURATION,
-	AMMO_USED_PER_SHOT,
-	CURRENT_AMMO,
-	FIRE_RATE,
-	FIRE_VELOCITY,
-	MAGAZINES,
-	MAGAZINE_CAPACITY,
-	POWER_LAUNCH_SPEED_MULT,
-	RETAIN_WHEN_EMPTY,
-	USE_AMMO,
-	USE_FIRE_RATE,
-	USE_MAGAZINES,
+	FALLOFF_DISTANCE_MULTIPLIER, # float
+	DAMAGE_MULTIPLIER, # float
+	DESTRUCTIBLE_SCALE_MULTIPLIER_SCALAR, # float
+	SHOULD_EXPLODE_ON_IMPACT, # bool
+	MASS, # float
+	MAX_LIFETIME, # float
 }
 
 @export var property: Modifiables ## Which property of the Weapon to modify.
 @export var operation: Operations ## What operation to perform on the property value.
 @export var value:float ## Int or Float. Not used if Operation is SET_TRUE or SET_FALSE.
 
-func modify_weapon(weapon: Weapon) -> void:
+func modify_projectile(projectile: WeaponProjectile) -> void:
 	var property_string:String = get_property_key(property)
-	var current_value = weapon.get(property_string) # This could be float, int, or bool
+	var current_value = projectile.get(property_string) # This could be float, int, or bool
 	var new_value = current_value # Should set the type??
 	print_debug(new_value)
 	
@@ -66,18 +58,18 @@ func modify_weapon(weapon: Weapon) -> void:
 				print_debug("Invalid operation on value", property_string)
 	
 	# Set the property
-	weapon.set(property_string, new_value)
+	projectile.set(property_string, new_value)
 
 func get_property_key(modifiable: Modifiables) -> String:
 	var text_representation:String = Modifiables.find_key(modifiable)
 	return text_representation.to_lower()
 
 # Code constructors
-func configure_and_apply(weapon_to_attach_to: Weapon, property: Modifiables, operation: Operations, value:float) -> void:
+func configure_and_apply(projectile_to_attach_to: WeaponProjectile, property: Modifiables, operation: Operations, value:float) -> void:
 	property = property
 	operation = operation
 	value = value
-	weapon_to_attach_to.apply_mod(self)
+	projectile_to_attach_to.apply_mod(self)
 
 func _init(property: Modifiables = property, operation: Operations = operation, value:float = value) -> void:
 	property = property

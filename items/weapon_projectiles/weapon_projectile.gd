@@ -25,30 +25,31 @@ signal completed_lifespan ## Tracked by Weapon class
 @export var max_lifetime: float = 10.0 ## Self destroys once this time has passed.
 @export var explosion_to_spawn:PackedScene
 
-@export_category("Damage")
+@export var upgrades: Array[ModProjectile] ## For upgrades and nerfs at runtime
+
 @export var damage_falloff_type: DamageFalloffType = DamageFalloffType.Linear
+@export var min_falloff_distance: float = 10:
+	get: return min_falloff_distance*falloff_distance_multiplier
+@export var max_falloff_distance: float = 60:
+	get: return max_falloff_distance*falloff_distance_multiplier
+@export var falloff_distance_multiplier: float = 1.0 # ModProjectile
 
-@export_category("Damage")
-@export var min_falloff_distance: float = 10
-
-@export_category("Damage")
-@export var max_falloff_distance: float = 60
-
-@export_category("Damage")
-@export var min_damage: float = 10
-
-@export_category("Damage")
-@export var max_damage: float = 100
+@export var min_damage: float = 10:
+	get: return min_damage * damage_multiplier
+@export var max_damage: float = 100:
+	get: return max_damage * damage_multiplier
+@export var damage_multiplier: float = 1.0 # ModProjectile
 
 #@export_category("Damage")
 #@export var last_collider_time_tolerance: float = 0.1
 
 @export_category("Destructible")
-@export var destructible_scale_multiplier:Vector2 = Vector2(10 , 10)
+@export var destructible_scale_multiplier:Vector2 = Vector2(10 , 10):
+	get: return destructible_scale_multiplier*destructible_scale_multiplier_scalar
+@export var destructible_scale_multiplier_scalar:float = 1.0 # ModProjectile
 
 ## Indicate whether need to explode on impact with supported collision layers and cause damage
 ## This replaces the "Overlap" concept
-@export_category("Destructible")
 @export var should_explode_on_impact:bool = true ## Deployable weapons should have this set to False.
 
 var calculated_hit: bool
@@ -80,6 +81,8 @@ func _ready() -> void:
 		destructible_component = get_node('Destructible')
 	if max_lifetime > 0.0: destroy_after_lifetime()
 	modulate = color
+	apply_all_mods() # This may not be desired but it probably is. If the weapon's stats are retained across matches, this could double the effect unintentionally
+	
 	GameEvents.emit_projectile_fired(self)
 	
 func set_sources(tank:Tank,weapon:Weapon) -> void:
@@ -292,3 +295,11 @@ func _calculate_point_damage(pos: Vector2) -> float:
 			
 func _calculate_dist_frac(dist: float):
 	return  (1.0 - (dist - min_falloff_distance) / (max_falloff_distance - min_falloff_distance))	
+
+func apply_all_mods(mods: Array[ModProjectile] = upgrades) -> void:
+	for mod in mods:
+		mod.modify_projectile(self)
+		
+func apply_mod(mod: ModProjectile) -> void:
+	upgrades.append(mod)
+	mod.modify_projectile(self)

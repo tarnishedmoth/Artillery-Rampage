@@ -1,9 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://c7jh5lsef6gd1"]
+[gd_scene load_steps=7 format=3 uid="uid://c7jh5lsef6gd1"]
 
 [ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile.gd" id="1_01gh6"]
 [ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="2_l4fkv"]
 [ext_resource type="PackedScene" uid="uid://gj55bahvsd7g" path="res://items/weapon_projectiles/explosions/explosion_leadball.tscn" id="2_mc0vs"]
 [ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="3_0q2o4"]
+[ext_resource type="Script" path="res://items/weapon_projectiles/mod_projectile.gd" id="3_chlre"]
+
+[sub_resource type="Resource" id="Resource_pkrle"]
+script = ExtResource("3_chlre")
+property = 1
+operation = 3
+value = 0.0
 
 [node name="WeaponProjectile" type="RigidBody2D"]
 collision_layer = 2
@@ -13,6 +20,7 @@ contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_01gh6")
 explosion_to_spawn = ExtResource("2_mc0vs")
+upgrades = Array[ExtResource("3_chlre")]([SubResource("Resource_pkrle")])
 min_falloff_distance = 5.0
 max_falloff_distance = 45.0
 max_damage = 50.0
