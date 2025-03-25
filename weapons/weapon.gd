@@ -15,11 +15,12 @@ signal magazines_changed(current_magazines:int)
 var parent_tank: Tank
 @export var display_name: String: ## Used by HUD/UI
 	get:
-		if not upgrades.is_empty():
+		if not mods.is_empty():
 			return str(display_name + ": Modified")
 		else: return display_name
 
-@export var upgrades: Array[ModWeapon] ## For upgrades and nerfs at runtime
+@export var mods: Array[ModWeapon] ## For upgrades and nerfs at runtime
+@export var projectile_mods: Array[ModProjectile]
 
 @export_group("Behavior")
 @export_range(-360,360,0.0001,"radians_as_degrees") var accuracy_angle_spread: float = 0.0 ## Radians.
@@ -196,12 +197,12 @@ func configure_barrels() -> void:
 			add_child(new_fire_sfx)
 			barrels_sfx_fire.append(new_fire_sfx)
 			
-func apply_all_mods(mods: Array[ModWeapon] = upgrades) -> void:
+func apply_all_mods(mods: Array[ModWeapon] = mods) -> void:
 	for mod in mods:
 		mod.modify_weapon(self)
 		
 func apply_mod(mod: ModWeapon) -> void:
-	upgrades.append(mod)
+	mods.append(mod)
 	mod.modify_weapon(self)
 
 func stop_all_sounds(_only_looping: bool = true) -> void: # TODO args
@@ -264,6 +265,7 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 		
 		if new_shot is WeaponProjectile:
 			new_shot.set_sources(parent_tank,self)
+			new_shot.apply_all_mods(projectile_mods)
 			add_projectile_awaiting(new_shot)
 		
 		new_shot.global_transform = barrel.global_transform

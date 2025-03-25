@@ -70,8 +70,3 @@ func configure_and_apply(projectile_to_attach_to: WeaponProjectile, property: Mo
 	operation = operation
 	value = value
 	projectile_to_attach_to.apply_mod(self)
-
-func _init(property: Modifiables = property, operation: Operations = operation, value:float = value) -> void:
-	property = property
-	operation = operation
-	value = value

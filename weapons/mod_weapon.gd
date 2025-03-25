@@ -1,6 +1,7 @@
 class_name ModWeapon extends Resource
 
 ## Class for upgrading/modifying Weapon properties at runtime.
+@export var projectile_mods:Array[ModProjectile]
 
 enum Operations {
 	MULTIPLY,
@@ -67,6 +68,9 @@ func modify_weapon(weapon: Weapon) -> void:
 	
 	# Set the property
 	weapon.set(property_string, new_value)
+	
+	if not projectile_mods.is_empty():
+		weapon.projectile_mods = projectile_mods
 
 func get_property_key(modifiable: Modifiables) -> String:
 	var text_representation:String = Modifiables.find_key(modifiable)
@@ -78,8 +82,3 @@ func configure_and_apply(weapon_to_attach_to: Weapon, property: Modifiables, ope
 	operation = operation
 	value = value
 	weapon_to_attach_to.apply_mod(self)
-
-func _init(property: Modifiables = property, operation: Operations = operation, value:float = value) -> void:
-	property = property
-	operation = operation
-	value = value
