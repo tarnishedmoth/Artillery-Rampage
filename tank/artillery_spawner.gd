@@ -78,8 +78,6 @@ func _instantiate_controller_scene_at(scene: PackedScene, position: Vector2) -> 
 	return instance
 
 func init_controller_props(controller: TankController) -> void:
-	# Disable fall damage - important especially for the procedural spawning as right now we generate points on a slant
-	controller.enable_damage_before_first_turn = false
 	if controller is AITank:
 		controller.set_color(Color(randf(), randf(), randf()))
 		
@@ -181,6 +179,10 @@ func _spawn_units(num_human: int) -> Array[TankController]:
 			scene = artillery_ai_types.pick_random()
 		var spawned := _instantiate_controller_scene_at(scene, _used_positions[i])
 		if spawned:
+			# Disable fall damage - important especially for the procedural spawning as right now we generate points on a slant
+			# Must be done before adding to the scene tree
+			spawned.enable_damage_before_first_turn = false
+
 			add_child(spawned)
 			if is_ai:
 				spawned.name = enemy_names[ (ai_count - 1) % enemy_names.size()] # Give AI random names
