@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cl8qlpmt0grgf"]
-
-[ext_resource type="PackedScene" uid="uid://dmbj0iglwwo7x" path="res://terrain/terrain_chunk.tscn" id="1_211vu"]
-
-[node name="TerrainChunk" instance=ExtResource("1_211vu")]
-
-[node name="Polygon2D" parent="." index="1"]
-polygon = PackedVector2Array(609, -8, 664.012, -7.16138, 664.282, -0.006653, 671.763, 31.2041, 685.425, 43.7047, 698.656, 36.8916, 711.453, 18.4542, 717.635, 15.691, 718.494, -6.33087, 937, -3, 945, 445, -103, 448, -104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 390, -447)
