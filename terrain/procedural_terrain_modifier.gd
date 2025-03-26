@@ -10,10 +10,15 @@ class_name ProceduralTerrainModifier extends Node
 @export_category("Generation")
 @export var replace_existing_heights:bool = false
 
+## Controls how far up from the current height we will deviate
+## Should be negative to raise the terrain up
 @export_category("Generation")
-@export_range(-1,1,0.01) var height_win_size_min_variation:float = -0.1
+@export_range(-1,1,0.001) var height_win_size_min_variation:float = -0.1
+
+## Controls how far down from the current height we will deviate
+## Should be positive to push the terrain down
 @export_category("Generation")
-@export_range(-1,1,0.01) var height_win_size_max_variation:float = 0.1
+@export_range(-1,1,0.001) var height_win_size_max_variation:float = 0.1
 
 @export_category("Generation")
 @export_range(0,100,0.01) var min_height_value:float = 20
@@ -107,13 +112,13 @@ func _modify_chunk(chunk: TerrainChunk, viewport_bounds: Rect2, _terrain_bounds:
 				
 		new_terrain_vertices = []
 		
-		for i in range(0, terrain_vertices.size()):
+		for i in range(terrain_vertices.size()):
 			if i == terrain_vertices.size() - 1 or !chunk.is_surface_point_global(terrain_vertices[i]):
 				new_terrain_vertices.push_back(terrain_vertices[i])
 				continue
 						
 			prev_point = terrain_vertices[i]
-			next_point = terrain_vertices[i+1]
+			next_point = terrain_vertices[i + 1]
 				
 			var total_to_add:int = mini(
 				int(next_point.distance_to(prev_point) / ideal_spacing), vertices_remaining)
@@ -124,7 +129,7 @@ func _modify_chunk(chunk: TerrainChunk, viewport_bounds: Rect2, _terrain_bounds:
 			var last_point:Vector2 = prev_point
 			new_terrain_vertices.push_back(prev_point)
 						
-			var direction:int = sign(next_point.x - last_point.x)
+			var direction:float = signf(next_point.x - last_point.x)
 			var ideal_height_inc: float = (next_point.y - last_point.y) / total_to_add
 			var min_x = minf(last_point.x, next_point.x)
 			var max_x = maxf(last_point.x, next_point.x)
@@ -167,7 +172,7 @@ func _modify_chunk(chunk: TerrainChunk, viewport_bounds: Rect2, _terrain_bounds:
 
 func _seed_terrain(terrain_vertices : PackedVector2Array, viewport_bounds: Rect2, count: int) -> void:
 	var bottom_y:float = viewport_bounds.size.y
-	var top_y:float = (bottom_y - min_height_value + max_height_clearance) * 0.5
+	var top_y:float = bottom_y - min_height_value
 	
 	# Need 2 for the bottom
 	var top_count : int = count - 2

@@ -21,11 +21,14 @@ polygon = PackedVector2Array()
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("2_gemlh")]
 additional_vertices = 100
 replace_existing_heights = true
+height_win_size_min_variation = -0.185
+height_win_size_max_variation = 0.18
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
 artillery_ai_types = Array[PackedScene]([ExtResource("3_qrf3b"), ExtResource("4_18hgv"), ExtResource("5_1nv3u"), ExtResource("6_d0lv3"), ExtResource("7_dp04k"), ExtResource("8_1qdpr"), ExtResource("9_b13qt"), ExtResource("10_0lpog")])
 default_ai_players = Vector2i(1, 4)
 default_human_players = Vector2i(1, 1)
+ideal_min_spawn_separation = 250.0
 
 [editable path="GameLevel"]
 [editable path="GameLevel/Terrain"]
