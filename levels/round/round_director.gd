@@ -26,6 +26,42 @@ var awaiting_intentions:int = 0
 ## player_goes_first will be honored if set
 @export var shuffle_order:bool = true
 
+var player: Player:
+	get:
+		var index:int = _get_player_index()
+		if index != -1:
+			return tank_controllers[index]
+		push_warning("%s - player not found!" % [name])
+		return null
+	set(value):
+		if not value:
+			return
+		var index:int = _get_player_index()
+		if index == -1:
+			push_warning("%s - player not found!" % [name])
+			return
+		var existing:Player = tank_controllers[index]
+		if value == existing:
+			print_debug("%s - player=%s is already in the round" % [name, existing.name])
+			return
+		
+		print_debug("%s - Changing player from %s to %s" % [name, existing.name, value.name])
+
+		# retain transform
+		var transform: Transform2D = existing.global_transform
+		var previous_parent:Node = existing.get_parent()
+				
+		tank_controllers[index] = value		
+		value.global_transform = transform
+		
+		if is_instance_valid(previous_parent):
+			previous_parent.remove_child(existing)
+			previous_parent.add_child(value)
+		else:
+			push_warning("%s - player did not have previous parent - using this node" % [name, value.name])
+			add_child(value)
+		existing.queue_free()
+		
 func _ready():
 	current_gamestate = create_new_gamestate() # TODO: loading saved gamestate
 	
@@ -37,8 +73,12 @@ func _ready():
 	
 	add_child(fall_check_timer)
 	
-func add_controller(tank_controller) -> void:
+func add_controller(tank_controller: TankController) -> TankController:
 	tank_controllers.append(tank_controller)
+	GameEvents.player_added.emit(tank_controller)
+
+	# In case player_added ends up modifying the tank_controllers array
+	return tank_controllers[tank_controllers.size() - 1]
 	
 func _on_fall_check_timeout():
 	_fall_check_elapsed_time += fall_check_timer.wait_time

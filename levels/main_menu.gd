@@ -76,10 +76,12 @@ func clear_all_text(text_nodes:Array) -> void:
 #region--Private Methods
 func _on_start_pressed() -> void:
 	print_debug("Start button")
+	PlayerStateManager.enable = true
 	SceneManager.next_level()
 
 func _on_level_select_pressed() -> void:
 	print_debug("Level select button")
+	PlayerStateManager.enable = false
 	level_select_menu.show()
 	main_menu.hide()
 

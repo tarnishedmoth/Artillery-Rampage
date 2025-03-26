@@ -44,13 +44,13 @@ func _on_round_ended() -> void:
 func _add_manually_placed_units():
 	for child in get_children():
 		if child is TankController:
-			round_director.add_controller(child)
-			connect_events(child)
+			var added := round_director.add_controller(child)
+			connect_events(added)
 
 func _add_spawned_units():
 	for controller in await spawner.spawn_all(terrain):
-		round_director.add_controller(controller)
-		connect_events(controller)
+		var added := round_director.add_controller(controller)
+		connect_events(added)
 		
 func connect_events(controller: TankController) -> void:
 	if controller is Player:
