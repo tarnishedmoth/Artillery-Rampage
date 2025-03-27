@@ -1,5 +1,9 @@
+## Keeps track of player state between rounds and establishes this state at the start of the round
+
 extends Node
 
+## Toggles whether player state tracking should be enabled
+## If disabled then each round will be independent of the others
 var enable:bool:
 	set(value):
 		if value:
@@ -12,7 +16,6 @@ var enable:bool:
 		return enable
 
 var player: Player
-var player_name: StringName
 	
 func _connect_events() -> void:
 	if not GameEvents.round_started.is_connected(_on_round_started):
@@ -23,13 +26,16 @@ func _connect_events() -> void:
 		GameEvents.round_ended.connect(_on_round_ended)
 	
 func _disconnect_events() -> void:
-	if  GameEvents.round_started.is_connected(_on_round_started):
+	if GameEvents.round_started.is_connected(_on_round_started):
 		GameEvents.round_started.disconnect(_on_round_started)
+	if GameEvents.player_added.is_connected(_on_player_added):
+		GameEvents.player_added.disconnect(_on_player_added)
+
 	if is_instance_valid(player):
 		if player.tank.tank_killed.is_connected(_on_player_killed):
 			player.tank.tank_killed.disconnect(_on_player_killed)
 		if not player.get_parent():
-			# This means that duplicate was never added to tree so we need to manually free
+			# This means that duplicate/removed child node was never added to tree so we need to manually free
 			player.queue_free()
 		player = null
 		
@@ -69,8 +75,6 @@ func _on_round_ended() -> void:
 	#player.name = orig_name
 	
 	# Instead of duplicating just remove from the tree so it doesn't get freed
-	player_name = player.name
-
 	var parent := player.get_parent()
 	if parent:
 		parent.remove_child(player)
@@ -85,4 +89,3 @@ func _replace_player_reference() -> void:
 	level.round_director.player = player
 	# Need to re-request since was already added to tree so weapons set up right
 	player.request_ready()
-	player.name = player_name
