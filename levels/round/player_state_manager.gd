@@ -1,5 +1,5 @@
 ## Keeps track of player state between rounds and establishes this state at the start of the round
-
+## TODO: Could use this as basis for data to auto-save/load player state from file
 extends Node
 
 ## Toggles whether player state tracking should be enabled
@@ -16,6 +16,7 @@ var enable:bool:
 		return enable
 
 var player: Player
+var player_state: PlayerState
 	
 func _connect_events() -> void:
 	if not GameEvents.round_started.is_connected(_on_round_started):
@@ -41,51 +42,29 @@ func _disconnect_events() -> void:
 		
 func _on_round_started() -> void:
 	pass
-	#if is_instance_valid(player):
-		#_replace_player_reference()
-	#else:
-		#var level:GameLevel = SceneManager.get_current_level_root()
-		#player = level.round_director.player
-		#if player:
-			#player.tank.tank_killed.connect(_on_player_killed)
 
 func _on_player_added(p_player: TankController) -> void:
+	# Called before player added to the tree
 	if p_player is not Player:
 		return
-	if is_instance_valid(player):
-		_replace_player_reference()
-	else:
-		#var level:GameLevel = SceneManager.get_current_level_root()
-		#player = level.round_director.player
-		#if player:
-		player = p_player
-		player.tank.tank_killed.connect(_on_player_killed)
-	
-func _on_round_ended() -> void:
-	# Make a copy of player before it is freed
-	if not player:
+	player = p_player
+
+	player.tank.tank_killed.connect(_on_player_killed)
+	if not player_state:
+		print_debug("%s - no player state, skipping" % [name])
 		return
 	
-	# Duplicate so not lost when round director frees
-	# Will be added to the tree on next round
-	# This doesn't work
-	#var orig_name := player.name
-	# #player = player.duplicate(DuplicateFlags.DUPLICATE_USE_INSTANTIATION)
-	#player = player.duplicate()
-	#player.name = orig_name
+	player.pending_state = player_state
 	
-	# Instead of duplicating just remove from the tree so it doesn't get freed
-	var parent := player.get_parent()
-	if parent:
-		parent.remove_child(player)
+func _on_round_ended() -> void:
+	if not player:
+		return
+	# Capture the state of the player at the end of the round
+	player_state = player.create_player_state()
+
+	# Will become invalid when the instance is destroyed by the current SceneTree
+	player = null
 	
 func _on_player_killed(_tank: Tank, _instigatorController: Node2D, _instigator: Node2D) -> void:
 	# TODO: Temporarily while we figure out the rogue-like mechanics
-	player = null
-	
-func _replace_player_reference() -> void:
-	print_debug("%s - replace player reference to %s" % [name, player.name])
-	var level:GameLevel = SceneManager.get_current_level_root()
-	level.round_director.player = player
-	# Need to re-request since was already added to tree so weapons set up right
-	player.request_ready()
+	pass

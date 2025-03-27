@@ -15,10 +15,15 @@ var can_aim: bool = false
 
 func _ready() -> void:
 	super._ready()
-	load_and_apply_upgrades()
-	
+
 	PlayerUpgrades.acquired_upgrade.connect(_on_acquired_upgrade)
 
+func begin_round() -> void:
+	super.begin_round()
+	
+	# Make sure weapon states are up to date before applying upgades
+	load_and_apply_upgrades()
+	
 # Called at the start of a turn
 # This will be a method available on all "tank controller" classes
 # like the player or the AI

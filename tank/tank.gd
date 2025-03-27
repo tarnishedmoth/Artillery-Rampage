@@ -44,7 +44,13 @@ signal tank_took_damage(
 var current_equipped_weapon: Weapon
 var current_equipped_weapon_index: int = -1
 
-var health: float
+var health: float:
+	set(value):
+		health = clampf(value, 0.0, max_health)
+		if not is_equal_approx(health, max_health):
+			_update_max_power()
+	get:
+		return health
 
 var power:float
 var max_power:float
@@ -70,7 +76,10 @@ func _ready() -> void:
 	scan_available_weapons()
 	
 	health = max_health
+
+	# Setters not called in _ready so need to call this manually
 	_update_max_power()
+
 	power = max_power
 	
 	# Make sure to do snap_to_ground from the physics task
@@ -79,6 +88,19 @@ func _ready() -> void:
 	# TODO: Using this in conjunction with falling detection
 	tankBody.contact_monitor = true
 	tankBody.max_contacts_reported = 1
+
+func apply_pending_state(state: PlayerState) -> void:
+	# TODO: This feels hacky but _ready has already run for children when this is called
+	scan_available_weapons()
+	max_health = state.max_health
+	health = state.health
+
+	#TODO: Temporary fix to apply health visuals
+	_update_visuals_after_damage()
+
+func populate_player_state(state: PlayerState) -> void:
+	state.max_health = max_health
+	state.health = health
 
 @warning_ignore("unused_parameter")
 func _physics_process(delta: float) -> void:
@@ -151,15 +173,14 @@ func shoot() -> bool:
 #region Damage and Death
 func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float) -> void:
 	var orig_health = health
-	health = clampf(health - amount, 0, max_health)
+	# Calls setter and automatically clamps
+	health = health - amount
 	var actual_damage = orig_health - health
 	
 	if is_zero_approx(actual_damage):
 		print("Tank " + get_parent().name + " didn't take any actual damage")
 		return
-	
-	_update_max_power()
-	
+		
 	if health > 0 and actual_damage > 0:
 		_update_visuals_after_damage()
 	

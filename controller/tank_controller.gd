@@ -6,6 +6,9 @@ var _initial_fall_damage:bool
 
 signal intent_to_act(action: Callable, owner: Object)
 
+## Set player state that has been loaded from previous round
+var pending_state: PlayerState
+
 func _ready() -> void:
 	GameEvents.connect("turn_ended", _on_turn_ended)
 	GameEvents.connect("turn_started", _on_turn_started)
@@ -13,9 +16,15 @@ func _ready() -> void:
 	_initial_fall_damage = tank.enable_fall_damage
 	
 	if !enable_damage_before_first_turn:
-		print("TankController(%s) - _ready: Disable fall damage before first turn" % [name])
+		print_debug("TankController(%s) - _ready: Disable fall damage before first turn" % [name])
 		tank.enable_fall_damage = false
-	
+
+func begin_round() -> void:
+	if pending_state:
+		print_debug("TankController(%s) - _ready: Applying pending state" % [name])
+		_apply_pending_state(pending_state)
+		pending_state = null
+
 func begin_turn() -> void:
 	#tank.reset_orientation()
 	tank.enable_fall_damage = _initial_fall_damage
@@ -23,6 +32,23 @@ func begin_turn() -> void:
 	
 var tank: Tank:
 	get: return _get_tank()
+
+func _apply_pending_state(state: PlayerState) -> void:
+	remove_all_weapons(true)
+	# Make sure decouple the weapon object from the state
+	attach_weapons(state.get_weapons_copy())
+
+	tank.apply_pending_state(state)
+
+## Capture the current state of the player
+## [param p_state] - state to use - useful for subclasses to override if we need derived player state classes
+func create_player_state(p_state: PlayerState = null) -> PlayerState:
+	var state: PlayerState = p_state if p_state else PlayerState.new()
+
+	state.weapons = get_weapons()
+	tank.populate_player_state(state)
+
+	return state
 
 func _get_tank() -> Tank:
 	push_error("abstract function")
@@ -41,10 +67,12 @@ func attach_weapons(weapons: Array[Weapon]) -> void:
 		w.global_position = tank.global_position # Probably not necessary but Weapon is a Node2D and should be simplified if so.
 	tank.scan_available_weapons()
 	
-func remove_all_weapons() -> void:
+func remove_all_weapons(detach_immediately: bool = false) -> void:
 	for w in weapons_container.get_children():
 		if w is Weapon:
 			w.destroy()
+			if detach_immediately and w.get_parent():
+				w.get_parent().remove_child(w)
 
 func set_color(value: Color) -> void:
 	tank.color = value

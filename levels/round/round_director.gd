@@ -34,6 +34,7 @@ var player: Player:
 		push_warning("%s - player not found!" % [name])
 		return null
 	set(value):
+		# TODO: This setter is no longer being used but keeping in case it proves useful later
 		if not value:
 			return
 		var index:int = _get_player_index()
@@ -73,12 +74,9 @@ func _ready():
 	
 	add_child(fall_check_timer)
 	
-func add_controller(tank_controller: TankController) -> TankController:
+func add_controller(tank_controller: TankController) -> void:
 	tank_controllers.append(tank_controller)
 	GameEvents.player_added.emit(tank_controller)
-
-	# In case player_added ends up modifying the tank_controllers array
-	return tank_controllers[tank_controllers.size() - 1]
 	
 func _on_fall_check_timeout():
 	_fall_check_elapsed_time += fall_check_timer.wait_time
@@ -101,6 +99,8 @@ func begin_round() -> bool:
 	for controller: TankController in tank_controllers:
 		controller.tank.tank_killed.connect(_on_tank_killed)
 		controller.intent_to_act.connect(_on_player_intent_to_act)
+		
+		controller.begin_round()
 		
 	set_turn_order()
 	
