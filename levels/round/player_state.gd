@@ -2,6 +2,11 @@
 ## Keeps track of persistent state across rounds
 ## used in conjunction with setting pending_state on the controller
 ## prior to adding it to the tree
+# TODO: Maybe extend from Resource so we can save/load using ResourceLoader/ResourceSaver as an easy
+# way to save/load player state from file
+# We would then wrap that in a SaveGameState that tracks other state like current level
+# and things not specific to the player
+# See https://docs.godotengine.org/en/stable/tutorials/io/saving_games.html
 class_name PlayerState
 
 # Create explicit private variable so we can access in the "destructor" notification
