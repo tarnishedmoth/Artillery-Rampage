@@ -10,6 +10,10 @@
 
 [node name="GameLevel" parent="." instance=ExtResource("1_hqq45")]
 
+[node name="RoundDirector" parent="GameLevel" index="7"]
+player_goes_first = true
+shuffle_order = false
+
 [node name="Enemy1" parent="GameLevel" instance=ExtResource("2_hhpre")]
 position = Vector2(479, 278)
 
@@ -29,8 +33,14 @@ color = Color(0.137255, 0.180392, 0.701961, 1)
 [node name="Player" parent="GameLevel" instance=ExtResource("4_wjquj")]
 position = Vector2(120, 427)
 
-[node name="Tree" parent="." instance=ExtResource("5_bwhbs")]
-position = Vector2(19, 368)
+[node name="Tree" parent="GameLevel" instance=ExtResource("5_bwhbs")]
+position = Vector2(45, 441)
+
+[node name="Tree2" parent="GameLevel" instance=ExtResource("5_bwhbs")]
+position = Vector2(960, 438)
+
+[node name="Tree3" parent="GameLevel" instance=ExtResource("5_bwhbs")]
+position = Vector2(1190, 440)
 
 [editable path="GameLevel"]
 [editable path="GameLevel/Terrain"]
