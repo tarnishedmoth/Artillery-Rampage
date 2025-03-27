@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://cb2v2wt3iblqa"]
+
+[ext_resource type="PackedScene" uid="uid://b00kdwwjo4hg8" path="res://destructible/destructible_object.tscn" id="1_dtmb7"]
+[ext_resource type="PackedScene" uid="uid://carbmsglps03v" path="res://environment/trees/tree_chunk.tscn" id="2_hfnib"]
+
+[node name="Tree" instance=ExtResource("1_dtmb7")]
+chunk_scene = ExtResource("2_hfnib")
+
+[node name="TreeChunk" parent="." index="0" instance=ExtResource("2_hfnib")]

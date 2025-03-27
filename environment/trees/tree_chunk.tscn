@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://carbmsglps03v"]
+
+[ext_resource type="PackedScene" uid="uid://cklh78tsa5qcj" path="res://destructible/destructible_object_chunk.tscn" id="1_0d328"]
+[ext_resource type="Texture2D" uid="uid://v4em4vxjcqki" path="res://environment/trees/tree1.png" id="2_sa5q7"]
+
+[node name="DestructibleObjectChunk" instance=ExtResource("1_0d328")]
+mass = 100.0
+
+[node name="Mesh" parent="." index="0"]
+position = Vector2(-26, 21)
+texture = ExtResource("2_sa5q7")
+texture_offset = Vector2(-20, 20)
+texture_scale = Vector2(5, 5)
+polygon = PackedVector2Array(22.4514, 50.058, 64.8652, 48.6675, 51.7555, 31.2862, 43.2727, 30.591, 46.3574, 20.1622, 67.9498, 16.686, 75.6614, -18.0765, 34.0188, -19.467, 27.0784, -10.4287, 21.6803, -4.1715, 27.8495, 13.905, 40.1881, 17.3812, 37.1034, 30.591, 25.536, 41.715)
+
+[node name="Collision" parent="." index="1"]
+position = Vector2(-26, 21)
