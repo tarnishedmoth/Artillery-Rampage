@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bmq6a5rs3s8jg"]
+
+[ext_resource type="PackedScene" uid="uid://bekgd5xyqpiwk" path="res://destructible/shatter/shatterable_object_body.tscn" id="1_q66tl"]
+[ext_resource type="Texture2D" uid="uid://v4em4vxjcqki" path="res://environment/trees/tree1.png" id="2_oasgw"]
+
+[node name="ShatterableTreeBody" instance=ExtResource("1_q66tl")]
+mass = 1000.0
+center_of_mass_mode = 1
+center_of_mass = Vector2(0, -70)
+
+[node name="Mesh" parent="." index="0"]
+position = Vector2(-43.63, -51)
+texture = ExtResource("2_oasgw")
+texture_offset = Vector2(-9.26, 61.18)
+texture_scale = Vector2(3, 3)
+polygon = PackedVector2Array(19, 51, 80, 50, 68, 31, 50, 27, 52, 5, 90, 3, 89, -24, 103, -57, 36, -61, 33, -46, 12, -41, 12, -22, 23, -1, 38, 3, 36, 31)
