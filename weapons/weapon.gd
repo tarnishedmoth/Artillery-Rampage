@@ -27,7 +27,7 @@ var parent_tank: Tank
 ## Default used if not given one by the shooter.
 ## [br]The Player and AI for example choose their power and pass it to the [method shoot] function.
 @export var fire_velocity: float = 100.0 # don't change this variable name
-@export_range(0.01, 10.0, 0.01) var power_launch_speed_mult: float = 1.0 ## Tune the initial velocity given the power
+@export_range(0.01, 10.0, 0.01,"or_greater","or_less") var power_launch_speed_mult: float = 1.00 ## Tune the initial velocity given the power
 @export var fires_continuously: bool = false ## Continuous-fire weapons don't use fire rate.
 @export var use_fire_rate: bool = false ## Prevents shooting while cycling.
 @export var fire_rate: float = 4.0 ## Rate of fire per second. 4.0 would fire once every quarter-second.

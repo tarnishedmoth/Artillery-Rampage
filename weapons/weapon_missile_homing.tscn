@@ -8,7 +8,8 @@
 script = ExtResource("1_44n5j")
 scene_to_spawn = ExtResource("2_8f5ta")
 display_name = "Homing Missile"
-fire_velocity = 600.0
+fire_velocity = 1500.0
+power_launch_speed_mult = 1.25
 use_ammo = true
 current_ammo = 5
 use_magazines = true

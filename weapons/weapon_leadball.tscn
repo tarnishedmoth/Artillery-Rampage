@@ -8,6 +8,7 @@
 script = ExtResource("1_psmpk")
 scene_to_spawn = ExtResource("2_w7m7e")
 display_name = "Lead Ball"
+fire_velocity = 1000.0
 sfx_fire = NodePath("Fire")
 
 [node name="Fire" type="AudioStreamPlayer2D" parent="."]
