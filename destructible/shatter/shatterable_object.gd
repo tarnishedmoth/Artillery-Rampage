@@ -29,10 +29,8 @@ func damage(body: ShatterableObjectBody, projectile: WeaponProjectile, contact_p
 	
 	var additional_pieces: Array[Node2D] = body.shatter(projectile, projectile_poly_global)
 	for new_body in additional_pieces:
-		_body_container.add_child(new_body)
-		
-	# TODO: Maybe apply a physics force to remaining bodies close to the projectile_poly_global that weren't directly damaged
-	
+		_body_container.call_deferred("add_child", new_body)
+			
 func delete() -> void:
 	print("ShatterableObject(%s) - delete" % [name])
 	destroyed.emit(self)
@@ -41,6 +39,7 @@ func delete() -> void:
 	
 func _on_body_deleted(_body: Node2D) -> void:
 	await get_tree().process_frame
+	await get_tree().create_timer(0.1).timeout
 	
 	if _body_container.get_child_count() == 0:
 		delete()

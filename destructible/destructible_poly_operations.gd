@@ -31,6 +31,8 @@ class_name DestructiblePolyOperations extends Node
 @export_category("Crumbling")
 @export_range(0, 100) var crumble_x_jitter: float = 10
 
+@export_category("Shatter")
+@export_range(0, 100) var max_iterations: int = 5
 
 func smooth(poly: PackedVector2Array, bounds: Circle) -> PackedVector2Array:
 	if poly.size() < 3:
@@ -200,3 +202,124 @@ func _create_break_polyline(poly: PackedVector2Array, first_index: int) -> Packe
 			-delta_y)
 	
 	return polyline
+
+# Use Delaunay triangulation as a "confetti" shatter starting point since it creates a higher density mesh
+# Then subdivide using centroids of the triangles to create smaller chunks and also combine some of the smaller adjacent triangle chunks together
+
+func shatter(poly: PackedVector2Array, min_area: float, _max_area: float) -> Array[PackedVector2Array]:
+	if poly.size() < 3:
+		return []
+	if poly.size() == 3:
+		return [poly]
+
+	var points: PackedVector2Array = poly.duplicate()
+	var last_point_count:int = 0
+	var indices: PackedInt32Array = []
+	for i in range(max_iterations):
+		last_point_count = points.size()
+		indices = Geometry2D.triangulate_delaunay(points)
+
+		# If delaunay fails, then just break
+		if indices.size() == 0:
+			print_debug("body(%s-%s) - shatter: Delaunay triangulation failed" % [name, get_parent().name])
+			if i == 0:
+				push_warning("body(%s-%s) - shatter: Delaunay triangulation on original poly failed - returning empty array" % [name, get_parent().name])
+				return []
+			# Otherwise we can break if this isn't the first iteration
+			break
+
+		# Determine area of the triangles and if they are above the threshold, compute an offseted centroid
+		for j in range(0, indices.size(), 3):
+			var a: Vector2 = points[indices[j]]
+			var b: Vector2 = points[indices[j + 1]]
+			var c: Vector2 = points[indices[j + 2]]
+			
+			# Area of triangle
+			var area: float = TerrainUtils.calculate_triangle_area(a, b, c)
+			if area <= min_area:
+				continue
+			
+			# Compute centroid to subdivide the triangle further but give it a deviation so that it isn't always the same
+			var offset_centroid: Vector2 = _offset_centroid(a, b, c)
+			points.append(offset_centroid)
+		
+		# We are done
+		if last_point_count == points.size():
+			break
+
+	assert(indices.size() > 0, "body(%s-%s) - shatter: didn't exit out on delaunay failure!" % [name, get_parent().name])
+
+	# Now that we have points and indices we can combine some adjacent triangles to make the chunks bigger
+	var adjacent_indices: Array[PackedInt32Array] = TerrainUtils.get_all_adjacent_polygons(indices)
+	var final_points: Array[PackedVector2Array] = []
+
+	var added_points: Dictionary = {}
+
+	for i in range(adjacent_indices.size()):
+		var triangle_indices: PackedInt32Array = adjacent_indices[i]
+		var triangle_points: PackedVector2Array = []
+		var combined_area: float = 0.0
+		
+		for j in range(0, triangle_indices.size(), 3):
+			var first_index: int = triangle_indices[j]
+			if added_points.has(first_index):
+				# Already accounted for the triangle and not just its adjacent neighbor
+				if j == 0:
+					break
+				else:
+					continue
+			var a: Vector2 = points[first_index]
+			var b: Vector2 = points[triangle_indices[j + 1]]
+			var c: Vector2 = points[triangle_indices[j + 2]]
+
+			var area: float = TerrainUtils.calculate_triangle_area(a, b, c)
+			combined_area += area
+			if j == 0 or combined_area < min_area:
+				triangle_points.append(a)
+				triangle_points.append(b)
+				triangle_points.append(c)
+				added_points[first_index] = true
+			else:
+				break
+		
+		if not triangle_points.is_empty():
+			final_points.append(triangle_points)
+
+	# Now we have the points and just need to turn them into polygons
+	var poly_points_list: Array[PackedVector2Array] = [] 
+	for i in range(final_points.size()):
+		var poly_points: PackedVector2Array = _points_to_poly(final_points[i])
+		if not poly_points.is_empty():
+			poly_points_list.append(poly_points)
+
+	return poly_points_list
+
+
+## As a good approximation when using delaunay triangulation, we can offset by 0.5 length of shortest edge and then if point is outside triangle, then 
+## try one more time divided again by 2 and then if again outside, then just use the original centroid
+func _offset_centroid(p1: Vector2, p2: Vector2, p3: Vector2) -> Vector2:
+	var centroid : Vector2 = TerrainUtils.triangle_centroid(p1, p2, p3)
+
+	var min_dist: float = p1.distance_squared_to(p2)
+	min_dist = minf(min_dist, p1.distance_squared_to(p3))
+	min_dist = minf(min_dist, p2.distance_squared_to(p3))
+	min_dist = sqrt(min_dist)
+
+	var points: PackedVector2Array = [p1, p2, p3]
+	var offset: float = min_dist * 0.5
+
+	for i in range(2):
+		var rand_dir: Vector2 = Vector2(randf(), randf()).normalized()
+		var offset_point: Vector2 = centroid + rand_dir * offset
+		if Geometry2D.is_point_in_polygon(offset_point, points):
+			return offset_point
+
+		offset *= 0.5
+	
+	print_debug("body(%s-%s) - shatter: Could not find offset centroid" % [name, get_parent().name])
+	TerrainUtils.print_poly("DestructiblePolyOperations(%s) - _offset_centroid(INVALID):" % [name], points)
+	return centroid
+
+func _points_to_poly(points: PackedVector2Array) -> PackedVector2Array:
+	# Use a convex hull to create polygon from points
+	return Geometry2D.convex_hull(points)

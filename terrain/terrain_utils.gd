@@ -3,15 +3,36 @@ class_name TerrainUtils
 static func largest_poly_first(a: PackedVector2Array, b: PackedVector2Array) -> bool:
 	return a.size() > b.size()
 
-# Calculate the area of a triangle using the Shoelace formula
-static func calculate_triangle_area(p1: Vector2, p2: Vector2, p3: Vector2) -> float:
-	var area = 0.5 * abs(
-		p1.x * (p2.y - p3.y) +
-		p2.x * (p3.y - p1.y) +
-		p3.x * (p1.y - p2.y)
-	)
-	return area
+
+static func triangle_centroid(p1: Vector2, p2: Vector2, p3: Vector2) -> Vector2:
+	return (p1 + p2 + p3) / 3.0
+
+static func calculate_barycentric_coordinates(p: Vector2, v1: Vector2, v2: Vector2, v3: Vector2) -> PackedFloat64Array:
+	var area_abc: float = calculate_triangle_area(v1, v2, v3)
+
+	if is_zero_approx(area_abc):
+		push_warning("calculate_barycentric_coordinates: triangle (v1,v2,v3) is degenerate - returning empty array")
+		return []
+
+	var area_pbc: float = calculate_triangle_area(p, v2, v3)
+	var area_pca: float = calculate_triangle_area(p, v3, v1)
+	var area_pab:float = calculate_triangle_area(p, v1, v2)
 	
+	var w1 := area_pbc / area_abc
+	var w2 := area_pca / area_abc
+	var w3 := area_pab / area_abc
+	
+	return [w1, w2, w3]
+
+static func calculate_triangle_area(p1: Vector2, p2: Vector2, p3: Vector2) -> float:
+	return absf(calculate_signed_triangle_area(p1, p2, p3))
+	
+static func is_clockwise_triangle_order(p1: Vector2, p2: Vector2, p3: Vector2) -> bool:
+	return (p2 - p1).cross(p3 - p1) < 0.0
+
+static func calculate_signed_triangle_area(p1: Vector2, p2: Vector2, p3: Vector2) -> float:
+	return 0.5 * (p2 - p1).cross(p3 - p1)
+
 # Calculate the area of a polygon using the Shoelace formula
 static func calculate_polygon_area(polygon: PackedVector2Array) -> float:
 	var area = 0.0
@@ -22,9 +43,26 @@ static func calculate_polygon_area(polygon: PackedVector2Array) -> float:
 		area += polygon[i].x * polygon[j].y
 		area -= polygon[j].x * polygon[i].y
 	
-	area = abs(area) * 0.5
+	area = absf(area) * 0.5
 	return area
 
+static func get_polygon_bounds(polygon: PackedVector2Array) -> Rect2:
+	if polygon.size() < 3:
+		return Rect2()
+
+	var min_x: float = polygon[0].x
+	var min_y: float = polygon[0].y
+	var max_x: float = min_x
+	var max_y: float = min_y
+	
+	for vertex in polygon:
+		min_x = minf(min_x, vertex.x)
+		min_y = minf(min_y, vertex.y)
+		max_x = maxf(max_x, vertex.x)
+		max_y = maxf(max_y, vertex.y)
+	
+	return Rect2(Vector2(min_x, min_y), Vector2(max_x - min_x, max_y - min_y))
+	
 # Triangulate always produces counter clockwise triangles so can simplify the checks
 
 static func is_adjacent_triangle(i00: int, i01: int, i02: int, i10: int, i11: int, i12: int) -> bool:
