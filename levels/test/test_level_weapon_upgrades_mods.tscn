@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dcodor2ac45dx"]
+[gd_scene load_steps=34 format=3 uid="uid://dcodor2ac45dx"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_15hwa"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_b4uer"]
@@ -17,10 +17,178 @@ value = 3.0
 [sub_resource type="Resource" id="Resource_5s45w"]
 script = ExtResource("6_vhdtx")
 projectile_mods = Array[ExtResource("7_pm7vn")]([SubResource("Resource_o1gw1")])
-target_weapon_name = ""
 property = 9
 operation = 0
 value = 1.35
+target_weapon_name = ""
+
+[sub_resource type="Resource" id="Resource_r3usa"]
+script = ExtResource("6_vhdtx")
+projectile_mods = Array[ExtResource("7_pm7vn")]([])
+property = 1
+operation = 0
+value = 3.0
+target_weapon_name = ""
+
+[sub_resource type="Resource" id="Resource_iv45d"]
+script = ExtResource("6_vhdtx")
+projectile_mods = Array[ExtResource("7_pm7vn")]([])
+property = 0
+operation = 0
+value = 3.0
+target_weapon_name = ""
+
+[sub_resource type="Resource" id="Resource_q1fvi"]
+script = ExtResource("6_vhdtx")
+projectile_mods = Array[ExtResource("7_pm7vn")]([])
+property = 11
+operation = 5
+value = 1.0
+target_weapon_name = ""
+
+[sub_resource type="Resource" id="Resource_ol5be"]
+script = ExtResource("7_pm7vn")
+property = 1
+operation = 0
+value = 0.5
+
+[sub_resource type="Resource" id="Resource_bv1gr"]
+script = ExtResource("7_pm7vn")
+property = 2
+operation = 0
+value = 2.0
+
+[sub_resource type="Resource" id="Resource_chpj8"]
+script = ExtResource("6_vhdtx")
+projectile_mods = Array[ExtResource("7_pm7vn")]([SubResource("Resource_ol5be"), SubResource("Resource_bv1gr")])
+property = 5
+operation = 0
+value = 2.0
+target_weapon_name = ""
+
+[sub_resource type="Resource" id="Resource_0l7vj"]
+script = ExtResource("7_pm7vn")
+property = 4
+operation = 0
+value = 10.0
+
+[sub_resource type="Resource" id="Resource_jmfpd"]
+script = ExtResource("7_pm7vn")
+property = 3
+operation = 5
+value = 0.0
+
+[sub_resource type="Resource" id="Resource_f4wpa"]
+script = ExtResource("7_pm7vn")
+property = 5
+operation = 3
+value = 2.0
+
+[sub_resource type="Resource" id="Resource_vrrd8"]
+script = ExtResource("6_vhdtx")
+projectile_mods = Array[ExtResource("7_pm7vn")]([SubResource("Resource_0l7vj"), SubResource("Resource_jmfpd"), SubResource("Resource_f4wpa")])
+property = 0
+operation = 0
+value = 3.0
+target_weapon_name = ""
+
+[sub_resource type="Resource" id="Resource_d5qvi"]
+script = ExtResource("7_pm7vn")
+property = 1
+operation = 0
+value = 0.75
+
+[sub_resource type="Resource" id="Resource_aln8v"]
+script = ExtResource("6_vhdtx")
+projectile_mods = Array[ExtResource("7_pm7vn")]([SubResource("Resource_d5qvi")])
+property = 1
+operation = 3
+value = 2.0
+target_weapon_name = ""
+
+[sub_resource type="Resource" id="Resource_biscp"]
+script = ExtResource("7_pm7vn")
+property = 1
+operation = 0
+value = 0.75
+
+[sub_resource type="Resource" id="Resource_qk1fn"]
+script = ExtResource("6_vhdtx")
+projectile_mods = Array[ExtResource("7_pm7vn")]([SubResource("Resource_biscp")])
+property = 1
+operation = 0
+value = 2.0
+target_weapon_name = ""
+
+[sub_resource type="Resource" id="Resource_j8wbp"]
+script = ExtResource("6_vhdtx")
+projectile_mods = Array[ExtResource("7_pm7vn")]([])
+property = 1
+operation = 1
+value = 1.0
+target_weapon_name = ""
+
+[sub_resource type="Resource" id="Resource_kaakm"]
+script = ExtResource("7_pm7vn")
+property = 0
+operation = 0
+value = 0.9
+
+[sub_resource type="Resource" id="Resource_6w7aj"]
+script = ExtResource("7_pm7vn")
+property = 1
+operation = 0
+value = 0.9
+
+[sub_resource type="Resource" id="Resource_runjq"]
+script = ExtResource("7_pm7vn")
+property = 2
+operation = 0
+value = 0.9
+
+[sub_resource type="Resource" id="Resource_uu3pv"]
+script = ExtResource("6_vhdtx")
+projectile_mods = Array[ExtResource("7_pm7vn")]([SubResource("Resource_kaakm"), SubResource("Resource_6w7aj"), SubResource("Resource_runjq")])
+property = 11
+operation = 5
+value = 1.0
+target_weapon_name = ""
+
+[sub_resource type="Resource" id="Resource_uxsfy"]
+script = ExtResource("6_vhdtx")
+projectile_mods = Array[ExtResource("7_pm7vn")]([])
+property = 2
+operation = 3
+value = 5.0
+target_weapon_name = ""
+
+[sub_resource type="Resource" id="Resource_n64nw"]
+script = ExtResource("6_vhdtx")
+projectile_mods = Array[ExtResource("7_pm7vn")]([])
+property = 12
+operation = 4
+value = 1.0
+target_weapon_name = ""
+
+[sub_resource type="Resource" id="Resource_c7fdi"]
+script = ExtResource("7_pm7vn")
+property = 1
+operation = 0
+value = 0.1
+
+[sub_resource type="Resource" id="Resource_4i8op"]
+script = ExtResource("7_pm7vn")
+property = 2
+operation = 0
+value = 0.5
+
+[sub_resource type="Resource" id="Resource_gr7kh"]
+script = ExtResource("6_vhdtx")
+projectile_mods = Array[ExtResource("7_pm7vn")]([SubResource("Resource_c7fdi"), SubResource("Resource_4i8op")])
+property = 5
+operation = 3
+value = 6.0
+target_weapon_name = ""
 
 [node name="TestLevel01" type="Node2D"]
 
@@ -55,6 +223,27 @@ position = Vector2(120, 427)
 
 [node name="WeaponLeadBall" parent="GameLevel/Player/Weapons" index="0"]
 weapon_mods = Array[ExtResource("6_vhdtx")]([SubResource("Resource_5s45w")])
+
+[node name="WeaponLeadballBurst" parent="GameLevel/Player/Weapons" index="1"]
+weapon_mods = Array[ExtResource("6_vhdtx")]([SubResource("Resource_r3usa"), SubResource("Resource_iv45d"), SubResource("Resource_q1fvi"), SubResource("Resource_chpj8")])
+
+[node name="WeaponLeadballShotgun" parent="GameLevel/Player/Weapons" index="2"]
+weapon_mods = Array[ExtResource("6_vhdtx")]([SubResource("Resource_vrrd8")])
+
+[node name="WeaponKilonuke" parent="GameLevel/Player/Weapons" index="3"]
+weapon_mods = Array[ExtResource("6_vhdtx")]([SubResource("Resource_aln8v")])
+
+[node name="WeaponMeganuke" parent="GameLevel/Player/Weapons" index="4"]
+weapon_mods = Array[ExtResource("6_vhdtx")]([SubResource("Resource_qk1fn")])
+
+[node name="WeaponDeployableMIRV" parent="GameLevel/Player/Weapons" index="5"]
+weapon_mods = Array[ExtResource("6_vhdtx")]([SubResource("Resource_j8wbp")])
+
+[node name="WeaponMissile" parent="GameLevel/Player/Weapons" index="6"]
+weapon_mods = Array[ExtResource("6_vhdtx")]([SubResource("Resource_uu3pv")])
+
+[node name="WeaponMissileHoming" parent="GameLevel/Player/Weapons" index="7"]
+weapon_mods = Array[ExtResource("6_vhdtx")]([SubResource("Resource_uxsfy"), SubResource("Resource_n64nw"), SubResource("Resource_gr7kh")])
 
 [editable path="GameLevel/Enemy1"]
 [editable path="GameLevel/Enemy2"]

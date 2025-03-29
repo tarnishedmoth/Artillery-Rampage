@@ -1,8 +1,9 @@
 class_name ModWeapon extends Resource
 
 ## Class for upgrading/modifying Weapon properties at runtime.
+
+## Passed to the Weapon to be applied on [method Weapon.shoot]
 @export var projectile_mods:Array[ModProjectile]
-@export var target_weapon_name:String
 
 enum Operations {
 	MULTIPLY,
@@ -32,9 +33,13 @@ enum Modifiables {
 
 @export var property: Modifiables ## Which property of the Weapon to modify.
 @export var operation: Operations ## What operation to perform on the property value.
-@export var value:float ## Int or Float. Not used if Operation is SET_TRUE or SET_FALSE.
+@export var value:float = 1.0 ## Int or Float. Not used if Operation is SET_TRUE or SET_FALSE.
+
+## Can be used to retain mods across matches and reapply them.
+@export_placeholder("Only needs set if not attached to weapon.") var target_weapon_name:String
 
 func modify_weapon(weapon: Weapon) -> void:
+	target_weapon_name = weapon.display_name # keep track
 	var property_string:String = get_property_key(property)
 	var current_value = weapon.get(property_string) # This could be float, int, or bool
 	var new_value = current_value # Should set the type??
