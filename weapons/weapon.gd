@@ -23,8 +23,10 @@ var parent_tank: Tank
 @export var projectile_mods: Array[ModProjectile]
 
 @export_group("Behavior")
-@export_range(-360,360,0.0001,"radians_as_degrees") var accuracy_angle_spread: float = 0.0 ## Radians.
-@export var fire_velocity: float = 100.0 ## Initial speed of the projectile.
+@export_range(-360,360,0.0001,"radians_as_degrees") var accuracy_angle_spread: float = 0.0 ## Accuracy of projectiles fired.
+## Default used if not given one by the shooter.
+## [br]The Player and AI for example choose their power and pass it to the [method shoot] function.
+@export var fire_velocity: float = 100.0 # don't change this variable name
 @export_range(0.01, 10.0, 0.01) var power_launch_speed_mult: float = 1.0 ## Tune the initial velocity given the power
 @export var fires_continuously: bool = false ## Continuous-fire weapons don't use fire rate.
 @export var use_fire_rate: bool = false ## Prevents shooting while cycling.
