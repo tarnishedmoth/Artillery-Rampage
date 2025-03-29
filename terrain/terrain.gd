@@ -46,9 +46,11 @@ func get_first_chunk() -> TerrainChunk:
 
 # TODO: Think projectile_poly should be a property of the WeaponProjectile and then can call .get_projectile_poly_global to
 # get the randomized damage polygon	
-func damage(terrainChunk: TerrainChunk, projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1,1)):
-	
+func damage(terrainChunk: TerrainChunk, projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
+	print_debug("%s - chunk=%s damaged by %s with poly_scale=%s" % [name, terrainChunk.name, projectile.name, poly_scale])
+
 	#print("Clipping terrain with polygon:", projectile_poly.polygon)
+	var projectile_poly: CollisionPolygon2D = projectile.get_destructible_component()
 	var projectile_poly_global: PackedVector2Array = _destructible_shape_calculator.get_projectile_poly_global(projectile_poly, poly_scale)
 	
 	# Transform terrain polygon to world space

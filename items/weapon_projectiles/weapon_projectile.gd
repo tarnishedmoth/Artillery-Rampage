@@ -109,6 +109,9 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	else:
 		current_collision = null
 
+func get_destructible_component() -> CollisionPolygon2D:
+	return destructible_component
+
 func on_body_entered(_body: Node2D):
 	# Need to do a sweep to see all the things we have influenced
 	# Need to be sure not to "double-damage" things both from influence and from direct hit
@@ -136,8 +139,8 @@ func on_body_entered(_body: Node2D):
 		if destructible_component:
 			root_node = Groups.get_parent_in_group(node, Groups.Destructible)
 			if root_node and root_node not in destructed_processed_set:
-				center_destructible_on_impact_point(destructible_component)
-				root_node.damage(destructible_component, destructible_scale_multiplier)
+				var contact_point: Vector2 = center_destructible_on_impact_point(destructible_component)
+				root_node.damage(self, contact_point, destructible_scale_multiplier)
 				had_interaction = true
 				destructed_processed_set[root_node] = root_node
 	# end for
@@ -156,7 +159,7 @@ func on_body_entered(_body: Node2D):
 	if calculated_hit:
 		destroy()
 		
-func center_destructible_on_impact_point(destructible: CollisionPolygon2D) -> void:
+func center_destructible_on_impact_point(destructible: CollisionPolygon2D) -> Vector2:
 	var destructible_polygon: PackedVector2Array = destructible.polygon
 	# Get velocity vector direction to determine translation direction
 	var movement_dir : Vector2 = last_recorded_linear_velocity.normalized()
@@ -169,6 +172,8 @@ func center_destructible_on_impact_point(destructible: CollisionPolygon2D) -> vo
 	
 	for i in range(destructible_polygon.size()):
 		destructible_polygon[i] += translation
+	
+	return contact_point
 
 func destroy():
 	#GameEvents.emit_turn_ended(owner_tank.owner) ## Moved to Weapon class.

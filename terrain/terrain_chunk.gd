@@ -146,8 +146,8 @@ func delete() -> void:
 	
 # Based on https://www.youtube.com/watch?v=FiKsyOLacwA
 # poly_scale will determine the size of the explosion that destroys the terrain
-func damage(projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1,1)):
-	owner.damage(self, projectile_poly, poly_scale)
+func damage(projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
+	owner.damage(self, projectile, contact_point, poly_scale)
 
 func is_surface_point(vertex: Vector2) -> bool:
 	var test_point: Vector2 = vertex + Vector2(0, surface_delta_y)

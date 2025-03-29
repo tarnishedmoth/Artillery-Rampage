@@ -14,11 +14,12 @@ func _ready() -> void:
 	
 	for body in _body_container.get_children():
 		body.owner = self		
-	
-func damage(body: ShatterableObjectBody, projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1,1)):
-	print_debug("%s - body=%s damaged by %s with poly_scale=%s" % [name, body.name, projectile_poly.name, poly_scale])
+
+func damage(body: ShatterableObjectBody, projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
+	print_debug("%s - body=%s damaged by %s with poly_scale=%s" % [name, body.name, projectile.name, poly_scale])
 	
 	# TODO: Cache this for given frame and event
+	var projectile_poly: CollisionPolygon2D = projectile.get_destructible_component()
 	var projectile_poly_global: PackedVector2Array = _destructible_shape_calculator.get_projectile_poly_global(projectile_poly, poly_scale)
 	
 	#var additional_pieces: Array[Node2D] = []
@@ -26,12 +27,11 @@ func damage(body: ShatterableObjectBody, projectile_poly: CollisionPolygon2D, po
 		#if is_instance_valid(body) and body is ShatterableObjectBody:
 			#additional_pieces.append_array(body.shatter(self, destructible_poly_global))
 	
-	var additional_pieces: Array[Node2D] = body.shatter(projectile_poly_global)
+	var additional_pieces: Array[Node2D] = body.shatter(projectile, projectile_poly_global)
 	for new_body in additional_pieces:
 		_body_container.add_child(new_body)
 		
 	# TODO: Maybe apply a physics force to remaining bodies close to the projectile_poly_global that weren't directly damaged
-
 	
 func delete() -> void:
 	print("ShatterableObject(%s) - delete" % [name])

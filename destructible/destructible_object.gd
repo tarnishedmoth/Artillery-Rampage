@@ -49,9 +49,10 @@ func get_chunk_count() -> int:
 			count += 1
 	return count
 
-func damage(chunk: DestructibleObjectChunk, projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1,1)):
-	print_debug("%s - chunk=%s damaged by %s with poly_scale=%s" % [name, chunk.name, projectile_poly.name, poly_scale])
+func damage(chunk: DestructibleObjectChunk, projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
+	print_debug("%s - chunk=%s damaged by %s with poly_scale=%s" % [name, chunk.name, projectile.name, poly_scale])
 	
+	var projectile_poly: CollisionPolygon2D = projectile.get_destructible_component()
 	var projectile_poly_global: PackedVector2Array = _destructible_shape_calculator.get_projectile_poly_global(projectile_poly, poly_scale)
 	
 	# Transform terrain polygon to world space

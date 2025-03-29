@@ -31,8 +31,8 @@ func _ready() -> void:
 	_set_initial_mass_and_density()
 	_request_sync_polygons()
 
-func damage(projectile_poly: CollisionPolygon2D, poly_scale: Vector2 = Vector2(1,1)):
-	owner.damage(self, projectile_poly, poly_scale)
+func damage(projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
+	owner.damage(self, projectile, contact_point, poly_scale)
 
 # TODO: Collision will never update if set use_mesh_as_collision to false so maybe remove this option	
 func _request_sync_polygons() -> void:
