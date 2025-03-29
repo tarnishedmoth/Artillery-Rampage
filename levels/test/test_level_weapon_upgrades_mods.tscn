@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dcodor2ac45dx"]
+[gd_scene load_steps=10 format=3 uid="uid://dcodor2ac45dx"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_15hwa"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_b4uer"]
@@ -6,18 +6,21 @@
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="4_igqu3"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="5_xjt6c"]
 [ext_resource type="Script" path="res://weapons/mod_weapon.gd" id="6_vhdtx"]
+[ext_resource type="Script" path="res://items/weapon_projectiles/mod_projectile.gd" id="7_pm7vn"]
 
-[sub_resource type="Resource" id="Resource_p6mtg"]
+[sub_resource type="Resource" id="Resource_o1gw1"]
+script = ExtResource("7_pm7vn")
+property = 2
+operation = 0
+value = 3.0
+
+[sub_resource type="Resource" id="Resource_5s45w"]
 script = ExtResource("6_vhdtx")
+projectile_mods = Array[ExtResource("7_pm7vn")]([SubResource("Resource_o1gw1")])
+target_weapon_name = ""
 property = 9
 operation = 0
-value = 1.5
-
-[sub_resource type="Resource" id="Resource_3bwyq"]
-script = ExtResource("6_vhdtx")
-property = 1
-operation = 3
-value = 2.0
+value = 1.35
 
 [node name="TestLevel01" type="Node2D"]
 
@@ -51,7 +54,7 @@ position = Vector2(934, 407)
 position = Vector2(120, 427)
 
 [node name="WeaponLeadBall" parent="GameLevel/Player/Weapons" index="0"]
-upgrades = Array[ExtResource("6_vhdtx")]([SubResource("Resource_p6mtg"), SubResource("Resource_3bwyq")])
+weapon_mods = Array[ExtResource("6_vhdtx")]([SubResource("Resource_5s45w")])
 
 [editable path="GameLevel/Enemy1"]
 [editable path="GameLevel/Enemy2"]

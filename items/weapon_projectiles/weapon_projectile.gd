@@ -305,6 +305,6 @@ func apply_all_mods(mods: Array[ModProjectile] = upgrades) -> void:
 	for mod in mods:
 		mod.modify_projectile(self)
 		
-func apply_mod(mod: ModProjectile) -> void:
+func apply_new_mod(mod: ModProjectile) -> void:
 	upgrades.append(mod)
 	mod.modify_projectile(self)

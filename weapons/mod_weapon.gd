@@ -71,7 +71,8 @@ func modify_weapon(weapon: Weapon) -> void:
 	weapon.set(property_string, new_value)
 	
 	if not projectile_mods.is_empty():
-		weapon.projectile_mods = projectile_mods
+		for mod in projectile_mods:
+			weapon.apply_new_mod(mod)
 
 func get_property_key(modifiable: Modifiables) -> String:
 	var text_representation:String = Modifiables.find_key(modifiable)

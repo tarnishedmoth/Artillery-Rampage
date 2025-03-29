@@ -15,12 +15,12 @@ signal magazines_changed(current_magazines:int)
 var parent_tank: Tank
 @export var display_name: String: ## Used by HUD/UI
 	get:
-		if not mods.is_empty():
+		if not weapon_mods.is_empty():
 			return str(display_name + ": Modified")
 		else: return display_name
 
-@export var mods: Array[ModWeapon] ## For upgrades and nerfs at runtime
-@export var projectile_mods: Array[ModProjectile]
+@export var weapon_mods: Array[ModWeapon] ## For upgrades and nerfs at runtime
+var projectile_mods: Array[ModProjectile] ## Applied to the projectile when fired.
 
 @export_group("Behavior")
 @export_range(-360,360,0.0001,"radians_as_degrees") var accuracy_angle_spread: float = 0.0 ## Accuracy of projectiles fired.
@@ -199,13 +199,16 @@ func configure_barrels() -> void:
 			add_child(new_fire_sfx)
 			barrels_sfx_fire.append(new_fire_sfx)
 			
-func apply_all_mods(mods: Array[ModWeapon] = mods) -> void:
+func apply_all_mods(mods: Array[ModWeapon] = weapon_mods) -> void:
 	for mod in mods:
 		mod.modify_weapon(self)
 		
-func apply_mod(mod: ModWeapon) -> void:
-	mods.append(mod)
-	mod.modify_weapon(self)
+func apply_new_mod(mod) -> void:
+	if mod is ModWeapon:
+		weapon_mods.append(mod)
+		mod.modify_weapon(self)
+	elif mod is ModProjectile:
+		projectile_mods.append(mod)
 
 func stop_all_sounds(_only_looping: bool = true) -> void: # TODO args
 	for s: AudioStreamPlayer2D in sounds:
