@@ -14,7 +14,11 @@ signal tank_took_damage(
 @export var min_angle:float = -90
 @export var max_angle:float = 90
 
-@export var weapon_max_power_health_mult:float = 10
+## Weapon power output is decreased when health isn't full.
+## @deprecated: Use [member weapon_max_power_range] instead
+@export var weapon_max_power_health_mult:float = 10 # Didn't comment out in case there are scenes with modified export property values
+## When [method _update_max_power] is called, [member max_power] is linearly interpolated using ([member health]/[member max_health]) as delta.
+@export var weapon_max_power_range:Vector2 = Vector2(300.0,1000.0)
 @export var max_health:float = 100
 @export var ground_trace_distance:float = 1000
 
@@ -154,7 +158,9 @@ func get_turret_rotation() -> float:
 	return turret.rotation
 	
 func _update_max_power():
-	max_power = health * weapon_max_power_health_mult
+	#max_power = health * weapon_max_power_health_mult
+	var health_delta = clampf(health / max_health, 0.01, 1.0)
+	max_power = lerpf(weapon_max_power_range.x, weapon_max_power_range.y, health_delta)
 	power = minf(power, max_power)
 #endregion
 	
