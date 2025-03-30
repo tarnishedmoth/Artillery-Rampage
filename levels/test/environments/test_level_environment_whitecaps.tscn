@@ -38,14 +38,6 @@ fractal_weighted_strength = 0.5
 [node name="UI_Game_SFX" parent="GameLevel/UI" index="2"]
 soundtrack_file = ExtResource("2_2r3lq")
 
-[node name="StaticBackground" type="Sprite2D" parent="GameLevel"]
-z_index = -98
-texture_filter = 2
-scale = Vector2(0.68, 0.68)
-texture = ExtResource("3_a2cra")
-centered = false
-offset = Vector2(-4, -214.915)
-
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
 texture_resources = Array[ExtResource("2_qth8w")]([SubResource("Resource_yxvgw")])
 
@@ -57,14 +49,22 @@ noise_template = SubResource("FastNoiseLite_iuf40")
 additional_vertices = 84
 max_height_clearance = 115.0
 
-[node name="Floor" parent="GameLevel" index="6"]
+[node name="Floor" parent="GameLevel" index="5"]
 visible = false
 
-[node name="ArtillerySpawner" parent="GameLevel" index="9"]
+[node name="ArtillerySpawner" parent="GameLevel" index="8"]
 artillery_ai_types = Array[PackedScene]([ExtResource("3_lov0y"), ExtResource("4_n4c4h"), ExtResource("5_sb62s"), ExtResource("6_pm32d"), ExtResource("7_3dhxr"), ExtResource("8_ea3ao"), ExtResource("9_wirxa"), ExtResource("10_i8u8w")])
 default_ai_players = Vector2i(1, 4)
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
+
+[node name="StaticBackground" type="Sprite2D" parent="GameLevel"]
+z_index = -98
+texture_filter = 2
+scale = Vector2(0.68, 0.68)
+texture = ExtResource("3_a2cra")
+centered = false
+offset = Vector2(-4, -214.915)
 
 [editable path="GameLevel"]
 [editable path="GameLevel/Terrain"]

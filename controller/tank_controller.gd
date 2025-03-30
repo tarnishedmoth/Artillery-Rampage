@@ -9,6 +9,11 @@ signal intent_to_act(action: Callable, owner: Object)
 ## Set player state that has been loaded from previous round
 var pending_state: PlayerState
 
+## identifier for team that this player is on 
+## If not on a team, then -1 is used
+## AI units will not attack those on the same team
+@export var team:int = -1
+
 func _ready() -> void:
 	GameEvents.connect("turn_ended", _on_turn_ended)
 	GameEvents.connect("turn_started", _on_turn_started)
@@ -19,6 +24,11 @@ func _ready() -> void:
 		print_debug("TankController(%s) - _ready: Disable fall damage before first turn" % [name])
 		tank.enable_fall_damage = false
 
+func is_on_same_team_as(other: TankController) -> bool:
+	if team < 0:
+		return false
+	return team == other.team
+	
 func begin_round() -> void:
 	if pending_state:
 		print_debug("TankController(%s) - _ready: Applying pending state" % [name])
