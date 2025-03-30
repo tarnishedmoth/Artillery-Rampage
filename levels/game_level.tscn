@@ -36,6 +36,7 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="PauseMenu" parent="UI" instance=ExtResource("3_272d0")]
+visible = false
 
 [node name="UI_Game_SFX" parent="UI" instance=ExtResource("4_mib3t")]
 
