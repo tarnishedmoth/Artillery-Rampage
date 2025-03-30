@@ -3,7 +3,6 @@ class_name TerrainUtils
 static func largest_poly_first(a: PackedVector2Array, b: PackedVector2Array) -> bool:
 	return a.size() > b.size()
 
-
 static func triangle_centroid(p1: Vector2, p2: Vector2, p3: Vector2) -> Vector2:
 	return (p1 + p2 + p3) / 3.0
 
@@ -23,6 +22,28 @@ static func calculate_barycentric_coordinates(p: Vector2, v1: Vector2, v2: Vecto
 	var w3 := area_pab / area_abc
 	
 	return [w1, w2, w3]
+
+## Convert from barycentric coordinates to Cartesian coordinates
+static func barycentric_to_cartesian(w1: float, w2: float, w3: float, v1: Vector2, v2: Vector2, v3: Vector2) -> Vector2:
+	return (w1 * v1) + (w2 * v2) + (w3 * v3)
+
+static func is_inside_triange_barycentric(w1: float, w2: float, w3: float) -> bool:
+	return w1 > 0.0 and w2 > 0.0 and w3 > 0.0 and absf(w1 + w2 + w3 - 1.0) < 1e6
+
+## Calculates the distance from [param point] to the edge defined by [param p1] and [ param p2].
+static func point_to_edge_distance(point: Vector2, p1: Vector2, p2: Vector2) -> float:
+	var edge:Vector2 = p2 - p1           
+	var to_point:Vector2 = point - p1
+	# Find the signed perpendicular distance from the point to the edge using cross product
+	var cross_product:float = edge.cross(to_point)
+	return absf(cross_product) / edge.length()
+	
+## Find the shortest distance from a point to a triangle's edges
+static func shortest_point_distance_to_edges(point: Vector2, p1: Vector2, p2: Vector2, p3: Vector2) -> float:
+	var d1 := point_to_edge_distance(point, p1, p2)
+	var d2 := point_to_edge_distance(point, p2, p3)
+	var d3 := point_to_edge_distance(point, p3, p1)
+	return min(d1, d2, d3)
 
 static func calculate_triangle_area(p1: Vector2, p2: Vector2, p3: Vector2) -> float:
 	return absf(calculate_signed_triangle_area(p1, p2, p3))

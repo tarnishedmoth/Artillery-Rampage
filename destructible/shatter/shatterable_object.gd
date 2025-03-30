@@ -22,11 +22,6 @@ func damage(body: ShatterableObjectBody, projectile: WeaponProjectile, contact_p
 	var projectile_poly: CollisionPolygon2D = projectile.get_destructible_component()
 	var projectile_poly_global: PackedVector2Array = _destructible_shape_calculator.get_projectile_poly_global(projectile_poly, poly_scale)
 	
-	#var additional_pieces: Array[Node2D] = []
-	#for body in _body_container.get_children():
-		#if is_instance_valid(body) and body is ShatterableObjectBody:
-			#additional_pieces.append_array(body.shatter(self, destructible_poly_global))
-	
 	var additional_pieces: Array[Node2D] = body.shatter(projectile, projectile_poly_global)
 	for new_body in additional_pieces:
 		_body_container.call_deferred("add_child", new_body)
