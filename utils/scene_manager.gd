@@ -64,7 +64,8 @@ func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 			await next_level(delay)
 	
 func switch_scene(scene: PackedScene, delay: float = default_delay) -> void:
-	print_debug("switch_scene: %s, delay=%f" % [scene.name, delay])
+	var display_name = str(scene)
+	print_debug("switch_scene: %s, delay=%f" % [display_name, delay])
 	await _switch_scene(func(): get_tree().change_scene_to_packed(scene), delay)
 	
 func switch_scene_file(scene: String, delay: float = default_delay) -> void:
