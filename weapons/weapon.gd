@@ -25,8 +25,9 @@ var projectile_mods: Array[ModProjectile] ## Applied to the projectile when fire
 @export_group("Behavior")
 @export_range(-360,360,0.0001,"radians_as_degrees") var accuracy_angle_spread: float = 0.0 ## Accuracy of projectiles fired.
 ## Default used if not given one by the shooter.
+## @deprecated: use [member power_launch_speed_mult] instead for tweaking relative projectile launch speed.
 ## [br]The Player and AI for example choose their power and pass it to the [method shoot] function.
-@export var fire_velocity: float = 100.0 # don't change this variable name
+@export var fire_velocity: float = 100.0
 @export_range(0.01, 10.0, 0.01,"or_greater","or_less") var power_launch_speed_mult: float = 1.00 ## Tune the initial velocity given the power
 @export var fires_continuously: bool = false ## Continuous-fire weapons don't use fire rate.
 @export var use_fire_rate: bool = false ## Prevents shooting while cycling.

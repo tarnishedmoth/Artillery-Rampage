@@ -23,6 +23,7 @@ signal completed_lifespan ## Tracked by Weapon class
 @export var color: Color = Color.BLACK
 
 @export var max_lifetime: float = 10.0 ## Self destroys once this time has passed.
+@export_range(0,99) var kill_after_turns_elapsed:int = 0 ## If >0, destroys after turns passed.
 @export var explosion_to_spawn:PackedScene
 
 @export var upgrades: Array[ModProjectile] ## For upgrades and nerfs at runtime
@@ -58,6 +59,8 @@ var source_weapon: Weapon # The weapon we came from
 var firing_container
 var destructible_component:CollisionPolygon2D
 
+var _turns_since_spawned:int = 0
+
 # TODO: We can probably combine this with above should_explode_on_impact
 # Removed the Overlap concept as can handle the overlap interaction through the rigid body
 # This also allows us to use continuous collision detection to fix the tunneling problem we see with projectiles going through the terrain
@@ -80,6 +83,9 @@ func _ready() -> void:
 	if has_node('Destructible'):
 		destructible_component = get_node('Destructible')
 	if max_lifetime > 0.0: destroy_after_lifetime()
+	if kill_after_turns_elapsed > 0:
+		GameEvents.turn_ended.connect(_on_turn_ended)
+	
 	modulate = color
 	apply_all_mods() # This may not be desired but it probably is. If the weapon's stats are retained across matches, this could double the effect unintentionally
 	
@@ -299,7 +305,13 @@ func _calculate_point_damage(pos: Vector2) -> float:
 			return max_damage
 			
 func _calculate_dist_frac(dist: float):
-	return  (1.0 - (dist - min_falloff_distance) / (max_falloff_distance - min_falloff_distance))	
+	return  (1.0 - (dist - min_falloff_distance) / (max_falloff_distance - min_falloff_distance))
+	
+func _on_turn_ended() -> void:
+	# Increment turn count
+	_turns_since_spawned += 1
+	if _turns_since_spawned >= kill_after_turns_elapsed:
+		destroy()
 
 func apply_all_mods(mods: Array[ModProjectile] = upgrades) -> void:
 	for mod in mods:
