@@ -1,6 +1,6 @@
 extends PanelContainer
 
-@export_dir var levels_folders_paths: Array[String]
+@export_dir var levels_folders_paths: Array[String] ## This functionality is only available in debug builds.
 @onready var menu_levels_list: VBoxContainer = %Buttons
 @onready var main_menu: VBoxContainer = %MainMenu
 
@@ -38,11 +38,7 @@ func refresh_list(path) -> void:
 		
 		# Get the filenames & directory names we need
 		for directory in levels_folders_paths:
-			items.append(directory)
-			var filepaths = DirAccess.get_files_at(directory)
-			for filepath in filepaths:
-				if filepath.ends_with("tscn"):
-					items.append(filepath)
+			items.append_array(recursive_files_and_folders(directory))
 		
 		# Generate the menu
 		var current_directory:String
@@ -61,6 +57,22 @@ func refresh_list(path) -> void:
 				menu_levels_list.add_child(entry)
 	else:
 		pass # Normal gameplay
+		
+func recursive_files_and_folders(directory) -> Array:
+	var items: Array
+	print(directory)
+	items.append(directory)
+	var filepaths = DirAccess.get_files_at(directory)
+	for filepath in filepaths:
+		print(filepath)
+		if filepath.ends_with("tscn"): # PackedScene
+			items.append(filepath)
+			
+	var subdirectories = DirAccess.get_directories_at(directory)
+	if not subdirectories.is_empty():
+		for sub in subdirectories:
+			items.append_array(recursive_files_and_folders(directory+"/"+sub))
+	return items
 	
 func load_level(level:String) -> void:
 	SceneManager.switch_scene_file(level)
