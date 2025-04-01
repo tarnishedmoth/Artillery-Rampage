@@ -24,6 +24,8 @@ class_name ShatterableObjectBody extends RigidBody2D
 
 @export var min_mass: float = 50
 
+@export var shattered_pieces_should_collide_with_tank: bool = false
+
 var shatter_iteration: int = 0
 
 var _init_poly:PackedVector2Array = []
@@ -32,10 +34,14 @@ var _init_owner: Node
 var density: float = 0.0
 var area: float = 0.0
 
+# Note that should apply the offset position to the root position rather than the mesh position otherwise
+# will get rotation about the body center and this will cause a "hinge" rotation that is probably not desired
+
 func _ready() -> void:
 	if not _init_poly.is_empty():
 		print_debug("%s - initializing from specified poly of size=%d" % [name, _init_poly.size()])
 		_mesh.polygon = _init_poly
+		_recenter_polygon()
 	if _init_owner:
 		owner = _init_owner
 	if is_zero_approx(area):
@@ -54,6 +60,15 @@ func _ready() -> void:
 		timer.wait_time = max_lifetime
 		timer.timeout.connect(delete)
 		add_child(timer)
+
+func _recenter_polygon() -> void:
+	# Should recenter the polygon about its new center of mass (centroid)
+	var centroid: Vector2 = TerrainUtils.polygon_centroid(_mesh.polygon)
+	# We want the centroid to be the rigid body center
+	position = Vector2.ZERO
+	_mesh.position = -centroid
+	center_of_mass_mode = CENTER_OF_MASS_MODE_CUSTOM
+	center_of_mass = Vector2.ZERO
 
 func damage(projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
 	owner.damage(self, projectile, contact_point, poly_scale)
@@ -103,18 +118,20 @@ func _create_body_from_poly(poly: PackedVector2Array, impact_velocity_dir: Vecto
 	new_instance.shatter_iteration = shatter_iteration + 1
 	
 	new_instance.density = density
+	
 	new_instance.position = position
 	new_instance.rotation = rotation
 	new_instance.linear_velocity = _randomize_impact_velocity_dir(impact_velocity_dir) * randf_range(min_body_linear_speed, max_body_linear_speed)
 	new_instance.angular_velocity = deg_to_rad(randf_range(min_body_angular_speed, max_body_angular_speed))
 
-	# Don't have the pieces collide with the tank
-	new_instance.collision_mask &= ~Collisions.Layers.tank
-	
-	# Layers and masks could still match on the tank side so get all the units in group and add instance exception
-	for unit in get_tree().get_nodes_in_group(Groups.Unit):
-		if unit is Tank:
-			unit.tankBody.add_collision_exception_with(new_instance)
+	# Don't have the pieces collide with the tank if configured
+	if not shattered_pieces_should_collide_with_tank and collision_mask & Collisions.Layers.tank:
+		new_instance.collision_mask &= ~Collisions.Layers.tank
+		# Layers and masks could still match on the tank side so get all the units in group and add instance exception
+		for unit in get_tree().get_nodes_in_group(Groups.Unit):
+			if unit is Tank:
+				unit.tankBody.add_collision_exception_with(new_instance)
+				
 	return new_instance
 
 func _randomize_impact_velocity_dir(impact_velocity_dir: Vector2) -> Vector2:
