@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://uaih1d1o2vd7"]
+[gd_scene load_steps=21 format=3 uid="uid://uaih1d1o2vd7"]
 
 [ext_resource type="Script" path="res://levels/game_level.gd" id="1_c8wet"]
 [ext_resource type="Script" path="res://utils/game_timer.gd" id="1_x4c1e"]
@@ -12,11 +12,16 @@
 [ext_resource type="Script" path="res://levels/round/round_director.gd" id="6_fyk6u"]
 [ext_resource type="Script" path="res://background_items/background.gd" id="6_hs6sd"]
 [ext_resource type="PackedScene" uid="uid://bogp8cydgto88" path="res://personnel/pickup_copter.tscn" id="6_jdphu"]
+[ext_resource type="Shader" path="res://background_items/background.gdshader" id="6_y871r"]
 [ext_resource type="PackedScene" uid="uid://d3q2cfp8mqu2x" path="res://tank/artillery_spawner.tscn" id="7_f5i3m"]
 [ext_resource type="PackedScene" uid="uid://boa5a2v0w2ag0" path="res://terrain/floor.tscn" id="8_bp7d6"]
 [ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="10_nmusx"]
 [ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="11_gqklp"]
 [ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="12_xykdc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_chthv"]
+shader = ExtResource("6_y871r")
+shader_parameter/speed = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_60ghs"]
 size = Vector2(1248, 688)
@@ -42,12 +47,15 @@ visible = false
 
 [node name="Background" type="TextureRect" parent="."]
 z_index = -100
+material = SubResource("ShaderMaterial_chthv")
 offset_right = 2048.0
 offset_bottom = 2048.0
 texture = ExtResource("5_8f76g")
 expand_mode = 1
 stretch_mode = 1
 script = ExtResource("6_hs6sd")
+wind_scoll_scale = 2.0
+min_wind_scroll_speed = 2.0
 
 [node name="Terrain" parent="." instance=ExtResource("3_nb1rg")]
 unique_name_in_owner = true
