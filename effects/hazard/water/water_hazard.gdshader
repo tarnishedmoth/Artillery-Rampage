@@ -47,8 +47,8 @@ void fragment() {
 	}
 
 	if(enable_noise) {
-		vec2 uv1 = UV + offset1 * TIME;
-		vec2 uv2 = UV + offset2 * TIME;
+		vec2 uv1 = uv + offset1 * TIME;
+		vec2 uv2 = uv + offset2 * TIME;
 		
 		vec4 noise_color1 = texture(noise_tex1, uv1);
 		vec4 noise_color2 = texture(noise_tex2, uv2);
