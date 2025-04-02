@@ -1,10 +1,24 @@
 class_name TerrainUtils
 
+# TODO: Should refactor some of these generic ones into separate utility class that aren't specific to terrain
+
 static func largest_poly_first(a: PackedVector2Array, b: PackedVector2Array) -> bool:
 	return a.size() > b.size()
 
 static func triangle_centroid(p1: Vector2, p2: Vector2, p3: Vector2) -> Vector2:
 	return (p1 + p2 + p3) / 3.0
+
+static func polygon_centroid(polygon: PackedVector2Array) -> Vector2:
+	if polygon.is_empty():
+		return Vector2()
+		
+	 # Calculate the centroid
+	var sum := Vector2()
+	for point in polygon:
+		sum += point
+	var centroid: Vector2 = sum / polygon.size()
+
+	return centroid
 
 static func calculate_barycentric_coordinates(p: Vector2, v1: Vector2, v2: Vector2, v3: Vector2) -> PackedFloat64Array:
 	var area_abc: float = calculate_triangle_area(v1, v2, v3)

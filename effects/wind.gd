@@ -28,24 +28,34 @@ var force: Vector2:
 	get:
 		return wind * wind_scale
 				
-var _active_projectile: WeaponProjectile
+var _active_projectile_set: Dictionary = {}
 
 func _ready() -> void:
 	wind = Vector2(_randomize_wind(), 0.0)
-	GameEvents.connect("projectile_fired", _on_projectile_fired)
+	GameEvents.projectile_fired.connect(_on_projectile_fired)
 
 func _randomize_wind() -> int:
 	# Increase "no-wind" probability by allowing negative and then clamping to zero if the random number is < 0
 	return max(randi_range(wind_min, wind_max), 0) * (1 if randf() <= 0.5 + wind_sign_bias * 0.5 else -1)
 
 func _physics_process(delta: float) -> void:
-	if !is_instance_valid(_active_projectile):
+	if _active_projectile_set.is_empty():
 		return
-	_apply_wind_to_active_weapon(delta)
+	_apply_wind_to_active_projectiles(delta)
 
 func _on_projectile_fired(projectile: WeaponProjectile) -> void:
-	#print("Wind(%s): on_projectile_fired: %s" % [name, projectile.name])
-	_active_projectile = projectile
+	# Need to bind the extra projectile argument to connect
+	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind([projectile]))
+	_active_projectile_set[projectile] = projectile
+
+	print_debug("Wind(%s): on_projectile_fired: %s - tracking=%d" % [name, projectile.name, _active_projectile_set.size()])
+
+func _on_projectile_destroyed(args: Array) -> void:
+	var projectile: WeaponProjectile = args[0]
+	_active_projectile_set.erase(projectile)
+	print_debug("Wind(%s): on_projectile_destroyed: %s - tracking=%d" % [name, projectile.name, _active_projectile_set.size()])
 	
-func _apply_wind_to_active_weapon(delta: float) -> void:
-	_active_projectile.apply_central_force(force * delta)
+func _apply_wind_to_active_projectiles(delta: float) -> void:
+	for projectile in _active_projectile_set:
+		if is_instance_valid(projectile):
+			projectile.apply_central_force(force * delta)
