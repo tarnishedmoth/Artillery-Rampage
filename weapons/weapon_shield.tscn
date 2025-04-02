@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://b86jghsmvnyg8"]
 
 [ext_resource type="Script" path="res://weapons/weapon.gd" id="1_oxv5w"]
-[ext_resource type="PackedScene" uid="uid://cs7gmoboe8c86" path="res://items/weapon_projectiles/weapon_projectile_shield.tscn" id="2_hq7cl"]
+[ext_resource type="PackedScene" uid="uid://cqnn2erq3eawq" path="res://items/weapon_projectiles/weapon_projectile_instant_kinetic_shield.tscn" id="2_7cg4m"]
 
 [node name="WeaponShield" type="Node2D"]
 script = ExtResource("1_oxv5w")
-scene_to_spawn = ExtResource("2_hq7cl")
+scene_to_spawn = ExtResource("2_7cg4m")
 display_name = "Deployable Shield"
 accuracy_angle_spread = 0.0349066
 power_launch_speed_mult = 0.0

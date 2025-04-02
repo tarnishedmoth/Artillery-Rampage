@@ -22,7 +22,9 @@ signal completed_lifespan ## Tracked by Weapon class
 
 @export var color: Color = Color.BLACK
 
-@export var max_lifetime: float = 10.0 ## Self destroys once this time has passed.
+## Self destroys once this time has passed.[br]
+## When [member kill_after_turns_elapsed] is used, this time emits [signal completed_lifespan].
+@export var max_lifetime: float = 10.0
 @export_range(0,99) var kill_after_turns_elapsed:int = 0 ## If >0, destroys after turns passed.
 @export var explosion_to_spawn:PackedScene
 
@@ -78,13 +80,15 @@ var current_collision:CollisionResult
 var last_recorded_linear_velocity:Vector2
 
 func _ready() -> void:
-	if should_explode_on_impact:
-		connect("body_entered", on_body_entered)
+	#if should_explode_on_impact: connect("body_entered", on_body_entered)
+	connect("body_entered", on_body_entered)
 	if has_node('Destructible'):
 		destructible_component = get_node('Destructible')
-	if max_lifetime > 0.0: destroy_after_lifetime()
+		
 	if kill_after_turns_elapsed > 0:
 		GameEvents.turn_ended.connect(_on_turn_ended)
+		_emit_completed_lifespan_without_destroying(max_lifetime) # Relinquish turn control
+	elif max_lifetime > 0.0: destroy_after_lifetime()
 	
 	modulate = color
 	apply_all_mods() # This may not be desired but it probably is. If the weapon's stats are retained across matches, this could double the effect unintentionally
@@ -118,7 +122,7 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 func get_destructible_component() -> CollisionPolygon2D:
 	return destructible_component
 
-func on_body_entered(_body: Node2D):
+func on_body_entered(_body: PhysicsBody2D):
 	# Need to do a sweep to see all the things we have influenced
 	# Need to be sure not to "double-damage" things both from influence and from direct hit
 	# The body here is the direct hit body that will trigger the projectile to explode if an interaction happens
@@ -126,9 +130,12 @@ func on_body_entered(_body: Node2D):
 		return
 	if calculated_hit:
 		return
-	var affected_nodes = _find_interaction_overlaps()
-	@warning_ignore("unused_variable")
+	
 	var had_interaction:bool = false
+	if _body.get_collision_layer_value(10): # ProjectileBlocker (shield, etc) hack
+		# FIXME if not inside_of_players_shield...:
+		had_interaction = true
+	var affected_nodes = _find_interaction_overlaps()
 	
 	var damaged_processed_map: Dictionary = {}
 	var destructed_processed_set: Dictionary = {}
@@ -161,8 +168,7 @@ func on_body_entered(_body: Node2D):
 	calculated_hit = not affected_nodes.is_empty()
 
 	# Always explode on impact
-	#if had_interaction:
-	if calculated_hit:
+	if had_interaction and should_explode_on_impact:
 		destroy()
 		
 func center_destructible_on_impact_point(destructible: CollisionPolygon2D) -> Vector2:
@@ -182,7 +188,6 @@ func center_destructible_on_impact_point(destructible: CollisionPolygon2D) -> Ve
 	return contact_point
 
 func destroy():
-	#GameEvents.emit_turn_ended(owner_tank.owner) ## Moved to Weapon class.
 	if explosion_to_spawn:
 		spawn_explosion(explosion_to_spawn)
 		
@@ -306,6 +311,10 @@ func _calculate_point_damage(pos: Vector2) -> float:
 			
 func _calculate_dist_frac(dist: float):
 	return  (1.0 - (dist - min_falloff_distance) / (max_falloff_distance - min_falloff_distance))
+
+func _emit_completed_lifespan_without_destroying(time:float) -> void:
+	if time > 0.0: await get_tree().create_timer(time).timeout
+	completed_lifespan.emit()
 	
 func _on_turn_ended() -> void:
 	# Increment turn count

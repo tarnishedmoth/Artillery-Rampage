@@ -1,8 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://dps6lqs28tqa1"]
+[gd_scene load_steps=11 format=3 uid="uid://dps6lqs28tqa1"]
 
 [ext_resource type="Script" path="res://controller/player/player.gd" id="1_t03mm"]
 [ext_resource type="PackedScene" uid="uid://dvr6bm2hlj5h4" path="res://tank/tank.tscn" id="2_3s1jp"]
-[ext_resource type="PackedScene" uid="uid://b86jghsmvnyg8" path="res://weapons/weapon_shield.tscn" id="3_iaqfs"]
 [ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="3_tmyes"]
 [ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="4_khwvf"]
 [ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="5_arar1"]
@@ -20,8 +19,6 @@ weapons_container = NodePath("Weapons")
 color = Color(0.145098, 0.227451, 0.00392157, 1)
 
 [node name="Weapons" type="Node" parent="."]
-
-[node name="WeaponShield" parent="Weapons" instance=ExtResource("3_iaqfs")]
 
 [node name="WeaponLeadBall" parent="Weapons" instance=ExtResource("3_tmyes")]
 
