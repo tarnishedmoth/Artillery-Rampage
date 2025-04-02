@@ -1,9 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://cmdqjyrjdgbl1"]
+[gd_scene load_steps=7 format=3 uid="uid://cmdqjyrjdgbl1"]
 
 [ext_resource type="Script" path="res://effects/hazard/water/water_hazard.gd" id="1_yswnd"]
+[ext_resource type="Shader" path="res://effects/hazard/water/water_hazard.gdshader" id="2_377d7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_45341"]
+shader = ExtResource("2_377d7")
+shader_parameter/wave_speed = 3.0
+shader_parameter/wave_frequency = 4.0
+shader_parameter/wave_amplitude = 10.0
+shader_parameter/wave_top = 0.1
 
 [sub_resource type="Gradient" id="Gradient_mvjr0"]
 offsets = PackedFloat32Array(0, 0.00248756)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0.878431, 0.686275)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_yxd2d"]
 gradient = SubResource("Gradient_mvjr0")
@@ -15,8 +24,8 @@ width = 500
 script = ExtResource("1_yswnd")
 
 [node name="Water" type="Sprite2D" parent="."]
-modulate = Color(0, 0, 0.878431, 0.490196)
 z_index = -100
+material = SubResource("ShaderMaterial_45341")
 texture = SubResource("GradientTexture2D_yxd2d")
 
 [node name="WaterOverlap" type="Area2D" parent="."]

@@ -47,7 +47,7 @@ func _on_overlap_begin(body: PhysicsBody2D) -> void:
 		return
 	if damageable in _damageables:
 		print_debug("%s - damageable=%s already in the damage set" % [name, damageable.name])
-		return
+	return
 		
 	print_debug("%s: Adding damageable=%s" % [name, damageable.name])
 	_damageables.push_back(damageable)
