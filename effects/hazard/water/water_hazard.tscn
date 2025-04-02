@@ -17,8 +17,8 @@ noise = SubResource("FastNoiseLite_emnpx")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_45341"]
 shader = ExtResource("2_377d7")
-shader_parameter/distortion_strength = 0.01
-shader_parameter/noise_strength = 0.025
+shader_parameter/distortion_strength = 1.0
+shader_parameter/noise_strength = 0.33
 shader_parameter/wave_speed = 0.2
 shader_parameter/wave_frequency = 41.0
 shader_parameter/wave_pct = 0.025

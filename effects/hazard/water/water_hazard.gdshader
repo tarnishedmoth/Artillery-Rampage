@@ -1,7 +1,7 @@
 shader_type canvas_item;
 
 uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_linear_mipmap;
-uniform float distortion_strength: hint_range(-1.0, 1.0, 0.01) = 1.5;
+uniform float distortion_strength: hint_range(0.0, 10.0, 0.01) = 1.0;
 uniform float noise_strength: hint_range(0.0, 1.0, 0.01) = 0.4;
 
 uniform float wave_speed = 0.2;   // Speed of wave movement
@@ -31,26 +31,21 @@ float wave_func_3(vec2 uv) {
 	return (sin(uv.x * wave_frequency * wave_choppiness * PI/6.0 + TIME * wave_speed * PI/4.0) + 1.0) * 0.5;
 }
 
-float wave_norm(float wave) {
-	return (wave + 1.0) * 0.5;
-}
-
 void fragment() {
     vec2 uv = UV;
     vec4 color = texture(TEXTURE, uv);
 
-	bool above_wave = false;
+	float wave_modifier = noise_strength;
     // Create the wave effect at the top of the rectangle
     if (uv.y <= wave_pct) {
         float wave_cutoff = (wave_func_1(uv) + wave_func_2(uv) + wave_func_3(uv)) / 3.0;
 		float topness = (wave_pct - uv.y) / wave_pct;
 		// Make transparent if above the cutoff
-		above_wave = topness > wave_cutoff;
-		if(above_wave) {
-			color.a = 0.0;
+		if(topness > wave_cutoff) {
+			color.a = wave_modifier = 0.0;
 		}
 	}
-	
+
 	if(enable_noise) {
 		vec2 uv1 = UV + offset1 * TIME;
 		vec2 uv2 = UV + offset2 * TIME;
@@ -58,11 +53,12 @@ void fragment() {
 		vec4 noise_color1 = texture(noise_tex1, uv1);
 		vec4 noise_color2 = texture(noise_tex2, uv2);
 		
-		float final_noise = mix(noise_color1.r, noise_color2.r, 0.5) * distortion_strength;
-		color.rgb = mix(color.rgb, color.rgb * final_noise, noise_strength);
-		if(!above_wave) {
-			color.a += final_noise;
-		}
+		vec2 noise = vec2(noise_color1.r, noise_color2.r);
+		float avg_noise = mix(noise.x, noise.y, 0.5);
+		float color_noise = avg_noise * distortion_strength;
+
+		color.rgb = mix(color.rgb, color.rgb * avg_noise, noise_strength);
+		color.a += avg_noise * wave_modifier;
 	}
 	
     COLOR = color;
