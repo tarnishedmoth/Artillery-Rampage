@@ -44,7 +44,6 @@ func _ready() -> void:
 	
 	# WaterHazard is higher sibling in GameLevel tree than Wind so our _ready will execute first
 	if not wind_updated:
-		var wind:Wind = null
 		for i in range(10):
 			await get_tree().create_timer(0.1).timeout
 			if wind_updated:
@@ -52,7 +51,7 @@ func _ready() -> void:
 			# TODO: Hack to get around error if access too soon
 			if not SceneManager._current_level_root_node:
 				continue
-			wind = SceneManager.get_current_level_root().wind
+			var wind: Wind = SceneManager.get_current_level_root().wind
 			if wind:
 				_on_update_wind(wind)
 				break
