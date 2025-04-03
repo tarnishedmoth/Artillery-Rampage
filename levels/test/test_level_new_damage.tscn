@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://c6rys133bf1nv"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_53utv"]
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_wbjcg"]
+[ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_yvo66"]
+[ext_resource type="PackedScene" uid="uid://158k4fde7cpd" path="res://controller/ai/behaviors/brute_ai_behavior.tscn" id="4_4utui"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="5_lryy1"]
+
+[node name="TestLevelNewDamage" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_53utv")]
+
+[node name="Enemy1" parent="GameLevel" instance=ExtResource("2_wbjcg")]
+position = Vector2(479, 278)
+
+[node name="Tank" parent="GameLevel/Enemy1" index="0"]
+enable_new_error_damage = true
+color = Color(0.682353, 0.713726, 0.219608, 1)
+
+[node name="LobberAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_yvo66")]
+forces_mask = 15
+
+[node name="Enemy2" parent="GameLevel" instance=ExtResource("2_wbjcg")]
+position = Vector2(1100, 426)
+
+[node name="Tank" parent="GameLevel/Enemy2" index="0"]
+enable_new_error_damage = true
+color = Color(0.137255, 0.180392, 0.701961, 1)
+
+[node name="BruteAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("4_4utui")]
+
+[node name="Player" parent="GameLevel" instance=ExtResource("5_lryy1")]
+position = Vector2(120, 427)
+
+[node name="Tank" parent="GameLevel/Player" index="0"]
+enable_new_error_damage = true
+
+[editable path="GameLevel/Enemy1"]
+[editable path="GameLevel/Enemy2"]
+[editable path="GameLevel/Player"]
