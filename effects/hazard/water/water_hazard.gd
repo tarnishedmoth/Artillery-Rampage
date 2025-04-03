@@ -16,12 +16,46 @@ var _damageables:Array[Node] = []
 
 var _immediate_damage_queue:Array[Node] = []
 
+## Frequencies for water shader - using prime numbers to lessen chance of wave cancellations
+@export var wave_frequencies:PackedInt32Array = [11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59]
+@export var wave_agitations:PackedInt32Array = [1, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67]
+## Affects the amplitude of the waves as a fraction of the total height
+## Min value is x and max value is y
+@export var wave_pct_range:Vector2 = Vector2(0.01, 0.04)
+
+## Affects how fast the waves move
+## min value is x and max value is y
+@export var wave_speed_range:Vector2 = Vector2(0.1, 0.3)
+
+## Affects how choppy the waves appear
+## min value is x and max value is y
+@export var wave_choppiness_range:Vector2 = Vector2(0.0, 4.0)
+
+var wind_updated:bool = false
+
 func _ready() -> void:
 	_init_collision()
 	
 	overlap.body_entered.connect(_on_overlap_begin)
 	overlap.body_exited.connect(_on_overlap_ended)
 	GameEvents.turn_started.connect(_on_turn_started)
+	
+	GameEvents.wind_updated.connect(_on_update_wind)
+	
+	# WaterHazard is higher sibling in GameLevel tree than Wind so our _ready will execute first
+	if not wind_updated:
+		var wind:Wind = null
+		for i in range(10):
+			await get_tree().create_timer(0.1).timeout
+			if wind_updated:
+				break
+			# TODO: Hack to get around error if access too soon
+			if not SceneManager._current_level_root_node:
+				continue
+			wind = SceneManager.get_current_level_root().wind
+			if wind:
+				_on_update_wind(wind)
+				break
 
 func _init_collision() -> void:
 	var sprite_size: Vector2 = _get_sprite_size()
@@ -102,3 +136,36 @@ func _on_turn_started(controller: TankController) -> void:
 	# Will damage again if just was damaged as we are starting a new turn
 	_damage_if_in_set(controller.tank)
 	
+func _on_update_wind(wind_node: Wind) -> void:
+	wind_updated = true
+	
+	var water_material:ShaderMaterial = sprite.material as ShaderMaterial
+	
+	if not water_material:
+		push_warning("%s: _on_update_wind(%s) - No material on node, will not change parameters" % [name, wind_node.name])
+		return
+	
+	var wind_range:float = maxf(wind_node.wind_max, 1.0)
+	
+	var speed:float = wind_node.wind.x
+	var speed_sgn:float = signf(speed)
+	var speed_abs:float = speed_sgn * speed
+	var speed_alpha: float = speed_abs / wind_range
+	
+	var wave_pct:float = lerpf(wave_pct_range.x, wave_pct_range.y, speed_alpha)
+	var wave_speed = -speed_sgn * lerpf(wave_speed_range.x, wave_speed_range.y, speed_alpha)
+	
+	var wave_frequency:float = _alpha_to_value(speed_alpha, wave_frequencies)
+	var wave_agitation:float = _alpha_to_value(speed_alpha, wave_agitations)
+	var wave_choppiness:float = lerpf(wave_choppiness_range.x, wave_choppiness_range.y, speed_alpha)
+	
+	water_material.set_shader_parameter(&"wave_speed", wave_speed)
+	water_material.set_shader_parameter(&"wave_frequency", wave_frequency)
+	water_material.set_shader_parameter(&"wave_pct", wave_pct)
+	water_material.set_shader_parameter(&"wave_agitation", wave_agitation)
+	water_material.set_shader_parameter(&"wave_choppiness", wave_choppiness)
+
+func _alpha_to_value(alpha: float, array: PackedInt32Array) -> float:
+	var index: int = clampi(roundi(alpha * (array.size() - 1)), 0, array.size() - 1)
+	var value:float = float(array[index])
+	return value

@@ -57,7 +57,7 @@ void fragment() {
 		float avg_noise = mix(noise.x, noise.y, 0.5);
 		float color_noise = avg_noise * distortion_strength;
 
-		color.rgb = mix(color.rgb, color.rgb * avg_noise, noise_strength);
+		color.rgb = mix(color.rgb, color.rgb * color_noise, noise_strength);
 		color.a += avg_noise * wave_modifier;
 	}
 	
