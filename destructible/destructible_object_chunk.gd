@@ -168,7 +168,7 @@ func get_destructible_local() -> PackedVector2Array:
 	return _mesh.polygon
 	
 func delete() -> void:
-	print("DestructibleObjectChunk(%s) - delete" % [name])
+	print_debug("DestructibleObjectChunk(%s) - delete" % [name])
 	queue_free.call_deferred()
 
 func print_poly(context: String, poly: PackedVector2Array) -> void:

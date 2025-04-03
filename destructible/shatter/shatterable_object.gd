@@ -27,7 +27,7 @@ func damage(body: ShatterableObjectBody, projectile: WeaponProjectile, contact_p
 		_body_container.call_deferred("add_child", new_body)
 			
 func delete() -> void:
-	print("ShatterableObject(%s) - delete" % [name])
+	print_debug("ShatterableObject(%s) - delete" % [name])
 	destroyed.emit(self)
 
 	queue_free.call_deferred()

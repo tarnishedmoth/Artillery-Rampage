@@ -97,7 +97,7 @@ func shatter(projectile: WeaponProjectile, destructible_poly_global: PackedVecto
 	return new_bodies
 
 func delete() -> void:
-	print("ShatterableObjectBody(%s) - delete" % [name])
+	print_debug("ShatterableObjectBody(%s) - delete" % [name])
 	owner.body_deleted.emit(self)
 	
 	queue_free.call_deferred()

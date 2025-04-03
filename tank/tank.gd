@@ -184,19 +184,19 @@ func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float
 	var actual_damage = orig_health - health
 	
 	if is_zero_approx(actual_damage):
-		print("Tank " + get_parent().name + " didn't take any actual damage")
+		print_debug("Tank %s didn't take any actual damage" % [get_parent().name])
 		return
 		
 	if health > 0 and actual_damage > 0:
 		_update_visuals_after_damage()
 	
-	print("Tank " + get_parent().name + " took " + str(actual_damage) + " damage; health=" + str(health))
+	print_debug("Tank %s took %f damage; health=%f" % [ get_parent().name, actual_damage, health])
 	emit_signal("tank_took_damage", self, instigatorController, instigator, actual_damage)
 	if health <= 0:
 		emit_signal("tank_killed", self, instigatorController, instigator)
 		
 func kill():
-	print("Tank: " + get_parent().name + " Killed")
+	print_debug("Tank: %s Killed" % [get_parent().name])
 	if drop_on_death:
 		spawn_death_drop()
 	queue_free()
@@ -221,7 +221,8 @@ func snap_to_ground():
 	# Setting the position here will put the center of the tank at the position. Need to offset by the bottom offset
 	var ground_position = get_ground_snap_position()
 		
-	print("tank.snap_to_ground(" + get_parent().name + "): adjusting from " + str(tankBody.global_position) + " to " + str(tankBody.global_position))
+	print_debug("tank.snap_to_ground(%s): adjusting from %s to %s"
+		% [get_parent().name, tankBody.global_position, ground_position])
 	
 	_check_and_emit_fall_damage(tankBody.global_position, ground_position)
 	
@@ -237,7 +238,7 @@ func get_ground_snap_position() -> Vector2:
 func _ground_trace(trace_distance: float) -> Vector2:
 	# If already overlapping something then just return the current position
 	if tankBody.get_contact_count() > 0:
-		#print("tank._ground_trace(%s): already colliding with body %s" % [get_parent().name, tankBody.get_colliding_bodies()[0].name])
+		print_debug("tank._ground_trace(%s): already colliding with body %s" % [get_parent().name, tankBody.get_colliding_bodies()[0].name])
 		return bottom_reference_point.global_position 
 		
 	var space_state := get_world_2d().direct_space_state
@@ -251,7 +252,7 @@ func _ground_trace(trace_distance: float) -> Vector2:
 	
 	var result = space_state.intersect_ray(query_params)
 	if !result:
-		print("tank._ground_trace(" + get_parent().name + "): cannot find ground")
+		print_debug("tank._ground_trace(%s): cannot find ground" % [get_parent().name])
 		return tankBody.global_position + Vector2(0, trace_distance)
 		
 	# Setting the position here will put the center of the tank at the position. Need to offset by the bottom offset
@@ -280,7 +281,7 @@ func _on_reset_orientation(_tankBody: TankBody) -> void:
 
 func _check_and_emit_fall_damage(start_position: Vector2, end_position: Vector2) -> void:
 	if !enable_fall_damage:
-		print("tank(%s): _check_and_emit_fall_damage - fall damage disabled" % [get_parent().name])
+		print_debug("tank(%s): _check_and_emit_fall_damage - fall damage disabled" % [get_parent().name])
 		return
 	var fall_damage := _calculate_fall_damage(start_position, end_position)
 	if fall_damage > 0:
@@ -289,18 +290,18 @@ func _check_and_emit_fall_damage(start_position: Vector2, end_position: Vector2)
 func _calculate_fall_damage(start_position: Vector2, end_position: Vector2) -> float:
 	var dist = (end_position - start_position).length()
 	if dist < min_damage_distance:
-		print("tank(%s): _calculate_fall_damage - %f < %f -> 0" % [get_parent().name, dist, min_damage_distance])
+		print_debug("tank(%s): _calculate_fall_damage - %f < %f -> 0" % [get_parent().name, dist, min_damage_distance])
 		return 0.0
 	
 	var damage := pow(dist * damage_distance_multiplier, damage_exponent)
-	print("tank(%s): _calculate_fall_damage: %f -> %f" % [get_parent().name, dist, damage])
+	print_debug("tank(%s): _calculate_fall_damage: %f -> %f" % [get_parent().name, dist, damage])
 	
 	return damage
 
 func started_falling() -> void:
 	if mark_falling:
 		return
-	print("tank(%s) started falling at position=%s" % [get_parent().name, str(tankBody.global_position)])
+	print_debug("tank(%s) started falling at position=%s" % [get_parent().name, str(tankBody.global_position)])
 	fall_start_position = tankBody.global_position
 	mark_falling = true
 
@@ -308,7 +309,7 @@ func stopped_falling() -> void:
 	if !mark_falling:
 		return
 	
-	print("tank(%s) stopped falling at position=%s" % [get_parent().name, str(tankBody.global_position)])
+	print_debug("tank(%s) stopped falling at position=%s" % [get_parent().name, str(tankBody.global_position)])
 	_check_and_emit_fall_damage(fall_start_position, tankBody.global_position)
 	mark_falling = false
 #endregion

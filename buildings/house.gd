@@ -30,10 +30,11 @@ func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float
 	var actual_damage = orig_health - health
 	
 	if is_zero_approx(actual_damage):
-		print("House " + get_parent().name + " didn't take any actual damage")
+		print_debug("House %s didn't take any actual damage" % [name])
 		return
 	
-	print("House " + get_parent().name + " took " + str(actual_damage) + " damage; health=" + str(health))
+	print_debug("House %s took %f damage; health=%f"
+		% [name, actual_damage, health])
 	
 	health_label.text = str(health)
 	health_bar.visible = true

@@ -63,13 +63,13 @@ func damage(chunk: DestructibleObjectChunk, projectile: WeaponProjectile, contac
 	
 	# This means the chunk was destroyed so we need to queue_free
 	if clipping_results.is_empty():
-		print("damage(" + name + ") completely destroyed by poly=" + projectile_poly.owner.name)
+		print_debug("damage(%s) completely destroyed by poly=%s" % [name, projectile_poly.owner.name])
 		delete_chunk(chunk)
 		return
 	
 	var updated_destructible_poly = clipping_results[0]
-	print("damage(" + name + ") Clip result with " + projectile_poly.owner.name +
-	 " - Changing from size of " + str(destructible_poly_global.size()) + " to " + str(updated_destructible_poly.size()))
+	print_debug("damage(%s) Clip result with %s - Changing from size of %d to %d" 
+		% [name, projectile_poly.owner.name, destructible_poly_global.size(), updated_destructible_poly.size()])
 	
 	# This could result in new chunks breaking off
 	var destructible_chunk_results := chunk.replace_contents(updated_destructible_poly, projectile_poly_global, chunk_update_flags)
@@ -94,7 +94,7 @@ func _add_new_chunks(incident_chunk: DestructibleObjectChunk,
  geometry_results: Array[PackedVector2Array], start_index: int) -> void:
 	# Create additional chunk pieces for the remaining geometry results
 	if !create_new_chunks:
-		print("_add_new_chunks(%s) New chunks disabled - ignoring additional %d chunk pieces" % [name, geometry_results.size() - start_index])
+		print_debug("_add_new_chunks(%s) New chunks disabled - ignoring additional %d chunk pieces" % [name, geometry_results.size() - start_index])
 		return
 
 	for i in range(start_index, geometry_results.size()):
@@ -102,13 +102,15 @@ func _add_new_chunks(incident_chunk: DestructibleObjectChunk,
 
 		# Ignore clockwise results as these are "holes" and need to handle these differently later
 		if TerrainUtils.is_invisible_polygon(new_clip_poly, false):
-			print("_add_new_chunks(" + name + ") Ignoring 'hole' polygon for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
+			print_debug("_add_new_chunks(%s) Ignoring 'hole' polygon for clipping result[%d] of size %d" 
+				% [name, i, new_clip_poly.size()])
 			continue
 			
 		var current_child_count: int = get_chunk_count()		
 		var new_chunk_name = initial_chunk_name + str(i + current_child_count)
 		
-		print("_add_new_chunks(" + name + ") Creating new chunk(" + new_chunk_name + ") for clipping result[" + str(i) + "] of size " + str(new_clip_poly.size()))
+		print_debug("_add_new_chunks(%s) Creating new chunk(%s) for clipping result[%d] of size %d"
+			% [name, new_chunk_name, i, new_clip_poly.size()])
 		
 		# Must be called deferred - see additional comment in _add_new_chunk as to why
 		call_deferred("_add_new_chunk", incident_chunk, new_chunk_name, new_clip_poly)
@@ -164,7 +166,7 @@ func get_bounds_global() -> Rect2:
 	return bounds
 
 func delete() -> void:
-	print("DestructibleObject(%s) - delete" % [name])
+	print_debug("DestructibleObject(%s) - delete" % [name])
 	destroyed.emit(self)
 
 	queue_free.call_deferred()
