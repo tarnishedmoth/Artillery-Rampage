@@ -63,6 +63,7 @@ var is_cycling: bool = false ## Weapon won't fire while cycling--see fire rate
 var is_equipped: bool = false ## Used for SFX, also the weapon won't fire if unequipped.
 var is_shooting: bool = false
 var _shoot_for_duration_power: float
+var _shoot_for_duration_angle_deviation: float
 var _shoot_for_count_remaining: int
 var _awaiting_lifespan_completion: int
 
@@ -84,7 +85,7 @@ func _ready() -> void:
 	
 func _process(_delta: float) -> void:
 	if is_shooting: ## Shooting for duration or count.
-		_shoot(_shoot_for_duration_power)
+		_shoot(_shoot_for_duration_power, _shoot_for_duration_angle_deviation)
 #endregion
 	
 #region Public Methods
@@ -114,7 +115,7 @@ func unequip() -> void:
 		if sfx_idle: sfx_idle.stop()
 	#else: print("Tried to unequip already unequipped!")
 	
-func shoot(power:float = fire_velocity) -> void:
+func shoot(power:float = fire_velocity, barrel_angle_deviation:float = 0.0) -> void:
 	if is_shooting: return
 	if not is_configured:
 		configure_barrels()
@@ -122,26 +123,28 @@ func shoot(power:float = fire_velocity) -> void:
 	var scaled_speed := power * power_launch_speed_mult
 
 	if always_shoot_for_duration > 0.0:
-		shoot_for_duration(always_shoot_for_duration, scaled_speed)
+		shoot_for_duration(always_shoot_for_duration, scaled_speed, barrel_angle_deviation)
 	elif always_shoot_for_count > 1:
-		shoot_for_count(always_shoot_for_count, scaled_speed)
+		shoot_for_count(always_shoot_for_count, scaled_speed, barrel_angle_deviation)
 	else:
-		_shoot(scaled_speed)
+		_shoot(scaled_speed, barrel_angle_deviation)
 	
-func shoot_for_duration(duration:float = always_shoot_for_duration, power:float = fire_velocity) -> void:
+func shoot_for_duration(duration:float = always_shoot_for_duration, power:float = fire_velocity, barrel_angle_deviation:float = 0.0) -> void:
 	if is_shooting: return
 	_shoot_for_duration_power = power
+	_shoot_for_duration_angle_deviation = barrel_angle_deviation
 	is_shooting = true
-	_shoot(power)
+	_shoot(power, barrel_angle_deviation)
 	await get_tree().create_timer(duration).timeout
 	is_shooting = false
 
-func shoot_for_count(count:int, power:float = fire_velocity) -> void:
+func shoot_for_count(count:int, power:float = fire_velocity, barrel_angle_deviation:float = 0.0) -> void:
 	if is_shooting: return
 	_shoot_for_duration_power = power
+	_shoot_for_duration_angle_deviation = barrel_angle_deviation
 	_shoot_for_count_remaining = count
 	is_shooting = true
-	_shoot(power)
+	_shoot(power, barrel_angle_deviation)
 	
 func dry_fire() -> void:
 	if sfx_dry_fire: sfx_dry_fire.play()
@@ -226,7 +229,7 @@ func destroy() -> void:
 #endregion
 
 #region Private Methods
-func _shoot(power:float = fire_velocity) -> void:
+func _shoot(power:float = fire_velocity, barrel_angle_deviation:float = 0.0) -> void:
 	if not is_equipped:
 		push_warning("Tried to shoot weapon that is not equipped.")
 		return
@@ -242,7 +245,7 @@ func _shoot(power:float = fire_velocity) -> void:
 		
 	if not fires_continuously:
 		if not barrels_sfx_fire.is_empty(): barrels_sfx_fire[current_barrel].play()
-		_spawn_projectile(power)
+		_spawn_projectile(power, barrel_angle_deviation)
 		cycle()
 		GameEvents.emit_weapon_fired(self) # This has no game effects right now.
 	else:
@@ -259,7 +262,7 @@ func _shoot(power:float = fire_velocity) -> void:
 	if _shoot_for_count_remaining == 0 or current_ammo == 0:
 		is_shooting = false
 			
-func _spawn_projectile(power: float = fire_velocity) -> void:
+func _spawn_projectile(power: float = fire_velocity, barrel_angle_deviation:float = 0.0) -> void:
 	var barrel = barrels[current_barrel]
 	if scene_to_spawn and scene_to_spawn.can_instantiate():
 		var new_shot = scene_to_spawn.instantiate() as RigidBody2D
@@ -275,7 +278,8 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 			add_projectile_awaiting(new_shot)
 		
 		new_shot.global_transform = barrel.global_transform
-		var aim_angle = barrel.global_rotation
+		# barrel_angle_deviation is for an errant shot - must convert to radians as this is what aim_angle expects
+		var aim_angle = barrel.global_rotation + deg_to_rad(barrel_angle_deviation)
 		if accuracy_angle_spread != 0.0:
 			var deviation = randf_range(-accuracy_angle_spread,accuracy_angle_spread) / 2
 			aim_angle += deviation

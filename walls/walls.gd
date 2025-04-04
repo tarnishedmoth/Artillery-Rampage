@@ -79,12 +79,10 @@ func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 	tracked_projectiles.append(projectile)
 
 	# Need to bind the extra projectile argument to connect
-	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind([projectile]))
+	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind(projectile))
 
 # Bind arguments are passed as an array
-func _on_projectile_destroyed(args: Array) -> void:
-	var projectile: WeaponProjectile = args[0]
-
+func _on_projectile_destroyed(projectile: WeaponProjectile) -> void:
 	print_debug("Wind(%s): Projectile Destroyed=%s" % [name, projectile.name])
 
 	tracked_projectiles.erase(projectile)

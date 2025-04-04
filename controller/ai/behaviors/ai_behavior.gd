@@ -398,14 +398,11 @@ func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 
 	last_opponent_history_entry.fire_time = _get_current_time_seconds()
 	# Need to bind the extra projectile argument to connect
-	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind([projectile, last_opponent_history_entry]))
+	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind(projectile, last_opponent_history_entry))
 
 # Bind arguments are passed as an array
-func _on_projectile_destroyed(args: Array) -> void:
-	var projectile: WeaponProjectile = args[0]
-	var opponent_history_entry: OpponentTargetHistory = args[1]
-
-	print_debug("Lobber AIBehavior(%s): Projectile Destroyed=%s" % [tank.owner.name, projectile.name])
+func _on_projectile_destroyed(projectile: WeaponProjectile, opponent_history_entry: OpponentTargetHistory) -> void:
+	print_debug("AIBehavior(%s): Projectile Destroyed=%s" % [tank.owner.name, projectile.name])
 
 	opponent_history_entry.hit_count += 1
 	opponent_history_entry.hit_location += projectile.global_position
