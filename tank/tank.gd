@@ -17,7 +17,7 @@ signal tank_took_damage(
 ## Weapon power output is decreased when health isn't full.
 ## @deprecated: Use [member weapon_max_power_range] instead
 @export var weapon_max_power_health_mult:float = 10 # Didn't comment out in case there are scenes with modified export property values
-## When [method _update_max_power] is called, [member max_power] is linearly interpolated using ([member health]/[member max_health]) as delta.
+## When [method _update_attributes] is called, [member max_power] is linearly interpolated using ([member health]/[member max_health]) as delta.
 @export var weapon_max_power_range:Vector2 = Vector2(300.0,1000.0)
 @export var max_health:float = 100
 @export var ground_trace_distance:float = 1000
@@ -27,11 +27,17 @@ signal tank_took_damage(
 @export var turret_color_value: float = 0.7
 
 @export_category("Damage")
+@export_group("Fall Damage")
 @export var enable_fall_damage:bool = true
 @export_range(0, 1000) var min_damage_distance: float = 10
 # (300*0.1)^x = 100 -> Want to lose all health if fall > 300 units
 @export_range(1, 10) var damage_exponent: float = 1.36
 @export_range(0.01, 100) var damage_distance_multiplier: float = 0.1
+
+@export_group("Damage Error")
+@export var enable_new_error_damage = false
+@export var max_power_v_health:Curve
+@export var aim_deviation_v_health:Curve
 
 @onready var tankBody: TankBody = $TankBody
 
@@ -52,7 +58,7 @@ var health: float:
 	set(value):
 		health = clampf(value, 0.0, max_health)
 		if not is_equal_approx(health, max_health):
-			_update_max_power()
+			_update_attributes()
 	get:
 		return health
 
@@ -62,6 +68,7 @@ var max_power:float
 var fall_start_position: Vector2
 var mark_falling: bool
 
+@export_group("")
 @export var color: Color = Color.WHITE:
 	set(value):
 		color = value
@@ -82,7 +89,7 @@ func _ready() -> void:
 	health = max_health
 
 	# Setters not called in _ready so need to call this manually
-	_update_max_power()
+	_update_attributes()
 
 	power = max_power
 	
@@ -136,6 +143,7 @@ func reset_orientation() -> void:
 	tankBody.reset_orientation()
 		
 #region Aim and Power
+# TODO: Account for new curve errors
 func aim_at(angle_rads: float) -> void:
 	turret.rotation = clampf(angle_rads, deg_to_rad(min_angle), deg_to_rad(max_angle))
 	GameEvents.emit_aim_updated(owner)
@@ -157,10 +165,16 @@ func set_power_delta(power_pct_delta: float) -> void:
 func get_turret_rotation() -> float:
 	return turret.rotation
 	
-func _update_max_power():
+func _update_attributes():
 	#max_power = health * weapon_max_power_health_mult
 	var health_delta = clampf(health / max_health, 0.01, 1.0)
-	max_power = lerpf(weapon_max_power_range.x, weapon_max_power_range.y, health_delta)
+	
+	if enable_new_error_damage:
+		max_power = weapon_max_power_range.y * max_power_v_health.sample(health_delta)
+		# TODO: Also impact accuracy
+	else:
+		max_power = lerpf(weapon_max_power_range.x, weapon_max_power_range.y, health_delta)
+	
 	power = minf(power, max_power)
 #endregion
 	
