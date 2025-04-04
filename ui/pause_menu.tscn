@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://btq3rsvojx8jg"]
+[gd_scene load_steps=5 format=3 uid="uid://btq3rsvojx8jg"]
 
 [ext_resource type="Script" path="res://ui/pause_menu.gd" id="1_4r0b1"]
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/control_theme_main_menu.tres" id="1_smh4t"]
+[ext_resource type="PackedScene" uid="uid://da23m08ml50op" path="res://ui/options_menu.tscn" id="3_pulrp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uvw1r"]
 bg_color = Color(0, 0, 0, 0.427451)
@@ -25,7 +26,17 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_uvw1r")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+[node name="OptionsMenu" parent="Panel" instance=ExtResource("3_pulrp")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+
+[node name="PauseMenu" type="VBoxContainer" parent="Panel"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -39,33 +50,42 @@ offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer"]
+[node name="Label" type="Label" parent="Panel/PauseMenu"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "PAUSED"
 horizontal_alignment = 1
 
-[node name="Resume" type="Button" parent="Panel/VBoxContainer"]
+[node name="Resume" type="Button" parent="Panel/PauseMenu"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("1_smh4t")
 text = "RESUME"
 
-[node name="MainMenu" type="Button" parent="Panel/VBoxContainer"]
+[node name="Options" type="Button" parent="Panel/PauseMenu"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_smh4t")
+text = "OPTIONS"
+
+[node name="MainMenu" type="Button" parent="Panel/PauseMenu"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("1_smh4t")
 text = "MAIN MENU"
 
-[node name="QuitToDesktop" type="Button" parent="Panel/VBoxContainer"]
+[node name="QuitToDesktop" type="Button" parent="Panel/PauseMenu"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("1_smh4t")
 text = "QUIT TO DESKTOP"
 
-[connection signal="pressed" from="Panel/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="Panel/VBoxContainer/MainMenu" to="." method="_on_main_menu_pressed"]
-[connection signal="pressed" from="Panel/VBoxContainer/QuitToDesktop" to="." method="_on_quit_to_desktop_pressed"]
+[connection signal="closed" from="Panel/OptionsMenu" to="." method="_on_options_menu_closed"]
+[connection signal="pressed" from="Panel/PauseMenu/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Panel/PauseMenu/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Panel/PauseMenu/MainMenu" to="." method="_on_main_menu_pressed"]
+[connection signal="pressed" from="Panel/PauseMenu/QuitToDesktop" to="." method="_on_quit_to_desktop_pressed"]
