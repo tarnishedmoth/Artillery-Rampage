@@ -64,6 +64,7 @@ var health: float:
 
 var power:float
 var max_power:float
+var angle_deviation:float
 
 var fall_start_position: Vector2
 var mark_falling: bool
@@ -171,11 +172,15 @@ func _update_attributes():
 	
 	if enable_new_error_damage:
 		max_power = weapon_max_power_range.y * max_power_v_health.sample(health_delta)
-		# TODO: Also impact accuracy
+		# Once an angle inaccuracy set use the same one for subsequent damage to avoid too much guesswork for the player
+		var angle_error_sign:float = signf(angle_deviation) if not is_zero_approx(angle_deviation) else MathUtils.randf_sgn()
+		angle_deviation = angle_error_sign * aim_deviation_v_health.sample(health_delta)
 	else:
 		max_power = lerpf(weapon_max_power_range.x, weapon_max_power_range.y, health_delta)
 	
 	power = minf(power, max_power)
+
+	print_debug("tank(%s): _update_attributes - health_delta=%f; power=%f; max_power=%f; angle_deviation=%f" % [get_parent().name, health_delta, power, max_power, angle_deviation])
 #endregion
 	
 ## If the weapon can be fired, return true, else false.
@@ -183,8 +188,8 @@ func shoot() -> bool:
 	var weapon: Weapon = get_equipped_weapon()
 	if check_can_shoot_weapon(weapon):
 		var controller:TankController = get_parent()
-		controller.submit_intended_action(weapon.shoot.bind(power), controller)
-		#weapon.shoot(power)
+		controller.submit_intended_action(weapon.shoot.bind(power, angle_deviation), controller)
+		#weapon.shoot(power, angle_deviation)
 		return true
 	else:
 		weapon.dry_fire() # For sound effect (if assigned in Weapon scene)
