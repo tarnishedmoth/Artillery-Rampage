@@ -174,7 +174,9 @@ func _update_attributes():
 		max_power = weapon_max_power_range.y * max_power_v_health.sample(health_delta)
 		# Once an angle inaccuracy set use the same one for subsequent damage to avoid too much guesswork for the player
 		var angle_error_sign:float = signf(angle_deviation) if not is_zero_approx(angle_deviation) else MathUtils.randf_sgn()
+		var previous_deviation:float = angle_deviation
 		angle_deviation = angle_error_sign * aim_deviation_v_health.sample(health_delta)
+		get_weapon_fire_locations().rotation_degrees += angle_deviation - previous_deviation
 	else:
 		max_power = lerpf(weapon_max_power_range.x, weapon_max_power_range.y, health_delta)
 	
@@ -188,8 +190,8 @@ func shoot() -> bool:
 	var weapon: Weapon = get_equipped_weapon()
 	if check_can_shoot_weapon(weapon):
 		var controller:TankController = get_parent()
-		controller.submit_intended_action(weapon.shoot.bind(power, angle_deviation), controller)
-		#weapon.shoot(power, angle_deviation)
+		controller.submit_intended_action(weapon.shoot.bind(power), controller)
+		#weapon.shoot(power)
 		return true
 	else:
 		weapon.dry_fire() # For sound effect (if assigned in Weapon scene)
