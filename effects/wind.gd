@@ -45,13 +45,12 @@ func _physics_process(delta: float) -> void:
 
 func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 	# Need to bind the extra projectile argument to connect
-	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind([projectile]))
+	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind(projectile))
 	_active_projectile_set[projectile] = projectile
 
 	print_debug("Wind(%s): on_projectile_fired: %s - tracking=%d" % [name, projectile.name, _active_projectile_set.size()])
 
-func _on_projectile_destroyed(args: Array) -> void:
-	var projectile: WeaponProjectile = args[0]
+func _on_projectile_destroyed(projectile: WeaponProjectile) -> void:
 	_active_projectile_set.erase(projectile)
 	print_debug("Wind(%s): on_projectile_destroyed: %s - tracking=%d" % [name, projectile.name, _active_projectile_set.size()])
 	
