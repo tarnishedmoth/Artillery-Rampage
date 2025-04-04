@@ -31,5 +31,6 @@ shape = ExtResource("4_3782q")
 stream = ExtResource("5_d5bl0")
 volume_db = -6.0
 pitch_scale = 4.0
+bus = &"SFX"
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

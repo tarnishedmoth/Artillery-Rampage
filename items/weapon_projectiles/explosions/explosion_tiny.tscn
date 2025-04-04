@@ -11,4 +11,5 @@ sfx = [NodePath("AudioStreamPlayer2D")]
 stream = ExtResource("2_yk7vb")
 volume_db = -9.0
 pitch_scale = 3.0
+bus = &"SFX"
 area_mask = 2

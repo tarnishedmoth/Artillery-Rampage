@@ -1,0 +1,96 @@
+[gd_scene load_steps=4 format=3 uid="uid://cuvkkaw31jk5y"]
+
+[ext_resource type="Script" path="res://ui/tooltipper.gd" id="1_5kk0e"]
+[ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/control_theme_main_menu.tres" id="1_wt18n"]
+[ext_resource type="Script" path="res://ui/array_seq_view_hide.gd" id="2_2oifc"]
+
+[node name="Tooltipper" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_5kk0e")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -124.0
+offset_right = 124.0
+offset_bottom = 39.0
+grow_horizontal = 2
+theme = ExtResource("1_wt18n")
+
+[node name="TooltipsMarginContainer" type="MarginContainer" parent="PanelContainer" node_paths=PackedStringArray("sequence")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 8
+script = ExtResource("2_2oifc")
+sequence = [NodePath("TooltipAimPower"), NodePath("TooltipShoot"), NodePath("TooltipChangeWeapon")]
+
+[node name="TooltipAimPower" type="HBoxContainer" parent="PanelContainer/TooltipsMarginContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsMarginContainer/TooltipAimPower"]
+layout_mode = 2
+text = "W / S   A / D"
+
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsMarginContainer/TooltipAimPower"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="Description" type="Label" parent="PanelContainer/TooltipsMarginContainer/TooltipAimPower"]
+layout_mode = 2
+text = "Power   Aim"
+
+[node name="TooltipShoot" type="HBoxContainer" parent="PanelContainer/TooltipsMarginContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsMarginContainer/TooltipShoot"]
+layout_mode = 2
+text = "Spacebar"
+
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsMarginContainer/TooltipShoot"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="Description" type="Label" parent="PanelContainer/TooltipsMarginContainer/TooltipShoot"]
+layout_mode = 2
+text = "Shoot"
+
+[node name="TooltipChangeWeapon" type="HBoxContainer" parent="PanelContainer/TooltipsMarginContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsMarginContainer/TooltipChangeWeapon"]
+layout_mode = 2
+text = "H"
+
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsMarginContainer/TooltipChangeWeapon"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="Description" type="Label" parent="PanelContainer/TooltipsMarginContainer/TooltipChangeWeapon"]
+layout_mode = 2
+text = "Cycle Weapons"
+
+[node name="HintHealth" type="HBoxContainer" parent="PanelContainer/TooltipsMarginContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsMarginContainer/HintHealth"]
+layout_mode = 2
+text = "Hint: Health"
+
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsMarginContainer/HintHealth"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="Description" type="Label" parent="PanelContainer/TooltipsMarginContainer/HintHealth"]
+layout_mode = 2
+text = "Taking damage will affect your shooting ability."

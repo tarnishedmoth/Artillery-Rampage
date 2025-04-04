@@ -41,6 +41,7 @@ lights_fade_time = 0.45
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("2_exc78")
+bus = &"SFX"
 area_mask = 2
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]

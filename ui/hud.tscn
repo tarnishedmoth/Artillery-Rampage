@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bg64wc8fibctr"]
+[gd_scene load_steps=10 format=3 uid="uid://bg64wc8fibctr"]
 
 [ext_resource type="PackedScene" uid="uid://csk42q7q75rcy" path="res://ui/hud_value.tscn" id="1_iign6"]
 [ext_resource type="Script" path="res://ui/hud.gd" id="1_qwt2x"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://c746m7aq2phfe" path="res://ui/hud_bg_center.png" id="5_toij6"]
 [ext_resource type="Script" path="res://ui/hud_value.gd" id="6_t13h5"]
 [ext_resource type="LabelSettings" uid="uid://d2qiettag13xr" path="res://ui/label_settings/hud_labels.tres" id="7_y12xy"]
+[ext_resource type="PackedScene" uid="uid://cuvkkaw31jk5y" path="res://ui/tooltipper.tscn" id="8_rj5xb"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ln601"]
 font_size = 24
@@ -148,6 +149,19 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "Level"
+
+[node name="Tooltipper" parent="." instance=ExtResource("8_rj5xb")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = 280.0
+offset_bottom = 280.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [editable path="VBoxContainer/Angle"]
 [editable path="VBoxContainer/Power"]

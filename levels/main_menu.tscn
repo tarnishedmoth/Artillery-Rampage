@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://levels/main_menu.gd" id="1_3vdg5"]
 [ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="3_tkm84"]
 [ext_resource type="Script" path="res://levels/mainmenu_level_select.gd" id="4_ryopc"]
-[ext_resource type="Script" path="res://levels/mainmenu_options.gd" id="5_kab65"]
+[ext_resource type="PackedScene" uid="uid://da23m08ml50op" path="res://ui/options_menu.tscn" id="6_snioo"]
 
 [node name="MainMenu" type="Node2D" node_paths=PackedStringArray("revealables")]
 script = ExtResource("1_3vdg5")
@@ -298,75 +298,8 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("5_kab65")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Controls/Options"]
-layout_mode = 2
-
-[node name="Spacer" type="Control" parent="Controls/Options/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.13
-
-[node name="Label" type="Label" parent="Controls/Options/VBoxContainer"]
-layout_mode = 2
-text = "Options Menu"
-horizontal_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Controls/Options/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Spacer" type="Control" parent="Controls/Options/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.5
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Controls/Options/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-alignment = 1
-
-[node name="TopSpacer" type="Control" parent="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.13
-
-[node name="RichTextLabel" type="RichTextLabel" parent="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-text = "Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... Bing bang boom boom boom bop bam... "
-
-[node name="MiddleSpacer" type="Control" parent="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.13
-
-[node name="ConfirmButtons" type="HBoxContainer" parent="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="Apply" type="Button" parent="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons"]
-layout_mode = 2
-text = "Apply"
-
-[node name="Cancel" type="Button" parent="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons"]
-layout_mode = 2
-text = "Cancel"
-
-[node name="BottomSpacer" type="Control" parent="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.13
-
-[node name="Spacer2" type="Control" parent="Controls/Options/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.5
-
-[node name="BoxContainer" type="BoxContainer" parent="Controls/Options/VBoxContainer"]
+[node name="OptionsMenu" parent="Controls/Options" instance=ExtResource("6_snioo")]
 layout_mode = 2
 
 [connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/Buttons/Start" to="." method="_on_start_pressed"]
@@ -377,5 +310,4 @@ layout_mode = 2
 [connection signal="mouse_exited" from="Controls/MainMenu/Columns/RightColumn/CreditsList" to="." method="_on_credits_list_mouse_exited"]
 [connection signal="pressed" from="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Start" to="Controls/LevelSelect" method="_on_apply_pressed"]
 [connection signal="pressed" from="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Cancel" to="Controls/LevelSelect" method="_on_cancel_pressed"]
-[connection signal="pressed" from="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Apply" to="Controls/Options" method="_on_apply_pressed"]
-[connection signal="pressed" from="Controls/Options/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Cancel" to="Controls/Options" method="_on_cancel_pressed"]
+[connection signal="closed" from="Controls/Options/OptionsMenu" to="." method="_on_options_menu_closed"]

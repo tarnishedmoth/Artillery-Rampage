@@ -27,6 +27,7 @@ AITypes="*res://controller/ai/ai_types.gd"
 SceneManager="*res://utils/scene_manager.tscn"
 PlayerUpgrades="*res://progression/player_upgrades.gd"
 PlayerStateManager="*res://levels/round/player_state_manager.tscn"
+UserOptions="*res://utils/user_options.gd"
 
 [display]
 

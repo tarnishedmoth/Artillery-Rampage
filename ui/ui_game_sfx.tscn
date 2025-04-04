@@ -12,14 +12,20 @@ sfx_weapon_updated = NodePath("Weapon Updated")
 sfx_soundtrack = NodePath("Soundtrack")
 
 [node name="Round Start" type="AudioStreamPlayer" parent="."]
+bus = &"SFX"
 
 [node name="Round End" type="AudioStreamPlayer" parent="."]
+bus = &"SFX"
 
 [node name="Turn Start" type="AudioStreamPlayer" parent="."]
+bus = &"SFX"
 
 [node name="Turn End" type="AudioStreamPlayer" parent="."]
+bus = &"SFX"
 
 [node name="Weapon Updated" type="AudioStreamPlayer" parent="."]
+bus = &"SFX"
 
 [node name="Soundtrack" type="AudioStreamPlayer" parent="."]
 volume_db = -6.0
+bus = &"Music"

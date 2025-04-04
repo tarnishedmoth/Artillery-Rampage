@@ -93,6 +93,11 @@ func _on_options_pressed() -> void:
 func _on_quit_pressed() -> void:
 	get_tree().quit()
 	
+func _on_options_menu_closed() -> void:
+	print_debug("Options menu closed -- main menu")
+	options_menu.hide()
+	main_menu.show()
+	
 #func _recursive_find_children(node:Node) -> Array:
 	#var children:Array = node.get_children()
 	#

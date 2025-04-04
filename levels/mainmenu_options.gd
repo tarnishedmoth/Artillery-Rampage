@@ -1,15 +1,7 @@
-extends PanelContainer
+extends Control
 
 @onready var main_menu: VBoxContainer = %MainMenu
 
-func close_options_menu() -> void:
-	hide()
+func _on_options_menu_closed() -> void:
+	print_debug("Options menu closed -- main menu")
 	main_menu.show()
-
-func _on_apply_pressed() -> void:
-	print_debug("Options Apply pressed")
-	close_options_menu()
-
-func _on_cancel_pressed() -> void:
-	print_debug("Options Cancel pressed")
-	close_options_menu()

@@ -35,37 +35,24 @@ func get_cached_volume(audio_stream_player) -> float:
 		return initial_db_values[audio_stream_player]
 	else:
 		return _sfx_volume_modifier
-		
-func get_sfx_volume_setting() -> float:
-	var nonlinear_volume = linear_to_db(_sfx_volume_modifier)
-	return nonlinear_volume
-	
-func get_music_volume_setting() -> float:
-	var nonlinear_volume = linear_to_db(_music_volume_modifier)
-	return nonlinear_volume
 	
 func _on_turn_started(_player) -> void:
 	if sfx_turn_started:
-		sfx_turn_started.set_volume_db(get_sfx_volume_setting())
 		sfx_turn_started.play()
 	
 func _on_turn_ended(_player) -> void:
 	if sfx_turn_ended:
-		sfx_turn_ended.set_volume_db(get_sfx_volume_setting())
 		sfx_turn_ended.play()
 
 func _on_round_started() -> void:
 	if sfx_round_started:
-		sfx_round_started.set_volume_db(get_sfx_volume_setting())
 		sfx_round_started.play()
 	if sfx_soundtrack:
 		sfx_soundtrack.stream = soundtrack_file
-		sfx_soundtrack.set_volume_db(get_music_volume_setting())
 		sfx_soundtrack.play()
 	
 func _on_round_ended() -> void:
 	if sfx_round_ended:
-		sfx_round_ended.set_volume_db(get_sfx_volume_setting())
 		sfx_round_ended.play()
 	if sfx_soundtrack:
 		sfx_soundtrack.stop()
@@ -75,5 +62,4 @@ func _on_weapon_updated(_weapon) -> void:
 	# but if you want one sound for all weapon changes just as an
 	# alert, this is the way.
 	if sfx_weapon_updated:
-		sfx_weapon_updated.set_volume_db(get_sfx_volume_setting())
 		sfx_weapon_updated.play()

@@ -40,6 +40,7 @@ lights = [NodePath("PointLight2D")]
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("2_ur366")
+bus = &"SFX"
 area_mask = 2
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]

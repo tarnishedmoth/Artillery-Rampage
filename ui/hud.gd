@@ -9,6 +9,7 @@ extends Control
 @onready var weapon_text = $CenterBackground/VBoxContainer3/Weapon
 
 @onready var debug_level_name: Label = %DebugLevelName
+@onready var tooltipper: Control = %Tooltipper
 
 func _ready() -> void:
 	init_signals()
@@ -20,6 +21,7 @@ func init_signals():
 	GameEvents.connect("wind_updated", _on_wind_updated)
 	GameEvents.connect("weapon_updated", _on_weapon_updated)
 	GameEvents.connect("level_loaded", _on_level_changed)
+	GameEvents.user_options_changed.connect(_on_user_options_changed)
 	
 	if OS.is_debug_build():
 		debug_level_name.show()
@@ -61,3 +63,10 @@ func _on_level_changed(_level: GameLevel) -> void:
 	if OS.is_debug_build():
 		var file_name = get_tree().current_scene.scene_file_path
 		debug_level_name.text = file_name
+	pass
+
+func _on_user_options_changed() -> void:
+	if UserOptions.show_hud:
+		if not visible: show()
+	else:
+		if visible: hide()

@@ -3,6 +3,9 @@ extends Node
 var current_level:GameLevel
 
 @warning_ignore("unused_signal")
+signal user_options_changed()
+
+@warning_ignore("unused_signal")
 signal turn_started(player: TankController)
 
 @warning_ignore("unused_signal")

@@ -44,6 +44,7 @@ gizmo_extents = 120.0
 
 [node name="Thruster" type="AudioStreamPlayer2D" parent="MissileThruster"]
 stream = ExtResource("4_37o5p")
+bus = &"SFX"
 
 [node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="MissileThruster"]
 z_index = 20

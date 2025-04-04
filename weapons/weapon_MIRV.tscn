@@ -19,3 +19,4 @@ sfx_fire = NodePath("Fire")
 
 [node name="Fire" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_p55o8")
+bus = &"SFX"
