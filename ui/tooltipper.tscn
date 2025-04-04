@@ -20,7 +20,9 @@ offset_bottom = 39.0
 grow_horizontal = 2
 theme = ExtResource("1_wt18n")
 
-[node name="TooltipsMarginContainer" type="MarginContainer" parent="PanelContainer" node_paths=PackedStringArray("sequence")]
+[node name="TooltipsPlayerTurn" type="MarginContainer" parent="PanelContainer" node_paths=PackedStringArray("sequence")]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
@@ -31,66 +33,144 @@ theme_override_constants/margin_bottom = 8
 script = ExtResource("2_2oifc")
 sequence = [NodePath("TooltipAimPower"), NodePath("TooltipShoot"), NodePath("TooltipChangeWeapon")]
 
-[node name="TooltipAimPower" type="HBoxContainer" parent="PanelContainer/TooltipsMarginContainer"]
+[node name="TooltipAimPower" type="HBoxContainer" parent="PanelContainer/TooltipsPlayerTurn"]
 visible = false
 layout_mode = 2
 
-[node name="Glyph" type="Label" parent="PanelContainer/TooltipsMarginContainer/TooltipAimPower"]
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipAimPower"]
 layout_mode = 2
 text = "W / S   A / D"
 
-[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsMarginContainer/TooltipAimPower"]
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/TooltipAimPower"]
 custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
-[node name="Description" type="Label" parent="PanelContainer/TooltipsMarginContainer/TooltipAimPower"]
+[node name="Description" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipAimPower"]
 layout_mode = 2
 text = "Power   Aim"
 
-[node name="TooltipShoot" type="HBoxContainer" parent="PanelContainer/TooltipsMarginContainer"]
+[node name="TooltipShoot" type="HBoxContainer" parent="PanelContainer/TooltipsPlayerTurn"]
 visible = false
 layout_mode = 2
 
-[node name="Glyph" type="Label" parent="PanelContainer/TooltipsMarginContainer/TooltipShoot"]
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipShoot"]
 layout_mode = 2
 text = "Spacebar"
 
-[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsMarginContainer/TooltipShoot"]
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/TooltipShoot"]
 custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
-[node name="Description" type="Label" parent="PanelContainer/TooltipsMarginContainer/TooltipShoot"]
+[node name="Description" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipShoot"]
 layout_mode = 2
 text = "Shoot"
 
-[node name="TooltipChangeWeapon" type="HBoxContainer" parent="PanelContainer/TooltipsMarginContainer"]
+[node name="TooltipChangeWeapon" type="HBoxContainer" parent="PanelContainer/TooltipsPlayerTurn"]
 visible = false
 layout_mode = 2
 
-[node name="Glyph" type="Label" parent="PanelContainer/TooltipsMarginContainer/TooltipChangeWeapon"]
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipChangeWeapon"]
 layout_mode = 2
 text = "H"
 
-[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsMarginContainer/TooltipChangeWeapon"]
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/TooltipChangeWeapon"]
 custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
-[node name="Description" type="Label" parent="PanelContainer/TooltipsMarginContainer/TooltipChangeWeapon"]
+[node name="Description" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipChangeWeapon"]
 layout_mode = 2
 text = "Cycle Weapons"
 
-[node name="HintHealth" type="HBoxContainer" parent="PanelContainer/TooltipsMarginContainer"]
+[node name="HintHealth" type="HBoxContainer" parent="PanelContainer/TooltipsPlayerTurn"]
 visible = false
 layout_mode = 2
 
-[node name="Glyph" type="Label" parent="PanelContainer/TooltipsMarginContainer/HintHealth"]
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/HintHealth"]
 layout_mode = 2
 text = "Hint: Health"
 
-[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsMarginContainer/HintHealth"]
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/HintHealth"]
 custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
-[node name="Description" type="Label" parent="PanelContainer/TooltipsMarginContainer/HintHealth"]
+[node name="Description" type="Label" parent="PanelContainer/TooltipsPlayerTurn/HintHealth"]
 layout_mode = 2
 text = "Taking damage will affect your shooting ability."
+
+[node name="TooltipsEnemyTurn" type="MarginContainer" parent="PanelContainer" node_paths=PackedStringArray("sequence")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 8
+script = ExtResource("2_2oifc")
+sequence = [NodePath("HintWaiting"), NodePath("HintAI1"), NodePath("HintHealth"), NodePath("HintAI2")]
+cycle_time = 4.5
+
+[node name="HintHealth" type="HBoxContainer" parent="PanelContainer/TooltipsEnemyTurn"]
+visible = false
+layout_mode = 2
+
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintHealth"]
+layout_mode = 2
+text = "Hint: Health"
+
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsEnemyTurn/HintHealth"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="Description" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintHealth"]
+layout_mode = 2
+text = "Taking damage will affect your shooting ability."
+
+[node name="HintAI1" type="HBoxContainer" parent="PanelContainer/TooltipsEnemyTurn"]
+visible = false
+layout_mode = 2
+
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintAI1"]
+layout_mode = 2
+text = "Hint: Opponents"
+
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsEnemyTurn/HintAI1"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="Description" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintAI1"]
+layout_mode = 2
+text = "Be wary of tough enemy."
+
+[node name="HintAI2" type="HBoxContainer" parent="PanelContainer/TooltipsEnemyTurn"]
+visible = false
+layout_mode = 2
+
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintAI2"]
+layout_mode = 2
+text = "Hint: Opponents"
+
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsEnemyTurn/HintAI2"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="Description" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintAI2"]
+layout_mode = 2
+text = "Ahh, ranged battle..."
+
+[node name="HintWaiting" type="HBoxContainer" parent="PanelContainer/TooltipsEnemyTurn"]
+visible = false
+layout_mode = 2
+
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintWaiting"]
+layout_mode = 2
+text = "Hint: Turns"
+
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsEnemyTurn/HintWaiting"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="Description" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintWaiting"]
+layout_mode = 2
+text = "You'll have to wait for your turn before taking any actions."
