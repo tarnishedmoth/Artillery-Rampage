@@ -79,6 +79,10 @@ var current_collision:CollisionResult
 
 var last_recorded_linear_velocity:Vector2
 
+## Post Processing Effects
+@export_group("Effects")
+@export var post_processing_scene: PackedScene
+
 func _ready() -> void:
 	#if should_explode_on_impact: connect("body_entered", on_body_entered)
 	connect("body_entered", on_body_entered)
@@ -92,6 +96,8 @@ func _ready() -> void:
 	
 	modulate = color
 	apply_all_mods() # This may not be desired but it probably is. If the weapon's stats are retained across matches, this could double the effect unintentionally
+	
+	_apply_post_processing()
 	
 	GameEvents.emit_projectile_fired(self)
 	
@@ -329,3 +335,13 @@ func apply_all_mods(mods: Array[ModProjectile] = upgrades) -> void:
 func apply_new_mod(mod: ModProjectile) -> void:
 	upgrades.append(mod)
 	mod.modify_projectile(self)
+
+func _apply_post_processing() -> void:
+	if not post_processing_scene or not SceneManager._current_level_root_node:
+		return
+	print_debug("%s - Adding post-processing scene=%s" % [name, post_processing_scene.resource_path])
+	var effect_node: Node2D = post_processing_scene.instantiate() as Node2D
+	if not effect_node:
+		push_error("%s - Could not instantiate post-processing scene=%s" % [name, post_processing_scene.resource_path])
+		return
+	SceneManager.get_current_level_root().post_processing.apply_effect(effect_node)

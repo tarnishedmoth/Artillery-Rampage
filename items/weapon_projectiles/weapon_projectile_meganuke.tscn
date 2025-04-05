@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bwdyexrcswl12"]
+[gd_scene load_steps=6 format=3 uid="uid://bwdyexrcswl12"]
 
 [ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile.gd" id="1_yknii"]
 [ext_resource type="PackedScene" uid="uid://70ea023qffgt" path="res://items/weapon_projectiles/explosions/explosion_meganuke.tscn" id="2_gjd3c"]
 [ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="3_6ghyx"]
+[ext_resource type="PackedScene" uid="uid://cchj21cb5n3ly" path="res://effects/post_processing/mega_nuke_explosion.tscn" id="3_15ki6"]
 [ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="4_u3320"]
 
 [node name="WeaponProjectile" type="RigidBody2D"]
@@ -21,6 +22,7 @@ max_falloff_distance = 360.0
 min_damage = 15.0
 max_damage = 250.0
 destructible_scale_multiplier = Vector2(36, 26)
+post_processing_scene = ExtResource("3_15ki6")
 
 [node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="."]
 z_index = 20

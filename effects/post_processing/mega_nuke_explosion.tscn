@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://cchj21cb5n3ly"]
+
+[ext_resource type="Shader" path="res://effects/post_processing/mega_nuke_explosion.gdshader" id="1_gsevq"]
+[ext_resource type="Script" path="res://effects/post_processing/mega_nuke_explosion.gd" id="1_q5jld"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v536b"]
+shader = ExtResource("1_gsevq")
+shader_parameter/start_time = null
+shader_parameter/lifetime = null
+shader_parameter/intensity = 10.0
+shader_parameter/flash_lifetime_frac = 0.1
+shader_parameter/flash_color = Color(1, 1, 1, 0.882353)
+shader_parameter/radiation_color = Color(0.72, 0.6894, 0.108, 0.717647)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_je3ns"]
+
+[node name="MegaNukeExplosion" type="Sprite2D"]
+material = SubResource("ShaderMaterial_v536b")
+position = Vector2(3266.75, 2603.25)
+scale = Vector2(6534.5, 5207.5)
+texture = SubResource("PlaceholderTexture2D_je3ns")
+script = ExtResource("1_q5jld")
