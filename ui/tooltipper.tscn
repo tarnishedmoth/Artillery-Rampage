@@ -11,13 +11,13 @@ script = ExtResource("1_5kk0e")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
-anchors_preset = 5
+anchors_preset = 8
 anchor_left = 0.5
+anchor_top = 0.5
 anchor_right = 0.5
-offset_left = -124.0
-offset_right = 124.0
-offset_bottom = 39.0
+anchor_bottom = 0.5
 grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("1_wt18n")
 
 [node name="TooltipsPlayerTurn" type="MarginContainer" parent="PanelContainer" node_paths=PackedStringArray("sequence")]
@@ -31,23 +31,39 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 8
 script = ExtResource("2_2oifc")
-sequence = [NodePath("TooltipAimPower"), NodePath("TooltipShoot"), NodePath("TooltipChangeWeapon")]
+sequence = [NodePath("TooltipAim"), NodePath("TooltipPower"), NodePath("TooltipShoot"), NodePath("TooltipChangeWeapon")]
 
-[node name="TooltipAimPower" type="HBoxContainer" parent="PanelContainer/TooltipsPlayerTurn"]
+[node name="TooltipPower" type="HBoxContainer" parent="PanelContainer/TooltipsPlayerTurn"]
 visible = false
 layout_mode = 2
 
-[node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipAimPower"]
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipPower"]
 layout_mode = 2
-text = "W / S   A / D"
+text = "power_increase / power_decrease"
 
-[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/TooltipAimPower"]
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/TooltipPower"]
 custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
-[node name="Description" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipAimPower"]
+[node name="Description" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipPower"]
 layout_mode = 2
-text = "Power   Aim"
+text = "Power"
+
+[node name="TooltipAim" type="HBoxContainer" parent="PanelContainer/TooltipsPlayerTurn"]
+visible = false
+layout_mode = 2
+
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipAim"]
+layout_mode = 2
+text = "aim_left / aim_right"
+
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/TooltipAim"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="Description" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipAim"]
+layout_mode = 2
+text = "Aim"
 
 [node name="TooltipShoot" type="HBoxContainer" parent="PanelContainer/TooltipsPlayerTurn"]
 visible = false
@@ -55,7 +71,7 @@ layout_mode = 2
 
 [node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipShoot"]
 layout_mode = 2
-text = "Spacebar"
+text = "shoot"
 
 [node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/TooltipShoot"]
 custom_minimum_size = Vector2(16, 0)
@@ -71,7 +87,7 @@ layout_mode = 2
 
 [node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipChangeWeapon"]
 layout_mode = 2
-text = "H"
+text = "cycle_next_weapon"
 
 [node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/TooltipChangeWeapon"]
 custom_minimum_size = Vector2(16, 0)

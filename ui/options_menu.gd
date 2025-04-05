@@ -64,9 +64,6 @@ func populate_keybinds_ui() -> void:
 	#print_debug(map)
 	
 	for action in map:
-		# Ignore built-ins
-		if action.begins_with("ui"): continue
-		
 		# Label
 		var label = Label.new()
 		label.text = action
