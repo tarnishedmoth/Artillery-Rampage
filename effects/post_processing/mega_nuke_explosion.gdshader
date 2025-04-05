@@ -11,7 +11,12 @@ uniform float intensity : hint_range(0, 10) = 1.0;
 uniform float flash_lifetime_frac = 0.1;
 
 uniform vec4 flash_color: source_color = vec4(1.0);
+uniform vec4 vignette_color: source_color = vec4(vec3(0.0), 1.0);
+
 uniform vec4 radiation_color: source_color;
+
+uniform float inner_vignette_radius : hint_range(0.0, 1.0) = 0.25; // Inner radius
+uniform float outer_vignette_radius : hint_range(0.0, 1.0) = 1.0; // Outer radius
 
 float get_abberation_alpha(float elapsed_time) {
 	// Period is the lifetime and phase shift by PI / 2 so that clamped value goes 0 to 1 and back to 0 over interval
@@ -21,6 +26,20 @@ float get_abberation_alpha(float elapsed_time) {
 float get_radiation_alpha(float elapsed_time) {
 	// Period is the lifetime and phase shift by PI / 2 so that clamped value goes 0 to 1 and back to 0 over interval
 	return (sin((TAU * elapsed_time / (lifetime * (1.0 - flash_lifetime_frac))) - PI * 0.5) * 0.5) + 0.5;
+}
+
+float vignette(vec2 screen_uv, float alpha) {
+	float inner_radius = inner_vignette_radius;
+	float outer_radius = outer_vignette_radius;
+
+	// Calculate the distance from the center of the screen
+	vec2 uv = screen_uv * 2.0 - 1.0;
+	float dist = length(uv);
+
+	// Calculate the vignette effect
+	float vignette_effect = smoothstep(inner_radius, outer_radius, dist);
+
+	return mix(0.0, vignette_effect, alpha);
 }
 
 vec4 chromatic_abberation(vec2 screen_uv, float alpha) {
@@ -44,8 +63,10 @@ void fragment() {
 	float elapsed_time = game_time - start_time;
 	float flash_time = lifetime * flash_lifetime_frac;
 	float lifetime_frac = elapsed_time / lifetime;
+
+	vec2 uv = SCREEN_UV;
 	
-	vec4 initial_color = texture(screen_texture, SCREEN_UV);
+	vec4 initial_color = texture(screen_texture, uv);
 	vec4 final_color;
 	
 	if(elapsed_time <= flash_time) {
@@ -56,8 +77,9 @@ void fragment() {
 	}
 	
 	float abberation_alpha = get_abberation_alpha(elapsed_time);
-    vec4 abberation_color = chromatic_abberation(SCREEN_UV, abberation_alpha);
+    vec4 abberation_color = chromatic_abberation(uv, abberation_alpha);
 	vec4 color = mix(final_color, abberation_color, abberation_alpha);
-	
+	color = mix(color, vignette_color, vignette(uv, abberation_alpha));
+
 	COLOR = color;
 }

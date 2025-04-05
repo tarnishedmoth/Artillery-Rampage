@@ -10,7 +10,10 @@ shader_parameter/lifetime = null
 shader_parameter/intensity = 10.0
 shader_parameter/flash_lifetime_frac = 0.3
 shader_parameter/flash_color = Color(1, 1, 1, 0.941176)
+shader_parameter/vignette_color = Color(0, 0, 0, 1)
 shader_parameter/radiation_color = Color(0.72, 0.6894, 0.108, 0.717647)
+shader_parameter/inner_vignette_radius = 0.1
+shader_parameter/outer_vignette_radius = 1.0
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_je3ns"]
 
