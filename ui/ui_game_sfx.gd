@@ -12,6 +12,7 @@ extends Node
 @export var sfx_turn_started: AudioStreamPlayer
 @export var sfx_turn_ended: AudioStreamPlayer
 @export var sfx_weapon_updated: AudioStreamPlayer
+@export var sfx_unit_killed: AudioStreamPlayer
 @export var sfx_soundtrack: AudioStreamPlayer
 
 var initial_db_values:Dictionary
@@ -24,6 +25,7 @@ func _ready() -> void:
 	GameEvents.round_started.connect(_on_round_started)
 	GameEvents.round_ended.connect(_on_round_ended)
 	GameEvents.weapon_updated.connect(_on_weapon_updated)
+	GameEvents.player_died.connect(_on_player_died)
 	
 @warning_ignore("unused_parameter")
 func check_cached_volume(audio_stream_player, override_volume_db:float = _sfx_volume_modifier) -> void:
@@ -63,3 +65,11 @@ func _on_weapon_updated(_weapon) -> void:
 	# alert, this is the way.
 	if sfx_weapon_updated:
 		sfx_weapon_updated.play()
+
+func _on_player_died(controller: TankController) -> void:
+	# Could have different sounds for enemies vs player
+	if controller is Player:
+		return
+	else:
+		if sfx_unit_killed:
+			sfx_unit_killed.play()

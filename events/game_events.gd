@@ -15,6 +15,9 @@ signal turn_ended(player: TankController)
 signal player_added(player: TankController)
 
 @warning_ignore("unused_signal")
+signal player_died(player: TankController)
+
+@warning_ignore("unused_signal")
 signal round_started()
 
 @warning_ignore("unused_signal")

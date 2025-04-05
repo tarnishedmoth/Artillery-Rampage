@@ -76,6 +76,8 @@ var mark_falling: bool
 		_on_update_color()
 	get:
 		return color
+		
+@onready var controller:TankController = get_parent()
 
 func _on_update_color():
 	modulate = color
@@ -189,7 +191,7 @@ func _update_attributes():
 func shoot() -> bool:
 	var weapon: Weapon = get_equipped_weapon()
 	if check_can_shoot_weapon(weapon):
-		var controller:TankController = get_parent()
+		#var controller:TankController = get_parent()
 		controller.submit_intended_action(weapon.shoot.bind(power), controller)
 		#weapon.shoot(power)
 		return true
@@ -220,6 +222,7 @@ func kill():
 	print_debug("Tank: %s Killed" % [get_parent().name])
 	if drop_on_death:
 		spawn_death_drop()
+	GameEvents.player_died.emit(controller)
 	queue_free()
 
 func spawn_death_drop() -> void:
