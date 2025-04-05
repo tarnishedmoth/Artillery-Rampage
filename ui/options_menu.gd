@@ -16,6 +16,8 @@ signal closed
 
 func _ready() -> void:
 	set_initial_states()
+	options.show()
+	keybinds.hide()
 
 func set_initial_states() -> void:
 	# Each option
