@@ -54,35 +54,44 @@ func _on_apply_pressed() -> void:
 func _on_cancel_pressed() -> void:
 	close_options_menu()
 
-
-func _on_configure_keybinds_button_pressed() -> void:
+func populate_keybinds_ui() -> void:
+	# Clear old data
+	for child in keybind_labels.get_children() + keybind_glyphs.get_children(): # Didn't know i could do this, cool
+		child.queue_free()
+	
 	# Get all keybinds and display them
 	var map: Array[StringName] = UserOptions.get_all_keybinds() # InputMap.get_actions()
-	print_debug(map)
+	#print_debug(map)
 	
 	for action in map:
 		# Ignore built-ins
 		if action.begins_with("ui"): continue
 		
+		# Label
 		var label = Label.new()
 		label.text = action
 		keybind_labels.add_child(label)
 		
+		# Glyph
 		var inputs: Array[InputEvent] = InputMap.action_get_events(action)
 		var text: String
 		for input: InputEvent in inputs:
-			text += str(input.as_text())
+			if not text.is_empty(): text += ", " # Add a separator
+			text += input.as_text()
+			
 		var glyph = Button.new()
 		glyph.text = text
-		glyph.pressed.connect(_on_keybinds_changing) # Is this accessible??
+		glyph.pressed.connect(_on_keybinds_changing)
 		keybind_glyphs.add_child(glyph)
-	
-	# Ready
+
+func _on_configure_keybinds_button_pressed() -> void:
+	populate_keybinds_ui()
 	keybinds.show()
 	
 func _on_keybinds_changing(action: StringName) -> void:
 	# TODO Show popup menu
 	# Use value to set event
+	# Pass a value from the button, not sure how at the moment
 	print_debug(action)
 
 func _on_keybinds_confirm_changes_pressed() -> void:
@@ -94,3 +103,5 @@ func _on_keybinds_cancel_pressed() -> void:
 
 func _on_keybinds_reset_all_pressed() -> void:
 	UserOptions.reset_all_keybinds_to_default()
+	keybinds.hide()
+	_on_configure_keybinds_button_pressed() # Reload
