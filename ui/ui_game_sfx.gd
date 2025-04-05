@@ -9,7 +9,8 @@ extends Node
 @export_group("AudioStreamPlayers","sfx_")
 @export var sfx_round_started: AudioStreamPlayer
 @export var sfx_round_ended: AudioStreamPlayer
-@export var sfx_turn_started: AudioStreamPlayer
+@export var sfx_enemy_turn_started: AudioStreamPlayer
+@export var sfx_player_turn_started: AudioStreamPlayer
 @export var sfx_turn_ended: AudioStreamPlayer
 @export var sfx_weapon_updated: AudioStreamPlayer
 @export var sfx_unit_killed: AudioStreamPlayer
@@ -38,9 +39,13 @@ func get_cached_volume(audio_stream_player) -> float:
 	else:
 		return _sfx_volume_modifier
 	
-func _on_turn_started(_player) -> void:
-	if sfx_turn_started:
-		sfx_turn_started.play()
+func _on_turn_started(controller: TankController) -> void:
+	if controller is Player:
+		if sfx_player_turn_started:
+			sfx_player_turn_started.play()
+	else:
+		if sfx_enemy_turn_started:
+			sfx_enemy_turn_started.play()
 	
 func _on_turn_ended(_player) -> void:
 	if sfx_turn_ended:
