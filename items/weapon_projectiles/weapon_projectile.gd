@@ -96,9 +96,7 @@ func _ready() -> void:
 	
 	modulate = color
 	apply_all_mods() # This may not be desired but it probably is. If the weapon's stats are retained across matches, this could double the effect unintentionally
-	
-	_apply_post_processing()
-	
+		
 	GameEvents.emit_projectile_fired(self)
 	
 func set_sources(tank:Tank,weapon:Weapon) -> void:
@@ -196,7 +194,9 @@ func center_destructible_on_impact_point(destructible: CollisionPolygon2D) -> Ve
 func destroy():
 	if explosion_to_spawn:
 		spawn_explosion(explosion_to_spawn)
-		
+	
+	_apply_post_processing()
+	
 	completed_lifespan.emit()
 	queue_free()
 	
