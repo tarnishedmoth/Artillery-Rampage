@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://bpy071ovoevnq"]
+[gd_scene load_steps=7 format=3 uid="uid://bpy071ovoevnq"]
 
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/control_theme_main_menu.tres" id="1_1lcqw"]
 [ext_resource type="Script" path="res://levels/main_menu.gd" id="1_3vdg5"]
+[ext_resource type="AudioStream" uid="uid://cbowxug2pgc4y" path="res://music/MenuRock.mp3" id="2_60dqb"]
 [ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="3_tkm84"]
 [ext_resource type="Script" path="res://levels/mainmenu_level_select.gd" id="4_ryopc"]
 [ext_resource type="PackedScene" uid="uid://da23m08ml50op" path="res://ui/options_menu.tscn" id="6_snioo"]
@@ -9,6 +10,11 @@
 [node name="MainMenu" type="Node2D" node_paths=PackedStringArray("revealables")]
 script = ExtResource("1_3vdg5")
 revealables = [NodePath("Controls/MainMenu/Columns/CenterColumn/MainMenuHeader"), NodePath("Controls/MainMenu/Columns/RightColumn/CreditsHeader"), NodePath("Controls/MainMenu/Columns/RightColumn/CreditsList")]
+
+[node name="Soundtrack" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("2_60dqb")
+bus = &"Music"
 
 [node name="Controls" type="Control" parent="."]
 custom_minimum_size = Vector2(1280, 720)

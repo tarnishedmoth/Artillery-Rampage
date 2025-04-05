@@ -26,6 +26,9 @@ var credits_list_is_focused:bool = false
 @onready var main_menu: VBoxContainer = %MainMenu
 @onready var options_menu: Control = %Options
 @onready var level_select_menu: Control = %LevelSelect
+
+@onready var soundtrack: AudioStreamPlayer2D = %Soundtrack
+
 #endregion
 
 
@@ -35,6 +38,7 @@ var credits_list_is_focused:bool = false
 func _ready() -> void:
 	per_character_full_reveal()
 	per_line_scroll_credits()
+	soundtrack.play()
 #func _input(event: InputEvent) -> void: pass
 #func _unhandled_input(event: InputEvent) -> void: pass
 #func _physics_process(delta: float) -> void: pass

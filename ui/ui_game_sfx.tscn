@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://dgmcs2um4230a"]
+[gd_scene load_steps=4 format=3 uid="uid://dgmcs2um4230a"]
 
 [ext_resource type="Script" path="res://ui/ui_game_sfx.gd" id="1_f7f20"]
+[ext_resource type="AudioStream" uid="uid://g8coshapm1yx" path="res://ui/sounds/snare_roll_7.wav" id="2_ue5xo"]
+[ext_resource type="AudioStream" uid="uid://ci1dek1d81545" path="res://ui/sounds/snare_roll_1.wav" id="3_u6enn"]
 
 [node name="UI_Game_SFX" type="Node" node_paths=PackedStringArray("sfx_round_started", "sfx_round_ended", "sfx_turn_started", "sfx_turn_ended", "sfx_weapon_updated", "sfx_soundtrack")]
 script = ExtResource("1_f7f20")
@@ -15,9 +17,12 @@ sfx_soundtrack = NodePath("Soundtrack")
 bus = &"SFX"
 
 [node name="Round End" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_ue5xo")
 bus = &"SFX"
 
 [node name="Turn Start" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_u6enn")
+volume_db = -3.0
 bus = &"SFX"
 
 [node name="Turn End" type="AudioStreamPlayer" parent="."]
