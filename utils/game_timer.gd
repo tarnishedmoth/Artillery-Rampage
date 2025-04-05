@@ -15,4 +15,5 @@ var time_ms: float:
 
 func _process(delta: float) -> void:
 	_time_seconds += delta
+	RenderingServer.global_shader_parameter_set(&"game_time", _time_seconds)
 	# print_debug("TimeSeconds=%fs; EngineTime=%fs" % [_time_seconds, Time.get_ticks_msec() / 1000.0])

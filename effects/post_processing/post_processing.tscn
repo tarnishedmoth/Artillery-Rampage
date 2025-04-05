@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://effects/post_processing/post_processing.gd" id="1_yqtf0"]
 
 [node name="PostProcessing" type="CanvasLayer"]
+process_mode = 4
 layer = 10
 script = ExtResource("1_yqtf0")
 

@@ -3,6 +3,11 @@ class_name MegaNukeExplosion extends Sprite2D
 @export var lifetime: float = 5.0
 
 var shader:ShaderMaterial
+
+## Callable for current game time
+## Set by PostProcessingEffects when added to the tree
+var get_game_time_seconds:Callable
+
 func _ready() -> void:
 		
 	shader = material as ShaderMaterial
@@ -15,7 +20,7 @@ func _ready() -> void:
 	self.position = Vector2.ZERO  # Place the node at the top-left corner
 	self.scale = viewport_size
 
-	shader.set_shader_parameter("start_time", get_time())
+	shader.set_shader_parameter("start_time", get_game_time_seconds.call())
 	
 	GameEvents.turn_started.connect(_on_turn_started)
 
@@ -27,6 +32,3 @@ func _ready() -> void:
 func _on_turn_started(player: TankController) -> void:
 	print_debug("%s - TurnStarted: %s" % [name, player.name])
 	# TODO: Fade out the effect
-
-func get_time() -> float:
-	return Time.get_ticks_msec() / 1000.0;

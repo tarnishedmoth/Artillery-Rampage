@@ -1,8 +1,11 @@
 shader_type canvas_item;
 
 uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_linear_mipmap;
+
+global uniform float game_time;
 uniform float start_time;
 uniform float lifetime;
+
 uniform float intensity : hint_range(0, 10) = 1.0;
 
 uniform float flash_lifetime_frac = 0.1;
@@ -38,7 +41,7 @@ vec4 chromatic_abberation(vec2 screen_uv, float alpha) {
 }
 
 void fragment() {
-	float elapsed_time = TIME - start_time;
+	float elapsed_time = game_time - start_time;
 	float flash_time = lifetime * flash_lifetime_frac;
 	float lifetime_frac = elapsed_time / lifetime;
 	

@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://d4hcektli3l46"]
+[gd_scene load_steps=6 format=3 uid="uid://d4hcektli3l46"]
 
 [ext_resource type="Script" path="res://levels/test/effects/effect_test.gd" id="1_mrotw"]
 [ext_resource type="PackedScene" uid="uid://cchj21cb5n3ly" path="res://effects/post_processing/mega_nuke_explosion.tscn" id="2_034qv"]
 [ext_resource type="PackedScene" uid="uid://bamvmc2k56pyk" path="res://effects/post_processing/post_processing.tscn" id="2_dkus7"]
 [ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="4_u44a6"]
+[ext_resource type="Script" path="res://utils/game_timer.gd" id="5_ck43f"]
 
 [node name="EffectTest" type="Node2D"]
 script = ExtResource("1_mrotw")
@@ -15,3 +16,6 @@ post_processing_scene = ExtResource("2_034qv")
 position = Vector2(658, 379)
 scale = Vector2(10.2656, 5.9375)
 texture = ExtResource("4_u44a6")
+
+[node name="GameTimer" type="Node" parent="."]
+script = ExtResource("5_ck43f")

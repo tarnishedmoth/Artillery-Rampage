@@ -107,3 +107,10 @@ pause={
 2d_physics/layer_8="Hazard"
 2d_physics/layer_9="Collectibles"
 2d_physics/layer_10="ProjectileBlocker"
+
+[shader_globals]
+
+game_time={
+"type": "float",
+"value": 0.0
+}
