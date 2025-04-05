@@ -1,6 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://da23m08ml50op"]
+[gd_scene load_steps=4 format=3 uid="uid://da23m08ml50op"]
 
 [ext_resource type="Script" path="res://ui/options_menu.gd" id="1_6vtbd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sbkqv"]
+bg_color = Color(0.462291, 0.462291, 0.46229, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_m3s5d"]
+font_size = 12
+shadow_size = 4
+shadow_color = Color(0, 0, 0, 0.25098)
 
 [node name="OptionsMenu" type="PanelContainer"]
 anchors_preset = 8
@@ -18,26 +26,26 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_6vtbd")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="Options" type="VBoxContainer" parent="."]
 custom_minimum_size = Vector2(512, 512)
 layout_mode = 2
 
-[node name="Spacer" type="Control" parent="VBoxContainer"]
+[node name="Spacer" type="Control" parent="Options"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.05
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="Label" type="Label" parent="Options"]
 layout_mode = 2
 text = "Options Menu"
 horizontal_alignment = 1
 
-[node name="Spacer2" type="Control" parent="VBoxContainer"]
+[node name="Spacer2" type="Control" parent="Options"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.05
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Options"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 16
@@ -45,65 +53,65 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Options/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="Options" type="VBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="Options" type="VBoxContainer" parent="Options/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ConfigureKeybindsButton" type="Button" parent="VBoxContainer/MarginContainer/VBoxContainer/Options"]
+[node name="ConfigureKeybindsButton" type="Button" parent="Options/MarginContainer/VBoxContainer/Options"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Configure Keybinds"
 
-[node name="ShowTooltips" type="HBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer/Options"]
+[node name="ShowTooltips" type="HBoxContainer" parent="Options/MarginContainer/VBoxContainer/Options"]
 layout_mode = 2
 alignment = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/Options/ShowTooltips"]
+[node name="Label" type="Label" parent="Options/MarginContainer/VBoxContainer/Options/ShowTooltips"]
 layout_mode = 2
 text = "Show tooltips in game"
 
-[node name="ShowTooltipsToggle" type="CheckButton" parent="VBoxContainer/MarginContainer/VBoxContainer/Options/ShowTooltips"]
+[node name="ShowTooltipsToggle" type="CheckButton" parent="Options/MarginContainer/VBoxContainer/Options/ShowTooltips"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ShowHUD" type="HBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer/Options"]
+[node name="ShowHUD" type="HBoxContainer" parent="Options/MarginContainer/VBoxContainer/Options"]
 layout_mode = 2
 alignment = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/Options/ShowHUD"]
+[node name="Label" type="Label" parent="Options/MarginContainer/VBoxContainer/Options/ShowHUD"]
 layout_mode = 2
 text = "Show HUD in game"
 
-[node name="ShowHUDToggle" type="CheckButton" parent="VBoxContainer/MarginContainer/VBoxContainer/Options/ShowHUD"]
+[node name="ShowHUDToggle" type="CheckButton" parent="Options/MarginContainer/VBoxContainer/Options/ShowHUD"]
 unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
 
-[node name="VolumeSliders" type="HBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer/Options"]
+[node name="VolumeSliders" type="HBoxContainer" parent="Options/MarginContainer/VBoxContainer/Options"]
 layout_mode = 2
 
-[node name="Labels" type="VBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer/Options/VolumeSliders"]
+[node name="Labels" type="VBoxContainer" parent="Options/MarginContainer/VBoxContainer/Options/VolumeSliders"]
 layout_mode = 2
 
-[node name="Music" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/Options/VolumeSliders/Labels"]
+[node name="Music" type="Label" parent="Options/MarginContainer/VBoxContainer/Options/VolumeSliders/Labels"]
 layout_mode = 2
 text = "Music Level"
 
-[node name="SFX" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/Options/VolumeSliders/Labels"]
+[node name="SFX" type="Label" parent="Options/MarginContainer/VBoxContainer/Options/VolumeSliders/Labels"]
 layout_mode = 2
 text = "Sound Effects"
 
-[node name="Sliders" type="VBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer/Options/VolumeSliders"]
+[node name="Sliders" type="VBoxContainer" parent="Options/MarginContainer/VBoxContainer/Options/VolumeSliders"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MusicVolumeSlider" type="HSlider" parent="VBoxContainer/MarginContainer/VBoxContainer/Options/VolumeSliders/Sliders"]
+[node name="MusicVolumeSlider" type="HSlider" parent="Options/MarginContainer/VBoxContainer/Options/VolumeSliders/Sliders"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
@@ -113,7 +121,7 @@ step = 0.01
 tick_count = 11
 ticks_on_borders = true
 
-[node name="SFXVolumeSlider" type="HSlider" parent="VBoxContainer/MarginContainer/VBoxContainer/Options/VolumeSliders/Sliders"]
+[node name="SFXVolumeSlider" type="HSlider" parent="Options/MarginContainer/VBoxContainer/Options/VolumeSliders/Sliders"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
@@ -123,19 +131,105 @@ step = 0.01
 tick_count = 11
 ticks_on_borders = true
 
-[node name="ConfirmButtons" type="HBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="ConfirmButtons" type="HBoxContainer" parent="Options/MarginContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="Apply" type="Button" parent="VBoxContainer/MarginContainer/VBoxContainer/ConfirmButtons"]
+[node name="Apply" type="Button" parent="Options/MarginContainer/VBoxContainer/ConfirmButtons"]
 layout_mode = 2
 text = "Apply"
 
-[node name="Cancel" type="Button" parent="VBoxContainer/MarginContainer/VBoxContainer/ConfirmButtons"]
+[node name="Cancel" type="Button" parent="Options/MarginContainer/VBoxContainer/ConfirmButtons"]
 layout_mode = 2
 text = "Cancel"
 
-[connection signal="toggled" from="VBoxContainer/MarginContainer/VBoxContainer/Options/ShowTooltips/ShowTooltipsToggle" to="." method="_on_showtooltips_toggled"]
-[connection signal="toggled" from="VBoxContainer/MarginContainer/VBoxContainer/Options/ShowHUD/ShowHUDToggle" to="." method="_on_showtooltips_toggled"]
-[connection signal="pressed" from="VBoxContainer/MarginContainer/VBoxContainer/ConfirmButtons/Apply" to="." method="_on_apply_pressed"]
-[connection signal="pressed" from="VBoxContainer/MarginContainer/VBoxContainer/ConfirmButtons/Cancel" to="." method="_on_cancel_pressed"]
+[node name="Keybinds" type="PanelContainer" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sbkqv")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Keybinds"]
+custom_minimum_size = Vector2(512, 512)
+layout_mode = 2
+
+[node name="Control" type="Control" parent="Keybinds/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.05
+
+[node name="Label" type="Label" parent="Keybinds/VBoxContainer"]
+layout_mode = 2
+text = "Configure Keybinds"
+horizontal_alignment = 1
+
+[node name="Control2" type="Control" parent="Keybinds/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.05
+
+[node name="MarginContainer" type="MarginContainer" parent="Keybinds/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Keybinds/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Keybinds/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Keybinds/VBoxContainer/MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="KeybindLabels" type="VBoxContainer" parent="Keybinds/VBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/HBoxContainer"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="KeybindGlyphs" type="VBoxContainer" parent="Keybinds/VBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/HBoxContainer"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ConfirmButtons" type="HBoxContainer" parent="Keybinds/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="ConfirmChanges" type="Button" parent="Keybinds/VBoxContainer/MarginContainer/VBoxContainer/ConfirmButtons"]
+layout_mode = 2
+text = "Confirm Changes"
+
+[node name="Cancel" type="Button" parent="Keybinds/VBoxContainer/MarginContainer/VBoxContainer/ConfirmButtons"]
+layout_mode = 2
+text = "Cancel"
+
+[node name="Spacer" type="Control" parent="Keybinds/VBoxContainer/MarginContainer/VBoxContainer/ConfirmButtons"]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+
+[node name="Reset" type="Button" parent="Keybinds/VBoxContainer/MarginContainer/VBoxContainer/ConfirmButtons"]
+layout_mode = 2
+text = "Reset All"
+
+[node name="REMOVE_ME" type="Label" parent="Keybinds/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "This menu is not yet functional. :)"
+label_settings = SubResource("LabelSettings_m3s5d")
+horizontal_alignment = 1
+
+[connection signal="pressed" from="Options/MarginContainer/VBoxContainer/Options/ConfigureKeybindsButton" to="." method="_on_configure_keybinds_button_pressed"]
+[connection signal="toggled" from="Options/MarginContainer/VBoxContainer/Options/ShowTooltips/ShowTooltipsToggle" to="." method="_on_showtooltips_toggled"]
+[connection signal="toggled" from="Options/MarginContainer/VBoxContainer/Options/ShowHUD/ShowHUDToggle" to="." method="_on_showtooltips_toggled"]
+[connection signal="pressed" from="Options/MarginContainer/VBoxContainer/ConfirmButtons/Apply" to="." method="_on_apply_pressed"]
+[connection signal="pressed" from="Options/MarginContainer/VBoxContainer/ConfirmButtons/Cancel" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="Keybinds/VBoxContainer/MarginContainer/VBoxContainer/ConfirmButtons/ConfirmChanges" to="." method="_on_keybinds_confirm_changes_pressed"]
+[connection signal="pressed" from="Keybinds/VBoxContainer/MarginContainer/VBoxContainer/ConfirmButtons/Cancel" to="." method="_on_keybinds_cancel_pressed"]
+[connection signal="pressed" from="Keybinds/VBoxContainer/MarginContainer/VBoxContainer/ConfirmButtons/Reset" to="." method="_on_keybinds_reset_all_pressed"]
