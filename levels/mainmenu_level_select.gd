@@ -1,4 +1,4 @@
-extends PanelContainer
+class_name LevelSelect extends PanelContainer
 
 @export var levels_always_selectable: Array[PackedScene] ## These levels are immediately & always available to select.
 @export_dir var levels_folders_paths: Array[String] ## This functionality is only available in debug builds.

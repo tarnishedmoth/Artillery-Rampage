@@ -65,7 +65,7 @@ vec4 glow(vec2 screen_uv, float alpha) {
 
 vec4 chromatic_abberation(vec2 screen_uv, float alpha) {
 	float effective_intensity = alpha * intensity;
-	
+
 	// Offsets for RGB channels
     vec2 red_offset = vec2(effective_intensity * 0.001, 0.0);
     vec2 green_offset = vec2(0.0, -effective_intensity * 0.001);
@@ -86,17 +86,17 @@ void fragment() {
 	float lifetime_frac = elapsed_time / lifetime;
 
 	vec2 uv = SCREEN_UV;
-	
+
 	vec4 initial_color = texture(screen_texture, uv);
 	vec4 final_color;
-	
+
 	if(elapsed_time <= flash_time) {
 		final_color = mix(flash_color, initial_color, elapsed_time / flash_time);
 	}
 	else {
 		final_color = mix(initial_color, radiation_color, get_radiation_alpha(elapsed_time - flash_time));
 	}
-	
+
 	float abberation_alpha = get_abberation_alpha(elapsed_time);
     vec4 abberation_color = chromatic_abberation(uv, abberation_alpha);
 	vec4 color = mix(final_color, abberation_color, abberation_alpha);

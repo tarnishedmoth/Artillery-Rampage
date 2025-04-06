@@ -16,10 +16,10 @@ value = 0.0
 [sub_resource type="Resource" id="Resource_i55pa"]
 script = ExtResource("4_1lrpj")
 projectile_mods = Array[ExtResource("3_83rhi")]([])
-target_weapon_name = "leadball"
 property = 1
 operation = 3
 value = 2.0
+target_weapon_name = "leadball"
 
 [sub_resource type="Resource" id="Resource_tekog"]
 script = ExtResource("5_d8jwv")

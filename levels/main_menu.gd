@@ -25,10 +25,9 @@ var credits_list_is_focused:bool = false
 
 @onready var main_menu: VBoxContainer = %MainMenu
 @onready var options_menu: Control = %Options
-@onready var level_select_menu: Control = %LevelSelect
+@onready var level_select_menu: LevelSelect = %LevelSelect
 
 @onready var soundtrack: AudioStreamPlayer2D = %Soundtrack
-
 #endregion
 
 
@@ -133,3 +132,11 @@ func _on_credits_list_mouse_entered() -> void:
 
 func _on_credits_list_mouse_exited() -> void:
 	credits_list_is_focused = false
+
+
+func _on_play_now_pressed() -> void:
+	PlayerStateManager.enable = false
+	
+	var level:PackedScene = level_select_menu.levels_always_selectable.pick_random()
+	if level:
+		SceneManager.switch_scene(level)
