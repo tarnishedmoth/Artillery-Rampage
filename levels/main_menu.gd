@@ -80,7 +80,7 @@ func clear_all_text(text_nodes:Array) -> void:
 func _on_start_pressed() -> void:
 	print_debug("Start button")
 	PlayerStateManager.enable = true
-	SceneManager.next_level()
+	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryStart)
 
 func _on_level_select_pressed() -> void:
 	print_debug("Level select button")

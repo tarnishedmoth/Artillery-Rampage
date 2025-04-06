@@ -10,10 +10,12 @@ func _ready() -> void:
 
 func _on_next() -> void:
 	print_debug("on_next")
-	# TODO: We will switch to the overworld map scene - See https://boards.hometeamgamedev.com/tasks/14240
-	await SceneManager.switch_scene_keyed(SceneManager.SceneKeys.MainMenu, 0)
+	await _go_to_next_scene()
 	
 func _on_skip() -> void:
 	print_debug("on_skip")
-	#SceneManager.switch_scene_keyed(SceneManager.SceneKeys.RandomStart, 0)
-	SceneManager.next_level()
+	await _go_to_next_scene()
+
+	
+func _go_to_next_scene() -> void:
+	await SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap, 0)

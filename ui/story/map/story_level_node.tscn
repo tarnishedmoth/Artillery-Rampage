@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://bch6pb81vhwb"]
+
+[ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="1_7cq0h"]
+
+[node name="StoryLevelNode" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 54.0
+offset_bottom = 23.0
+
+[node name="Icon" type="Sprite2D" parent="."]
+scale = Vector2(0.492188, 0.515625)
+texture = ExtResource("1_7cq0h")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+offset_left = -28.0
+offset_top = 33.0
+offset_right = 26.0
+offset_bottom = 56.0
+text = "Level 1"

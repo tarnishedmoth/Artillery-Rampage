@@ -6,6 +6,9 @@ class SceneKeys:
 	const MainMenu:StringName = &"MainMenu"
 	#const PauseMenu:StringName = &"PauseMenu"
 	const RandomStart:StringName = &"RandomStart"
+	
+	const StoryMap:StringName = &"StoryMap"
+	const StoryStart:StringName = &"StoryStart"
 
 # We expect to reference the above keys with a const "preload" of a packed scene 
 # or reference to a unique name (possibly for pause menu)
@@ -20,6 +23,8 @@ class SceneKeys:
 const default_delay: float = 1.0
 
 const main_menu_scene_file = "res://levels/main_menu.tscn"
+const story_start_scene_file = "res://ui/story/story_sequence.tscn"
+const story_map_scene_file = "res://ui/story/map/story_map_scene.tscn"
 
 var _current_level_index:int = 0
 var _current_level_root_node:GameLevel
@@ -55,13 +60,15 @@ func next_level(delay: float = default_delay) -> void:
 	_current_level_index = (_current_level_index + 1) % levels.size()
 		
 func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
-	# TODO: Loading main menu and pause menu
 	match key:
 		SceneKeys.MainMenu:
 			await switch_scene_file(main_menu_scene_file)
-			return
 		SceneKeys.RandomStart:
 			await next_level(delay)
+		SceneKeys.StoryStart:
+			await switch_scene_file(story_start_scene_file)
+		SceneKeys.StoryMap:
+			await switch_scene_file(story_map_scene_file)
 	
 func switch_scene(scene: PackedScene, delay: float = default_delay) -> void:
 	var display_name = str(scene)

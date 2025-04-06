@@ -1,0 +1,107 @@
+[gd_scene load_steps=6 format=3 uid="uid://bh3bmcratw025"]
+
+[ext_resource type="Script" path="res://ui/story/map/story_map_scene.gd" id="1_5v7n8"]
+[ext_resource type="PackedScene" uid="uid://bch6pb81vhwb" path="res://ui/story/map/story_level_node.tscn" id="2_udjio"]
+[ext_resource type="PackedScene" uid="uid://cs37yf58hf3tp" path="res://ui/story/map/story_level_edge.tscn" id="3_4e1f5"]
+
+[sub_resource type="Gradient" id="Gradient_gl7n1"]
+colors = PackedColorArray(0.0851705, 0.243201, 0.0842348, 1, 0.611278, 0.401298, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_tggun"]
+gradient = SubResource("Gradient_gl7n1")
+
+[node name="StoryMapScene" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_5v7n8")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
+offset_top = 2.0
+offset_right = 1306.0
+offset_bottom = 718.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_tggun")
+
+[node name="Container" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="LevelNodesContainer" type="Control" parent="Container"]
+layout_mode = 2
+
+[node name="Level1" parent="Container/LevelNodesContainer" instance=ExtResource("2_udjio")]
+layout_mode = 2
+offset_left = 179.0
+offset_top = 291.0
+offset_right = 179.0
+offset_bottom = 291.0
+
+[node name="Level2" parent="Container/LevelNodesContainer" instance=ExtResource("2_udjio")]
+layout_mode = 2
+offset_left = 398.0
+offset_top = 310.0
+offset_right = 398.0
+offset_bottom = 310.0
+
+[node name="Label" parent="Container/LevelNodesContainer/Level2" index="1"]
+text = "Level 2
+"
+
+[node name="Edge12" parent="Container/LevelNodesContainer" instance=ExtResource("3_4e1f5")]
+
+[node name="Edge23" parent="Container/LevelNodesContainer" instance=ExtResource("3_4e1f5")]
+position = Vector2(226.35, 0)
+points = PackedVector2Array(206.65, 314, 330.65, 276)
+
+[node name="Level3" parent="Container/LevelNodesContainer" instance=ExtResource("2_udjio")]
+layout_mode = 2
+offset_left = 398.0
+offset_top = 310.0
+offset_right = 398.0
+offset_bottom = 310.0
+
+[node name="Icon" parent="Container/LevelNodesContainer/Level3" index="0"]
+position = Vector2(190, -35)
+
+[node name="Label" parent="Container/LevelNodesContainer/Level3" index="1"]
+offset_left = 164.0
+offset_top = 0.0
+offset_right = 218.0
+offset_bottom = 49.0
+text = "Level 3
+
+"
+
+[node name="Buttons" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="NextButton" type="Button" parent="Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 800.0
+offset_top = 500.0
+offset_right = 845.0
+offset_bottom = 531.0
+size_flags_vertical = 8
+text = "Next"
+
+[connection signal="pressed" from="Buttons/NextButton" to="." method="_on_next_button_pressed"]
+
+[editable path="Container/LevelNodesContainer/Level2"]
+[editable path="Container/LevelNodesContainer/Level3"]

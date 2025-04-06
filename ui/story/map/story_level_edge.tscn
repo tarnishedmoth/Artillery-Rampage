@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cs37yf58hf3tp"]
+
+[node name="LevelPath" type="Line2D"]
+points = PackedVector2Array(210, 289, 369, 310)
+width = 5.0
+default_color = Color(0.2, 0.213333, 1, 1)
