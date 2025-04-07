@@ -5,7 +5,12 @@ var paused = false;
 @onready var options_menu: PanelContainer = %OptionsMenu
 @onready var pause_menu: VBoxContainer = %PauseMenu
 
+@onready var exit_to_desktop_button: Button = %QuitToDesktop
+
+
 func _ready():
+	if OS.get_name() == "Web":
+		exit_to_desktop_button.hide()
 	hide()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

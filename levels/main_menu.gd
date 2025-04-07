@@ -26,6 +26,7 @@ var credits_list_is_focused:bool = false
 @onready var main_menu: VBoxContainer = %MainMenu
 @onready var options_menu: Control = %Options
 @onready var level_select_menu: LevelSelect = %LevelSelect
+@onready var exit_to_desktop_button: Button = %Quit
 
 @onready var soundtrack: AudioStreamPlayer2D = %Soundtrack
 #endregion
@@ -35,6 +36,9 @@ var credits_list_is_focused:bool = false
 #func _init() -> void: pass
 #func _enter_tree() -> void: pass
 func _ready() -> void:
+	if OS.get_name() == "Web":
+		exit_to_desktop_button.hide()
+	
 	per_character_full_reveal()
 	per_line_scroll_credits()
 	soundtrack.play()
