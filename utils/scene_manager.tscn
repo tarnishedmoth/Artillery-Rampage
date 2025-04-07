@@ -1,10 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://diy1qhcffvn7e"]
+[gd_scene load_steps=3 format=3 uid="uid://diy1qhcffvn7e"]
 
 [ext_resource type="Script" path="res://utils/scene_manager.gd" id="1_olrhd"]
+[ext_resource type="Resource" uid="uid://b20xhiq7ab52i" path="res://levels/conf/story_levels_resource.tres" id="2_f8pd1"]
 
 [node name="SceneManager" type="Node"]
 script = ExtResource("1_olrhd")
-levels = Array[String](["res://levels/test/environments/test_level_environment_islands.tscn", "res://levels/test/environments/test_level_environment_scorchedplains.tscn", "res://levels/test/test_level_terrain_proc_gen.tscn", "res://levels/test/environments/test_level_environment_plains.tscn", "res://levels/test/test_level_terrain_proc_gen_fresh.tscn", "res://levels/test/environments/test_level_environment_plateau.tscn", "res://levels/test/environments/test_level_environment_whitecaps.tscn", "res://levels/test/environments/test_level_environment_divide.tscn"])
-level_names = {
-"res://levels/test/test_level_01.tscn": "Level 1"
-}
+story_levels = ExtResource("2_f8pd1")

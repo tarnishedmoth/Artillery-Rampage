@@ -8,6 +8,9 @@ class_name GameLevel extends Node2D
 @onready var game_timer:GameTimer = %GameTimer
 @onready var post_processing: PostProcessingEffects = %PostProcessing
 
+## Name of level displayed to player
+@export var level_name:StringName
+
 var container_for_spawnables
 
 func _ready() -> void:

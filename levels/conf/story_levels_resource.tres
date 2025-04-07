@@ -1,0 +1,57 @@
+[gd_resource type="Resource" script_class="StoryLevelsResource" load_steps=12 format=3 uid="uid://b20xhiq7ab52i"]
+
+[ext_resource type="Script" path="res://levels/conf/story_level_resource.gd" id="1_3qnfp"]
+[ext_resource type="Script" path="res://levels/conf/story_levels_resource.gd" id="1_e5mo0"]
+[ext_resource type="PackedScene" uid="uid://bch6pb81vhwb" path="res://ui/story/map/story_level_node.tscn" id="2_dfrvm"]
+
+[sub_resource type="Resource" id="Resource_ccn48"]
+script = ExtResource("1_3qnfp")
+scene_res_path = &"res://levels/test/environments/test_level_environment_islands.tscn"
+name = &"Islands"
+ui_map_node = ExtResource("2_dfrvm")
+
+[sub_resource type="Resource" id="Resource_ls1ig"]
+script = ExtResource("1_3qnfp")
+scene_res_path = &"res://levels/test/environments/test_level_environment_scorchedplains.tscn"
+name = &"Scorched Plains"
+ui_map_node = ExtResource("2_dfrvm")
+
+[sub_resource type="Resource" id="Resource_8g4lb"]
+script = ExtResource("1_3qnfp")
+scene_res_path = &"res://levels/test/test_level_terrain_proc_gen.tscn"
+name = &"Spikey Hills"
+ui_map_node = ExtResource("2_dfrvm")
+
+[sub_resource type="Resource" id="Resource_w4otv"]
+script = ExtResource("1_3qnfp")
+scene_res_path = &"res://levels/test/environments/test_level_environment_plains.tscn"
+name = &"Plains"
+ui_map_node = ExtResource("2_dfrvm")
+
+[sub_resource type="Resource" id="Resource_yxy2j"]
+script = ExtResource("1_3qnfp")
+scene_res_path = &"res://levels/test/test_level_terrain_proc_gen_fresh.tscn"
+name = &"New Heights"
+ui_map_node = ExtResource("2_dfrvm")
+
+[sub_resource type="Resource" id="Resource_tj162"]
+script = ExtResource("1_3qnfp")
+scene_res_path = &"res://levels/test/environments/test_level_environment_plateau.tscn"
+name = &"Wild West"
+ui_map_node = ExtResource("2_dfrvm")
+
+[sub_resource type="Resource" id="Resource_xxtnw"]
+script = ExtResource("1_3qnfp")
+scene_res_path = &"res://levels/test/environments/test_level_environment_whitecaps.tscn"
+name = &"Snow Caps"
+ui_map_node = ExtResource("2_dfrvm")
+
+[sub_resource type="Resource" id="Resource_ssq1b"]
+script = ExtResource("1_3qnfp")
+scene_res_path = &"res://levels/test/environments/test_level_environment_divide.tscn"
+name = &"The Great Divide"
+ui_map_node = ExtResource("2_dfrvm")
+
+[resource]
+script = ExtResource("1_e5mo0")
+levels = Array[ExtResource("1_3qnfp")]([SubResource("Resource_ccn48"), SubResource("Resource_ls1ig"), SubResource("Resource_8g4lb"), SubResource("Resource_w4otv"), SubResource("Resource_yxy2j"), SubResource("Resource_tj162"), SubResource("Resource_xxtnw"), SubResource("Resource_ssq1b")])

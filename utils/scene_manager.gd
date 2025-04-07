@@ -13,12 +13,8 @@ class SceneKeys:
 # We expect to reference the above keys with a const "preload" of a packed scene 
 # or reference to a unique name (possibly for pause menu)
 
-# These are more dynamic levels that we will specify in configuration
-# TODO: May want to make these a dictionary with key being level name but then will want to be sure to preserve order
-
 # Don't use PackedScene as we don't want all the scene data to be preloaded at the start of the game
-@export var levels: Array[String]
-@export var level_names: Dictionary = {}
+@export var story_levels: StoryLevelsResource
 
 const default_delay: float = 1.0
 
@@ -28,6 +24,7 @@ const story_map_scene_file = "res://ui/story/map/story_map_scene.tscn"
 
 var _current_level_index:int = 0
 var _current_level_root_node:GameLevel
+var _current_story_level:StoryLevel
 
 func _init() -> void:
 	GameEvents.level_loaded.connect(_on_GameLevel_loaded)
@@ -50,14 +47,15 @@ func restart_level(delay: float = default_delay) -> void:
 	_switch_scene(func(): get_tree().reload_current_scene(), delay)
 	
 func next_level(delay: float = default_delay) -> void:
-	if levels.is_empty():
+	if !story_levels or !story_levels.levels:
 		push_error("No levels available to load")
 	# TODO: When using procedural maps may need a different strategy or may want to shuffle the levels on start
 	# The procedural map could just be a specific scene that has some base configuration and then generates on ready
 	# Or we could start proc-gening the next scene during current scene and then just keep in memory and present it here
 	print_debug("Loading")
-	await switch_scene_file(levels[_current_level_index], delay)
-	_current_level_index = (_current_level_index + 1) % levels.size()
+	_current_story_level = story_levels.levels[_current_level_index]
+	await switch_scene_file(_current_story_level.scene_res_path, delay)
+	_current_level_index = (_current_level_index + 1) % story_levels.levels.size()
 		
 func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 	match key:
@@ -96,4 +94,6 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 func _on_GameLevel_loaded(level:GameLevel) -> void:
 	print_debug("_on_GameLevel_loaded: level=%s" % [str(level.name) if level else "NULL"])
 	
+	if _current_story_level:
+		level.name = _current_story_level.name
 	_current_level_root_node = level

@@ -1,18 +1,12 @@
-[gd_scene load_steps=14 format=3 uid="uid://bpy071ovoevnq"]
+[gd_scene load_steps=8 format=3 uid="uid://bpy071ovoevnq"]
 
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/control_theme_main_menu.tres" id="1_1lcqw"]
 [ext_resource type="Script" path="res://levels/main_menu.gd" id="1_3vdg5"]
 [ext_resource type="AudioStream" uid="uid://cbowxug2pgc4y" path="res://music/MenuRock.mp3" id="2_60dqb"]
 [ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="3_tkm84"]
 [ext_resource type="Script" path="res://levels/mainmenu_level_select.gd" id="4_ryopc"]
-[ext_resource type="PackedScene" uid="uid://dwgn8g6vo2w3h" path="res://levels/test/environments/test_level_environment_whitecaps.tscn" id="6_pdv4a"]
+[ext_resource type="Resource" uid="uid://b20xhiq7ab52i" path="res://levels/conf/story_levels_resource.tres" id="6_ryb4w"]
 [ext_resource type="PackedScene" uid="uid://da23m08ml50op" path="res://ui/options_menu.tscn" id="6_snioo"]
-[ext_resource type="PackedScene" uid="uid://xbu6vsgqj6ol" path="res://levels/test/environments/test_level_environment_plateau.tscn" id="7_l6xe1"]
-[ext_resource type="PackedScene" uid="uid://chyc3ellb55lr" path="res://levels/test/environments/test_level_environment_plains.tscn" id="8_k3yoy"]
-[ext_resource type="PackedScene" uid="uid://djpfk6t0465og" path="res://levels/test/environments/test_level_environment_islands.tscn" id="9_dpyyp"]
-[ext_resource type="PackedScene" uid="uid://wu7hqwxsows8" path="res://levels/test/environments/test_level_environment_divide.tscn" id="10_0mv82"]
-[ext_resource type="PackedScene" uid="uid://kgy6jgf0n1qg" path="res://levels/test/test_level_terrain_proc_gen_fresh.tscn" id="11_uj3l2"]
-[ext_resource type="PackedScene" uid="uid://c28jyv737dg8r" path="res://levels/test/test_level_terrain_proc_gen.tscn" id="12_d26a3"]
 
 [node name="MainMenu" type="Node2D" node_paths=PackedStringArray("revealables")]
 script = ExtResource("1_3vdg5")
@@ -220,7 +214,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("4_ryopc")
-levels_always_selectable = Array[PackedScene]([ExtResource("6_pdv4a"), ExtResource("7_l6xe1"), ExtResource("8_k3yoy"), ExtResource("9_dpyyp"), ExtResource("10_0mv82"), ExtResource("11_uj3l2"), ExtResource("12_d26a3")])
+levels_always_selectable = ExtResource("6_ryb4w")
 levels_folders_paths = Array[String](["res://levels"])
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Controls/LevelSelect"]

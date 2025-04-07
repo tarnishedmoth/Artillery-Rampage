@@ -1,6 +1,6 @@
 class_name LevelSelect extends PanelContainer
 
-@export var levels_always_selectable: Array[PackedScene] ## These levels are immediately & always available to select.
+@export var levels_always_selectable: StoryLevelsResource ## These levels are immediately & always available to select.
 @export_dir var levels_folders_paths: Array[String] ## This functionality is only available in debug builds.
 @onready var menu_levels_list: VBoxContainer = %Buttons
 @onready var main_menu: VBoxContainer = %MainMenu
@@ -48,9 +48,9 @@ func refresh_list(path) -> void:
 	var items: Array
 	
 	# Add always available levels
-	if not levels_always_selectable.is_empty():
+	if levels_always_selectable and not levels_always_selectable.levels.is_empty():
 		if scan_all_levels: add_menu_item("Always Selectable", _on_level_selected)
-		for level in levels_always_selectable:
+		for level in levels_always_selectable.levels:
 			add_menu_item(level, _on_level_selected)
 	
 	# Debug builds only
@@ -97,6 +97,12 @@ func add_menu_item(item = null, press_call:Callable = _on_level_selected) -> voi
 	var entry
 	if item == null:
 		entry = LabelDirectory.new("")
+	elif item is StoryLevel:
+		var story_level:StoryLevel = item as StoryLevel
+		entry = ButtonLevelFile.new(
+			str(story_level.scene_res_path), # Full file path
+			story_level.name, # Display text
+			_on_level_selected) # Callable
 	elif item is PackedScene:
 		entry = ButtonLevelPackedScene.new(
 			item,
