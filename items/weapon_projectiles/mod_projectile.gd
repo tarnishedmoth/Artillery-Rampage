@@ -18,6 +18,9 @@ enum Modifiables {
 	SHOULD_EXPLODE_ON_IMPACT, # bool
 	MASS, # float
 	MAX_LIFETIME, # float
+	DEPLOY_NUMBER, # int, Deployable only
+	DEPLOY_VELOCITY_IMPULSE, # float, Deployable only
+	DEPLOY_DELAY, # float, Deployable only
 }
 
 @export var property: Modifiables ## Which property of the Weapon to modify.

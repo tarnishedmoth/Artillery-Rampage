@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://i4anqg26d78u"]
 
 [ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile_deployable.gd" id="1_wgrqp"]
-[ext_resource type="PackedScene" uid="uid://c7jh5lsef6gd1" path="res://items/weapon_projectiles/weapon_projectile.tscn" id="2_e33fd"]
+[ext_resource type="PackedScene" uid="uid://qjakm7qdri7x" path="res://items/weapon_projectiles/weapon_projectile_small.tscn" id="2_duidj"]
 [ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="3_3drbo"]
 [ext_resource type="PackedScene" uid="uid://gj55bahvsd7g" path="res://items/weapon_projectiles/explosions/explosion_leadball.tscn" id="3_riydy"]
 [ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="4_trup7"]
@@ -17,7 +17,7 @@ contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_wgrqp")
 sfx_trigger = NodePath("TriggerSFX")
-deploy_scene_to_spawn = ExtResource("2_e33fd")
+deploy_scene_to_spawn = ExtResource("2_duidj")
 deploy_number = 3
 deploy_velocity_impulse = 120.0
 deploy_delay = 0.3
