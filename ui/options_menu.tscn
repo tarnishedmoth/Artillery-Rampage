@@ -93,6 +93,19 @@ unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
 
+[node name="ShowTrajectory" type="HBoxContainer" parent="Options/MarginContainer/VBoxContainer/Options"]
+layout_mode = 2
+alignment = 2
+
+[node name="Label" type="Label" parent="Options/MarginContainer/VBoxContainer/Options/ShowTrajectory"]
+layout_mode = 2
+text = "Preview Trajectory"
+
+[node name="ShowTrajectoryToggle" type="CheckButton" parent="Options/MarginContainer/VBoxContainer/Options/ShowTrajectory"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = false
+
 [node name="VolumeSliders" type="HBoxContainer" parent="Options/MarginContainer/VBoxContainer/Options"]
 layout_mode = 2
 
@@ -144,6 +157,7 @@ layout_mode = 2
 text = "Cancel"
 
 [node name="Keybinds" type="PanelContainer" parent="."]
+visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_sbkqv")
 
@@ -226,8 +240,8 @@ label_settings = SubResource("LabelSettings_m3s5d")
 horizontal_alignment = 1
 
 [connection signal="pressed" from="Options/MarginContainer/VBoxContainer/Options/ConfigureKeybindsButton" to="." method="_on_configure_keybinds_button_pressed"]
-[connection signal="toggled" from="Options/MarginContainer/VBoxContainer/Options/ShowTooltips/ShowTooltipsToggle" to="." method="_on_showtooltips_toggled"]
-[connection signal="toggled" from="Options/MarginContainer/VBoxContainer/Options/ShowHUD/ShowHUDToggle" to="." method="_on_showtooltips_toggled"]
+[connection signal="drag_ended" from="Options/MarginContainer/VBoxContainer/Options/VolumeSliders/Sliders/MusicVolumeSlider" to="." method="_on_music_volume_slider_drag_ended"]
+[connection signal="drag_ended" from="Options/MarginContainer/VBoxContainer/Options/VolumeSliders/Sliders/SFXVolumeSlider" to="." method="_on_sfx_volume_slider_drag_ended"]
 [connection signal="pressed" from="Options/MarginContainer/VBoxContainer/ConfirmButtons/Apply" to="." method="_on_apply_pressed"]
 [connection signal="pressed" from="Options/MarginContainer/VBoxContainer/ConfirmButtons/Cancel" to="." method="_on_cancel_pressed"]
 [connection signal="pressed" from="Keybinds/VBoxContainer/MarginContainer/VBoxContainer/ConfirmButtons/ConfirmChanges" to="." method="_on_keybinds_confirm_changes_pressed"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dvr6bm2hlj5h4"]
+[gd_scene load_steps=11 format=3 uid="uid://dvr6bm2hlj5h4"]
 
 [ext_resource type="Script" path="res://tank/tank.gd" id="1_0iy80"]
 [ext_resource type="Script" path="res://tank/tank_body.gd" id="2_o5qn2"]
@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://banqgk8hu7ykt" path="res://tank/tank_placeholder_texture.tres" id="3_t17rk"]
 [ext_resource type="Curve" uid="uid://b18ca2qbmkjvy" path="res://tank/aim_deviation_v_health.tres" id="4_cvubm"]
 [ext_resource type="PackedScene" uid="uid://8ypb526keg0k" path="res://weapons/weapon_trajectory_previewer.tscn" id="7_hqpr6"]
-[ext_resource type="PackedScene" uid="uid://f62gmbwtqiwg" path="res://items/weapon_projectiles/weapon_projectile_previewer.tscn" id="8_q8wwb"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1pofo"]
 friction = 100.0
@@ -74,5 +73,4 @@ position = Vector2(0, -13)
 [node name="FiredWeaponContainer" type="Node" parent="."]
 
 [node name="WeaponTrajectoryPreviewer" parent="." instance=ExtResource("7_hqpr6")]
-scene_to_spawn = ExtResource("8_q8wwb")
 use_fire_rate = false

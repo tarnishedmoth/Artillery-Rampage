@@ -51,7 +51,6 @@ func _process(delta: float) -> void:
 		set_power(-delta * power_pct_per_sec)
 	if Input.is_action_just_pressed("cycle_next_weapon"):
 		cycle_next_weapon()
-		tank.visualize_trajectory()
 		
 		
 func aim(delta: float) -> void:
@@ -95,3 +94,7 @@ func _on_tank_tank_killed(tank_unit: Tank, instigatorController: Node2D, instiga
 
 func _on_acquired_upgrade() -> void:
 	load_new_upgrade(PlayerUpgrades.get_current_upgrades().back()) # Get the newest item
+
+
+func _on_trajectory_previewer_timeout() -> void:
+	if can_shoot: tank.visualize_trajectory()

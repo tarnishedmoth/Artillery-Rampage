@@ -18,6 +18,9 @@ weapons_container = NodePath("Weapons")
 [node name="Tank" parent="." groups=["Player"] instance=ExtResource("2_3s1jp")]
 color = Color(0.145098, 0.227451, 0.00392157, 1)
 
+[node name="TrajectoryPreviewer" type="Timer" parent="."]
+autostart = true
+
 [node name="Weapons" type="Node" parent="."]
 
 [node name="WeaponLeadBall" parent="Weapons" instance=ExtResource("3_tmyes")]
@@ -39,3 +42,4 @@ current_ammo = 3
 [node name="WeaponMissileHoming" parent="Weapons" instance=ExtResource("10_lvkgb")]
 
 [connection signal="tank_killed" from="Tank" to="." method="_on_tank_tank_killed"]
+[connection signal="timeout" from="TrajectoryPreviewer" to="." method="_on_trajectory_previewer_timeout"]
