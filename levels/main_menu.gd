@@ -141,6 +141,6 @@ func _on_credits_list_mouse_exited() -> void:
 func _on_play_now_pressed() -> void:
 	PlayerStateManager.enable = false
 	
-	var level:PackedScene = level_select_menu.levels_always_selectable.pick_random()
+	var level: StoryLevel = level_select_menu.levels_always_selectable.levels.pick_random()
 	if level:
-		SceneManager.switch_scene(level)
+		SceneManager.switch_scene_file(level.scene_res_path)
