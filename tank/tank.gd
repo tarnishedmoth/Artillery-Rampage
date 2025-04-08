@@ -9,7 +9,8 @@ signal tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2D)
 signal tank_took_damage(
 	tank: Tank, instigatorController: Node2D, instigator: Node2D, amount: float)
 
-@export var drop_on_death:PackedScene
+@export var drop_on_death:PackedScene ## Scene is spawned at tank's global position when it dies.
+@export var shooting_trajectory_indicator:Weapon
 
 @export var min_angle:float = -90
 @export var max_angle:float = 90
@@ -340,6 +341,7 @@ func stopped_falling() -> void:
 
 #region Weapon Use
 func get_weapon_fire_locations() -> Marker2D:
+	## Only returns one item not multiple!
 	return weapon_fire_location
 
 func get_fired_weapon_container() -> Node:
@@ -383,6 +385,9 @@ func check_can_shoot_weapon(weapon: Weapon) -> bool:
 func scan_available_weapons() -> void:
 	weapons.clear()
 	
+	if shooting_trajectory_indicator:
+		shooting_trajectory_indicator.connect_to_tank(self)
+	
 	var parent = get_parent()
 	if parent is TankController:
 		weapons = parent.get_weapons()
@@ -403,6 +408,10 @@ func equip_next_weapon() -> void:
 	
 func push_weapon_update_to_hud(weapon: Weapon = get_equipped_weapon()) -> void:
 	GameEvents.weapon_updated.emit(weapon)
+	
+func visualize_trajectory() -> void:
+	if shooting_trajectory_indicator:
+		shooting_trajectory_indicator.shoot(power)
 
 func _on_weapon_destroyed(weapon: Weapon) -> void:
 	weapons.erase(weapon)

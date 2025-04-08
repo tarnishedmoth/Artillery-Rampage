@@ -100,6 +100,7 @@ func connect_to_tank(tank: Tank) -> void:
 	configure_barrels()
 	reload()
 
+## Serves no real function at this time
 func equip() -> void:
 	if not is_equipped:
 		is_equipped = true
@@ -147,7 +148,7 @@ func dry_fire() -> void:
 	if sfx_dry_fire: sfx_dry_fire.play()
 	
 func reload(immediate: bool = false) -> void:
-	if not is_equipped: return
+	#if not is_equipped: return
 	if is_reloading: return
 	if use_magazines && magazines < 1: return ## Out of magazines/ammo.
 	if use_ammo:
@@ -227,9 +228,9 @@ func destroy() -> void:
 
 #region Private Methods
 func _shoot(power:float = fire_velocity) -> void:
-	if not is_equipped:
-		push_warning("Tried to shoot weapon that is not equipped.")
-		return
+	#if not is_equipped:
+		#push_warning("Tried to shoot weapon that is not equipped.")
+		#return
 	if is_cycling: return
 	if is_reloading:
 		dry_fire()

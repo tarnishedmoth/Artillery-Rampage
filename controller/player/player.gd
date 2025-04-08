@@ -51,6 +51,7 @@ func _process(delta: float) -> void:
 		set_power(-delta * power_pct_per_sec)
 	if Input.is_action_just_pressed("cycle_next_weapon"):
 		cycle_next_weapon()
+		tank.visualize_trajectory()
 		
 		
 func aim(delta: float) -> void:
