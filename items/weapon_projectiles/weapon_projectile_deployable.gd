@@ -26,6 +26,7 @@ class_name WeaponProjectileDeployable extends WeaponProjectile
 var deployed_container:Node2D
 var deployed:Array
 # _private
+var _current_projectile_index: int = 1 # Current place in deploy_number while iterating
 var _impacted:bool = false
 var _triggered:bool = false
 var _deployed_lifespan_completed:int = 0
@@ -60,6 +61,7 @@ func _ready() -> void:
 #endregion
 #region--Public Methods
 func deploy() -> void:
+	_current_projectile_index = 1
 	for i in deploy_number:
 		var deployable = deploy_scene_to_spawn.instantiate()
 		if deployable is WeaponProjectile:
@@ -69,6 +71,7 @@ func deploy() -> void:
 			_setup_deployable(deployable, true)
 		else:
 			_setup_deployable(deployable, false)
+		_current_projectile_index += 1 # Track which one we're setting up
 	
 	if destroy_after_deployed: destroy()
 	else: _fake_destroy()
@@ -91,7 +94,7 @@ func trigger() -> void:
 #region--Private Methods
 func _setup_deployable(deployable:Node2D, physics:bool = true) -> void:
 	#var new_spawn = scene_to_spawn.instantiate()
-	var aim_angle = Vector2.UP.angle() # This is a mess what was I thinking lol
+	var aim_angle = TAU / deploy_number * _current_projectile_index
 	
 	deployable.global_position = self.global_position
 	if physics:

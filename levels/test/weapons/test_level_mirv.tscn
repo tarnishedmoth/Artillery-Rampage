@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://cav080ef26ey8"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_80pec"]
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_bwejw"]
+[ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_yd5fc"]
+[ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="4_f7dg7"]
+[ext_resource type="PackedScene" uid="uid://bx3va4wmvmw4o" path="res://weapons/weapon_MIRV.tscn" id="4_odlq2"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="5_wxlom"]
+
+[node name="TestLevel01" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_80pec")]
+
+[node name="Enemy1" parent="GameLevel" instance=ExtResource("2_bwejw")]
+position = Vector2(479, 278)
+
+[node name="Tank" parent="GameLevel/Enemy1" index="0"]
+color = Color(0.682353, 0.713726, 0.219608, 1)
+
+[node name="LobberAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_yd5fc")]
+forces_mask = 15
+
+[node name="WeaponDeployableMIRV" parent="GameLevel/Enemy1/Weapons" index="0" instance=ExtResource("4_odlq2")]
+position = Vector2(479, 278)
+use_ammo = false
+
+[node name="Enemy2" parent="GameLevel" instance=ExtResource("2_bwejw")]
+position = Vector2(1100, 426)
+
+[node name="Tank" parent="GameLevel/Enemy2" index="0"]
+color = Color(0.137255, 0.180392, 0.701961, 1)
+
+[node name="LobberAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_yd5fc")]
+forces_mask = 15
+
+[node name="WeaponDeployableMIRV" parent="GameLevel/Enemy2/Weapons" index="0" instance=ExtResource("4_odlq2")]
+position = Vector2(1100, 426)
+use_ammo = false
+
+[node name="House1" parent="GameLevel" instance=ExtResource("4_f7dg7")]
+position = Vector2(43, 409)
+
+[node name="House2" parent="GameLevel" instance=ExtResource("4_f7dg7")]
+position = Vector2(934, 407)
+
+[node name="Player" parent="GameLevel" instance=ExtResource("5_wxlom")]
+position = Vector2(120, 427)
+
+[editable path="GameLevel/Enemy1"]
+[editable path="GameLevel/Enemy2"]
+[editable path="GameLevel/Player"]

@@ -4,12 +4,12 @@
 [ext_resource type="PackedScene" uid="uid://i4anqg26d78u" path="res://items/weapon_projectiles/weapon_projectile_MIRV.tscn" id="2_fwcj5"]
 [ext_resource type="AudioStream" uid="uid://cgac4miv6d3uq" path="res://weapons/sounds/sfx_weapon_singleshot15.wav" id="3_p55o8"]
 
-[node name="WeaponDeployableMIRV" type="Node2D" node_paths=PackedStringArray("sfx_fire")]
+[node name="WeaponMIRV" type="Node2D" node_paths=PackedStringArray("sfx_fire")]
 script = ExtResource("1_ij436")
 scene_to_spawn = ExtResource("2_fwcj5")
 display_name = "MIRV"
 fire_velocity = 1000.0
-power_launch_speed_mult = 1.2
+power_launch_speed_mult = 1.1
 use_fire_rate = true
 fire_rate = 1.0
 retain_when_empty = false
