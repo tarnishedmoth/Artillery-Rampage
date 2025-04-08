@@ -104,7 +104,6 @@ text = "Preview Trajectory"
 [node name="ShowTrajectoryToggle" type="CheckButton" parent="Options/MarginContainer/VBoxContainer/Options/ShowTrajectory"]
 unique_name_in_owner = true
 layout_mode = 2
-toggle_mode = false
 
 [node name="VolumeSliders" type="HBoxContainer" parent="Options/MarginContainer/VBoxContainer/Options"]
 layout_mode = 2
