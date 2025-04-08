@@ -40,10 +40,10 @@ func _on_player_killed(in_player: Player) -> void:
 	print("Game Over!")
 	in_player.queue_free()
 	
-	SceneManager.restart_level()
+	SceneManager.level_failed()
 
 func _on_round_ended() -> void:
-	SceneManager.next_level()
+	SceneManager.level_complete()
 
 func _add_manually_placed_units():
 	for child in get_children():

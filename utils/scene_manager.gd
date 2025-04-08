@@ -2,6 +2,12 @@ extends Node
 
 var is_switching_scene: bool
 
+enum PlayMode {
+	STORY,
+	PLAY_NOW,
+	LEVEL_SELECT
+}
+
 class SceneKeys:
 	const MainMenu:StringName = &"MainMenu"
 	#const PauseMenu:StringName = &"PauseMenu"
@@ -22,9 +28,11 @@ const main_menu_scene_file = "res://levels/main_menu.tscn"
 const story_start_scene_file = "res://ui/story/story_sequence.tscn"
 const story_map_scene_file = "res://ui/story/map/story_map_scene.tscn"
 
-var _current_level_index:int = 0
+var _current_level_index:int = -1
 var _current_level_root_node:GameLevel
 var _current_story_level:StoryLevel
+
+var play_mode:PlayMode
 
 func _init() -> void:
 	GameEvents.level_loaded.connect(_on_GameLevel_loaded)
@@ -44,7 +52,7 @@ func quit() -> void:
 func restart_level(delay: float = default_delay) -> void:
 	print_debug("restart_level: %s, delay=%f" % [str(_current_level_root_node.name) if _current_level_root_node else "NULL", delay])
 
-	_switch_scene(func(): get_tree().reload_current_scene(), delay)
+	await _switch_scene(func(): get_tree().reload_current_scene(), delay)
 	
 func next_level(delay: float = default_delay) -> void:
 	if !story_levels or !story_levels.levels:
@@ -55,8 +63,32 @@ func next_level(delay: float = default_delay) -> void:
 	print_debug("Loading")
 	_current_story_level = story_levels.levels[_current_level_index]
 	await switch_scene_file(_current_story_level.scene_res_path, delay)
+	
 	_current_level_index = (_current_level_index + 1) % story_levels.levels.size()
-		
+
+# TODO: May move these branches out of the scene manager to keep it more single responsiblity
+func level_failed() -> void:
+	match play_mode:
+		PlayMode.STORY:
+			# TODO: Round summary for failed state
+			restart_level()
+		_: # default
+			restart_level()
+			
+func level_complete() -> void:
+	match play_mode:
+		PlayMode.STORY:
+			# TODO: Round summary
+			await switch_scene_keyed(SceneKeys.StoryMap)
+		PlayMode.PLAY_NOW:
+			# TODO: Logic duplication, possibly different set of levels with PlayNow logic in MainMenu, should consolidate
+			if story_levels and story_levels.levels:
+				await switch_scene_file(story_levels.levels.pick_random().scene_res_path)
+			else:
+				restart_level()
+		PlayMode.LEVEL_SELECT:
+			await switch_scene_keyed(SceneKeys.MainMenu)
+			
 func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 	match key:
 		SceneKeys.MainMenu:
@@ -64,6 +96,7 @@ func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 		SceneKeys.RandomStart:
 			await next_level(delay)
 		SceneKeys.StoryStart:
+			_current_level_index = 0
 			await switch_scene_file(story_start_scene_file)
 		SceneKeys.StoryMap:
 			await switch_scene_file(story_map_scene_file)
@@ -92,7 +125,7 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	get_tree().paused = false
 
 func _on_GameLevel_loaded(level:GameLevel) -> void:
-	print_debug("_on_GameLevel_loaded: level=%s" % [str(level.name) if level else "NULL"])
+	print_debug("_on_GameLevel_loaded: level=%s" % [str(level.get_parent().name) if level else "NULL"])
 	
 	if _current_story_level:
 		level.name = _current_story_level.name

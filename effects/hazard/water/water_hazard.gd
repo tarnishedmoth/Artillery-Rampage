@@ -97,7 +97,7 @@ func _on_overlap_ended(body: PhysicsBody2D) -> void:
 		print_debug("%s - Ignoring non-damageable body=%s" % [name, body.name])
 		return
 		
-	print_debug("%s: Removing damageable=" % [name, damageable.name])
+	print_debug("%s: Removing damageable=%s" % [name, damageable.name])
 	_damageables.erase(damageable)
 	_immediate_damage_queue.erase(damageable)
 	

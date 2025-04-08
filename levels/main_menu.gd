@@ -84,11 +84,15 @@ func clear_all_text(text_nodes:Array) -> void:
 func _on_start_pressed() -> void:
 	print_debug("Start button")
 	PlayerStateManager.enable = true
+	SceneManager.play_mode = SceneManager.PlayMode.STORY
+
 	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryStart)
 
 func _on_level_select_pressed() -> void:
 	print_debug("Level select button")
 	PlayerStateManager.enable = false
+	SceneManager.play_mode = SceneManager.PlayMode.LEVEL_SELECT
+
 	level_select_menu.show()
 	main_menu.hide()
 
@@ -140,6 +144,7 @@ func _on_credits_list_mouse_exited() -> void:
 
 func _on_play_now_pressed() -> void:
 	PlayerStateManager.enable = false
+	SceneManager.play_mode = SceneManager.PlayMode.PLAY_NOW
 	
 	var level: StoryLevel = level_select_menu.levels_always_selectable.levels.pick_random()
 	if level:
