@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://ccl2oyo13754i"]
+
+[ext_resource type="Script" path="res://weapons/weapon.gd" id="1_0yig6"]
+[ext_resource type="PackedScene" uid="uid://cwx6a57nrpgas" path="res://items/weapon_projectiles/weapon_projectile_MiniMIRV.tscn" id="2_b70co"]
+[ext_resource type="AudioStream" uid="uid://cgac4miv6d3uq" path="res://weapons/sounds/sfx_weapon_singleshot15.wav" id="3_8bgxf"]
+
+[node name="WeaponMiniMIRV" type="Node2D" node_paths=PackedStringArray("sfx_fire")]
+script = ExtResource("1_0yig6")
+scene_to_spawn = ExtResource("2_b70co")
+display_name = "Mini-MIRV"
+accuracy_angle_spread = 0.0523599
+fire_velocity = 1000.0
+power_launch_speed_mult = 1.1
+use_fire_rate = true
+fire_rate = 1.0
+retain_when_empty = false
+use_ammo = true
+sfx_fire = NodePath("Fire")
+
+[node name="Fire" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_8bgxf")
+bus = &"SFX"

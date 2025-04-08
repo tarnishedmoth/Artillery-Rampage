@@ -103,9 +103,7 @@ func set_sources(tank:Tank,weapon:Weapon) -> void:
 	owner_tank = tank
 	source_weapon = weapon
 	if explosion_to_spawn:
-		firing_container = SceneManager.get_current_level_root() if not null else get_tree().current_scene
-		if firing_container.has_method("get_container"):
-			firing_container = firing_container.get_container()
+		firing_container = _get_container()
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	# Store any collision results for later access
@@ -212,6 +210,7 @@ func spawn_explosion(scene:PackedScene) -> void:
 		instance = scene.instantiate()
 		instance.global_position = global_position
 		# Per - weapon_projectile.gd:191 @ spawn_explosion(): Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.
+		if not firing_container: firing_container = _get_container()
 		firing_container.add_child.call_deferred(instance)
 
 func _physics_process(_delta: float) -> void:
@@ -317,6 +316,13 @@ func _calculate_point_damage(pos: Vector2) -> float:
 			
 func _calculate_dist_frac(dist: float):
 	return  (1.0 - (dist - min_falloff_distance) / (max_falloff_distance - min_falloff_distance))
+	
+func _get_container() -> Node:
+	var container = SceneManager.get_current_level_root() if not null else get_tree().current_scene
+	#deployed_container = get_tree().current_scene
+	if container.has_method("get_container"):
+		container = container.get_container()
+	return container
 
 func _emit_completed_lifespan_without_destroying(time:float) -> void:
 	if time > 0.0: await get_tree().create_timer(time).timeout

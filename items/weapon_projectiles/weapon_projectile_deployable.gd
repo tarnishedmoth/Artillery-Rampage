@@ -37,26 +37,6 @@ var _explosion_played:bool = false
 
 
 #region--Virtuals
-#func _init() -> void: pass
-#func _enter_tree() -> void: pass
-func _ready() -> void:
-	super._ready()
-	modulate = color
-	if max_lifetime > 0.0: destroy_after_lifetime()
-	#overlap.connect("body_entered", on_body_entered)
-	#GameEvents.emit_projectile_fired(self)
-	
-	# FIXME: Cannot call SceneManager in ready on game start as ready is called in DFS manner so SceneManager won't be initialized yet
-	# JM: Kept getting assertion triggered on start of level where player had deployable personnel in their inventory
-	#deployed_container = SceneManager.get_current_level_root() if not null else get_tree().current_scene
-	deployed_container = get_tree().current_scene
-	if deployed_container.has_method("get_container"):
-		deployed_container = deployed_container.get_container()
-	
-#func _input(event: InputEvent) -> void: pass
-#func _unhandled_input(event: InputEvent) -> void: pass
-#func _physics_process(delta: float) -> void: pass
-#func _process(delta: float) -> void: pass
 
 #endregion
 #region--Public Methods
@@ -64,13 +44,13 @@ func deploy() -> void:
 	_current_projectile_index = 1
 	for i in deploy_number:
 		var deployable = deploy_scene_to_spawn.instantiate()
-		if deployable is WeaponProjectile:
-			deployable.set_sources(owner_tank,source_weapon)
-			source_weapon.add_projectile_awaiting(deployable)
 		if deployable is RigidBody2D:
 			_setup_deployable(deployable, true)
 		else:
 			_setup_deployable(deployable, false)
+		if deployable is WeaponProjectile:
+			deployable.set_sources(owner_tank,source_weapon)
+			source_weapon.add_projectile_awaiting(deployable)
 		_current_projectile_index += 1 # Track which one we're setting up
 	
 	if destroy_after_deployed: destroy()
@@ -107,7 +87,7 @@ func _setup_deployable(deployable:Node2D, physics:bool = true) -> void:
 	if destroy_after_deployables_destroyed:
 		deployable.completed_lifespan.connect(_on_deployable_lifetime_completed)
 	
-	if not deployed_container: deployed_container = self
+	if not deployed_container: deployed_container = _get_container()
 	deployed_container.add_child(deployable)
 	deployed.append(deployable)
 	

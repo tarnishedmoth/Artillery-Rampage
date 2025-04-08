@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cav080ef26ey8"]
+[gd_scene load_steps=8 format=3 uid="uid://cav080ef26ey8"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_80pec"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_bwejw"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="4_f7dg7"]
 [ext_resource type="PackedScene" uid="uid://bx3va4wmvmw4o" path="res://weapons/weapon_MIRV.tscn" id="4_odlq2"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="5_wxlom"]
+[ext_resource type="PackedScene" uid="uid://ccl2oyo13754i" path="res://weapons/weapon_MiniMIRV.tscn" id="7_u13ms"]
 
 [node name="TestLevel01" type="Node2D"]
 
@@ -45,6 +46,8 @@ position = Vector2(934, 407)
 
 [node name="Player" parent="GameLevel" instance=ExtResource("5_wxlom")]
 position = Vector2(120, 427)
+
+[node name="WeaponMiniMIRV" parent="GameLevel/Player/Weapons" index="0" instance=ExtResource("7_u13ms")]
 
 [editable path="GameLevel/Enemy1"]
 [editable path="GameLevel/Enemy2"]

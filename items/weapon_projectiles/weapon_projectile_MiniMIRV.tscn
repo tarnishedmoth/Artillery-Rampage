@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=3 uid="uid://cwx6a57nrpgas"]
+
+[ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile_deployable.gd" id="1_rigkk"]
+[ext_resource type="PackedScene" uid="uid://b5qb8k2xaexhf" path="res://items/weapon_projectiles/weapon_projectile_leadballburst.tscn" id="2_wyx84"]
+[ext_resource type="PackedScene" uid="uid://gj55bahvsd7g" path="res://items/weapon_projectiles/explosions/explosion_leadball.tscn" id="3_kndst"]
+[ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="4_ad4nj"]
+[ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="5_4orei"]
+[ext_resource type="AudioStream" uid="uid://cgac4miv6d3uq" path="res://weapons/sounds/sfx_weapon_singleshot15.wav" id="6_hmlfd"]
+[ext_resource type="Script" path="res://items/weapon_projectiles/apex_sensor.gd" id="7_uhyc4"]
+
+[node name="WeaponProjectileDeployableMiniMIRV" type="RigidBody2D" node_paths=PackedStringArray("sfx_trigger")]
+collision_layer = 2
+collision_mask = 29
+mass = 2.0
+continuous_cd = 2
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_rigkk")
+sfx_trigger = NodePath("TriggerSFX")
+deploy_scene_to_spawn = ExtResource("2_wyx84")
+deploy_number = 12
+deploy_velocity_impulse = 240.0
+deploy_delay = 0.1
+color = Color(0.0807833, 0.0807833, 0.0807833, 1)
+max_lifetime = 6.0
+explosion_to_spawn = ExtResource("3_kndst")
+min_damage = 2.0
+max_damage = 15.0
+destructible_scale_multiplier = Vector2(1, 1)
+should_explode_on_impact = false
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_ad4nj")
+
+[node name="CollisionShade2D" type="CollisionShape2D" parent="."]
+shape = ExtResource("5_4orei")
+
+[node name="TriggerSFX" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_hmlfd")
+volume_db = -6.0
+pitch_scale = 2.0
+
+[node name="ApexSensor" type="Node2D" parent="." node_paths=PackedStringArray("tracking", "deployable")]
+script = ExtResource("7_uhyc4")
+tracking = NodePath("..")
+deployable = NodePath("..")
+y_velocity_min_threshold = 2.0
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
