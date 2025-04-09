@@ -5,6 +5,7 @@ var _initial_fall_damage:bool
 @export var weapons_container:Node = self ## Keep all Weapon components in here. If unassigned, self is used.
 
 signal intent_to_act(action: Callable, owner: Object)
+var can_take_action:bool = true
 
 ## Set player state that has been loaded from previous round
 var pending_state: PlayerState
@@ -15,6 +16,7 @@ var pending_state: PlayerState
 @export var team:int = -1
 
 func _ready() -> void:
+	tank.actions_completed.connect(_on_tank_actions_completed)
 	GameEvents.connect("turn_ended", _on_turn_ended)
 	GameEvents.connect("turn_started", _on_turn_started)
 	
@@ -39,6 +41,10 @@ func begin_turn() -> void:
 	#tank.reset_orientation()
 	tank.enable_fall_damage = _initial_fall_damage
 	tank.push_weapon_update_to_hud() # TODO: fix for simultaneous fire game
+	can_take_action = check_if_must_skip_actions() # Check this in Player/AI for behavior. Will submit empty action if true.
+	
+func end_turn() -> void:
+	GameEvents.turn_ended.emit(tank.controller) # Because I'm not sure if "self" is abstract in this context
 	
 var tank: Tank:
 	get: return _get_tank()
@@ -95,6 +101,30 @@ func _on_turn_started(_player: TankController) -> void:
 	# Ony any player turn started, stop simulating physics
 	tank.reset_orientation()
 
+func _on_tank_actions_completed(_tank: Tank) -> void:
+	end_turn()
+
 func submit_intended_action(action: Callable, player: TankController) -> void:
-	print_debug("Submitted action")
-	intent_to_act.emit(action, player)
+	if can_take_action:
+		print_debug("Submitted action")
+		intent_to_act.emit(action, player)
+	else:
+		skip_action(player) # This is a catch case, should be handled by AI behavior before this, but it does work.
+
+func skip_action(player: TankController) -> void:
+	print_debug("Skipping taking actions (this turn)")
+	intent_to_act.emit(_skip, player) # Required for turn to advance as RoundDirector is awaiting our ticket
+	await get_tree().process_frame
+	end_turn()
+	
+func _skip() -> void:
+	pass
+
+func check_if_must_skip_actions() -> bool:
+	# Disabling effects like EMP
+	var disabling_emp_charge_threshold:float = 50.0
+	if tank.debuff_emp_charge > disabling_emp_charge_threshold:
+		print_debug("EMP charge above threshold--turn must be skipped")
+		return false
+		
+	return true

@@ -90,6 +90,8 @@ func _process(_delta: float) -> void:
 #region Public Methods
 func connect_to_tank(tank: Tank) -> void:
 	parent_tank = tank
+	if not weapon_actions_completed.is_connected(parent_tank._on_weapon_actions_completed):
+		weapon_actions_completed.connect(parent_tank._on_weapon_actions_completed)
 	if not weapon_destroyed.is_connected(parent_tank._on_weapon_destroyed): # Will push error
 		weapon_destroyed.connect(parent_tank._on_weapon_destroyed)
 		if use_ammo:
@@ -298,6 +300,4 @@ func _on_weapon_actions_completed(_weapon: Weapon) -> void:
 		if current_ammo < 1:
 			if magazines < 1 or not use_magazines:
 				destroy()
-	if parent_tank is Tank: ## This is when Turn Changeover happens. It should signal to Player or AI not the game manager directly, then we could have multiple actions per turn.
-		GameEvents.emit_turn_ended(parent_tank.owner)
 #endregion

@@ -76,12 +76,12 @@ color_ramp = SubResource("Gradient_fapac")
 color_initial_ramp = SubResource("Gradient_r6uu2")
 
 [node name="Dust" parent="." instance=ExtResource("3_1x5fp")]
-amount = 3
+amount = 6
 lifetime = 2.5
 emission_sphere_radius = 16.0
 gravity = Vector2(0, -16)
-initial_velocity_min = 24.0
-initial_velocity_max = 60.0
+initial_velocity_min = 36.0
+initial_velocity_max = 72.0
 damping_min = 4.0
 damping_max = 5.0
 scale_amount_min = 0.5

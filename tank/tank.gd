@@ -2,11 +2,11 @@ class_name Tank extends Node2D
 
 # TODO: These maybe should be global events
 
-@warning_ignore("unused_signal")
+signal actions_completed(tank: Tank)
 signal tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2D)
-
-@warning_ignore("unused_signal")
 signal tank_took_damage(
+	tank: Tank, instigatorController: Node2D, instigator: Node2D, amount: float)
+signal  tank_took_emp(
 	tank: Tank, instigatorController: Node2D, instigator: Node2D, amount: float)
 
 @export var drop_on_death:PackedScene ## Scene is spawned at tank's global position when it dies.
@@ -69,6 +69,11 @@ var angle_deviation:float
 
 var fall_start_position: Vector2
 var mark_falling: bool
+
+# Effects
+var debuff_emp_charge:float = 0.0
+var debuff_emp_conductivity_multiplier:float = 1.0 ## Incoming charge is multiplied by this figure
+var debuff_emp_discharge_per_turn:float = 50.0
 
 @export_group("")
 @export var color: Color = Color.WHITE:
@@ -192,9 +197,7 @@ func _update_attributes():
 func shoot() -> bool:
 	var weapon: Weapon = get_equipped_weapon()
 	if check_can_shoot_weapon(weapon):
-		#var controller:TankController = get_parent()
 		controller.submit_intended_action(weapon.shoot.bind(power), controller)
-		#weapon.shoot(power)
 		return true
 	else:
 		weapon.dry_fire() # For sound effect (if assigned in Weapon scene)
@@ -218,6 +221,13 @@ func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float
 	emit_signal("tank_took_damage", self, instigatorController, instigator, actual_damage)
 	if health <= 0:
 		emit_signal("tank_killed", self, instigatorController, instigator)
+		
+func take_emp(instigatorController: Node2D, instigator: Node2D, charge:float) -> void:
+	var actual_charge = charge * debuff_emp_conductivity_multiplier
+	debuff_emp_charge += actual_charge
+	
+	print_debug("Tank %s took %f EMP charge; total=%f" % [ get_parent().name, actual_charge, debuff_emp_charge])
+	emit_signal("tank_took_emp", self, instigatorController, instigator, actual_charge)
 		
 func kill():
 	print_debug("Tank: %s Killed" % [get_parent().name])
@@ -430,6 +440,16 @@ func _on_weapon_magazines_changed(_new_mags:int) -> void:
 	
 func _on_weapon_changed(new_weapon: Weapon) -> void:
 	push_weapon_update_to_hud(new_weapon)
+
+## TURN CHANGE
+func _on_weapon_actions_completed(weapon: Weapon) -> void:
+	# ---TURN CHANGEOVER HAPPENS HERE---
+	# More than one action / phase could be supported
+	actions_completed.emit(self)
+	
+func _on_turn_ended() -> void:
+	if debuff_emp_charge > 0.0:
+		debuff_emp_charge = maxf(debuff_emp_charge - debuff_emp_discharge_per_turn, 0.0)
 #endregion
 
 #region AI Helpers

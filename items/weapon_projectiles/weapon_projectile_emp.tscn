@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://cvjtryhv8qdqp"]
 
-[ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile.gd" id="1_imo32"]
+[ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile_emp.gd" id="1_kiwqg"]
 [ext_resource type="PackedScene" uid="uid://xbbrj3p1ed11" path="res://items/weapon_projectiles/explosions/explosion_emp.tscn" id="2_d3jsb"]
 [ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="3_gmeid"]
 [ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="4_swm3x"]
@@ -11,12 +11,12 @@ collision_mask = 541
 continuous_cd = 2
 contact_monitor = true
 max_contacts_reported = 1
-script = ExtResource("1_imo32")
+script = ExtResource("1_kiwqg")
 color = Color(0.321052, 0.49973, 0.742005, 1)
 max_lifetime = 8.0
 explosion_to_spawn = ExtResource("2_d3jsb")
 min_falloff_distance = 30.0
-max_falloff_distance = 80.0
+max_falloff_distance = 100.0
 min_damage = 4.0
 max_damage = 20.0
 destructible_scale_multiplier = Vector2(6, 6)

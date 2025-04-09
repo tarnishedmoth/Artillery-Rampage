@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://vr87whox7pa7"]
+[gd_scene load_steps=12 format=3 uid="uid://vr87whox7pa7"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_8s14s"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_cign7"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://items/weapon_projectiles/mod_projectile.gd" id="5_0g4dc"]
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="5_cggln"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="6_xy0wx"]
+[ext_resource type="Script" path="res://ui/auto_property_label.gd" id="8_2f270"]
 [ext_resource type="PackedScene" uid="uid://cbek5kw6n2l41" path="res://weapons/weapon_emp.tscn" id="8_rvgrj"]
 
 [sub_resource type="Resource" id="Resource_s00ki"]
@@ -33,6 +34,14 @@ position = Vector2(479, 278)
 [node name="Tank" parent="GameLevel/Enemy1" index="0"]
 color = Color(0.682353, 0.713726, 0.219608, 1)
 
+[node name="PropertyLabel" type="Label" parent="GameLevel/Enemy1/Tank" index="3"]
+offset_right = 111.0
+offset_bottom = 23.0
+text = "EMP Charge: 0"
+script = ExtResource("8_2f270")
+label = "EMP Charge:"
+parameter_path = "debuff_emp_charge"
+
 [node name="LobberAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_ffyb3")]
 forces_mask = 15
 
@@ -44,6 +53,14 @@ position = Vector2(1100, 426)
 
 [node name="Tank" parent="GameLevel/Enemy2" index="0"]
 color = Color(0.137255, 0.180392, 0.701961, 1)
+
+[node name="PropertyLabel" type="Label" parent="GameLevel/Enemy2/Tank" index="3"]
+offset_right = 111.0
+offset_bottom = 23.0
+text = "EMP Charge: 0"
+script = ExtResource("8_2f270")
+label = "EMP Charge:"
+parameter_path = "debuff_emp_charge"
 
 [node name="LobberAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_ffyb3")]
 forces_mask = 15
@@ -59,6 +76,14 @@ position = Vector2(934, 407)
 
 [node name="Player" parent="GameLevel" instance=ExtResource("6_xy0wx")]
 position = Vector2(120, 427)
+
+[node name="PropertyLabel" type="Label" parent="GameLevel/Player/Tank" index="3"]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "EMP Charge: 0"
+script = ExtResource("8_2f270")
+label = "EMP Charge:"
+parameter_path = "debuff_emp_charge"
 
 [node name="WeaponEMP" parent="GameLevel/Player/Weapons" index="0" instance=ExtResource("8_rvgrj")]
 use_ammo = false

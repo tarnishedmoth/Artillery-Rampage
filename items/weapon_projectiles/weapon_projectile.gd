@@ -163,7 +163,7 @@ func on_body_entered(_body: PhysicsBody2D):
 	# Process damage at end as took max damage if there were multiple collidors on single damageable root node
 	for damageable_node in damaged_processed_map:
 		var damage: float = damaged_processed_map[damageable_node]
-		damageable_node.take_damage(owner_tank, self, damage)
+		damage_damageable_node(damageable_node, damage) # I want to hook here without overriding this function
 
 	
 	# FIXME: Technically shouldn't do this and should set to true and also always call destroy but MIRV doesn't work correctly without it
@@ -172,6 +172,9 @@ func on_body_entered(_body: PhysicsBody2D):
 	# Always explode on impact
 	if had_interaction and should_explode_on_impact:
 		destroy()
+		
+func damage_damageable_node(damageable_node: Node, damage:float) -> void:
+	damageable_node.take_damage(owner_tank, self, damage)
 		
 func center_destructible_on_impact_point(destructible: CollisionPolygon2D) -> Vector2:
 	var destructible_polygon: PackedVector2Array = destructible.polygon
