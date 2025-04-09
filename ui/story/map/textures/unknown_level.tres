@@ -5,4 +5,6 @@ noise_type = 3
 frequency = 0.5
 
 [resource]
+width = 128
+height = 128
 noise = SubResource("FastNoiseLite_sp327")

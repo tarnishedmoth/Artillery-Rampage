@@ -1,3 +1,6 @@
-[gd_resource type="ShaderMaterial" format=3 uid="uid://bigbcyue3woos"]
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bigbcyue3woos"]
+
+[ext_resource type="Shader" uid="uid://rap6fgth0tf1" path="res://ui/story/map/materials/grayscale_material.gdshader" id="1_vllin"]
 
 [resource]
+shader = ExtResource("1_vllin")
