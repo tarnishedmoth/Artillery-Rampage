@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_ewpo0"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_epc0n"]
 [ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_5efie"]
-[ext_resource type="Script" path="res://controller/ai/variations/ai_tank_windwunder.gd" id="3_vmd4b"]
+[ext_resource type="Script" uid="uid://djwdaw0f4tooh" path="res://controller/ai/variations/ai_tank_windwunder.gd" id="3_vmd4b"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="4_0qd6l"]
 
 [node name="TestLevelAIWallMaster" type="Node2D"]

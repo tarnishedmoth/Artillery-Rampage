@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://c6bkea7amdoay"]
 
-[ext_resource type="Script" path="res://addons/runtime_debug_tools/scripts/debugger_runtime.gd" id="1_mjb85"]
-[ext_resource type="Script" path="res://addons/runtime_debug_tools/scripts/debug_runtime_interaction_2d.gd" id="2_2iser"]
-[ext_resource type="Script" path="res://addons/runtime_debug_tools/scripts/debug_runtime_interaction_3d.gd" id="3_gj84u"]
+[ext_resource type="Script" uid="uid://bv8wsgrijgyt7" path="res://addons/runtime_debug_tools/scripts/debugger_runtime.gd" id="1_mjb85"]
+[ext_resource type="Script" uid="uid://dc8e8y4mio53c" path="res://addons/runtime_debug_tools/scripts/debug_runtime_interaction_2d.gd" id="2_2iser"]
+[ext_resource type="Script" uid="uid://bvdixa5iefefe" path="res://addons/runtime_debug_tools/scripts/debug_runtime_interaction_3d.gd" id="3_gj84u"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ndhe8"]
 no_depth_test = true

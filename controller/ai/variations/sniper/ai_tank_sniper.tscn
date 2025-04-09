@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://4sagk5utumdt"]
 
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="1_nhff4"]
-[ext_resource type="Script" path="res://controller/ai/variations/sniper/ai_tank_sniper.gd" id="2_gx3om"]
+[ext_resource type="Script" uid="uid://chf0f0mby2mgi" path="res://controller/ai/variations/sniper/ai_tank_sniper.gd" id="2_gx3om"]
 [ext_resource type="PackedScene" uid="uid://dku7irydr1vm7" path="res://controller/ai/variations/sniper/sniper_brute_ai_scene.tscn" id="2_vexu8"]
 [ext_resource type="PackedScene" uid="uid://closdtou4bbqf" path="res://controller/ai/variations/sniper/sniper_lobber_ai_scene.tscn" id="3_b5iva"]
 

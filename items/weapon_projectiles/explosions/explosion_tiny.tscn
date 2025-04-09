@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b6wcmxufjceme"]
 
-[ext_resource type="Script" path="res://items/weapon_projectiles/explosions/explosion.gd" id="1_ybw22"]
+[ext_resource type="Script" uid="uid://bl6jwqokvmogc" path="res://items/weapon_projectiles/explosions/explosion.gd" id="1_ybw22"]
 [ext_resource type="AudioStream" uid="uid://dlh3tqoi34qet" path="res://items/weapon_projectiles/explosions/sounds/sfx_small_explosion.wav" id="2_yk7vb"]
 
 [node name="ExplosionTiny" type="Node2D" node_paths=PackedStringArray("sfx")]

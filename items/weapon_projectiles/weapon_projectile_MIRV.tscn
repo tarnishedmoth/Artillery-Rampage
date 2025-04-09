@@ -1,12 +1,12 @@
 [gd_scene load_steps=8 format=3 uid="uid://i4anqg26d78u"]
 
-[ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile_deployable.gd" id="1_wgrqp"]
+[ext_resource type="Script" uid="uid://btecvempmygq6" path="res://items/weapon_projectiles/weapon_projectile_deployable.gd" id="1_wgrqp"]
 [ext_resource type="PackedScene" uid="uid://qjakm7qdri7x" path="res://items/weapon_projectiles/weapon_projectile_small.tscn" id="2_duidj"]
 [ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="3_3drbo"]
 [ext_resource type="PackedScene" uid="uid://gj55bahvsd7g" path="res://items/weapon_projectiles/explosions/explosion_leadball.tscn" id="3_riydy"]
 [ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="4_trup7"]
 [ext_resource type="AudioStream" uid="uid://cgac4miv6d3uq" path="res://weapons/sounds/sfx_weapon_singleshot15.wav" id="5_544do"]
-[ext_resource type="Script" path="res://items/weapon_projectiles/apex_sensor.gd" id="7_v0wp2"]
+[ext_resource type="Script" uid="uid://bjpelktvpajtj" path="res://items/weapon_projectiles/apex_sensor.gd" id="7_v0wp2"]
 
 [node name="WeaponProjectileDeployableMIRV" type="RigidBody2D" node_paths=PackedStringArray("sfx_trigger")]
 collision_layer = 2

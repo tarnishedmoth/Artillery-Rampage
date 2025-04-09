@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bamvmc2k56pyk"]
 
-[ext_resource type="Script" path="res://effects/post_processing/post_processing.gd" id="1_yqtf0"]
+[ext_resource type="Script" uid="uid://ggi3rv3yjp3q" path="res://effects/post_processing/post_processing.gd" id="1_yqtf0"]
 
 [node name="PostProcessing" type="CanvasLayer"]
 process_mode = 4

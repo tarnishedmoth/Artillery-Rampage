@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://dvr6bm2hlj5h4"]
 
-[ext_resource type="Script" path="res://tank/tank.gd" id="1_0iy80"]
-[ext_resource type="Script" path="res://tank/tank_body.gd" id="2_o5qn2"]
+[ext_resource type="Script" uid="uid://capm81lvak2c3" path="res://tank/tank.gd" id="1_0iy80"]
+[ext_resource type="Script" uid="uid://iirywjtssovs" path="res://tank/tank_body.gd" id="2_o5qn2"]
 [ext_resource type="PackedScene" uid="uid://bfovdi5eowpoe" path="res://items/collectible_item.tscn" id="2_qlwk0"]
 [ext_resource type="Curve" uid="uid://jlsv4hedfkw7" path="res://tank/max_power_v_health.tres" id="3_6i2oc"]
 [ext_resource type="Texture2D" uid="uid://banqgk8hu7ykt" path="res://tank/tank_placeholder_texture.tres" id="3_t17rk"]

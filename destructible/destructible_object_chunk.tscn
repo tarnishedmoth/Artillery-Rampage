@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cklh78tsa5qcj"]
 
-[ext_resource type="Script" path="res://destructible/destructible_object_chunk.gd" id="1_qicvu"]
-[ext_resource type="Script" path="res://destructible/destructible_poly_operations.gd" id="2_1266p"]
+[ext_resource type="Script" uid="uid://bmi1wdvbuh06w" path="res://destructible/destructible_object_chunk.gd" id="1_qicvu"]
+[ext_resource type="Script" uid="uid://dncglgy7n0c4f" path="res://destructible/destructible_poly_operations.gd" id="2_1266p"]
 
 [node name="DestructibleObjectChunk" type="RigidBody2D" groups=["Destructible"]]
 collision_layer = 16

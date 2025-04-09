@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://csk42q7q75rcy"]
 
 [ext_resource type="LabelSettings" uid="uid://d2qiettag13xr" path="res://ui/label_settings/hud_labels.tres" id="1_6ir8l"]
-[ext_resource type="Script" path="res://ui/hud_value.gd" id="1_rvkc5"]
+[ext_resource type="Script" uid="uid://c56hl8owfw0k6" path="res://ui/hud_value.gd" id="1_rvkc5"]
 [ext_resource type="LabelSettings" uid="uid://ckve5dbqttaql" path="res://ui/label_settings/hud_values.tres" id="2_m4o08"]
 
 [node name="HUDElement" type="HBoxContainer"]

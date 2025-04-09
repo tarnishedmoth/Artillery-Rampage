@@ -1,6 +1,8 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://d3wya431x5exo"]
+[gd_resource type="Resource" script_class="TerrainChunkTextureResource" load_steps=2 format=3 uid="uid://d3wya431x5exo"]
 
-[ext_resource type="Script" path="res://terrain/terrain_chunk_texture.gd" id="1_07yig"]
+[ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="1_07yig"]
 
 [resource]
 script = ExtResource("1_07yig")
+repeat = 0
+offset = Vector2(0, 0)

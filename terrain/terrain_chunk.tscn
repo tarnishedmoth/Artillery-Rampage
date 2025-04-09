@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://dmbj0iglwwo7x"]
 
-[ext_resource type="Script" path="res://terrain/terrain_chunk.gd" id="1_m7lgb"]
-[ext_resource type="Script" path="res://destructible/destructible_poly_operations.gd" id="2_41dms"]
-[ext_resource type="Script" path="res://terrain/terrain_chunk_texture.gd" id="2_obytp"]
+[ext_resource type="Script" uid="uid://ng7sthm4nght" path="res://terrain/terrain_chunk.gd" id="1_m7lgb"]
+[ext_resource type="Script" uid="uid://dncglgy7n0c4f" path="res://destructible/destructible_poly_operations.gd" id="2_41dms"]
+[ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_obytp"]
 [ext_resource type="Texture2D" uid="uid://byy76mvisn1j0" path="res://terrain/terrain-strata.png" id="2_sdw60"]
 
 [sub_resource type="Resource" id="Resource_jrpiv"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://ct7ax8u2uxeeb"]
 
-[ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile_deployable.gd" id="1_6sst8"]
+[ext_resource type="Script" uid="uid://btecvempmygq6" path="res://items/weapon_projectiles/weapon_projectile_deployable.gd" id="1_6sst8"]
 [ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="2_mfriq"]
 [ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="3_jc62i"]
 [ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="4_3782q"]

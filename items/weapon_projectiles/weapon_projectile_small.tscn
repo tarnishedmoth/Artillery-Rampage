@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://qjakm7qdri7x"]
 
-[ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile.gd" id="1_qs1y6"]
+[ext_resource type="Script" uid="uid://cm2b1mrcm6tml" path="res://items/weapon_projectiles/weapon_projectile.gd" id="1_qs1y6"]
 [ext_resource type="PackedScene" uid="uid://gj55bahvsd7g" path="res://items/weapon_projectiles/explosions/explosion_leadball.tscn" id="2_05rm8"]
 [ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="3_xb1fd"]
 [ext_resource type="Shape2D" uid="uid://e6adxe7db6m7" path="res://items/weapon_projectiles/weapon_projectile_small_collision.tres" id="4_dpp8x"]

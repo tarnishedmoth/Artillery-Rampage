@@ -12,7 +12,7 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.8, 0.8)
 
 [sub_resource type="Curve" id="Curve_3wgpn"]
-max_value = 20.0
+_limits = [0.0, 20.0, 0.0, 1.0]
 _data = [Vector2(0, 20), 0.0, -77.9845, 0, 1, Vector2(0.256461, 0), -77.9845, 0.0, 1, 0]
 point_count = 2
 

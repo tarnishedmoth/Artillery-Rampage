@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://dmtjm8de7ep32"]
 
-[ext_resource type="Script" path="res://controller/ai/ai_tank.gd" id="1_x14qc"]
+[ext_resource type="Script" uid="uid://bmbbgbcsobixw" path="res://controller/ai/ai_tank.gd" id="1_x14qc"]
 [ext_resource type="PackedScene" uid="uid://dvr6bm2hlj5h4" path="res://tank/tank.tscn" id="2_1btk6"]
-[ext_resource type="Script" path="res://controller/ai/ai_tank_state_machine.gd" id="3_7xwap"]
+[ext_resource type="Script" uid="uid://br5jh5gjskryb" path="res://controller/ai/ai_tank_state_machine.gd" id="3_7xwap"]
 [ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="4_qpyk8"]
 
 [node name="AITank" type="Node2D" node_paths=PackedStringArray("weapons_container")]

@@ -1,11 +1,11 @@
 [gd_scene load_steps=10 format=3 uid="uid://bg64wc8fibctr"]
 
 [ext_resource type="PackedScene" uid="uid://csk42q7q75rcy" path="res://ui/hud_value.tscn" id="1_iign6"]
-[ext_resource type="Script" path="res://ui/hud.gd" id="1_qwt2x"]
+[ext_resource type="Script" uid="uid://qt8fgnh0x5bx" path="res://ui/hud.gd" id="1_qwt2x"]
 [ext_resource type="Texture2D" uid="uid://dpfc8uwt8aa7v" path="res://ui/hud_bg_topleft.png" id="2_2w7a5"]
 [ext_resource type="Texture2D" uid="uid://d4l0fjsjek7l8" path="res://ui/hud_bg_topright.png" id="4_fd2cg"]
 [ext_resource type="Texture2D" uid="uid://c746m7aq2phfe" path="res://ui/hud_bg_center.png" id="5_toij6"]
-[ext_resource type="Script" path="res://ui/hud_value.gd" id="6_t13h5"]
+[ext_resource type="Script" uid="uid://c56hl8owfw0k6" path="res://ui/hud_value.gd" id="6_t13h5"]
 [ext_resource type="LabelSettings" uid="uid://d2qiettag13xr" path="res://ui/label_settings/hud_labels.tres" id="7_y12xy"]
 [ext_resource type="PackedScene" uid="uid://cuvkkaw31jk5y" path="res://ui/tooltipper.tscn" id="8_rj5xb"]
 

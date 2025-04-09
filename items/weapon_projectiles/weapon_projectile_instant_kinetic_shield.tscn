@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cqnn2erq3eawq"]
 
-[ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile.gd" id="1_6p7r8"]
+[ext_resource type="Script" uid="uid://cm2b1mrcm6tml" path="res://items/weapon_projectiles/weapon_projectile.gd" id="1_6p7r8"]
 [ext_resource type="PackedScene" uid="uid://cs7gmoboe8c86" path="res://items/weapon_projectiles/kinetic_shield.tscn" id="2_nps0b"]
 
 [node name="WeaponProjectile" type="RigidBody2D" groups=["Player"]]

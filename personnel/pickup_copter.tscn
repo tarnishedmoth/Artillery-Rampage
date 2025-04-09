@@ -1,8 +1,8 @@
 [gd_scene load_steps=31 format=3 uid="uid://bogp8cydgto88"]
 
-[ext_resource type="Script" path="res://personnel/pickup_copter.gd" id="1_ohviw"]
+[ext_resource type="Script" uid="uid://h10sisqnu5qp" path="res://personnel/pickup_copter.gd" id="1_ohviw"]
 [ext_resource type="AudioStream" uid="uid://bxqicyawwef5m" path="res://personnel/copter.wav" id="2_pqhqg"]
-[ext_resource type="Script" path="res://weapons/weapon.gd" id="3_oxyy2"]
+[ext_resource type="Script" uid="uid://bkt30e3183urb" path="res://weapons/weapon.gd" id="3_oxyy2"]
 [ext_resource type="PackedScene" uid="uid://dm223lhar2pup" path="res://items/weapon_projectiles/weapon_projectile_flare.tscn" id="4_fs2kr"]
 [ext_resource type="AudioStream" uid="uid://cgac4miv6d3uq" path="res://weapons/sounds/sfx_weapon_singleshot15.wav" id="5_yb673"]
 
@@ -210,11 +210,11 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_j4rpa"]
 _data = {
-"RESET": SubResource("Animation_y08e2"),
-"arrive": SubResource("Animation_m68qb"),
-"hover_leftright": SubResource("Animation_qs5qh"),
-"hover_updown": SubResource("Animation_rwwf7"),
-"leave": SubResource("Animation_qfxhq")
+&"RESET": SubResource("Animation_y08e2"),
+&"arrive": SubResource("Animation_m68qb"),
+&"hover_leftright": SubResource("Animation_qs5qh"),
+&"hover_updown": SubResource("Animation_rwwf7"),
+&"leave": SubResource("Animation_qfxhq")
 }
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_tuaom"]

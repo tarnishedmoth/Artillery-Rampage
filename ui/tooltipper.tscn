@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://cuvkkaw31jk5y"]
 
-[ext_resource type="Script" path="res://ui/tooltipper.gd" id="1_5kk0e"]
+[ext_resource type="Script" uid="uid://b6bxwhqduhu3g" path="res://ui/tooltipper.gd" id="1_5kk0e"]
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/control_theme_main_menu.tres" id="1_wt18n"]
-[ext_resource type="Script" path="res://ui/array_seq_view_hide.gd" id="2_2oifc"]
+[ext_resource type="Script" uid="uid://df7r7bwm230pa" path="res://ui/array_seq_view_hide.gd" id="2_2oifc"]
 
 [node name="Tooltipper" type="Control"]
 layout_mode = 3

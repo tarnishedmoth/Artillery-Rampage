@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://6b6y8xulf247"]
 
-[ext_resource type="Script" path="res://controller/ai/behaviors/rando_ai_behavior.gd" id="1_11djm"]
+[ext_resource type="Script" uid="uid://c83nk1umr4n4o" path="res://controller/ai/behaviors/rando_ai_behavior.gd" id="1_11djm"]
 
 [node name="RandoAiBehavior" type="Node2D"]
 script = ExtResource("1_11djm")

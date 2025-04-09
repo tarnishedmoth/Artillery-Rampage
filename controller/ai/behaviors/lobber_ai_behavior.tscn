@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c5g3m0l3ccwf1"]
 
-[ext_resource type="Script" path="res://controller/ai/behaviors/lobber_ai_behavior.gd" id="1_v83to"]
+[ext_resource type="Script" uid="uid://bdm12sqv7wle8" path="res://controller/ai/behaviors/lobber_ai_behavior.gd" id="1_v83to"]
 
 [node name="LobberAiBehavior" type="Node"]
 script = ExtResource("1_v83to")

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bch6pb81vhwb"]
 
 [ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="1_7cq0h"]
-[ext_resource type="Script" path="res://ui/story/map/story_level_node.gd" id="1_wccu6"]
+[ext_resource type="Script" uid="uid://cdh41csbpfnvy" path="res://ui/story/map/story_level_node.gd" id="1_wccu6"]
 
 [node name="StoryLevelNode" type="Control"]
 layout_mode = 3

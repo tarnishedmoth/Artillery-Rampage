@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bekgd5xyqpiwk" path="res://destructible/shatter/shatterable_object_body.tscn" id="1_q66tl"]
 [ext_resource type="Texture2D" uid="uid://v4em4vxjcqki" path="res://environment/trees/tree1.png" id="2_oasgw"]
-[ext_resource type="Script" path="res://destructible/destructible_poly_operations.gd" id="3_ak64s"]
+[ext_resource type="Script" uid="uid://dncglgy7n0c4f" path="res://destructible/destructible_poly_operations.gd" id="3_ak64s"]
 
 [node name="ShatterableTreeBody" instance=ExtResource("1_q66tl")]
 mass = 1000.0

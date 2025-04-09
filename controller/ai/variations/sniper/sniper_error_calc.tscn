@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://brdhgxtj0uff2"]
 
-[ext_resource type="Script" path="res://controller/ai/variations/sniper/sniper_error_calc.gd" id="1_h1erg"]
+[ext_resource type="Script" uid="uid://cp8t0pf8xq3d2" path="res://controller/ai/variations/sniper/sniper_error_calc.gd" id="1_h1erg"]
 
 [node name="SniperErrorCalc" type="Node2D"]
 script = ExtResource("1_h1erg")

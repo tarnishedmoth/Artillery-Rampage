@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://no0hhhxjq8ql"]
 
-[ext_resource type="Script" path="res://effects/wind.gd" id="1_xlmkh"]
+[ext_resource type="Script" uid="uid://c1urpi2jwfsia" path="res://effects/wind.gd" id="1_xlmkh"]
 
 [node name="Wind" type="Node"]
 script = ExtResource("1_xlmkh")

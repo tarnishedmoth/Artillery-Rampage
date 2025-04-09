@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bx3va4wmvmw4o"]
 
-[ext_resource type="Script" path="res://weapons/weapon.gd" id="1_ij436"]
+[ext_resource type="Script" uid="uid://bkt30e3183urb" path="res://weapons/weapon.gd" id="1_ij436"]
 [ext_resource type="PackedScene" uid="uid://i4anqg26d78u" path="res://items/weapon_projectiles/weapon_projectile_MIRV.tscn" id="2_fwcj5"]
 [ext_resource type="AudioStream" uid="uid://cgac4miv6d3uq" path="res://weapons/sounds/sfx_weapon_singleshot15.wav" id="3_p55o8"]
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://c6rys133bf1nv"]
 
-[ext_resource type="Script" path="res://levels/test/test_level_new_damage.gd" id="1_6mvpv"]
+[ext_resource type="Script" uid="uid://cnnjhwvrmv5jr" path="res://levels/test/test_level_new_damage.gd" id="1_6mvpv"]
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_53utv"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_wbjcg"]
 [ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_yvo66"]

@@ -1,11 +1,11 @@
 [gd_scene load_steps=10 format=3 uid="uid://d2kx5hvsxsu7h"]
 
-[ext_resource type="Script" path="res://progression/upgrade_select.gd" id="1_dt2xf"]
-[ext_resource type="Script" path="res://progression/button_upgrade_selection.gd" id="2_qujwc"]
-[ext_resource type="Script" path="res://items/weapon_projectiles/mod_projectile.gd" id="3_83rhi"]
-[ext_resource type="Script" path="res://weapons/mod_weapon.gd" id="4_1lrpj"]
-[ext_resource type="Script" path="res://progression/mod_bundle.gd" id="5_d8jwv"]
-[ext_resource type="Script" path="res://progression/ui_upgrades_list.gd" id="6_qqn3m"]
+[ext_resource type="Script" uid="uid://e1gq6cjfgr7d" path="res://progression/upgrade_select.gd" id="1_dt2xf"]
+[ext_resource type="Script" uid="uid://q2j3yg41rkbk" path="res://progression/button_upgrade_selection.gd" id="2_qujwc"]
+[ext_resource type="Script" uid="uid://cevnfqipg6slo" path="res://items/weapon_projectiles/mod_projectile.gd" id="3_83rhi"]
+[ext_resource type="Script" uid="uid://ctrs8xq1khhs2" path="res://weapons/mod_weapon.gd" id="4_1lrpj"]
+[ext_resource type="Script" uid="uid://nk32ppgcm4iu" path="res://progression/mod_bundle.gd" id="5_d8jwv"]
+[ext_resource type="Script" uid="uid://c2ybgs20rgnsl" path="res://progression/ui_upgrades_list.gd" id="6_qqn3m"]
 
 [sub_resource type="Resource" id="Resource_457dn"]
 script = ExtResource("3_83rhi")

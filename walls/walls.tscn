@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://b7vpl03hcrs3e"]
 
-[ext_resource type="Script" path="res://walls/walls.gd" id="1_pbin1"]
+[ext_resource type="Script" uid="uid://c2yd4dwrx3lmj" path="res://walls/walls.gd" id="1_pbin1"]
 [ext_resource type="PackedScene" uid="uid://dnxwnbuahqh8o" path="res://walls/blocking_area.tscn" id="2_7kjnw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q4e8e"]

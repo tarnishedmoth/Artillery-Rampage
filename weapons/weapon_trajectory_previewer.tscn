@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://8ypb526keg0k"]
 
-[ext_resource type="Script" path="res://weapons/weapon.gd" id="1_sdubn"]
+[ext_resource type="Script" uid="uid://bkt30e3183urb" path="res://weapons/weapon.gd" id="1_sdubn"]
 [ext_resource type="PackedScene" uid="uid://f62gmbwtqiwg" path="res://items/weapon_projectiles/weapon_projectile_previewer.tscn" id="2_fgw0u"]
 
 [node name="WeaponTrajectoryPreviewer" type="Node2D"]

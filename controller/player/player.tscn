@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://dps6lqs28tqa1"]
 
-[ext_resource type="Script" path="res://controller/player/player.gd" id="1_t03mm"]
+[ext_resource type="Script" uid="uid://drk5s6oo6lloa" path="res://controller/player/player.gd" id="1_t03mm"]
 [ext_resource type="PackedScene" uid="uid://dvr6bm2hlj5h4" path="res://tank/tank.tscn" id="2_3s1jp"]
 [ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="3_tmyes"]
 [ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="4_khwvf"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://rvjcwiafo8ut"]
 
-[ext_resource type="Script" path="res://items/weapon_projectiles/weapon_projectile_missile.gd" id="1_asd6x"]
+[ext_resource type="Script" uid="uid://cmjsdf2jf8epg" path="res://items/weapon_projectiles/weapon_projectile_missile.gd" id="1_asd6x"]
 [ext_resource type="PackedScene" uid="uid://ctbymmvkiyfhu" path="res://items/weapon_projectiles/explosions/explosion_kilonuke.tscn" id="2_274w3"]
 [ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="3_q6rmh"]
 [ext_resource type="Texture2D" uid="uid://c737fmtapano1" path="res://items/weapon_projectiles/missiles/g14.png" id="3_x8060"]

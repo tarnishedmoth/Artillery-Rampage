@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://d3hlh5amohta"]
 
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="1_xuq2b"]
-[ext_resource type="Script" path="res://controller/ai/variations/ai_tank_windwunder.gd" id="2_70hrc"]
+[ext_resource type="Script" uid="uid://djwdaw0f4tooh" path="res://controller/ai/variations/ai_tank_windwunder.gd" id="2_70hrc"]
 [ext_resource type="PackedScene" uid="uid://ckpfbtl8xjgm8" path="res://controller/ai/behaviors/wallmaster_ai_behavior.tscn" id="3_s2s7f"]
 [ext_resource type="PackedScene" uid="uid://158k4fde7cpd" path="res://controller/ai/behaviors/brute_ai_behavior.tscn" id="4_t8h2u"]
 

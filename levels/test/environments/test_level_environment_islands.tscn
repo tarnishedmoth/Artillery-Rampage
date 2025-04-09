@@ -1,7 +1,7 @@
 [gd_scene load_steps=17 format=3 uid="uid://djpfk6t0465og"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_trgql"]
-[ext_resource type="Script" path="res://terrain/terrain_chunk_texture.gd" id="2_2spyf"]
+[ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_2spyf"]
 [ext_resource type="Texture2D" uid="uid://my1pco86ryy2" path="res://terrain/terrain-grass-and-dirt.png" id="3_5wor3"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="4_bxj1n"]
 [ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="5_ewm8w"]

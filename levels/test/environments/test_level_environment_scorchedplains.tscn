@@ -1,7 +1,7 @@
 [gd_scene load_steps=17 format=3 uid="uid://6th82t2sjqi7"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_rsg1u"]
-[ext_resource type="Script" path="res://terrain/terrain_chunk_texture.gd" id="2_pssa8"]
+[ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_pssa8"]
 [ext_resource type="Texture2D" uid="uid://couf67gr1ds88" path="res://background_items/background_scorchedplains.png" id="2_s1lmh"]
 [ext_resource type="Texture2D" uid="uid://bqds07ajtn7ei" path="res://terrain/terrain-scorched-earth.png" id="4_gdugl"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="4_x5dsb"]

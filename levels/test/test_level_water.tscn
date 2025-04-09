@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_hr00p"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_aoyoi"]
-[ext_resource type="Shader" path="res://effects/hazard/water/water_hazard.gdshader" id="3_85cl6"]
+[ext_resource type="Shader" uid="uid://jnl644tjjk1s" path="res://effects/hazard/water/water_hazard.gdshader" id="3_85cl6"]
 [ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_axj0u"]
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="4_d3cex"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="5_xyt2g"]
@@ -30,10 +30,10 @@ shader_parameter/wave_pct = 0.025
 shader_parameter/wave_agitation = 11.0
 shader_parameter/wave_choppiness = 1.1
 shader_parameter/enable_noise = true
-shader_parameter/offset1 = Vector2(0.1, 0.1)
-shader_parameter/offset2 = Vector2(0.04, 0.04)
 shader_parameter/noise_tex1 = SubResource("NoiseTexture2D_700nr")
 shader_parameter/noise_tex2 = SubResource("NoiseTexture2D_muiwd")
+shader_parameter/offset1 = Vector2(0.1, 0.1)
+shader_parameter/offset2 = Vector2(0.04, 0.04)
 
 [node name="TestLevelWater" type="Node2D"]
 

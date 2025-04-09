@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://rv05q0begimh"]
 
-[ext_resource type="Script" path="res://addons/runtime_debug_tools/examples/example_spin.gd" id="1_1d7j6"]
+[ext_resource type="Script" uid="uid://c4d6b5cyjmq5i" path="res://addons/runtime_debug_tools/examples/example_spin.gd" id="1_1d7j6"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_ds8tl"]
 specular_color = Color(0.41024, 0.41024, 0.41024, 1)

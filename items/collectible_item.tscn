@@ -1,9 +1,9 @@
 [gd_scene load_steps=9 format=3 uid="uid://bfovdi5eowpoe"]
 
-[ext_resource type="Script" path="res://items/collectible_item.gd" id="1_4k6ar"]
+[ext_resource type="Script" uid="uid://d0rltbrlj4m0j" path="res://items/collectible_item.gd" id="1_4k6ar"]
 [ext_resource type="PackedScene" uid="uid://cjk1xlwijbmno" path="res://items/weapon_projectiles/explosions/dust.tscn" id="2_48q08"]
 [ext_resource type="PackedScene" uid="uid://cqbcgkw62vmhs" path="res://items/rubble/rubble_piece.tscn" id="2_yciuw"]
-[ext_resource type="Script" path="res://items/weapon_projectiles/explosions/autostart_oneshot.gd" id="3_oripr"]
+[ext_resource type="Script" uid="uid://ba6qivai2ve0n" path="res://items/weapon_projectiles/explosions/autostart_oneshot.gd" id="3_oripr"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_f40h2"]
 radius = 16.0

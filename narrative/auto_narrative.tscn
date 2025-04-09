@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b4hy7hmnoewje"]
 
-[ext_resource type="Script" path="res://narrative/auto_narrative.gd" id="1_qf8eq"]
+[ext_resource type="Script" uid="uid://b2h05rst7wj8" path="res://narrative/auto_narrative.gd" id="1_qf8eq"]
 
 [node name="AutoNarrative" type="Node"]
 script = ExtResource("1_qf8eq")

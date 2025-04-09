@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bekgd5xyqpiwk"]
 
-[ext_resource type="Script" path="res://destructible/shatter/shatterable_object_body.gd" id="1_220fe"]
+[ext_resource type="Script" uid="uid://bya7x8gifm32p" path="res://destructible/shatter/shatterable_object_body.gd" id="1_220fe"]
 
 [node name="ShatterableObjectBody" type="RigidBody2D" groups=["Destructible"]]
 collision_layer = 16
