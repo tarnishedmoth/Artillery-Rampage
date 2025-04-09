@@ -2,7 +2,7 @@
 
 ## Info
 
-Project uses Godot 4.3 with GDScript.
+Project uses Godot 4.4.1 with GDScript.
 
 ## Inspiration
 
