@@ -21,7 +21,6 @@ var _current_level_index:int
 
 func _ready() -> void:
 	_create_graph()
-	pass
 
 func _on_next_button_pressed() -> void:
 	SceneManager.next_level()
@@ -100,11 +99,6 @@ func _clear_graph() -> void:
 		var child:Node = graph_container.get_child(i)
 		graph_container.remove_child(child)
 		child.queue_free()
-	
-	
-func _update_active_level() -> void:
-	pass
-	
 	
 func _create_story_level_node(index:int, metadata:StoryLevel) -> StoryLevelNode:
 	# TODO: Maybe knowing about future node is an unlockable or a more complex strategy is adopted
