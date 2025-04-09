@@ -74,3 +74,4 @@ position = Vector2(0, -13)
 
 [node name="WeaponTrajectoryPreviewer" parent="." instance=ExtResource("7_hqpr6")]
 use_fire_rate = false
+emit_action_signals = false

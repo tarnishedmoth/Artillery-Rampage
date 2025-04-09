@@ -34,7 +34,10 @@ var projectile_mods: Array[ModProjectile] ## Applied to the projectile when fire
 @export var fire_rate: float = 4.0 ## Rate of fire per second. 4.0 would fire once every quarter-second.
 @export var always_shoot_for_duration:float = 0.0 ## If greater than zero, when Shoot() is called, weapon will fire as frequently as it can based on fire-rate for this duration in seconds.
 @export var always_shoot_for_count:int = 1 ## When fired, weapon will shoot this many times, separated by fire rate delay.
-@export var barrels: Array[Marker2D] = [] ## 
+## Emit signals necessary for game logic. Disable for alternate use cases (cosmetic).
+## Implemented as a fix for TrajectoryPreviewer (tank.tscn)
+@export var emit_action_signals:bool = true
+@export var barrels: Array[Marker2D] = []
 var barrels_sfx_fire: Array[AudioStreamPlayer2D] = [] ## Automatically assigned through code with TankController, but can be manually specified.
 var current_barrel: int = 0
 
@@ -224,7 +227,7 @@ func add_projectile_awaiting(projectile: WeaponProjectile) -> void:
 	_awaiting_lifespan_completion += 1
 
 func destroy() -> void:
-	weapon_destroyed.emit(self)
+	if emit_action_signals: weapon_destroyed.emit(self)
 	queue_free()
 #endregion
 
@@ -247,7 +250,7 @@ func _shoot(power:float = fire_velocity) -> void:
 		if not barrels_sfx_fire.is_empty(): barrels_sfx_fire[current_barrel].play()
 		_spawn_projectile(power)
 		cycle()
-		GameEvents.emit_weapon_fired(self) # This has no game effects right now.
+		if emit_action_signals: GameEvents.emit_weapon_fired(self) # This has no game effects right now.
 	else:
 		## Alternative handling for continuous weapons
 		print_debug("Continuous fire is not yet supported")
@@ -291,6 +294,8 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 
 func _on_projectile_completed_lifespan() -> void:
 	_awaiting_lifespan_completion -= 1
+	
+	if not emit_action_signals: return
 	if not is_shooting: # Wait til we've fired all our shots this action
 		if _awaiting_lifespan_completion < 1:
 			weapon_actions_completed.emit(self) # If this doesn't emit, the game turn will be stuck.
