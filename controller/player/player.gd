@@ -30,6 +30,8 @@ func begin_round() -> void:
 func begin_turn():
 	super.begin_turn()
 	
+	popup_message("Your Turn", PopupNotification.PulsePresets.Three, 4.5)
+	
 	can_shoot = true
 	can_aim = true
 

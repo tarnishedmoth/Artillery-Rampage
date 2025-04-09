@@ -15,6 +15,8 @@ var pending_state: PlayerState
 ## AI units will not attack those on the same team
 @export var team:int = -1
 
+var popups:Array
+
 func _ready() -> void:
 	tank.actions_completed.connect(_on_tank_actions_completed)
 	GameEvents.connect("turn_ended", _on_turn_ended)
@@ -44,6 +46,7 @@ func begin_turn() -> void:
 	can_take_action = check_if_must_skip_actions() # Check this in Player/AI for behavior. Will submit empty action if true.
 	
 func end_turn() -> void:
+	clear_all_popups()
 	GameEvents.turn_ended.emit(tank.controller) # Because I'm not sure if "self" is abstract in this context
 	
 var tank: Tank:
@@ -125,11 +128,35 @@ func check_if_must_skip_actions() -> bool:
 	var disabling_emp_charge_threshold:float = 50.0
 	if tank.debuff_emp_charge > disabling_emp_charge_threshold:
 		#print_debug("EMP charge above threshold--turn must be skipped")
-		var popup = PopupNotification.constructor(PopupNotification.Contexts.EMP_DISABLED)
-		tank.add_child(popup)
-		var offset = Vector2(0.0, 24.0)
-		popup.global_position = tank.global_position + offset
-		
+		var popup = popup_message(PopupNotification.Contexts.EMP_DISABLED)
 		return false
 		
 	return true
+
+#region Popup Notifications
+func popup_message(message:String, pulses:Array = PopupNotification.PulsePresets.Three, lifetime:float = 0.0) -> PopupNotification:
+	var popup = PopupNotification.constructor(message, pulses)
+	if lifetime > 0.0: # Allows for default from the instance's export var
+		popup.lifetime = lifetime
+	
+	tank.tankBody.add_child(popup) # Because the tankBody moves independently of the tank node...
+	
+	var offset = Vector2(0.0, 24.0) + (popups.size() * Vector2(0.0, 48.0)) # They stack
+	
+	# TODO place above tank if near bottom of screen (would be cut off)
+	popup.global_position = tank.tankBody.global_position + offset
+	
+	popup.completed_lifetime.connect(_on_popup_completed_lifetime)
+	
+	popups.append(popup)
+	return popup
+	
+func clear_all_popups() -> void:
+	for popup:PopupNotification in popups:
+		popup.fade_out(1.0)
+	
+# Popup stacking
+func _on_popup_completed_lifetime(popup: PopupNotification) -> void:
+	popups.erase(popup)
+	#print_debug("Active popups: ", popups.size())
+#endregion
