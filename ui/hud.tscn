@@ -24,6 +24,18 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_qwt2x")
 
+[node name="Header" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="DebugLevelName" type="Label" parent="Header"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Level"
+
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 20.0
@@ -135,21 +147,6 @@ layout_mode = 2
 text = "Ammo"
 label_settings = ExtResource("7_y12xy")
 
-[node name="Footer" type="CenterContainer" parent="."]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="DebugLevelName" type="Label" parent="Footer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "Level"
-
 [node name="Tooltipper" parent="." instance=ExtResource("8_rj5xb")]
 unique_name_in_owner = true
 layout_mode = 1
@@ -158,8 +155,8 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_top = 280.0
-offset_bottom = 280.0
+offset_top = 320.0
+offset_bottom = 320.0
 grow_horizontal = 2
 grow_vertical = 2
 

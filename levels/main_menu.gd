@@ -36,6 +36,9 @@ var credits_list_is_focused:bool = false
 #func _init() -> void: pass
 #func _enter_tree() -> void: pass
 func _ready() -> void:
+	main_menu.show()
+	level_select_menu.hide()
+	
 	if OS.get_name() == "Web":
 		exit_to_desktop_button.hide()
 	

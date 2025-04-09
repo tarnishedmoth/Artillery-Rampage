@@ -1,11 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8v38rorbbmnd"]
+[gd_scene load_steps=3 format=3 uid="uid://c8v38rorbbmnd"]
 
 [ext_resource type="Script" uid="uid://ll20jf80fodp" path="res://ui/hud_popup_notification.gd" id="1_0eeeh"]
+[ext_resource type="Theme" uid="uid://somhyiu2b38w" path="res://ui/themes/control_theme_tooltips.tres" id="1_s83jf"]
 
 [node name="HudPopupNotification" type="Control"]
 top_level = true
 layout_mode = 3
 anchors_preset = 0
+theme = ExtResource("1_s83jf")
 script = ExtResource("1_0eeeh")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]

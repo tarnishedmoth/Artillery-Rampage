@@ -145,6 +145,9 @@ func popup_message(message:String, pulses:Array = PopupNotification.PulsePresets
 	
 	# TODO place above tank if near bottom of screen (would be cut off)
 	popup.global_position = tank.tankBody.global_position + offset
+	var actual = get_global_transform_with_canvas().origin
+	if actual.y + 96.0 > get_viewport().get_visible_rect().size.y:
+		popup.global_position = tank.tankBody.global_position - offset*3
 	
 	popup.completed_lifetime.connect(_on_popup_completed_lifetime)
 	
@@ -153,7 +156,7 @@ func popup_message(message:String, pulses:Array = PopupNotification.PulsePresets
 	
 func clear_all_popups() -> void:
 	for popup:PopupNotification in popups:
-		popup.fade_out(1.0)
+		popup.fade_out(0.75)
 	
 # Popup stacking
 func _on_popup_completed_lifetime(popup: PopupNotification) -> void:

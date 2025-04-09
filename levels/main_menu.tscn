@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://bpy071ovoevnq"]
+[gd_scene load_steps=9 format=3 uid="uid://bpy071ovoevnq"]
 
-[ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/control_theme_main_menu.tres" id="1_1lcqw"]
+[ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="1_1lcqw"]
 [ext_resource type="Script" uid="uid://bn7hgaa71swpl" path="res://levels/main_menu.gd" id="1_3vdg5"]
 [ext_resource type="AudioStream" uid="uid://cbowxug2pgc4y" path="res://music/MenuRock.mp3" id="2_60dqb"]
 [ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="3_tkm84"]
+[ext_resource type="Texture2D" uid="uid://dp0yqs3ec4c18" path="res://terrain/sky-tile.png" id="4_pppj1"]
 [ext_resource type="Script" uid="uid://dsphnlf4hpu7y" path="res://levels/mainmenu_level_select.gd" id="4_ryopc"]
 [ext_resource type="Resource" uid="uid://b20xhiq7ab52i" path="res://levels/conf/story_levels_resource.tres" id="6_ryb4w"]
 [ext_resource type="PackedScene" uid="uid://da23m08ml50op" path="res://ui/options_menu.tscn" id="6_snioo"]
@@ -18,6 +19,7 @@ stream = ExtResource("2_60dqb")
 bus = &"Music"
 
 [node name="Controls" type="Control" parent="."]
+texture_filter = 6
 custom_minimum_size = Vector2(1280, 720)
 layout_mode = 3
 anchors_preset = 0
@@ -25,7 +27,8 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme = ExtResource("1_1lcqw")
 
-[node name="TextureRect" type="TextureRect" parent="Controls"]
+[node name="FullBackgroundImage" type="TextureRect" parent="Controls"]
+modulate = Color(0.64, 0.64, 0.64, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,7 +37,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource("3_tkm84")
+texture = ExtResource("4_pppj1")
 
 [node name="MainMenu" type="VBoxContainer" parent="Controls"]
 unique_name_in_owner = true
@@ -66,12 +69,15 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="PanelContainer" type="PanelContainer" parent="Controls/MainMenu/Columns/LeftColumn"]
+clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ColorRect" type="ColorRect" parent="Controls/MainMenu/Columns/LeftColumn/PanelContainer"]
+[node name="TextureRect" type="TextureRect" parent="Controls/MainMenu/Columns/LeftColumn/PanelContainer"]
 layout_mode = 2
-color = Color(0.0907759, 0.251854, 0.506566, 1)
+texture = ExtResource("3_tkm84")
+expand_mode = 5
+stretch_mode = 6
 
 [node name="Spacer2" type="Control" parent="Controls/MainMenu/Columns"]
 layout_mode = 2
@@ -88,12 +94,13 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
 [node name="MainMenuHeader" type="Label" parent="Controls/MainMenu/Columns/CenterColumn"]
+custom_minimum_size = Vector2(546, 0)
 layout_mode = 2
+theme_type_variation = &"HeaderLarge"
 text = "Artillery Rampage"
 horizontal_alignment = 1
 
-[node name="Divider" type="Panel" parent="Controls/MainMenu/Columns/CenterColumn"]
-custom_minimum_size = Vector2(0, 8)
+[node name="Divider" type="HSeparator" parent="Controls/MainMenu/Columns/CenterColumn"]
 layout_mode = 2
 
 [node name="Spacer" type="Control" parent="Controls/MainMenu/Columns/CenterColumn"]
@@ -101,33 +108,44 @@ custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 size_flags_stretch_ratio = 0.13
 
-[node name="Buttons" type="VBoxContainer" parent="Controls/MainMenu/Columns/CenterColumn"]
+[node name="MarginContainer" type="MarginContainer" parent="Controls/MainMenu/Columns/CenterColumn"]
 layout_mode = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_right = 48
 
-[node name="PlayNow" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/Buttons"]
+[node name="Buttons" type="VBoxContainer" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PlayNow" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
+layout_mode = 2
+theme_type_variation = &"BigButton"
 text = "Play Now!"
 
-[node name="Start" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/Buttons"]
+[node name="Start" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
 layout_mode = 2
+theme_type_variation = &"BigButton"
 text = "New Story"
 
-[node name="LevelSelect" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/Buttons"]
+[node name="LevelSelect" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
 layout_mode = 2
+theme_type_variation = &"BigButton"
 text = "Select Level"
 
-[node name="Options" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/Buttons"]
+[node name="Options" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
 layout_mode = 2
+theme_type_variation = &"BigButton"
 text = "Options"
 
-[node name="Spacer" type="Control" parent="Controls/MainMenu/Columns/CenterColumn/Buttons"]
+[node name="Spacer" type="Control" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 size_flags_stretch_ratio = 0.13
 
-[node name="Quit" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/Buttons"]
+[node name="Quit" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"BigButton"
 text = "Quit"
 
 [node name="SpacerBottom" type="Control" parent="Controls/MainMenu/Columns/CenterColumn"]
@@ -186,6 +204,7 @@ M convallis pulvinar habitasse laoreet. Eros sapien quisque elit laoreet mattis 
 
 N Facilisis turpis finibus sit rutrum enim consectetur ultrices ridiculus. Himenaeos"
 shortcut_keys_enabled = false
+threaded = true
 
 [node name="Spacer2" type="Control" parent="Controls/MainMenu/Columns/RightColumn"]
 layout_mode = 2
@@ -204,7 +223,6 @@ size_flags_stretch_ratio = 0.05
 
 [node name="LevelSelect" type="PanelContainer" parent="Controls"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -243,7 +261,6 @@ size_flags_stretch_ratio = 0.5
 [node name="VBoxContainer" type="VBoxContainer" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-alignment = 1
 
 [node name="TopSpacer" type="Control" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -253,6 +270,7 @@ size_flags_stretch_ratio = 0.13
 [node name="ScrollContainer" type="ScrollContainer" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer"]
 layout_mode = 2
@@ -265,6 +283,7 @@ theme_override_constants/margin_bottom = 8
 
 [node name="Buttons" type="VBoxContainer" parent="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer"]
 unique_name_in_owner = true
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -315,11 +334,11 @@ size_flags_vertical = 3
 [node name="OptionsMenu" parent="Controls/Options" instance=ExtResource("6_snioo")]
 layout_mode = 2
 
-[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/Buttons/PlayNow" to="." method="_on_play_now_pressed"]
-[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/Buttons/Start" to="." method="_on_start_pressed"]
-[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/Buttons/LevelSelect" to="." method="_on_level_select_pressed"]
-[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/Buttons/Options" to="." method="_on_options_pressed"]
-[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/Buttons/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/PlayNow" to="." method="_on_play_now_pressed"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/LevelSelect" to="." method="_on_level_select_pressed"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/Quit" to="." method="_on_quit_pressed"]
 [connection signal="mouse_entered" from="Controls/MainMenu/Columns/RightColumn/CreditsList" to="." method="_on_credits_list_mouse_entered"]
 [connection signal="mouse_exited" from="Controls/MainMenu/Columns/RightColumn/CreditsList" to="." method="_on_credits_list_mouse_exited"]
 [connection signal="pressed" from="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Start" to="Controls/LevelSelect" method="_on_apply_pressed"]
