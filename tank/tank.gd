@@ -73,7 +73,7 @@ var mark_falling: bool
 # Effects
 var debuff_emp_charge:float = 0.0
 var debuff_emp_conductivity_multiplier:float = 1.0 ## Incoming charge is multiplied by this figure
-var debuff_emp_discharge_per_turn:float = 50.0
+var debuff_emp_discharge_per_turn:float = 60.0
 
 @export_group("")
 @export var color: Color = Color.WHITE:
@@ -92,6 +92,8 @@ func _on_update_color():
 		turret.modulate = color.darkened(1 - turret_color_value)
 
 func _ready() -> void:
+	GameEvents.turn_ended.connect(_on_turn_ended)
+	
 	_on_update_color()
 	scan_available_weapons()
 	
@@ -447,9 +449,10 @@ func _on_weapon_actions_completed(weapon: Weapon) -> void:
 	# More than one action / phase could be supported
 	actions_completed.emit(self)
 	
-func _on_turn_ended() -> void:
-	if debuff_emp_charge > 0.0:
-		debuff_emp_charge = maxf(debuff_emp_charge - debuff_emp_discharge_per_turn, 0.0)
+func _on_turn_ended(player: TankController) -> void:
+	if player == controller: # Our tank
+		if debuff_emp_charge > 0.0:
+			debuff_emp_charge = maxf(debuff_emp_charge - debuff_emp_discharge_per_turn, 0.0)
 #endregion
 
 #region AI Helpers

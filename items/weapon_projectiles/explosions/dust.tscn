@@ -22,10 +22,10 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 [node name="Dust" type="CPUParticles2D"]
 z_index = -1
 amount = 12
+texture = SubResource("GradientTexture2D_x1oaf")
 lifetime = 3.0
 explosiveness = 1.0
 lifetime_randomness = 0.33
-texture = SubResource("GradientTexture2D_x1oaf")
 emission_shape = 2
 emission_sphere_radius = 60.0
 direction = Vector2(0, 1)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://xbbrj3p1ed11"]
 
-[ext_resource type="Script" path="res://items/weapon_projectiles/explosions/explosion.gd" id="1_wjfsp"]
+[ext_resource type="Script" uid="uid://bl6jwqokvmogc" path="res://items/weapon_projectiles/explosions/explosion.gd" id="1_wjfsp"]
 [ext_resource type="AudioStream" uid="uid://dlh3tqoi34qet" path="res://items/weapon_projectiles/explosions/sounds/sfx_small_explosion.wav" id="2_ba8uh"]
 [ext_resource type="PackedScene" uid="uid://cjk1xlwijbmno" path="res://items/weapon_projectiles/explosions/dust.tscn" id="3_1x5fp"]
 
@@ -9,7 +9,7 @@ _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.131075, 0.637572), -2.22803, -
 point_count = 3
 
 [sub_resource type="Curve" id="Curve_baml1"]
-max_value = 100.0
+_limits = [0.0, 100.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 295.126, 0, 0, Vector2(1, 49.631), -150.041, 0.0, 0, 0]
 point_count = 2
 
