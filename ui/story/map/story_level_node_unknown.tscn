@@ -3,3 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://bch6pb81vhwb" path="res://ui/story/map/story_level_node.tscn" id="1_n0v7d"]
 
 [node name="StoryLevelNode" instance=ExtResource("1_n0v7d")]
+
+[node name="Label" parent="." index="1"]
+text = "???"
