@@ -18,8 +18,6 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameEvents="*res://events/game_events.gd"
-DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
-RuntimeDebugTools="*res://addons/runtime_debug_tools/scenes/remote_inspector.tscn"
 Collisions="*res://utils/collisions.gd"
 Groups="*res://utils/groups.gd"
 PhysicsUtils="*res://utils/physics_utils.gd"
@@ -28,6 +26,7 @@ SceneManager="*res://utils/scene_manager.tscn"
 PlayerUpgrades="*res://progression/player_upgrades.gd"
 PlayerStateManager="*res://levels/round/player_state_manager.tscn"
 UserOptions="*res://utils/user_options.gd"
+DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 
 [display]
 
@@ -41,7 +40,7 @@ project/assembly_name="ArtilleryRampage"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/runtime_debug_tools/plugin.cfg")
+enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg")
 
 [global_group]
 
