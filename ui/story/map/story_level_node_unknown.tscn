@@ -1,8 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://ya2fn3ef1h2j"]
+[gd_scene load_steps=3 format=3 uid="uid://ya2fn3ef1h2j"]
 
 [ext_resource type="PackedScene" uid="uid://bch6pb81vhwb" path="res://ui/story/map/story_level_node.tscn" id="1_n0v7d"]
+[ext_resource type="Texture2D" uid="uid://blhehpxyq286x" path="res://ui/story/map/textures/unknown_level.tres" id="2_obhak"]
 
 [node name="StoryLevelNode" instance=ExtResource("1_n0v7d")]
+
+[node name="Icon" parent="." index="0"]
+texture = ExtResource("2_obhak")
 
 [node name="Label" parent="." index="1"]
 text = "???"
