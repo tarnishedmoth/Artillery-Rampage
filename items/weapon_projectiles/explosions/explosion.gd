@@ -8,11 +8,14 @@ class_name Explosion extends Node2D
 ## It might make sense for this to also have the functionality for damage, if we
 ## move it from the WeaponProjectile class.
 
-@export var particles:Array[CPUParticles2D] ## Will wait until all emit finished to queue_free
+## Will wait until all emit [signal finished] to [method queue_free] this object.
+@export var particles:Array[CPUParticles2D]
 # AudioStreamPlayer and AudioStreamPlayer2D are not related
 # Also we could use the type of Player that layers sounds itself.
-@export var sfx:Array[AudioStreamPlayer2D] ## Will wait until all emit finished to queue_free
-@export var lights:Array[PointLight2D] ## Will fade out the light's energy property to 0.
+## Will wait until all emit [signal finished] to [method queue_free] this object.
+@export var sfx:Array[AudioStreamPlayer2D]
+## Will fade out the light's [member PointLight2D.energy] to 0 using [member lights_fade_time].
+@export var lights:Array[PointLight2D]
 @export_range(0.1, 10.0, 0.05,"or_greater","suffix:seconds") var lights_fade_time:float = 1.0
 
 var _finished_sfx:int = 0

@@ -1,0 +1,96 @@
+[gd_scene load_steps=11 format=3 uid="uid://xbbrj3p1ed11"]
+
+[ext_resource type="Script" path="res://items/weapon_projectiles/explosions/explosion.gd" id="1_wjfsp"]
+[ext_resource type="AudioStream" uid="uid://dlh3tqoi34qet" path="res://items/weapon_projectiles/explosions/sounds/sfx_small_explosion.wav" id="2_ba8uh"]
+[ext_resource type="PackedScene" uid="uid://cjk1xlwijbmno" path="res://items/weapon_projectiles/explosions/dust.tscn" id="3_1x5fp"]
+
+[sub_resource type="Curve" id="Curve_n12t2"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.131075, 0.637572), -2.22803, -2.22803, 0, 0, Vector2(1, 0.0414279), -0.0869588, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_baml1"]
+max_value = 100.0
+_data = [Vector2(0, 0), 0.0, 295.126, 0, 0, Vector2(1, 49.631), -150.041, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_7drfs"]
+_data = [Vector2(0, 1), 0.0, 0.0511093, 0, 0, Vector2(0.642121, 0.516729), 4.72049, 4.72049, 0, 0, Vector2(1, 0), 0.0205708, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_fapac"]
+interpolation_color_space = 1
+offsets = PackedFloat32Array(0.0736842, 0.271579, 0.662142, 0.766214, 0.84917)
+colors = PackedColorArray(0.453111, 0.495954, 0.697603, 1, 0, 0.975291, 0.763194, 1, 0.323426, 0.46214, 0.767976, 0.380392, 1, 1, 1, 0.945098, 0.296577, 0.463451, 0.764118, 0.382399)
+
+[sub_resource type="Gradient" id="Gradient_r6uu2"]
+offsets = PackedFloat32Array(0, 0.502262, 1)
+colors = PackedColorArray(0.494658, 0.476219, 0.56092, 1, 1, 1, 1, 1, 0.666202, 0.738932, 0.635233, 1)
+
+[sub_resource type="Gradient" id="Gradient_uthto"]
+interpolation_mode = 2
+interpolation_color_space = 1
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dj1jv"]
+gradient = SubResource("Gradient_uthto")
+width = 256
+height = 256
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.9, 0.9)
+
+[node name="ExplosionEMP" type="Node2D" node_paths=PackedStringArray("particles", "sfx", "lights")]
+script = ExtResource("1_wjfsp")
+particles = [NodePath("CPUParticles2D"), NodePath("Dust")]
+sfx = [NodePath("AudioStreamPlayer2D")]
+lights = [NodePath("PointLight2D")]
+lights_fade_time = 0.65
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_ba8uh")
+pitch_scale = 0.45
+bus = &"SFX"
+area_mask = 2
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+amount = 12
+lifetime = 1.4
+explosiveness = 1.0
+lifetime_randomness = 0.9
+direction = Vector2(0, -1)
+spread = 130.0
+gravity = Vector2(0, 180)
+initial_velocity_min = 100.0
+initial_velocity_max = 320.0
+orbit_velocity_min = 0.01
+orbit_velocity_max = 2.0
+orbit_velocity_curve = SubResource("Curve_n12t2")
+damping_min = 3.0
+damping_max = 7.0
+damping_curve = SubResource("Curve_baml1")
+scale_amount_min = 3.0
+scale_amount_max = 12.0
+scale_amount_curve = SubResource("Curve_7drfs")
+color_ramp = SubResource("Gradient_fapac")
+color_initial_ramp = SubResource("Gradient_r6uu2")
+
+[node name="Dust" parent="." instance=ExtResource("3_1x5fp")]
+amount = 3
+lifetime = 2.5
+emission_sphere_radius = 16.0
+gravity = Vector2(0, -16)
+initial_velocity_min = 24.0
+initial_velocity_max = 60.0
+damping_min = 4.0
+damping_max = 5.0
+scale_amount_min = 0.5
+scale_amount_max = 0.75
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(0.716489, 0.997089, 0.935687, 1)
+energy = 1.25
+shadow_enabled = true
+shadow_filter = 1
+texture = SubResource("GradientTexture2D_dj1jv")
+height = 4.0
