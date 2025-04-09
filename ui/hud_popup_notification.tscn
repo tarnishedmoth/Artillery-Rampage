@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8v38rorbbmnd"]
+
+[ext_resource type="Script" uid="uid://ll20jf80fodp" path="res://ui/hud_popup_notification.gd" id="1_0eeeh"]
+
+[node name="HudPopupNotification" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_0eeeh")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -51.0
+offset_right = 51.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_right = 12
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Warning!"
+horizontal_alignment = 1

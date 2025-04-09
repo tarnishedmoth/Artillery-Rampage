@@ -124,7 +124,12 @@ func check_if_must_skip_actions() -> bool:
 	# Disabling effects like EMP
 	var disabling_emp_charge_threshold:float = 50.0
 	if tank.debuff_emp_charge > disabling_emp_charge_threshold:
-		print_debug("EMP charge above threshold--turn must be skipped")
+		#print_debug("EMP charge above threshold--turn must be skipped")
+		var popup = PopupNotification.constructor(PopupNotification.Contexts.EMP_DISABLED)
+		tank.add_child(popup)
+		var offset = Vector2(0.0, 24.0)
+		popup.global_position = tank.global_position + offset
+		
 		return false
 		
 	return true

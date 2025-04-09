@@ -1,7 +1,5 @@
 class_name Tank extends Node2D
 
-# TODO: These maybe should be global events
-
 signal actions_completed(tank: Tank)
 signal tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2D)
 signal tank_took_damage(
@@ -49,7 +47,6 @@ signal  tank_took_emp(
 
 @onready var turret = $TankBody/TankTurret
 @onready var weapon_fire_location = $TankBody/TankTurret/WeaponFireLocation
-#@onready var fired_weapon_container = $FiredWeaponContainer # MOVED TO SCENEMANAGER/GAMELEVEL
 
 @onready var weapons: Array[Weapon]
 var current_equipped_weapon: Weapon
