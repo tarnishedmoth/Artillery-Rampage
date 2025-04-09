@@ -28,6 +28,10 @@ func _ready() -> void:
 	GameEvents.weapon_updated.connect(_on_weapon_updated)
 	GameEvents.player_died.connect(_on_player_died)
 	
+	if sfx_soundtrack:
+		sfx_soundtrack.stream = soundtrack_file
+		sfx_soundtrack.play()
+	
 @warning_ignore("unused_parameter")
 func check_cached_volume(audio_stream_player, override_volume_db:float = _sfx_volume_modifier) -> void:
 	if not audio_stream_player in initial_db_values:
@@ -54,9 +58,9 @@ func _on_turn_ended(_player) -> void:
 func _on_round_started() -> void:
 	if sfx_round_started:
 		sfx_round_started.play()
-	if sfx_soundtrack:
-		sfx_soundtrack.stream = soundtrack_file
-		sfx_soundtrack.play()
+	#if sfx_soundtrack: # Moved to _ready
+		#sfx_soundtrack.stream = soundtrack_file
+		#sfx_soundtrack.play()
 	
 func _on_round_ended() -> void:
 	if sfx_round_ended:
