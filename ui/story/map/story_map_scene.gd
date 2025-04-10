@@ -50,13 +50,17 @@ func _create_graph() -> void:
 	var nodes:Array[StoryLevelNode] = []
 	nodes.resize(_story_levels_resource.levels.size())
 	
-	var ideal_edge_length:float = bounds.size.x / nodes.size()
-	var edge_range:Vector2 = Vector2(minf(min_edge_length, ideal_edge_length), 0.0)
-	edge_range.y = maxf(edge_range.x, max_edge_length)
+	var prototype_node:StoryLevelNode = _new_story_level_node(default_node_prototype)
+	var avg_node_width:float = _get_node_width(prototype_node)	
+	var ideal_edge_length:float = maxf((bounds.size.x - nodes.size() * avg_node_width) / (nodes.size() - 1), min_edge_length)
+	var edge_range:Vector2 = Vector2(min_edge_length, max_edge_length)
 	
+	prototype_node.queue_free()
 	#endregion
 	
 	#region Populate Nodes
+	
+	var edge_length_diff:float = 0.0
 		
 	for i in range(levels.size()):
 		var level:StoryLevel = levels[i]
@@ -72,13 +76,19 @@ func _create_graph() -> void:
 		node.position = pos
 		
 		# Offset by right edge position for edge attachment
-		pos.x += node.right_edge.position.x - node.left_edge.position.x
+		pos.x += _get_node_width(node)
 		
-		var edge:Vector2 = Vector2(1.0,0.0).rotated(deg_to_rad(randf_range(node.min_edge_angle, node.max_edge_angle))).normalized() * randf_range(edge_range.x, edge_range.y)
+		var edge_length:float = randf_range(edge_range.x, edge_range.y)
+		if edge_length_diff < 0 and -edge_length_diff > ideal_edge_length * (levels.size() - i) / float(levels.size()):
+			print_debug("%s: Edges are too long - reducing current edge(%d) length from %f by %f" % [name, i, edge_length, -edge_length_diff])
+			edge_length = maxf(ideal_edge_length + edge_length_diff, edge_range.x)
+		var edge:Vector2 = Vector2(1.0,0.0).rotated(deg_to_rad(randf_range(node.min_edge_angle, node.max_edge_angle))).normalized() * edge_length
+		
 		if(pos.y + edge.y > bounds.position.y + bounds.size.y or 
 			pos.y + edge.y < bounds.position.y):
-			print_debug("%s: Edge hit bounds - flipping y direction" % [name, node.name])
+			print_debug("%s: Edge(%d) hit y bounds - flipping y direction" % [name, i])
 			edge.y = -edge.y
+		edge_length_diff += ideal_edge_length - edge.x
 		pos += edge
 		
 		nodes[i] = node
@@ -94,6 +104,8 @@ func _create_graph() -> void:
 			graph_container.add_child(_edge_from_to(prev_node, next_node))
 	#endregion		
 
+func _get_node_width(node: StoryLevelNode) -> float:
+	return node.right_edge.position.x - node.left_edge.position.x
 func _clear_graph() -> void:
 	for i in range(graph_container.get_child_count() - 1, -1, -1):
 		var child:Node = graph_container.get_child(i)

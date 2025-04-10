@@ -49,48 +49,6 @@ theme_override_constants/margin_bottom = 20
 [node name="LevelNodesContainer" type="Control" parent="Container"]
 layout_mode = 2
 
-[node name="Level1" parent="Container/LevelNodesContainer" instance=ExtResource("2_udjio")]
-layout_mode = 2
-offset_left = 179.0
-offset_top = 291.0
-offset_right = 179.0
-offset_bottom = 291.0
-
-[node name="Level2" parent="Container/LevelNodesContainer" instance=ExtResource("2_udjio")]
-layout_mode = 2
-offset_left = 398.0
-offset_top = 310.0
-offset_right = 398.0
-offset_bottom = 310.0
-
-[node name="Label" parent="Container/LevelNodesContainer/Level2" index="1"]
-text = "Level 2
-"
-
-[node name="Edge12" parent="Container/LevelNodesContainer" instance=ExtResource("3_4e1f5")]
-
-[node name="Edge23" parent="Container/LevelNodesContainer" instance=ExtResource("3_4e1f5")]
-position = Vector2(226.35, 0)
-
-[node name="Level3" parent="Container/LevelNodesContainer" instance=ExtResource("2_udjio")]
-layout_mode = 2
-offset_left = 398.0
-offset_top = 310.0
-offset_right = 398.0
-offset_bottom = 310.0
-
-[node name="Icon" parent="Container/LevelNodesContainer/Level3" index="0"]
-position = Vector2(190, -35)
-
-[node name="Label" parent="Container/LevelNodesContainer/Level3" index="1"]
-offset_left = 164.0
-offset_top = 0.0
-offset_right = 218.0
-offset_bottom = 49.0
-text = "Level 3
-
-"
-
 [node name="Buttons" type="Control" parent="."]
 anchors_preset = 0
 offset_right = 40.0
@@ -107,6 +65,3 @@ size_flags_vertical = 8
 text = "Next"
 
 [connection signal="pressed" from="Buttons/NextButton" to="." method="_on_next_button_pressed"]
-
-[editable path="Container/LevelNodesContainer/Level2"]
-[editable path="Container/LevelNodesContainer/Level3"]
