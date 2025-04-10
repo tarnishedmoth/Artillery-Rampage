@@ -9,48 +9,56 @@ script = ExtResource("1_3qnfp")
 scene_res_path = &"res://levels/test/environments/test_level_environment_islands.tscn"
 name = &"Islands"
 ui_map_node = ExtResource("2_dfrvm")
+narratives = Array[String](["We must push back these AI artillery and gain a foothold on the coast!"])
 
 [sub_resource type="Resource" id="Resource_ls1ig"]
 script = ExtResource("1_3qnfp")
 scene_res_path = &"res://levels/test/environments/test_level_environment_scorchedplains.tscn"
 name = &"Scorched Plains"
 ui_map_node = ExtResource("2_dfrvm")
+narratives = Array[String](["We are moving inland now!", "This land has taken heavy damage from the enemy."])
 
 [sub_resource type="Resource" id="Resource_8g4lb"]
 script = ExtResource("1_3qnfp")
 scene_res_path = &"res://levels/test/test_level_terrain_proc_gen.tscn"
 name = &"Spikey Hills"
 ui_map_node = ExtResource("2_dfrvm")
+narratives = Array[String](["This terrain will prove difficult.", "We must apply new tactices."])
 
 [sub_resource type="Resource" id="Resource_w4otv"]
 script = ExtResource("1_3qnfp")
 scene_res_path = &"res://levels/test/environments/test_level_environment_plains.tscn"
 name = &"Plains"
 ui_map_node = ExtResource("2_dfrvm")
+narratives = Array[String](["Back to the open land.", "We have made great progress against the enemy."])
 
 [sub_resource type="Resource" id="Resource_yxy2j"]
 script = ExtResource("1_3qnfp")
 scene_res_path = &"res://levels/test/test_level_terrain_proc_gen_fresh.tscn"
 name = &"New Heights"
 ui_map_node = ExtResource("2_dfrvm")
+narratives = Array[String](["This is a new and strange territory.", "Much variance!"])
 
 [sub_resource type="Resource" id="Resource_tj162"]
 script = ExtResource("1_3qnfp")
 scene_res_path = &"res://levels/test/environments/test_level_environment_plateau.tscn"
 name = &"Wild West"
 ui_map_node = ExtResource("2_dfrvm")
+narratives = Array[String](["I think I can see my house from up here!", "We must use the high ground!", ""])
 
 [sub_resource type="Resource" id="Resource_xxtnw"]
 script = ExtResource("1_3qnfp")
 scene_res_path = &"res://levels/test/environments/test_level_environment_whitecaps.tscn"
 name = &"Snow Caps"
 ui_map_node = ExtResource("2_dfrvm")
+narratives = Array[String](["I can't feel my toes!", "We must dispatch the enemy quickly and move onward to victory!"])
 
 [sub_resource type="Resource" id="Resource_ssq1b"]
 script = ExtResource("1_3qnfp")
 scene_res_path = &"res://levels/test/environments/test_level_environment_divide.tscn"
 name = &"The Great Divide"
 ui_map_node = ExtResource("2_dfrvm")
+narratives = Array[String](["There is a large gap between us and the enemy.", "Perhaps it will confuse the enemy."])
 
 [resource]
 script = ExtResource("1_e5mo0")

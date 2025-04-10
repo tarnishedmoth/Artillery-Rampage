@@ -9,3 +9,7 @@ class_name StoryLevel extends Resource
 
 ## Scene file that is subclass of StoryLevelNode
 @export  var ui_map_node:PackedScene
+
+## Text to display on the map node when moving to next level
+@export_group("Narrative")
+@export_multiline var narratives:Array[String]
