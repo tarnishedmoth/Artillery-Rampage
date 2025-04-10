@@ -71,7 +71,6 @@ text = "Level 2
 
 [node name="Edge23" parent="Container/LevelNodesContainer" instance=ExtResource("3_4e1f5")]
 position = Vector2(226.35, 0)
-points = PackedVector2Array(206.65, 314, 330.65, 276)
 
 [node name="Level3" parent="Container/LevelNodesContainer" instance=ExtResource("2_udjio")]
 layout_mode = 2

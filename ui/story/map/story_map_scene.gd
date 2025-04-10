@@ -138,16 +138,14 @@ func _new_story_level_node(prototype: PackedScene) -> StoryLevelNode:
 	graph_container.add_child(node)
 	return node
 	
-func _edge_from_to(from: StoryLevelNode, to: StoryLevelNode) -> Line2D:
-	var edge:Line2D = edge_node_prototype.instantiate() as Line2D
+func _edge_from_to(from: StoryLevelNode, to: StoryLevelNode) -> StoryLevelEdge:
+	var edge:StoryLevelEdge = edge_node_prototype.instantiate() as StoryLevelEdge
 	
 	edge.position = Vector2.ZERO
-
-	var from_pos:Vector2 = 	from.position + from.right_edge.position
-	var to_pos:Vector2 = to.position + to.left_edge.position
-	print_debug("%s: Add edge(%s->%s) - [%s, %s]" % [name, from.label.text, to.label.text, from_pos, to_pos])
-
-	edge.set_points([from_pos, to_pos])
+	edge.from = from.position + from.right_edge.position
+	edge.to = to.position + to.left_edge.position
+	
+	print_debug("%s: Add edge(%s->%s) - [%s, %s]" % [name, from.label.text, to.label.text, edge.from, edge.to])
 	
 	#TODO: Change color?
 	return edge

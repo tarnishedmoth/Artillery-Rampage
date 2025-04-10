@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://cs37yf58hf3tp"]
+[gd_scene load_steps=2 format=3 uid="uid://cs37yf58hf3tp"]
 
-[node name="LevelPath" type="Line2D"]
-points = PackedVector2Array(210, 289, 369, 310)
-width = 5.0
-default_color = Color(0.2, 0.213333, 1, 1)
+[ext_resource type="Script" uid="uid://cv0gib7320jt3" path="res://ui/story/map/story_level_edge.gd" id="1_dqsta"]
+
+[node name="Edge" type="Node2D"]
+script = ExtResource("1_dqsta")
+color = Color(0.82, 0.65764, 0.00819999, 1)
