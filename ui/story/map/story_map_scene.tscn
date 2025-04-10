@@ -12,7 +12,7 @@ colors = PackedColorArray(0.0851705, 0.243201, 0.0842348, 1, 0.611278, 0.401298,
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_tggun"]
 gradient = SubResource("Gradient_gl7n1")
 
-[node name="StoryMapScene" type="Control"]
+[node name="StoryMapScene" type="Control" groups=["Savable"]]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_5v7n8")

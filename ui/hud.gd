@@ -62,7 +62,7 @@ func _on_weapon_updated(weapon: Weapon) -> void:
 
 func _on_level_changed(_level: GameLevel) -> void:
 	if OS.is_debug_build():
-		var file_name = get_tree().current_scene.scene_file_path
+		var file_name = SceneManager.current_scene.scene_file_path
 		debug_level_name.text = file_name
 	pass
 

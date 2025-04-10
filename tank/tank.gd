@@ -238,7 +238,7 @@ func kill():
 func spawn_death_drop() -> void:
 	var spawn = drop_on_death.instantiate()
 	spawn.global_position = global_position
-	var container = get_tree().current_scene ## Change later if wanted
+	var container = SceneManager.current_scene ## Change later if wanted
 	container.add_child.call_deferred(spawn)
 	
 func _update_visuals_after_damage():
@@ -354,7 +354,7 @@ func get_weapon_fire_locations() -> Marker2D:
 	return weapon_fire_location
 
 func get_fired_weapon_container() -> Node:
-	var root = SceneManager.get_current_level_root() if not null else get_tree().current_scene
+	var root = SceneManager.get_current_level_root() if not null else SceneManager.current_scene
 	if root.has_method("get_container"):
 		return root.get_container()
 	else: return self

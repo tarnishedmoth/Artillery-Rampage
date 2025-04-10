@@ -34,6 +34,17 @@ var _current_story_level:StoryLevel
 
 var play_mode:PlayMode
 
+var current_scene:Node = null:
+	get: return current_scene if current_scene else get_tree().current_scene
+	set(value):
+		current_scene = value
+	
+var _last_scene_resource:Resource
+
+func _ready()->void:
+	var root = get_tree().root
+	current_scene = root.get_child(root.get_child_count() - 1)
+	
 func _init() -> void:
 	GameEvents.level_loaded.connect(_on_GameLevel_loaded)
 	
@@ -52,7 +63,7 @@ func quit() -> void:
 func restart_level(delay: float = default_delay) -> void:
 	print_debug("restart_level: %s, delay=%f" % [str(_current_level_root_node.name) if _current_level_root_node else "NULL", delay])
 
-	await _switch_scene(func(): get_tree().reload_current_scene(), delay)
+	await _switch_scene(func()->Resource: return _last_scene_resource, delay)
 	
 func next_level(delay: float = default_delay) -> void:
 	if !story_levels or !story_levels.levels:
@@ -104,24 +115,48 @@ func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 func switch_scene(scene: PackedScene, delay: float = default_delay) -> void:
 	var display_name = str(scene)
 	print_debug("switch_scene: %s, delay=%f" % [display_name, delay])
-	await _switch_scene(func(): get_tree().change_scene_to_packed(scene), delay)
+	await _switch_scene(func()->Resource: return scene, delay)
 	
 func switch_scene_file(scene: String, delay: float = default_delay) -> void:
 	print_debug("switch_scene_file: %s, delay=%f" % [scene, delay])
-	await _switch_scene(func(): get_tree().change_scene_to_file(scene), delay)
+	# TODO: Consider using resource loader to load async during the delay period
+	await _switch_scene(func()->Resource: return load(scene), delay)
 
 func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	if is_switching_scene:
 		return
 	
 	# Avoid two events causing a restart in the same game (e.g. player dies and leaves 1 player remaining)
+	SaveStateManager.save_tree_state()
+	
 	is_switching_scene = true
-	await get_tree().create_timer(delay).timeout
+	if delay > 0:
+		await get_tree().create_timer(delay).timeout
+	else:
+		await get_tree().process_frame
 	
 	is_switching_scene = false
 	
-	# TODO: Consider using resource loader to load async during the delay period
-	switchFunc.call()
+	var root = get_tree().root
+	var root_current_scene = root.get_child(root.get_child_count() - 1)
+	root_current_scene.free()
+	
+	var new_scene:Resource = switchFunc.call()
+	
+	current_scene = new_scene.instantiate()
+	#current_scene.scene_file_path = new_scene.resource_path
+	
+	# Somehow get_tree().current_scene is null inside _ready of the loaded scene
+	# even if we do get_tree().current_scene = current_scene before
+	# So instead set the current_scene on SceneManager and have it manage the current_scene rather than the tree root
+	# So replaced all references to this
+	get_tree().root.add_child(current_scene)
+	get_tree().current_scene = current_scene
+	
+	SaveStateManager.restore_tree_state()
+	
+	_last_scene_resource = new_scene
+	
 	get_tree().paused = false
 
 func _on_GameLevel_loaded(level:GameLevel) -> void:

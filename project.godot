@@ -22,6 +22,7 @@ Collisions="*res://utils/collisions.gd"
 Groups="*res://utils/groups.gd"
 PhysicsUtils="*res://utils/physics_utils.gd"
 AITypes="*res://controller/ai/ai_types.gd"
+SaveStateManager="*res://utils/save_state_manager.gd"
 SceneManager="*res://utils/scene_manager.tscn"
 PlayerUpgrades="*res://progression/player_upgrades.gd"
 PlayerStateManager="*res://levels/round/player_state_manager.tscn"
@@ -50,6 +51,7 @@ Damageable="Supports the \"take_damage\" function to affect the health of a unit
 Player="Player unit"
 Bot="AI-controlled unit"
 Collectible="Retrievable pickups--see Personnel"
+Savable="Class that participates in save/load system"
 
 [input]
 

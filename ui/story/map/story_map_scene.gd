@@ -20,7 +20,54 @@ var _story_levels_resource:StoryLevelsResource
 var _current_level_index:int
 
 func _ready() -> void:
+	if graph_container.get_child_count() == 0:
+		_create_graph()
+
+#region Savable
+
+const _save_state_key:StringName = &"StoryMap"
+var _save_state:SaveState
+
+func update_save_state(save:SaveState) -> void:
+	save.state[_save_state_key] = _create_save_state()
+
+func restore_from_save_state(save: SaveState) -> void:
+	_save_state = save
 	_create_graph()
+	_save_state = null
+	
+func _create_save_state() -> StoryMapSaveState:
+	# Save node positions
+	var state := StoryMapSaveState.new()
+	for child in graph_container.get_children():
+		if child is StoryLevelNode:
+			state.nodes.push_back(child.position)
+		
+	return state
+func _get_save_state() -> StoryMapSaveState:
+	return _save_state.state.get(_save_state_key) as StoryMapSaveState if _save_state else null
+	
+func _create_nodes_from_save_state(saved_state: StoryMapSaveState) -> Array[StoryLevelNode]:
+	var levels:Array[StoryLevel] = _story_levels_resource.levels
+	var nodes:Array[StoryLevelNode]
+	nodes.resize(_story_levels_resource.levels.size())
+	
+	if nodes.size() != saved_state.nodes.size():
+		push_warning("%s: Invalid save state - expected size=%d but node size was %d" % [name, nodes.size(), saved_state.nodes.size()])
+		return []
+	
+	#region Populate Nodes
+			
+	for i in range(levels.size()):
+		var level:StoryLevel = levels[i]
+		var node:StoryLevelNode = _create_story_level_node(i, level)
+		if not node:
+			push_warning("%s: Unable to create story node for %d:%s" % [name, i, level.name])
+			continue
+		nodes[i] = node
+		node.position = saved_state.nodes[i]
+	return nodes
+#endregion
 
 func _on_next_button_pressed() -> void:
 	SceneManager.next_level()
@@ -28,7 +75,6 @@ func _on_next_button_pressed() -> void:
 func _create_graph() -> void:
 	_clear_graph()
 	
-	#region Graph Setup
 	_current_level_index = SceneManager._current_level_index
 	if _current_level_index < 0:
 		push_error("%s: Current story level index is invalid. Map will be empty!" % [name])
@@ -39,6 +85,29 @@ func _create_graph() -> void:
 		push_error("%s: No story levels defined. Map will be empty!" % [name])
 		return
 		
+	var nodes:Array[StoryLevelNode] =_generate_or_load_nodes()
+	
+	#region Populate Edges
+	for i in range(1, nodes.size()):
+		var prev_node:StoryLevelNode = nodes[i - 1]
+		var next_node:StoryLevelNode = nodes[i]
+		
+		if prev_node and next_node:
+			graph_container.add_child(_edge_from_to(prev_node, next_node))
+	#endregion		
+
+func _generate_or_load_nodes() -> Array[StoryLevelNode]:
+	var saved_state: StoryMapSaveState = _get_save_state()
+	var nodes:Array[StoryLevelNode] = []
+	
+	if saved_state:
+		nodes = _create_nodes_from_save_state(saved_state)
+		# Save state could be invalid so it will return empty in that case
+	if not nodes:
+		nodes = _generate_nodes()
+	return nodes
+	
+func _generate_nodes() -> Array[StoryLevelNode]:
 	var levels:Array[StoryLevel] = _story_levels_resource.levels
 	
 	var bounds:Rect2 = get_viewport().get_visible_rect()
@@ -56,7 +125,6 @@ func _create_graph() -> void:
 	var edge_range:Vector2 = Vector2(min_edge_length, max_edge_length)
 	
 	prototype_node.queue_free()
-	#endregion
 	
 	#region Populate Nodes
 	
@@ -95,15 +163,8 @@ func _create_graph() -> void:
 				
 	#endregion
 	
-	#region Populate Edges
-	for i in range(1, nodes.size()):
-		var prev_node:StoryLevelNode = nodes[i - 1]
-		var next_node:StoryLevelNode = nodes[i]
-		
-		if prev_node and next_node:
-			graph_container.add_child(_edge_from_to(prev_node, next_node))
-	#endregion		
-
+	return nodes
+	
 func _get_node_width(node: StoryLevelNode) -> float:
 	return node.right_edge.position.x - node.left_edge.position.x
 func _clear_graph() -> void:
