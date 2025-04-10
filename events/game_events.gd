@@ -2,62 +2,34 @@ extends Node
 
 var current_level:GameLevel
 
-@warning_ignore("unused_signal")
+@warning_ignore_start("unused_signal")
+
 signal user_options_changed()
 
-@warning_ignore("unused_signal")
-signal turn_started(player: TankController)
-
-@warning_ignore("unused_signal")
-signal turn_ended(player: TankController)
-
-@warning_ignore("unused_signal")
-signal player_added(player: TankController)
-
-@warning_ignore("unused_signal")
-signal player_died(player: TankController)
-
-@warning_ignore("unused_signal")
 signal round_started()
-
-@warning_ignore("unused_signal")
 signal round_ended()
-
-@warning_ignore("unused_signal")
 signal level_loaded(level: GameLevel)
 
-@warning_ignore("unused_signal")
+signal turn_started(player: TankController)
+signal turn_ended(player: TankController)
+
+signal player_added(player: TankController)
+signal player_died(player: TankController)
+
 signal wind_updated(wind: Wind)
-
-@warning_ignore("unused_signal")
 signal aim_updated(player: TankController)
-
-@warning_ignore("unused_signal")
 signal power_updated(player: TankController)
-
-@warning_ignore("unused_signal")
 signal weapon_updated(weapon: Weapon)
-
-@warning_ignore("unused_signal")
 signal projectile_fired(projectile : WeaponProjectile)
-
-@warning_ignore("unused_signal")
 signal weapon_fired(weapon : Weapon)
 
-@warning_ignore("unused_signal")
 signal collectible_collected(collected: CollectibleItem)
-
-@warning_ignore("unused_signal")
 signal personnel_requested_pickup(unit: PersonnelUnit)
-
-@warning_ignore("unused_signal")
 signal personnel_requested_delivery(unit: PersonnelUnit)
-
-@warning_ignore("unused_signal")
 signal copter_arrived_for_pickups(copter)
-
-@warning_ignore("unused_signal") 
 signal copter_left_airspace(copter)
+
+@warning_ignore_restore("unused_signal")
 
 func emit_turn_started(player: TankController):
 	emit_signal("turn_started", player)

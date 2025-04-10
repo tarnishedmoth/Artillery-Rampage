@@ -28,10 +28,13 @@ func _ready() -> void:
 		print_debug("TankController(%s) - _ready: Disable fall damage before first turn" % [name])
 		tank.enable_fall_damage = false
 
-func is_on_same_team_as(other: TankController) -> bool:
-	if team < 0:
-		return false
-	return team == other.team
+func is_on_same_team_as(other) -> bool:
+	if other is TankController:
+		if team < 0:
+			return false
+		return team == other.team
+	else:
+		return team == other # int comparison
 	
 func begin_round() -> void:
 	if pending_state:

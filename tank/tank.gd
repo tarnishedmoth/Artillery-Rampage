@@ -14,14 +14,14 @@ signal  tank_took_emp(
 @export var max_angle:float = 90
 
 ## Weapon power output is decreased when health isn't full.
-## @deprecated: Use [member weapon_max_power_range] instead
+## @deprecated: Use [member weapon_max_power_range] instead.
 @export var weapon_max_power_health_mult:float = 10 # Didn't comment out in case there are scenes with modified export property values
 ## When [method _update_attributes] is called, [member max_power] is linearly interpolated using ([member health]/[member max_health]) as delta.
 @export var weapon_max_power_range:Vector2 = Vector2(300.0,1000.0)
 @export var max_health:float = 100
 @export var ground_trace_distance:float = 1000
 
-@export var turret_shot_angle_offset:float = -90
+@export var turret_shot_angle_offset:float = -90 ## @deprecated: - corrected the rotation of the marker2D and math instead
 
 @export var turret_color_value: float = 0.7
 
@@ -354,7 +354,9 @@ func get_weapon_fire_locations() -> Marker2D:
 	return weapon_fire_location
 
 func get_fired_weapon_container() -> Node:
-	var root = SceneManager.get_current_level_root() if not null else SceneManager.current_scene
+	var root = SceneManager.get_current_level_root()
+	if root == null:
+		root = SceneManager.current_scene
 	if root.has_method("get_container"):
 		return root.get_container()
 	else: return self

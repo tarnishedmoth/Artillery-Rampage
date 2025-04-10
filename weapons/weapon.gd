@@ -1,37 +1,102 @@
-class_name Weapon extends Node2D
-## To use: attach script to a Node2D and configure in the Inspector panel.
-## Contains functionality for ammo based weapons, magazines, fire rate (cycling), and reloading.
-## Also TODO provide support for continuous fire weapons like a laser beam etc.
-## Provide Marker2D nodes in the barrels array, shots will spawn from each point, in order.
+## A [Node2D] that spawns scenes with a wide scope of options focused on firearms.
+##
+## Contains functionality for ammunition, magazines, fire rate (cycling), reloading, variable quantity
+## of projectiles spawned at once, and duration-based continuous fire.
+## [br][br]
+## Use in the editor: attach script to a Node2D and configure in the Inspector panel.
+## Can be set up in code but is designed to be instantiated as a scene root with [AudioStreamPlayer2D]
+## children, [Marker2D] barrels (whose transform is used when spawning the projectiles), and art.
+## [br][br]
+##
+## The various [method shoot] methods will spawn [WeaponProjectile]s at the first barrel in
+## [member barrels] and continue in order for each successive shot before looping back to the first entry.
+## Sound effects will play when appropriate if configured.
+## Key parameters like [member accuracy_angle_spread]
+## , [member power_launch_speed_mult] , [member fire_rate] , [member retain_when_empty] , and [member use_ammo]
+## can completely change how the [Weapon] behaves.
+## Look in [i]Behavior[/i] and [i]Ammo[/i] for details.
+## The player's in-game's [b]HUD[/b] uses [member display_name] when it is called upon in
+## [method Tank.push_weapon_update_to_hud].
+## If configured in the Inspector, sound effects such as [member sfx_fire] will play when appropriate.
+## Weapon upgrades [ModWeapon] can be attached either in the Inspector: [member weapon_mods],
+## or in code using [method attach_mods].
+## [br][br]
+## [color=yellow]TODO[/color][i] provide support for continuous fire weapons like a laser beam etc.
+## See [member fires_continuously].[/i]
 
-#enum WeaponType{}
-signal weapon_actions_completed(weapon: Weapon) ## Emits once all the projectiles have completed their lifespans.
+class_name Weapon extends Node2D
+
+## Emits once all the [WeaponProjectile]s fired by this [Weapon] have completed their lifespans.
+signal weapon_actions_completed(weapon: Weapon)
+## Emits when [method Weapon.destroy] before [method queue_free].
 signal weapon_destroyed(weapon: Weapon)
+## Used to emit the [member current_ammo] as an [int].
 signal ammo_changed(current_ammo:int)
+## Used to emit the [member magazines] as an [int].
 signal magazines_changed(current_magazines:int)
 
 #region Variables
-@export var scene_to_spawn: PackedScene ## This is the projectile or shoot effect.
+## This scene is spawned and set up when this weapon is fired. It is designed to use
+## [WeaponProjectile], but it also accepts other types, you may need to tinker.
+## As long as it derives from [RigidBody2D], it will be given a starting [code]linear_velocity[/code].
+@export var scene_to_spawn: PackedScene
+
+## Used by [Tank] in [method connect_to_tank], and used to initialize some properties
+## of [ModProjectile] when shot, in [method _spawn_projectile].
 var parent_tank: Tank
-@export var display_name: String: ## Used by HUD/UI
+
+## Used by the player's in-game HUD UI. It automatically adds a denotion when [code]get[/code]
+## if the [Weapon] is modified with [ModWeapon].
+@export var display_name: String:
 	get:
 		if not weapon_mods.is_empty():
 			return str(display_name + ": Modified")
 		else: return display_name
 
-@export var weapon_mods: Array[ModWeapon] ## For upgrades and nerfs at runtime
-var projectile_mods: Array[ModProjectile] ## Applied to the projectile when fired.
+## Used for applying upgrades and nerfs at runtime. This array is applied in the [method _ready] function.
+## The [ModWeapon] directly (permanently) alters the exposed properties of this instance.
+## They can contain [ModProjectile] within that is automatically applied to [WeaponProjectile]
+## spawned by this weapon. See also [member projectile_mods].
+@export var weapon_mods: Array[ModWeapon]
+## Used for applying upgrades and nerfs at runtime. This array is applied to every [WeaponProjectile]
+## spawned by this weapon. See also [member weapon_mods].
+var projectile_mods: Array[ModProjectile]
+
 
 @export_group("Behavior")
-@export_range(-360,360,0.0001,"radians_as_degrees") var accuracy_angle_spread: float = 0.0 ## Accuracy of projectiles fired.
-## Default used if not given one by the shooter.
-## @deprecated: use [member power_launch_speed_mult] instead for tweaking relative projectile launch speed.
-## [br]The Player and AI for example choose their power and pass it to the [method shoot] function.
+## Inaccuracy of projectiles fired. A value of 0.0 is always perfectly accurate.
+@export_range(0.0,360,0.0001,"radians_as_degrees") var accuracy_angle_spread: float = 0.0
+
+## Default used if not provided one by the controlling object when
+## calling [method shoot], [method shoot_for_count], or [method shoot_for_duration].
+## [br][br]
+## Use [member power_launch_speed_mult] instead for tweaking relative projectile launch speed.
+## The Player and AI for example choose their power and pass it to the [method shoot] function, where
+## this property has no effect; see [method Tank.shoot] & [member Tank.max_power].
 @export var fire_velocity: float = 100.0
-@export_range(0.01, 10.0, 0.01,"or_greater","or_less") var power_launch_speed_mult: float = 1.00 ## Tune the initial velocity given the power
-@export var fires_continuously: bool = false ## Continuous-fire weapons don't use fire rate.
-@export var use_fire_rate: bool = false ## Prevents shooting while cycling.
-@export var fire_rate: float = 4.0 ## Rate of fire per second. 4.0 would fire once every quarter-second.
+
+## Tune projectile's initial velocity.
+## [br]
+## Use this to make projectiles faster or slower than "default". This number is multiplied by
+## [param power] in [method shoot], [method shoot_for_count], & [method shoot_for_duration].
+@export_range(0.01, 10.0, 0.01,"or_greater","or_less") var power_launch_speed_mult: float = 1.00
+## @experimental: Not yet functional
+## Continuous-fire weapons don't use fire rate, and fire for a duration of time.
+## See [member always_shoot_for_duration] and [method shoot_for_duration].
+@export var fires_continuously: bool = false
+## Whether to utilize the [member fire_rate] when shooting. This provides for machine gun/automatic
+## rifle behavior. Shooting is prevented for the interval [member fire_rate]--see [method cycle].
+@export var use_fire_rate: bool = false
+## Rate of fire, per second. 4.0 would fire once every quarter-second.
+## 0.5 would fire once every two seconds.
+## [member use_fire_rate] must be [code]true[/code] for this to have any effect. See [method cycle].
+@export var fire_rate: float = 4.0
+## This many scenes are spawned and set up each time this weapon shoots.
+## This provides for shotgun behavior. It is preferable to using [member always_shoot_for_count] with
+## [code]use_fire_rate = false[/code], because they are instanced all at once.
+@export var number_of_scenes_to_spawn:int = 1
+
+
 @export var always_shoot_for_duration:float = 0.0 ## If greater than zero, when Shoot() is called, weapon will fire as frequently as it can based on fire-rate for this duration in seconds.
 @export var always_shoot_for_count:int = 1 ## When fired, weapon will shoot this many times, separated by fire rate delay.
 ## Emit signals necessary for game logic. Disable for alternate use cases (cosmetic).
@@ -83,7 +148,7 @@ var _awaiting_lifespan_completion: int
 #region Virtuals
 func _ready() -> void:
 	weapon_actions_completed.connect(_on_weapon_actions_completed)
-	apply_all_mods() # This may not be desired but it probably is. If the weapon's stats are retained across matches, this could double the effect unintentionally
+	apply_all_mods() # If the weapon's state is retained across scene trees, this could stack the effect unintentionally.
 	
 func _process(_delta: float) -> void:
 	if is_shooting: ## Shooting for duration or count.
@@ -129,8 +194,10 @@ func shoot(power:float = fire_velocity) -> void:
 
 	if always_shoot_for_duration > 0.0:
 		shoot_for_duration(always_shoot_for_duration, scaled_speed)
-	elif always_shoot_for_count > 1:
+		return
+	if always_shoot_for_count > 1:
 		shoot_for_count(always_shoot_for_count, scaled_speed)
+		return
 	else:
 		_shoot(scaled_speed)
 	
@@ -138,6 +205,12 @@ func shoot_for_duration(duration:float = always_shoot_for_duration, power:float 
 	if is_shooting: return
 	_shoot_for_duration_power = power
 	is_shooting = true
+	
+	if use_fire_rate == false and fires_continuously == false:
+		## Prevent projectiles spawning every frame.
+		assert("You must use_fire_rate on this Weapon to shoot for duration!")
+		use_fire_rate = true
+	
 	_shoot(power)
 	await get_tree().create_timer(duration).timeout
 	is_shooting = false
@@ -167,6 +240,8 @@ func reload(immediate: bool = false) -> void:
 	is_reloading = false ## Finished reloading.
 	if sfx_reload: sfx_reload.play() ## Trigger the SFX to play
 		
+## This function is called after every time the weapon shoots, to start the waiting timer
+## if [member use_fire_rate], and to advance to the next member of [member barrels].
 func cycle() -> void:
 	if use_fire_rate: ## Prevent shooting while cycling.
 		is_cycling = true
@@ -197,8 +272,9 @@ func configure_barrels() -> void:
 	if barrels.size() == 0:
 		var new_marker_2d = Marker2D.new()
 		add_child(new_marker_2d)
-		barrels.append(new_marker_2d) ## So we can access our own basis data.
-		## Typically if you're shooting from this spot you're inside of your own tank, and it will just instantly collide.
+		barrels.append(new_marker_2d) # So we can access our own basis data.
+		push_warning("Weapon was configured with no barrels.")
+		# Typically if you're shooting from this spot you're inside of your own tank, and it will just instantly collide.
 	
 	for i in barrels:
 		if sfx_fire: ## Set up audio stream players at the barrel points.
@@ -206,57 +282,104 @@ func configure_barrels() -> void:
 			add_child(new_fire_sfx)
 			barrels_sfx_fire.append(new_fire_sfx)
 			
-func apply_all_mods(mods: Array[ModWeapon] = weapon_mods) -> void:
-	for mod in mods:
+## Applies all modifications in [member weapon_mods], using the current state
+## of the [Weapon] and its properties. This can result in stacking mods' effects.
+## [br]TODO cache the initial state maybe. If you want to reset the weapon,
+## you can just instantiate a new version of this weapon if it's a saved scene
+## --like all our weapons are so far--and then reattach your mods and apply.
+func apply_all_mods() -> void:
+	for mod in weapon_mods:
 		mod.modify_weapon(self)
 		
-func apply_new_mod(mod) -> void:
+## The argument [param mods] can be an [ModWeapon] or [ModProjectile], as an [Array] or as a singular object.
+## [param apply_immediately] can be set [code]false[/code] to only append this mod to [member weapon_mods].
+func attach_mods(mods, apply_immediately:bool = true) -> void:
+	if mods is Array:
+		for mod in mods:
+			_attach_new_mod(mod, apply_immediately)
+	else:
+		_attach_new_mod(mods, apply_immediately)
+		
+# Internal
+func _attach_new_mod(mod, apply:bool) -> void:
 	if mod is ModWeapon:
 		weapon_mods.append(mod)
-		mod.modify_weapon(self)
+		if apply: mod.modify_weapon(self)
 	elif mod is ModProjectile:
 		projectile_mods.append(mod)
 
+## Directly applies a [ModWeapon]'s effect to this [Weapon] without keeping it in
+## [member weapon_mods]. This method will not do anything when provided a [ModProjectile].
+func apply_new_mod(mod) -> void:
+	push_warning("This method only applies the mod's effects one-shot.
+		It does not append a reference to the weapon_mods array property.
+		You can ignore if this is intended use.")
+	if mod is ModWeapon:
+		mod.modify_weapon(self)
+
+## Will stop all [AudioStreamPlayer2D] in [member sounds].
 func stop_all_sounds(_only_looping: bool = true) -> void: # TODO args
 	for s: AudioStreamPlayer2D in sounds:
 		#if it's a looping sound...
 		if s.playing: s.stop()
 		
-func add_projectile_awaiting(projectile: WeaponProjectile) -> void:
+## Related to [signal weapon_actions_completed].
+## [br]Connects the
+## [param projectile]'s
+## [signal WeaponProjectile.completed_lifespan]
+## and increments an internal counter.
+func _add_projectile_awaiting(projectile: WeaponProjectile) -> void:
 	projectile.completed_lifespan.connect(_on_projectile_completed_lifespan) # So we know when the projectile is finished.
 	_awaiting_lifespan_completion += 1
 
+## Emits death signals if appropriate and calls [method queue_free].
 func destroy() -> void:
 	if emit_action_signals: weapon_destroyed.emit(self)
 	queue_free()
 #endregion
 
 #region Private Methods
+## The internal source of shooting. Used by [method shoot], [method shoot_for_duration], & [method shoot_for_count].
 func _shoot(power:float = fire_velocity) -> void:
+	## Prevented from shooting
 	#if not is_equipped:
 		#push_warning("Tried to shoot weapon that is not equipped.")
 		#return
 	if is_cycling: return
 	if is_reloading:
 		dry_fire()
-		cycle() ## To PUNISH them...
+		cycle()
 		return
 	if use_ammo == true && current_ammo <= 0:
 		dry_fire()
 		cycle()
 		return ## We can't shoot.
 		
+	## Shooting
 	if not fires_continuously:
+		# Play sound effect
 		if not barrels_sfx_fire.is_empty(): barrels_sfx_fire[current_barrel].play()
-		_spawn_projectile(power)
+		
+		# Spawn projectiles
+		for projectile in number_of_scenes_to_spawn:
+			_spawn_projectile(power)
+		
+		# Cycle the gun
 		cycle()
-		if emit_action_signals: GameEvents.emit_weapon_fired(self) # This has no game effects right now.
+		
+		# Signals
+		if emit_action_signals:
+			## This has no game effects right now.
+			## It could be useful for things like screen shake, camera behavior, other reactions.
+			## (The logic for turn changes happens elsewhere.)
+			GameEvents.emit_weapon_fired(self)
 	else:
 		## Alternative handling for continuous weapons
-		print_debug("Continuous fire is not yet supported")
+		push_error("Continuous fire is not yet supported.")
 		cycle()
 		pass
 		
+	## Counters
 	if use_ammo:
 		current_ammo -= ammo_used_per_shot
 		ammo_changed.emit(current_ammo)
@@ -264,32 +387,43 @@ func _shoot(power:float = fire_velocity) -> void:
 		_shoot_for_count_remaining -= 1
 	if _shoot_for_count_remaining == 0 or current_ammo == 0:
 		is_shooting = false
-			
+	
+## Instances the [member scene_to_spawn], configures critical properties and signals for [WeaponProjectile],
+## childs it to the [member GameLevel.container_for_spawnables] or [member SceneManager.current_scene],
+## then applies transforms and velocity, making use of [member accuracy_angle_spread].
 func _spawn_projectile(power: float = fire_velocity) -> void:
 	var barrel = barrels[current_barrel]
 	if scene_to_spawn and scene_to_spawn.can_instantiate():
 		var new_shot = scene_to_spawn.instantiate() as RigidBody2D
-		#var container = SceneManager.current_scene
-		#var container = parent_tank.get_fired_weapon_container()
-		var container = SceneManager.get_current_level_root() if not null else SceneManager.current_scene
+		
+		var container = SceneManager.get_current_level_root()
+		if container == null:
+			container = SceneManager.current_scene
 		if container.has_method("get_container"):
 			container = container.get_container()
 		
 		if new_shot is WeaponProjectile:
 			new_shot.set_sources(parent_tank,self)
 			new_shot.apply_all_mods(projectile_mods)
-			add_projectile_awaiting(new_shot)
+			_add_projectile_awaiting(new_shot) # Uses signals in class
 		
-		new_shot.global_transform = barrel.global_transform
+		container.add_child(new_shot)
+		new_shot.global_transform = barrel.global_transform # TODO micro offsets might be a good idea for shotguns etc
+		
 		var aim_angle = barrel.global_rotation
 		if accuracy_angle_spread != 0.0:
 			var deviation = randf_range(-accuracy_angle_spread,accuracy_angle_spread) / 2
 			aim_angle += deviation
+			# TODO this should also rotate the object
 		
-		var velocity = Vector2(power, 0.0)
-		new_shot.linear_velocity = velocity.rotated(aim_angle)
+		if new_shot is RigidBody2D:
+			var velocity = Vector2(power, 0.0)
+			new_shot.linear_velocity = velocity.rotated(aim_angle)
+			# TODO alternative for other types of objects?
+			# Can't think of a specific use yet.
+			
+		#container.add_child(new_shot) # Original location, testing earlier use above
 		
-		container.add_child(new_shot)
 		#print_debug("Shot fired with ", velocity, " at ", aim_angle)
 
 func _on_projectile_completed_lifespan() -> void:

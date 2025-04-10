@@ -11,6 +11,7 @@ class_name GameLevel extends Node2D
 ## Name of level displayed to player
 @export var level_name:StringName
 
+## Used to hold various spawnables such as [WeaponProjectile] and particle effects.
 var container_for_spawnables
 
 func _ready() -> void:

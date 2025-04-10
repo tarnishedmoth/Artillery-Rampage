@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3 uid="uid://bxxxyc5m3lkkd"]
+
+[ext_resource type="Script" uid="uid://s005lxvabpuw" path="res://turret/turret.gd" id="1_1p48p"]
+[ext_resource type="Script" uid="uid://bkt30e3183urb" path="res://weapons/weapon.gd" id="2_uqrhp"]
+[ext_resource type="AudioStream" uid="uid://cgac4miv6d3uq" path="res://weapons/sounds/sfx_weapon_singleshot15.wav" id="3_7gi6x"]
+[ext_resource type="PackedScene" uid="uid://dm223lhar2pup" path="res://items/weapon_projectiles/weapon_projectile_flare.tscn" id="3_uqrhp"]
+
+[node name="Turret" type="Node2D"]
+script = ExtResource("1_1p48p")
+
+[node name="Chaingun" type="Node2D" parent="." node_paths=PackedStringArray("barrels", "sfx_fire")]
+unique_name_in_owner = true
+rotation = -1.5708
+script = ExtResource("2_uqrhp")
+scene_to_spawn = ExtResource("3_uqrhp")
+display_name = "Chaingun"
+accuracy_angle_spread = 0.0174533
+fire_velocity = 3000.0
+use_fire_rate = true
+fire_rate = 10.0
+barrels = [NodePath("Body/Barrel")]
+sfx_fire = NodePath("Fire")
+
+[node name="Body" type="Polygon2D" parent="Chaingun"]
+rotation = 1.5708
+polygon = PackedVector2Array(-4, 8, -4, -16, 4, -16, 4, 8)
+uv = PackedVector2Array(-80, 8, -80, -40, -72, -40, -72, 8)
+
+[node name="Barrel" type="Marker2D" parent="Chaingun/Body"]
+position = Vector2(0, -18)
+rotation = -1.5708
+
+[node name="Fire" type="AudioStreamPlayer2D" parent="Chaingun"]
+stream = ExtResource("3_7gi6x")
+volume_db = -3.0
+pitch_scale = 2.7
+bus = &"SFX"
+
+[node name="Body" type="Polygon2D" parent="."]
+color = Color(0.65, 0.65, 0.65, 1)
+polygon = PackedVector2Array(-8, 0, 8, 0, 24, 48, -24, 48)
+uv = PackedVector2Array(0, 0, 16, 0, 16, 40, 0, 40)

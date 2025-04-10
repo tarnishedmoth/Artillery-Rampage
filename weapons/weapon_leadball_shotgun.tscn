@@ -10,10 +10,11 @@ scene_to_spawn = ExtResource("2_flncf")
 display_name = "Shot Gun"
 accuracy_angle_spread = 0.314159
 fire_velocity = 1000.0
-always_shoot_for_count = 8
+number_of_scenes_to_spawn = 8
 retain_when_empty = false
 use_ammo = true
 current_ammo = 32
+ammo_used_per_shot = 8
 sfx_fire = NodePath("Fire")
 
 [node name="Fire" type="AudioStreamPlayer2D" parent="."]

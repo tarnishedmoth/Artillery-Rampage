@@ -1,0 +1,65 @@
+[gd_scene load_steps=5 format=3 uid="uid://b7xb51e8j6314"]
+
+[ext_resource type="Script" uid="uid://clmeh5kj3pxi5" path="res://levels/test/weapons/test_level_turrets.gd" id="1_t3q2g"]
+[ext_resource type="PackedScene" uid="uid://bxxxyc5m3lkkd" path="res://turret/turret.tscn" id="2_dtd3k"]
+[ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="3_oodso"]
+[ext_resource type="Script" uid="uid://bvfsipn68yaro" path="res://ui/auto_property_label.gd" id="4_dtd3k"]
+
+[node name="TestLevelTurrets" type="Node2D"]
+script = ExtResource("1_t3q2g")
+
+[node name="Turret" parent="." node_paths=PackedStringArray("debug_target") instance=ExtResource("2_dtd3k")]
+position = Vector2(641, 527)
+debug_target = NodePath("../DebugTarget")
+
+[node name="DebugTarget" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(676, 197)
+
+[node name="name" type="Label" parent="DebugTarget"]
+offset_left = -57.0
+offset_top = -87.0
+offset_right = -56.0
+offset_bottom = -64.0
+size_flags_horizontal = 4
+horizontal_alignment = 1
+script = ExtResource("4_dtd3k")
+parameter_path = "name"
+
+[node name="Sprite2D" type="Sprite2D" parent="DebugTarget"]
+texture = ExtResource("3_oodso")
+
+[node name="Info" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PanelContainer" type="PanelContainer" parent="Info"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Info/PanelContainer"]
+layout_mode = 2
+
+[node name="engaged" type="Label" parent="Info/PanelContainer/VBoxContainer" node_paths=PackedStringArray("remote_object")]
+layout_mode = 2
+script = ExtResource("4_dtd3k")
+remote_object = NodePath("../../../../Turret")
+label = "engaged"
+parameter_path = "_is_engaged"
+
+[node name="target" type="Label" parent="Info/PanelContainer/VBoxContainer" node_paths=PackedStringArray("remote_object")]
+layout_mode = 2
+script = ExtResource("4_dtd3k")
+remote_object = NodePath("../../../../Turret")
+label = "current target"
+parameter_path = "current_target"
+
+[node name="targets" type="Label" parent="Info/PanelContainer/VBoxContainer" node_paths=PackedStringArray("remote_object")]
+layout_mode = 2
+script = ExtResource("4_dtd3k")
+remote_object = NodePath("../../../../Turret")
+label = "targets"
+parameter_path = "targets"
