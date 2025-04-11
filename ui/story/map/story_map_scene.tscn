@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://bh3bmcratw025"]
+[gd_scene load_steps=9 format=3 uid="uid://bh3bmcratw025"]
 
 [ext_resource type="Script" uid="uid://d3mw66c4x3kum" path="res://ui/story/map/story_map_scene.gd" id="1_5v7n8"]
 [ext_resource type="PackedScene" uid="uid://bch6pb81vhwb" path="res://ui/story/map/story_level_node.tscn" id="2_udjio"]
 [ext_resource type="PackedScene" uid="uid://cs37yf58hf3tp" path="res://ui/story/map/story_level_edge.tscn" id="3_4e1f5"]
 [ext_resource type="PackedScene" uid="uid://ya2fn3ef1h2j" path="res://ui/story/map/story_level_node_unknown.tscn" id="4_cestf"]
 [ext_resource type="Material" uid="uid://bigbcyue3woos" path="res://ui/story/map/materials/grayscale_material.tres" id="5_8dcih"]
+[ext_resource type="Script" uid="uid://df7r7bwm230pa" path="res://ui/array_seq_view_hide.gd" id="6_8dcih"]
 
 [sub_resource type="Gradient" id="Gradient_gl7n1"]
 colors = PackedColorArray(0.0851705, 0.243201, 0.0842348, 1, 0.611278, 0.401298, 0, 1)
@@ -34,6 +35,36 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_tggun")
 
+[node name="StoryTooltips" type="MarginContainer" parent="." node_paths=PackedStringArray("sequence")]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 600.0
+offset_top = 450.0
+offset_right = 664.0
+offset_bottom = 466.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 8
+script = ExtResource("6_8dcih")
+sequence = [NodePath("Tooltip")]
+
+[node name="Tooltip" type="HBoxContainer" parent="StoryTooltips"]
+visible = false
+layout_mode = 2
+
+[node name="Glyph" type="Label" parent="StoryTooltips/Tooltip"]
+layout_mode = 2
+
+[node name="GSpacer" type="Control" parent="StoryTooltips/Tooltip"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="Description" type="Label" parent="StoryTooltips/Tooltip"]
+layout_mode = 2
+
 [node name="Container" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -47,6 +78,7 @@ theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
 [node name="LevelNodesContainer" type="Control" parent="Container"]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Buttons" type="Control" parent="."]

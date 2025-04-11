@@ -1,4 +1,4 @@
-extends Control
+class_name TextSequence extends Control
 
 ## Designed to cycle tooltips and other sorts of UI things.
 

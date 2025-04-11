@@ -14,7 +14,8 @@ class_name StoryMapScene extends Control
 
 @export_group("")
 
-@onready var graph_container: Node = $Container/LevelNodesContainer
+@onready var graph_container: Node = %LevelNodesContainer
+@onready var tooltipper:TextSequence = %StoryTooltips
 
 var _story_levels_resource:StoryLevelsResource
 var _current_level_index:int
@@ -94,7 +95,12 @@ func _create_graph() -> void:
 		
 		if prev_node and next_node:
 			graph_container.add_child(_edge_from_to(prev_node, next_node))
-	#endregion		
+	#endregion	
+
+	var current_level:StoryLevel = _story_levels_resource.levels[_current_level_index]
+	var active_node:StoryLevelNode = nodes[_current_level_index]
+
+	_create_scrolling_narrative(current_level, active_node)	
 
 func _generate_or_load_nodes() -> Array[StoryLevelNode]:
 	var saved_state: StoryMapSaveState = _get_save_state()
@@ -107,12 +113,17 @@ func _generate_or_load_nodes() -> Array[StoryLevelNode]:
 		nodes = _generate_nodes()
 	return nodes
 	
-func _generate_nodes() -> Array[StoryLevelNode]:
-	var levels:Array[StoryLevel] = _story_levels_resource.levels
-	
+func _calculate_bounds() -> Rect2:
 	var bounds:Rect2 = get_viewport().get_visible_rect()
 	bounds.size -= 2 * margins
 	bounds.position.x += margins.x
+	
+	return bounds
+
+func _generate_nodes() -> Array[StoryLevelNode]:
+	var levels:Array[StoryLevel] = _story_levels_resource.levels
+	
+	var bounds:Rect2 = _calculate_bounds()
 	
 	# Start in the middle in y
 	var pos:Vector2 = Vector2(bounds.position.x, bounds.size.y / 2.0)
@@ -167,10 +178,20 @@ func _generate_nodes() -> Array[StoryLevelNode]:
 	
 func _get_node_width(node: StoryLevelNode) -> float:
 	return node.right_edge.position.x - node.left_edge.position.x
+
 func _clear_graph() -> void:
 	for i in range(graph_container.get_child_count() - 1, -1, -1):
 		var child:Node = graph_container.get_child(i)
 		graph_container.remove_child(child)
+		child.queue_free()
+
+	# Delete all but the prototype text node for the tooltipper
+	# Skip anything that is not a control as this will be a Timer
+	# whose cleanup is automatically handled by the implementation
+	# Don't delete the first sequence so stop iteration at index 1
+	for _i in range(tooltipper.sequence.size() - 1, 0, -1):
+		var child:Control = tooltipper.sequence.pop_back()
+		tooltipper.remove_child(child)
 		child.queue_free()
 	
 func _create_story_level_node(index:int, metadata:StoryLevel) -> StoryLevelNode:
@@ -222,3 +243,56 @@ func _edge_from_to(from: StoryLevelNode, to: StoryLevelNode) -> StoryLevelEdge:
 	
 	#TODO: Change color?
 	return edge
+
+#region Narrative
+
+func _create_scrolling_narrative(level:StoryLevel, active_node: StoryLevelNode) -> void:
+	# TODO: Start sequence is needed here on the export for the tooltipper - get a nullreference
+	# Also relying on too many internal details so this should be later refactored
+	# So need to align that with the child nodes
+	#tooltipper.sequence
+
+	if not level.narratives:
+		push_warning("%s: No narratives defined for level %s" % [name, level.name])
+		return
+	if not tooltipper.sequence:
+		push_warning("%s: Tooltipper=%s has no sequences defined. Cannot extract prototype for level %s" 
+		% [name, tooltipper.name, level.name])
+
+	var prototype:Control = tooltipper.sequence.back()
+	var narrative_nodes:Array[Control] = [prototype]
+
+	# Copy and add the prototype
+	for narrative in range(1, level.narratives.size()):
+		var node:Control = prototype.duplicate() as Control
+		# Hide by default - same as start_sequence behavior
+		node.get_child(0).text = narrative
+		node.hide()
+
+		tooltipper.sequence.push_back(node)
+
+		tooltipper.add_child(node)
+		narrative_nodes.append(node)
+
+	# Set text on first instance
+	prototype.get_child(0).text = level.narratives[0]
+
+	# Position above current node if <= bounds and below current node otherwise
+	var active_node_pos:Vector2 = active_node.position
+	var narrative_pos:Vector2 = active_node_pos
+
+	var bounds:Rect2 = _calculate_bounds()
+	if active_node_pos.y > (bounds.position.y + bounds.size.y) * 0.5:
+		#narrative_pos.y -= 200
+		pass
+	else:
+		#narrative_pos.y += 200
+		pass
+	
+	if active_node_pos.x > (bounds.position.x + bounds.size.x) * 0.5:
+		narrative_pos.x = (bounds.position.x + bounds.size.x) * 0.5
+
+	narrative_pos.x += 100	
+	tooltipper.position = narrative_pos
+
+#endregion
