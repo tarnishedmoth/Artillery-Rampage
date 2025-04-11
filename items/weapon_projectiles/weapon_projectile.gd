@@ -139,8 +139,8 @@ func on_body_entered(_body: PhysicsBody2D):
 		had_interaction = true
 	var affected_nodes = _find_interaction_overlaps()
 	
-	var damaged_processed_map: Dictionary = {}
-	var destructed_processed_set: Dictionary = {}
+	var damaged_processed_map: Dictionary[Node, float] = {}
+	var destructed_processed_set: Dictionary[Node, Node] = {}
 
 	for node in affected_nodes:
 		# See if this node is a "Damageable" or a "Destructable"

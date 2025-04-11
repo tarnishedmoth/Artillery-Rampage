@@ -28,7 +28,7 @@ var force: Vector2:
 	get:
 		return wind * wind_scale
 				
-var _active_projectile_set: Dictionary = {}
+var _active_projectile_set: Dictionary[WeaponProjectile, WeaponProjectile] = {}
 
 func _ready() -> void:
 	wind = Vector2(_randomize_wind(), 0.0)

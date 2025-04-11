@@ -127,7 +127,7 @@ static func determine_overlap_vertices(first_poly: PackedVector2Array, second_po
 
 static func _determine_source_overlaps_target_vertices(source_poly: PackedVector2Array, target_poly: PackedVector2Array, association_dist_sq: float, overlap_dist: float) -> PackedInt32Array:
 	var all_results : PackedInt32Array = []
-	var direct_results: Dictionary = {}
+	var direct_results: Dictionary[int, bool] = {}
 	
 	for i in range(source_poly.size()):
 		var vertex := source_poly[i]
@@ -358,8 +358,8 @@ static func get_all_adjacent_polygons(triangle_list_indices: PackedInt32Array) -
 static func _collapse_adjacent_triangles(nodes_edges : Array[PackedInt32Array]) -> Array[PackedInt32Array]:
 	var components: Array[PackedInt32Array] = []
 	
-	var visited: Dictionary = {}
-	var adjaceny_list_graph: Dictionary = _make_graph(nodes_edges)
+	var visited: Dictionary[int, bool] = {}
+	var adjaceny_list_graph: Dictionary[int, PackedInt32Array] = _make_graph(nodes_edges)
 
 	for node in adjaceny_list_graph:
 		if visited.has(node):
@@ -369,8 +369,8 @@ static func _collapse_adjacent_triangles(nodes_edges : Array[PackedInt32Array]) 
 			
 	return components
 
-static func _make_graph(nodes_edges : Array[PackedInt32Array]) -> Dictionary:
-	var adjacency_list_graph: Dictionary = {}
+static func _make_graph(nodes_edges : Array[PackedInt32Array]) -> Dictionary[int, PackedInt32Array]:
+	var adjacency_list_graph: Dictionary[int, PackedInt32Array] = {}
 
 	for edge_list in nodes_edges:
 		var node := _get_node_id(edge_list)
@@ -396,7 +396,7 @@ static func _get_node_id(edge_list : PackedInt32Array) -> int:
 	# First edge is actually the triangles of the node itself
 	return _get_node_id_tri_indices(edge_list[0], edge_list[1], edge_list[2])
 
-static func _dfs_adjacent_triangles(graph: Dictionary, node: int, visited: Dictionary) -> PackedInt32Array:
+static func _dfs_adjacent_triangles(graph: Dictionary[int, PackedInt32Array], node: int, visited: Dictionary[int, bool]) -> PackedInt32Array:
 	var stack: Array[int] = []
 	var component: PackedInt32Array = []
 	
