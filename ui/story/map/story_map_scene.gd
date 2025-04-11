@@ -302,8 +302,9 @@ func _create_scrolling_narrative(level:StoryLevel, active_node: StoryLevelNode) 
 	
 	if active_node_pos.x > (bounds.position.x + bounds.size.x) * 0.5:
 		narrative_pos.x = (bounds.position.x + bounds.size.x) * 0.5
-
-	narrative_pos.x += 100	
+	else:
+		narrative_pos.x += 100
+		
 	tooltipper.position = narrative_pos
 
 #region Auto Narrative Round Summary
