@@ -17,6 +17,9 @@ class_name StoryMapScene extends Control
 @onready var graph_container: Node = %LevelNodesContainer
 @onready var tooltipper:TextSequence = %StoryTooltips
 
+# TODO: This probably belongs more on the round summary but experimenting with it here
+@onready var auto_narrative:AutoNarrative = %AutoNarrative
+
 var _story_levels_resource:StoryLevelsResource
 var _current_level_index:int
 
@@ -262,11 +265,19 @@ func _create_scrolling_narrative(level:StoryLevel, active_node: StoryLevelNode) 
 	var prototype:Control = tooltipper.sequence.back()
 	var narrative_nodes:Array[Control] = [prototype]
 
+	var all_narratives:Array[String] = level.narratives
+	
+	# If this isn't first level, then generate an auto-narrative from previous
+	if _current_level_index > 0:
+		# Duplicate so we don't modify a global resource
+		all_narratives = all_narratives.duplicate()
+		all_narratives.push_front(_get_prev_round_narrative_summary())
+		
 	# Copy and add the prototype
-	for narrative in range(1, level.narratives.size()):
+	for i in range(1, all_narratives.size()):
 		var node:Control = prototype.duplicate() as Control
 		# Hide by default - same as start_sequence behavior
-		node.get_child(0).text = narrative
+		node.get_child(0).text = all_narratives[i]
 		node.hide()
 
 		tooltipper.sequence.push_back(node)
@@ -275,7 +286,7 @@ func _create_scrolling_narrative(level:StoryLevel, active_node: StoryLevelNode) 
 		narrative_nodes.append(node)
 
 	# Set text on first instance
-	prototype.get_child(0).text = level.narratives[0]
+	prototype.get_child(0).text = all_narratives[0]
 
 	# Position above current node if <= bounds and below current node otherwise
 	var active_node_pos:Vector2 = active_node.position
@@ -283,10 +294,10 @@ func _create_scrolling_narrative(level:StoryLevel, active_node: StoryLevelNode) 
 
 	var bounds:Rect2 = _calculate_bounds()
 	if active_node_pos.y > (bounds.position.y + bounds.size.y) * 0.5:
-		#narrative_pos.y -= 200
+		narrative_pos.y -= 200
 		pass
 	else:
-		#narrative_pos.y += 200
+		narrative_pos.y += 200
 		pass
 	
 	if active_node_pos.x > (bounds.position.x + bounds.size.x) * 0.5:
@@ -294,5 +305,14 @@ func _create_scrolling_narrative(level:StoryLevel, active_node: StoryLevelNode) 
 
 	narrative_pos.x += 100	
 	tooltipper.position = narrative_pos
+
+#region Auto Narrative Round Summary
+
+func _get_prev_round_narrative_summary() -> String:
+	# TODO: Determine outcome based on actual results
+	# Here we are assuming we won since moving to next level but we aren't measuring the success level yet
+	var outcome:AutoNarrative.Outcomes = randi_range(0, 2)
+	return auto_narrative.generate_narrative(outcome)
+#endregion
 
 #endregion

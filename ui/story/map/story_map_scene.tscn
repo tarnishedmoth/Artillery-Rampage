@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bh3bmcratw025"]
+[gd_scene load_steps=10 format=3 uid="uid://bh3bmcratw025"]
 
 [ext_resource type="Script" uid="uid://d3mw66c4x3kum" path="res://ui/story/map/story_map_scene.gd" id="1_5v7n8"]
 [ext_resource type="PackedScene" uid="uid://bch6pb81vhwb" path="res://ui/story/map/story_level_node.tscn" id="2_udjio"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ya2fn3ef1h2j" path="res://ui/story/map/story_level_node_unknown.tscn" id="4_cestf"]
 [ext_resource type="Material" uid="uid://bigbcyue3woos" path="res://ui/story/map/materials/grayscale_material.tres" id="5_8dcih"]
 [ext_resource type="Script" uid="uid://df7r7bwm230pa" path="res://ui/array_seq_view_hide.gd" id="6_8dcih"]
+[ext_resource type="PackedScene" uid="uid://b4hy7hmnoewje" path="res://narrative/auto_narrative.tscn" id="7_mer82"]
 
 [sub_resource type="Gradient" id="Gradient_gl7n1"]
 colors = PackedColorArray(0.0851705, 0.243201, 0.0842348, 1, 0.611278, 0.401298, 0, 1)
@@ -95,5 +96,8 @@ offset_right = 1288.0
 offset_bottom = 707.0
 size_flags_vertical = 8
 text = "Next"
+
+[node name="AutoNarrative" parent="." instance=ExtResource("7_mer82")]
+unique_name_in_owner = true
 
 [connection signal="pressed" from="Buttons/NextButton" to="." method="_on_next_button_pressed"]
