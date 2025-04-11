@@ -96,43 +96,95 @@ var projectile_mods: Array[ModProjectile]
 ## [code]use_fire_rate = false[/code], because they are instanced all at once.
 @export var number_of_scenes_to_spawn:int = 1
 
-
-@export var always_shoot_for_duration:float = 0.0 ## If greater than zero, when Shoot() is called, weapon will fire as frequently as it can based on fire-rate for this duration in seconds.
-@export var always_shoot_for_count:int = 1 ## When fired, weapon will shoot this many times, separated by fire rate delay.
-## Emit signals necessary for game logic. Disable for alternate use cases (cosmetic).
-## Implemented as a fix for TrajectoryPreviewer (tank.tscn)
+## @experimental:
+## If greater than zero, when Shoot() is called, weapon will fire as frequently as it can based on fire-rate for this duration in seconds.
+@export var always_shoot_for_duration:float = 0.0
+## When fired, weapon will shoot this many times, separated by fire rate delay.
+## Keep in mind that each shot will spawn [member number_of_scenes_to_spawn].
+@export var always_shoot_for_count:int = 1
+## @experimental: Emit signals necessary for game logic. Disable for alternate use cases.
+## Implemented as a fix for TrajectoryPreviewer--see [Tank].
 @export var emit_action_signals:bool = true
+## Each time [method _shoot] is called, the spawned scene(s) will appear at and be launched from
+## this transform, as will the [member sfx_fire] sound effect, if configured.
+## [br][br]
+## [b]Note:[/b] Automatically assigned through code for [Tank] weapons with
+## [method TankController.attach_weapons], but can be manually specified otherwise.
 @export var barrels: Array[Marker2D] = []
-var barrels_sfx_fire: Array[AudioStreamPlayer2D] = [] ## Automatically assigned through code with TankController, but can be manually specified.
+## Contains references to the instanced [AudioStreamPlayer2D] spawned at each barrel location.
+var barrels_sfx_fire: Array[AudioStreamPlayer2D] = []
+## Iterator index for [member barrels], used by [method cycle].
 var current_barrel: int = 0
 
-@export_group("Ammo")
-@export var retain_when_empty: bool = true ## If false, destroy the Weapon once out of ammo.
-@export var use_ammo: bool = false ## Whether to check and track ammo.
-@export var current_ammo: int = 16 ## Starting ammo.
-@export var ammo_used_per_shot: int = 1
-@export var use_magazines: bool = false ## If true, use a finite ammo supply.
-@export var magazines: int = 3
-@export var magazine_capacity: int = 16
-@export var reload_delay_time: float = 2.0 ## Seconds it takes to reload a mag.
 
-## Sound Effects
+@export_group("Ammo")
+## If false, call [method destroy] once out of ammo (and magazines, if configured).
+@export var retain_when_empty: bool = true
+## Whether to check and track ammo. If [code]false[/code], you have infinite ammo.
+@export var use_ammo: bool = false
+## Starting ammo when this [Weapon] is instanced. Use [method reload] to refill this property.
+@export var current_ammo: int = 16
+## Each time [method _shoot] is called, decrement [member current_ammo] by this number. For example,
+## if [code]number_of_scenes_to_spawn = 10[/code] and [code]ammo_used_per_shot = 3[/code], assuming
+## the weapon is shot only once, 10 instances of the [member scene_to_spawn] will spawn, but [member current_ammo]
+## will only have 3 deducted.[br]
+## Following that example, if the [Weapon] were shot five times, there would be 50 instances of
+## [member scene_to_spawn], and the [Weapon] will have spent 15 ammo.
+@export var ammo_used_per_shot: int = 1
+## If [code]true[/code], use a finite ammo supply. Calling [method reload] will set [member current_ammo] to
+## be equal to [member magazine_capacity], if there is a [member magazine] available.[br][br]
+## If [code]false[/code], calling [method reload] will always refill the [member current_ammo] to its
+## initial value.
+@export var use_magazines: bool = false
+## The current number of magazines available full of ammunition. The total available ammunition is
+## [code]current_ammo + (magazines * magazine_capacity)[/code]. See [member use_magazines].[br][br]
+## [b]Note:[/b] Magazines don't actually hold ammo, they simply represent the ability to reload
+## [member current_ammo] to [member magazine_capacity].
+@export var magazines: int = 3
+## The number to set [member current_ammo] to upon [method reload]. See [member use_magazines].
+@export var magazine_capacity: int = 16
+## The time in seconds it takes to set [member current_ammo], during which the [Weapon] can not be fired.
+@export var reload_delay_time: float = 2.0
+
+
 @export_group("Sounds")
+## Plays when [method _shoot] shoots successfully.
 @export var sfx_fire: AudioStreamPlayer2D
+## Plays when the weapon tries to shoot but is stopped, for example from being out of ammo.
 @export var sfx_dry_fire: AudioStreamPlayer2D
+## Plays when [method reload] reloads successfully.
 @export var sfx_reload: AudioStreamPlayer2D
+## Plays when [method equip].
 @export var sfx_equip: AudioStreamPlayer2D
+## Plays when [method unequip].
 @export var sfx_unequip: AudioStreamPlayer2D
+## Starts playback when [method equip], and stops when [method unequip].
 @export var sfx_idle: AudioStreamPlayer2D
 
+# State variables
+## Used to force [method configure_barrels] so that a barrel is ready for [method _spawn_projectile].
 var is_configured: bool = false
+## Used to prevent some conditional actions while reloading, such as [method shoot] and [method reload].
 var is_reloading: bool = false
-var is_cycling: bool = false ## Weapon won't fire while cycling--see fire rate
-var is_equipped: bool = false ## Used for SFX, also the weapon won't fire if unequipped.
+## Weapon won't fire while cycling--see [member use_fire_rate].
+var is_cycling: bool = false
+## Used for SFX, also [s]the weapon won't fire if unequipped.[/s]
+## [i]Bypassed for now as there's no use case in our game for this logic yet.[/i]
+var is_equipped: bool = false:
+	set(value):
+		is_equipped = value
+	get:
+		return true
+## Used to [method shoot_for_duration], to prevent new shooting actions while already shooting,
+## and when tracking [signal WeaponProjectile.completed_lifespan].
 var is_shooting: bool = false
-var _shoot_for_duration_power: float
-var _shoot_for_count_remaining: int
-var _awaiting_lifespan_completion: int
+
+var _shoot_for_duration_power: float ## Internal: Cache of the requested power from [method shoot_for_duration].
+var _shoot_for_count_remaining: int ## Internal: Counter for [method shoot_for_count].
+var _awaiting_lifespan_completion: int ## Internal: Counter for [signal weapon_actions_completed].
+
+@onready var _starting_ammo:int = current_ammo ## Internal: Cache of [member current_ammo] on instantiation.
+@onready var _starting_magazines:int = magazines ## Internal: Cache of [member magazines] on instantiation.
 
 @onready var parent = get_parent()
 @onready var sounds = [
@@ -156,6 +208,13 @@ func _process(_delta: float) -> void:
 #endregion
 	
 #region Public Methods
+## Should be called by a [Tank] to set up this [Weapon] for use by it.
+## [br][br]
+## Sets the [member parent_tank] to [param tank], connects signals
+## [signal weapon_actions_completed], [signal weapon_destroyed], [signal ammo_changed], &
+## [signal magazines_changed] to the [param tank]'s receiver methods, gets the location for a barrel
+## from the [method Tank.get_weapon_fire_locations] and appends it to [member barrels], then calls
+## [method configure_barrels] and finally [method reload]s the [Weapon] so it's ready to shoot.
 func connect_to_tank(tank: Tank) -> void:
 	parent_tank = tank
 	if not weapon_actions_completed.is_connected(parent_tank._on_weapon_actions_completed):
@@ -170,7 +229,8 @@ func connect_to_tank(tank: Tank) -> void:
 	configure_barrels()
 	reload()
 
-## Serves no real function at this time
+## The [Weapon] must be [member is_equipped] to be fired. This method also uses sound effects if configured.
+## See [member sfx_equip] & [member sfx_idle].
 func equip() -> void:
 	if not is_equipped:
 		is_equipped = true
@@ -178,6 +238,8 @@ func equip() -> void:
 		if sfx_idle: sfx_idle.play()
 	#else: print("Tried to equip already equipped!")
 	
+## The [Weapon] must be [member is_equipped] to be fired. This method also uses sound effects if configured.
+## See [member sfx_unequip] & [member sfx_idle].
 func unequip() -> void:
 	if is_equipped:
 		is_equipped = false
@@ -185,22 +247,30 @@ func unequip() -> void:
 		if sfx_idle: sfx_idle.stop()
 	#else: print("Tried to unequip already unequipped!")
 	
+## The primary way to fire the weapon, spawning projectiles according to the configuration.
+## [br][br]
+## A front door method that determines which function to call next. If [member always_shoot_for_duration]
+## or [member always_shoot_for_count] is configured, it will employ those options.
+## The [param power] will be cached and used for all the queued projectiles firing velocity.
+## Will automatically configure [member barrels] if not [member is_configured] before.
+## See [method shoot_for_duration], [method shoot_for_count], and [method _shoot].
 func shoot(power:float = fire_velocity) -> void:
 	if is_shooting: return
 	if not is_configured:
 		configure_barrels()
 		reload()
-	var scaled_speed := power * power_launch_speed_mult
 
 	if always_shoot_for_duration > 0.0:
-		shoot_for_duration(always_shoot_for_duration, scaled_speed)
+		shoot_for_duration(always_shoot_for_duration, power)
 		return
 	if always_shoot_for_count > 1:
-		shoot_for_count(always_shoot_for_count, scaled_speed)
+		shoot_for_count(always_shoot_for_count, power)
 		return
 	else:
-		_shoot(scaled_speed)
+		_shoot(power)
 	
+## Make the [Weapon] shoot continuously for a duration of time [param duration] in seconds.
+## The [param power] will be cached and used for all the queued projectiles firing velocity.
 func shoot_for_duration(duration:float = always_shoot_for_duration, power:float = fire_velocity) -> void:
 	if is_shooting: return
 	_shoot_for_duration_power = power
@@ -215,6 +285,8 @@ func shoot_for_duration(duration:float = always_shoot_for_duration, power:float 
 	await get_tree().create_timer(duration).timeout
 	is_shooting = false
 
+## Make the [Weapon] shoot continuously until it has [method _shoot] for [param count] number of times.
+## The [param power] will be cached and used for all the queued projectiles firing velocity.
 func shoot_for_count(count:int, power:float = fire_velocity) -> void:
 	if is_shooting: return
 	_shoot_for_duration_power = power
@@ -222,15 +294,24 @@ func shoot_for_count(count:int, power:float = fire_velocity) -> void:
 	is_shooting = true
 	_shoot(power)
 	
+## Simply plays the [member sfx_dry_fire] sound effect if configured.
 func dry_fire() -> void:
 	if sfx_dry_fire: sfx_dry_fire.play()
 	
+## Manipulates [member current_ammo], if not prevented by ongoing weapon actions.
+## If [member use_magazines], [member current_ammo] will be set to [member magazine_capacity] and
+## [member magazines] will decrement by 1. [param immediate] is by default [code]false[/code], but
+## if [code]true[/code], will skip creating a one-shot [Timer] with [member reload_delay_time] that
+## prevents [Weapon] actions for a time using [member is_reloading], and instead immediately
+## manipulate the ammunition/magazines.
+## Also plays a sound effect if [member sfx_reload] is configured.
 func reload(immediate: bool = false) -> void:
-	#if not is_equipped: return
+	if not is_equipped: return
 	if is_reloading: return
 	if use_magazines && magazines < 1: return ## Out of magazines/ammo.
 	if use_ammo:
 		is_reloading = true
+		#if sfx_reload: sfx_reload.play() ## Trigger the SFX to play on start
 		if not immediate: ## Instant reloading
 			await get_tree().create_timer(reload_delay_time).timeout ## Reload Timer
 		current_ammo = magazine_capacity ## Reset ammo
@@ -238,7 +319,8 @@ func reload(immediate: bool = false) -> void:
 	else:
 		pass
 	is_reloading = false ## Finished reloading.
-	if sfx_reload: sfx_reload.play() ## Trigger the SFX to play
+	if sfx_reload: sfx_reload.play() ## Trigger the SFX to play on completion
+	# This could definitely be a start and stop pair of sounds.
 		
 ## This function is called after every time the weapon shoots, to start the waiting timer
 ## if [member use_fire_rate], and to advance to the next member of [member barrels].
@@ -251,19 +333,31 @@ func cycle() -> void:
 	if current_barrel+1 > barrels.size():
 		current_barrel = 0
 		
+## This method is different from [method reload] because it refills both
+## [member current_ammo] as well as [member magazines] with their initial values
+## from when this scene was [signal ready].
 func restock() -> void:
-	restock_ammo()
-	if use_magazines: restock_magazines()
+	restock_ammo(_starting_ammo)
+	if use_magazines: restock_magazines(_starting_magazines)
 	print_debug(display_name," ammo restocked.")
 
+## Adds [param new_magazines] to [member magazines] and emits [signal magazines_changed].
 func restock_magazines(new_magazines:int = 1) -> void:
+	# Magazines don't actually hold ammo, they simply represent
+	# the ability to reload current_ammo to magazine_capacity.
 	magazines += new_magazines
 	magazines_changed.emit(magazines)
 
+## Adds [param ammo] to the [member current_ammo] and emits [signal ammo_changed].
 func restock_ammo(ammo:int = magazine_capacity) -> void:
 	current_ammo += ammo
 	ammo_changed.emit(current_ammo)
 
+## Sets up [member barrels] so that the weapon can shoot from them in [method _spawn_projectile].
+## [br][br]
+## If there are any existing barrels and instanced copies of [member sfx_fire], clears them.
+## If there are no [Marker2D] in [member barrels], sets one up as a child of [Weapon].
+## Instances copies of [member sfx_fire] at every [code]barrel[/code] location.
 func configure_barrels() -> void:
 	is_configured = true
 	current_barrel = 0
@@ -342,9 +436,9 @@ func destroy() -> void:
 ## The internal source of shooting. Used by [method shoot], [method shoot_for_duration], & [method shoot_for_count].
 func _shoot(power:float = fire_velocity) -> void:
 	## Prevented from shooting
-	#if not is_equipped:
-		#push_warning("Tried to shoot weapon that is not equipped.")
-		#return
+	if not is_equipped:
+		push_warning("Tried to shoot weapon that is not equipped.")
+		return
 	if is_cycling: return
 	if is_reloading:
 		dry_fire()
@@ -361,8 +455,9 @@ func _shoot(power:float = fire_velocity) -> void:
 		if not barrels_sfx_fire.is_empty(): barrels_sfx_fire[current_barrel].play()
 		
 		# Spawn projectiles
+		var scaled_speed := power * power_launch_speed_mult
 		for projectile in number_of_scenes_to_spawn:
-			_spawn_projectile(power)
+			_spawn_projectile(scaled_speed)
 		
 		# Cycle the gun
 		cycle()
