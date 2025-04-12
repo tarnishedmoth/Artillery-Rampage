@@ -29,7 +29,6 @@ PlayerUpgrades="*res://progression/player_upgrades.gd"
 PlayerStateManager="*res://levels/round/player_state_manager.tscn"
 UserOptions="*res://utils/user_options.gd"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
-Documentation="*res://utils/documentation.gd"
 
 [display]
 
@@ -43,7 +42,7 @@ project/assembly_name="ArtilleryRampage"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg")
+enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/documentation_regenerator/plugin.cfg")
 
 [global_group]
 

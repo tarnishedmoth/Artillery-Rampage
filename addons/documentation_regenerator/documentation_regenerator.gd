@@ -18,17 +18,26 @@
 @tool
 extends EditorPlugin
 
+const SCRIPTS = [
+	"res://weapons/weapon.gd",
+	"res://weapons/mod_weapon.gd",
+	"res://items/weapon_projectiles/mod_projectile.gd",
+	"res://items/weapon_projectiles/weapon_projectile.gd",
+	
+	"res://tank/tank.gd",
+	"res://controller/tank_controller.gd",
+	"res://controller/player/player.gd",
+	"res://controller/ai/ai_tank.gd",
+]
+
 func _ready() -> void:
-	#ResourceSaver.save(preload())
+	print_rich("[bgcolor=WHITE] - - - - [b][color=#54B0BD]Welcome, HomeTeam Game Dev - - - - ")
 	
-	ResourceSaver.save(preload("res://weapons/weapon.gd"))
-	ResourceSaver.save(preload("res://weapons/mod_weapon.gd"))
-	ResourceSaver.save(preload("res://items/weapon_projectiles/mod_projectile.gd"))
-	ResourceSaver.save(preload("res://items/weapon_projectiles/weapon_projectile.gd"))
+	if Engine.is_editor_hint():
+		#ResourceSaver.save(preload()) # Moved to for loop
+		generate(SCRIPTS)
 	
-	ResourceSaver.save(preload("res://tank/tank.gd"))
-	ResourceSaver.save(preload("res://controller/tank_controller.gd"))
-	ResourceSaver.save(preload("res://controller/player/player.gd"))
-	ResourceSaver.save(preload("res://controller/ai/ai_tank.gd"))
-	
-	#ResourceSaver.save(preload())
+
+func generate(array: Array) -> void:
+	for i:String in array:
+		ResourceSaver.save(load(i))
