@@ -174,7 +174,9 @@ func on_body_entered(_body: PhysicsBody2D):
 		destroy()
 		
 func damage_damageable_node(damageable_node: Node, damage:float) -> void:
-	damageable_node.take_damage(owner_tank.get_parent(), self, damage)
+	var instigator_controller: Node2D = owner_tank.get_parent() as Node2D if is_instance_valid(owner_tank) else null
+
+	damageable_node.take_damage(instigator_controller, self, damage)
 		
 func center_destructible_on_impact_point(destructible: CollisionPolygon2D) -> Vector2:
 	var destructible_polygon: PackedVector2Array = destructible.polygon
