@@ -1,21 +1,20 @@
 [gd_scene load_steps=6 format=3 uid="uid://2lrjsixfec3s"]
 
 [ext_resource type="Script" uid="uid://bwosyyfk5m2qq" path="res://ui/story/round_summary/story_round_summary.gd" id="1_gobxv"]
+[ext_resource type="Texture2D" uid="uid://dwgftpip8fi4m" path="res://ui/story/round_summary/win_background.tres" id="2_4a1kv"]
 [ext_resource type="PackedScene" uid="uid://8hat5mrejfwr" path="res://ui/story/round_summary/round_summary_hud_element.tscn" id="2_q3afb"]
+[ext_resource type="Texture2D" uid="uid://cu5jf42lb8rpe" path="res://ui/story/round_summary/lose_background.tres" id="3_g56bg"]
 [ext_resource type="LabelSettings" uid="uid://caafhio2r1ekd" path="res://ui/story/round_summary/round_summary_header.tres" id="3_xarch"]
-
-[sub_resource type="Gradient" id="Gradient_gl7n1"]
-colors = PackedColorArray(0, 0.211375, 0.366316, 1, 4.81307e-07, 0.515133, 0.534022, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_q3afb"]
-gradient = SubResource("Gradient_gl7n1")
 
 [node name="StoryRoundSummary" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_gobxv")
+win_background = ExtResource("2_4a1kv")
+lose_background = ExtResource("3_g56bg")
 
 [node name="Background" type="TextureRect" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,7 +25,7 @@ offset_right = 1306.0
 offset_bottom = 718.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("GradientTexture2D_q3afb")
+texture = ExtResource("2_4a1kv")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0

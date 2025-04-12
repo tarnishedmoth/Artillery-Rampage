@@ -41,7 +41,11 @@ var current_scene:Node = null:
 	set(value):
 		current_scene = value
 	
+# Any scene, even if it is a UI scene and not a game level scene
 var _last_scene_resource:Resource
+
+# Only the last game level scene
+var _last_game_level_resource:Resource
 
 func _ready()->void:
 	var root = get_tree().root
@@ -67,7 +71,11 @@ func quit() -> void:
 func restart_level(delay: float = default_delay) -> void:
 	print_debug("restart_level: %s, delay=%f" % [str(_current_level_root_node.name) if _current_level_root_node else "NULL", delay])
 
-	await _switch_scene(func()->Resource: return _last_scene_resource, delay)
+	if not _last_game_level_resource:
+		push_error("restart_level: No last game level resource to restart")
+		return
+
+	await _switch_scene(func()->Resource: return _last_game_level_resource, delay)
 	
 func next_level(delay: float = default_delay) -> void:
 	if !story_levels or !story_levels.levels:
@@ -85,8 +93,7 @@ func next_level(delay: float = default_delay) -> void:
 func level_failed() -> void:
 	match play_mode:
 		PlayMode.STORY:
-			# TODO: Round summary for failed state
-			restart_level()
+			switch_scene_keyed(SceneKeys.RoundSummary)
 		_: # default
 			restart_level()
 			
@@ -133,10 +140,11 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	if is_switching_scene:
 		return
 	
-	# Avoid two events causing a restart in the same game (e.g. player dies and leaves 1 player remaining)
 	SaveStateManager.save_tree_state()
 	
+	# Avoid two events causing a restart in the same game (e.g. player dies and leaves 1 player remaining)
 	is_switching_scene = true
+	
 	if delay > 0:
 		await get_tree().create_timer(delay).timeout
 	else:
@@ -148,9 +156,12 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	var root_current_scene = root.get_child(root.get_child_count() - 1)
 	root_current_scene.free()
 	
-	var new_scene:Resource = switchFunc.call()
+	# Await in case the loading is done async
+	var new_scene:Resource = await switchFunc.call()
 	
 	current_scene = new_scene.instantiate()
+	_last_scene_resource = new_scene
+
 	#current_scene.scene_file_path = new_scene.resource_path
 	
 	# Somehow get_tree().current_scene is null inside _ready of the loaded scene
@@ -162,8 +173,6 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	
 	SaveStateManager.restore_tree_state()
 	
-	_last_scene_resource = new_scene
-	
 	get_tree().paused = false
 
 func _on_GameLevel_loaded(level:GameLevel) -> void:
@@ -172,3 +181,5 @@ func _on_GameLevel_loaded(level:GameLevel) -> void:
 	if _current_story_level:
 		level.name = _current_story_level.name
 	_current_level_root_node = level
+
+	_last_game_level_resource = _last_scene_resource
