@@ -1,16 +1,17 @@
-[gd_scene load_steps=7 format=3 uid="uid://bb7kpruyfrk8b"]
+[gd_scene load_steps=8 format=3 uid="uid://bb7kpruyfrk8b"]
 
 [ext_resource type="Script" uid="uid://cmjsdf2jf8epg" path="res://items/weapon_projectiles/weapon_projectile_missile.gd" id="1_i33yu"]
 [ext_resource type="PackedScene" uid="uid://ctbymmvkiyfhu" path="res://items/weapon_projectiles/explosions/explosion_kilonuke.tscn" id="2_4tg6q"]
 [ext_resource type="Texture2D" uid="uid://c737fmtapano1" path="res://items/weapon_projectiles/missiles/g14.png" id="3_4iye4"]
 [ext_resource type="AudioStream" uid="uid://clcb4lxiicjhg" path="res://items/weapon_projectiles/missiles/missile_thruster.wav" id="4_37o5p"]
+[ext_resource type="AudioStream" uid="uid://ka2pekrao6yr" path="res://items/weapon_projectiles/missiles/alarm_f.wav" id="5_4gj83"]
 [ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="5_rhfto"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ojyh2"]
 radius = 4.0
 height = 32.0
 
-[node name="WeaponProjectile" type="RigidBody2D" node_paths=PackedStringArray("thrust_sfx")]
+[node name="WeaponProjectile" type="RigidBody2D" node_paths=PackedStringArray("thrust_sfx", "acquired_target_sfx")]
 collision_layer = 2
 collision_mask = 29
 continuous_cd = 2
@@ -19,6 +20,7 @@ max_contacts_reported = 1
 script = ExtResource("1_i33yu")
 behavior = 1
 thrust_sfx = NodePath("MissileThruster/Thruster")
+acquired_target_sfx = NodePath("MissileThruster/AcquiredTarget")
 explosion_to_spawn = ExtResource("2_4tg6q")
 min_falloff_distance = 20.0
 max_falloff_distance = 150.0
@@ -45,6 +47,10 @@ gizmo_extents = 120.0
 [node name="Thruster" type="AudioStreamPlayer2D" parent="MissileThruster"]
 stream = ExtResource("4_37o5p")
 bus = &"SFX"
+
+[node name="AcquiredTarget" type="AudioStreamPlayer2D" parent="MissileThruster"]
+stream = ExtResource("5_4gj83")
+bus = &"Environment"
 
 [node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="MissileThruster"]
 z_index = 20

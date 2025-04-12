@@ -21,4 +21,4 @@ sfx_fire = NodePath("Fire")
 [node name="Fire" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_a1dk7")
 pitch_scale = 0.65
-bus = &"SFX"
+bus = &"Guns"

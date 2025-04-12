@@ -50,7 +50,7 @@ func deploy() -> void:
 			_setup_deployable(deployable, false)
 		if deployable is WeaponProjectile:
 			deployable.set_sources(owner_tank,source_weapon)
-			source_weapon.add_projectile_awaiting(deployable)
+			source_weapon._add_projectile_awaiting(deployable)
 		_current_projectile_index += 1 # Track which one we're setting up
 	
 	if destroy_after_deployed: destroy()

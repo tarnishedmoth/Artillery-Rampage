@@ -1,8 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://bx3va4wmvmw4o"]
+[gd_scene load_steps=5 format=3 uid="uid://bx3va4wmvmw4o"]
 
 [ext_resource type="Script" uid="uid://bkt30e3183urb" path="res://weapons/weapon.gd" id="1_ij436"]
 [ext_resource type="PackedScene" uid="uid://i4anqg26d78u" path="res://items/weapon_projectiles/weapon_projectile_MIRV.tscn" id="2_fwcj5"]
-[ext_resource type="AudioStream" uid="uid://cgac4miv6d3uq" path="res://weapons/sounds/sfx_weapon_singleshot15.wav" id="3_p55o8"]
+[ext_resource type="AudioStream" uid="uid://bgv5x2hf3v2qp" path="res://weapons/sounds/sfx_shot_a_4.wav" id="3_jc2w8"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_rjody"]
+playback_mode = 1
+random_pitch = 1.05
+random_volume_offset_db = 0.1
+streams_count = 1
+stream_0/stream = ExtResource("3_jc2w8")
 
 [node name="WeaponMIRV" type="Node2D" node_paths=PackedStringArray("sfx_fire")]
 script = ExtResource("1_ij436")
@@ -19,5 +26,5 @@ ammo_used_per_shot = 3
 sfx_fire = NodePath("Fire")
 
 [node name="Fire" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("3_p55o8")
-bus = &"SFX"
+stream = SubResource("AudioStreamRandomizer_rjody")
+bus = &"Guns"

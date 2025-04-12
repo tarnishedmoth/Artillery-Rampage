@@ -7,6 +7,7 @@ enum MissileBehaviorType {
 
 @export var behavior:MissileBehaviorType = MissileBehaviorType.Downward
 @export var thrust_sfx:AudioStreamPlayer2D
+@export var acquired_target_sfx:AudioStreamPlayer2D
 @export var max_thrust:float = 1500.0
 @export var delay_before_targeting:float = 0.5
 @export var delay_before_thrusting:float = 0.68
@@ -83,6 +84,9 @@ func _find_nearest_target() -> Vector2:
 	var nearest_target:Node2D = null
 	var nearest_distance:float
 	
+	if not targets.is_empty(): # Should acquire a target, lol
+		if acquired_target_sfx: acquired_target_sfx.play()
+		
 	for foo in targets:
 		var distance = (foo.global_position - global_position).length()
 		
