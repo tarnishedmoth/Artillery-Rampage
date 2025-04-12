@@ -420,9 +420,19 @@ func equip_next_weapon() -> void:
 func push_weapon_update_to_hud(weapon: Weapon = get_equipped_weapon()) -> void:
 	GameEvents.weapon_updated.emit(weapon)
 	
+## This method is not used by this class, instead it's used by [Player].
 func visualize_trajectory() -> void:
 	if shooting_trajectory_indicator:
+		# TODO account for variable mass in WeaponProjectile, and power multiplier in Weapon
+		# The projectile "weapon_projectile_previewer.tscn" has a mass of 1kg, which is what
+		# we've used on the default weapon Lead Ball since the start. Some projectiles
+		# have different masses, which only really has an effect with the wind calculations.
+		# power_launch_speed_mult in Weapon is a direct multiplier on initial velocity
+		# and needs to be accounted for an accurate prediction.
+		#     I think I'm better off rigging Weapon to show its trajectory innately
+		# instead of trying to mirror another object on the fly.
 		shooting_trajectory_indicator.shoot(power)
+		
 
 func _on_weapon_destroyed(weapon: Weapon) -> void:
 	weapons.erase(weapon)

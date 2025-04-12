@@ -29,6 +29,7 @@ PlayerUpgrades="*res://progression/player_upgrades.gd"
 PlayerStateManager="*res://levels/round/player_state_manager.tscn"
 UserOptions="*res://utils/user_options.gd"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
+Documentation="*res://utils/documentation.gd"
 
 [display]
 
