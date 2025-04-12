@@ -1,6 +1,10 @@
 extends Node
 
 class RoundData:
+	var final_health:float
+	var max_health:float
+	# Ideally health_lost should be max_health - final_health unless player takes damage before level starts
+	# which should only be happening in test levels where fall_damage before start isn't configured right
 	var health_lost:float
 	var damage_done:float
 	var kills:int
@@ -29,13 +33,17 @@ func _on_level_loaded(level: GameLevel) -> void:
 	print_debug("%s: Level loaded - (name=%s)" % [name, _current_level.level_name])	
 
 func _on_round_started() -> void:
+	# This is called AFTER all players added
 	round_data = RoundData.new()
+	if is_instance_valid(_player):
+		round_data.max_health = _player.tank.max_health
 	round_data.level_name = _current_level.name
 	print_debug("%s: Round Started - (level=%s)" % [name, round_data.level_name])	
 
 func _on_round_ended() -> void:
 	if not round_data.died:
 		round_data.won = true
+		round_data.final_health = _player.tank.health
 		
 	# Will get destroyed so invalidate references
 	_player = null

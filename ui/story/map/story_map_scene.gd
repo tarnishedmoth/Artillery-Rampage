@@ -268,10 +268,11 @@ func _create_scrolling_narrative(level:StoryLevel, active_node: StoryLevelNode) 
 	var all_narratives:Array[String] = level.narratives
 	
 	# If this isn't first level, then generate an auto-narrative from previous
-	if _current_level_index > 0:
-		# Duplicate so we don't modify a global resource
-		all_narratives = all_narratives.duplicate()
-		all_narratives.push_front(_get_prev_round_narrative_summary())
+	# Moved to StoryRoundSummary
+	#if _current_level_index > 0:
+		## Duplicate so we don't modify a global resource
+		#all_narratives = all_narratives.duplicate()
+		#all_narratives.push_front(_get_prev_round_narrative_summary())
 		
 	# Copy and add the prototype
 	for i in range(1, all_narratives.size()):
