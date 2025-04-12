@@ -1,0 +1,91 @@
+[gd_scene load_steps=5 format=3 uid="uid://2lrjsixfec3s"]
+
+[ext_resource type="Script" uid="uid://bwosyyfk5m2qq" path="res://ui/story/round_summary/story_round_summary.gd" id="1_gobxv"]
+[ext_resource type="PackedScene" uid="uid://8hat5mrejfwr" path="res://ui/story/round_summary/round_summary_hud_element.tscn" id="2_q3afb"]
+
+[sub_resource type="Gradient" id="Gradient_gl7n1"]
+colors = PackedColorArray(0, 0.211375, 0.366316, 1, 4.81307e-07, 0.515133, 0.534022, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_q3afb"]
+gradient = SubResource("Gradient_gl7n1")
+
+[node name="StoryRoundSummary" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_gobxv")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
+offset_top = 2.0
+offset_right = 1306.0
+offset_bottom = 718.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_q3afb")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 25.0
+offset_right = 809.0
+offset_bottom = 267.0
+theme_override_constants/separation = 10
+
+[node name="Title" parent="VBoxContainer" instance=ExtResource("2_q3afb")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" parent="VBoxContainer/Title" index="0"]
+text = "Round Summary"
+
+[node name="Value" parent="VBoxContainer/Title" index="1"]
+text = "VICTORY!"
+
+[node name="Turns" parent="VBoxContainer" instance=ExtResource("2_q3afb")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" parent="VBoxContainer/Turns" index="0"]
+text = "Turns:"
+
+[node name="Value" parent="VBoxContainer/Turns" index="1"]
+text = "5"
+
+[node name="DamageDone" parent="VBoxContainer" instance=ExtResource("2_q3afb")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" parent="VBoxContainer/DamageDone" index="0"]
+text = "Total Damage Done:"
+
+[node name="Value" parent="VBoxContainer/DamageDone" index="1"]
+text = "250"
+
+[node name="HealthLost" parent="VBoxContainer" instance=ExtResource("2_q3afb")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" parent="VBoxContainer/HealthLost" index="0"]
+text = "Health Lost:"
+
+[node name="Value" parent="VBoxContainer/HealthLost" index="1"]
+text = "10"
+
+[node name="Spacer" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+
+[node name="Next" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Next"
+
+[connection signal="pressed" from="VBoxContainer/Next" to="." method="_on_next_pressed"]
+
+[editable path="VBoxContainer/Title"]
+[editable path="VBoxContainer/Turns"]
+[editable path="VBoxContainer/DamageDone"]
+[editable path="VBoxContainer/HealthLost"]

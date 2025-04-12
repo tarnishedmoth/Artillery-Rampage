@@ -15,6 +15,7 @@ class SceneKeys:
 	
 	const StoryMap:StringName = &"StoryMap"
 	const StoryStart:StringName = &"StoryStart"
+	const RoundSummary:StringName = &"RoundSummary"
 
 # We expect to reference the above keys with a const "preload" of a packed scene 
 # or reference to a unique name (possibly for pause menu)
@@ -27,6 +28,7 @@ const default_delay: float = 1.0
 const main_menu_scene_file = "res://levels/main_menu.tscn"
 const story_start_scene_file = "res://ui/story/story_sequence.tscn"
 const story_map_scene_file = "res://ui/story/map/story_map_scene.tscn"
+const story_round_summary_scene_file = "res://ui/story/round_summary/story_round_summary.tscn"
 
 var _current_level_index:int = -1
 var _current_level_root_node:GameLevel
@@ -91,8 +93,7 @@ func level_failed() -> void:
 func level_complete() -> void:
 	match play_mode:
 		PlayMode.STORY:
-			# TODO: Round summary
-			await switch_scene_keyed(SceneKeys.StoryMap)
+			await switch_scene_keyed(SceneKeys.RoundSummary)
 		PlayMode.PLAY_NOW:
 			# TODO: Logic duplication, possibly different set of levels with PlayNow logic in MainMenu, should consolidate
 			if story_levels and story_levels.levels:
@@ -113,6 +114,10 @@ func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 			await switch_scene_file(story_start_scene_file)
 		SceneKeys.StoryMap:
 			await switch_scene_file(story_map_scene_file)
+		SceneKeys.RoundSummary:
+			await switch_scene_file(story_round_summary_scene_file)
+		_:
+			push_error("Unhandled scene key=%s" % [key])
 	
 func switch_scene(scene: PackedScene, delay: float = default_delay) -> void:
 	var display_name = str(scene)

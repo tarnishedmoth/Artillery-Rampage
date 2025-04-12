@@ -1,0 +1,16 @@
+[gd_scene load_steps=5 format=3 uid="uid://8hat5mrejfwr"]
+
+[ext_resource type="PackedScene" uid="uid://csk42q7q75rcy" path="res://ui/hud_value.tscn" id="1_vvcbf"]
+[ext_resource type="Theme" uid="uid://ddklgnmfj25sv" path="res://ui/story/story_theme.tres" id="2_mw05f"]
+[ext_resource type="LabelSettings" uid="uid://cx44py5nu61e6" path="res://ui/story/round_summary/round_summary_labels.tres" id="3_08xho"]
+[ext_resource type="LabelSettings" uid="uid://cisyn7fnm0465" path="res://ui/story/round_summary/round_summary_values.tres" id="4_jwuyb"]
+
+[node name="RoundSummaryHUDElement" instance=ExtResource("1_vvcbf")]
+theme = ExtResource("2_mw05f")
+theme_override_constants/separation = 10
+
+[node name="Label" parent="." index="0"]
+label_settings = ExtResource("3_08xho")
+
+[node name="Value" parent="." index="1"]
+label_settings = ExtResource("4_jwuyb")
