@@ -1,16 +1,5 @@
 ## This script is a fix for a Godot editor bug.
 ##
-## Godot automatically generates documentation pages for GDScript files, but they
-## are only made on-demand, so each time you launch the editor you would need to
-## load and modify the script to access its documentation in the editor search help (F1).
-##
-## This workaround just forces the editor to do this for you.
-## But it doesn't fix it immediately.
-##
-## There is a second bug with Godot 4 where @tool scripts will not run the first time the project
-## is loaded in the editor. After first launching the editor, you have to go to the menu bar and
-## navigate to Project->Reload Current Project. Once the project has loaded, this script will run.
-##
 ## https://github.com/godotengine/godot/issues/72406 # Documentation generation bug
 ## https://github.com/godotengine/godot/issues/66381 # @tool scripts won't run until reload.
 ##
