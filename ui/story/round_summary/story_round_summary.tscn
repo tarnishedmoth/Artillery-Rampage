@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://2lrjsixfec3s"]
+[gd_scene load_steps=6 format=3 uid="uid://2lrjsixfec3s"]
 
 [ext_resource type="Script" uid="uid://bwosyyfk5m2qq" path="res://ui/story/round_summary/story_round_summary.gd" id="1_gobxv"]
 [ext_resource type="PackedScene" uid="uid://8hat5mrejfwr" path="res://ui/story/round_summary/round_summary_hud_element.tscn" id="2_q3afb"]
+[ext_resource type="LabelSettings" uid="uid://caafhio2r1ekd" path="res://ui/story/round_summary/round_summary_header.tres" id="3_xarch"]
 
 [sub_resource type="Gradient" id="Gradient_gl7n1"]
 colors = PackedColorArray(0, 0.211375, 0.366316, 1, 4.81307e-07, 0.515133, 0.534022, 1)
@@ -40,10 +41,12 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Label" parent="VBoxContainer/Title" index="0"]
-text = "Round Summary"
+text = "Round Summary:"
+label_settings = ExtResource("3_xarch")
 
 [node name="Value" parent="VBoxContainer/Title" index="1"]
 text = "VICTORY!"
+label_settings = ExtResource("3_xarch")
 
 [node name="Turns" parent="VBoxContainer" instance=ExtResource("2_q3afb")]
 unique_name_in_owner = true
@@ -54,6 +57,16 @@ text = "Turns:"
 
 [node name="Value" parent="VBoxContainer/Turns" index="1"]
 text = "5"
+
+[node name="Kills" parent="VBoxContainer" instance=ExtResource("2_q3afb")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" parent="VBoxContainer/Kills" index="0"]
+text = "Kills:"
+
+[node name="Value" parent="VBoxContainer/Kills" index="1"]
+text = "1"
 
 [node name="DamageDone" parent="VBoxContainer" instance=ExtResource("2_q3afb")]
 unique_name_in_owner = true
@@ -87,5 +100,6 @@ text = "Next"
 
 [editable path="VBoxContainer/Title"]
 [editable path="VBoxContainer/Turns"]
+[editable path="VBoxContainer/Kills"]
 [editable path="VBoxContainer/DamageDone"]
 [editable path="VBoxContainer/HealthLost"]

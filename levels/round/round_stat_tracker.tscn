@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b2y8fu841r40y"]
+
+[ext_resource type="Script" uid="uid://cxht7gdphkfcg" path="res://levels/round/round_stat_tracker.gd" id="1_cnok3"]
+
+[node name="RoundStatTracker" type="Node"]
+script = ExtResource("1_cnok3")
