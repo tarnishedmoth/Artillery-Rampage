@@ -40,19 +40,36 @@ func _ready() -> void:
 #endregion
 
 #region--Public Methods
+func start_typewriter_effect() -> void:
+	for node in revealables:
+		TypewriterEffect.effect(node)
+		
 # Scrolls the credits automatically as it isn't focused (mouse hover).
 func per_line_scroll_credits() -> void:
 	var scroller = Timer.new()
 	scroller.timeout.connect(_on_scroller_timeout)
 	add_child(scroller)
+	await get_tree().create_timer(credits_line_scroll_frequency*3).timeout # Let it populate a litte
 	scroller.start(credits_line_scroll_frequency)
-	
-func start_typewriter_effect() -> void:
-	for node in revealables:
-		TypewriterEffect.effect(node)
+		
+func _on_scroller_timeout() -> void:
+	if credits_list_is_focused: return
+	_current_credits_list_line += 1
+	if _current_credits_list_line > credits_list.get_line_count():
+		_current_credits_list_line = 0
+	credits_list.scroll_to_line(_current_credits_list_line)
 #endregion
+
 #region--Private Methods
-func _on_start_pressed() -> void:
+func _on_play_now_pressed() -> void:
+	PlayerStateManager.enable = false
+	SceneManager.play_mode = SceneManager.PlayMode.PLAY_NOW
+	
+	var level: StoryLevel = level_select_menu.levels_always_selectable.levels.pick_random()
+	if level:
+		SceneManager.switch_scene_file(level.scene_res_path)
+
+func _on_story_pressed() -> void:
 	print_debug("Start button")
 	PlayerStateManager.enable = true
 	SceneManager.play_mode = SceneManager.PlayMode.STORY
@@ -80,23 +97,8 @@ func _on_options_menu_closed() -> void:
 	options_menu.hide()
 	main_menu.show()
 
-func _on_scroller_timeout() -> void:
-	if credits_list_is_focused: return
-	_current_credits_list_line += 1
-	if _current_credits_list_line > credits_list.get_line_count():
-		_current_credits_list_line = 0
-	credits_list.scroll_to_line(_current_credits_list_line)
-
 func _on_credits_list_mouse_entered() -> void:
 	credits_list_is_focused = true
 
 func _on_credits_list_mouse_exited() -> void:
 	credits_list_is_focused = false
-
-func _on_play_now_pressed() -> void:
-	PlayerStateManager.enable = false
-	SceneManager.play_mode = SceneManager.PlayMode.PLAY_NOW
-	
-	var level: StoryLevel = level_select_menu.levels_always_selectable.levels.pick_random()
-	if level:
-		SceneManager.switch_scene_file(level.scene_res_path)

@@ -121,7 +121,7 @@ layout_mode = 2
 theme_type_variation = &"BigButton"
 text = "Play Now!"
 
-[node name="Start" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
+[node name="Story" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
 layout_mode = 2
 theme_type_variation = &"BigButton"
 text = "New Story"
@@ -163,10 +163,11 @@ size_flags_horizontal = 3
 [node name="Spacer" type="Control" parent="Controls/MainMenu/Columns/RightColumn"]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.5
+size_flags_stretch_ratio = 0.45
 
 [node name="CreditsHeader" type="Label" parent="Controls/MainMenu/Columns/RightColumn"]
 layout_mode = 2
+theme_type_variation = &"HeaderSmall"
 text = "Credits"
 horizontal_alignment = 1
 
@@ -174,6 +175,7 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
 text = "A Lorem ipsum odor amet, consectetuer adipiscing elit. Malesuada velit iaculis suscipit maximus, vivamus lacus. Class ad nulla facilisi facilisi facilisi, ultrices
 
@@ -204,11 +206,12 @@ M convallis pulvinar habitasse laoreet. Eros sapien quisque elit laoreet mattis 
 N Facilisis turpis finibus sit rutrum enim consectetur ultrices ridiculus. Himenaeos"
 shortcut_keys_enabled = false
 threaded = true
+visible_characters_behavior = 1
 
 [node name="Spacer2" type="Control" parent="Controls/MainMenu/Columns/RightColumn"]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.5
+size_flags_stretch_ratio = 0.05
 
 [node name="Spacer4" type="Control" parent="Controls/MainMenu/Columns"]
 layout_mode = 2
@@ -335,7 +338,7 @@ size_flags_vertical = 3
 layout_mode = 2
 
 [connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/PlayNow" to="." method="_on_play_now_pressed"]
-[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/Story" to="." method="_on_story_pressed"]
 [connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/LevelSelect" to="." method="_on_level_select_pressed"]
 [connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/Quit" to="." method="_on_quit_pressed"]
