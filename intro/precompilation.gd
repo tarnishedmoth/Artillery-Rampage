@@ -1,13 +1,17 @@
 ## Avoid hitches and skips by previewing all of the game entities before loading the game.
 ## Will load and instantiate every tscn in each directory added.
 ## [i]Does not[/i] recursively load subdirectories.
-class_name Precompiler extends Node2D
+extends Node2D
 
 signal completed
 
-@export_dir var scene_folders:Array[String]
-@export var batch_size:int = 3 ## Scenes to instantiate at once
+# Sorry this is a spaghetti of real things and fake gamified things
 
+# Real things
+@export_dir var scene_folders:Array[String] ## Loads all tscn files in these directories
+@export var batch_size:int = 2 ## Scenes to instantiate at once
+
+# Not real things
 @export var show_imaginary_steps:bool = true
 @export var imaginary_steps:Array[String]
 var show_steps_frequency:float:
@@ -68,9 +72,10 @@ func _physics_process(delta: float) -> void:
 
 ## The main method
 func precompile_all_configured_scenes() -> void:
+	const print_colors:String = "[bgcolor=grey][color=black]"
 	%LoadingLabel.set_visible_characters(0)
 	%LoadingLabel.text = "Loading..."
-	TypewriterEffect.effect(%LoadingLabel)
+	TypewriterEffect.apply_to(%LoadingLabel)
 	running = true # Used for visual elements
 	
 	## Get full resource paths through ResourceLoader and set up the UI elements
@@ -80,7 +85,7 @@ func precompile_all_configured_scenes() -> void:
 	add_imaginary_steps(total_scenes/3)
 	%NumberOfEntitiesUI.text = str(total_scenes) + " entities"
 	
-	await get_tree().process_frame # Wait a moment
+	await get_tree().process_frame
 	
 	## Load the PackedScenes from the ResourceLoader into batches -- (Pre-instancing)
 	var _batch:Array[PackedScene] ## Holds scenes in the iterator to copy into batches
@@ -89,7 +94,7 @@ func precompile_all_configured_scenes() -> void:
 	for path in scene_paths:
 		# Get the scene
 		var scene = ResourceLoader.load(path,"PackedScene")
-		print("Loaded ", path)
+		print_rich(print_colors,"Loaded ", path)
 		_batch.append(scene)
 		if index % batch_size == 0:
 			# Copy this batch off and start over
@@ -97,16 +102,17 @@ func precompile_all_configured_scenes() -> void:
 			_batch.clear()
 		index += 1
 	if not _batch.is_empty(): batches.append(_batch) # Add final unfilled batch
-	print("Loaded ", total_scenes, " scenes.")
+	print_rich(print_colors,"Loaded ", total_scenes, " scenes.")
 	
-	await get_tree().process_frame # Wait a moment
+	await get_tree().process_frame
+	## Instancing
 	for batch:Array in batches:
 		await spawn_batch(%InstancesContainer, batch)
 		await get_tree().process_frame
 		
 		## Finished this batch
 		remainder -= batch.size()
-		print(remainder, " scenes remaining.")
+		print_rich(print_colors, remainder, " scenes remaining.")
 		_on_progress_updated()
 	
 	## Completed precompiling
@@ -141,36 +147,35 @@ func spawn_batch(container:Node, scenes: Array[PackedScene]) -> void:
 			continue
 		else:
 			spawn_and_fire(container, scene)
-		await get_tree().process_frame # Wait a moment
+		await get_tree().process_frame
 	return
 
+## Handles special cases
 func spawn_and_fire(container:Node, scene: PackedScene) -> void:
 	var instance = scene.instantiate()
-	#instance.set_block_signals(true) # Block it from emitting signals maybe
 	
 	var dont_clear:bool = false
 	if instance is Weapon:
 			container.add_child(instance)
-			instance.shoot()
+			instance.shoot() # Spawns things
 	elif instance is WeaponProjectile:
 			container.add_child(instance)
-			instance.destroy()
+			instance.destroy() # Spawns things
 	elif instance is Explosion:
 			container.add_child(instance)
 			await instance.started # Signal after all effects started
 	elif instance is MegaNukeExplosion:
-			instance.get_game_time_seconds = func(): return 0.0
+			instance.get_game_time_seconds = func(): return 0.0 # Missing shader function
 			container.add_child(instance)
-			pass
 	else:
-			container.add_child(instance)
+		# All unhandled types
+		container.add_child(instance)
 	await get_tree().process_frame # Wait a moment
 	if is_instance_valid(instance) && not dont_clear:
 		instance.queue_free() # Some scenes free themselves
 	return
 #endregion
 
-#region Static Methods
 static func find_scene_files(folders:Array[String], full_path:bool = false) -> Array[String]:
 	var scenes:Array[String]
 	
@@ -189,9 +194,9 @@ static func find_scene_files(folders:Array[String], full_path:bool = false) -> A
 					scenes.append(path)
 			
 	return scenes
-	#endregion
 
-## Decorative label with juice
+#region Inner classes
+## Purely decorative label with juice
 class ProgressStep extends Label:
 	var attack:float = 0.2 ## Transition into view
 	var hold:float = 0.85 ## Time to remain in place
@@ -239,3 +244,4 @@ class ProgressStep extends Label:
 	func _on_visibility_changed() -> void:
 		if visible:
 			start()
+#endregion

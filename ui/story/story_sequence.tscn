@@ -17,14 +17,16 @@ streams_count = 2
 stream_0/stream = ExtResource("3_4kt13")
 stream_1/stream = ExtResource("4_yker4")
 
-[node name="StorySequence" type="Control"]
+[node name="StorySequence" type="Control" node_paths=PackedStringArray("texts")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_l35kj")
 script = ExtResource("1_n5gvg")
+texts = [NodePath("Container/StorySlides/Slide/StoryText"), NodePath("Container/StorySlides/Slide2/StoryText")]
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
@@ -43,54 +45,37 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="StorySlides" type="Control" parent="Container"]
+[node name="StorySlides" type="MarginContainer" parent="Container"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 128
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 128
 
 [node name="Slide" type="CenterContainer" parent="Container/StorySlides"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -512.0
-offset_top = -50.0
-offset_right = 512.0
-offset_bottom = 50.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 
 [node name="StoryText" type="RichTextLabel" parent="Container/StorySlides/Slide"]
 custom_minimum_size = Vector2(1024, 0)
 layout_mode = 2
 theme = ExtResource("2_l35kj")
-text = "*the radio crackles*
-
-
-... It's lorem ipsum!"
+text = "*the radio crackles*"
 fit_content = true
 visible_characters_behavior = 1
 
 [node name="Slide2" type="CenterContainer" parent="Container/StorySlides"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -512.0
-offset_top = -50.0
-offset_right = 512.0
-offset_bottom = 50.0
-grow_horizontal = 2
-grow_vertical = 2
+visible = false
+layout_mode = 2
 
 [node name="StoryText" type="RichTextLabel" parent="Container/StorySlides/Slide2"]
 custom_minimum_size = Vector2(1024, 0)
 layout_mode = 2
+size_flags_vertical = 4
 theme = ExtResource("2_l35kj")
-text = "Prepare for battle!"
+text = "Approaching the beachfront!
+
+The conditions are [WEATHER]... it won't deter us. Might as well be any old Sunday. Looking at [FACTION], we're prepared. We're expecting to face them [ENVIRONMENT]. Maybe [CIRCUMSTANCE]... let's try it."
 fit_content = true
 visible_characters_behavior = 1
 
@@ -130,6 +115,6 @@ text = "Next"
 [node name="Radio" type="AudioStreamPlayer" parent="SFX"]
 unique_name_in_owner = true
 stream = SubResource("AudioStreamRandomizer_cy58k")
-autoplay = true
+volume_db = -4.0
 bus = &"Environment"
 playback_type = 1

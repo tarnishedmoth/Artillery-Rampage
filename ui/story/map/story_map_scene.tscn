@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://bh3bmcratw025"]
+[gd_scene load_steps=11 format=3 uid="uid://bh3bmcratw025"]
 
 [ext_resource type="Script" uid="uid://d3mw66c4x3kum" path="res://ui/story/map/story_map_scene.gd" id="1_5v7n8"]
+[ext_resource type="Theme" uid="uid://ddklgnmfj25sv" path="res://ui/story/story_theme.tres" id="1_nmkcg"]
 [ext_resource type="PackedScene" uid="uid://bch6pb81vhwb" path="res://ui/story/map/story_level_node.tscn" id="2_udjio"]
 [ext_resource type="PackedScene" uid="uid://cs37yf58hf3tp" path="res://ui/story/map/story_level_edge.tscn" id="3_4e1f5"]
 [ext_resource type="PackedScene" uid="uid://ya2fn3ef1h2j" path="res://ui/story/map/story_level_node_unknown.tscn" id="4_cestf"]
@@ -17,6 +18,7 @@ gradient = SubResource("Gradient_mer82")
 [node name="StoryMapScene" type="Control" groups=["Savable"]]
 layout_mode = 3
 anchors_preset = 0
+theme = ExtResource("1_nmkcg")
 script = ExtResource("1_5v7n8")
 edge_node_prototype = ExtResource("3_4e1f5")
 default_node_prototype = ExtResource("2_udjio")

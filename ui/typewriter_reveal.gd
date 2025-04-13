@@ -1,9 +1,9 @@
 class_name TypewriterEffect
 
 const DEFAULT_SPEED:float = 0.15
-const MAX_SPEED:float = 2.0
-const MIN_SPEED:float = 0.012
-const ACCELERATION:float = 0.95
+const MAX_SPEED:float = 1.6
+const MIN_SPEED:float = 0.016
+const ACCELERATION:float = 0.88
 
 ## A timer that applies the TypewriterEffect and either loops or deletes itself when complete.
 class TypewriterTextRevealer extends Timer:
@@ -34,7 +34,7 @@ class TypewriterTextRevealer extends Timer:
 func _init() -> void: push_error("Abstract class")
 
 ## Use this to apply the effect to a node.
-static func effect(node:Control, speed:float = DEFAULT_SPEED) -> void:
+static func apply_to(node:Control, speed:float = DEFAULT_SPEED) -> void:
 	clear(node)
 	if "set_visible_characters" in node:
 		var new_timer = TypewriterTextRevealer.new()

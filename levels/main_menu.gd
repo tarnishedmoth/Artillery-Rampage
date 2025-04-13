@@ -42,7 +42,7 @@ func _ready() -> void:
 #region--Public Methods
 func start_typewriter_effect() -> void:
 	for node in revealables:
-		TypewriterEffect.effect(node)
+		TypewriterEffect.apply_to(node)
 		
 # Scrolls the credits automatically as it isn't focused (mouse hover).
 func per_line_scroll_credits() -> void:
