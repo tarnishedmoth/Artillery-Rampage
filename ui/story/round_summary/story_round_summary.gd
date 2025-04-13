@@ -13,6 +13,9 @@ class_name StoryRoundSummary extends Control
 @onready var tooltipper:TextSequence = %StoryTooltips
 @onready var auto_narrative:AutoNarrative = %AutoNarrative
 
+@onready var win_audio: AudioStreamPlayer = %RoundWinAudio
+@onready var lose_audio: AudioStreamPlayer = %RoundLoseAudio
+
 func _ready() -> void:
 	var stats := RoundStatTracker.round_data
 	if not stats:
@@ -35,6 +38,8 @@ func _ready() -> void:
 	damage_done.set_value("%.1f" % stats.damage_done)
 	health_lost.set_value("%.1f" % (stats.max_health - stats.final_health))
 	
+	_play_audio()
+	
 func _on_next_pressed() -> void:
 	var stats := RoundStatTracker.round_data
 
@@ -43,6 +48,12 @@ func _on_next_pressed() -> void:
 	else:
 		SceneManager.restart_level()
 
+func _play_audio() -> void:
+	if RoundStatTracker.round_data.won:
+		win_audio.play()
+	else:
+		lose_audio.play()
+		
 #region Auto Narrative
 
 func _set_narrative() -> void:

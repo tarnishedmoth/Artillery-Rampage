@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://2lrjsixfec3s"]
+[gd_scene load_steps=10 format=3 uid="uid://2lrjsixfec3s"]
 
 [ext_resource type="Script" uid="uid://bwosyyfk5m2qq" path="res://ui/story/round_summary/story_round_summary.gd" id="1_gobxv"]
 [ext_resource type="Texture2D" uid="uid://dwgftpip8fi4m" path="res://ui/story/round_summary/win_background.tres" id="2_4a1kv"]
@@ -7,6 +7,8 @@
 [ext_resource type="LabelSettings" uid="uid://caafhio2r1ekd" path="res://ui/story/round_summary/round_summary_header.tres" id="3_xarch"]
 [ext_resource type="PackedScene" uid="uid://b4hy7hmnoewje" path="res://narrative/auto_narrative.tscn" id="6_5a4nf"]
 [ext_resource type="Script" uid="uid://df7r7bwm230pa" path="res://ui/array_seq_view_hide.gd" id="6_b4u1x"]
+[ext_resource type="AudioStream" uid="uid://b2okn8726gjgw" path="res://music/round_won.wav" id="8_knv81"]
+[ext_resource type="AudioStream" uid="uid://bfsk5b6gxtcen" path="res://music/round_lost.wav" id="9_m67ci"]
 
 [node name="StoryRoundSummary" type="Control"]
 layout_mode = 3
@@ -125,6 +127,14 @@ text = "Next"
 
 [node name="AutoNarrative" parent="." instance=ExtResource("6_5a4nf")]
 unique_name_in_owner = true
+
+[node name="RoundWinAudio" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("8_knv81")
+
+[node name="RoundLoseAudio" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("9_m67ci")
 
 [connection signal="pressed" from="VBoxContainer/Next" to="." method="_on_next_pressed"]
 
