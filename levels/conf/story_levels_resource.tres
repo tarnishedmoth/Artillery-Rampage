@@ -23,7 +23,7 @@ script = ExtResource("1_3qnfp")
 scene_res_path = &"res://levels/test/test_level_terrain_proc_gen.tscn"
 name = &"Spikey Hills"
 ui_map_node = ExtResource("2_dfrvm")
-narratives = Array[String](["This terrain will prove difficult.", "We must apply new tactices."])
+narratives = Array[String](["This terrain will prove difficult.", "We must apply new tactics."])
 
 [sub_resource type="Resource" id="Resource_w4otv"]
 script = ExtResource("1_3qnfp")
