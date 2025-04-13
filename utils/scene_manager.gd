@@ -3,6 +3,7 @@ extends Node
 var is_switching_scene: bool
 
 enum PlayMode {
+	DIRECT, # Happens with playing level directly
 	STORY,
 	PLAY_NOW,
 	LEVEL_SELECT
@@ -23,7 +24,7 @@ class SceneKeys:
 # Don't use PackedScene as we don't want all the scene data to be preloaded at the start of the game
 @export var story_levels: StoryLevelsResource
 
-const default_delay: float = 1.0
+const default_delay: float = 2.0
 
 const main_menu_scene_file = "res://levels/main_menu.tscn"
 const story_start_scene_file = "res://ui/story/story_sequence.tscn"
@@ -94,11 +95,19 @@ func level_failed() -> void:
 	match play_mode:
 		PlayMode.STORY:
 			switch_scene_keyed(SceneKeys.RoundSummary)
+		PlayMode.DIRECT:
+			_default_restart_level()
 		_: # default
 			restart_level()
 			
+func _default_restart_level():
+	await get_tree().create_timer(default_delay).timeout
+	get_tree().reload_current_scene()
+			
 func level_complete() -> void:
 	match play_mode:
+		PlayMode.DIRECT:
+			_default_restart_level()
 		PlayMode.STORY:
 			await switch_scene_keyed(SceneKeys.RoundSummary)
 		PlayMode.PLAY_NOW:
