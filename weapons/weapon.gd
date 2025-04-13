@@ -179,6 +179,9 @@ var is_equipped: bool = false:
 ## and when tracking [signal WeaponProjectile.completed_lifespan].
 var is_shooting: bool = false
 
+## Internal: Used as conditional for behavior during precompiler.
+var _game_precompiling:bool = false
+
 var _shoot_for_duration_power: float ## Internal: Cache of the requested power from [method shoot_for_duration].
 var _shoot_for_count_remaining: int ## Internal: Counter for [method shoot_for_count].
 var _awaiting_lifespan_completion: int ## Internal: Counter for [signal weapon_actions_completed].
@@ -367,7 +370,8 @@ func configure_barrels() -> void:
 		var new_marker_2d = Marker2D.new()
 		add_child(new_marker_2d)
 		barrels.append(new_marker_2d) # So we can access our own basis data.
-		push_warning("Weapon was configured with no barrels.")
+		if not _game_precompiling:
+			push_warning("Weapon was configured with no barrels.")
 		# Typically if you're shooting from this spot you're inside of your own tank, and it will just instantly collide.
 	
 	for i in barrels:

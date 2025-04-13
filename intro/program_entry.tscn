@@ -1,20 +1,22 @@
-[gd_scene load_steps=6 format=3 uid="uid://clfh2l3a2t5f2"]
+[gd_scene load_steps=7 format=3 uid="uid://clfh2l3a2t5f2"]
 
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="1_pq7yr"]
 [ext_resource type="Script" uid="uid://bcgprnoveco8f" path="res://intro/program_entry.gd" id="1_uorr4"]
 [ext_resource type="PackedScene" uid="uid://buf6mii47hclt" path="res://intro/precompilation.tscn" id="2_krgqr"]
 [ext_resource type="Texture2D" uid="uid://cn7sx5hhhhe7w" path="res://intro/hometeamf.png" id="2_pq7yr"]
 [ext_resource type="Texture2D" uid="uid://c7hmhe7rjgrea" path="res://intro/logo_large_monochrome_dark.svg" id="3_jwe0a"]
+[ext_resource type="PackedScene" uid="uid://cuc767ok22fwd" path="res://intro/steps.tscn" id="6_55h8v"]
 
 [node name="ProgramEntry" type="Control"]
+clip_contents = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme = ExtResource("1_pq7yr")
 script = ExtResource("1_uorr4")
 
@@ -64,3 +66,19 @@ stretch_mode = 4
 
 [node name="Precompilation" parent="." instance=ExtResource("2_krgqr")]
 unique_name_in_owner = true
+position = Vector2(640, 359)
+
+[node name="ProgressUI" parent="." instance=ExtResource("6_55h8v")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="completed" from="Precompilation" to="ProgressUI" method="_on_precompilation_completed"]
+[connection signal="entity_count_changed" from="Precompilation" to="ProgressUI" method="_on_precompilation_entities_count_changed"]
+[connection signal="progress_changed" from="Precompilation" to="ProgressUI" method="_on_precompilation_progress_changed"]
