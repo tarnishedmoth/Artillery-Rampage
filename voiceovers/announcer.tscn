@@ -5,6 +5,7 @@
 
 [node name="Announcer" type="Node"]
 script = ExtResource("1_ik160")
+announcement_queue_turn_delay = 0.25
 
 [node name="AnnouncerSfx" parent="." instance=ExtResource("2_fp170")]
 default_fade_out = 2.0

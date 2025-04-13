@@ -14,6 +14,13 @@ var image_resource = load("res://buildings/house.png")
 var image: Image = image_resource.get_image()
 var texture = ImageTexture.create_from_image(image)
 
+# Non-tank damageable object should define these signals as well as the take_damage function
+@warning_ignore("unused_signal")
+signal took_damage(object: Node, instigatorController: Node2D, instigator: Node2D, amount: float)
+
+@warning_ignore("unused_signal")
+signal destroyed(object: Node)
+
 func _ready() -> void:
 	health = max_health
 	# replace CompressedTexture2D with an editable texture
@@ -40,7 +47,10 @@ func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float
 	health_bar.visible = true
 	health_bar_current_health.scale.x = health / max_health
 	
+	took_damage.emit(self, instigatorController, instigator, actual_damage)
+
 	if health <= 0:
+		destroyed.emit(self)
 		queue_free()
 	else:
 		# randomly erase pixels from the image

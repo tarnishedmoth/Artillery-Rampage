@@ -5,7 +5,7 @@ Trick shot! (Use elastic walls with 2+ bounces and hit a opponent when a direct 
 Avalanche! (Collapse terrain on a snowy mountain map that leads to damage to one or more players)
 Annihilation! (Destroy all opposing units on map with one shot)
 Gravity Kill! (Kill an opponent entirely from fall damage)
-Free Fallin! (You or an opponnent loses at least 50% of max health from fall damage without dying)
+Free Fallin! (You or an opponent loses at least 50% of max health from fall damage without dying)
 Vandal! (You destroy 3 or more buildings or trees on the map)
 Overkill! (You use a powerful weapon to kill an opponent when a lesser one would have done the job fine)
 Woopsies! (You accidentally take yourself out with your own shot)

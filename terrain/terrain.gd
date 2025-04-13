@@ -22,6 +22,18 @@ var first_child_chunk: TerrainChunk
 
 @onready var _destructible_shape_calculator: DestructibleShapeCalculator = $DestructibleShapeCalculator
 
+@warning_ignore("unused_signal")
+signal chunk_split(chunk: TerrainChunk,  new_chunk: TerrainChunk)
+
+# TODO: Currently we are not destroying the whole terrain when all chunks destroyed
+# and this could have other impacts to other systems that rely on the object existing
+## Fires when there are no more chunks left on the terrain
+@warning_ignore("unused_signal")
+signal destroyed(terrain: Terrain)
+
+@warning_ignore("unused_signal")
+signal chunk_destroyed(terrain: TerrainChunk)
+
 func _ready():
 
 	first_child_chunk = get_first_chunk()
@@ -65,7 +77,7 @@ func damage(terrainChunk: TerrainChunk, projectile: WeaponProjectile, contact_po
 	# This means the chunk was destroyed so we need to queue_free
 	if clipping_results.is_empty():
 		print("damage(" + name + ") completely destroyed by poly=" + projectile_poly.owner.name)
-		terrainChunk.delete()
+		_delete_chunk(terrainChunk)
 		return
 	
 	var updated_terrain_poly = clipping_results[0]
@@ -133,6 +145,10 @@ func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_
 
 	new_chunk.replace_contents(new_clip_poly)
 
+	# TODO: For destructible_object always pass in incident chunk and this is usually main one
+	# but chunks could subdivide after initial splitting so should account for that in the parameter
+	chunk_split.emit(prototype_chunk, new_chunk)
+
 	print_debug("added new chunk=%s - chunk count=%d" % [new_chunk.name, get_chunk_count()])
 
 func _morph_falling_chunk(chunk: TerrainChunk) -> PackedVector2Array:
@@ -194,12 +210,12 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 	if results.size() >= 1:
 		first_chunk.replace_contents(results[0], influence_vertices, 0)
 	else:
-		first_chunk.delete()
+		_delete_chunk(first_chunk)
 	
 	if results.size() >= 2:
 		second_chunk.replace_contents(results[1], influence_vertices, 0)
 	else:
-		second_chunk.delete()
+		_delete_chunk(second_chunk)
 		
 	if results.size() >= 3:
 		# Children added deferred so printing will happen on the add
@@ -210,6 +226,14 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 	
 	return stop_falling
 	
+func _delete_chunk(chunk: TerrainChunk) -> void:
+	chunk_destroyed.emit(chunk)
+	chunk.delete()
+	await get_tree().process_frame
+	
+	if get_chunk_count() == 0:
+		destroyed.emit(self)
+		
 # Need to specify which poly is falling and if so check delta y down and up to see which vertices will get merged and then
 # any other vertex within a sq dist influence of that will be also considered for "crushing" by testing the area of those polygons
 # if for some reason no vertices match then just return the original poly arrays without triangulation

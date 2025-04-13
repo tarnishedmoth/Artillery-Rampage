@@ -155,7 +155,10 @@ func on_body_entered(_body: PhysicsBody2D):
 			root_node = Groups.get_parent_in_group(node, Groups.Destructible)
 			if root_node and root_node not in destructed_processed_set:
 				var contact_point: Vector2 = center_destructible_on_impact_point(destructible_component)
+				
 				root_node.damage(self, contact_point, destructible_scale_multiplier)
+				GameEvents.took_damage.emit(root_node, get_instigator(), self)
+
 				had_interaction = true
 				destructed_processed_set[root_node] = root_node
 	# end for
@@ -174,10 +177,12 @@ func on_body_entered(_body: PhysicsBody2D):
 		destroy()
 		
 func damage_damageable_node(damageable_node: Node, damage:float) -> void:
-	var instigator_controller: Node2D = owner_tank.get_parent() as Node2D if is_instance_valid(owner_tank) else null
+	damageable_node.take_damage(get_instigator(), self, damage)
+	GameEvents.took_damage.emit(damageable_node, get_instigator(), self)
 
-	damageable_node.take_damage(instigator_controller, self, damage)
-		
+func get_instigator() -> Node2D:
+	return owner_tank.get_parent() as Node2D if is_instance_valid(owner_tank) else null
+	
 func center_destructible_on_impact_point(destructible: CollisionPolygon2D) -> Vector2:
 	var destructible_polygon: PackedVector2Array = destructible.polygon
 	# Get velocity vector direction to determine translation direction

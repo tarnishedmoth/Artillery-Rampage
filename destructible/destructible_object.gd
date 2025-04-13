@@ -134,11 +134,10 @@ func _add_new_chunk(incident_chunk: DestructibleObjectChunk = null, chunk_name: 
 
 	# Will be empty if creating the first chunk as using the default values from the chunk_scene
 	if new_clip_poly:
-		chunk_split.emit()
 		new_chunk.replace_contents(new_clip_poly)
 
-		if incident_chunk:
-			chunk_split.emit(incident_chunk, new_chunk)
+	if incident_chunk:
+		chunk_split.emit(incident_chunk, new_chunk)
 
 	print_debug("added new chunk=%s - chunk count=%d" % [new_chunk.name, get_chunk_count()])
 

@@ -29,6 +29,8 @@ signal personnel_requested_delivery(unit: PersonnelUnit)
 signal copter_arrived_for_pickups(copter)
 signal copter_left_airspace(copter)
 
+signal took_damage(object: Node, instigatorController: Node2D, instigator: Node2D)
+
 @warning_ignore_restore("unused_signal")
 
 func emit_turn_started(player: TankController):

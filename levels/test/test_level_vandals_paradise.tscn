@@ -1,0 +1,94 @@
+[gd_scene load_steps=7 format=3 uid="uid://qvm3pvdumekv"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_ao2g5"]
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_tkmwi"]
+[ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_ul511"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="4_8sbhn"]
+[ext_resource type="PackedScene" uid="uid://sa0oyrt453vy" path="res://buildings/lighthouse/light_house.tscn" id="5_ul511"]
+[ext_resource type="PackedScene" uid="uid://cdu7jxpquqjer" path="res://environment/trees/shatterable_tree.tscn" id="6_8sbhn"]
+
+[node name="TestLevel01" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_ao2g5")]
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+polygon = PackedVector2Array(-104, -8, 66, -4, 609, -8, 937, -3, 945, 445, -103, 448)
+
+[node name="Wind" parent="GameLevel" index="6"]
+wind_min = 0
+wind_max = 0
+
+[node name="RoundDirector" parent="GameLevel" index="7"]
+player_goes_first = true
+shuffle_order = false
+
+[node name="Enemy1" parent="GameLevel" instance=ExtResource("2_tkmwi")]
+position = Vector2(459, 414)
+enable_damage_before_first_turn = false
+
+[node name="Tank" parent="GameLevel/Enemy1" index="0"]
+color = Color(0.682353, 0.713726, 0.219608, 1)
+
+[node name="LobberAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_ul511")]
+forces_mask = 15
+
+[node name="Enemy2" parent="GameLevel" instance=ExtResource("2_tkmwi")]
+position = Vector2(725, 416)
+enable_damage_before_first_turn = false
+
+[node name="Tank" parent="GameLevel/Enemy2" index="0"]
+color = Color(0.137255, 0.180392, 0.701961, 1)
+
+[node name="LobberAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_ul511")]
+forces_mask = 15
+
+[node name="Enemy3" parent="GameLevel" instance=ExtResource("2_tkmwi")]
+position = Vector2(1085, 416)
+enable_damage_before_first_turn = false
+
+[node name="Tank" parent="GameLevel/Enemy3" index="0"]
+color = Color(0.137255, 0.180392, 0.701961, 1)
+
+[node name="LobberAiBehavior" parent="GameLevel/Enemy3/StateMachine" index="0" instance=ExtResource("3_ul511")]
+forces_mask = 15
+
+[node name="Player" parent="GameLevel" instance=ExtResource("4_8sbhn")]
+position = Vector2(120, 427)
+enable_damage_before_first_turn = false
+
+[node name="Destructibles" type="Node" parent="GameLevel"]
+
+[node name="Lighthouse" parent="GameLevel/Destructibles" instance=ExtResource("5_ul511")]
+position = Vector2(259, 442)
+
+[node name="Lighthouse2" parent="GameLevel/Destructibles" instance=ExtResource("5_ul511")]
+position = Vector2(571, 440)
+
+[node name="Lighthouse3" parent="GameLevel/Destructibles" instance=ExtResource("5_ul511")]
+position = Vector2(885, 438)
+
+[node name="Lighthouse4" parent="GameLevel/Destructibles" instance=ExtResource("5_ul511")]
+position = Vector2(1191, 440)
+
+[node name="ShatterableTree" parent="GameLevel/Destructibles" instance=ExtResource("6_8sbhn")]
+position = Vector2(40, 435)
+
+[node name="ShatterableTree2" parent="GameLevel/Destructibles" instance=ExtResource("6_8sbhn")]
+position = Vector2(346, 440)
+
+[node name="ShatterableTree3" parent="GameLevel/Destructibles" instance=ExtResource("6_8sbhn")]
+position = Vector2(647, 435)
+
+[node name="ShatterableTree4" parent="GameLevel/Destructibles" instance=ExtResource("6_8sbhn")]
+position = Vector2(795, 432)
+
+[node name="ShatterableTree5" parent="GameLevel/Destructibles" instance=ExtResource("6_8sbhn")]
+position = Vector2(974, 435)
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/Enemy1"]
+[editable path="GameLevel/Enemy2"]
+[editable path="GameLevel/Enemy3"]
