@@ -30,7 +30,7 @@ scale_amount_min = 4.0
 scale_amount_max = 4.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.12, 0.12)
+scale = Vector2(0.09, 0.09)
 texture = ExtResource("3_jc7pl")
 
 [node name="PhysicsShape" type="CollisionShape2D" parent="."]

@@ -50,6 +50,7 @@ bus = &"SFX"
 
 [node name="AcquiredTarget" type="AudioStreamPlayer2D" parent="MissileThruster"]
 stream = ExtResource("5_4gj83")
+volume_db = -6.0
 bus = &"Environment"
 
 [node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="MissileThruster"]

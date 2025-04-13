@@ -2,13 +2,11 @@ extends Node2D
 
 #region--Variables
 @export var revealables:Array[Control] ## Will reveal their text as determined by reveal_speed
-@export var reveal_speed: float = 0.15
 
 @export var credits_line_scroll_frequency:float = 1.5 ## In seconds, advances credits one line.
 var _current_credits_list_line:int = 0
 
 @onready var credits_list: RichTextLabel = %CreditsList
-@onready var credits_list_line_count = credits_list.get_line_count()
 var credits_list_is_focused:bool = false
 
 @onready var main_menu: VBoxContainer = %MainMenu
@@ -31,8 +29,8 @@ func _ready() -> void:
 	if OS.get_name() == "Web":
 		exit_to_desktop_button.hide()
 	
-	start_typewriter_effect() # Typewriter effect
 	per_line_scroll_credits() # Autoscrolling
+	start_typewriter_effect() # Typewriter effect
 	soundtrack.play()
 	
 	# Fade in
@@ -85,7 +83,7 @@ func _on_options_menu_closed() -> void:
 func _on_scroller_timeout() -> void:
 	if credits_list_is_focused: return
 	_current_credits_list_line += 1
-	if _current_credits_list_line > credits_list_line_count:
+	if _current_credits_list_line > credits_list.get_line_count():
 		_current_credits_list_line = 0
 	credits_list.scroll_to_line(_current_credits_list_line)
 
