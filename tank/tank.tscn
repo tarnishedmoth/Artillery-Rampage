@@ -17,7 +17,7 @@ size = Vector2(26, 26)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bbvof"]
 size = Vector2(6, 30.8)
 
-[node name="Tank" type="Node2D" node_paths=PackedStringArray("shooting_trajectory_indicator") groups=["Damageable", "Unit"]]
+[node name="Tank" type="Node2D" node_paths=PackedStringArray("shooting_trajectory_indicator") groups=["Damageable", "DamageableRoot", "Unit"]]
 script = ExtResource("1_0iy80")
 drop_on_death = ExtResource("2_qlwk0")
 shooting_trajectory_indicator = NodePath("WeaponTrajectoryPreviewer")

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cewjvqn7t7b2h" path="res://destructible/destructible_object.gd" id="1_6grk8"]
 [ext_resource type="Script" uid="uid://cj4ks2od2ywxd" path="res://destructible/destructible_shape_calculator.gd" id="2_7ar1y"]
 
-[node name="DestructibleObject" type="Node2D"]
+[node name="DestructibleObject" type="Node2D" groups=["DamageableRoot"]]
 script = ExtResource("1_6grk8")
 
 [node name="DestructibleShapeCalculator" type="Node" parent="."]

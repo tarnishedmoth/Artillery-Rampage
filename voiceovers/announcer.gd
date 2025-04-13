@@ -24,11 +24,9 @@ var _first_kill_time:float = 0.0
 var _num_opponents:int
 var _last_enemy_damage:float 
 
-var _objects_destroyed:int = 0
-
 var _queued_announcements:Array[StringName] = []
 
-var _object_damage_associations:Dictionary[int,TankController] = {}
+var _objects_vandalized_by_player:Dictionary[int,bool] = {}
 
 # Destroy all opposing units on map with one shot
 const annilation_sfx_res:StringName =  &"res://voiceovers/annihilation.mp3"
@@ -85,9 +83,7 @@ func _on_round_started() -> void:
 	# This is called AFTER all players added
 	print_debug("%s: Round Started - level=%s" % [name, _game_level.level_name])
 	_num_opponents = _game_level.round_director.tank_controllers.size() - 1
-	
-	_set_up_object_destroyed_events()
-	
+		
 func _on_round_ended() -> void:
 	print_debug("%s: Round ended -  level=%s" % [name, _game_level.level_name])
 	
@@ -188,55 +184,23 @@ func _on_tank_stopped_falling(tank: Tank) -> void:
 
 func _on_object_took_damage(object: Node, instigatorController: Node2D, _instigator: Node2D) -> void:
 	print_debug("%s: Object took damage - name=%s" % [name, object.name])
-	_object_damage_associations[object.get_instance_id()] = instigatorController as TankController
-
-func _set_up_object_destroyed_events() -> void:
-	#region damageables
-	var damageables: Array[Node] = get_tree().get_nodes_in_group(Groups.Damageable)
-	print_debug("%s: Found %d damageable objects" % [name, damageables.size()])
-	for damageable in damageables:
-		# Tank is a special case and not handled for general vandalism
-		if damageable is not Tank:
-			print_debug("%s: Node %s is a Damageable object" % [name, damageable.name])
-			var damageable_signal_node:Node = find_object_with_signal(damageable, "destroyed")
-			if damageable_signal_node:
-				damageable_signal_node.destroyed.connect(_on_object_destroyed)
-			else:
-				push_warning("%s: Damageable object %s does not have a destroyed signal" % [name, damageable.name])
-	#endregion
-
-	#region destructible
-	var destructibles: Array[Node] = get_tree().get_nodes_in_group(Groups.Destructible)
-	print_debug("%s: Found %d destructible objects" % [name, destructibles.size()])
-	for destructible in destructibles:
-		if destructible is not Terrain:
-			print_debug("%s: Node %s is a Destructible object" % [name, destructible.name])
-			var destructible_signal_node:Node = find_object_with_signal(destructible, "destroyed")
-			if destructible_signal_node:
-				destructible_signal_node.destroyed.connect(_on_object_destroyed)
-			else:
-				push_warning("%s: Destructible object %s does not have a chunk_destroyed signal" % [name, destructible.name])
-	#endregion
-
-func find_object_with_signal(in_node: Node, signal_name:StringName) -> Node:
-	var node:Node = in_node
-	while node:
-		if node.has_signal(signal_name):
-			return node
-		node = node.get_parent()
-	return null
 	
-func _on_object_destroyed(object: Node) -> void:
-	print_debug("%s: Object %s destroyed" % [name, object.name])
-	# Make sure player was the culprint
-	var instigator: TankController = _object_damage_associations.get(object.get_instance_id(), null)
-	if instigator != _player:
-		print_debug("%s: Ignore object %s as wasn't destroyed by player - instigator=%s" % [name, object.name, instigator.name if is_instance_valid(instigator) else &"NULL"])
+	# Ignore things not damaged by player
+	if instigatorController != _player:
 		return
 		
-	_objects_destroyed += 1
-	if _objects_destroyed == vandal_object_destroyed_threshold:
-		print_debug("%s: Player vandalized %d objects" % [name, _objects_destroyed])
+	# Get the damageable root
+	var object_root:Node = Groups.get_parent_in_group(object, Groups.DamageableRoot)
+	if not object_root or object_root is Tank or object_root is Terrain:
+		return
+
+	_objects_vandalized_by_player[object_root.get_instance_id()] = true
+	
+	print_debug("%s: Player vandalized %s" % [name, object_root.name])
+	print_debug("%s: Player vandalized %d objects" % [name, _objects_vandalized_by_player.size()])
+
+	if _objects_vandalized_by_player.size() == vandal_object_destroyed_threshold:
+		print_debug("%s: Triggering vandal announcement - Player vandalized %d objects" % [name, _objects_vandalized_by_player.size()])
 		_queued_announcements.push_back(vandal_sfx_res)
 
 #endregion

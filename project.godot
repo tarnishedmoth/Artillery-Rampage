@@ -55,6 +55,7 @@ Player="Player unit"
 Bot="AI-controlled unit"
 Collectible="Retrievable pickups--see Personnel"
 Savable="Class that participates in save/load system"
+DamageableRoot="Root node in the damageable or destructible tree - e.g. Terrain for TerrainChunk"
 
 [input]
 

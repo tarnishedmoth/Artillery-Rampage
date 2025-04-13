@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cj4ks2od2ywxd" path="res://destructible/destructible_shape_calculator.gd" id="1_cuql0"]
 [ext_resource type="PackedScene" uid="uid://dmbj0iglwwo7x" path="res://terrain/terrain_chunk.tscn" id="2_3bd8x"]
 
-[node name="Terrain" type="Node2D"]
+[node name="Terrain" type="Node2D" groups=["DamageableRoot"]]
 z_index = -100
 script = ExtResource("1_4p40s")
 

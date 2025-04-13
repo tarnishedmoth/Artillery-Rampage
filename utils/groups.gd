@@ -3,6 +3,10 @@ extends Node
 const Collectible:StringName = &"Collectible"
 const Destructible:StringName = &"Destructible"
 const Damageable:StringName = &"Damageable"
+
+## Root node in the damageable tree
+const DamageableRoot:StringName = &"DamageableRoot"
+
 const Unit:StringName = &"Unit"
 
 @warning_ignore("shadowed_global_identifier")

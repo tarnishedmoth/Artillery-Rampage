@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://g5t4sgg2c6dd" path="res://destructible/shatter/shatterable_object.gd" id="1_nbse4"]
 [ext_resource type="Script" uid="uid://cj4ks2od2ywxd" path="res://destructible/destructible_shape_calculator.gd" id="2_3uqi2"]
 
-[node name="ShatterableObject" type="Node2D"]
+[node name="ShatterableObject" type="Node2D" groups=["DamageableRoot"]]
 script = ExtResource("1_nbse4")
 
 [node name="BodyContainer" type="Node2D" parent="."]
