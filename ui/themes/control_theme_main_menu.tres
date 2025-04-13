@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=24 format=3 uid="uid://djf2yc1tmc0u8"]
+[gd_resource type="Theme" load_steps=26 format=3 uid="uid://djf2yc1tmc0u8"]
 
 [ext_resource type="FontFile" uid="uid://cg5hjbm350ehu" path="res://ui/typewriter_font.fnt" id="1_0egtd"]
 
@@ -117,6 +117,20 @@ vertical = true
 color = Color(0.439049, 0.439049, 0.439049, 1)
 thickness = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e566v"]
+bg_color = Color(0.920995, 0.920995, 0.920995, 1)
+border_width_bottom = 8
+border_color = Color(0.497474, 0.497474, 0.497473, 1)
+border_blend = true
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_04o7l"]
+bg_color = Color(1, 1, 1, 1)
+draw_center = false
+border_width_bottom = 8
+border_color = Color(0.333333, 0.690196, 0.741176, 1)
+corner_detail = 1
+
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_0egtd"]
 color = Color(0.929715, 0.929715, 0.929715, 1)
 thickness = 3
@@ -179,6 +193,10 @@ HSlider/styles/slider = SubResource("StyleBoxLine_eftre")
 HeaderLarge/font_sizes/font_size = 32
 HeaderMedium/font_sizes/font_size = 24
 HeaderSmall/font_sizes/font_size = 20
+ProgressBar/colors/font_color = Color(0, 0, 0, 1)
+ProgressBar/font_sizes/font_size = 14
+ProgressBar/styles/background = SubResource("StyleBoxFlat_e566v")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_04o7l")
 VScrollBar/styles/grabber = SubResource("StyleBoxLine_0egtd")
 VScrollBar/styles/grabber_highlight = SubResource("StyleBoxLine_jy2ir")
 VScrollBar/styles/grabber_pressed = SubResource("StyleBoxLine_2j86a")

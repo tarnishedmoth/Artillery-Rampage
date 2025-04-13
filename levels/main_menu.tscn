@@ -98,7 +98,6 @@ custom_minimum_size = Vector2(546, 0)
 layout_mode = 2
 theme_type_variation = &"HeaderLarge"
 text = "Artillery Rampage"
-horizontal_alignment = 1
 
 [node name="Divider" type="HSeparator" parent="Controls/MainMenu/Columns/CenterColumn"]
 layout_mode = 2
@@ -223,6 +222,7 @@ size_flags_stretch_ratio = 0.05
 
 [node name="LevelSelect" type="PanelContainer" parent="Controls"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

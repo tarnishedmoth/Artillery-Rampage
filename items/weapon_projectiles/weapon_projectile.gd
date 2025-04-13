@@ -323,7 +323,8 @@ func _calculate_dist_frac(dist: float):
 	return  (1.0 - (dist - min_falloff_distance) / (max_falloff_distance - min_falloff_distance))
 	
 func _get_container() -> Node:
-	var container = SceneManager.get_current_level_root() if not null else SceneManager.current_scene
+	var container = SceneManager.get_current_level_root()
+	if container == null: container = SceneManager.current_scene
 	#deployed_container = SceneManager.current_scene
 	if container.has_method("get_container"):
 		container = container.get_container()

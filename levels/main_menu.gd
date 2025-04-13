@@ -23,6 +23,7 @@ var credits_list_is_focused:bool = false
 #region--Virtuals
 func _ready() -> void:
 	# Editor convenience
+	modulate = Color.BLACK
 	main_menu.show()
 	level_select_menu.hide()
 	
@@ -33,6 +34,11 @@ func _ready() -> void:
 	start_typewriter_effect() # Typewriter effect
 	per_line_scroll_credits() # Autoscrolling
 	soundtrack.play()
+	
+	# Fade in
+	await get_tree().process_frame
+	await Juice.fade_in(self, Juice.SNAP, Color.BLACK).finished
+	AudioServer.set_bus_mute(AudioServer.get_bus_index("SFX"), false) # Unmute SFX bus
 #endregion
 
 #region--Public Methods

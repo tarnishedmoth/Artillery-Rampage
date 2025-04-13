@@ -1,0 +1,70 @@
+[gd_scene load_steps=3 format=3 uid="uid://buf6mii47hclt"]
+
+[ext_resource type="Script" uid="uid://b81nkb6tq5o2q" path="res://intro/precompilation.gd" id="1_sca42"]
+[ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="2_yftex"]
+
+[node name="Precompilation" type="Node2D"]
+script = ExtResource("1_sca42")
+scene_folders = Array[String](["res://effects/post_processing", "res://items", "res://items/weapon_projectiles", "res://items/weapon_projectiles/explosions", "res://items/rubble", "res://weapons", "res://buildings", "res://buildings/lighthouse", "res://effects/hazard/water", "res://environment/trees", "res://tank"])
+imaginary_steps = Array[String](["Sorting laundry...", "Parsing astral orientation...", "Forming critical molded objects...", "Firing kilns...", "Taking short positions...", "Holding stocks...", "Indexing llamas...", "Calibrating whimsy...", "Defragmenting player memory...", "Syncing signals...", "Plotting orbits...", "Preloading magazines...", "Arming forces...", "Layering backgrounds...", "Connecting scaffolds...", "Inspecting parameters...", "Harmonizing harmonics...", "Aligning thrusters...", "Adjusting temporal field...", "Spraying for insects...", "Participating in charity...", "Submitting entries...", "Flattening layers...", "Arguing variables...", "Spinning spanners...", "Watering vegetation...", "Predicting weather patterns...", "Assembling tanks...", "Cleaning arsenals...", "Employing NPCs...", "Recording responses...", "Verifying user options...", "Modeling lattices...", "Filling arrays...", "Setting traps...", "Orienting sky dome...", "Projecting digital space textures...", "Appropriating affine filtering...", "Wiping pixel residue...", "Hinging logic gates...", "Quantizing angles...", "Calculating risk...", "Recalculating risk...", "Skipped: employ agendas...", "Navigating handrolled code...", "Inverting entropy!", "Mapping confusion clusters...", "Overclocking behavioral reactivity...", "Spawning sub-subroutines...", "Rewriting similar methods...", "Duplicating functionality...", "Compartmentalizing intricacies...", "Absorbing floating point errors...", "Absolving blames...", "Tracing references...", "Using protractors...", "Drafting architecture...", "Clearing assembly lines...", "Arresting coroutines...", "Yielding computational control...", "Transmuting efforts into void...", "Aligning firewall mirrors...", "Dialing down world temperatures...", "Preloading assets...", "Drawing textures...", "Sculpting models...", "Caching sounds...", "Starting programs...", "Converting degrees to radians...", "Searching documentation...", "Overcooking irrelevant aspects...", "Amending commits...", "Forking new branches...", "Trading pink slips...", "Browsing marketplace...", "Investigating sidetracks...", "Parsing serialized files...", "Increasing physics precision...", "Investigating unobservable switch...", "Simulating projectiles...", "Spawning collectibles...", "Customizing characters...", "Calibrating white balance...", "Curving contrast...", "Delegating tasks...", "Seeking real results...", "Reflecting on logs...", "Compiling errors...", "Preparing utilities...", "Feeding codebase...", "Deleting commented code...", "Adjusting resolution...", "Crafting menu buttons...", "Organizing level structures...", "Structuring enemy militaries...", "Dozing unused facilities...", "Calling subroutines to surface...", "Baking HTTP cookies...", "Spinning alternate web theories...", "Cutting with the grain...", "Calling familiar numbers...", "Mapping dimensions...", "Fueling vehicles...", "Spawning spawners...", "Attaching scripts...", "Renaming constants...", "Patching gamebreakers...", "Infusing logic with global seed...", "Attributing credits...", "Applying to HomeTeam...", "Darkening shadows...", "Dodging highlights...", "Removing asset projects...", "Ignoring obstructive practices...", "Braking panel seams...", "Acquiring protective equipment...", "Publishing safety data sheets...", "Complying with regulations...", "Running required countermeasures...", "Specifying hat colors...", "Sharpening null pointers...", "Distributing resistance...", "Halting recursions...", "Simulating competence...", "Randomizing randomizer...", "Confounding staff...", "Counting bit depths...", "Straightening pixel rows...", "Plotting dimensional grids...", "Sanitizing work surfaces...", "Rewatching classics...", "Cruising avenues...", "Capping environment energy...", "Cascading shadows...", "Queueing soundtrack...", "Supeceding parent methods...", "Reparenting orphaned nodes...", "Commemorating annual events...", "Congregating masses...", "Clamping trajectories...", "Priming carburetors...", "Winterizing dormant projects..."])
+
+[node name="InstancesContainer" type="Node2D" parent="."]
+unique_name_in_owner = true
+z_index = -2
+position = Vector2(640, 359)
+
+[node name="UI" type="Control" parent="."]
+light_mask = 0
+clip_contents = true
+custom_minimum_size = Vector2(1280, 720)
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("2_yftex")
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 362.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 128
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="UI/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+
+[node name="LoadingLabel" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeaderSmall"
+text = "Welcome!"
+
+[node name="ProgressBarUI" type="ProgressBar" parent="UI/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+min_value = 0.01
+value = 0.01
+
+[node name="NumberOfEntitiesUI" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeaderSmall"
+text = "Please wait."
+
+[node name="ProgressNotesUI" type="VBoxContainer" parent="UI/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+modulate = Color(0.641934, 0.641934, 0.641934, 1)
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 0
