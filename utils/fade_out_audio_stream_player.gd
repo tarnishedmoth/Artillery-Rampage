@@ -1,5 +1,5 @@
-## Plays an audio stream resource by async loading it and switching out the stream
-## Adds an optional fade out for previously playing sound
+## Optionally fades out an existing audio stream before playing a new one or skip restarting a sound that is already playing.
+## Optional set of priorities can be set on sound resources to determine if a new sound should pre-empt an existing sound.
 class_name FadeOutAudioStreamPlayer extends AudioStreamPlayer
 
 @export var default_fade_out:float = 0.0
