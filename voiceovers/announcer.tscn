@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dlh1i2cvw3mim"]
+
+[ext_resource type="Script" uid="uid://buqwpl0e1656q" path="res://voiceovers/announcer.gd" id="1_ik160"]
+[ext_resource type="PackedScene" uid="uid://da6l1fpnsnt5m" path="res://utils/fade_out_audio_stream_player.tscn" id="2_fp170"]
+
+[node name="Announcer" type="Node"]
+script = ExtResource("1_ik160")
+
+[node name="AnnouncerSfx" parent="." instance=ExtResource("2_fp170")]
+default_fade_out = 2.0

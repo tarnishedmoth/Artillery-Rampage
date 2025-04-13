@@ -7,6 +7,9 @@ signal tank_took_damage(
 signal  tank_took_emp(
 	tank: Tank, instigatorController: Node2D, instigator: Node2D, amount: float)
 
+signal tank_started_falling(tank: Tank)
+signal tank_stopped_falling(tank: Tank)
+
 @export var drop_on_death:PackedScene ## Scene is spawned at tank's global position when it dies.
 @export var shooting_trajectory_indicator:Weapon
 
@@ -338,6 +341,7 @@ func started_falling() -> void:
 	print_debug("tank(%s) started falling at position=%s" % [get_parent().name, str(tankBody.global_position)])
 	fall_start_position = tankBody.global_position
 	mark_falling = true
+	tank_started_falling.emit(self)
 
 func stopped_falling() -> void:
 	if !mark_falling:
@@ -346,6 +350,8 @@ func stopped_falling() -> void:
 	print_debug("tank(%s) stopped falling at position=%s" % [get_parent().name, str(tankBody.global_position)])
 	_check_and_emit_fall_damage(fall_start_position, tankBody.global_position)
 	mark_falling = false
+	tank_stopped_falling.emit(self)
+	
 #endregion
 
 #region Weapon Use
