@@ -78,19 +78,22 @@ func refresh_list(path) -> void:
 				add_menu_item(composite_path, _on_level_selected)
 		
 func recursive_files_and_folders(directory) -> Array:
+	#print(directory)
 	var items: Array
-	print(directory)
+	
 	items.append(directory)
-	var filepaths = DirAccess.get_files_at(directory)
+	var filepaths = ResourceLoader.list_directory(directory)
+	#var filepaths = DirAccess.get_files_at(directory)
 	for filepath in filepaths:
 		print(filepath)
 		if filepath.ends_with("tscn"): # PackedScene
 			items.append(filepath)
 			
-	var subdirectories = DirAccess.get_directories_at(directory)
-	if not subdirectories.is_empty():
-		for sub in subdirectories:
-			items.append_array(recursive_files_and_folders(directory+"/"+sub))
+	if OS.is_debug_build():
+		var subdirectories = DirAccess.get_directories_at(directory) # Won't work in exported projects
+		if not subdirectories.is_empty():
+			for sub in subdirectories:
+				items.append_array(recursive_files_and_folders(directory+"/"+sub))
 	return items
 	
 func add_menu_item(item = null, press_call:Callable = _on_level_selected) -> void:

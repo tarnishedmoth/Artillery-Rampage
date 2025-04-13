@@ -80,7 +80,8 @@ var debuff_emp_discharge_per_turn:float = 60.0
 	get:
 		return color
 		
-@onready var controller:TankController = get_parent()
+#@onready var controller:TankController = get_parent()
+@onready var controller = get_parent()
 
 func _on_update_color():
 	modulate = color

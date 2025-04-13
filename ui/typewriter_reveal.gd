@@ -35,6 +35,7 @@ func _init() -> void: push_error("Abstract class")
 
 ## Use this to apply the effect to a node.
 static func effect(node:Control, speed:float = DEFAULT_SPEED) -> void:
+	clear(node)
 	if "set_visible_characters" in node:
 		var new_timer = TypewriterTextRevealer.new()
 		node.add_child(new_timer)

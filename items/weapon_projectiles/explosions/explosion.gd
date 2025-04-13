@@ -1,5 +1,8 @@
 class_name Explosion extends Node2D
 
+signal started
+signal completed
+
 ## Starts SFX and Particles and frees itself once all are finished.
 ## This class only handles CPUParticles2D and AudioStreamPlayer2D at this time.
 ## It will wait until all nodes assigned in the Inspector export properties have
@@ -36,18 +39,21 @@ func play_all() -> void:
 	for light in lights:
 		fade_light(light)
 	
-	var started:int = 0
+	var played:int = 0
 	for player in sfx:
 		player.finished.connect(_on_sfx_finished)
 		player.play() # We could just set the nodes themselves to autoplay & not intervene
-		started += 1
-	if emitted > 0 or started > 0:
-		print_debug("Explosion handled ",started," sfx & ",emitted," particles.")
+		played += 1
+	if emitted > 0 or played > 0:
+		print_debug("Explosion handled ",played," sfx & ",emitted," particles.")
 	else:
 		free_after_delay() # Bad configuration
 		
+	started.emit()
+		
 func check_all_finished() -> void:
 	if _finished_particles == particles.size() and _finished_sfx == sfx.size():
+		completed.emit()
 		queue_free()
 		
 func free_after_delay() -> void:
