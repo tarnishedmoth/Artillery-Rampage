@@ -21,16 +21,6 @@ min_damage = 2.0
 max_damage = 16.0
 destructible_scale_multiplier = Vector2(2, 2)
 
-[node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="."]
-visible = false
-z_index = 20
-scale = Vector2(0.183745, 0.183745)
-amount = 100
-lifetime = 5.0
-gravity = Vector2(0, 0)
-scale_amount_min = 4.0
-scale_amount_max = 4.0
-
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.09, 0.09)
 texture = ExtResource("3_0dbsd")
