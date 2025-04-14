@@ -6,3 +6,6 @@
 [node name="ShatterableTree" instance=ExtResource("1_xu8tq")]
 
 [node name="TreeBody" parent="BodyContainer" index="0" instance=ExtResource("2_h0drd")]
+
+[node name="ShatterCompletionTimer" type="Timer" parent="." index="2"]
+wait_time = 0.1
