@@ -2,7 +2,6 @@ class_name ShatterableObject extends Node2D
 
 @onready var _destructible_shape_calculator: DestructibleShapeCalculator = $DestructibleShapeCalculator
 @onready var _body_container:Node = $BodyContainer
-@onready var _shatter_completion_timer:Timer = $ShatterCompletionTimer
 
 var _shatter_in_progress:bool = false
 
@@ -14,7 +13,6 @@ signal body_deleted(body: Node2D)
 
 func _ready() -> void:
 	body_deleted.connect(_on_body_deleted)
-	_shatter_completion_timer.timeout.connect(_on_shatter_cooldown_complete)
 	
 	for body in _body_container.get_children():
 		body.owner = self		
@@ -43,7 +41,6 @@ func damage(body: ShatterableObjectBody, projectile: WeaponProjectile, contact_p
 	_delay_shatter_complete()
 	
 func _delay_shatter_complete() -> void:
-	# _shatter_completion_timer.start()
 	# wait a couple frames - we don't necessarily want to delay a long time as want to destroy the small pieces faster if hit
 	# it with a multi-shot weapon
 	var process_frame := get_tree().process_frame
@@ -58,9 +55,7 @@ func _on_shatter_cooldown_complete() -> void:
 	
 func delete() -> void:
 	print_debug("ShatterableObject(%s) - delete" % [name])
-	
-	_shatter_completion_timer.stop()
-	
+		
 	destroyed.emit(self)
 
 	queue_free.call_deferred()
