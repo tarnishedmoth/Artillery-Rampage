@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dwgn8g6vo2w3h"]
+[gd_scene load_steps=19 format=3 uid="uid://dwgn8g6vo2w3h"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_pnpmv"]
 [ext_resource type="AudioStream" uid="uid://o2aq3qhc7qb" path="res://music/SoundtrackWhitecaps.mp3" id="2_2r3lq"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bbgp31owjo7sk" path="res://background_items/background_snowymountains.png" id="3_a2cra"]
 [ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="3_lov0y"]
 [ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="4_n4c4h"]
+[ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="4_qpo8v"]
 [ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="5_sb62s"]
 [ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="6_pm32d"]
 [ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="7_3dhxr"]
@@ -15,9 +16,17 @@
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="9_wirxa"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="10_i8u8w"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n0lpj"]
+shader = ExtResource("4_qpo8v")
+shader_parameter/amount = Vector3(0.65, 0.8, 0.85)
+shader_parameter/multiply = 1.25
+shader_parameter/minimum = 0.0
+shader_parameter/maximum = 1.15
+
 [sub_resource type="Resource" id="Resource_yxvgw"]
 script = ExtResource("2_qth8w")
 texture = ExtResource("3_356m7")
+material = SubResource("ShaderMaterial_n0lpj")
 repeat = 2
 offset = Vector2(0, 0)
 

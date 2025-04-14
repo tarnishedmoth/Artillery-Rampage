@@ -1,7 +1,8 @@
-[gd_scene load_steps=18 format=3 uid="uid://chyc3ellb55lr"]
+[gd_scene load_steps=20 format=3 uid="uid://chyc3ellb55lr"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_pecm2"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="3_ok7pe"]
+[ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_v5hmv"]
 [ext_resource type="Texture2D" uid="uid://c6drjfyj22hs4" path="res://terrain/terrain-grass-to-dirt.png" id="4_sgex8"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_h3ok2"]
 [ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="6_cywuh"]
@@ -16,9 +17,17 @@
 [ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="14_r0sp1"]
 [ext_resource type="PackedScene" uid="uid://cdu7jxpquqjer" path="res://environment/trees/shatterable_tree.tscn" id="15_we1am"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cr1wu"]
+shader = ExtResource("3_v5hmv")
+shader_parameter/amount = Vector3(1, 1, 1.29)
+shader_parameter/multiply = 1.0
+shader_parameter/minimum = 0.0
+shader_parameter/maximum = 1.5
+
 [sub_resource type="Resource" id="Resource_msmqt"]
 script = ExtResource("3_ok7pe")
 texture = ExtResource("4_sgex8")
+material = SubResource("ShaderMaterial_cr1wu")
 repeat = 3
 offset = Vector2(0, 0)
 
@@ -36,7 +45,7 @@ fractal_gain = 0.605
 texture_resources = Array[ExtResource("3_ok7pe")]([SubResource("Resource_msmqt")])
 
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
-polygon = PackedVector2Array(-104, -8, 101.563, -1.47058, 283.594, 1.47058, 385.156, 25, 460.156, 95.5883, 547.656, 29.4117, 639.844, 7.35297, 753.125, 1.47058, 937, -3, 945, 445, -103, 448)
+polygon = PackedVector2Array(-104, -8, 101.563, -1.47058, 283.594, 1.47058, 385.156, 25, 460.156, 95.5883, 547.656, 29.4117, 639.844, 7.35297, 753.125, 1.47058, 950, -2.94116, 945, 445, -103, 448)
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("5_h3ok2")]
 noise_template = SubResource("FastNoiseLite_iuf40")

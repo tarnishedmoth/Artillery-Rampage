@@ -1,7 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://wu7hqwxsows8"]
+[gd_scene load_steps=18 format=3 uid="uid://wu7hqwxsows8"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_jka4u"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_6fado"]
+[ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_bl5yk"]
 [ext_resource type="Texture2D" uid="uid://byy76mvisn1j0" path="res://terrain/terrain-strata.png" id="3_tk06e"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="4_f3wsx"]
 [ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="5_eq7ts"]
@@ -14,9 +15,17 @@
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="11_0jupl"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="12_07oax"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_52q06"]
+shader = ExtResource("3_bl5yk")
+shader_parameter/amount = Vector3(1, 1, 1)
+shader_parameter/multiply = 1.35
+shader_parameter/minimum = 0.0
+shader_parameter/maximum = 1.15
+
 [sub_resource type="Resource" id="Resource_msmqt"]
 script = ExtResource("2_6fado")
 texture = ExtResource("3_tk06e")
+material = SubResource("ShaderMaterial_52q06")
 repeat = 3
 offset = Vector2(0, 400)
 

@@ -2,6 +2,7 @@ class_name TerrainChunk extends StaticBody2D
 
 class TerrainTexture:
 	@export var texture: Texture2D
+	@export var material: Material
 	@export var repeat: CanvasItem.TextureRepeat = CanvasItem.TextureRepeat.TEXTURE_REPEAT_DISABLED
 	@export var offset: Vector2
 	

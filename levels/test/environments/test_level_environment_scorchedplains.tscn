@@ -1,8 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://6th82t2sjqi7"]
+[gd_scene load_steps=19 format=3 uid="uid://6th82t2sjqi7"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_rsg1u"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_pssa8"]
 [ext_resource type="Texture2D" uid="uid://couf67gr1ds88" path="res://background_items/background_scorchedplains.png" id="2_s1lmh"]
+[ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_5kcrr"]
 [ext_resource type="Texture2D" uid="uid://bqds07ajtn7ei" path="res://terrain/terrain-scorched-earth.png" id="4_gdugl"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="4_x5dsb"]
 [ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="5_6ok1n"]
@@ -15,9 +16,17 @@
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="12_lropv"]
 [ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="13_hwjp5"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wfvon"]
+shader = ExtResource("3_5kcrr")
+shader_parameter/amount = Vector3(1.6, 1.6, 1.6)
+shader_parameter/multiply = 1.0
+shader_parameter/minimum = 0.0
+shader_parameter/maximum = 1.5
+
 [sub_resource type="Resource" id="Resource_msmqt"]
 script = ExtResource("2_pssa8")
 texture = ExtResource("4_gdugl")
+material = SubResource("ShaderMaterial_wfvon")
 repeat = 3
 offset = Vector2(0, 0)
 

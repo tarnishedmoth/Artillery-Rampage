@@ -1,14 +1,22 @@
 class_name TerrainChunkTextureResource extends Resource
 
 @export var texture: Texture2D
+@export var material: Material
 @export var repeat: CanvasItem.TextureRepeat
 @export var offset: Vector2
 
 # Make sure that every parameter has a default value.
 # Otherwise, there will be problems with creating and editing
 # your resource via the inspector.
-func _init(p_texture:Texture2D = null, p_repeat: CanvasItem.TextureRepeat = CanvasItem.TextureRepeat.TEXTURE_REPEAT_DISABLED, p_offset: Vector2 = Vector2.ZERO):
+func _init(
+	p_texture:Texture2D = null,
+	p_material:Material = null,
+	p_repeat: CanvasItem.TextureRepeat = CanvasItem.TextureRepeat.TEXTURE_REPEAT_DISABLED,
+	p_offset: Vector2 = Vector2.ZERO
+	):
+		
 	texture = p_texture
+	material = p_material
 	repeat = p_repeat
 	offset = p_offset
 	 
@@ -19,6 +27,7 @@ func matches(_chunk: TerrainChunk) -> bool:
 func apply_to(chunk: TerrainChunk) -> void:
 	var mesh: Polygon2D = chunk.terrainMesh
 	
+	mesh.material = material
 	mesh.set_texture(texture)
 	mesh.texture_repeat = repeat
 	mesh.texture_offset = offset
