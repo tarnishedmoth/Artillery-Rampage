@@ -4,8 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://da6l1fpnsnt5m" path="res://utils/fade_out_audio_stream_player.tscn" id="2_fp170"]
 
 [node name="Announcer" type="Node"]
+process_mode = 1
 script = ExtResource("1_ik160")
 announcement_queue_turn_delay = 0.25
 
 [node name="AnnouncerSfx" parent="." instance=ExtResource("2_fp170")]
-default_fade_out = 2.0
+default_fade_out = 0.5

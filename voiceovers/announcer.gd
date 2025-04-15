@@ -16,6 +16,9 @@ class_name Announcer extends Node
 
 @export_range(0, 100, 1, "or_greater") var vandal_object_destroyed_threshold:int = 3
 
+## Minimum fraction of health to lose from fall damage to trigger "Free-Fallin' announcement
+@export var free_fallin_health_fraction_loss_threshold = 0.5
+
 var _game_level:GameLevel
 var _player:Player
 var _last_turn_player: TankController
@@ -24,9 +27,15 @@ var _first_kill_time:float = 0.0
 var _num_opponents:int
 var _last_enemy_damage:float 
 
+class StampedAnnouncement:
+	var res:StringName
+	var game_time:float
+
+var _stamped_announcements:Array[StampedAnnouncement] = []
 var _queued_announcements:Array[StringName] = []
 
 var _objects_vandalized_by_player:Dictionary[int,bool] = {}
+var _falling_players:Dictionary[int,float] = {}
 
 # Destroy all opposing units on map with one shot
 const annilation_sfx_res:StringName =  &"res://voiceovers/annihilation.mp3"
@@ -75,6 +84,9 @@ func _ready() -> void:
 	announcer_player.priority_dictionary[gravity_kill_sfx_res] = 20
 	announcer_player.priority_dictionary[overkill_sfx_res] = 10
 
+func _process(delta: float) -> void:
+	_check_stamped_announcements()
+	
 func _on_level_loaded(level: GameLevel) -> void:
 	_game_level = level
 	print_debug("%s: Level loaded - name=%s" % [name, _game_level.level_name])
@@ -112,7 +124,7 @@ func _on_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2
 
 	# See if this is a water kill by player
 	if _last_turn_player == _player and instigator is WaterHazard:
-		print_debug("%s: Player water-killed %s" % [name, tank.get_parent()])
+		print_debug("%s: Player water-killed %s" % [name, tank.owner])
 		announcer_player.switch_stream_res_and_play(water_kill_sfx_res)
 	
 	# Start clock for multi-kill
@@ -138,47 +150,72 @@ func _on_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2
 		var projectile:WeaponProjectile = instigator as WeaponProjectile
 		var max_damage_to_max_health:float = projectile.max_damage  / tank.max_health
 		if damage_pct <= enemy_health_fraction_overkill_threshold and max_damage_to_max_health >= max_damage_to_max_health:
-			print_debug("%s: Player triggered overkill with %s on %s" % [name, projectile.source_weapon.display_name, tank.get_parent()])
+			print_debug("%s: Player triggered overkill with %s on %s" % [name, projectile.source_weapon.display_name, tank.owner])
 			_queued_announcements.push_back(overkill_sfx_res)
 
 func _on_turn_ended(player: TankController) -> void:
 	await get_tree().create_timer(announcement_queue_turn_delay).timeout
 	_trigger_queued_announcement()
-	
+
+#region Announcement Batching
+
 func _trigger_queued_announcement() -> void:
 	print_debug("%s: Trigger queued announcements: %d" % [name, _queued_announcements.size()])
-	# Trigger highest priority sound
-	_queued_announcements.sort_custom(
+	_trigger_highest_priority_sfx(_queued_announcements)
+
+func _check_stamped_announcements() -> void:
+	if _stamped_announcements.is_empty() or not is_instance_valid(_game_level):
+		return
+		
+	var current_time:float = _game_level.game_timer.time_seconds
+	var annoucements:Array[StringName] = []
+	
+	# Determine ones meeting criteria
+	for i in range(_stamped_announcements.size() - 1, -1, -1):
+		var stamped_announcement:StampedAnnouncement = _stamped_announcements[i]
+		if stamped_announcement.game_time >= current_time:
+			annoucements.push_back(stamped_announcement.res)
+			_stamped_announcements.erase(stamped_announcement)
+	
+	_trigger_highest_priority_sfx(annoucements)
+	
+	print_debug("%s: %d stamped announcements remain" % [name, _stamped_announcements.size()])
+	
+func _add_stamped_announcement(resource:StringName, delta_time: float) -> void:
+		var game_timer:GameTimer = _game_level.game_timer
+		var annoucement := StampedAnnouncement.new()
+		annoucement.res = resource
+		annoucement.game_time = game_timer.time_seconds + delta_time
+		
+		_stamped_announcements.push_back(annoucement)
+		
+func _trigger_highest_priority_sfx(announcements: Array[StringName]) -> void:
+	announcements.sort_custom(
 		func(a:StringName, b:StringName) -> bool:
 			return announcer_player.priority_dictionary.get(a, -1) > announcer_player.priority_dictionary.get(b, -1)
 	)
 	
-	if !_queued_announcements.is_empty():
-		announcer_player.switch_stream_res_and_play(_queued_announcements.front())
-		_queued_announcements.clear()
-	
-func _on_player_took_damage(_tank: Tank, instigatorController: Node2D, _instigator: Node2D, amount: float) -> void:
-		pass
+	if !announcements.is_empty():
+		announcer_player.switch_stream_res_and_play(announcements.front())
+		announcements.clear()
+
+#endregion
+
+func _on_player_took_damage(tank: Tank, instigatorController: Node2D, instigator: Node2D, amount: float) -> void:
+	_check_gravity_damage_announce(tank, instigatorController, instigator, amount)
 		
-func _on_enemy_took_damage(_tank: Tank, instigatorController: Node2D, _instigator: Node2D, amount: float) -> void:
-	# Make sure player was instigator
-	if instigatorController != _player:
-		print_debug("%s: Ignore enemy took damage as wasn't by player - instigator=%s" % [name, instigatorController.name])	
-		return
+func _on_enemy_took_damage(tank: Tank, instigatorController: Node2D, instigator: Node2D, amount: float) -> void:
+	if instigatorController == _player:
+		print_debug("%s: Enemy took damage by player - enemy=%s; amount=%f" % [name, tank.owner, amount])	
+		_last_enemy_damage = amount 
+	else:
+		_check_gravity_damage_announce(tank, instigatorController, instigator, amount)
 		
-	print_debug("%s: Enemy took damage by player - enemy=%s; amount=%f" % [name, _tank.get_parent().name, amount])	
-	_last_enemy_damage = amount 
-	
 func _on_turn_started(player: TankController) -> void:
 	print_debug("%s: Player turn started" % [name])
 	_last_turn_player = player
 	if player == _player:
 		_kill_count = 0
-
-func _on_tank_started_falling(tank: Tank) -> void:
-	pass
-func _on_tank_stopped_falling(tank: Tank) -> void:
-	pass
 
 #region Vandalism
 
@@ -203,4 +240,49 @@ func _on_object_took_damage(object: Node, instigatorController: Node2D, _instiga
 		print_debug("%s: Triggering vandal announcement - Player vandalized %d objects" % [name, _objects_vandalized_by_player.size()])
 		_queued_announcements.push_back(vandal_sfx_res)
 
+#endregion
+
+#region Fall Damage
+
+func _on_tank_started_falling(tank: Tank) -> void:
+	var controller:TankController = tank.owner
+	if controller:
+		print_debug("%s - %s started falling" % [name, controller.name])
+		_falling_players[controller.get_instance_id()] = tank.health
+		
+func _on_tank_stopped_falling(tank: Tank) -> void:
+	var controller:TankController = tank.owner
+	if controller:
+		print_debug("%s - %s stopped falling" % [name, controller.name])
+		# This doesn't trigger until after the damage event so we can use the data stored to check for amount
+		_falling_players.erase(controller.get_instance_id())
+
+func _check_gravity_damage_announce(tank: Tank, instigator_controller: Node2D, instigator: Node2D, amount: float) -> void:
+	# For gravity damage the instigatorController is self and instigator is tank itself
+	# TODO: Have a damage type and falling as this type or have a separate event to distinguish more reliably
+	if instigator_controller != tank.owner or instigator != tank:
+		return
+		
+	var instigator_id:int = instigator_controller.get_instance_id()
+	if not instigator_id in _falling_players:
+		print_debug("%s - _check_gravity_damage_announce - false positive on %s as wasn't in the falling dictionary" % [name, instigator_controller])
+		return
+	
+	var starting_health:float = _falling_players[instigator_id]
+	var is_kill:bool = is_equal_approx(amount, starting_health)
+	
+	if is_kill:
+		print_debug("%s - _check_gravity_damage_announce: player %s killed by gravity alone" % [name, instigator_controller])
+		#_queued_announcements.push_back(gravity_kill_sfx_res)
+		_add_stamped_announcement(gravity_kill_sfx_res, 0.1)
+	else:
+		var loss_fraction:float = amount / tank.max_health
+		var trigger_damage_alert:bool = loss_fraction >= free_fallin_health_fraction_loss_threshold
+	
+		print_debug("%s - _check_gravity_damage_announce: player=%s; amount=%f; loss_fraction=%f; trigger=%s" % [name, instigator_controller, amount, loss_fraction, trigger_damage_alert])
+	
+		if trigger_damage_alert:
+			#_queued_announcements.push_back(free_falling_sfx_res)
+			_add_stamped_announcement(free_falling_sfx_res, 0.1)
+		
 #endregion
