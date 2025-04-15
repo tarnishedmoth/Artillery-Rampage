@@ -112,6 +112,9 @@ func _ready() -> void:
 	tankBody.contact_monitor = true
 	tankBody.max_contacts_reported = 1
 
+func _to_string() -> String:
+	return name
+	
 func apply_pending_state(state: PlayerState) -> void:
 	# TODO: This feels hacky but _ready has already run for children when this is called
 	scan_available_weapons()
