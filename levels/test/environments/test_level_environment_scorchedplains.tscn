@@ -67,6 +67,7 @@ default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
 
 [node name="StaticBackground" type="Sprite2D" parent="GameLevel"]
+modulate = Color(1, 1, 1, 0.635294)
 z_index = -98
 texture_filter = 6
 position = Vector2(-3, -132.885)

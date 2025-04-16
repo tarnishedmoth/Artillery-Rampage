@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://xbbrj3p1ed11"]
+[gd_scene load_steps=12 format=3 uid="uid://xbbrj3p1ed11"]
 
 [ext_resource type="Script" uid="uid://bl6jwqokvmogc" path="res://items/weapon_projectiles/explosions/explosion.gd" id="1_wjfsp"]
 [ext_resource type="AudioStream" uid="uid://dlh3tqoi34qet" path="res://items/weapon_projectiles/explosions/sounds/sfx_small_explosion.wav" id="2_ba8uh"]
 [ext_resource type="PackedScene" uid="uid://cjk1xlwijbmno" path="res://items/weapon_projectiles/explosions/dust.tscn" id="3_1x5fp"]
+[ext_resource type="AudioStream" uid="uid://bvdegnhqkad5d" path="res://weapons/sounds/sfx_shot_a_6.wav" id="3_xheie"]
 
 [sub_resource type="Curve" id="Curve_n12t2"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.131075, 0.637572), -2.22803, -2.22803, 0, 0, Vector2(1, 0.0414279), -0.0869588, 0.0, 0, 0]
@@ -43,14 +44,21 @@ fill_to = Vector2(0.9, 0.9)
 [node name="ExplosionEMP" type="Node2D" node_paths=PackedStringArray("particles", "sfx", "lights")]
 script = ExtResource("1_wjfsp")
 particles = [NodePath("CPUParticles2D"), NodePath("Dust")]
-sfx = [NodePath("AudioStreamPlayer2D")]
+sfx = [NodePath("Explode"), NodePath("Explode2")]
 lights = [NodePath("PointLight2D")]
 lights_fade_time = 0.65
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="Explode" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("2_ba8uh")
 pitch_scale = 0.45
-bus = &"SFX"
+bus = &"Guns"
+area_mask = 2
+
+[node name="Explode2" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_xheie")
+volume_db = -7.0
+pitch_scale = 0.7
+bus = &"Guns"
 area_mask = 2
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
@@ -76,6 +84,7 @@ color_ramp = SubResource("Gradient_fapac")
 color_initial_ramp = SubResource("Gradient_r6uu2")
 
 [node name="Dust" parent="." instance=ExtResource("3_1x5fp")]
+modulate = Color(0.788948, 0.974265, 1, 1)
 amount = 6
 lifetime = 2.5
 emission_sphere_radius = 16.0

@@ -13,11 +13,13 @@ stream_0/stream = ExtResource("3_gu30n")
 [node name="WeaponEMP" type="Node2D" node_paths=PackedStringArray("sfx_fire")]
 script = ExtResource("1_i3iqj")
 scene_to_spawn = ExtResource("2_cj6ii")
-display_name = "Contact EMP"
+display_name = "EMP"
+accuracy_angle_spread = 0.0174533
 fire_velocity = 1000.0
 retain_when_empty = false
 use_ammo = true
-current_ammo = 3
+current_ammo = 1
+magazine_capacity = 0
 sfx_fire = NodePath("Fire")
 
 [node name="Fire" type="AudioStreamPlayer2D" parent="."]

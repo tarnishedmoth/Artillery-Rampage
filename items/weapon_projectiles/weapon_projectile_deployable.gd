@@ -21,6 +21,8 @@ class_name WeaponProjectileDeployable extends WeaponProjectile
 @export_group("Turn Behavior")
 @export var destroy_after_deployed:bool = true
 @export var destroy_after_deployables_destroyed:bool = false ## For spawning new projectiles i.e. MIRV
+@export_category("NOTE: WeaponProjectile settings below do not apply to deployable scene_to_spawn.")
+@export var understood:bool ## This has no effect.
 #@export var 
 # public
 var deployed_container:Node2D

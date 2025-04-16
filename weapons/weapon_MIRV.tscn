@@ -21,8 +21,9 @@ use_fire_rate = true
 fire_rate = 1.0
 retain_when_empty = false
 use_ammo = true
-current_ammo = 18
-ammo_used_per_shot = 3
+current_ammo = 6
+magazines = 1
+magazine_capacity = 6
 sfx_fire = NodePath("Fire")
 
 [node name="Fire" type="AudioStreamPlayer2D" parent="."]

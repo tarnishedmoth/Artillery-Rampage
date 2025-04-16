@@ -14,14 +14,16 @@ stream_0/stream = ExtResource("3_f8es1")
 [node name="WeaponMiniMIRV" type="Node2D" node_paths=PackedStringArray("sfx_fire")]
 script = ExtResource("1_0yig6")
 scene_to_spawn = ExtResource("2_b70co")
-display_name = "Mini-MIRV"
-accuracy_angle_spread = 0.0523599
+display_name = "MIRV Mini"
+accuracy_angle_spread = 0.0698132
 fire_velocity = 1000.0
 power_launch_speed_mult = 1.1
 use_fire_rate = true
 fire_rate = 1.0
 retain_when_empty = false
 use_ammo = true
+current_ammo = 6
+magazine_capacity = 6
 sfx_fire = NodePath("Fire")
 
 [node name="Fire" type="AudioStreamPlayer2D" parent="."]

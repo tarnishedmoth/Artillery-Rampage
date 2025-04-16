@@ -281,7 +281,7 @@ func shoot_for_duration(duration:float = always_shoot_for_duration, power:float 
 	
 	if use_fire_rate == false and fires_continuously == false:
 		## Prevent projectiles spawning every frame.
-		assert("You must use_fire_rate on this Weapon to shoot for duration!")
+		push_error("You must use_fire_rate on this Weapon to shoot for duration!")
 		use_fire_rate = true
 	
 	_shoot(power)
@@ -317,8 +317,11 @@ func reload(immediate: bool = false) -> void:
 		#if sfx_reload: sfx_reload.play() ## Trigger the SFX to play on start
 		if not immediate: ## Instant reloading
 			await get_tree().create_timer(reload_delay_time).timeout ## Reload Timer
-		current_ammo = magazine_capacity ## Reset ammo
-		if use_magazines: magazines -= 1
+		if use_magazines:
+			current_ammo = magazine_capacity ## Reset ammo
+			magazines -= 1
+		else:
+			current_ammo = _starting_ammo
 	else:
 		pass
 	is_reloading = false ## Finished reloading.

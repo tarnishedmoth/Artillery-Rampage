@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dps6lqs28tqa1"]
+[gd_scene load_steps=13 format=3 uid="uid://dps6lqs28tqa1"]
 
 [ext_resource type="Script" uid="uid://drk5s6oo6lloa" path="res://controller/player/player.gd" id="1_t03mm"]
 [ext_resource type="PackedScene" uid="uid://dvr6bm2hlj5h4" path="res://tank/tank.tscn" id="2_3s1jp"]
@@ -6,9 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="4_khwvf"]
 [ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="5_arar1"]
 [ext_resource type="PackedScene" uid="uid://hlpewhe5vg2k" path="res://weapons/weapon_leadball_shotgun.tscn" id="5_lcvh8"]
+[ext_resource type="PackedScene" uid="uid://cbek5kw6n2l41" path="res://weapons/weapon_emp.tscn" id="6_c14li"]
 [ext_resource type="PackedScene" uid="uid://bx3va4wmvmw4o" path="res://weapons/weapon_MIRV.tscn" id="7_8sa47"]
 [ext_resource type="PackedScene" uid="uid://dnc0x4uvh6tq8" path="res://weapons/weapon_meganuke.tscn" id="7_dhpe0"]
 [ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="8_j0lm5"]
+[ext_resource type="PackedScene" uid="uid://ccl2oyo13754i" path="res://weapons/weapon_MiniMIRV.tscn" id="9_4e8rn"]
 [ext_resource type="PackedScene" uid="uid://do2r411gtohhx" path="res://weapons/weapon_missile_homing.tscn" id="10_lvkgb"]
 
 [node name="Player" type="Node2D" node_paths=PackedStringArray("weapons_container")]
@@ -30,10 +32,14 @@ autostart = true
 [node name="WeaponLeadballShotgun" parent="Weapons" instance=ExtResource("5_lcvh8")]
 fire_velocity = 600.0
 
+[node name="WeaponEMP" parent="Weapons" instance=ExtResource("6_c14li")]
+
 [node name="WeaponKilonuke" parent="Weapons" instance=ExtResource("5_arar1")]
 current_ammo = 3
 
 [node name="WeaponMeganuke" parent="Weapons" instance=ExtResource("7_dhpe0")]
+
+[node name="WeaponMiniMIRV" parent="Weapons" instance=ExtResource("9_4e8rn")]
 
 [node name="WeaponDeployableMIRV" parent="Weapons" instance=ExtResource("7_8sa47")]
 
