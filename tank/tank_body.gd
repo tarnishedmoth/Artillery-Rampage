@@ -6,11 +6,8 @@ var queue_reset_orientation: bool = false
 @warning_ignore("unused_signal")
 signal on_reset_orientation(tankBody: TankBody)
 
-var _original_pos:Vector2
-
 func _ready() -> void:
 	orig_gravity = gravity_scale
-	_original_pos = position
 
 func toggle_gravity(enabled: bool) -> void:
 	print("Tank(%s): toggle_gravity - %s" % [get_parent().get_parent().name, str(enabled)])
@@ -42,20 +39,6 @@ func _do_reset_orientation(state: PhysicsDirectBodyState2D) -> void:
 	
 	rotation = 0
 	
-	# Both of the below cause physics glitches
-	# Because the tank body is attached to a Node2D its parent position is getting "out of sync" with the rigid body so must correct it
-	# var pos_delta:Vector2 = position - _original_pos
-	# var parent_2d:Node2D = get_parent() as Node2D
-	# if parent_2d:
-	# 	parent_2d.position += pos_delta
-	# 	position = _original_pos
-
-	# Because the tank body is attached to a Node2D its parent position is getting "out of sync" with the rigid body so must correct it
-	# Doing this in _integrate_forces causes physics engine issues and things never "settle"
-	# var parent_2d:Node2D = get_parent() as Node2D
-	# if parent_2d:
-	# 	parent_2d.global_position = global_position
-
 	emit_signal("on_reset_orientation", self)
 	
 func is_falling() -> bool:

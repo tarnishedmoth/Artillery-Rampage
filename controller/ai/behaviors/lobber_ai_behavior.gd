@@ -158,7 +158,7 @@ func _modify_shot_based_on_history(shot: Dictionary) -> void:
 		return
 
 	var my_pos:Vector2 = aim_fulcrum_position
-	var opp_pos:Vector2 = shot.opponent.tank.tankBody.global_position
+	var opp_pos:Vector2 = shot.opponent.tank.global_position
 
 	# Compensate based on last shot but ignore if delta is too large
 	var last_entry: OpponentTargetHistory = opponent_target_history.back()
@@ -304,9 +304,9 @@ func _select_best_opponent() -> Dictionary:
 	# First try to test power and angle with a hit test and then try it without as can still try and destroy the object rather than take a blind shot
 	for hit_test in [true, false]:
 		for opponent in opponents:
-			var adjusted_opponent_position: Vector2 = get_target_end_walls(tank.tankBody.global_position, opponent.tank.tankBody.global_position, forces_mask)
+			var adjusted_opponent_position: Vector2 = get_target_end_walls(tank.global_position, opponent.tank.global_position, forces_mask)
 
-			var distance: float = tank.tankBody.global_position.distance_squared_to(adjusted_opponent_position)
+			var distance: float = tank.global_position.distance_squared_to(adjusted_opponent_position)
 
 			if is_equal_approx(closest_distance, sentinel_dist) or _is_better_fallback_opponent(opponent, closest_opponent, distance, closest_distance):
 				closest_distance = distance
@@ -326,7 +326,7 @@ func _select_best_opponent() -> Dictionary:
 	
 	if closest_direct_opponent:
 		var transformed_angle = global_angle_to_turret_angle(closest_targeting_values.angle)
-		var angle: float = transformed_angle if closest_direct_opponent_pos.x >= tank.tankBody.global_position.x else -transformed_angle
+		var angle: float = transformed_angle if closest_direct_opponent_pos.x >= tank.global_position.x else -transformed_angle
 
 		return { direct = true, opponent = closest_direct_opponent, angle = angle, power = closest_targeting_values.power, adjusted_position = closest_direct_opponent_pos, distance = sqrt(closest_direct_shot_distance) }
 
@@ -334,7 +334,7 @@ func _select_best_opponent() -> Dictionary:
 	else:
 		var transformed_angle = global_angle_to_turret_angle(angles.min())
 
-		var angle: float = transformed_angle if closest_opponent_position.x >= tank.tankBody.global_position.x else -transformed_angle
+		var angle: float = transformed_angle if closest_opponent_position.x >= tank.global_position.x else -transformed_angle
 		var dir: Vector2 = aim_angle_to_world_direction(angle)
 		# Determine point we hit in that direction
 		var ray_cast_result: Dictionary = check_world_collision(tank.turret.global_position, tank.turret.global_position + dir * 10000.0)
@@ -347,7 +347,7 @@ func _select_best_opponent() -> Dictionary:
 		return result
 
 func _get_power_and_angle_to_opponent(opponent: TankController, launch_props: AIBehavior.LaunchProperties, hit_test:bool = true) -> Dictionary:
-	var target: Vector2 = opponent.tank.tankBody.global_position
+	var target: Vector2 = opponent.tank.global_position
 
 	for angle in angles:
 		var power := get_power_for_target_and_angle(target, angle, launch_props, forces_mask, hit_test)
@@ -371,9 +371,9 @@ func _select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavi
 
 	# We are going to hit something other than opponent tank first
 	if opponent_data.has("hit_position"):
-		target_distance = tank.tankBody.global_position.distance_to(opponent_data.hit_position)
+		target_distance = tank.global_position.distance_to(opponent_data.hit_position)
 	else:
-		target_distance = tank.tankBody.global_position.distance_to(opponent_data.adjusted_position)
+		target_distance = tank.global_position.distance_to(opponent_data.adjusted_position)
 
 	# Select most powerful available weapon that won't cause self-damage
 	var player_has_not_fired:bool = _target_is_player_and_has_not_fired(opponent_data.opponent)

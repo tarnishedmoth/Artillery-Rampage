@@ -378,7 +378,7 @@ func _check_for_sniper_shot(enemy: Tank, instigator: Node2D) -> void:
 	if not _player_wall_interactions.is_empty() or not is_instance_valid(_player) or not _is_direct_shot(enemy, instigator):
 		return
 	# Determine x distance
-	var dist_x:float = absf(_player.tank.tankBody.global_position.x - enemy.tankBody.global_position.x)
+	var dist_x:float = absf(_player.tank.global_position.x - enemy.global_position.x)
 	var level_bounds_x:float = _game_level.walls.bounds.size.x
 	var dist_fraction:float = dist_x / level_bounds_x
 	var is_sniper_shot:bool = dist_fraction >= sniper_shot_bounds_dist_threshold
