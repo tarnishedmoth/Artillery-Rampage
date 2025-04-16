@@ -138,3 +138,6 @@ func _randomize_impact_velocity_dir(impact_velocity_dir: Vector2) -> Vector2:
 	var angle_dev: float = deg_to_rad(randf_range(min_velocity_angle_dev, max_velocity_angle_dev))
 	var random_angle: float = angle_dev * MathUtils.randf_sgn()
 	return impact_velocity_dir.rotated(random_angle)
+
+func _to_string() -> String:
+	return name

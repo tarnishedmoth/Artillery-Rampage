@@ -305,3 +305,6 @@ func get_bounds_global() -> Rect2:
 	for chunk in get_chunks():
 		bounds = bounds.merge(chunk.get_bounds_global())
 	return bounds
+
+func _to_string() -> String:
+	return name

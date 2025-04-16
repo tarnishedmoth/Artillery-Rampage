@@ -169,3 +169,6 @@ func delete() -> void:
 	destroyed.emit(self)
 
 	queue_free.call_deferred()
+
+func _to_string() -> String:
+	return name

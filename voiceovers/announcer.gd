@@ -37,6 +37,8 @@ var _queued_announcements:Array[StringName] = []
 var _objects_vandalized_by_player:Dictionary[int,bool] = {}
 var _falling_players:Dictionary[int,float] = {}
 
+var _terrain_break_frame:int = -1
+
 # Destroy all opposing units on map with one shot
 const annilation_sfx_res:StringName =  &"res://voiceovers/annihilation.mp3"
 
@@ -95,7 +97,15 @@ func _on_round_started() -> void:
 	# This is called AFTER all players added
 	print_debug("%s: Round Started - level=%s" % [name, _game_level.level_name])
 	_num_opponents = _game_level.round_director.tank_controllers.size() - 1
-		
+	
+	if is_avalance_level:
+		print_debug("%s - subscribing to terrain fracture events for avalanche level" % name)
+		_game_level.terrain.chunk_split.connect(_on_terrain_chunk_split)
+
+func _on_terrain_chunk_split(chunk: TerrainChunk,  new_chunk: TerrainChunk) -> void:
+	print_debug("%s: Terrain Chunk split: chunk=%s; new_chunk=%s" % [name, chunk, new_chunk])
+	_terrain_break_frame = _game_level.game_timer.frame
+	
 func _on_round_ended() -> void:
 	print_debug("%s: Round ended -  level=%s" % [name, _game_level.level_name])
 	
@@ -121,7 +131,6 @@ func _on_player_killed(tank: Tank, instigatorController: Node2D, instigator: Nod
 		announcer_player.switch_stream_res_and_play(whoopsies_sfx_res)	
 		
 func _on_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2D) -> void:
-
 	# See if this is a water kill by player
 	if _last_turn_player == _player and instigator is WaterHazard:
 		print_debug("%s: Player water-killed %s" % [name, tank.owner])
@@ -216,7 +225,10 @@ func _on_turn_started(player: TankController) -> void:
 	_last_turn_player = player
 	if player == _player:
 		_kill_count = 0
-
+	
+	# clear any existing avalanche frame counters
+	_terrain_break_frame = -1
+	
 #region Vandalism
 
 func _on_object_took_damage(object: Node, instigatorController: Node2D, _instigator: Node2D) -> void:
@@ -249,6 +261,11 @@ func _on_tank_started_falling(tank: Tank) -> void:
 	if controller:
 		print_debug("%s - %s started falling" % [name, controller.name])
 		_falling_players[controller.get_instance_id()] = tank.health
+		
+		# Check for avalanche announcement
+		if _terrain_break_frame >= 0:
+			_add_stamped_announcement(avalanche_sfx_res, 0.1)
+			_terrain_break_frame = -1
 		
 func _on_tank_stopped_falling(tank: Tank) -> void:
 	var controller:TankController = tank.owner

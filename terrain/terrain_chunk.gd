@@ -185,3 +185,7 @@ func get_bounds_global():
 		vertex.x = clampf(vertex.x, 0.0, viewport_width)
 		bounds = bounds.expand(vertex)
 	return bounds
+
+func _to_string() -> String:
+	return name
+	

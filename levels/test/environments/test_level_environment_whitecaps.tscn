@@ -67,6 +67,9 @@ default_ai_players = Vector2i(1, 4)
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
 
+[node name="Announcer" parent="GameLevel" index="10"]
+is_avalance_level = true
+
 [node name="StaticBackground" type="Sprite2D" parent="GameLevel"]
 z_index = -98
 texture_filter = 2

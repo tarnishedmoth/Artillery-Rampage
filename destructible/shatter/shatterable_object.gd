@@ -66,3 +66,6 @@ func _on_body_deleted(_body: Node2D) -> void:
 	
 	if _body_container.get_child_count() == 0:
 		delete()
+
+func _to_string() -> String:
+	return name

@@ -1,0 +1,108 @@
+[gd_scene load_steps=20 format=3 uid="uid://bedkhdsb7a6t0"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_mypqo"]
+[ext_resource type="AudioStream" uid="uid://o2aq3qhc7qb" path="res://music/SoundtrackWhitecaps.mp3" id="2_hxstr"]
+[ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="3_i8xtn"]
+[ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="4_7h0co"]
+[ext_resource type="Texture2D" uid="uid://byxfbh0q6w7ua" path="res://terrain/terrain-rock-snowy.png" id="5_w5qva"]
+[ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="6_jssil"]
+[ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="7_m78i8"]
+[ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="8_e00c0"]
+[ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="9_41iwx"]
+[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="10_keaib"]
+[ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="11_yapv8"]
+[ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="12_o33ps"]
+[ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="13_pjegx"]
+[ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="14_ttjw4"]
+[ext_resource type="Texture2D" uid="uid://bbgp31owjo7sk" path="res://background_items/background_snowymountains.png" id="15_c3ntn"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="16_7gg46"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n0lpj"]
+shader = ExtResource("4_7h0co")
+shader_parameter/amount = Vector3(0.65, 0.8, 0.85)
+shader_parameter/multiply = 1.25
+shader_parameter/minimum = 0.0
+shader_parameter/maximum = 1.15
+
+[sub_resource type="Resource" id="Resource_yxvgw"]
+script = ExtResource("3_i8xtn")
+texture = ExtResource("5_w5qva")
+material = SubResource("ShaderMaterial_n0lpj")
+repeat = 2
+offset = Vector2(0, 0)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_iuf40"]
+noise_type = 3
+seed = 70
+frequency = 0.0081
+fractal_type = 2
+fractal_octaves = 4
+fractal_lacunarity = 1.56
+fractal_gain = 0.645
+fractal_weighted_strength = 0.5
+
+[node name="TestLevelProcGen" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_mypqo")]
+
+[node name="UI_Game_SFX" parent="GameLevel/UI" index="2"]
+soundtrack_file = ExtResource("2_hxstr")
+
+[node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
+texture_resources = Array[ExtResource("3_i8xtn")]([SubResource("Resource_yxvgw")])
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+polygon = PackedVector2Array(-104, -8, -28.125, -307.353, 50.7813, 29.4117, 414.063, -485.294, 452.344, -295.588, 539.844, -248.529, 639.844, 89.7059, 750, 101.471, 852.344, -305.882, 905.458, -3.48077, 937, -3, 945, 445, -103, 448)
+
+[node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("6_jssil")]
+noise_template = SubResource("FastNoiseLite_iuf40")
+additional_vertices = 84
+max_height_clearance = 115.0
+
+[node name="Floor" parent="GameLevel" index="5"]
+visible = false
+
+[node name="RoundDirector" parent="GameLevel" index="7"]
+player_goes_first = true
+shuffle_order = false
+
+[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+artillery_ai_types = Array[PackedScene]([ExtResource("7_m78i8"), ExtResource("8_e00c0"), ExtResource("9_41iwx"), ExtResource("10_keaib"), ExtResource("11_yapv8"), ExtResource("12_o33ps"), ExtResource("13_pjegx"), ExtResource("14_ttjw4")])
+ideal_min_spawn_separation = 250.0
+
+[node name="Announcer" parent="GameLevel" index="10"]
+is_avalance_level = true
+
+[node name="StaticBackground" type="Sprite2D" parent="GameLevel"]
+z_index = -98
+texture_filter = 2
+scale = Vector2(0.68, 0.68)
+texture = ExtResource("15_c3ntn")
+centered = false
+offset = Vector2(-4, -214.915)
+
+[node name="Player" parent="GameLevel" instance=ExtResource("16_7gg46")]
+position = Vector2(188, 438)
+enable_damage_before_first_turn = false
+
+[node name="AITank" parent="GameLevel" instance=ExtResource("7_m78i8")]
+position = Vector2(616, 112)
+enable_damage_before_first_turn = false
+
+[node name="AITank2" parent="GameLevel" instance=ExtResource("7_m78i8")]
+position = Vector2(720, 218)
+enable_damage_before_first_turn = false
+
+[node name="AITank3" parent="GameLevel" instance=ExtResource("7_m78i8")]
+position = Vector2(989, 476)
+enable_damage_before_first_turn = false
+
+[node name="AITank4" parent="GameLevel" instance=ExtResource("7_m78i8")]
+position = Vector2(423, 248)
+enable_damage_before_first_turn = false
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/ArtillerySpawner"]
