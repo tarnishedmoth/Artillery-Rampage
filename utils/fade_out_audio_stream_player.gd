@@ -9,8 +9,6 @@ class_name FadeOutAudioStreamPlayer extends AudioStreamPlayer
 
 var _last_audio_res:StringName
 
-signal audio_started(audio_resource:StringName)
-
 func switch_stream_res_if_not_playing(stream_resource: StringName) -> void:
 	if playing:		
 		print_debug("%s: switch_stream_res_if_not_playing - %s - existing audio is playing, return" % [name, stream_resource])

@@ -19,6 +19,9 @@ class_name Announcer extends Node
 ## Minimum fraction of health to lose from fall damage to trigger "Free-Fallin' announcement
 @export var free_fallin_health_fraction_loss_threshold = 0.5
 
+@export_range(0.0, 1.0, 0.05) var sniper_shot_bounds_dist_threshold = 0.75
+@export_range(1.0, 3.0, 0.1) var direct_shot_bounds_multiplier = 1.5
+
 var _game_level:GameLevel
 var _player:Player
 var _last_turn_player: TankController
@@ -36,6 +39,7 @@ var _queued_announcements:Array[StringName] = []
 
 var _objects_vandalized_by_player:Dictionary[int,bool] = {}
 var _falling_players:Dictionary[int,float] = {}
+var _player_wall_interactions:Dictionary[Walls.WallInteractionLocation, int]
 
 var _terrain_break_frame:int = -1
 
@@ -78,6 +82,7 @@ func _ready() -> void:
 	GameEvents.turn_started.connect(_on_turn_started)
 	GameEvents.turn_ended.connect(_on_turn_ended)
 	GameEvents.took_damage.connect(_on_object_took_damage)
+	GameEvents.wall_interaction.connect(_on_wall_interaction)
 	
 	announcer_player.priority_dictionary[whoopsies_sfx_res] = 100
 	announcer_player.priority_dictionary[annilation_sfx_res] = 50
@@ -86,7 +91,7 @@ func _ready() -> void:
 	announcer_player.priority_dictionary[gravity_kill_sfx_res] = 20
 	announcer_player.priority_dictionary[overkill_sfx_res] = 10
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	_check_stamped_announcements()
 	
 func _on_level_loaded(level: GameLevel) -> void:
@@ -125,7 +130,7 @@ func _on_player_added(player:TankController) -> void:
 	player.tank.tank_started_falling.connect(_on_tank_started_falling)
 	player.tank.tank_stopped_falling.connect(_on_tank_stopped_falling)
 
-func _on_player_killed(tank: Tank, instigatorController: Node2D, instigator: Node2D) -> void:
+func _on_player_killed(_tank: Tank, instigatorController: Node2D, _instigator: Node2D) -> void:
 	if instigatorController == _player:
 		print_debug("%s: Player blew themselves up" % [name])
 		announcer_player.switch_stream_res_and_play(whoopsies_sfx_res)	
@@ -162,7 +167,7 @@ func _on_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2
 			print_debug("%s: Player triggered overkill with %s on %s" % [name, projectile.source_weapon.display_name, tank.owner])
 			_queued_announcements.push_back(overkill_sfx_res)
 
-func _on_turn_ended(player: TankController) -> void:
+func _on_turn_ended(__player: TankController) -> void:
 	await get_tree().create_timer(announcement_queue_turn_delay).timeout
 	_trigger_queued_announcement()
 
@@ -216,7 +221,10 @@ func _on_player_took_damage(tank: Tank, instigatorController: Node2D, instigator
 func _on_enemy_took_damage(tank: Tank, instigatorController: Node2D, instigator: Node2D, amount: float) -> void:
 	if instigatorController == _player:
 		print_debug("%s: Enemy took damage by player - enemy=%s; amount=%f" % [name, tank.owner, amount])	
-		_last_enemy_damage = amount 
+		_last_enemy_damage = amount
+		
+		_check_for_trick_shot(tank, instigator)
+		_check_for_sniper_shot(tank, instigator)
 	else:
 		_check_gravity_damage_announce(tank, instigatorController, instigator, amount)
 		
@@ -225,6 +233,7 @@ func _on_turn_started(player: TankController) -> void:
 	_last_turn_player = player
 	if player == _player:
 		_kill_count = 0
+		_player_wall_interactions.clear()
 	
 	# clear any existing avalanche frame counters
 	_terrain_break_frame = -1
@@ -302,4 +311,80 @@ func _check_gravity_damage_announce(tank: Tank, instigator_controller: Node2D, i
 			#_queued_announcements.push_back(free_falling_sfx_res)
 			_add_stamped_announcement(free_falling_sfx_res, 0.1)
 		
+#endregion
+
+#region Wall Interactions
+func _on_wall_interaction(_walls: Walls, projectile: WeaponProjectile, interaction_location: Walls.WallInteractionLocation) -> void:
+	if not is_instance_valid(projectile.owner_tank) or not is_instance_valid(projectile.owner_tank.owner):
+		return
+	var player:TankController = projectile.owner_tank.owner
+	if player != _player:
+		return
+	
+	var count:int = _player_wall_interactions.get(interaction_location, 0)
+	count += 1
+	_player_wall_interactions[interaction_location] = count
+	
+	print_debug("%s - recording player wall interaction: %s -> %d; %d total unique interactions" % [name, interaction_location, count, _player_wall_interactions.size()])
+
+#endregion
+
+func _is_direct_shot(enemy: Tank, instigator: Node2D) -> bool:
+	var projectile:WeaponProjectile = instigator as WeaponProjectile
+	if not projectile:
+		return false
+	
+	# Make sure it was a direct hit
+	var bounds:Rect2 = Rect2(
+		Vector2(enemy.left_reference_point.global_position.x, enemy.top_reference_point.global_position.y),
+		Vector2(enemy.right_reference_point.global_position.x - enemy.left_reference_point.global_position.x,
+				enemy.bottom_reference_point.global_position.y - enemy.top_reference_point.global_position.y)
+	)
+	
+	# Expand the bounds for leniency
+	var size:Vector2 = bounds.size
+	var grow_side_amount:Vector2 = size * direct_shot_bounds_multiplier * 0.5
+	
+	bounds = bounds.grow_individual(grow_side_amount.x, grow_side_amount.y, grow_side_amount.x, grow_side_amount.y)
+		
+	return bounds.has_point(projectile.global_position)
+	
+#region Trick Shot
+
+func _check_for_trick_shot(enemy: Tank, instigator: Node2D) -> void:
+	if _player_wall_interactions.size() < 2 or not is_instance_valid(_player) or not _is_direct_shot(enemy, instigator):
+		return
+	
+	# Check for LOS
+	var space_state := _player.get_world_2d().direct_space_state
+
+	var start_pos:Vector2 = _player.tank.top_reference_point.global_position
+	var end_pos:Vector2 = enemy.top_reference_point.global_position
+	
+	var query_params := PhysicsRayQueryParameters2D.create(
+		start_pos, end_pos,
+		Collisions.CompositeMasks.obstacle)
+
+	var result: Dictionary = space_state.intersect_ray(query_params)
+	
+	# Have line of sight
+	if not result:
+		print_debug("%s - trick shot on %s" % [name, enemy.owner])
+		_queued_announcements.push_back(trick_shot_sfx_res)
+#endregion
+
+#region Sniper Shot
+func _check_for_sniper_shot(enemy: Tank, instigator: Node2D) -> void:
+	if not _player_wall_interactions.is_empty() or not is_instance_valid(_player) or not _is_direct_shot(enemy, instigator):
+		return
+	# Determine x distance
+	var dist_x:float = absf(_player.tank.global_position.x - enemy.global_position.x)
+	var level_bounds_x:float = _game_level.walls.bounds.size.x
+	var dist_fraction:float = dist_x / level_bounds_x
+	var is_sniper_shot:bool = dist_fraction >= sniper_shot_bounds_dist_threshold
+	
+	print_debug("%s - sniper_shot on %s: dist_x=%f; fraction=%f; is_sniper_shot=%s" % [name, enemy.owner, dist_x, dist_fraction, is_sniper_shot])
+	
+	if is_sniper_shot:
+		_queued_announcements.push_back(sniper_shot_sfx_res)
 #endregion
