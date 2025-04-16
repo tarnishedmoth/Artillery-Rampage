@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://j4if1rryqdp3"]
+[gd_scene load_steps=3 format=3 uid="uid://j4if1rryqdp3"]
 
 [ext_resource type="Script" uid="uid://cxevx3vi7ixrc" path="res://levels/game_over.gd" id="1_51duh"]
+[ext_resource type="AudioStream" uid="uid://bfsk5b6gxtcen" path="res://music/round_lost.wav" id="2_i7eks"]
 
 [node name="game_over" type="CanvasLayer"]
 script = ExtResource("1_51duh")
@@ -38,6 +39,10 @@ offset_bottom = -260.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Quit"
+
+[node name="loseSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_i7eks")
+autoplay = true
 
 [connection signal="pressed" from="retry" to="." method="_on_retry_pressed"]
 [connection signal="pressed" from="quit" to="." method="_on_quit_pressed"]
