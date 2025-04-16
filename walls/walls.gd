@@ -3,10 +3,18 @@ class_name Walls extends Node2D
 @onready var playableArea = $PlayableArea
 @onready var shape = $PlayableArea/CollisionShape2D
 @export var warp_offset: float = 10
+@export var elastic_min_velocity_threshold:float = 100
 
 enum WallType {
 	WARP, 
 	ELASTIC
+}
+
+enum WallInteractionLocation {
+	Top,
+	Bottom,
+	Right,
+	Left
 }
 
 @export
@@ -51,24 +59,53 @@ func projectile_elastic(projectile: WeaponProjectile):
 		if(movement_dir.x < 0):
 			movement_dir.x = -movement_dir.x
 			projectile.linear_velocity = movement_dir
+			GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Left)
 	elif pos.x >= bounds.position.x + bounds.size.x:
 		pos.x = bounds.position.x + bounds.size.x
 		if(movement_dir.x > 0):
 			movement_dir.x = -movement_dir.x
 			projectile.linear_velocity = movement_dir
-
+			GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Right)
+			
+	#Top
+	if pos.y <= bounds.position.y:
+		pos.y = bounds.position.y
+		if movement_dir.y < 0:
+			movement_dir.y = -movement_dir.y
+			projectile.linear_velocity = movement_dir
+			GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Top)
+	#Bottom
+	elif pos.y >= bounds.position.y + bounds.size.y:
+		pos.y = bounds.position.y + bounds.size.y
+		if movement_dir.y > 0:
+			movement_dir.y = -movement_dir.y
+			projectile.linear_velocity = movement_dir
+			GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Bottom)
+			
+		# if velocity small on bottom then we should delete
+		var speed:float = projectile.linear_velocity.length_squared()
+		if speed <= elastic_min_velocity_threshold * elastic_min_velocity_threshold:
+			print_debug("Hit bottom %s with small velocity=%s - destroying" % [str(pos), projectile.linear_velocity])
+			#Delete projectile
+			projectile.destroy()
+		else:
+			print_debug("Hit bottom %s with velocity=%s; speed=%f above threshold" % [str(pos), projectile.linear_velocity, sqrt(speed)])
+		
 func projectile_warp(projectile: WeaponProjectile):
 	var pos: Vector2 = projectile.global_position
 
 	if(pos.x <= bounds.position.x):
 		pos.x = bounds.position.x + bounds.size.x - warp_offset
 		print_debug("Warp to right side %s -> %s" % [str(projectile.global_position), str(pos)])
+		GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Left)
 	elif pos.x >= bounds.position.x + bounds.size.x:
 		pos.x = bounds.position.x + warp_offset
 		print_debug("Warp to left side %s -> %s" % [str(projectile.global_position), str(pos)])
+		GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Right)
 
 	if pos.y >= bounds.position.y + bounds.size.y:
 		print_debug("Hit bottom %s - destroying" % [str(pos)])
+		GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Bottom)
 		#Delete projectile
 		projectile.destroy()
 	
