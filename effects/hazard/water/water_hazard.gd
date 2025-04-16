@@ -80,7 +80,7 @@ func _on_overlap_begin(body: PhysicsBody2D) -> void:
 		return
 	if damageable in _damageables:
 		print_debug("%s - damageable=%s already in the damage set" % [name, damageable.name])
-	return
+		return
 		
 	print_debug("%s: Adding damageable=%s" % [name, damageable.name])
 	_damageables.push_back(damageable)
@@ -109,12 +109,21 @@ func _damage(damageable: Node) -> void:
 
 	# Only actually damage if center of damageable is inside the hazard
 	var damage_bounds:Rect2 = _get_collision_rect_global()
-	if !damage_bounds.has_point(damageable.global_position):
+	var damageable_pos:Vector2 = _get_damageable_position(damageable)
+	if !damage_bounds.has_point(damageable_pos):
 		print_debug("%s: center of %s is not inside the hazard, ignoring damage" % [name, damageable.name])
 		return
 	
 	damageable.take_damage(damageable.owner, self, damage_per_turn)
 	
+func _get_damageable_position(damageable: Node) -> Vector2:
+	# Need to get the position of the rigid body as that moves independently of its parent 
+	# and so need to the correct position to apply damage
+	for child in damageable.get_children():
+		var rigid_body_child:RigidBody2D = child as RigidBody2D
+		if rigid_body_child:
+			return rigid_body_child.global_position
+	return damageable.global_position
 func _damage_all() -> void:
 	for damageable in _damageables:
 		_damage(damageable)

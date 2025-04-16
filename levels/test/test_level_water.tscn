@@ -64,15 +64,6 @@ color = Color(0.682353, 0.713726, 0.219608, 1)
 [node name="LobberAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_axj0u")]
 forces_mask = 15
 
-[node name="Enemy2" parent="GameLevel" instance=ExtResource("2_aoyoi")]
-position = Vector2(1100, 426)
-
-[node name="Tank" parent="GameLevel/Enemy2" index="0"]
-color = Color(0.137255, 0.180392, 0.701961, 1)
-
-[node name="LobberAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_axj0u")]
-forces_mask = 15
-
 [node name="House1" parent="GameLevel" instance=ExtResource("4_d3cex")]
 position = Vector2(43, 409)
 
@@ -82,10 +73,21 @@ position = Vector2(934, 407)
 [node name="Player" parent="GameLevel" instance=ExtResource("5_xyt2g")]
 position = Vector2(120, 427)
 
+[node name="VisualWaterHitTest" type="Node2D" parent="."]
+visible = false
+
+[node name="WaterBounds" type="Polygon2D" parent="VisualWaterHitTest"]
+color = Color(0.9515, 0.03, 1, 0.498039)
+polygon = PackedVector2Array(-19.5, 465, 1313, 465, 1313, 785, -19.5, 785)
+
+[node name="Marker2D" type="Marker2D" parent="VisualWaterHitTest"]
+top_level = true
+position = Vector2(425, 460)
+gizmo_extents = 30.0
+
 [editable path="GameLevel"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]
 [editable path="GameLevel/WaterHazard"]
 [editable path="GameLevel/Enemy1"]
-[editable path="GameLevel/Enemy2"]
