@@ -12,7 +12,7 @@
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
 polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 195.313, 152.941, 204.688, 5.88232, 245.313, -1.47058, 272.656, -119.118, 277.344, -264.706, 352.344, -272.059, 405.469, -322.059, 475, -4.41174, 609, -8, 624.219, -161.765, 714.063, -155.882, 783.594, 127.941, 852.344, 130.882, 903.125, 138.235, 905.458, -3.48077, 937, -3, 945, 445, -103, 448)
 
-[node name="ArtillerySpawner" parent="GameLevel" index="7"]
+[node name="ArtillerySpawner" parent="GameLevel" index="8"]
 artillery_ai_types = Array[PackedScene]([ExtResource("2_x4mij")])
 artillery_ai_starting_weapons = Array[PackedScene]([ExtResource("2_l6tsi"), ExtResource("3_ti0p0")])
 default_ai_players = Vector2i(1, 4)

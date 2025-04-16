@@ -20,6 +20,7 @@ const spawn_delay:float = 0.2
 var _specified_positions: Array[Marker2D] = []
 var _all_positions: Array[Vector2] = []
 var _used_positions: Array[Vector2] = []
+var _placed_positions: Array[Vector2] = []
 
 var enemy_names: Array[String] = [
 	"Billy", "Rob", "Don", "Jerry", "Peter", "Amanda", "Alex", "Alexa", 
@@ -36,6 +37,7 @@ func _ready() -> void:
 func spawn_all(terrain: Terrain, ai_players: Vector2i = Vector2i(), human_players: Vector2i = Vector2i()) -> Array[TankController]:
 	_used_positions.clear()
 	_all_positions.clear()
+	_placed_positions.clear()
 	
 	if ai_players.x <= 0:
 		ai_players = default_ai_players
@@ -85,7 +87,12 @@ func _calculate_spawn_positions(terrain: Terrain, count: int) -> bool:
 	var success:bool = true
 	for marker in _specified_positions:
 		_all_positions.push_back(marker.global_position)
-	
+		
+	for placed_unit in get_tree().get_nodes_in_group(Groups.Unit):
+		var placed_unit_node = placed_unit as Node2D
+		if placed_unit_node:
+			_placed_positions.push_back(placed_unit_node.global_position)
+	print_debug("ArtillerySpawner(%s): Discovered %d placed units" % [name, _placed_positions.size()])
 	await _generate_spawns(terrain, count - _all_positions.size())
 	
 	if count > _all_positions.size():
@@ -109,20 +116,34 @@ func _generate_spawns(terrain: Terrain, requested_count: int) -> void:
 	
 	# Subtract out the safe bounds on either side
 	var spawnable_size: float = spawn_bounds.size.x - (min_boundary_x_distance * 2)
-	var stride:float = spawnable_size / requested_count
+	# Generate extra positions to work around the placed ones
+	var surplus_pos:int = _placed_positions.size() * 2
+	var generated_pos:int = requested_count + surplus_pos
+	var stride:float = spawnable_size / generated_pos
 	var min_x:float = spawn_bounds.position.x + min_boundary_x_distance
-	var min_spawn_separation:float = min(ideal_min_spawn_separation, stride)
+	var min_spawn_separation:float = minf(ideal_min_spawn_separation, stride)
 	
 	var last_x:float = min_x
 	
-	for i in range(0, requested_count):
-		var x:float = max(min_x + randf_range(i * stride, (i + 1) * stride),
+	var skipped_pos:int = 0
+	
+	for i in range(0, generated_pos):
+		var x:float = maxf(min_x + randf_range(i * stride, (i + 1) * stride),
 			last_x + min_spawn_separation)
 		
 		var pos := _get_spawn_position(terrain, x)
 		last_x = pos.x
 		
-		_all_positions.push_back(pos)
+		# Make sure not too close to a placed unit
+		var should_add:bool = true
+		if skipped_pos < surplus_pos:
+			for placed_pos in _placed_positions:
+				if absf(placed_pos.x - pos.x) < min_spawn_separation:
+					skipped_pos += 1
+					should_add = false
+					break
+		if should_add:
+			_all_positions.push_back(pos)
 
 func _choose_positions(count: int) -> void:
 	if count < _all_positions.size():
@@ -132,8 +153,9 @@ func _choose_positions(count: int) -> void:
 		
 		var _used_indices:Array[int] = []
 		
+		var last_index:int = 0
 		for i in range(0, count):
-			var index:int = mini(roundi(randf_range(i * stride, (i + 1) * stride)), max_position)
+			var index:int = last_index + mini(roundi(randf_range(i * stride, (i + 1) * stride)), max_position)
 			# Already guarded against infinite loop as clamp count to max positions
 			# This shouldn't happen much - only in cases of player count to 
 			while index in _used_indices:
@@ -142,6 +164,7 @@ func _choose_positions(count: int) -> void:
 					index = max_position
 			_used_indices.push_back(index)
 			_used_positions.push_back(_all_positions[index])
+			last_index = index
 	else: 	# Special case of total positions available is count
 		_used_positions.append_array(_all_positions)
 	
