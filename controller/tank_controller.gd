@@ -89,7 +89,7 @@ func get_weapons() -> Array[Weapon]:
 func attach_weapons(weapons: Array[Weapon]) -> void:
 	for w in weapons:
 		weapons_container.add_child(w)
-		w.global_position = tank.global_position # Probably not necessary but Weapon is a Node2D and should be simplified if so.
+		w.global_position = tank.tankBody.global_position # Probably not necessary but Weapon is a Node2D and should be simplified if so.
 	tank.scan_available_weapons()
 	
 func remove_all_weapons(detach_immediately: bool = false) -> void:

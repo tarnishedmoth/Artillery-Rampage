@@ -167,7 +167,7 @@ func _select_best_opponent() -> Dictionary:
 	for opponent in opponents:
 		var result: Dictionary = has_direct_shot_to(opponent, launch_props, forces_mask)
 
-		var distance: float = tank.global_position.distance_squared_to(result.adjusted_opponent_position)
+		var distance: float = tank.tankBody.global_position.distance_squared_to(result.adjusted_opponent_position)
 
 		if is_equal_approx(closest_distance, sentinel_dist) or _is_better_fallback_opponent(opponent, closest_opponent, distance, closest_distance):
 			closest_distance = distance
@@ -212,9 +212,9 @@ func _select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavi
 
 	# We are going to hit something other than opponent tank first
 	if opponent_data.has("hit_position"):
-		target_distance = tank.global_position.distance_to(opponent_data.hit_position)
+		target_distance = tank.tankBody.global_position.distance_to(opponent_data.hit_position)
 	else:
-		target_distance = tank.global_position.distance_to(opponent_data.adjusted_position)
+		target_distance = tank.tankBody.global_position.distance_to(opponent_data.adjusted_position)
 
 
 	# Select most powerful available weapon that won't cause self-damage

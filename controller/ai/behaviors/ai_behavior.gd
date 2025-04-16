@@ -521,7 +521,7 @@ func _add_opponent_target_entry(opponent_data: Dictionary) -> OpponentTargetHist
 	var target_data = OpponentTargetHistory.new()
 	target_data.opponent = opponent
 	target_data.my_position = aim_fulcrum_position
-	target_data.opp_position = opponent.tank.global_position
+	target_data.opp_position = opponent.tank.tankBody.global_position
 	target_data.power = power
 	target_data.angle = angle
 	target_data.max_power = max_power
