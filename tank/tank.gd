@@ -133,8 +133,8 @@ func _physics_process(delta: float) -> void:
 	if !tankBody.is_gravity_enabled():
 		return
 	
-	position = tankBody.position
 	global_position = tankBody.global_position
+	tankBody.position = Vector2.ZERO
 	
 	# Check for falling
 	var falling := is_falling()
