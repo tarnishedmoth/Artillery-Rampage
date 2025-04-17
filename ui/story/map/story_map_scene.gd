@@ -40,17 +40,30 @@ func restore_from_save_state(save: SaveState) -> void:
 	_create_graph()
 	_save_state = null
 	
-func _create_save_state() -> StoryMapSaveState:
+func _create_save_state() -> Dictionary:
 	# Save node positions
-	var state := StoryMapSaveState.new()
+	var state:Dictionary = {}
+	var nodes:PackedVector2Array = []
+
 	for child in graph_container.get_children():
 		if child is StoryLevelNode:
-			state.nodes.push_back(child.position)
-		
+			nodes.push_back(child.position)
+
+	state["nodes"] = nodes
 	return state
+
 func _get_save_state() -> StoryMapSaveState:
-	return _save_state.state.get(_save_state_key) as StoryMapSaveState if _save_state else null
+	if not _save_state or not _save_state.state.has(_save_state_key):
+		return null
 	
+	var saved_state:Dictionary = _save_state.state[_save_state_key]
+
+	var deserialized := StoryMapSaveState.new()
+	deserialized.nodes = saved_state["nodes"] as PackedVector2Array
+
+	return deserialized
+#endregion
+
 func _create_nodes_from_save_state(saved_state: StoryMapSaveState) -> Array[StoryLevelNode]:
 	var levels:Array[StoryLevel] = _story_levels_resource.levels
 	var nodes:Array[StoryLevelNode]
