@@ -12,7 +12,7 @@ func _ready() -> void:
 	# TODO: If save performance becomes an issue can switch to binary for release builds, but 
 	# it will be easier to debug issues and less frustrating to end users if we just use text always
 	if true: #OS.is_debug_build():
-		_save_ext = &"dat"
+		_save_ext = &"json"
 		_save_strategy = func() -> void: _save_as_text()
 		_load_strategy = func() -> SaveState: return _load_as_text()
 	else:
@@ -34,9 +34,8 @@ var save_state:SaveState
 func reset_save() -> void:
 	save_state = SaveState.new()
 	_save()
-
 func restore_tree_state(force_file_reload:bool = false) -> void:
-	if force_file_reload and ResourceLoader.exists(save_path):
+	if force_file_reload and FileAccess.file_exists(save_path):
 		save_state = _load()
 	if not save_state.state:
 		print_debug("No save state is available")
@@ -44,7 +43,6 @@ func restore_tree_state(force_file_reload:bool = false) -> void:
 		
 	for node in get_tree().get_nodes_in_group(Groups.Savable):
 		node.restore_from_save_state(save_state)
-	
 	
 func save_tree_state() -> void:
 	
@@ -93,11 +91,11 @@ func _load_as_binary() -> SaveState:
 #region Text
 
 func _save_as_text() -> void:
-	var str_data:String = var_to_str(save_state.state)
+	var json:String = JSON.stringify(JSON.from_native(save_state.state, false))
 
 	var file = FileAccess.open(save_path, FileAccess.WRITE)
 	if file:
-		file.store_string(str_data)
+		file.store_string(json)
 		file.flush()
 		file.close()
 	else:
@@ -109,7 +107,14 @@ func _load_as_text() -> SaveState:
 		var save_state_str:String = file.get_as_text()
 		file.close()
 
-		return _to_save_state(str_to_var(save_state_str) as Dictionary[StringName, Dictionary])
+		var raw_json:Variant = JSON.parse_string(save_state_str)
+		if not raw_json:
+			push_error("%s: Failed to parse JSON from file %s" % [name, save_path])
+			return null
+		
+		var data:Dictionary[StringName, Dictionary] = JSON.to_native(raw_json, false)
+		
+		return _to_save_state(data)
 	else:
 		push_error("%s: Failed to open file %s for reading" % [name, save_path])
 		return null
