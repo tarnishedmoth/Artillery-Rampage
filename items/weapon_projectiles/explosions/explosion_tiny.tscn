@@ -1,7 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://b6wcmxufjceme"]
+[gd_scene load_steps=7 format=3 uid="uid://b6wcmxufjceme"]
 
 [ext_resource type="Script" uid="uid://bl6jwqokvmogc" path="res://items/weapon_projectiles/explosions/explosion.gd" id="1_ybw22"]
 [ext_resource type="AudioStream" uid="uid://dlh3tqoi34qet" path="res://items/weapon_projectiles/explosions/sounds/sfx_small_explosion.wav" id="2_yk7vb"]
+[ext_resource type="PackedScene" uid="uid://cjk1xlwijbmno" path="res://items/weapon_projectiles/explosions/dust.tscn" id="3_usqme"]
+[ext_resource type="Texture2D" uid="uid://8xc0o7f4ipq8" path="res://items/weapon_projectiles/explosions/images/explosions.png" id="4_3olq4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qvkjp"]
+atlas = ExtResource("4_3olq4")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="Curve" id="Curve_tw250"]
+_data = [Vector2(0, 0), 0.0, 6.46183, 0, 0, Vector2(0.0838816, 0.933893), 0.382793, 0.382793, 0, 0, Vector2(0.768092, 0.656242), -2.00966, -2.00966, 0, 0, Vector2(1, 0), 0.121111, 0.0, 0, 0]
+point_count = 4
 
 [node name="ExplosionTiny" type="Node2D" node_paths=PackedStringArray("sfx")]
 script = ExtResource("1_ybw22")
@@ -13,3 +23,27 @@ volume_db = -9.0
 pitch_scale = 3.0
 bus = &"SFX"
 area_mask = 2
+
+[node name="Fire" parent="." instance=ExtResource("3_usqme")]
+modulate = Color(0.788948, 0.974265, 1, 1)
+emitting = false
+amount = 4
+texture = SubResource("AtlasTexture_qvkjp")
+lifetime = 0.75
+one_shot = true
+emission_sphere_radius = 16.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 4.0
+initial_velocity_max = 32.0
+angular_velocity_min = -180.0
+angular_velocity_max = 180.0
+damping_min = 4.0
+damping_max = 5.0
+angle_min = 0.0
+angle_max = 360.0
+scale_amount_min = 0.5
+scale_amount_max = 0.75
+scale_amount_curve = SubResource("Curve_tw250")
+color = Color(1, 0.395769, 0.0622668, 1)
+hue_variation_min = 0.15
+hue_variation_max = 0.38
