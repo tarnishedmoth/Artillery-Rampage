@@ -49,3 +49,55 @@ func _notification(what: int) -> void:
 			if is_instance_valid(w):
 				w.queue_free()
 		_weapons.clear()
+
+# Don't add to Savable group as this is managed by PlayerStateManager
+#region Savable
+
+const SAVE_STATE_KEY = "player"
+
+static func deserialize_from_save_state(save: SaveState) -> PlayerState:
+	if not save or not save.state or not save.state.has(SAVE_STATE_KEY):
+		print_debug("No save state found")
+		return null
+	
+	var serialized_player_state: Dictionary = save.state[SAVE_STATE_KEY]
+	var state:PlayerState = PlayerState.new()
+
+	state.health = serialized_player_state.health
+	state.max_health = serialized_player_state.max_health
+	
+	var weapons:Array[Weapon] = []
+	for w in serialized_player_state.weapons:
+		if w.has("res"):
+			var weapon:Weapon = SaveState.safe_load_scene(w.res) as Weapon
+			if weapon:
+				weapon.current_ammo = w.ammo
+				weapons.push_back(weapon)
+			else:
+				push_warning("PlayerState: weapon is not valid - skipping")
+		else:
+			push_warning("PlayerState: weapon does not have res - skipping")
+	
+	state.weapons = weapons
+	
+	return state
+
+func serialize_save_state(game_state:SaveState) -> void:
+	var serialized_player_state:Dictionary = {}
+	serialized_player_state.health = health
+	serialized_player_state.max_health = max_health
+
+	var serialized_weapon_state: Array[Dictionary] = []
+	
+	for w in weapons:
+		if is_instance_valid(w):
+			var weapon_state: Dictionary = {}
+			weapon_state.res = w.scene_file_path
+			weapon_state.ammo = w.current_ammo
+			serialized_weapon_state.push_back(weapon_state)
+		else:
+			push_warning("PlayerState: weapon is not valid - skipping")
+
+	serialized_player_state.weapons = serialized_weapon_state
+	game_state.state[SAVE_STATE_KEY] = serialized_player_state
+#endregion

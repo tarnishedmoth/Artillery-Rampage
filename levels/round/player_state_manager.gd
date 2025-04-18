@@ -6,11 +6,12 @@ extends Node
 ## If disabled then each round will be independent of the others
 var enable:bool:
 	set(value):
+		enable = value
 		if value:
-			print_debug("%s: enable" % [name])
+			print_debug("enable")
 			_connect_events()
 		else:
-			print_debug("%s: disable" % [name])
+			print_debug("disable")
 			_disconnect_events()
 	get:
 		return enable
@@ -68,3 +69,17 @@ func _on_round_ended() -> void:
 func _on_player_killed(_tank: Tank, _instigatorController: Node2D, _instigator: Node2D) -> void:
 	# TODO: Temporarily while we figure out the rogue-like mechanics
 	pass
+
+#region Savable
+func restore_from_save_state(save: SaveState) -> void:
+	if not enable:
+		return
+	player_state = PlayerState.deserialize_from_save_state(save)
+	print_debug("%s: restore_from_save_state: %s" % [name, is_instance_valid(player_state)])
+
+func update_save_state(game_state:SaveState) -> void:
+	if not enable or not player_state:
+		return
+	player_state.serialize_save_state(game_state)
+	print_debug("%s: update_save_state" % name)
+#endregion

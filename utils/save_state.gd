@@ -11,3 +11,18 @@ class_name SaveState
 # TODO: Retrofit the adhoc system done for TankController and Tank to use this system
 # Can attach the game state to this
 var state: Dictionary[StringName, Dictionary] = {}
+
+static func safe_load_scene(scene_file:String) -> Node:
+	if not scene_file:
+		return null
+	# This technique is used by https://github.com/derkork/godot-safe-resource-loader/blob/29e27fb432ef6e8db3c81b1c0d29ed53cd75f70c/addons/safe_resource_loader/safe_resource_loader.gd#L18
+	# Assumes that the file system in res:// is truly read-only
+	if not scene_file.begins_with("res://"):
+		push_warning("Attempted to load non-packaged scene_file=%s" % scene_file)
+		return null
+	var scene:PackedScene = load(scene_file) as PackedScene
+	if not scene:
+		push_warning("scene_file=%s is not a packed scene" % [scene_file])
+		return null
+		
+	return scene.instantiate()

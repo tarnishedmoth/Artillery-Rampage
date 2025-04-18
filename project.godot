@@ -28,8 +28,8 @@ RoundStatTracker="*res://levels/round/round_stat_tracker.tscn"
 SaveStateManager="*res://utils/save_state_manager.gd"
 SceneManager="*res://utils/scene_manager.tscn"
 PlayerUpgrades="*res://progression/player_upgrades.gd"
-PlayerStateManager="*res://levels/round/player_state_manager.tscn"
 UserOptions="*res://utils/user_options.gd"
+PlayerStateManager="*res://levels/round/player_state_manager.tscn"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 
 [display]

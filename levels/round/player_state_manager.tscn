@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" uid="uid://cjaxsytansdfh" path="res://levels/round/player_state_manager.gd" id="1_b2lrm"]
 
-[node name="PlayerStateManager" type="Node"]
+[node name="PlayerStateManager" type="Node" groups=["Savable"]]
 script = ExtResource("1_b2lrm")
