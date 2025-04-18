@@ -37,6 +37,8 @@ var _current_story_level:StoryLevel
 
 var play_mode:PlayMode
 
+const new_story_selected:StringName = &"NewStory"
+
 var current_scene:Node = null:
 	get: return current_scene if current_scene else get_tree().current_scene
 	set(value):

@@ -55,6 +55,10 @@ func _notification(what: int) -> void:
 
 const SAVE_STATE_KEY = "player"
 
+static func delete_save_state(save: SaveState) -> void:
+	if save and save.state:
+		save.state.erase(SAVE_STATE_KEY)
+		
 static func deserialize_from_save_state(save: SaveState) -> PlayerState:
 	if not save or not save.state or not save.state.has(SAVE_STATE_KEY):
 		print_debug("No save state found")

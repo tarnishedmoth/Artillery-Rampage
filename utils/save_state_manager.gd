@@ -31,9 +31,26 @@ func _ready() -> void:
 
 var save_state:SaveState
 
+var _flag_consumers:Dictionary[StringName, Dictionary] = {}
+
+## Adds a flag that can be read in deserializers that need to ignore state in a certain context
+# such as a new story mode
+func add_state_flag(flag:StringName) -> void:
+	_flag_consumers[flag] = {}
+
+## Check if state flag currently set and schedule to remove it if found
+func consume_state_flag(flag:StringName, consumer_key:StringName) -> bool:
+	if flag in _flag_consumers:
+		var flag_consumers: Dictionary = _flag_consumers[flag]
+		if not consumer_key in flag_consumers:
+			flag_consumers[consumer_key] = true
+			return true
+	return false
+	
 func reset_save() -> void:
 	save_state = SaveState.new()
 	_save()
+	
 func restore_tree_state(force_file_reload:bool = false) -> void:
 	if force_file_reload and FileAccess.file_exists(save_path):
 		save_state = _load()
@@ -45,7 +62,6 @@ func restore_tree_state(force_file_reload:bool = false) -> void:
 		node.restore_from_save_state(save_state)
 	
 func save_tree_state() -> void:
-	
 	var nodes:Array[Node] = get_tree().get_nodes_in_group(Groups.Savable)
 	if not nodes:
 		return

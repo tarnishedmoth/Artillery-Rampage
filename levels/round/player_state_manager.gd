@@ -73,7 +73,13 @@ func _on_player_killed(_tank: Tank, _instigatorController: Node2D, _instigator: 
 #region Savable
 func restore_from_save_state(save: SaveState) -> void:
 	if not enable:
+		player_state = null
 		return
+	if SaveStateManager.consume_state_flag(SceneManager.new_story_selected, &"player"):
+		PlayerState.delete_save_state(save)
+		player_state = null
+		return
+		
 	player_state = PlayerState.deserialize_from_save_state(save)
 	print_debug("%s: restore_from_save_state: %s" % [name, is_instance_valid(player_state)])
 

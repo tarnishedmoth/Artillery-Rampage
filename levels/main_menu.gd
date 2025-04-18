@@ -72,6 +72,7 @@ func _on_play_now_pressed() -> void:
 func _on_story_pressed() -> void:
 	print_debug("Start button")
 	PlayerStateManager.enable = true
+	SaveStateManager.add_state_flag(SceneManager.new_story_selected)
 	SceneManager.play_mode = SceneManager.PlayMode.STORY
 
 	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryStart)

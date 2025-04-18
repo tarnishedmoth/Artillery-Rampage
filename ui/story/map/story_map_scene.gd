@@ -53,7 +53,7 @@ func _create_save_state() -> Dictionary:
 	return state
 
 func _get_save_state() -> StoryMapSaveState:
-	if not _save_state or not _save_state.state.has(_save_state_key):
+	if not _save_state or not _save_state.state.has(_save_state_key) or SaveStateManager.consume_state_flag(SceneManager.new_story_selected, _save_state_key):
 		return null
 	
 	var saved_state:Dictionary = _save_state.state[_save_state_key]
