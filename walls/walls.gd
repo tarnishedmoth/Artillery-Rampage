@@ -7,7 +7,10 @@ class_name Walls extends Node2D
 
 enum WallType {
 	WARP, 
-	ELASTIC
+	ELASTIC,
+	ACCELERATE,
+	STICKY,
+	NONE
 }
 
 enum WallInteractionLocation {
@@ -19,6 +22,15 @@ enum WallInteractionLocation {
 
 @export
 var wall_mode = WallType.WARP
+
+
+@export
+var speed_multiplier_by_wall_mode : Dictionary[WallType, float] = {
+	WallType.WARP: 1.0,
+	WallType.ELASTIC: 1.0,
+	WallType.ACCELERATE: 1.5,
+	WallType.STICKY: 0.5
+}
 
 var bounds: Rect2;
 var min_extent: Vector2
@@ -42,29 +54,30 @@ func _physics_process(_delta: float) -> void:
 	for projectile in tracked_projectiles:
 		check_projectile_wall_interaction(projectile)
 		
-#TODO: Implement Warp, elastic, accelerate, sticky, and none behaviors
 func check_projectile_wall_interaction(projectile: WeaponProjectile):
 	match wall_mode:
 		WallType.WARP:
 			projectile_warp(projectile)
-		WallType.ELASTIC:
+		WallType.ELASTIC, WallType.ACCELERATE, WallType.STICKY:
 			projectile_elastic(projectile)
-	
+		WallType.NONE:
+			projectile_none(projectile)
+
 func projectile_elastic(projectile: WeaponProjectile):
 	var pos = projectile.global_position
-	var movement_dir : Vector2 = projectile.linear_velocity
+	var movement_dir : Vector2 = projectile.linear_velocity.normalized()
 	
 	if(pos.x <= bounds.position.x):
 		pos.x = bounds.position.x
 		if(movement_dir.x < 0):
 			movement_dir.x = -movement_dir.x
-			projectile.linear_velocity = movement_dir
+			_adjust_interaction_velocity(projectile, movement_dir)
 			GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Left)
 	elif pos.x >= bounds.position.x + bounds.size.x:
 		pos.x = bounds.position.x + bounds.size.x
 		if(movement_dir.x > 0):
 			movement_dir.x = -movement_dir.x
-			projectile.linear_velocity = movement_dir
+			_adjust_interaction_velocity(projectile, movement_dir)
 			GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Right)
 			
 	#Top
@@ -72,14 +85,14 @@ func projectile_elastic(projectile: WeaponProjectile):
 		pos.y = bounds.position.y
 		if movement_dir.y < 0:
 			movement_dir.y = -movement_dir.y
-			projectile.linear_velocity = movement_dir
+			_adjust_interaction_velocity(projectile, movement_dir)
 			GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Top)
 	#Bottom
 	elif pos.y >= bounds.position.y + bounds.size.y:
 		pos.y = bounds.position.y + bounds.size.y
 		if movement_dir.y > 0:
 			movement_dir.y = -movement_dir.y
-			projectile.linear_velocity = movement_dir
+			_adjust_interaction_velocity(projectile, movement_dir)
 			GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Bottom)
 			
 		# if velocity small on bottom then we should delete
@@ -90,7 +103,7 @@ func projectile_elastic(projectile: WeaponProjectile):
 			projectile.destroy()
 		else:
 			print_debug("Hit bottom %s with velocity=%s; speed=%f above threshold" % [str(pos), projectile.linear_velocity, sqrt(speed)])
-		
+	
 func projectile_warp(projectile: WeaponProjectile):
 	var pos: Vector2 = projectile.global_position
 
@@ -111,6 +124,29 @@ func projectile_warp(projectile: WeaponProjectile):
 	
 	projectile.global_position = pos
 
+func projectile_none(projectile: WeaponProjectile):
+	var pos: Vector2 = projectile.global_position
+
+	if(pos.x <= bounds.position.x):
+		print_debug("Hit left side %s at %s" % [projectile.name, projectile.global_position])
+		GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Left)
+		projectile.destroy()
+	elif pos.x >= bounds.position.x + bounds.size.x:
+		print_debug("Hit right side %s at %s" % [projectile.name, projectile.global_position])
+		GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Right)
+		projectile.destroy()
+	elif pos.y >= bounds.position.y + bounds.size.y:
+		print_debug("Hit bottom %s at %s" % [projectile.name, projectile.global_position])
+		GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Bottom)
+		projectile.destroy()
+		
+func _adjust_interaction_velocity(projectile: WeaponProjectile, new_dir:Vector2) -> void:
+	var speed:float = projectile.linear_velocity.length()
+	var new_speed:float = speed * speed_multiplier_by_wall_mode.get(wall_mode, 1.0)
+	var new_velocity:Vector2 = new_dir * new_speed
+	
+	projectile.linear_velocity = new_velocity
+		 
 func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 	print_debug("Wind(%s) - Tracking projectile fired - %s - %s" % [name, projectile.name, str(projectile.global_position)])
 	tracked_projectiles.append(projectile)

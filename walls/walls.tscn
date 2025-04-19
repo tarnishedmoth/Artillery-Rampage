@@ -7,6 +7,12 @@
 
 [node name="Walls" type="Node2D"]
 script = ExtResource("1_pbin1")
+speed_multiplier_by_wall_mode = Dictionary[int, float]({
+0: 1.0,
+1: 1.0,
+2: 1.333,
+3: 0.6
+})
 
 [node name="PlayableArea" type="Area2D" parent="."]
 collision_layer = 4
