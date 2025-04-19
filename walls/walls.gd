@@ -23,7 +23,6 @@ enum WallInteractionLocation {
 @export
 var wall_mode = WallType.WARP
 
-
 @export
 var speed_multiplier_by_wall_mode : Dictionary[WallType, float] = {
 	WallType.WARP: 1.0,
@@ -32,6 +31,11 @@ var speed_multiplier_by_wall_mode : Dictionary[WallType, float] = {
 	WallType.STICKY: 0.5
 }
 
+## Override wall mode with specification of available wall types
+## and their weight in selection. A weight <= 0 will ignore that type.
+@export
+var wall_randomization_weights:Dictionary[WallType, float] = {}
+
 var bounds: Rect2;
 var min_extent: Vector2
 var max_extent: Vector2
@@ -39,6 +43,10 @@ var max_extent: Vector2
 var tracked_projectiles: Array[WeaponProjectile]
 
 func _ready() -> void:
+	wall_mode = _select_wall_type()
+	
+	print_debug("%s: Wall Mode=%s" % [name, wall_mode])
+	
 	# Opting for continuous checking once fired due to edge cases crossing boundary like the turret going through boundary
 	GameEvents.projectile_fired.connect(_on_projectile_fired)
 
@@ -53,7 +61,40 @@ func _physics_process(_delta: float) -> void:
 		return
 	for projectile in tracked_projectiles:
 		check_projectile_wall_interaction(projectile)
+
+func _select_wall_type() -> WallType:
+	if wall_randomization_weights.is_empty():
+		return wall_mode
 		
+	var weight_sum:float = 0.0
+	for wall_type in wall_randomization_weights:
+		var weight:float = wall_randomization_weights[wall_type]
+		if weight > 0:
+			weight_sum += weight
+		
+	if is_zero_approx(weight_sum):
+		push_warning("%s: All wall type randomizations have zero weight!" % name)
+		return wall_mode
+	
+	var walls:Array[WallType] = []
+	var thresholds: PackedFloat32Array = []
+	
+	for wall_type in wall_randomization_weights:
+		var weight:float = wall_randomization_weights[wall_type]
+		if weight > 0:
+			walls.push_back(wall_type)
+			thresholds.push_back(weight / weight_sum)
+	
+	var roll:float = randf()
+	
+	var sum:float = 0.0
+	for i in range(walls.size()):
+		sum += thresholds[i]
+		if sum <= roll:
+			return walls[i]
+			
+	return walls.back() if not walls.is_empty() else wall_mode
+	
 func check_projectile_wall_interaction(projectile: WeaponProjectile):
 	match wall_mode:
 		WallType.WARP:
