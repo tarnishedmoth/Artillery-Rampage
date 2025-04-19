@@ -71,9 +71,11 @@ var fall_start_position: Vector2
 var mark_falling: bool
 
 # Effects
+@export_group("Debuffs (EMP, ...)", "debuff_")
 var debuff_emp_charge:float = 0.0
-var debuff_emp_conductivity_multiplier:float = 1.0 ## Incoming charge is multiplied by this figure
-var debuff_emp_discharge_per_turn:float = 60.0
+@export var debuff_disabling_emp_charge_threshold = 50.0 ## This much charge will "disable" this tank preventing it from shooting
+@export var debuff_emp_conductivity_multiplier:float = 1.0 ## Incoming charge is multiplied by this figure
+@export var debuff_emp_discharge_per_turn:float = 60.0 ## This much charge is subtracted each turn end.
 
 @export_group("")
 @export var color: Color = Color.WHITE:
