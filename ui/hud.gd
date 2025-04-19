@@ -1,9 +1,8 @@
 extends Control
 
-@onready var angle_text = $VBoxContainer/Angle
-@onready var power_text = $VBoxContainer/Power
-@onready var health_text = $VBoxContainer2/Health
-@onready var aim_direction_text = $VBoxContainer2/AimDirection
+@onready var angle_text = %Angle
+@onready var power_text = %Power
+@onready var health_text = %Health
 @onready var active_player_text = $CenterBackground/VBoxContainer3/ActivePlayer
 @onready var wind_text = $CenterBackground/VBoxContainer3/Wind
 @onready var weapon_text = $CenterBackground/VBoxContainer3/Weapon
@@ -38,7 +37,6 @@ func _on_aim_updated(player: TankController) -> void:
 	var angleRads = player.tank.get_turret_rotation()
 	
 	angle_text.set_value(str(int(abs(rad_to_deg(angleRads))))+"°") 
-	aim_direction_text.set_value(_get_direction_string(angleRads))
 
 func _on_power_updated(player: TankController) -> void:
 	power_text.set_value(int(player.tank.power))
