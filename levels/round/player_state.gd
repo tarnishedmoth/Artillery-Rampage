@@ -53,7 +53,7 @@ func _notification(what: int) -> void:
 # Don't add to Savable group as this is managed by PlayerStateManager
 #region Savable
 
-const SAVE_STATE_KEY = "player"
+const SAVE_STATE_KEY:StringName = &"player"
 
 static func delete_save_state(save: SaveState) -> void:
 	if save and save.state:

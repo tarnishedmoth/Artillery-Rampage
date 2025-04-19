@@ -31,6 +31,8 @@ const story_start_scene_file = "res://ui/story/story_sequence.tscn"
 const story_map_scene_file = "res://ui/story/map/story_map_scene.tscn"
 const story_round_summary_scene_file = "res://ui/story/round_summary/story_round_summary.tscn"
 
+var _story_level_state_scene:PackedScene = preload("res://levels/story_level_state.tscn")
+
 var _current_level_index:int = -1
 var _current_level_root_node:GameLevel
 var _current_story_level:StoryLevel
@@ -92,6 +94,13 @@ func next_level(delay: float = default_delay) -> void:
 	
 	_current_level_index = (_current_level_index + 1) % story_levels.levels.size()
 
+func set_story_level_index(index:int) -> bool:
+	if index >= 0 and index < story_levels.levels.size():
+		_current_level_index = index
+		return true
+	push_warning("Attempted to set invalid story level index=%d - expected [0, %d)" % [index, story_levels.levels.size()])
+	return false
+	
 # TODO: May move these branches out of the scene manager to keep it more single responsiblity
 func level_failed() -> void:
 	match play_mode:
@@ -191,6 +200,8 @@ func _on_GameLevel_loaded(level:GameLevel) -> void:
 	
 	if _current_story_level:
 		level.name = _current_story_level.name
+		level.add_child(_story_level_state_scene.instantiate())
+		
 	_current_level_root_node = level
 
 	_last_game_level_resource = _last_scene_resource

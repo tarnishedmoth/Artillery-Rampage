@@ -29,11 +29,11 @@ func _ready() -> void:
 
 #region Savable
 
-const _save_state_key:StringName = &"StoryMap"
+const SAVE_STATE_KEY:StringName = &"StoryMap"
 var _save_state:SaveState
 
 func update_save_state(save:SaveState) -> void:
-	save.state[_save_state_key] = _create_save_state()
+	save.state[SAVE_STATE_KEY] = _create_save_state()
 
 func restore_from_save_state(save: SaveState) -> void:
 	_save_state = save
@@ -53,10 +53,10 @@ func _create_save_state() -> Dictionary:
 	return state
 
 func _get_save_state() -> StoryMapSaveState:
-	if not _save_state or not _save_state.state.has(_save_state_key) or SaveStateManager.consume_state_flag(SceneManager.new_story_selected, _save_state_key):
+	if not _save_state or not _save_state.state.has(SAVE_STATE_KEY) or SaveStateManager.consume_state_flag(SceneManager.new_story_selected, SAVE_STATE_KEY):
 		return null
 	
-	var saved_state:Dictionary = _save_state.state[_save_state_key]
+	var saved_state:Dictionary = _save_state.state[SAVE_STATE_KEY]
 
 	var deserialized := StoryMapSaveState.new()
 	deserialized.nodes = saved_state["nodes"] as PackedVector2Array

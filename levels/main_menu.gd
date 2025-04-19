@@ -15,6 +15,8 @@ var credits_list_is_focused:bool = false
 @onready var exit_to_desktop_button: Button = %Quit
 
 @onready var soundtrack: AudioStreamPlayer2D = %Soundtrack
+@onready var btn_continue_story:Button = %ContinueStory
+
 #endregion
 
 
@@ -28,6 +30,9 @@ func _ready() -> void:
 	# Remove buttons that don't function on Web
 	if OS.get_name() == "Web":
 		exit_to_desktop_button.hide()
+		
+	# Only show continue story if there is an existing save
+	btn_continue_story.disabled = not StorySaveUtils.story_save_exists()
 	
 	per_line_scroll_credits() # Autoscrolling
 	start_typewriter_effect() # Typewriter effect
@@ -103,3 +108,13 @@ func _on_credits_list_mouse_entered() -> void:
 
 func _on_credits_list_mouse_exited() -> void:
 	credits_list_is_focused = false
+
+
+func _on_continue_story_pressed() -> void:
+	if btn_continue_story.disabled:
+		print_debug("Continue story button is disabled")
+		return
+		
+	SceneManager.play_mode = SceneManager.PlayMode.STORY
+	StorySaveUtils.set_story_level_index()
+	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap)

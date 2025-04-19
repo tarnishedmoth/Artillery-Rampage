@@ -121,6 +121,13 @@ layout_mode = 2
 theme_type_variation = &"BigButton"
 text = "Play Now!"
 
+[node name="ContinueStory" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BigButton"
+disabled = true
+text = "Continue Story"
+
 [node name="Story" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
 layout_mode = 2
 theme_type_variation = &"BigButton"
@@ -338,6 +345,7 @@ size_flags_vertical = 3
 layout_mode = 2
 
 [connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/PlayNow" to="." method="_on_play_now_pressed"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/ContinueStory" to="." method="_on_continue_story_pressed"]
 [connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/Story" to="." method="_on_story_pressed"]
 [connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/LevelSelect" to="." method="_on_level_select_pressed"]
 [connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/Options" to="." method="_on_options_pressed"]

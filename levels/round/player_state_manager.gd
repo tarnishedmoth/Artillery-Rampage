@@ -71,6 +71,7 @@ func _on_player_killed(_tank: Tank, _instigatorController: Node2D, _instigator: 
 	pass
 
 #region Savable
+
 func restore_from_save_state(save: SaveState) -> void:
 	if not enable:
 		player_state = null

@@ -44,6 +44,8 @@ func _on_player_killed(in_player: Player) -> void:
 	SceneManager.level_failed()
 
 func _on_round_ended() -> void:
+	# Let other listeners process before switching the scene
+	await get_tree().process_frame
 	SceneManager.level_complete()
 
 func _add_manually_placed_units():
