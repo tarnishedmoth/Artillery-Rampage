@@ -158,7 +158,7 @@ func next_turn() -> bool:
 		
 	return true
 
-func next_player():
+func next_player() -> void:
 	## If there are 1 or 0 players left then the round is over
 	#if tank_controllers.size() <= 1:
 		#active_player_index = -1
@@ -175,12 +175,11 @@ func next_player():
 	
 	#return true
 	
-func end_turn() -> void:
-	GameEvents.turn_ended.emit()
-	
 func _on_turn_ended(controller: TankController) -> void:
 	print("Turn ended for " + controller.name)
-	if awaiting_intentions > 0: return
+	if awaiting_intentions > 0:
+		print_debug("Turn ended but awaiting %d intentions from player" % [controller])
+		return
 	
 	await _async_check_and_await_falling()
 	
@@ -196,7 +195,7 @@ func all_players() -> void:
 		
 func execute_all_actions() -> void:
 	var actions = current_gamestate.get_actions()
-	var actions_taken: int
+	var actions_taken: int = 0
 	for i in actions.size():
 		current_gamestate.run_next_action()
 		actions_taken += 1
@@ -232,14 +231,14 @@ func _on_tank_killed(tank: Tank, _instigatorController: Node2D, _instigator: Nod
 		push_warning("TankController=" + tank_controller_to_remove.name + " is not in round")
 		return
 	
-	tank_controllers.erase(tank_controller_to_remove)
+	tank_controllers.remove_at(index_to_remove)
 	
 	# See if we need to shift the active player index
 	if index_to_remove <= active_player_index:
 		active_player_index -= 1
 		if active_player_index < 0:
 			active_player_index = tank_controllers.size() - 1
-			
+
 func _on_player_intent_to_act(action: Callable, owner: Object) -> void:
 	print_debug("Received action: ",action)
 	current_gamestate.queue_action(action, owner)
