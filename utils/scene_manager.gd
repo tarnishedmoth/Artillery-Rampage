@@ -1,5 +1,6 @@
 extends Node
 
+@export var levels_always_selectable: StoryLevelsResource ## These levels are immediately & always available to select.
 var is_switching_scene: bool
 
 enum PlayMode {
