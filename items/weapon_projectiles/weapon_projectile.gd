@@ -26,6 +26,12 @@ signal completed_lifespan ## Tracked by Weapon class
 ## When [member kill_after_turns_elapsed] is used, this time emits [signal completed_lifespan].
 @export var max_lifetime: float = 10.0
 @export_range(0,99) var kill_after_turns_elapsed:int = 0 ## If >0, destroys after turns passed.
+
+## Indicate whether this projectile should destroy itself after an interaction.
+## See [method disarm] and [method arm] to change the state at runtime.
+@export var should_explode_on_impact:bool = true
+var run_collision_logic:bool = true ## Whether to affect damageables & destructibles on collision. See [method arm] and [method disarm].
+
 @export var explosion_to_spawn:PackedScene
 
 @export var upgrades: Array[ModProjectile] ## For upgrades and nerfs at runtime
@@ -51,10 +57,6 @@ signal completed_lifespan ## Tracked by Weapon class
 	get: return destructible_scale_multiplier*destructible_scale_multiplier_scalar
 @export var destructible_scale_multiplier_scalar:float = 1.0 # ModProjectile
 
-## Indicate whether need to explode on impact with supported collision layers and cause damage
-## This replaces the "Overlap" concept
-@export var should_explode_on_impact:bool = true ## Deployable weapons should have this set to False.
-
 var calculated_hit: bool
 var owner_tank: Tank;
 var source_weapon: Weapon # The weapon we came from
@@ -62,11 +64,6 @@ var firing_container
 var destructible_component:CollisionPolygon2D
 
 var _turns_since_spawned:int = 0
-
-# TODO: We can probably combine this with above should_explode_on_impact
-# Removed the Overlap concept as can handle the overlap interaction through the rigid body
-# This also allows us to use continuous collision detection to fix the tunneling problem we see with projectiles going through the terrain
-var can_explode:bool = true # used by MIRV
 
 #func set_spawn_parameters(in_owner_tank: Tank, power:float, angle:float):
 	#self.owner_tank = in_owner_tank
@@ -84,7 +81,6 @@ var last_recorded_linear_velocity:Vector2
 @export var post_processing_scene: PackedScene
 
 func _ready() -> void:
-	#if should_explode_on_impact: connect("body_entered", on_body_entered)
 	connect("body_entered", on_body_entered)
 	if has_node('Destructible'):
 		destructible_component = get_node('Destructible')
@@ -104,6 +100,14 @@ func set_sources(tank:Tank,weapon:Weapon) -> void:
 	source_weapon = weapon
 	if explosion_to_spawn:
 		firing_container = _get_container()
+		
+## Sets the projectile to run collision detection code and maybe explode after.
+func arm(to_explode:bool = should_explode_on_impact):
+	run_collision_logic = true
+	should_explode_on_impact = to_explode
+	if calculated_hit: calculated_hit = false
+func disarm():
+	run_collision_logic = false
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	# Store any collision results for later access
@@ -128,7 +132,7 @@ func on_body_entered(_body: PhysicsBody2D):
 	# Need to do a sweep to see all the things we have influenced
 	# Need to be sure not to "double-damage" things both from influence and from direct hit
 	# The body here is the direct hit body that will trigger the projectile to explode if an interaction happens
-	if not can_explode:
+	if not run_collision_logic:
 		return
 	if calculated_hit:
 		return
@@ -143,14 +147,17 @@ func on_body_entered(_body: PhysicsBody2D):
 	var destructed_processed_set: Dictionary[Node, Node] = {}
 
 	for node in affected_nodes:
-		# See if this node is a "Damageable" or a "Destructable"
+		## See if this node is a "Damageable" or a "Destructable"
+		## Damageable:
 		var root_node: Node = Groups.get_parent_in_group(node, Groups.Damageable)
 		if root_node:
 			var damage_amount = _calculate_damage(node)
 			if damage_amount > 0:
 				had_interaction = true
 				damaged_processed_map[root_node] = maxf(damage_amount, damaged_processed_map.get(root_node, 0.0))
-		# Some projectiles don't have a destructible node, e.g. MIRV
+				
+		## Destructible:
+		# -Some projectiles don't have a destructible node and don't damage the terrain or other shatterable things.
 		if destructible_component:
 			root_node = Groups.get_parent_in_group(node, Groups.Destructible)
 			if root_node and root_node not in destructed_processed_set:
@@ -161,20 +168,15 @@ func on_body_entered(_body: PhysicsBody2D):
 
 				had_interaction = true
 				destructed_processed_set[root_node] = root_node
-	# end for
+	## end for
 
 	# Process damage at end as took max damage if there were multiple collidors on single damageable root node
 	for damageable_node in damaged_processed_map:
 		var damage: float = damaged_processed_map[damageable_node]
 		damage_damageable_node(damageable_node, damage) # I want to hook here without overriding this function
 
-	
-	# FIXME: Technically shouldn't do this and should set to true and also always call destroy but MIRV doesn't work correctly without it
-	calculated_hit = not affected_nodes.is_empty()
-
-	# Always explode on impact
-	if had_interaction and should_explode_on_impact:
-		destroy()
+	# Explode
+	if had_interaction and should_explode_on_impact: destroy()
 		
 func damage_damageable_node(damageable_node: Node, damage:float) -> void:
 	damageable_node.take_damage(get_instigator(), self, damage)

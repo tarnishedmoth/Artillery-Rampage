@@ -1,22 +1,19 @@
-[gd_scene load_steps=10 format=3 uid="uid://b0f7b6sblxhfv"]
+[gd_scene load_steps=9 format=3 uid="uid://b0f7b6sblxhfv"]
 
 [ext_resource type="Script" uid="uid://cm2b1mrcm6tml" path="res://items/weapon_projectiles/weapon_projectile.gd" id="1_6h8cr"]
 [ext_resource type="PackedScene" uid="uid://gj55bahvsd7g" path="res://items/weapon_projectiles/explosions/explosion_leadball.tscn" id="2_het2b"]
 [ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="3_frkrk"]
 [ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="4_1uxoh"]
 [ext_resource type="Script" uid="uid://dokat5ut8s1cf" path="res://items/weapon_projectiles/impact_counter.gd" id="5_het2b"]
-[ext_resource type="AudioStream" uid="uid://bh5ef3521wtkr" path="res://weapons/sounds/sfx_shot_a_5.wav" id="6_1uxoh"]
 [ext_resource type="AudioStream" uid="uid://dce5pw2beeheh" path="res://weapons/sounds/alarm_c_press.wav" id="6_frkrk"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_6h8cr"]
-friction = 0.9
-bounce = 0.75
+bounce = 0.85
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_r53mv"]
-random_pitch = 1.25
-random_volume_offset_db = 3.0
+random_pitch = 1.02
 streams_count = 1
-stream_0/stream = ExtResource("6_1uxoh")
+stream_0/stream = ExtResource("6_frkrk")
 
 [node name="WeaponProjectile" type="RigidBody2D"]
 collision_layer = 2
@@ -26,6 +23,7 @@ continuous_cd = 2
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_6h8cr")
+should_explode_on_impact = false
 explosion_to_spawn = ExtResource("2_het2b")
 min_falloff_distance = 5.0
 max_falloff_distance = 45.0
@@ -59,12 +57,12 @@ sfx_armed = NodePath("Armed")
 
 [node name="Bounce" type="AudioStreamPlayer2D" parent="ImpactCounter"]
 stream = SubResource("AudioStreamRandomizer_r53mv")
-pitch_scale = 2.5
+pitch_scale = 0.88
 bus = &"Guns"
 
 [node name="Armed" type="AudioStreamPlayer2D" parent="ImpactCounter"]
 stream = ExtResource("6_frkrk")
-pitch_scale = 1.25
+volume_db = 3.0
 bus = &"Guns"
 
 [connection signal="body_entered" from="." to="ImpactCounter" method="_on_weapon_projectile_body_entered"]
