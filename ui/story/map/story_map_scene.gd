@@ -21,7 +21,7 @@ class_name StoryMapScene extends Control
 @onready var auto_narrative:AutoNarrative = %AutoNarrative
 
 var _story_levels_resource:StoryLevelsResource
-var _current_level_index:int
+var _next_level_index:int
 
 func _ready() -> void:
 	if graph_container.get_child_count() == 0:
@@ -92,10 +92,8 @@ func _on_next_button_pressed() -> void:
 func _create_graph() -> void:
 	_clear_graph()
 	
-	_current_level_index = SceneManager._current_level_index
-	if _current_level_index < 0:
-		push_error("%s: Current story level index is invalid. Map will be empty!" % [name])
-		return
+	# We display the next story index
+	_next_level_index = SceneManager._current_level_index + 1
 		
 	_story_levels_resource = SceneManager.story_levels
 	if not _story_levels_resource or not _story_levels_resource.levels:
@@ -113,10 +111,10 @@ func _create_graph() -> void:
 			graph_container.add_child(_edge_from_to(prev_node, next_node))
 	#endregion	
 
-	var current_level:StoryLevel = _story_levels_resource.levels[_current_level_index]
-	var active_node:StoryLevelNode = nodes[_current_level_index]
+	var next_level:StoryLevel = _story_levels_resource.levels[_next_level_index]
+	var active_node:StoryLevelNode = nodes[_next_level_index]
 
-	_create_scrolling_narrative(current_level, active_node)	
+	_create_scrolling_narrative(next_level, active_node)	
 
 func _generate_or_load_nodes() -> Array[StoryLevelNode]:
 	var saved_state: StoryMapSaveState = _get_save_state()
@@ -214,9 +212,9 @@ func _create_story_level_node(index:int, metadata:StoryLevel) -> StoryLevelNode:
 	# TODO: Maybe knowing about future node is an unlockable or a more complex strategy is adopted
 	# If it is unlockable then the story sequence would need to be more procedural 
 	# which wasn't planned other than individual procedural nature within a given level
-	if index < _current_level_index:
+	if index < _next_level_index:
 		return _new_explored_node(metadata)
-	elif index == _current_level_index:
+	elif index == _next_level_index:
 		return _new_discovered_node(metadata)
 	return _new_unknown_node(metadata)
 	
@@ -282,7 +280,7 @@ func _create_scrolling_narrative(level:StoryLevel, active_node: StoryLevelNode) 
 	
 	# If this isn't first level, then generate an auto-narrative from previous
 	# Moved to StoryRoundSummary
-	#if _current_level_index > 0:
+	#if _next_level_index > 0:
 		## Duplicate so we don't modify a global resource
 		#all_narratives = all_narratives.duplicate()
 		#all_narratives.push_front(_get_prev_round_narrative_summary())

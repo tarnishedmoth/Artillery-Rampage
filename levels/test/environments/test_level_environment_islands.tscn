@@ -53,6 +53,12 @@ height_win_size_min_variation = -0.05
 height_win_size_max_variation = 0.05
 max_height_clearance = 60.0
 
+[node name="Walls" parent="GameLevel" index="4"]
+wall_randomization_weights = Dictionary[int, float]({
+0: 1.0,
+4: 1.0
+})
+
 [node name="Floor" parent="GameLevel" index="5"]
 visible = false
 

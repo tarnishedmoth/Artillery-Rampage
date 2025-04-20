@@ -34,11 +34,24 @@ class StampedAnnouncement:
 	var res:StringName
 	var game_time:float
 
+enum SpecialShotType {
+	TRICK_SHOT,
+	SNIPER_SHOT
+}
+
 var _stamped_announcements:Array[StampedAnnouncement] = []
 var _queued_announcements:Array[StringName] = []
 
 var _objects_vandalized_by_player:Dictionary[int,bool] = {}
 var _falling_players:Dictionary[int,float] = {}
+
+# Only make special shot announcements once per enemy hit
+var _special_shot_recorded_enemies:Dictionary[SpecialShotType, PackedInt32Array] = {
+	SpecialShotType.TRICK_SHOT: PackedInt32Array(),
+	SpecialShotType.SNIPER_SHOT: PackedInt32Array()
+}
+
+
 var _player_wall_interactions:Dictionary[Walls.WallInteractionLocation, int]
 
 var _terrain_break_frame:int = -1
@@ -252,8 +265,12 @@ func _on_object_took_damage(object: Node, instigatorController: Node2D, _instiga
 	if not object_root or object_root is Tank or object_root is Terrain:
 		return
 
-	_objects_vandalized_by_player[object_root.get_instance_id()] = true
-	
+	var object_id:int = object_root.get_instance_id()
+	if object_id in _objects_vandalized_by_player:
+		print_debug("%s: Player already vandalized %s" % [name, object_root.name])
+		return
+		
+	_objects_vandalized_by_player[object_id] = true
 	print_debug("%s: Player vandalized %s" % [name, object_root.name])
 	print_debug("%s: Player vandalized %d objects" % [name, _objects_vandalized_by_player.size()])
 
@@ -352,7 +369,9 @@ func _is_direct_shot(enemy: Tank, instigator: Node2D) -> bool:
 #region Trick Shot
 
 func _check_for_trick_shot(enemy: Tank, instigator: Node2D) -> void:
-	if _player_wall_interactions.size() < 2 or not is_instance_valid(_player) or not _is_direct_shot(enemy, instigator):
+	if _player_wall_interactions.size() < 2 or not is_instance_valid(_player) \
+	 or enemy.get_instance_id() in _special_shot_recorded_enemies[SpecialShotType.TRICK_SHOT] \
+	 or not _is_direct_shot(enemy, instigator):
 		return
 	
 	# Check for LOS
@@ -370,13 +389,18 @@ func _check_for_trick_shot(enemy: Tank, instigator: Node2D) -> void:
 	# Have line of sight
 	if not result:
 		print_debug("%s - trick shot on %s" % [name, enemy.owner])
+
+		_special_shot_recorded_enemies[SpecialShotType.TRICK_SHOT].push_back(enemy.get_instance_id())
 		_queued_announcements.push_back(trick_shot_sfx_res)
 #endregion
 
 #region Sniper Shot
 func _check_for_sniper_shot(enemy: Tank, instigator: Node2D) -> void:
-	if not _player_wall_interactions.is_empty() or not is_instance_valid(_player) or not _is_direct_shot(enemy, instigator):
+	if not _player_wall_interactions.is_empty() or not is_instance_valid(_player) \
+	 or enemy.get_instance_id() in _special_shot_recorded_enemies[SpecialShotType.SNIPER_SHOT] \
+	 or not _is_direct_shot(enemy, instigator):
 		return
+
 	# Determine x distance
 	var dist_x:float = absf(_player.tank.global_position.x - enemy.global_position.x)
 	var level_bounds_x:float = _game_level.walls.bounds.size.x
@@ -386,5 +410,7 @@ func _check_for_sniper_shot(enemy: Tank, instigator: Node2D) -> void:
 	print_debug("%s - sniper_shot on %s: dist_x=%f; fraction=%f; is_sniper_shot=%s" % [name, enemy.owner, dist_x, dist_fraction, is_sniper_shot])
 	
 	if is_sniper_shot:
+		print_debug("%s - sniper shot on %s" % [name, enemy.owner])
+		_special_shot_recorded_enemies[SpecialShotType.SNIPER_SHOT].push_back(enemy.get_instance_id())
 		_queued_announcements.push_back(sniper_shot_sfx_res)
 #endregion

@@ -5,4 +5,5 @@
 
 [node name="SceneManager" type="Node"]
 script = ExtResource("1_olrhd")
+levels_always_selectable = ExtResource("2_f8pd1")
 story_levels = ExtResource("2_f8pd1")

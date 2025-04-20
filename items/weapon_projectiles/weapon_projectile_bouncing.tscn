@@ -1,0 +1,68 @@
+[gd_scene load_steps=9 format=3 uid="uid://b0f7b6sblxhfv"]
+
+[ext_resource type="Script" uid="uid://cm2b1mrcm6tml" path="res://items/weapon_projectiles/weapon_projectile.gd" id="1_6h8cr"]
+[ext_resource type="PackedScene" uid="uid://gj55bahvsd7g" path="res://items/weapon_projectiles/explosions/explosion_leadball.tscn" id="2_het2b"]
+[ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="3_frkrk"]
+[ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="4_1uxoh"]
+[ext_resource type="Script" uid="uid://dokat5ut8s1cf" path="res://items/weapon_projectiles/impact_counter.gd" id="5_het2b"]
+[ext_resource type="AudioStream" uid="uid://dce5pw2beeheh" path="res://weapons/sounds/alarm_c_press.wav" id="6_frkrk"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_6h8cr"]
+bounce = 0.85
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_r53mv"]
+random_pitch = 1.02
+streams_count = 1
+stream_0/stream = ExtResource("6_frkrk")
+
+[node name="WeaponProjectile" type="RigidBody2D"]
+collision_layer = 2
+collision_mask = 541
+physics_material_override = SubResource("PhysicsMaterial_6h8cr")
+continuous_cd = 2
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_6h8cr")
+should_explode_on_impact = false
+explosion_to_spawn = ExtResource("2_het2b")
+min_falloff_distance = 5.0
+max_falloff_distance = 45.0
+max_damage = 50.0
+destructible_scale_multiplier = Vector2(6, 6)
+
+[node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="."]
+z_index = 20
+scale = Vector2(0.183745, 0.183745)
+amount = 100
+lifetime = 5.0
+gravity = Vector2(0, 0)
+scale_amount_min = 4.0
+scale_amount_max = 4.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.183745, 0.183745)
+texture = ExtResource("3_frkrk")
+
+[node name="PhysicsShape" type="CollisionShape2D" parent="."]
+shape = ExtResource("4_1uxoh")
+
+[node name="Destructible" type="CollisionPolygon2D" parent="."]
+scale = Vector2(1.07263, 1.07263)
+polygon = PackedVector2Array(-5.59373, 1.86458, -5.59373, 0, -4.66144, -2.79687, -2.79687, -4.66144, 0, -5.59373, 2.79687, -4.66144, 4.66144, -2.79687, 5.59373, 0, 4.66144, 2.79687, 2.79687, 4.66144, 0, 5.59373, -2, 5, -4, 4)
+
+[node name="ImpactCounter" type="Node" parent="." node_paths=PackedStringArray("sfx_impact", "sfx_armed")]
+script = ExtResource("5_het2b")
+sfx_impact = NodePath("Bounce")
+sfx_armed = NodePath("Armed")
+
+[node name="Bounce" type="AudioStreamPlayer2D" parent="ImpactCounter"]
+stream = SubResource("AudioStreamRandomizer_r53mv")
+pitch_scale = 0.88
+bus = &"Guns"
+
+[node name="Armed" type="AudioStreamPlayer2D" parent="ImpactCounter"]
+stream = ExtResource("6_frkrk")
+volume_db = 3.0
+bus = &"Guns"
+
+[connection signal="body_entered" from="." to="ImpactCounter" method="_on_weapon_projectile_body_entered"]

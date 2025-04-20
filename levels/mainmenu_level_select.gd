@@ -1,7 +1,7 @@
 class_name LevelSelect extends PanelContainer
 
-@export var levels_always_selectable: StoryLevelsResource ## These levels are immediately & always available to select.
 @export_dir var levels_folders_paths: Array[String] ## This functionality is only available in debug builds.
+@onready var levels_always_selectable: StoryLevelsResource = SceneManager.levels_always_selectable ## These levels are immediately & always available to select.
 @onready var menu_levels_list: VBoxContainer = %Buttons
 @onready var main_menu: VBoxContainer = %MainMenu
 

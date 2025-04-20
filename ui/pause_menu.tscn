@@ -70,6 +70,13 @@ size_flags_vertical = 4
 theme = ExtResource("1_smh4t")
 text = "OPTIONS"
 
+[node name="NewGame" type="Button" parent="Panel/PauseMenu"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_smh4t")
+text = "NEW GAME"
+
 [node name="MainMenu" type="Button" parent="Panel/PauseMenu"]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -88,5 +95,6 @@ text = "QUIT TO DESKTOP"
 [connection signal="closed" from="Panel/OptionsMenu" to="." method="_on_options_menu_closed"]
 [connection signal="pressed" from="Panel/PauseMenu/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="Panel/PauseMenu/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Panel/PauseMenu/NewGame" to="." method="_on_new_game_pressed"]
 [connection signal="pressed" from="Panel/PauseMenu/MainMenu" to="." method="_on_main_menu_pressed"]
 [connection signal="pressed" from="Panel/PauseMenu/QuitToDesktop" to="." method="_on_quit_to_desktop_pressed"]

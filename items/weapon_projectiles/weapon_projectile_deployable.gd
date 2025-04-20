@@ -39,7 +39,10 @@ var _explosion_played:bool = false
 
 
 #region--Virtuals
-
+func _ready() -> void:
+	super()
+	run_collision_logic = false # WeaponProjectile class
+	
 #endregion
 #region--Public Methods
 func deploy() -> void:
@@ -105,7 +108,7 @@ func _on_deployable_lifetime_completed() -> void:
 		destroy()
 
 func _fake_destroy() -> void:
-	can_explode = false
+	disarm()
 	if explosion_to_spawn:
 		spawn_explosion(explosion_to_spawn)
 		_explosion_played = true

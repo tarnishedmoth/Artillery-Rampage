@@ -11,6 +11,9 @@ var paused = false;
 func _ready():
 	if OS.get_name() == "Web":
 		exit_to_desktop_button.hide()
+		
+	if not SceneManager.play_mode == SceneManager.PlayMode.PLAY_NOW:
+		%PauseMenu.get_node("NewGame").hide()
 	hide()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -46,3 +49,14 @@ func _on_options_pressed() -> void:
 func _on_options_menu_closed() -> void:
 	pause_menu.show()
 	options_menu.hide()
+
+
+func _on_new_game_pressed() -> void:
+	# Start a new quick match
+	
+	#PlayerStateManager.enable = false
+	#SceneManager.play_mode = SceneManager.PlayMode.PLAY_NOW
+	
+	var level: StoryLevel = SceneManager.levels_always_selectable.levels.pick_random()
+	if level:
+		SceneManager.switch_scene_file(level.scene_res_path)

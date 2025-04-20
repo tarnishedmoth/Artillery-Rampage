@@ -1,10 +1,11 @@
-# Abstract base class for AI and player controllers
+## Abstract base class for AI and player controllers
 class_name TankController extends Node2D
 @export var enable_damage_before_first_turn:bool = true 
 var _initial_fall_damage:bool
 @export var weapons_container:Node = self ## Keep all Weapon components in here. If unassigned, self is used.
 
 signal intent_to_act(action: Callable, owner: Object)
+## This is set each turn start with the return of [method check_if_must_skip_actions].
 var can_take_action:bool = true
 
 ## Set player state that has been loaded from previous round
@@ -17,8 +18,14 @@ var pending_state: PlayerState
 
 var popups:Array
 
+var _active_turn:bool = false
+
 func _ready() -> void:
 	tank.actions_completed.connect(_on_tank_actions_completed)
+
+	# Need to auto-end turn if killed during active turn and other intents will not fire
+	tank.tank_killed.connect(_on_tank_killed)
+
 	GameEvents.connect("turn_ended", _on_turn_ended)
 	GameEvents.connect("turn_started", _on_turn_started)
 	
@@ -46,12 +53,26 @@ func begin_round() -> void:
 		pending_state = null
 
 func begin_turn() -> void:
+	_active_turn = true
+
 	#tank.reset_orientation()
 	tank.enable_fall_damage = _initial_fall_damage
 	tank.push_weapon_update_to_hud() # TODO: fix for simultaneous fire game
-	can_take_action = check_if_must_skip_actions() # Check this in Player/AI for behavior. Will submit empty action if true.
+	can_take_action = check_if_must_skip_actions() # Check this in Player/AI for behavior. Will submit an empty action (to skip) this turn, if true.
+	
+func _on_tank_killed(_tank: Tank, _instigatorController: Node2D, _instigator: Node2D) -> void:
+	if _active_turn:
+		print_debug("TankController(%s) - _on_tank_killed: Ending turn" % [name])
+		end_turn()
+	else:
+		print_debug("TankController(%s) - _on_tank_killed: Not active turn" % [name])
 	
 func end_turn() -> void:
+	if not _active_turn:
+		print_debug("TankController(%s) - end_turn: Not active turn" % [name])
+		return
+
+	_active_turn = false
 	clear_all_popups()
 	GameEvents.turn_ended.emit(tank.controller) # Because I'm not sure if "self" is abstract in this context
 	
@@ -118,10 +139,12 @@ func submit_intended_action(action: Callable, player: TankController) -> void:
 		print_debug("Submitted action")
 		intent_to_act.emit(action, player)
 	else:
-		skip_action(player) # This is a catch case, should be handled by AI behavior before this, but it does work.
+		skip_action(player)
 
 func skip_action(player: TankController) -> void:
-	print_debug("Skipping taking actions (this turn)")
+	#print_debug("Skipping taking actions (this turn)")
+	
+	# Provide intent_to_act() with an empty dummy callable, to do nothing and advance turns.
 	intent_to_act.emit(_skip, player) # Required for turn to advance as RoundDirector is awaiting our ticket
 	await get_tree().process_frame
 	end_turn()
@@ -129,10 +152,9 @@ func skip_action(player: TankController) -> void:
 func _skip() -> void:
 	pass
 
+## Check for disabling effects like EMP
 func check_if_must_skip_actions() -> bool:
-	# Disabling effects like EMP
-	var disabling_emp_charge_threshold:float = 50.0
-	if tank.debuff_emp_charge > disabling_emp_charge_threshold:
+	if tank.debuff_emp_charge > tank.debuff_disabling_emp_charge_threshold:
 		#print_debug("EMP charge above threshold--turn must be skipped")
 		var popup = popup_message(PopupNotification.Contexts.EMP_DISABLED)
 		return false
