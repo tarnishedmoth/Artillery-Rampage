@@ -92,10 +92,8 @@ func _on_next_button_pressed() -> void:
 func _create_graph() -> void:
 	_clear_graph()
 	
-	_current_level_index = SceneManager._current_level_index
-	if _current_level_index < 0:
-		push_error("%s: Current story level index is invalid. Map will be empty!" % [name])
-		return
+	# We display the next story index
+	_current_level_index = SceneManager._current_level_index + 1
 		
 	_story_levels_resource = SceneManager.story_levels
 	if not _story_levels_resource or not _story_levels_resource.levels:

@@ -88,14 +88,13 @@ func next_level(delay: float = default_delay) -> void:
 	# TODO: When using procedural maps may need a different strategy or may want to shuffle the levels on start
 	# The procedural map could just be a specific scene that has some base configuration and then generates on ready
 	# Or we could start proc-gening the next scene during current scene and then just keep in memory and present it here
+	_current_level_index = (_current_level_index + 1) % story_levels.levels.size()
 	_current_story_level = story_levels.levels[_current_level_index]
+	
 	print_debug("Loading story level index=%d -> %s" % [_current_level_index, _current_story_level.name])
 
 	await switch_scene_file(_current_story_level.scene_res_path, delay)
 	
-	_current_level_index = (_current_level_index + 1) % story_levels.levels.size()
-	print_debug("set _current_level_index=%d" % [_current_level_index])
-
 func set_story_level_index(index:int) -> bool:
 	if index >= 0 and index < story_levels.levels.size():
 		print_debug("set story level index=%d" % [index])
@@ -140,7 +139,7 @@ func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 		SceneKeys.RandomStart:
 			await next_level(delay)
 		SceneKeys.StoryStart:
-			_current_level_index = 0
+			_current_level_index = -1
 			await switch_scene_file(story_start_scene_file)
 		SceneKeys.StoryMap:
 			await switch_scene_file(story_map_scene_file)

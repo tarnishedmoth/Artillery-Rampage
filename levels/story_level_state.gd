@@ -32,10 +32,15 @@ func restore_from_save_state(save: SaveState) -> void:
 		save.state.erase(SAVE_STATE_KEY)
 		return
 		
-	var level:int = restore_story_level_state(save)
-	if level != -1:
-		_last_completed_level = level
-		print_debug("last_completed_level=%d" % [_last_completed_level])
+	# Set based on current scene value as state restored on continue through static function
+	#HACK:
+	_last_completed_level = SceneManager._current_level_index - 1
+	print_debug("restore_from_save_state: last_completed_level=%d" % [_last_completed_level])
+	
+	# var level:int = restore_story_level_state(save)
+	# if level != -1:
+	# 	_last_completed_level = level
+	# 	print_debug("last_completed_level=%d" % [_last_completed_level])
 
 func update_save_state(save:SaveState) -> void:
 	if not save or not save.state:
