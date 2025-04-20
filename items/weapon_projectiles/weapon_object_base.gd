@@ -1,1 +1,0 @@
-class_name WeaponObjectBase extends RigidBody2D

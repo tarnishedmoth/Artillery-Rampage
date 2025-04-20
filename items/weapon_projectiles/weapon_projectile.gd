@@ -1,4 +1,4 @@
-class_name WeaponProjectile extends WeaponObjectBase
+class_name WeaponProjectile extends RigidBody2D
 
 #TODO: We might not need the Overlap if we only have the weapon projectile interact with Area2D's and not other physics bodies
 
