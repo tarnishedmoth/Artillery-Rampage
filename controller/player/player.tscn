@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dps6lqs28tqa1"]
+[gd_scene load_steps=14 format=3 uid="uid://dps6lqs28tqa1"]
 
 [ext_resource type="Script" uid="uid://drk5s6oo6lloa" path="res://controller/player/player.gd" id="1_t03mm"]
 [ext_resource type="PackedScene" uid="uid://dvr6bm2hlj5h4" path="res://tank/tank.tscn" id="2_3s1jp"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="8_j0lm5"]
 [ext_resource type="PackedScene" uid="uid://ccl2oyo13754i" path="res://weapons/weapon_MiniMIRV.tscn" id="9_4e8rn"]
 [ext_resource type="PackedScene" uid="uid://do2r411gtohhx" path="res://weapons/weapon_missile_homing.tscn" id="10_lvkgb"]
+[ext_resource type="PackedScene" uid="uid://evwfga4yj1nk" path="res://weapons/weapon_laser.tscn" id="13_4e8rn"]
 
 [node name="Player" type="Node2D" node_paths=PackedStringArray("weapons_container")]
 script = ExtResource("1_t03mm")
@@ -24,6 +25,8 @@ color = Color(0.145098, 0.227451, 0.00392157, 1)
 autostart = true
 
 [node name="Weapons" type="Node" parent="."]
+
+[node name="WeaponLaser" parent="Weapons" instance=ExtResource("13_4e8rn")]
 
 [node name="WeaponLeadBall" parent="Weapons" instance=ExtResource("3_tmyes")]
 

@@ -1,4 +1,4 @@
-class_name WeaponProjectile extends WeaponObjectBase
+class_name WeaponBeam extends WeaponObjectBase
 
 #TODO: We might not need the Overlap if we only have the weapon projectile interact with Area2D's and not other physics bodies
 
@@ -95,10 +95,12 @@ func _ready() -> void:
 	elif max_lifetime > 0.0: destroy_after_lifetime()
 	
 	modulate = color
-	apply_all_mods() # This may not be desired but it probably is. If the weapon's stats are retained across matches, this could double the effect unintentionally
-		
-	GameEvents.emit_projectile_fired(self)
+	# TODO: see if beams still need mods
+	# apply_all_mods() # This may not be desired but it probably is. If the weapon's stats are retained across matches, this could double the effect unintentionally
 	
+	# TODO: see if beam weapons need to emit an event	
+	# GameEvents.emit_projectile_fired(self)
+
 func set_sources(tank:Tank,weapon:Weapon) -> void:
 	owner_tank = tank
 	source_weapon = weapon
@@ -156,7 +158,8 @@ func on_body_entered(_body: PhysicsBody2D):
 			if root_node and root_node not in destructed_processed_set:
 				var contact_point: Vector2 = center_destructible_on_impact_point(destructible_component)
 				
-				root_node.damage(self, contact_point, destructible_scale_multiplier)
+				# TODO: debug type issue
+				# root_node.damage(self, contact_point, destructible_scale_multiplier)
 				GameEvents.took_damage.emit(root_node, get_instigator(), self)
 
 				had_interaction = true
@@ -227,6 +230,10 @@ func _physics_process(_delta: float) -> void:
 	# Need to record this for contact point determination on impact as the linear_velocity there is after the collision
 	last_recorded_linear_velocity = linear_velocity
 	# print_debug("LinearVelocity=%s" % [linear_velocity])
+	$BeamCollision.position.x += 4
+	$BeamCollision.shape.size.x += 8
+	$BeamCollision/BeamSprite.position.x -= 0
+	$BeamCollision/BeamSprite.scale.y = $BeamCollision.shape.size.x
 	
 func _determine_contact_point(movement_dir: Vector2, radius: float) -> Vector2:
 	var space_state = get_world_2d().direct_space_state
@@ -345,13 +352,16 @@ func _on_turn_ended() -> void:
 	if _turns_since_spawned >= kill_after_turns_elapsed:
 		destroy()
 
-func apply_all_mods(mods: Array[ModProjectile] = upgrades) -> void:
-	for mod in mods:
-		mod.modify_projectile(self)
+# TODO: see if you still need this
+#func apply_all_mods(mods: Array[ModProjectile] = upgrades) -> void:
+	#for mod in mods:
+		# TODO: see if you still need this
+		#mod.modify_projectile(self)
 		
 func apply_new_mod(mod: ModProjectile) -> void:
 	upgrades.append(mod)
-	mod.modify_projectile(self)
+	# TODO: see if you still need this
+	#mod.modify_projectile(self)
 
 func _apply_post_processing() -> void:
 	if not post_processing_scene or not SceneManager._current_level_root_node:

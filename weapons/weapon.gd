@@ -508,6 +508,8 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 			new_shot.set_sources(parent_tank,self)
 			new_shot.apply_all_mods(projectile_mods)
 			_add_projectile_awaiting(new_shot) # Uses signals in class
+		elif new_shot is WeaponBeam:
+			new_shot.set_sources(parent_tank,self)
 		
 		container.add_child(new_shot)
 		new_shot.global_transform = barrel.global_transform # TODO micro offsets might be a good idea for shotguns etc
@@ -518,11 +520,13 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 			aim_angle += deviation
 			# TODO this should also rotate the object
 		
-		if new_shot is RigidBody2D:
+		if new_shot is RigidBody2D and new_shot is WeaponProjectile:
 			var velocity = Vector2(power, 0.0)
 			new_shot.linear_velocity = velocity.rotated(aim_angle)
 			# TODO alternative for other types of objects?
 			# Can't think of a specific use yet.
+		elif new_shot is WeaponBeam:
+			new_shot.global_rotation = barrel.global_rotation
 			
 		#container.add_child(new_shot) # Original location, testing earlier use above
 		

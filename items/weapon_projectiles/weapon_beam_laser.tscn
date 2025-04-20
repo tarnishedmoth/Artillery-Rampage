@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://d2v7yibsm1j4m"]
+
+[ext_resource type="Script" uid="uid://luaehj85b40i" path="res://items/weapon_projectiles/weapon_beam.gd" id="1_gil0t"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ppf4e"]
+size = Vector2(1, 8)
+
+[sub_resource type="Gradient" id="Gradient_mhdbg"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ppf4e"]
+gradient = SubResource("Gradient_mhdbg")
+width = 8
+
+[node name="WeaponBeam" type="RigidBody2D"]
+gravity_scale = 0.0
+script = ExtResource("1_gil0t")
+metadata/_custom_type_script = "uid://luaehj85b40i"
+
+[node name="BeamCollision" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ppf4e")
+
+[node name="BeamSprite" type="Sprite2D" parent="BeamCollision"]
+rotation = 1.5708
+texture = SubResource("GradientTexture1D_ppf4e")
