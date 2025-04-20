@@ -265,8 +265,12 @@ func _on_object_took_damage(object: Node, instigatorController: Node2D, _instiga
 	if not object_root or object_root is Tank or object_root is Terrain:
 		return
 
-	_objects_vandalized_by_player[object_root.get_instance_id()] = true
-	
+	var object_id:int = object_root.get_instance_id()
+	if object_id in _objects_vandalized_by_player:
+		print_debug("%s: Player already vandalized %s" % [name, object_root.name])
+		return
+		
+	_objects_vandalized_by_player[object_id] = true
 	print_debug("%s: Player vandalized %s" % [name, object_root.name])
 	print_debug("%s: Player vandalized %d objects" % [name, _objects_vandalized_by_player.size()])
 
