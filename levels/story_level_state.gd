@@ -20,7 +20,7 @@ func _on_round_ended() -> void:
 	# SceneManager.next_level increments so "current_level_index" is actually the next level here
 	if player_won:
 		_last_completed_level = SceneManager._current_level_index
-		print_debug("last_completed_level=%d" [_last_completed_level])
+		print_debug("last_completed_level=%d" % [_last_completed_level])
 		# TODO: This can increment beyond the end which will invalidate the story state
 	
 #region Savable
@@ -35,7 +35,7 @@ func restore_from_save_state(save: SaveState) -> void:
 	var level:int = restore_story_level_state(save)
 	if level != -1:
 		_last_completed_level = level
-		print_debug("last_completed_level=%d" [_last_completed_level])
+		print_debug("last_completed_level=%d" % [_last_completed_level])
 
 func update_save_state(save:SaveState) -> void:
 	if not save or not save.state:
@@ -44,7 +44,7 @@ func update_save_state(save:SaveState) -> void:
 	if _last_completed_level >= 0:
 		var state:Dictionary = save.state.get_or_add(SAVE_STATE_KEY, {})
 		state[_LEVEL_KEY] = _last_completed_level
-		print_debug("set save state last completed level=%d" [_last_completed_level])
+		print_debug("set save state last completed level=%d" % [_last_completed_level])
 	
 static func restore_story_level_state(save: SaveState) -> int:
 	if not save or not save.state:
