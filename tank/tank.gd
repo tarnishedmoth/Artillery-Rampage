@@ -429,6 +429,10 @@ func equip_next_weapon() -> void:
 	set_equipped_weapon(next_index)
 	prints(self,"cycled weapon to", current_equipped_weapon.display_name)
 	
+func next_weapon_mode() -> void:
+	var weapon = get_equipped_weapon()
+	weapon.next_mode()
+	
 func push_weapon_update_to_hud(weapon: Weapon = get_equipped_weapon()) -> void:
 	GameEvents.weapon_updated.emit(weapon)
 	

@@ -52,8 +52,9 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed("power_decrease"):
 		set_power(-delta * power_pct_per_sec)
 	if Input.is_action_just_pressed("cycle_next_weapon"):
-		cycle_next_weapon()
-		
+		if can_shoot: tank.equip_next_weapon()
+	if Input.is_action_just_pressed("cycle_weapon_mode"):
+		if can_shoot: tank.next_weapon_mode()
 		
 func aim(delta: float) -> void:
 	if !can_aim : return
@@ -74,11 +75,6 @@ func shoot() -> void:
 	else:
 		# Didn't shoot.
 		pass
-		
-func cycle_next_weapon() -> void:
-	# Super simple for testing multiple weapons for now.
-	if !can_shoot: return
-	tank.equip_next_weapon()
 	
 func load_and_apply_upgrades() -> void:
 	var mod_bundles:Array[ModBundle] = PlayerUpgrades.get_current_upgrades()
