@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dps6lqs28tqa1"]
+[gd_scene load_steps=15 format=3 uid="uid://dps6lqs28tqa1"]
 
 [ext_resource type="Script" uid="uid://drk5s6oo6lloa" path="res://controller/player/player.gd" id="1_t03mm"]
 [ext_resource type="PackedScene" uid="uid://dvr6bm2hlj5h4" path="res://tank/tank.tscn" id="2_3s1jp"]
@@ -27,8 +27,6 @@ autostart = true
 
 [node name="Weapons" type="Node" parent="."]
 
-[node name="WeaponLaser" parent="Weapons" instance=ExtResource("13_4e8rn")]
-
 [node name="WeaponLeadBall" parent="Weapons" instance=ExtResource("3_tmyes")]
 
 [node name="WeaponLeadballBurst" parent="Weapons" instance=ExtResource("4_khwvf")]
@@ -52,6 +50,8 @@ current_ammo = 3
 [node name="WeaponMissile" parent="Weapons" instance=ExtResource("8_j0lm5")]
 
 [node name="WeaponMissileHoming" parent="Weapons" instance=ExtResource("10_lvkgb")]
+
+[node name="WeaponLaser" parent="Weapons" instance=ExtResource("13_4e8rn")]
 
 [connection signal="tank_killed" from="Tank" to="." method="_on_tank_tank_killed"]
 [connection signal="timeout" from="TrajectoryPreviewer" to="." method="_on_trajectory_previewer_timeout"]
