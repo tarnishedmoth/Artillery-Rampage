@@ -30,10 +30,14 @@ class_name Weapon extends Node2D
 signal weapon_actions_completed(weapon: Weapon)
 ## Emits when [method Weapon.destroy] before [method queue_free].
 signal weapon_destroyed(weapon: Weapon)
+## Can be used by components.
+signal projectile_spawned(projectile_root_node)
 ## Used to emit the [member current_ammo] as an [int].
 signal ammo_changed(current_ammo:int)
 ## Used to emit the [member magazines] as an [int].
 signal magazines_changed(current_magazines:int)
+## Emitted when Player presses the "Cycle Weapon Mode" key.
+signal mode_change(current_mode:int)
 
 #region Variables
 ## This scene is spawned and set up when this weapon is fired. It is designed to use
@@ -185,6 +189,9 @@ var _game_precompiling:bool = false
 var _shoot_for_duration_power: float ## Internal: Cache of the requested power from [method shoot_for_duration].
 var _shoot_for_count_remaining: int ## Internal: Counter for [method shoot_for_count].
 var _awaiting_lifespan_completion: int ## Internal: Counter for [signal weapon_actions_completed].
+
+var mode:int = 0 ## Subclasses and components can make use of this counter.
+var modes_total:int = 0 ## Subclasses and components can make use of this counter.
 
 @onready var _starting_ammo:int = current_ammo ## Internal: Cache of [member current_ammo] on instantiation.
 @onready var _starting_magazines:int = magazines ## Internal: Cache of [member magazines] on instantiation.
@@ -432,6 +439,15 @@ func stop_all_sounds(_only_looping: bool = true) -> void: # TODO args
 func _add_projectile_awaiting(projectile: WeaponProjectile) -> void:
 	projectile.completed_lifespan.connect(_on_projectile_completed_lifespan) # So we know when the projectile is finished.
 	_awaiting_lifespan_completion += 1
+	
+## The [Weapon] class doesn't inherently use modes, but components and subclasses can make use of them.
+func next_mode() -> void:
+	## Or override this for functionality
+	#print_debug("Mode changed")
+	mode += 1
+	if mode >= modes_total:
+		mode = 0
+	mode_change.emit(mode)
 
 ## Emits death signals if appropriate and calls [method queue_free].
 func destroy() -> void:
@@ -527,6 +543,7 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 		#container.add_child(new_shot) # Original location, testing earlier use above
 		
 		#print_debug("Shot fired with ", velocity, " at ", aim_angle)
+		projectile_spawned.emit(new_shot)
 
 func _on_projectile_completed_lifespan() -> void:
 	_awaiting_lifespan_completion -= 1

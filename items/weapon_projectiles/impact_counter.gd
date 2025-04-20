@@ -1,6 +1,6 @@
 extends Node
 
-@export var count_to_arm:int = 2 ## Projectile will be armed (will explode on next impact) after this many impacts counted.
+@export var count_to_arm:int = 1 ## Projectile will be armed (will explode on next impact) after this many impacts counted.
 @export var impact_delay_buffer:float = 0.1 ## The buffer prevents multiple impacts registering more quickly than this time in seconds.
 
 @export_group("SFX", "sfx_")
