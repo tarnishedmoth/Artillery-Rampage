@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://b63tolfatjppu"]
+[gd_scene load_steps=7 format=3 uid="uid://b63tolfatjppu"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_6jm18"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_0svqt"]
 [ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_hdm3l"]
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="4_lk24d"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="5_paslo"]
+[ext_resource type="PackedScene" uid="uid://evwfga4yj1nk" path="res://weapons/weapon_laser.tscn" id="6_0svqt"]
 
 [node name="TestLevel01" type="Node2D"]
 
@@ -28,4 +29,7 @@ position = Vector2(934, 407)
 [node name="Player" parent="GameLevel" instance=ExtResource("5_paslo")]
 position = Vector2(120, 427)
 
+[node name="WeaponLaser2" parent="GameLevel/Player/Weapons" index="0" instance=ExtResource("6_0svqt")]
+
 [editable path="GameLevel/Enemy2"]
+[editable path="GameLevel/Player"]
