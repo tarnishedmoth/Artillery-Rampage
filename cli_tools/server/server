@@ -1,4 +1,12 @@
 #!/bin/bash
 
+opts=$1
+
 # You may need to replace `python` with `python3` on some platforms.
-python serve.py --root ../../build/web
+if [[ "$opts" == "-r" || "$opts" == "--release" ]]; then
+    echo "Serving release build..."
+    python serve.py --root ../../build/web/release
+else
+    echo "Serving debug build..."
+    python serve.py --root ../../build/web/debug
+fi
