@@ -1,4 +1,7 @@
-[gd_resource type="LabelSettings" format=3 uid="uid://byh6marjknil4"]
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://byh6marjknil4"]
+
+[ext_resource type="FontFile" uid="uid://cb5drvh0e7jll" path="res://ui/fonts/FreeSerif-YO4a.otf" id="1_v85p2"]
 
 [resource]
+font = ExtResource("1_v85p2")
 font_size = 24
