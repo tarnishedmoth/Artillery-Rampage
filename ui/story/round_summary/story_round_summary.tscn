@@ -77,6 +77,16 @@ layout_mode = 2
 [node name="Description" type="Label" parent="VBoxContainer/StoryTooltips/Tooltip"]
 layout_mode = 2
 
+[node name="Grade" parent="VBoxContainer" instance=ExtResource("2_q3afb")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" parent="VBoxContainer/Grade" index="0"]
+text = "Grade:"
+
+[node name="Value" parent="VBoxContainer/Grade" index="1"]
+text = "B+"
+
 [node name="Turns" parent="VBoxContainer" instance=ExtResource("2_q3afb")]
 unique_name_in_owner = true
 layout_mode = 2
@@ -139,6 +149,7 @@ stream = ExtResource("9_m67ci")
 [connection signal="pressed" from="VBoxContainer/Next" to="." method="_on_next_pressed"]
 
 [editable path="VBoxContainer/Title"]
+[editable path="VBoxContainer/Grade"]
 [editable path="VBoxContainer/Turns"]
 [editable path="VBoxContainer/Kills"]
 [editable path="VBoxContainer/DamageDone"]
