@@ -55,6 +55,8 @@ signal tank_stopped_falling(tank: Tank)
 var current_equipped_weapon: Weapon
 var current_equipped_weapon_index: int = -1
 
+@onready var fall_damage_causer: FallDamageCauser = %FallDamageCauser
+
 var health: float:
 	set(value):
 		health = clampf(value, 0.0, max_health)
@@ -328,7 +330,8 @@ func _check_and_emit_fall_damage(start_position: Vector2, end_position: Vector2)
 		return
 	var fall_damage := _calculate_fall_damage(start_position, end_position)
 	if fall_damage > 0:
-		self.take_damage(owner, self, fall_damage)
+		var instigator_controller:TankController = fall_damage_causer.instigator_controller if fall_damage_causer.instigator_controller else owner
+		self.take_damage(instigator_controller, self, fall_damage)
 		
 func _calculate_fall_damage(start_position: Vector2, end_position: Vector2) -> float:
 	var dist = (end_position - start_position).length()

@@ -10,13 +10,16 @@
 [node name="GameLevel" parent="." instance=ExtResource("1_7engp")]
 
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
-polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 234.375, 73.5294, 234.375, -220.588, 275, -220.588, 272.656, 70.5883, 609, -8, 937, -3, 945, 445, -103, 448)
+polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 234.375, 73.5294, 232.813, -361.765, 278.125, -361.765, 272.656, 70.5883, 609, -8, 937, -3, 945, 445, -103, 448)
+
+[node name="RoundDirector" parent="GameLevel" index="7"]
+player_goes_first = true
+shuffle_order = false
 
 [node name="Enemy1" parent="GameLevel" instance=ExtResource("2_bsaef")]
-position = Vector2(479, 278)
+position = Vector2(445, 186)
 
 [node name="Tank" parent="GameLevel/Enemy1" index="0"]
-position = Vector2(-38, 2)
 color = Color(0.682353, 0.713726, 0.219608, 1)
 
 [node name="RandoAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_cno0n")]

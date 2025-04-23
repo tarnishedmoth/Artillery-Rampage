@@ -31,7 +31,7 @@ signal copter_left_airspace(copter)
 
 signal wall_interaction(walls: Walls, projectile: WeaponProjectile, interaction_location: Walls.WallInteractionLocation)
 
-signal took_damage(object: Node, instigatorController: Node2D, instigator: Node2D)
+signal took_damage(object: Node, instigatorController: Node2D, instigator: Node2D, contact_point: Vector2)
 
 @warning_ignore_restore("unused_signal")
 

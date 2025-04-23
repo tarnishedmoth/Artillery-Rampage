@@ -232,7 +232,7 @@ func _on_player_took_damage(tank: Tank, instigatorController: Node2D, instigator
 	_check_gravity_damage_announce(tank, instigatorController, instigator, amount)
 		
 func _on_enemy_took_damage(tank: Tank, instigatorController: Node2D, instigator: Node2D, amount: float) -> void:
-	if instigatorController == _player:
+	if instigatorController == _player and tank != instigator:
 		print_debug("%s: Enemy took damage by player - enemy=%s; amount=%f" % [name, tank.owner, amount])	
 		_last_enemy_damage = amount
 		
@@ -253,7 +253,7 @@ func _on_turn_started(player: TankController) -> void:
 	
 #region Vandalism
 
-func _on_object_took_damage(object: Node, instigatorController: Node2D, _instigator: Node2D) -> void:
+func _on_object_took_damage(object: Node, instigatorController: Node2D, _instigator: Node2D, _contact_point: Vector2) -> void:
 	print_debug("%s: Object took damage - name=%s" % [name, object.name])
 	
 	# Ignore things not damaged by player
@@ -300,29 +300,30 @@ func _on_tank_stopped_falling(tank: Tank) -> void:
 		# This doesn't trigger until after the damage event so we can use the data stored to check for amount
 		_falling_players.erase(controller.get_instance_id())
 
-func _check_gravity_damage_announce(tank: Tank, instigator_controller: Node2D, instigator: Node2D, amount: float) -> void:
+func _check_gravity_damage_announce(tank: Tank, _instigator_controller: Node2D, instigator: Node2D, amount: float) -> void:
 	# For gravity damage the instigatorController is self and instigator is tank itself
 	# TODO: Have a damage type and falling as this type or have a separate event to distinguish more reliably
-	if instigator_controller != tank.owner or instigator != tank:
+	# For fall damage instigator will be the tank itself but the instigator_controller could be another player that caused the fall
+	if instigator != tank or not tank.owner:
 		return
 		
-	var instigator_id:int = instigator_controller.get_instance_id()
+	var instigator_id:int = tank.owner.get_instance_id()
 	if not instigator_id in _falling_players:
-		print_debug("%s - _check_gravity_damage_announce - false positive on %s as wasn't in the falling dictionary" % [name, instigator_controller])
+		print_debug("%s - _check_gravity_damage_announce - false positive on %s as wasn't in the falling dictionary" % [name,  tank.owner])
 		return
 	
 	var starting_health:float = _falling_players[instigator_id]
 	var is_kill:bool = is_equal_approx(amount, starting_health)
 	
 	if is_kill:
-		print_debug("%s - _check_gravity_damage_announce: player %s killed by gravity alone" % [name, instigator_controller])
+		print_debug("%s - _check_gravity_damage_announce: player %s killed by gravity alone" % [name,  tank.owner])
 		#_queued_announcements.push_back(gravity_kill_sfx_res)
 		_add_stamped_announcement(gravity_kill_sfx_res, 0.1)
 	else:
 		var loss_fraction:float = amount / tank.max_health
 		var trigger_damage_alert:bool = loss_fraction >= free_fallin_health_fraction_loss_threshold
 	
-		print_debug("%s - _check_gravity_damage_announce: player=%s; amount=%f; loss_fraction=%f; trigger=%s" % [name, instigator_controller, amount, loss_fraction, trigger_damage_alert])
+		print_debug("%s - _check_gravity_damage_announce: player=%s; amount=%f; loss_fraction=%f; trigger=%s" % [name,  tank.owner, amount, loss_fraction, trigger_damage_alert])
 	
 		if trigger_damage_alert:
 			#_queued_announcements.push_back(free_falling_sfx_res)

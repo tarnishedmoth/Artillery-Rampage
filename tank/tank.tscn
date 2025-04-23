@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dvr6bm2hlj5h4"]
+[gd_scene load_steps=12 format=3 uid="uid://dvr6bm2hlj5h4"]
 
 [ext_resource type="Script" uid="uid://capm81lvak2c3" path="res://tank/tank.gd" id="1_0iy80"]
 [ext_resource type="Script" uid="uid://iirywjtssovs" path="res://tank/tank_body.gd" id="2_o5qn2"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://banqgk8hu7ykt" path="res://tank/tank_placeholder_texture.tres" id="3_t17rk"]
 [ext_resource type="Curve" uid="uid://b18ca2qbmkjvy" path="res://tank/aim_deviation_v_health.tres" id="4_cvubm"]
 [ext_resource type="PackedScene" uid="uid://8ypb526keg0k" path="res://weapons/weapon_trajectory_previewer.tscn" id="7_hqpr6"]
+[ext_resource type="Script" uid="uid://cu7a4bvlikg2j" path="res://tank/fall_damage_causer.gd" id="8_5poe7"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1pofo"]
 friction = 100.0
@@ -76,3 +77,8 @@ position = Vector2(0, -13)
 accuracy_angle_spread = 0.0174533
 use_fire_rate = false
 emit_action_signals = false
+
+[node name="FallDamageCauser" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("8_5poe7")
+metadata/_custom_type_script = "uid://cu7a4bvlikg2j"
