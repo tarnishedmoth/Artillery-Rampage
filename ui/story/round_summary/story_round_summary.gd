@@ -34,7 +34,7 @@ static func _static_init():
 		grade_to_letter[i] = grades[i]
 
 func _ready() -> void:
-	var stats := RoundStatTracker.round_data
+	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
 	if not stats:
 		push_error("No stat tracking was recorded!")
 		title.set_value("ERROR!")
@@ -61,7 +61,7 @@ func _ready() -> void:
 	_play_audio()
 	
 func _on_next_pressed() -> void:
-	var stats := RoundStatTracker.round_data
+	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
 
 	if stats and stats.won:
 		SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap)
@@ -103,7 +103,7 @@ func _calculate_grade() -> int:
 	# If won look at damage ratio and take into account kills
 	# TODO: For miracle, track damage done and kills at low health - probably need to bracket into percentiles (not dictionary with float)
 	# That tracks damage_done and kills at each health level
-	var stats := RoundStatTracker.round_data
+	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
 
 	# Damage to health lost ratio
 	var damage_to_health:float = stats.damage_done / maxf(stats.max_health - stats.final_health, 1.0)
