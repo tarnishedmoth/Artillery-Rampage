@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://blq5nrj7cm2f3"]
+
+[ext_resource type="PackedScene" uid="uid://b00kdwwjo4hg8" path="res://destructible/destructible_object.tscn" id="1_hhghx"]
+[ext_resource type="PackedScene" uid="uid://dnyfrb2okojox" path="res://terrain/destructible_terrain_chunk_body.tscn" id="2_o6w57"]
+
+[node name="DestructibleTerrainChunk" groups=["TerrainChunk"] instance=ExtResource("1_hhghx")]
+
+[node name="DestructibleTerrainChunkBody" parent="." index="0" instance=ExtResource("2_o6w57")]

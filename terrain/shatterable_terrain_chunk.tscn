@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://vdbf13j8n2f4"]
+
+[ext_resource type="PackedScene" uid="uid://pdcv81wpv3s8" path="res://destructible/shatter/shatterable_object.tscn" id="1_y5ttr"]
+[ext_resource type="PackedScene" uid="uid://dunveja8n84fm" path="res://terrain/shatterable_terrain_chunk_body.tscn" id="2_ipihv"]
+
+[node name="ShatterableTerrainChunk" groups=["TerrainChunk"] instance=ExtResource("1_y5ttr")]
+
+[node name="ShatterableTerrainChunkBody" parent="BodyContainer" index="0" instance=ExtResource("2_ipihv")]
