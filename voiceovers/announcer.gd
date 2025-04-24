@@ -120,7 +120,7 @@ func _on_round_started() -> void:
 		print_debug("%s - subscribing to terrain fracture events for avalanche level" % name)
 		_game_level.terrain.chunk_split.connect(_on_terrain_chunk_split)
 
-func _on_terrain_chunk_split(chunk: Node,  new_chunk: Node) -> void:
+func _on_terrain_chunk_split(chunk: Node2D,  new_chunk: Node2D) -> void:
 	print_debug("%s: Terrain Chunk split: chunk=%s; new_chunk=%s" % [name, chunk, new_chunk])
 	_terrain_break_frame = _game_level.game_timer.frame
 	

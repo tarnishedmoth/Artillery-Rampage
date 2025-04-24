@@ -17,6 +17,24 @@ const TerrainChunkScene = preload("res://terrain/terrain_chunk.tscn")
 @export_category("Crushing")
 @export var max_crush_triangle_delete_size: float = 150
 
+## Customize the types of chunks that can break off when the terrain is being destroyed
+@export_group("Chunks")
+
+## DestructibleObject derived scenes
+@export_category("Destructible")
+
+## Optional chunk scene for rigid body chunks that can break off when the terrain breaks
+@export var destructible_chunk_scene: PackedScene
+@export var destructible_area_threshold_range:Vector2
+
+## ShatterableObject derived scenes
+@export_category("Shatterable")
+
+@export var shatterable_chunk_scene: PackedScene
+@export var shatterable_area_threshold_range:Vector2
+
+@export_group("")
+
 var initial_chunk_name: String
 var first_child_chunk: TerrainChunk
 
@@ -26,7 +44,7 @@ var first_child_chunk: TerrainChunk
 ## This could be a TerrainChunk static body, some kind of destructible object chunk that is in the TerrainChunk group
 ## or a shatterable object chunk that is in the TerrainChunk group and has broken into pieces
 @warning_ignore("unused_signal")
-signal chunk_split(chunk: Node,  new_chunk: Node)
+signal chunk_split(chunk: Node2D,  new_chunk: Node2D)
 
 # TODO: Currently we are not destroying the whole terrain when all chunks destroyed
 # and this could have other impacts to other systems that rely on the object existing
@@ -134,6 +152,8 @@ func get_chunk_count() -> int:
 			count += 1
 	return count
 	
+#region New Terrain Chunk
+
 func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_poly: PackedVector2Array) -> void:
 	# TODO: Have some criteria on whether this will be a static chunk, or a destructible chunk or shatterable chunk
 	# to be specified as separate prototype scenes
@@ -145,8 +165,40 @@ func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_
 
 	# TODO: Right now the texture resource application is broken for new chunks - this happens on the whitecaps
 	# So need to solve for that as well
+	var new_chunk:Node2D = null
 	
+	if not destructible_chunk_scene or not shatterable_chunk_scene:
+		var poly_area:float = TerrainUtils.calculate_polygon_area(new_clip_poly)
+
+		if shatterable_chunk_scene and poly_area >= shatterable_area_threshold_range.x and poly_area <= shatterable_area_threshold_range.y:
+			# TODO: Create shatterable object scene
+			pass
+		elif destructible_chunk_scene and poly_area >= destructible_area_threshold_range.x and poly_area <= destructible_area_threshold_range.y:
+			# TODO: Create destructible object scene
+			pass
+
+	# Fallback to default chunk strategy
+	if not new_chunk:
+		new_chunk = _create_default_chunk(prototype_chunk, chunk_name, new_clip_poly)
+
+	# TODO: For destructible_object always pass in incident chunk and this is usually main one
+	# but chunks could subdivide after initial splitting so should account for that in the parameter
+	chunk_split.emit(prototype_chunk, new_chunk)
+
+	print_debug("added new chunk=%s - chunk count=%d" % [new_chunk.name, get_chunk_count()])
+
+
+func _create_default_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_poly: PackedVector2Array) -> Node2D:
 	var new_chunk = TerrainChunkScene.instantiate()
+	_configure_new_chunk(new_chunk, chunk_name)
+	
+	_update_chunk_from_prototype(prototype_chunk, new_chunk)
+
+	new_chunk.replace_contents(new_clip_poly)
+
+	return new_chunk
+
+func _configure_new_chunk(new_chunk: Node2D, chunk_name: String) -> void:
 	new_chunk.name = chunk_name
 	# By definition a disconnected chunk could be falling so we will let it test for that
 	new_chunk.falling = true
@@ -156,18 +208,13 @@ func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_
 	add_child(new_chunk)
 	# Must be done after adding as a child
 	new_chunk.owner = self
-	
+
+func _update_chunk_from_prototype(prototype_chunk: Node2D, new_chunk: Node2D) -> void:
 	# Put the new chunk with same positioning was existing
 	new_chunk.global_transform = prototype_chunk.global_transform
 	new_chunk.z_index = prototype_chunk.z_index
 
-	new_chunk.replace_contents(new_clip_poly)
-
-	# TODO: For destructible_object always pass in incident chunk and this is usually main one
-	# but chunks could subdivide after initial splitting so should account for that in the parameter
-	chunk_split.emit(prototype_chunk, new_chunk)
-
-	print_debug("added new chunk=%s - chunk count=%d" % [new_chunk.name, get_chunk_count()])
+#endregion
 
 func _morph_falling_chunk(chunk: TerrainChunk) -> PackedVector2Array:
 	var falling_transform: Transform2D = Transform2D(0, Vector2(0, falling_offset))
