@@ -20,7 +20,7 @@ material = SubResource("ShaderMaterial_m70bf")
 repeat = 3
 offset = Vector2(0, 400)
 
-[node name="TerrainChunk" type="StaticBody2D" groups=["Destructible"]]
+[node name="TerrainChunk" type="StaticBody2D" groups=["Destructible", "TerrainChunk"]]
 collision_layer = 8
 collision_mask = 59
 script = ExtResource("1_m7lgb")

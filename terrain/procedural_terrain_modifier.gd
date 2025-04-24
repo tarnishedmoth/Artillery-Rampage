@@ -47,7 +47,9 @@ func _modify_terrain():
 	var current_terrain_bounds := _terrain.get_bounds_global()
 
 	for chunk in _terrain.get_chunks():
-		_modify_chunk(chunk, viewport_bounds, current_terrain_bounds)
+		var terrain_chunk := chunk as TerrainChunk
+		if terrain_chunk:
+			_modify_chunk(terrain_chunk, viewport_bounds, current_terrain_bounds)
 
 func _modify_chunk(chunk: TerrainChunk, viewport_bounds: Rect2, _terrain_bounds: Rect2) -> void:
 

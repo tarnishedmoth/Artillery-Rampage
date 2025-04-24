@@ -56,6 +56,7 @@ Bot="AI-controlled unit"
 Collectible="Retrievable pickups--see Personnel"
 Savable="Class that participates in save/load system"
 DamageableRoot="Root node in the damageable or destructible tree - e.g. Terrain for TerrainChunk"
+TerrainChunk="Class that can be used as a child in Terrain system. Allows for destructible and shatterable objects in addition to standard static TerrainChunk"
 
 [input]
 

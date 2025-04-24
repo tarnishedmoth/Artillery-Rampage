@@ -22,8 +22,11 @@ var first_child_chunk: TerrainChunk
 
 @onready var _destructible_shape_calculator: DestructibleShapeCalculator = $DestructibleShapeCalculator
 
+## Fires when a piece of the terrain is destroyed
+## This could be a TerrainChunk static body, some kind of destructible object chunk that is in the TerrainChunk group
+## or a shatterable object chunk that is in the TerrainChunk group and has broken into pieces
 @warning_ignore("unused_signal")
-signal chunk_split(chunk: TerrainChunk,  new_chunk: TerrainChunk)
+signal chunk_split(chunk: Node,  new_chunk: Node)
 
 # TODO: Currently we are not destroying the whole terrain when all chunks destroyed
 # and this could have other impacts to other systems that rely on the object existing
@@ -31,8 +34,11 @@ signal chunk_split(chunk: TerrainChunk,  new_chunk: TerrainChunk)
 @warning_ignore("unused_signal")
 signal destroyed(terrain: Terrain)
 
+## Fires when a piece of the terrain is destroyed
+## This could be a TerrainChunk static body, some kind of destructible object chunk that is in the TerrainChunk group
+## or a shatterable object chunk that is in the TerrainChunk group and has broken into pieces
 @warning_ignore("unused_signal")
-signal chunk_destroyed(terrain: TerrainChunk)
+signal chunk_destroyed(terrain_chunk: PhysicsBody2D)
 
 func _ready():
 
@@ -40,7 +46,7 @@ func _ready():
 	initial_chunk_name = first_child_chunk.name
 	
 	for chunk in get_children():
-		if chunk is TerrainChunk:
+		if chunk.is_in_group(Groups.TerrainChunk):
 			chunk.owner = self
 
 #TODO: We should never delete the first chunk but sometimes this is happening
@@ -57,7 +63,8 @@ func get_first_chunk() -> TerrainChunk:
 # poly_scale will determine the size of the explosion that destroys the terrain
 
 # TODO: Think projectile_poly should be a property of the WeaponProjectile and then can call .get_projectile_poly_global to
-# get the randomized damage polygon	
+# get the randomized damage polygon
+# Only static TerrainChunk objects are damaged this way - other destructible or shatterable chunks are handled in their respective classes
 func damage(terrainChunk: TerrainChunk, projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
 	print_debug("%s - chunk=%s damaged by %s with poly_scale=%s" % [name, terrainChunk.name, projectile.name, poly_scale])
 
@@ -123,11 +130,22 @@ func _add_new_chunks(first_chunk: TerrainChunk,
 func get_chunk_count() -> int:
 	var count:int = 0
 	for chunk in get_children():
-		if chunk is TerrainChunk:
+		if chunk.is_in_group(Groups.TerrainChunk):
 			count += 1
 	return count
 	
 func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_poly: PackedVector2Array) -> void:
+	# TODO: Have some criteria on whether this will be a static chunk, or a destructible chunk or shatterable chunk
+	# to be specified as separate prototype scenes
+	# Will need to pass in some of the projectile characteristics like impact velocity and direction
+	# so that the right impulse is applied when it is created for rigid body chunks
+	# Can't just pass in the WeaponProjectile as it will be destroyed by the time this is called since it is called deferred
+	# Store these in a struct-like class
+	# Will also need a way to copy over the terrain texture so it is seamlessly applied to the new chunk
+
+	# TODO: Right now the texture resource application is broken for new chunks - this happens on the whitecaps
+	# So need to solve for that as well
+	
 	var new_chunk = TerrainChunkScene.instantiate()
 	new_chunk.name = chunk_name
 	# By definition a disconnected chunk could be falling so we will let it test for that
@@ -227,6 +245,13 @@ func merge_chunks(in_first_chunk: TerrainChunk, in_second_chunk: TerrainChunk) -
 	return stop_falling
 	
 func _delete_chunk(chunk: TerrainChunk) -> void:
+	# TODO: Need to listen for child DestructibleObject or ShatterableObject deletion signals and then re-propagate them here
+	# There is some inconsistency here as the "chunk_count" will apply to the full destructible or shatterable object
+	# For shatterable for sure want to only emit when the full object is shattered into pieces
+	# For destructibleObject if we end up supporting multiple chunks each chunk being destroyed should emit a separate event
+	# as these events are more discrete
+	# The destroyed chunks will always be the chunk classes of either TerrainChunk or a derived class of DestructibleObjectChunk or ShatterableObjectChunk
+	# These all have the common base class PhysicsBody2D
 	chunk_destroyed.emit(chunk)
 	chunk.delete()
 	await get_tree().process_frame
@@ -292,10 +317,10 @@ func contains_point(point: Vector2) -> bool:
 				return true
 	return false
 
-func get_chunks() -> Array[TerrainChunk]:
-	var chunks : Array[TerrainChunk] = []
+func get_chunks() -> Array[Node]:
+	var chunks : Array[Node] = []
 	for child in get_children():
-		if child is TerrainChunk:
+		if child.is_in_group(Groups.TerrainChunk):
 			chunks.push_back(child)
 	return chunks
 	
