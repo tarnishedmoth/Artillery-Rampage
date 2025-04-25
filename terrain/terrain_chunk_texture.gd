@@ -21,12 +21,13 @@ func _init(
 	offset = p_offset
 	 
 # TODO: We can add more complex logic to see if this resource meets the criteria of the chunk
-func matches(_chunk: TerrainChunk) -> bool:
+func matches(_chunk: Node2D) -> bool:
 	return true
 	
 func apply_to(chunk: TerrainChunk) -> void:
-	var mesh: Polygon2D = chunk.terrainMesh
-	
+	apply_to_mesh(chunk.terrainMesh)
+
+func apply_to_mesh(mesh: Polygon2D) -> void:
 	mesh.material = material
 	mesh.set_texture(texture)
 	mesh.texture_repeat = repeat

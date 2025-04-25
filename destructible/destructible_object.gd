@@ -118,8 +118,11 @@ func _add_new_chunks(incident_chunk: DestructibleObjectChunk,
 func _add_new_chunk(incident_chunk: DestructibleObjectChunk = null, chunk_name: String = "", new_clip_poly: PackedVector2Array = []) -> DestructibleObjectChunk:
 	if not chunk_scene:
 		push_error("%s - No chunk_scene set" % [name])
-		return
-	var new_chunk = chunk_scene.instantiate()
+		return null
+	var new_chunk:Node = chunk_scene.instantiate() as DestructibleObjectChunk
+	if not new_chunk:
+		push_error("%s - chunk_scene %s is not a DestructibleObjectChunk" % [name, chunk_scene.resource_path])
+		return null
 
 	if chunk_name:
 		new_chunk.name = chunk_name

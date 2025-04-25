@@ -31,6 +31,7 @@ var shatter_iteration: int = 0
 var _init_poly:PackedVector2Array = []
 var _init_owner: Node
 
+@export
 var density: float = 0.0
 var area: float = 0.0
 

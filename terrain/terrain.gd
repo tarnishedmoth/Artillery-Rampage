@@ -155,27 +155,26 @@ func get_chunk_count() -> int:
 #region New Terrain Chunk
 
 func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_poly: PackedVector2Array) -> void:
-	# TODO: Have some criteria on whether this will be a static chunk, or a destructible chunk or shatterable chunk
-	# to be specified as separate prototype scenes
-	# Will need to pass in some of the projectile characteristics like impact velocity and direction
+	# TODO: Will need to pass in some of the projectile characteristics like impact velocity and direction
 	# so that the right impulse is applied when it is created for rigid body chunks
 	# Can't just pass in the WeaponProjectile as it will be destroyed by the time this is called since it is called deferred
 	# Store these in a struct-like class
 	# Will also need a way to copy over the terrain texture so it is seamlessly applied to the new chunk
 
-	# TODO: Right now the texture resource application is broken for new chunks - this happens on the whitecaps
-	# So need to solve for that as well
 	var new_chunk:Node2D = null
 	
-	if not destructible_chunk_scene or not shatterable_chunk_scene:
+	if destructible_chunk_scene or shatterable_chunk_scene:
 		var poly_area:float = TerrainUtils.calculate_polygon_area(new_clip_poly)
 
-		if shatterable_chunk_scene and poly_area >= shatterable_area_threshold_range.x and poly_area <= shatterable_area_threshold_range.y:
-			# TODO: Create shatterable object scene
-			pass
-		elif destructible_chunk_scene and poly_area >= destructible_area_threshold_range.x and poly_area <= destructible_area_threshold_range.y:
-			# TODO: Create destructible object scene
-			pass
+		if shatterable_chunk_scene and poly_area >= shatterable_area_threshold_range.x and poly_area < shatterable_area_threshold_range.y:
+			print_debug("_add_new_chunk: shatterable_chunk_scene(%s) - poly_area=%f; new_clip_poly=%d" % [shatterable_chunk_scene.resource_path, poly_area, new_clip_poly.size()])
+			new_chunk = _create_shatterable_chunk(prototype_chunk, chunk_name, new_clip_poly)
+		elif destructible_chunk_scene and poly_area >= destructible_area_threshold_range.x and poly_area < destructible_area_threshold_range.y:
+			print_debug("_add_new_chunk: destructible_chunk_scene(%s) - poly_area=%f; new_clip_poly=%d" % [destructible_chunk_scene.resource_path, poly_area, new_clip_poly.size()])
+			new_chunk = _create_destructible_chunk(prototype_chunk, chunk_name, new_clip_poly)
+		else:
+			print_debug("_add_new_chunk: default chunk_scene - poly_area=%f; new_clip_poly=%d" % [poly_area, new_clip_poly.size()])
+			new_chunk = _create_default_chunk(prototype_chunk, chunk_name, new_clip_poly)
 
 	# Fallback to default chunk strategy
 	if not new_chunk:
@@ -189,7 +188,14 @@ func _add_new_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_
 
 
 func _create_default_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_poly: PackedVector2Array) -> Node2D:
-	var new_chunk = TerrainChunkScene.instantiate()
+	var new_chunk: TerrainChunk = TerrainChunkScene.instantiate() as TerrainChunk
+	assert(new_chunk, "%s - new_chunk(%s) from %s is not a TerrainChunk" % 
+		[name, chunk_name, TerrainChunkScene.resource_path])
+	
+	# By definition a disconnected chunk could be falling so we will let it test for that
+	new_chunk.falling = true
+	new_chunk.texture_resources = prototype_chunk.texture_resources
+
 	_configure_new_chunk(new_chunk, chunk_name)
 	
 	_update_chunk_from_prototype(prototype_chunk, new_chunk)
@@ -198,10 +204,50 @@ func _create_default_chunk(prototype_chunk: TerrainChunk, chunk_name: String, ne
 
 	return new_chunk
 
+func _create_destructible_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_poly: PackedVector2Array) -> Node2D:
+	var new_chunk:DestructibleTerrainChunk = destructible_chunk_scene.instantiate() as DestructibleTerrainChunk
+
+	if not new_chunk:
+		push_error("%s - new_chunk(%s) from %s is not a DestructibleTerrainChunk" % 
+			[name, chunk_name, destructible_chunk_scene.resource_path])
+		return null
+	if new_chunk.get_chunk_count() != 1:
+		push_error("%s - new_chunk(%s) from %s has %d chunks - expected 1" % 
+			[name, new_chunk.name, destructible_chunk_scene.resource_path, new_chunk.get_chunk_count()])
+		return null
+
+	_configure_new_chunk(new_chunk, chunk_name)
+	
+	_update_chunk_from_prototype(prototype_chunk, new_chunk)
+
+	var chunk_body:Node = new_chunk.get_chunks()[0]
+
+	chunk_body.texture_resources = prototype_chunk.texture_resources
+	chunk_body.apply_textures()
+	chunk_body.replace_contents(new_clip_poly)
+
+	return new_chunk
+
+func _create_shatterable_chunk(prototype_chunk: TerrainChunk, chunk_name: String, new_clip_poly: PackedVector2Array) -> Node2D:
+	var new_scene:Node = shatterable_chunk_scene.instantiate()
+	var new_chunk:ShatterableTerrainChunk = new_scene as ShatterableTerrainChunk
+
+	if not new_chunk:
+		push_error("%s - new_chunk(%s) from %s is not a ShatterableTerrainChunk" % 
+			[name, new_scene.name, shatterable_chunk_scene.resource_path])
+		return null
+
+	new_chunk.initial_poly = new_clip_poly
+	new_chunk.texture_resources = prototype_chunk.texture_resources
+
+	_configure_new_chunk(new_chunk, chunk_name)
+
+	_update_chunk_from_prototype(prototype_chunk, new_chunk)
+
+	return new_chunk
+
 func _configure_new_chunk(new_chunk: Node2D, chunk_name: String) -> void:
 	new_chunk.name = chunk_name
-	# By definition a disconnected chunk could be falling so we will let it test for that
-	new_chunk.falling = true
 	
 	# Get an error when this is called upstream from weapon_projectile.on_body_entered() -
 	# E 0:00:34:0608   terrain.gd:137 @ _add_new_chunk(): Can't change this state while flushing queries. Use call_deferred() or set_deferred() to change monitoring state instead.

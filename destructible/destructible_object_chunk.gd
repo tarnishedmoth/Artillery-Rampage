@@ -20,6 +20,8 @@ class_name DestructibleObjectChunk extends RigidBody2D
 @export_group("Damage")
 @export var destroy_below_min_mass: bool
 
+@export_group("Physical Properties")
+@export
 ## Density in kg / p^2
 var density: float
 
