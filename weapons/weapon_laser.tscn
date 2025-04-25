@@ -17,6 +17,8 @@ scene_to_spawn = ExtResource("2_l583l")
 display_name = "Laser"
 fire_velocity = 100000.0
 power_launch_speed_mult = 10.0
+use_ammo = true
+current_ammo = 3
 sfx_fire = NodePath("Fire")
 
 [node name="Fire" type="AudioStreamPlayer2D" parent="."]

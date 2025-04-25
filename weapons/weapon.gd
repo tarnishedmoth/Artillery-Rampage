@@ -534,9 +534,7 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 			aim_angle += deviation
 			# TODO this should also rotate the object
 		
-		#if new_shot is WeaponBeam:
-			#new_shot.global_rotation = barrel.global_rotation # This is already part of the global transform set a few lines above
-		if new_shot is RigidBody2D:
+		if new_shot is RigidBody2D and new_shot is not WeaponBeam:
 			var velocity = Vector2(power, 0.0)
 			new_shot.linear_velocity = velocity.rotated(aim_angle)
 			# TODO alternative for other types of objects?
