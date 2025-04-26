@@ -41,7 +41,7 @@ func _request_sync_polygons() -> void:
 	if !use_mesh_as_collision:
 		return
 	# Make sure the collision and visual polygon the same
-	# Need to wake up the rigidt body if it is asleep so that these changes take immediate effect
+	# Need to wake up the rigid body if it is asleep so that these changes take immediate effect
 	sleeping = false
 	
 	# Wait until next frame to signal the collision update
@@ -117,11 +117,16 @@ func _replace_contents_local(new_poly: PackedVector2Array, immediate:bool) -> vo
 		return
 	
 	if(immediate):
-		_mesh.polygon = new_poly
+		_update_poly_local(new_poly)
 	else:
-		_mesh.set_deferred("polygon", new_poly)
+		call_deferred("_update_poly_local", new_poly)
 
 	_request_sync_polygons()
+
+## Called to update the meshes polygon in local space
+## Can be overridden to take additional actions
+func _update_poly_local(new_poly: PackedVector2Array) -> void:
+	_mesh.polygon = new_poly
 
 class UpdateFlags:
 	const Immediate:int = 1

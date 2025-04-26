@@ -216,6 +216,9 @@ func _create_destructible_chunk(prototype_chunk: TerrainChunk, chunk_name: Strin
 			[name, new_chunk.name, destructible_chunk_scene.resource_path, new_chunk.get_chunk_count()])
 		return null
 
+	# Place new chunk at the new_clip_poly centroid
+	#_center_rigid_body_chunk(new_chunk, new_clip_poly)
+
 	_configure_new_chunk(new_chunk, chunk_name)
 	
 	_update_chunk_from_prototype(prototype_chunk, new_chunk)
@@ -237,6 +240,8 @@ func _create_shatterable_chunk(prototype_chunk: TerrainChunk, chunk_name: String
 			[name, new_scene.name, shatterable_chunk_scene.resource_path])
 		return null
 
+	#_center_rigid_body_chunk(new_chunk, new_clip_poly)
+
 	new_chunk.initial_poly = new_clip_poly
 	new_chunk.texture_resources = prototype_chunk.texture_resources
 
@@ -245,6 +250,13 @@ func _create_shatterable_chunk(prototype_chunk: TerrainChunk, chunk_name: String
 	_update_chunk_from_prototype(prototype_chunk, new_chunk)
 
 	return new_chunk
+
+func _center_rigid_body_chunk(chunk: Node2D, new_clip_poly: PackedVector2Array) -> void:
+	# Place new chunk at the new_clip_poly centroid
+	var centroid: Vector2 = TerrainUtils.polygon_centroid(new_clip_poly)
+	chunk.global_position = centroid
+	for i in new_clip_poly.size():
+		new_clip_poly[i] -= centroid
 
 func _configure_new_chunk(new_chunk: Node2D, chunk_name: String) -> void:
 	new_chunk.name = chunk_name
