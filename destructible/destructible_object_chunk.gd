@@ -28,10 +28,12 @@ var density: float
 const surface_delta_y: float = 1.0
 
 var _collision_dirty:bool
+var _initialized_mass_and_density:bool
 
 func _ready() -> void:
-	_set_initial_mass_and_density()
-	_request_sync_polygons()
+	if not _mesh.polygon.is_empty():
+		_set_initial_mass_and_density()
+		_request_sync_polygons()
 
 func damage(projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
 	owner.damage(self, projectile, contact_point, poly_scale)
@@ -61,6 +63,8 @@ func _sync_polygons() -> void:
 	_collision_dirty = false
 
 func _set_initial_mass_and_density() -> void:
+	_initialized_mass_and_density = true
+
 	# If density already provided, set the mass based on density and area
 	if density > 0:
 		_recalculate_mass()
@@ -70,8 +74,12 @@ func _set_initial_mass_and_density() -> void:
 		push_warning("DestructibleObjectChunk(%s) - Neither mass nor density provided, setting density to 1.0" % [name])
 		density = 1.0
 		_recalculate_mass()
-
+	
 func _recalculate_mass() -> void:
+	if not _initialized_mass_and_density:
+		_set_initial_mass_and_density()
+		return
+	
 	# Calculate the mass based on the area of the polygon
 	var should_delete:bool = false
 	var area:float = TerrainUtils.calculate_polygon_area(_mesh.polygon)
@@ -160,7 +168,7 @@ func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global
 	_replace_contents_local(replacement_poly_local, update_flags & UpdateFlags.Immediate)
 	
 	# Convert additional chunks to global
-	for i in range(0, additional_chunk_polys.size()):
+	for i in additional_chunk_polys.size():
 		var additional_chunk_poly = additional_chunk_polys[i]
 		additional_chunk_polys[i] = _mesh.global_transform * additional_chunk_poly
 		

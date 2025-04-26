@@ -14,9 +14,9 @@
 
 [node name="Terrain" parent="GameLevel" index="3"]
 destructible_chunk_scene = ExtResource("2_ohbu4")
-destructible_area_threshold_range = Vector2(1000, 10000)
+destructible_area_threshold_range = Vector2(4000, 20000)
 shatterable_chunk_scene = ExtResource("3_tm77w")
-shatterable_area_threshold_range = Vector2(0, 1000)
+shatterable_area_threshold_range = Vector2(0, 4000)
 
 [node name="RoundDirector" parent="GameLevel" index="7"]
 player_goes_first = true

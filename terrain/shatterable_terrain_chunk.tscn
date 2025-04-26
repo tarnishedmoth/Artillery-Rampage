@@ -7,3 +7,4 @@
 [node name="ShatterableTerrainChunk" groups=["TerrainChunk"] instance=ExtResource("1_y5ttr")]
 script = ExtResource("2_ipihv")
 chunk_scene = ExtResource("3_h8wss")
+impulse_multiplier = 0.0001

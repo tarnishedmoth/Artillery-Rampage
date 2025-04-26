@@ -1,12 +1,23 @@
-[gd_scene load_steps=5 format=3 uid="uid://dnyfrb2okojox"]
+[gd_scene load_steps=6 format=3 uid="uid://dnyfrb2okojox"]
 
 [ext_resource type="PackedScene" uid="uid://cklh78tsa5qcj" path="res://destructible/destructible_object_chunk.tscn" id="1_gxofj"]
 [ext_resource type="Script" uid="uid://dsiuvryqggu03" path="res://terrain/destructible_terrain_chunk_body.gd" id="2_r1qkq"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="3_em7fj"]
 [ext_resource type="Resource" uid="uid://d3wya431x5exo" path="res://terrain/terrain_chunk_texture.tres" id="4_edu2y"]
 
+[sub_resource type="Curve" id="Curve_em7fj"]
+_limits = [20.0, 500.0, 1.0, 100.0]
+_data = [Vector2(1, 20), 0.0, 0.0, 0, 0, Vector2(100, 500), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [node name="DestructibleTerrainChunkBody" instance=ExtResource("1_gxofj")]
 collision_layer = 8
 script = ExtResource("2_r1qkq")
 texture_resources = Array[ExtResource("3_em7fj")]([ExtResource("4_edu2y")])
+crumble_impulse_threshold = 1.0
+impulse_crumbling_enabled = true
+influence_poly_size_v_impulse = SubResource("Curve_em7fj")
+enable_impulse_crumble_smoothing = true
+min_mass = 10.0
+destroy_below_min_mass = true
 density = 2.0

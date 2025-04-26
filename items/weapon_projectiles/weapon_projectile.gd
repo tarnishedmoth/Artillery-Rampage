@@ -116,7 +116,7 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 		# and this agrees with empirical results
 		var pos: Vector2 = state.get_contact_local_position(0)
 		current_collision = CollisionResult.new()
-
+		
 		current_collision.game_time_seconds = SceneManager.get_current_level_root().game_timer.time_seconds
 		current_collision.global_position = pos
 		current_collision.collider = state.get_contact_collider_object(0) as Node2D

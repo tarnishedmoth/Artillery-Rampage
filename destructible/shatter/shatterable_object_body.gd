@@ -74,19 +74,20 @@ func _recenter_polygon() -> void:
 func damage(projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
 	owner.damage(self, projectile, contact_point, poly_scale)
 	
-func shatter(projectile: WeaponProjectile, destructible_poly_global: PackedVector2Array) -> Array[Node2D]:
-	# TODO: Split current polygon into smaller pieces as new bodies
-	# Should set a lifetime on smaller pieces to auto-delete or go to sleep permanently after a given interval
-	# If we want ot be able to shatter again we return another instance of ShatterableObjectBody; otherwise, return a simple RigidBody2D or event a 
-	# StaticBody2D or just a particle effect that expires and deletes itself after a period
-	# TODO: Use velocity of weapon projectile to determine how pieces fly off
+func shatter(projectile: WeaponProjectile, _destructible_poly_global: PackedVector2Array) -> Array[Node2D]:
+	var pieces: Array[Node2D] = []
+	if shatter_iteration < max_shatter_divisions:
+		pieces.append_array(shatter_with_velocity(projectile.last_recorded_linear_velocity))
+	return pieces
+
+func shatter_with_velocity(impact_velocity: Vector2) -> Array[Node2D]:
 	var new_bodies: Array[Node2D] = []
 
 	if shatter_iteration < max_shatter_divisions:
-		var new_polys: Array[PackedVector2Array] = _create_shatter_polys(projectile, destructible_poly_global)
+		var new_polys: Array[PackedVector2Array] = _create_shatter_polys()
 		new_bodies.resize(new_polys.size())
 
-		var impact_velocity_dir: Vector2 = projectile.last_recorded_linear_velocity.normalized()
+		var impact_velocity_dir: Vector2 = impact_velocity.normalized()
 
 		for i in range(new_polys.size()):
 			var new_poly: PackedVector2Array = new_polys[i]
@@ -103,7 +104,7 @@ func delete() -> void:
 	
 	queue_free.call_deferred()
 
-func _create_shatter_polys(_projectile: WeaponProjectile, _destructible_poly_global: PackedVector2Array) -> Array[PackedVector2Array]:
+func _create_shatter_polys() -> Array[PackedVector2Array]:
 	var max_area: float = maxf(min_shatter_area, area * max_shatter_area_fract)
 	return _poly_ops.shatter(_mesh.polygon, min_shatter_area, max_area)
 

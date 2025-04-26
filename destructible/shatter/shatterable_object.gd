@@ -39,6 +39,25 @@ func damage(body: ShatterableObjectBody, projectile: WeaponProjectile, contact_p
 		_body_container.call_deferred("add_child", new_body)
 	
 	_delay_shatter_complete()
+
+func shatter(body: ShatterableObjectBody, impact_velocity: Vector2, contact_point: Vector2) -> void:
+	print_debug("%s - body=%s shatter with impact_velocity=%s contact_point=%s" % [name, body.name, impact_velocity, contact_point])
+	
+	if _shatter_in_progress:
+		print_debug("%s: shatter - shatter already in progress - ignoring new shatter event" % name)
+		return
+	if is_queued_for_deletion():
+		print_debug("%s: shatter - ignoring as object already queued for deletion" % name)
+		return
+	
+	# Avoid multi-shot projectiles from triggering a fury of shatter events in a single frame and undefined behavior
+	_shatter_in_progress = true
+	
+	var additional_pieces: Array[Node2D] = body.shatter_with_velocity(impact_velocity)
+	for new_body in additional_pieces:
+		_body_container.call_deferred("add_child", new_body)
+	
+	_delay_shatter_complete()
 	
 func _delay_shatter_complete() -> void:
 	# wait a couple frames - we don't necessarily want to delay a long time as want to destroy the small pieces faster if hit

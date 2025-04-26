@@ -82,6 +82,18 @@ func damage(chunk: DestructibleObjectChunk, projectile: WeaponProjectile, contac
 		
 	_add_new_chunks(chunk, clipping_results, 1)
 
+func crumble(chunk: DestructibleObjectChunk, influence_poly_global: PackedVector2Array, in_smoothing: bool = true) -> void:
+	print_debug("%s - chunk=%s crumbling with influence_poly=%s" % [name, chunk.name, influence_poly_global])
+	
+	var update_flags:int = DestructibleObjectChunk.UpdateFlags.Crumble
+	if in_smoothing:
+		update_flags |= DestructibleObjectChunk.UpdateFlags.Smooth
+
+	# Kind of a hack but pass in the same contents to just invoke the crumbling
+	var destructible_chunk_results := chunk.replace_contents(chunk.get_destructible_global(), influence_poly_global, update_flags)
+	if !destructible_chunk_results.is_empty():
+		_add_new_chunks(chunk, destructible_chunk_results, 0)
+
 func delete_chunk(chunk: DestructibleObjectChunk) -> void:
 	chunk_destroyed.emit(chunk)
 	chunk.delete()

@@ -6,5 +6,6 @@
 
 [node name="DestructibleTerrainChunk" groups=["TerrainChunk"] instance=ExtResource("1_hhghx")]
 script = ExtResource("2_t8ni0")
+chunk_scene = ExtResource("2_o6w57")
 
 [node name="DestructibleTerrainChunkBody" parent="." index="0" instance=ExtResource("2_o6w57")]

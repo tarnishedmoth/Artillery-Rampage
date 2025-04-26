@@ -4,6 +4,9 @@ class_name ShatterableTerrainChunk extends ShatterableObject
 @export_category("Chunk")
 @export var chunk_scene: PackedScene
 
+@export_category("Chunk")
+@export var impulse_multiplier: float = 1e-4
+
 var initial_poly: PackedVector2Array
 var texture_resources: Array[TerrainChunkTextureResource]
 
@@ -14,7 +17,7 @@ func _ready() -> void:
 	var chunk: ShatterableObjectBody = _create_chunk_scene()
 	if chunk:
 		# F*dt = m*dv -> Impulse is change in momentum
-		chunk.apply_impulse(initial_velocity * chunk.mass, impact_point_global - chunk.global_position)
+		chunk.apply_impulse(initial_velocity * chunk.mass * impulse_multiplier, impact_point_global - chunk.global_position)
 	super._ready()
 	
 func _create_chunk_scene() -> ShatterableTerrainBody:
@@ -28,7 +31,11 @@ func _create_chunk_scene() -> ShatterableTerrainBody:
 		return null
 
 	# Must initialize the shatterable object poly before ready is run on it
-	new_chunk._init_poly = initial_poly
+		# Transform updated polygon back to local space
+	var global_to_local: Transform2D = global_transform.affine_inverse()
+	var initial_poly_local: PackedVector2Array = global_to_local * initial_poly
+
+	new_chunk._init_poly = initial_poly_local
 	new_chunk._init_owner = self
 	
 	if texture_resources:
