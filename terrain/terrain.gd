@@ -1,6 +1,6 @@
 class_name Terrain extends Node2D
 
-const TerrainChunkScene = preload("res://terrain/terrain_chunk.tscn")
+const TerrainChunkScene: PackedScene = preload("res://terrain/terrain_chunk.tscn")
 
 @export_category("Smoothing")
 @export var smooth_offset: float = 3
@@ -33,6 +33,11 @@ const TerrainChunkScene = preload("res://terrain/terrain_chunk.tscn")
 @export var shatterable_chunk_scene: PackedScene
 @export var shatterable_area_threshold_range:Vector2
 
+@export var base_poly_size: float = 100.0
+# TODO: Make this a curve
+@export var impact_energy_retention: float = 0.75
+@export var impact_angle_randomization_deg: float = 30.0
+
 @export_group("")
 
 var initial_chunk_name: String
@@ -58,6 +63,21 @@ signal destroyed(terrain: Terrain)
 @warning_ignore("unused_signal")
 signal chunk_destroyed(terrain_chunk: PhysicsBody2D)
 
+class LastDamageInputs:
+	var contact_point: Vector2
+	var poly_scale: Vector2
+	var projectile_linear_velocity: Vector2
+	var projectile_angular_velocity: float
+
+	func _init(in_projectile: WeaponProjectile, in_contact_point: Vector2, in_poly_scale: Vector2) -> void:
+		self.contact_point = in_contact_point
+		self.poly_scale = in_poly_scale
+		self.projectile_linear_velocity = in_projectile.last_recorded_linear_velocity
+		self.projectile_angular_velocity = in_projectile.angular_velocity
+
+
+var _last_damage_inputs: LastDamageInputs
+
 func _ready():
 
 	first_child_chunk = get_first_chunk()
@@ -77,6 +97,7 @@ func get_first_chunk() -> TerrainChunk:
 			return chunk
 	return null
 
+
 # Based on https://www.youtube.com/watch?v=FiKsyOLacwA
 # poly_scale will determine the size of the explosion that destroys the terrain
 
@@ -85,6 +106,8 @@ func get_first_chunk() -> TerrainChunk:
 # Only static TerrainChunk objects are damaged this way - other destructible or shatterable chunks are handled in their respective classes
 func damage(terrainChunk: TerrainChunk, projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
 	print_debug("%s - chunk=%s damaged by %s with poly_scale=%s" % [name, terrainChunk.name, projectile.name, poly_scale])
+
+	_last_damage_inputs = LastDamageInputs.new(projectile, contact_point, poly_scale)
 
 	#print("Clipping terrain with polygon:", projectile_poly.polygon)
 	var projectile_poly: CollisionPolygon2D = projectile.get_destructible_component()
@@ -216,8 +239,7 @@ func _create_destructible_chunk(prototype_chunk: TerrainChunk, chunk_name: Strin
 			[name, new_chunk.name, destructible_chunk_scene.resource_path, new_chunk.get_chunk_count()])
 		return null
 
-	# Place new chunk at the new_clip_poly centroid
-	#_center_rigid_body_chunk(new_chunk, new_clip_poly)
+	_add_momentum_to_new_chunk(new_chunk)
 
 	_configure_new_chunk(new_chunk, chunk_name)
 	
@@ -240,10 +262,10 @@ func _create_shatterable_chunk(prototype_chunk: TerrainChunk, chunk_name: String
 			[name, new_scene.name, shatterable_chunk_scene.resource_path])
 		return null
 
-	#_center_rigid_body_chunk(new_chunk, new_clip_poly)
-
 	new_chunk.initial_poly = new_clip_poly
 	new_chunk.texture_resources = prototype_chunk.texture_resources
+
+	_add_momentum_to_new_chunk(new_chunk)
 
 	_configure_new_chunk(new_chunk, chunk_name)
 
@@ -251,12 +273,17 @@ func _create_shatterable_chunk(prototype_chunk: TerrainChunk, chunk_name: String
 
 	return new_chunk
 
-func _center_rigid_body_chunk(chunk: Node2D, new_clip_poly: PackedVector2Array) -> void:
-	# Place new chunk at the new_clip_poly centroid
-	var centroid: Vector2 = TerrainUtils.polygon_centroid(new_clip_poly)
-	chunk.global_position = centroid
-	for i in new_clip_poly.size():
-		new_clip_poly[i] -= centroid
+func _add_momentum_to_new_chunk(chunk: Node2D) -> void:
+	if not _last_damage_inputs:
+		push_warning("%s - _last_damage_inputs is null" % [name])
+		return
+
+	# Set velocity in opposite direction of the impact velocity and scale by how big the explosion was and also apply an energy loss fraction
+	var base_velocity:Vector2 = -_last_damage_inputs.projectile_linear_velocity * impact_energy_retention * _last_damage_inputs.poly_scale.length() / base_poly_size
+	var velocity:Vector2 = base_velocity.rotated(deg_to_rad(randf_range(-impact_angle_randomization_deg, impact_angle_randomization_deg)))
+	
+	chunk.initial_velocity = velocity
+	chunk.impact_point_global = _last_damage_inputs.contact_point
 
 func _configure_new_chunk(new_chunk: Node2D, chunk_name: String) -> void:
 	new_chunk.name = chunk_name

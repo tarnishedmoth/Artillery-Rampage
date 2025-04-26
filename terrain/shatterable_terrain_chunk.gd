@@ -7,9 +7,14 @@ class_name ShatterableTerrainChunk extends ShatterableObject
 var initial_poly: PackedVector2Array
 var texture_resources: Array[TerrainChunkTextureResource]
 
-func _ready() -> void:
-	_create_chunk_scene()
+var initial_velocity: Vector2
+var impact_point_global: Vector2
 
+func _ready() -> void:
+	var chunk: ShatterableObjectBody = _create_chunk_scene()
+	if chunk:
+		# F*dt = m*dv -> Impulse is change in momentum
+		chunk.apply_impulse(initial_velocity * chunk.mass, impact_point_global - chunk.global_position)
 	super._ready()
 	
 func _create_chunk_scene() -> ShatterableTerrainBody:
