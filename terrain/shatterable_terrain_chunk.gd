@@ -31,12 +31,13 @@ func _create_chunk_scene() -> ShatterableTerrainBody:
 		return null
 
 	# Must initialize the shatterable object poly before ready is run on it
-		# Transform updated polygon back to local space
+	# Transform updated polygon back to local space
 	var global_to_local: Transform2D = global_transform.affine_inverse()
 	var initial_poly_local: PackedVector2Array = global_to_local * initial_poly
 
 	new_chunk._init_poly = initial_poly_local
 	new_chunk._init_owner = self
+	new_chunk.position = Vector2.ZERO
 	
 	if texture_resources:
 		new_chunk.texture_resources = texture_resources
