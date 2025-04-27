@@ -49,8 +49,12 @@ func _ready() -> void:
 		background.texture = lose_background
 		
 	_grade = _calculate_grade()
-	grade.set_value(_fmt_grade(_grade))
-	
+	# Hiding grade if you lose
+	if stats.won:
+		grade.set_value(_fmt_grade(_grade))
+	else:
+		grade.hide()
+		
 	_set_narrative(_grade)
 	
 	turns.set_value(stats.turns)
