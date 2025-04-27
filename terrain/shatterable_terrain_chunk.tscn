@@ -8,3 +8,4 @@
 script = ExtResource("2_ipihv")
 chunk_scene = ExtResource("3_h8wss")
 impulse_multiplier = 0.0001
+max_new_bodies_per_frame = 1

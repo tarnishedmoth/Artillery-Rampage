@@ -77,13 +77,17 @@ func damage(projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Ve
 func shatter(projectile: WeaponProjectile, _destructible_poly_global: PackedVector2Array) -> Array[Node2D]:
 	var pieces: Array[Node2D] = []
 	if shatter_iteration < max_shatter_divisions:
-		pieces.append_array(shatter_with_velocity(projectile.last_recorded_linear_velocity))
+		var results: Array[Node2D] = await shatter_with_velocity(projectile.last_recorded_linear_velocity)
+		pieces.append_array(results)
 	return pieces
 
 func shatter_with_velocity(impact_velocity: Vector2) -> Array[Node2D]:
 	var new_bodies: Array[Node2D] = []
 
 	if shatter_iteration < max_shatter_divisions:
+		set_deferred("freeze", true)
+		await get_tree().physics_frame
+
 		var new_polys: Array[PackedVector2Array] = _create_shatter_polys()
 		new_bodies.resize(new_polys.size())
 
