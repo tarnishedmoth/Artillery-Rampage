@@ -5,8 +5,8 @@ opts=$1
 # You may need to replace `python` with `python3` on some platforms.
 if [[ "$opts" == "-r" || "$opts" == "--release" ]]; then
     echo "Serving release build..."
-    python serve.py --root ../../build/web/release
+    python serve.py -p 9000 --root ../../build/web/release
 else
     echo "Serving debug build..."
-    python serve.py --root ../../build/web/debug
+    python serve.py -p 9000 --root ../../build/web/debug
 fi
