@@ -4,6 +4,10 @@ class_name ArtillerySpawner extends Node
 @export var artillery_ai_starting_weapons: Array[PackedScene] ## These must be of class Weapon
 #@export var artillery_ai_upgrade_weapons: Array[PackedScene] # Could go this route
 @export var default_ai_players: Vector2i = Vector2i()
+## Specify min and max team size. If < 1 then no teams will be assigned
+@export var num_ai_teams: int = 0
+@export var group_teams_together:bool = true
+
 @export var default_human_players: Vector2i = Vector2i()
 
 @export_range(-100, 100) var spawn_y_offset: float = -10.0
@@ -217,9 +221,36 @@ func _spawn_units(num_human: int) -> Array[TankController]:
 			init_controller_props(spawned)
 			
 			all_spawned.push_back(spawned)
-	
+
+	_assign_teams(all_spawned)
+
 	return all_spawned
-		
+
+func _assign_teams(spawned: Array[TankController]) -> void:
+	if num_ai_teams <= 0:
+		return
+
+	var ai_players: Array[AITank] = []
+	for controller in spawned:
+		if controller is AITank:
+			ai_players.append(controller)
+
+	if group_teams_together:
+		ai_players.sort_custom(func(a:AITank, b:AITank) -> bool: return a.global_position.x < b.global_position.x)
+	
+	var team_size:int = maxi(ceili(ai_players.size() / float(num_ai_teams)), 2)
+	
+	var team_number:int = -1
+	var team_leader:int = -1
+	for i in ai_players.size():
+		if i % team_size == 0:
+			team_number += 1
+			team_leader = i
+		else:
+			# AI get color of their team leader
+			ai_players[i].set_color(ai_players[team_leader].get_color())
+		ai_players[i].team = team_number
+			
 func _get_spawn_position(terrain: Terrain, x: float) -> Vector2:
 	var from:Vector2 = Vector2(x, 0)
 	var to:Vector2 = Vector2(x, get_viewport().size.y)

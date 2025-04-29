@@ -60,7 +60,8 @@ visible = false
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
 artillery_ai_types = Array[PackedScene]([ExtResource("6_cywuh"), ExtResource("7_83fhi"), ExtResource("8_5526i"), ExtResource("9_12yws"), ExtResource("10_cdukd"), ExtResource("11_igvec"), ExtResource("12_va36e"), ExtResource("13_vskxa")])
-default_ai_players = Vector2i(1, 4)
+default_ai_players = Vector2i(2, 4)
+num_ai_teams = 2
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
 

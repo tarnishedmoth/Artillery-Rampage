@@ -122,6 +122,9 @@ func remove_all_weapons(detach_immediately: bool = false) -> void:
 
 func set_color(value: Color) -> void:
 	tank.color = value
+	
+func get_color() -> Color:
+	return tank.color
 
 func _on_turn_ended(_player: TankController) -> void:
 	# On any player turn ended, simulate physics	
