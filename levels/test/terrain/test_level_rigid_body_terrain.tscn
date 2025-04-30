@@ -1,9 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://dcgscyy0td4qe"]
+[gd_scene load_steps=6 format=3 uid="uid://dcgscyy0td4qe"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_886ax"]
-[ext_resource type="PackedScene" uid="uid://blq5nrj7cm2f3" path="res://terrain/destructible_terrain_chunk.tscn" id="2_ohbu4"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_wmygx"]
-[ext_resource type="PackedScene" uid="uid://vdbf13j8n2f4" path="res://terrain/shatterable_terrain_chunk.tscn" id="3_tm77w"]
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="4_by5tq"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="5_od0sv"]
 [ext_resource type="PackedScene" uid="uid://6b6y8xulf247" path="res://controller/ai/behaviors/rando_ai_behavior.tscn" id="5_ohbu4"]
@@ -13,9 +11,7 @@
 [node name="GameLevel" parent="." instance=ExtResource("1_886ax")]
 
 [node name="Terrain" parent="GameLevel" index="3"]
-destructible_chunk_scene = ExtResource("2_ohbu4")
 destructible_area_threshold_range = Vector2(4000, 20000)
-shatterable_chunk_scene = ExtResource("3_tm77w")
 shatterable_area_threshold_range = Vector2(0, 4000)
 
 [node name="Walls" parent="GameLevel" index="4"]
