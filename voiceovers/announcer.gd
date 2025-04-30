@@ -4,6 +4,7 @@ class_name Announcer extends Node
 
 ## Indicates whether this is a snowy level that triggers an "Avalanche" sfx
 @export var is_avalance_level:bool = false
+@export var avalanche_area_threshold:float = 500.0
 
 @export var multi_kill_duration_threshold:float = 4.0
 @export var announcement_queue_turn_delay:float = 0.5
@@ -121,8 +122,13 @@ func _on_round_started() -> void:
 		_game_level.terrain.chunk_split.connect(_on_terrain_chunk_split)
 
 func _on_terrain_chunk_split(chunk: Node2D,  new_chunk: Node2D) -> void:
-	print_debug("%s: Terrain Chunk split: chunk=%s; new_chunk=%s" % [name, chunk, new_chunk])
-	_terrain_break_frame = _game_level.game_timer.frame
+	# Only record when chunk splits off of the main chunk which will be of type TerrainChunk
+	var notify:bool = chunk is TerrainChunk and new_chunk.has_method("get_area") and new_chunk.get_area() >= avalanche_area_threshold
+	
+	print_debug("%s: Terrain Chunk split: notify=%s; chunk=%s; new_chunk=%s" % [name, notify, chunk, new_chunk])
+
+	if notify:
+		_terrain_break_frame = _game_level.game_timer.frame
 	
 func _on_round_ended() -> void:
 	print_debug("%s: Round ended -  level=%s" % [name, _game_level.level_name])
@@ -260,9 +266,9 @@ func _on_object_took_damage(object: Node, instigatorController: Node2D, _instiga
 	if instigatorController != _player:
 		return
 		
-	# Get the damageable root
+	# Get the damageable root - exclude terrain and tank
 	var object_root:Node = Groups.get_parent_in_group(object, Groups.DamageableRoot)
-	if not object_root or object_root is Tank or object_root is Terrain:
+	if not object_root or object_root is Tank or object_root is Terrain or Groups.get_parent_in_group(object, Groups.TerrainChunk):
 		return
 
 	var object_id:int = object_root.get_instance_id()

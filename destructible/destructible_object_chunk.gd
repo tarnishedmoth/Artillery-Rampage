@@ -82,7 +82,7 @@ func _recalculate_mass() -> void:
 	
 	# Calculate the mass based on the area of the polygon
 	var should_delete:bool = false
-	var area:float = TerrainUtils.calculate_polygon_area(_mesh.polygon)
+	var area:float = get_area()
 	
 	if is_zero_approx(area):
 		push_warning("DestructibleObjectChunk(%s) - Polygon area is zero" % [name])
@@ -102,7 +102,7 @@ func _recalculate_mass() -> void:
 
 func _calculate_density() -> void:
 	# Calculate the density based on the mass and area of the polygon
-	var area:float = TerrainUtils.calculate_polygon_area(_mesh.polygon)
+	var area:float = get_area()
 	if is_zero_approx(area):
 		push_warning("DestructibleObjectChunk(%s) - Polygon area is zero, setting density to 1" % [name])
 		density = 1
@@ -110,6 +110,9 @@ func _calculate_density() -> void:
 		density = mass / area
 
 	print_debug("DestructibleObjectChunk(%s) - mass=%f; density=%f" % [name, mass, density])
+
+func get_area() -> float:
+	return TerrainUtils.calculate_polygon_area(_mesh.polygon)
 
 func _integrate_forces(_state: PhysicsDirectBodyState2D) -> void:
 	# If the collision polygon is dirty, update the collision polygon

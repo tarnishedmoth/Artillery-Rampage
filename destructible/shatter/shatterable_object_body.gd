@@ -62,6 +62,9 @@ func _ready() -> void:
 		timer.timeout.connect(delete)
 		add_child(timer)
 
+func get_area() -> float:
+	return area
+
 func _recenter_polygon() -> void:
 	# Should recenter the polygon about its new center of mass (centroid)
 	var centroid: Vector2 = TerrainUtils.polygon_centroid(_mesh.polygon)

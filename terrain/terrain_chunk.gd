@@ -167,6 +167,9 @@ func contains_point(point: Vector2) -> bool:
 func _is_in_terrain(point_local: Vector2) -> bool:
 	return Geometry2D.is_point_in_polygon(point_local, get_terrain_local())
 
+func get_area() -> float:
+	return TerrainUtils.calculate_polygon_area(terrainMesh.polygon)
+
 # Sort by largest first
 func compare(other: TerrainChunk) -> bool:
 	return terrainMesh.polygon.size() > other.terrainMesh.polygon.size()

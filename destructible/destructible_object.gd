@@ -179,6 +179,12 @@ func get_bounds_global() -> Rect2:
 		bounds = bounds.merge(chunk.get_bounds_global())
 	return bounds
 
+func get_area() -> float:
+	var area:float = 0.0
+	for chunk in get_chunks():
+		area += chunk.get_area()
+	return area
+	
 func delete() -> void:
 	print_debug("DestructibleObject(%s) - delete" % [name])
 	destroyed.emit(self)

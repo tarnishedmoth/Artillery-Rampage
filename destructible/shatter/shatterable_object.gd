@@ -20,6 +20,13 @@ func _ready() -> void:
 	for body in _body_container.get_children():
 		body.owner = self		
 
+func get_area() -> float:
+	var area:float = 0.0
+	for body in _body_container.get_children():
+		if body is ShatterableObjectBody:
+			area += body.get_area()
+	return area
+	
 func damage(body: ShatterableObjectBody, projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
 	print_debug("%s - body=%s damaged by %s with poly_scale=%s" % [name, body.name, projectile.name, poly_scale])
 	
