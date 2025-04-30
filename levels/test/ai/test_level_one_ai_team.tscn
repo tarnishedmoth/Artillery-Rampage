@@ -1,0 +1,90 @@
+[gd_scene load_steps=19 format=3 uid="uid://d3vrse8cfxgb4"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_dyx2u"]
+[ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_sdwng"]
+[ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_t073g"]
+[ext_resource type="Texture2D" uid="uid://bqds07ajtn7ei" path="res://terrain/terrain-scorched-earth.png" id="4_twj70"]
+[ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_fdrw1"]
+[ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="6_25fr7"]
+[ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="7_cj23r"]
+[ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="8_s0suu"]
+[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="9_s1egm"]
+[ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="10_nu3xf"]
+[ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="11_evylf"]
+[ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="12_6xowo"]
+[ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="13_y16a7"]
+[ext_resource type="Texture2D" uid="uid://couf67gr1ds88" path="res://background_items/background_scorchedplains.png" id="14_4wmyn"]
+[ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="15_x502v"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wfvon"]
+shader = ExtResource("3_t073g")
+shader_parameter/amount = Vector3(1.6, 1.6, 1.6)
+shader_parameter/multiply = 1.0
+shader_parameter/minimum = 0.0
+shader_parameter/maximum = 1.5
+
+[sub_resource type="Resource" id="Resource_msmqt"]
+script = ExtResource("2_sdwng")
+texture = ExtResource("4_twj70")
+material = SubResource("ShaderMaterial_wfvon")
+repeat = 3
+offset = Vector2(0, 0)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_iuf40"]
+frequency = 0.0102
+fractal_octaves = 3
+fractal_lacunarity = 2.52
+fractal_gain = 0.605
+
+[node name="TestLevelProcGen" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_dyx2u")]
+
+[node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
+texture_resources = Array[ExtResource("2_sdwng")]([SubResource("Resource_msmqt")])
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+polygon = PackedVector2Array(-103.906, 91.1765, 27.3438, 97.0588, 180.469, 58.8235, 408.594, 105.882, 586.719, 104.412, 939.844, 82.353, 945, 445, -103, 448)
+
+[node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("5_fdrw1")]
+noise_template = SubResource("FastNoiseLite_iuf40")
+additional_vertices = 16
+height_win_size_min_variation = -0.02
+height_win_size_max_variation = 0.02
+max_height_clearance = 60.0
+
+[node name="Walls" parent="GameLevel" index="4"]
+wall_mode = 4
+
+[node name="Floor" parent="GameLevel" index="5"]
+visible = false
+
+[node name="Wind" parent="GameLevel" index="6"]
+wind_scale = 650.0
+wind_sign_bias = 0.2
+
+[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+artillery_ai_types = Array[PackedScene]([ExtResource("6_25fr7"), ExtResource("7_cj23r"), ExtResource("8_s0suu"), ExtResource("9_s1egm"), ExtResource("10_nu3xf"), ExtResource("11_evylf"), ExtResource("12_6xowo"), ExtResource("13_y16a7")])
+default_ai_players = Vector2i(3, 3)
+num_ai_teams = 1
+default_human_players = Vector2i(1, 1)
+ideal_min_spawn_separation = 250.0
+
+[node name="StaticBackground" type="Sprite2D" parent="GameLevel"]
+modulate = Color(1, 1, 1, 0.635294)
+z_index = -98
+texture_filter = 6
+position = Vector2(-3, -132.885)
+scale = Vector2(0.68, 0.68)
+texture = ExtResource("14_4wmyn")
+centered = false
+
+[node name="WaterHazard" parent="GameLevel" instance=ExtResource("15_x502v")]
+position = Vector2(701, 674)
+scale = Vector2(7.02656, 4.6518)
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/ArtillerySpawner"]

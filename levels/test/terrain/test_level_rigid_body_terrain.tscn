@@ -11,7 +11,6 @@
 [node name="GameLevel" parent="." instance=ExtResource("1_886ax")]
 
 [node name="Terrain" parent="GameLevel" index="3"]
-destructible_area_threshold_range = Vector2(4000, 20000)
 shatterable_area_threshold_range = Vector2(0, 4000)
 
 [node name="Walls" parent="GameLevel" index="4"]

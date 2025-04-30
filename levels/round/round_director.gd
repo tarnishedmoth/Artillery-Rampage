@@ -143,8 +143,18 @@ func check_players() -> bool:
 	if tank_controllers.size() <= 1:
 		active_player_index = -1
 		return false
-	else:
+
+	# if all remaining players on the same team then end the round as well
+	var team: int = tank_controllers[0].team
+	# team < 0 means no team so at least one valid target for the other player
+	if team < 0:
 		return true
+	
+	for i in range(1, tank_controllers.size()):
+		if team != tank_controllers[i].team:
+			return true
+	# All players are on the same team
+	return false
 		
 #region Turn Based
 func next_turn() -> bool:

@@ -11,6 +11,8 @@ class_name GameLevel extends Node2D
 ## Name of level displayed to player
 @export var level_name:StringName
 
+var _scene_transitioned:bool = false
+
 ## Used to hold various spawnables such as [WeaponProjectile] and particle effects.
 var container_for_spawnables
 
@@ -38,14 +40,29 @@ func begin_round():
 	round_director.begin_round()
 		
 func _on_player_killed(in_player: Player) -> void:
-	print("Game Over!")
+	# Must free player as the player class does not do this when the tank is killed
+	# AI tank gets freed when the tank is killed
 	in_player.queue_free()
+
+	if _scene_transitioned:
+		print_debug("Player killed but scene already transitioned - ignoring")
+		return
+	_scene_transitioned = true
 	
+	print("Game Over!")
 	SceneManager.level_failed()
 
 func _on_round_ended() -> void:
 	# Let other listeners process before switching the scene
 	await get_tree().process_frame
+
+	# if player was killed then level_failed already called so don't call again here
+	# as this is used for the win state
+	if _scene_transitioned:
+		print_debug("Round ended but scene already transitioned - ignoring")
+		return
+
+	_scene_transitioned = true
 	SceneManager.level_complete()
 
 func _add_manually_placed_units():
