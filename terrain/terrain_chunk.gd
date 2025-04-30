@@ -13,7 +13,8 @@ class TerrainTexture:
 @onready var overlapMesh = $Overlap/CollisionPolygon2D
 @onready var destructiblePolyOperations = $DestructiblePolyOperations
 
-@export_range(0, 1000) var gravity:float = 20
+@export_range(0, 10.0) var gravity_scale:float = 1.0
+
 @export var initially_falling:bool = false
 
 @export var smooth_influence_scale: float = 1.5
@@ -84,7 +85,7 @@ func _physics_process(delta: float) -> void:
 			falling = false
 			return
 			
-	_velocity += Vector2(0, gravity) * delta
+	_velocity += PhysicsUtils.get_gravity_vector() * gravity_scale * delta
 	global_position += _velocity * delta
 
 func _replace_contents_local(new_poly: PackedVector2Array, immediate:bool) -> void:
