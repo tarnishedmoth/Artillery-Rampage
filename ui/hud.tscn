@@ -74,7 +74,7 @@ layout_mode = 2
 text = "⛨ Health:"
 
 [node name="Value" parent="VBoxContainer/Health" index="1"]
-text = "100"
+text = "100.0%"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
 layout_mode = 0
@@ -93,7 +93,7 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Label" parent="VBoxContainer2/Walls" index="0"]
-text = "| Walls:"
+text = "Edges:"
 
 [node name="Value" parent="VBoxContainer2/Walls" index="1"]
 text = "Accelerate"

@@ -12,29 +12,52 @@ extends Control
 @onready var debug_level_name: Label = %DebugLevelName
 @onready var tooltipper: Control = %Tooltipper
 
+var _active_player:TankController = null
+
 func _ready() -> void:
 	init_signals()
 	_on_user_options_changed() # Apply user options
 
 func init_signals():
-	GameEvents.connect("turn_started", _on_turn_started);
-	GameEvents.connect("aim_updated", _on_aim_updated);
-	GameEvents.connect("power_updated", _on_power_updated)
-	GameEvents.connect("wind_updated", _on_wind_updated)
-	GameEvents.connect("weapon_updated", _on_weapon_updated)
-	GameEvents.connect("level_loaded", _on_level_changed)
+	GameEvents.turn_started.connect(_on_turn_started);
+	GameEvents.turn_ended.connect(_on_turn_ended);
+	GameEvents.aim_updated.connect(_on_aim_updated);
+	GameEvents.power_updated.connect(_on_power_updated)
+	GameEvents.wind_updated.connect(_on_wind_updated)
+	GameEvents.weapon_updated.connect(_on_weapon_updated)
+	GameEvents.level_loaded.connect(_on_level_changed)
 	GameEvents.user_options_changed.connect(_on_user_options_changed)
 	
 	if OS.is_debug_build():
 		debug_level_name.show()
 
 func _on_turn_started(player: TankController) -> void:
-	active_player_text.text = player.name
-	health_text.set_value(ceil(player.tank.health))
+	_active_player = player
+	# Update health dynamically as player takes damage during turn
+	player.tank.tank_took_damage.connect(_on_took_damage)
 	
+	active_player_text.text = player.name
+	
+	_update_health(player)
 	_on_aim_updated(player)
 	_on_power_updated(player)
 
+func _on_took_damage(tank: Tank, _instigatorController: Node2D, _instigator: Node2D, _amount: float):
+	if tank.owner == _active_player:
+		_update_health(_active_player)
+		
+func _update_health(player: TankController) -> void:
+	var tank:Tank = player.tank
+	
+	# Round pct to nearest tenth
+	var pct:float = roundf(tank.health / tank.max_health * 1000.0) / 10.0
+	health_text.set_value("%.1f%%" % pct)
+
+func _on_turn_ended(player: TankController) -> void:
+	# Disconnect when no longer the active player
+	if player.tank.tank_took_damage.is_connected(_on_took_damage):
+		player.tank.tank_took_damage.disconnect(_on_took_damage)
+	
 func _on_aim_updated(player: TankController) -> void:
 	var angleRads = player.tank.get_turret_rotation()
 	
