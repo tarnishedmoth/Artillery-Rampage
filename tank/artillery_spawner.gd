@@ -253,7 +253,7 @@ func _assign_teams(spawned: Array[TankController]) -> void:
 			
 func _get_spawn_position(terrain: Terrain, x: float) -> Vector2:
 	var from:Vector2 = Vector2(x, 0)
-	var to:Vector2 = Vector2(x, get_viewport().size.y)
+	var to:Vector2 = Vector2(x, get_viewport().get_visible_rect().size.y)
 	
 	var query_params = PhysicsRayQueryParameters2D.create(from, to,
 	 Collisions.CompositeMasks.tank_snap)

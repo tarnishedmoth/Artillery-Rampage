@@ -1,0 +1,45 @@
+[gd_scene load_steps=14 format=3 uid="uid://c1yqjq2qkx6cd"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_o0b5t"]
+[ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="2_pqxmw"]
+[ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="3_d7mul"]
+[ext_resource type="PackedScene" uid="uid://cwssjadyxw2gg" path="res://environment/procedural_object_spawner.tscn" id="3_npmx6"]
+[ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="4_0pd85"]
+[ext_resource type="Script" uid="uid://bke3gd68u5yjw" path="res://environment/procedural_object_constraints.gd" id="4_3hpmn"]
+[ext_resource type="Resource" uid="uid://bow3ltxvkxclj" path="res://environment/trees/shatterable_tree_object_constraint.tres" id="5_5homu"]
+[ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="5_u8x03"]
+[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="6_tqm7g"]
+[ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="7_hcfdf"]
+[ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="8_v1inc"]
+[ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="9_vmfja"]
+[ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="10_27pdu"]
+
+[node name="TestLevelProcGen" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_o0b5t")]
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 195.313, 152.941, 204.688, 5.88232, 245.313, -1.47058, 272.656, -119.118, 277.344, -264.706, 352.344, -272.059, 405.469, -322.059, 475, -4.41174, 609, -8, 624.219, -161.765, 714.063, -155.882, 783.594, 127.941, 852.344, 130.882, 903.125, 138.235, 905.458, -3.48077, 937, -3, 945, 445, -103, 448)
+
+[node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("2_pqxmw")]
+additional_vertices = 100
+height_win_size_min_variation = -0.15
+height_win_size_max_variation = 0.15
+
+[node name="Floor" parent="GameLevel" index="5"]
+visible = false
+
+[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+artillery_ai_types = Array[PackedScene]([ExtResource("3_d7mul"), ExtResource("4_0pd85"), ExtResource("5_u8x03"), ExtResource("6_tqm7g"), ExtResource("7_hcfdf"), ExtResource("8_v1inc"), ExtResource("9_vmfja"), ExtResource("10_27pdu")])
+default_ai_players = Vector2i(1, 4)
+default_human_players = Vector2i(1, 1)
+ideal_min_spawn_separation = 250.0
+
+[node name="ProceduralObjectSpawner" parent="GameLevel" instance=ExtResource("3_npmx6")]
+objects = Array[ExtResource("4_3hpmn")]([ExtResource("5_5homu")])
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/ArtillerySpawner"]

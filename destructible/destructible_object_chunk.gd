@@ -114,6 +114,9 @@ func _calculate_density() -> void:
 func get_area() -> float:
 	return TerrainUtils.calculate_polygon_area(_mesh.polygon)
 
+func get_rect() -> Rect2:
+	return TerrainUtils.get_polygon_bounds(get_destructible_local())
+	
 func _integrate_forces(_state: PhysicsDirectBodyState2D) -> void:
 	# If the collision polygon is dirty, update the collision polygon
 	if _collision_dirty:

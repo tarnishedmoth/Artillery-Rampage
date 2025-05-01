@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ProceduralObjectContraints" load_steps=3 format=3 uid="uid://bow3ltxvkxclj"]
+
+[ext_resource type="PackedScene" uid="uid://cdu7jxpquqjer" path="res://environment/trees/shatterable_tree.tscn" id="1_c47rm"]
+[ext_resource type="Script" uid="uid://bke3gd68u5yjw" path="res://environment/procedural_object_constraints.gd" id="2_b44m1"]
+
+[resource]
+script = ExtResource("2_b44m1")
+scene = ExtResource("1_c47rm")
+min_spacing = 50.0
+count = Vector2i(3, 5)
+max_slant_angle_deg = 10.0
+spawn_y_offset = -10.0
+adjacent_constraints = Dictionary[PackedScene, float]({})

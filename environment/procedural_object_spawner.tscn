@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cwssjadyxw2gg"]
+
+[ext_resource type="Script" uid="uid://btdpl0blw77n2" path="res://environment/procedural_object_spawner.gd" id="1_2cpo4"]
+
+[node name="ProceduralObjectSpawner" type="Node2D"]
+script = ExtResource("1_2cpo4")
+metadata/_custom_type_script = "uid://btdpl0blw77n2"
+
+[node name="Container" type="Node" parent="."]
