@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://d1xl6ffmsld74"]
+
+[ext_resource type="PackedScene" uid="uid://bekgd5xyqpiwk" path="res://destructible/shatter/shatterable_object_body.tscn" id="1_ueltn"]
+[ext_resource type="Texture2D" uid="uid://bc2wv7vilbasc" path="res://environment/rocks/rocks.png" id="2_g7nyk"]
+
+[node name="ShatterableRockBody" instance=ExtResource("1_ueltn")]
+mass = 1000.0
+center_of_mass_mode = 1
+center_of_mass = Vector2(0, -70)
+
+[node name="Mesh" parent="." index="0"]
+position = Vector2(-20.11, -100.735)
+texture = ExtResource("2_g7nyk")
+texture_offset = Vector2(32.98, 45.195)
+texture_scale = Vector2(4, 4)
+polygon = PackedVector2Array(64.46, 68.735, 63.46, 78.735, 64.46, 88.735, 56.46, 96.735, 38.46, 99.735, 20.46, 100.735, 1.46, 99.735, -13.54, 91.735, -30.54, 92.735, -29.54, 76.735, -20.54, 70.735, -18.54, 50.735, -10.54, 45.735, -0.540001, 37.735, 13.46, 34.735, 24.46, 29.735, 40.46, 30.735, 55.46, 37.735, 55.46, 50.735, 53.46, 58.735, 60.46, 61.735)

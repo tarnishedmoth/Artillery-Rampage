@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ProceduralObjectContraints" load_steps=3 format=3 uid="uid://0wgxqduf2coh"]
+
+[ext_resource type="PackedScene" uid="uid://dopwqpmocmicx" path="res://environment/rocks/shatterable_rock02.tscn" id="1_qrh0i"]
+[ext_resource type="Script" uid="uid://bke3gd68u5yjw" path="res://environment/procedural_object_constraints.gd" id="2_x8yi1"]
+
+[resource]
+script = ExtResource("2_x8yi1")
+scene = ExtResource("1_qrh0i")
+min_spacing = 10.0
+count = Vector2i(2, 4)
+max_slant_angle_deg = 20.0
+spawn_y_offset = -5.0
+adjacent_constraints = Dictionary[PackedScene, float]({})

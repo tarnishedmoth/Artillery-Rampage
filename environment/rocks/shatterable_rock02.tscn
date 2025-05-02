@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://dopwqpmocmicx"]
+
+[ext_resource type="PackedScene" uid="uid://pdcv81wpv3s8" path="res://destructible/shatter/shatterable_object.tscn" id="1_bthvc"]
+[ext_resource type="PackedScene" uid="uid://d1xl6ffmsld74" path="res://environment/rocks/shatterable_rock_body02.tscn" id="2_r38n4"]
+
+[node name="ShatterableRock" instance=ExtResource("1_bthvc")]
+
+[node name="ShatterableRockBody" parent="BodyContainer" index="0" instance=ExtResource("2_r38n4")]
