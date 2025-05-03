@@ -172,14 +172,20 @@ func _insert_bounds(bounds:Rect2) -> void:
 	var insertPos:int = _sorted_insert_positions.bsearch_custom(bounds, _bounds_compare)
 	_sorted_insert_positions.insert(insertPos, bounds)
 	
-func _intersects_existing_spawned(center_pos: Vector2, object_type : ProceduralObjectContraints, bounds:Rect2) -> bool:
+func _intersects_existing_spawned(bottom_center_pos: Vector2, object_type : ProceduralObjectContraints, bounds:Rect2) -> bool:
 	if _sorted_insert_positions.is_empty():
 		return false
 
 	# Expand the bounds to include the spacing
-	bounds.size.x += object_type.min_spacing
+	bounds.size.x += 2 * object_type.min_spacing
 
-	bounds.position = center_pos - bounds.size * 0.5
+	# translate to bottom center and then position bounds at top left corner
+	#var global_bounds_pos:Vector2 = bottom_center_pos + object_type.bottom_center_offset - Vector2(bounds.size.x * 0.5, bounds.size.y)
+	var global_bounds_pos:Vector2 = bottom_center_pos - bounds.size * 0.5
+
+	bounds.position = global_bounds_pos
+
+
 	var insertPos:int = _sorted_insert_positions.bsearch_custom(bounds, _bounds_compare)
 
 	# See if placing it here will intersect previous or the next
