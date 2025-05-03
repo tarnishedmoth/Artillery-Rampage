@@ -90,10 +90,15 @@ func _ready() -> void:
 		_emit_completed_lifespan_without_destroying(max_lifetime) # Relinquish turn control
 	elif max_lifetime > 0.0: destroy_after_lifetime()
 	
-	modulate = color
+	if modulate_enabled():
+		modulate = color
+
 	apply_all_mods() # This may not be desired but it probably is. If the weapon's stats are retained across matches, this could double the effect unintentionally
 		
 	GameEvents.emit_projectile_fired(self)
+	
+func modulate_enabled() -> bool:
+	return true
 	
 func set_sources(tank:Tank,weapon:Weapon) -> void:
 	owner_tank = tank
