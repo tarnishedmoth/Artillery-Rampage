@@ -6,6 +6,8 @@
 [node name="ShatterableRockBody" instance=ExtResource("1_5ru8w")]
 mass = 1000.0
 center_of_mass_mode = 1
+min_body_impulse = 500.0
+max_body_impulse = 1000.0
 
 [node name="Mesh" parent="." index="0"]
 position = Vector2(-27.46, -97.735)

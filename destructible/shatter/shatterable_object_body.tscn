@@ -7,6 +7,9 @@
 collision_layer = 16
 collision_mask = 315
 script = ExtResource("1_220fe")
+min_body_impulse = 250.0
+max_body_impulse = 500.0
+max_velocity_angle_dev = 120.0
 
 [node name="Mesh" type="Polygon2D" parent="."]
 

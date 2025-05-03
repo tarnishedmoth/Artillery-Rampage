@@ -36,6 +36,11 @@ position = Vector2(120, 427)
 [node name="ShatterableTree" parent="GameLevel" instance=ExtResource("6_wdx12")]
 position = Vector2(45, 439.16)
 
+[node name="TreeBody" parent="GameLevel/ShatterableTree/BodyContainer" index="0"]
+min_body_impulse = 200.0
+max_body_impulse = 400.0
+max_velocity_angle_dev = 90.0
+
 [node name="ShatterableTree2" parent="GameLevel" instance=ExtResource("6_wdx12")]
 position = Vector2(960, 438)
 

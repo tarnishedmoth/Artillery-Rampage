@@ -9,11 +9,8 @@ class_name ShatterableObjectBody extends RigidBody2D
 @export var min_shatter_area:float = 250
 @export_range(0, 1, 0.01) var max_shatter_area_fract: float = 1/3.0
 
-@export var min_body_linear_speed: float = 50
-@export var max_body_linear_speed: float = 200
-
-@export var min_body_angular_speed: float = 0
-@export var max_body_angular_speed: float = 360
+@export var min_body_impulse:float = 100
+@export var max_body_impulse:float = 200
 
 @export var min_velocity_angle_dev: float = 0
 @export var max_velocity_angle_dev: float = 90
@@ -133,8 +130,10 @@ func _create_body_from_poly(poly: PackedVector2Array, impact_velocity_dir: Vecto
 	
 	new_instance.position = position
 	new_instance.rotation = rotation
-	new_instance.linear_velocity = _randomize_impact_velocity_dir(impact_velocity_dir) * randf_range(min_body_linear_speed, max_body_linear_speed)
-	new_instance.angular_velocity = deg_to_rad(randf_range(min_body_angular_speed, max_body_angular_speed))
+	
+	var impulse:Vector2 = _randomize_impact_velocity_dir(impact_velocity_dir) * randf_range(min_body_impulse, max_body_impulse)
+	var location: Vector2 = _get_random_point_in_or_near_poly(poly)
+	new_instance.apply_impulse(impulse, location)
 
 	# Don't have the pieces collide with the tank if configured
 	if not shattered_pieces_should_collide_with_tank:
@@ -150,6 +149,15 @@ func _randomize_impact_velocity_dir(impact_velocity_dir: Vector2) -> Vector2:
 	var angle_dev: float = deg_to_rad(randf_range(min_velocity_angle_dev, max_velocity_angle_dev))
 	var random_angle: float = angle_dev * MathUtils.randf_sgn()
 	return impact_velocity_dir.rotated(random_angle)
+
+func _get_random_point_in_or_near_poly(poly: PackedVector2Array) -> Vector2:
+	var bounds:Rect2 = TerrainUtils.get_polygon_bounds(poly)
+
+	var quarter_size: Vector2 = bounds.size * 0.25
+	var x: float = randf_range(bounds.position.x + quarter_size.x, bounds.position.x + 3 * quarter_size.x)
+	var y: float = randf_range(bounds.position.y + quarter_size.y, bounds.position.y + 3 * quarter_size.y)
+
+	return Vector2(x, y)
 
 func _to_string() -> String:
 	return name
