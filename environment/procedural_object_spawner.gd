@@ -55,9 +55,15 @@ func _place_objects(object_type : ProceduralObjectContraints) -> void:
 	
 	var next_point_pos:float = start_x
 	for i in num_points:
-		next_point_pos += i * step + randf() * half_width
-		points[i] = next_point_pos
-				
+		next_point_pos += step + randf() * half_width
+		if next_point_pos <= end_x:
+			points[i] = next_point_pos
+		else:
+			print_debug("ProceduralObjectSpawner(%s): Hit level bounds truncating points from %d -> %d" % [name, num_points, i])
+			num_points = i
+			points.resize(num_points)
+			break
+			
 	# Randomize the order of the points
 	points.shuffle()
 	var spawn_count:int = 0
