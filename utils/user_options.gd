@@ -37,6 +37,7 @@ func reset_all_keybinds_to_default() -> void:
 	
 func change_keybind(action, new_key) -> void:
 	# Take an InputEvent and reassign it to a new key
+	print_debug("TODO Keybind ", action, " should be changed to new key ", new_key)
 	pass
 	
 	

@@ -35,8 +35,12 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	# Keybind Change Window
 	if capturing_input:
-		#foo
-		pass
+		# This prevents assignment to mouse controls
+		if event is InputEventMouseMotion: return # If you put these in one line with an
+		if event is InputEventMouseButton: return # "Or" operator it blocks all inputs?? Lol
+		if event.is_pressed():
+			_on_keybind_changing_input_pressed(event)
+		get_viewport().set_input_as_handled()
 
 func set_initial_states() -> void:
 	# Each option
@@ -159,11 +163,15 @@ func _on_keybind_changing_visibility_changed() -> void:
 	else:
 		capturing_input = false
 		print_debug("Released input capture...")
+		
+func _on_keybind_changing_input_pressed(event: InputEvent) -> void:
+	print(event)
+	keybind_changing_glyph.text = event.as_text()
 	
-func _on_keybinds_changing_cancel_pressed() -> void:
+func _on_keybind_changing_cancel_pressed() -> void:
 	keybind_changing.hide()
 
-func _on_keybinds_changing_confirm_pressed() -> void:
+func _on_keybind_changing_apply_pressed() -> void:
 	# Assign the keybind
-	print_debug("This menu is not yet functional!")
+	UserOptions.change_keybind(keybind_changing_label.text, keybind_changing_glyph.text)
 	keybind_changing.hide()
