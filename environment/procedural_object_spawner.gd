@@ -135,8 +135,13 @@ func _get_ground_position(x: float) -> Dictionary[String, Vector2]:
 	if !result:
 		push_error("ProceduralObjectSpawner(%s): _get_spawn_position could not find y for x=%f" % [name, x])
 		return {}
-		
-	var ground_pos:Vector2 = result["position"]
+	
+	# Should have intersected the terrain
+	var collider:Node = result.collider
+	if  collider.collision_layer != Collisions.Layers.terrain:
+		print_debug("ProceduralObjectSpawner(%s): Ground position: %s collided with non terrain object %s" % [name, result.position, collider.name])
+		return {}
+	var ground_pos:Vector2 = result.position
 	
 	return { "position" : ground_pos }
 
