@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://da23m08ml50op"]
+[gd_scene load_steps=5 format=3 uid="uid://da23m08ml50op"]
 
 [ext_resource type="Script" uid="uid://cyry0di35umy7" path="res://ui/options_menu.gd" id="1_6vtbd"]
 
@@ -9,6 +9,14 @@ bg_color = Color(0.462291, 0.462291, 0.46229, 1)
 font_size = 12
 shadow_size = 4
 shadow_color = Color(0, 0, 0, 0.25098)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ibk6l"]
+bg_color = Color(0.347817, 0.347817, 0.347817, 1)
+border_width_left = 32
+border_width_top = 128
+border_width_right = 32
+border_width_bottom = 128
+border_color = Color(0.8, 0.8, 0.8, 0.913725)
 
 [node name="OptionsMenu" type="PanelContainer"]
 anchors_preset = 8
@@ -237,6 +245,83 @@ text = "This menu is not yet functional. :)"
 label_settings = SubResource("LabelSettings_m3s5d")
 horizontal_alignment = 1
 
+[node name="KeybindChanging" type="PanelContainer" parent="Keybinds"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ibk6l")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Keybinds/KeybindChanging"]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="Keybinds/KeybindChanging/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.05
+
+[node name="Label" type="Label" parent="Keybinds/KeybindChanging/VBoxContainer"]
+layout_mode = 2
+text = "Change Keybind"
+horizontal_alignment = 1
+
+[node name="Spacer2" type="Control" parent="Keybinds/KeybindChanging/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Keybinds/KeybindChanging/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Keybinds/KeybindChanging/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="KeybindChangingLabel" type="Label" parent="Keybinds/KeybindChanging/VBoxContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Action"
+
+[node name="Label" type="Label" parent="Keybinds/KeybindChanging/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "will be assigned to"
+
+[node name="KeybindChangingGlyph" type="Label" parent="Keybinds/KeybindChanging/VBoxContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Glyph"
+
+[node name="Spacer2" type="Control" parent="Keybinds/KeybindChanging/VBoxContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="PressAKey" type="Label" parent="Keybinds/KeybindChanging/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Press any key to change assignment..."
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Keybinds/KeybindChanging/VBoxContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Keybinds/KeybindChanging/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Confirm" type="Button" parent="Keybinds/KeybindChanging/VBoxContainer/MarginContainer/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Apply"
+
+[node name="Spacer" type="Control" parent="Keybinds/KeybindChanging/VBoxContainer/MarginContainer/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+
+[node name="Cancel" type="Button" parent="Keybinds/KeybindChanging/VBoxContainer/MarginContainer/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Cancel"
+
 [connection signal="pressed" from="Options/MarginContainer/VBoxContainer/Options/ConfigureKeybindsButton" to="." method="_on_configure_keybinds_button_pressed"]
 [connection signal="drag_ended" from="Options/MarginContainer/VBoxContainer/Options/VolumeSliders/Sliders/MusicVolumeSlider" to="." method="_on_music_volume_slider_drag_ended"]
 [connection signal="drag_ended" from="Options/MarginContainer/VBoxContainer/Options/VolumeSliders/Sliders/SFXVolumeSlider" to="." method="_on_sfx_volume_slider_drag_ended"]
@@ -245,3 +330,5 @@ horizontal_alignment = 1
 [connection signal="pressed" from="Keybinds/VBoxContainer/MarginContainer/VBoxContainer/ConfirmButtons/ConfirmChanges" to="." method="_on_keybinds_confirm_changes_pressed"]
 [connection signal="pressed" from="Keybinds/VBoxContainer/MarginContainer/VBoxContainer/ConfirmButtons/Cancel" to="." method="_on_keybinds_cancel_pressed"]
 [connection signal="pressed" from="Keybinds/VBoxContainer/MarginContainer/VBoxContainer/ConfirmButtons/Reset" to="." method="_on_keybinds_reset_all_pressed"]
+[connection signal="pressed" from="Keybinds/KeybindChanging/VBoxContainer/MarginContainer/VBoxContainer/Buttons/Confirm" to="." method="_on_keybinds_changing_confirm_pressed"]
+[connection signal="pressed" from="Keybinds/KeybindChanging/VBoxContainer/MarginContainer/VBoxContainer/Buttons/Cancel" to="." method="_on_keybinds_changing_cancel_pressed"]

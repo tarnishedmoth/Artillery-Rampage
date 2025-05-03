@@ -15,13 +15,28 @@ signal closed
 @onready var keybind_labels: VBoxContainer = %KeybindLabels
 @onready var keybind_glyphs: VBoxContainer = %KeybindGlyphs
 
+@onready var keybind_changing: PanelContainer = $Keybinds/KeybindChanging
+@onready var keybind_changing_label: Label = %KeybindChangingLabel
+@onready var keybind_changing_glyph: Label = %KeybindChangingGlyph
+
+
 var cached_music_volume: float
 var cached_sfx_volume: float
+
+var capturing_input:bool = false
 
 func _ready() -> void:
 	set_initial_states()
 	options.show()
 	keybinds.hide()
+	keybind_changing.hide()
+	keybind_changing.visibility_changed.connect(_on_keybind_changing_visibility_changed)
+	
+func _input(event: InputEvent) -> void:
+	# Keybind Change Window
+	if capturing_input:
+		#foo
+		pass
 
 func set_initial_states() -> void:
 	# Each option
@@ -104,10 +119,11 @@ func _on_configure_keybinds_button_pressed() -> void:
 	keybinds.show()
 	
 func _on_keybinds_changing(action: StringName) -> void:
-	# TODO Show popup menu
-	# Use value to set event
-	# Pass a value from the button, not sure how at the moment
 	print_debug(action)
+	
+	keybind_changing.show()
+	keybind_changing_label.text = action
+	keybind_changing_glyph.text = str(UserOptions.get_glyphs(action))
 
 func _on_keybinds_confirm_changes_pressed() -> void:
 	# TODO apply changes
@@ -132,3 +148,22 @@ func _on_sfx_volume_slider_drag_ended(value_changed: bool) -> void:
 	if value_changed:
 		var sfx_bus = AudioServer.get_bus_index("SFX")
 		AudioServer.set_bus_volume_db(sfx_bus, linear_to_db(sfx_volume_slider.value))
+		
+## Keybinds Changing Window
+func _on_keybind_changing_visibility_changed() -> void:
+	# We need to capture the users inputs if this window is showing to prevent it from
+	# doing unintended things.
+	if keybind_changing.visible:
+		capturing_input = true
+		print_debug("Capturing user inputs...")
+	else:
+		capturing_input = false
+		print_debug("Released input capture...")
+	
+func _on_keybinds_changing_cancel_pressed() -> void:
+	keybind_changing.hide()
+
+func _on_keybinds_changing_confirm_pressed() -> void:
+	# Assign the keybind
+	print_debug("This menu is not yet functional!")
+	keybind_changing.hide()
