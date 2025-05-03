@@ -36,6 +36,7 @@ func reset_all_keybinds_to_default() -> void:
 	InputMap.load_from_project_settings()
 	
 func change_keybind(action, new_key) -> void:
+	# Take an InputEvent and reassign it to a new key
 	pass
 	
 	

@@ -90,7 +90,7 @@ func populate_keybinds_ui() -> void:
 			
 		var glyph = Button.new()
 		glyph.text = text
-		glyph.pressed.connect(_on_keybinds_changing)
+		glyph.pressed.connect(_on_keybinds_changing.bind(action))
 		keybind_glyphs.add_child(glyph)
 		
 		## Label
