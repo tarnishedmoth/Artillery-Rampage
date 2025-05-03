@@ -1,19 +1,25 @@
 class_name ProceduralObjectSpawner extends Node2D
 
 @export var objects:Array[ProceduralObjectContraints] = []
+@export var randomize_object_priorities:bool = false
+
 @onready var container:Node = $Container
 
 @export var spawn_screen_deadzone: float = 20.0
 
 # Need to wait for the terrain to finish building before doing raycasts
-const spawn_delay:float = 0.2
+const spawn_delay:float = 0.3
 
-var _spawned_objects:Dictionary[int, Node] = {}
+var _sorted_insert_positions: Array[Rect2] = []
 
 func _ready() -> void:
-	# TODO: Maybe place after units spawned?
 	await get_tree().create_timer(spawn_delay).timeout
 
+	_find_and_insert_tank_bounds()
+	
+	if randomize_object_priorities:
+		objects.shuffle()
+		
 	for object_type in objects:
 		_place_objects(object_type)
 
@@ -39,7 +45,6 @@ func _place_objects(object_type : ProceduralObjectContraints) -> void:
 	container.remove_child(prototype_object)
 	prototype_object.queue_free()
 
-	# Try to generate objects starting at opposite ends of the screen and meet in middle
 	var bounds:Rect2 = get_viewport().get_visible_rect()
 	var half_width:float = bounding_box.size.x / 2
 
@@ -50,9 +55,12 @@ func _place_objects(object_type : ProceduralObjectContraints) -> void:
 	var points: Array[float] = []
 	var num_points:int = floori((end_x - start_x) / step)
 	points.resize(num_points)
+	
+	var next_point_pos:float = start_x
 	for i in num_points:
-		points[i] = start_x + (i - 1) * step + bounding_box.size.x + randf() * object_type.min_spacing
-
+		next_point_pos += i * step + randf() * half_width
+		points[i] = next_point_pos
+				
 	# Randomize the order of the points
 	points.shuffle()
 	var spawn_count:int = 0
@@ -66,16 +74,20 @@ func _place_objects(object_type : ProceduralObjectContraints) -> void:
 			assert(new_object != null, "ProceduralObjectSpawner(%s): _place_objects() - new_object is null" % [name])
 			
 			new_object.position = Vector2(point, y + object_type.spawn_y_offset)
-			_add_object(new_object)
+			bounding_box.position = new_object.position
+			
+			_add_object(new_object, bounding_box)
 			spawn_count += 1
 			print_debug("ProceduralObjectSpawner(%s): Spawned object %s at %s" % [name, object_scene.resource_name, new_object.position])
 			
 			if spawn_count >= max_spawn_count:
 				break
 
-func _add_object(node: Node) -> void:
+func _add_object(node: Node, bounds:Rect2) -> void:
 	container.add_child(node)
-	_spawned_objects[node.get_instance_id()] = node
+
+	# Add the bounding box to the sorted list
+	_insert_bounds(bounds)
 	
 func _get_placement_y_at(bounds: Rect2, object_type : ProceduralObjectContraints, x: float) -> float:
 	var center_point_test := _get_ground_position(x)
@@ -108,8 +120,9 @@ func _get_placement_y_at(bounds: Rect2, object_type : ProceduralObjectContraints
 		return -1
 		
 	# Check this doesn't intersect already spawned objects
-	if _intersects_existing_spawned(center_point, bounds):
+	if _intersects_existing_spawned(center_point, object_type, bounds):
 		return -1
+
 	return center_point.y
 
 func _get_ground_position(x: float) -> Dictionary[String, Vector2]:
@@ -123,40 +136,59 @@ func _get_ground_position(x: float) -> Dictionary[String, Vector2]:
 	var result: Dictionary = space_state.intersect_ray(query_params)
 
 	if !result:
-		push_error("ProceduralObjectSpawner(%s): _get_spawn_position could not find y - x=%f" % [name, x])
+		push_error("ProceduralObjectSpawner(%s): _get_spawn_position could not find y for x=%f" % [name, x])
 		return {}
 		
-	# This doesn't work as physics engine hasn't processed the new nodes yet
-	# Make sure objects not spawning on top of each other
-	#if _is_part_of_spawned(result.collider):
-	#	return {}
 	var ground_pos:Vector2 = result["position"]
 	
 	return { "position" : ground_pos }
 
-func _is_part_of_spawned(node: Node) -> bool:
-	while node:
-		if node.get_instance_id() in _spawned_objects:
-			return true
-		node = node.get_parent()
-	return false
+func _find_and_insert_tank_bounds() -> void:
+	var tanks: Array[Node] = get_tree().get_nodes_in_group(Groups.Unit)
+	print_debug("ProceduralObjectSpawner(%s): found %d tanks in scene" % [name, tanks.size()])
+	
+	for tank in tanks:
+		var bounds:Rect2 = tank.get_rect()
+		bounds.position = tank.global_position
+		_insert_bounds(bounds)
+		
+func _insert_bounds(bounds:Rect2) -> void:
+	var insertPos:int = _sorted_insert_positions.bsearch_custom(bounds, _bounds_compare)
+	_sorted_insert_positions.insert(insertPos, bounds)
+	
+func _intersects_existing_spawned(pos: Vector2, object_type : ProceduralObjectContraints, bounds:Rect2) -> bool:
+	if _sorted_insert_positions.is_empty():
+		return false
 
-func _intersects_existing_spawned(pos: Vector2, bounds:Rect2) -> bool:
 	bounds.position = pos
-	for node_id in _spawned_objects:
-		var node:Node = _spawned_objects[node_id]
-		var node_rect:Rect2 = _get_bounding_box(node)
-		if bounds.intersects(node_rect):
+	var insertPos:int = _sorted_insert_positions.bsearch_custom(bounds, _bounds_compare)
+
+	# See if placing it here will intersect previous or the next
+	# Expand the bounds to include the spacing
+	bounds.size.x += object_type.min_spacing
+
+	if insertPos > 0:
+		var prev_bounds:Rect2 = _sorted_insert_positions[insertPos - 1]
+		if bounds.intersects(prev_bounds):
 			return true
+	
+	if insertPos < _sorted_insert_positions.size():
+		var next_bounds:Rect2 = _sorted_insert_positions[insertPos]
+		if bounds.intersects(next_bounds):
+			return true
+
 	return false
 	
+func _bounds_compare(a:Rect2, b:Rect2) -> bool:
+	return a.position.x < b.position.x
+
 func _get_bounding_box(root: Node) -> Rect2:
 	var rect := Rect2()
 	var nodes:Array[Node] = [root]
 	
 	while not nodes.is_empty():
 		var node:Node = nodes.pop_back()
-		if node.has_method("get_rect"):
+		if node.has_method("get_rect") and node.has_method("to_global"):
 			var node_rect:Rect2 = node.get_rect()
 			node_rect.position = node.to_global(node_rect.position)
 			rect = rect.merge(node_rect)

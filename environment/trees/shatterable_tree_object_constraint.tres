@@ -9,5 +9,5 @@ scene = ExtResource("1_c47rm")
 min_spacing = 50.0
 count = Vector2i(3, 5)
 max_slant_angle_deg = 10.0
-spawn_y_offset = -10.0
+spawn_y_offset = 0.0
 adjacent_constraints = Dictionary[PackedScene, float]({})

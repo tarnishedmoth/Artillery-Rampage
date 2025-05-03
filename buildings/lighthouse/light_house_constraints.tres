@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ProceduralObjectContraints" load_steps=3 format=3 uid="uid://d2iumnebtj2f3"]
+
+[ext_resource type="Script" uid="uid://bke3gd68u5yjw" path="res://environment/procedural_object_constraints.gd" id="1_3bin1"]
+[ext_resource type="PackedScene" uid="uid://sa0oyrt453vy" path="res://buildings/lighthouse/light_house.tscn" id="1_cu7n0"]
+
+[resource]
+script = ExtResource("1_3bin1")
+scene = ExtResource("1_cu7n0")
+min_spacing = 100.0
+count = Vector2i(1, 2)
+max_slant_angle_deg = 5.0
+spawn_y_offset = 0.0
+adjacent_constraints = Dictionary[PackedScene, float]({})
+metadata/_custom_type_script = "uid://bke3gd68u5yjw"

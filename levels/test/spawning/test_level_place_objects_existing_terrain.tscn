@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://c1yqjq2qkx6cd"]
+[gd_scene load_steps=18 format=3 uid="uid://c1yqjq2qkx6cd"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_o0b5t"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="2_pqxmw"]
@@ -15,6 +15,8 @@
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="10_27pdu"]
 [ext_resource type="Resource" uid="uid://6vvcguyaaxie" path="res://environment/rocks/shatterable_rock01_constraints.tres" id="14_5homu"]
 [ext_resource type="Resource" uid="uid://0wgxqduf2coh" path="res://environment/rocks/shatterable_rock02_constraints.tres" id="15_2go1p"]
+[ext_resource type="Resource" uid="uid://d2iumnebtj2f3" path="res://buildings/lighthouse/light_house_constraints.tres" id="16_r0hmc"]
+[ext_resource type="Resource" uid="uid://4mjdfsy014xp" path="res://buildings/house_constraints.tres" id="17_b8pl5"]
 
 [node name="TestLevelProcGen" type="Node2D"]
 
@@ -38,7 +40,8 @@ default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
 
 [node name="ProceduralObjectSpawner" parent="GameLevel" instance=ExtResource("3_npmx6")]
-objects = Array[ExtResource("4_3hpmn")]([ExtResource("5_5homu"), ExtResource("14_5homu"), ExtResource("15_2go1p")])
+objects = Array[ExtResource("4_3hpmn")]([ExtResource("5_5homu"), ExtResource("14_5homu"), ExtResource("15_2go1p"), ExtResource("16_r0hmc"), ExtResource("17_b8pl5")])
+randomize_object_priorities = true
 
 [editable path="GameLevel"]
 [editable path="GameLevel/Terrain"]

@@ -119,6 +119,12 @@ func _ready() -> void:
 func _to_string() -> String:
 	return name
 	
+## Returns the bounds of the tank in local coordinates
+func get_rect() -> Rect2:
+	return Rect2(0.0, 0.0,
+	 right_reference_point.position.x - left_reference_point.position.x, # Width
+	 bottom_reference_point.position.y - top_reference_point.position.y) # Height
+	
 func apply_pending_state(state: PlayerState) -> void:
 	# TODO: This feels hacky but _ready has already run for children when this is called
 	scan_available_weapons()
