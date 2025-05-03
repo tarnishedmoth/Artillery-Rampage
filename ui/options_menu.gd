@@ -69,21 +69,19 @@ func _on_cancel_pressed() -> void:
 	close_options_menu()
 
 func populate_keybinds_ui() -> void:
-	# Clear old data
+	## Clear old data
 	for child in keybind_labels.get_children() + keybind_glyphs.get_children(): # Didn't know i could do this, cool
 		child.queue_free()
 	
-	# Get all keybinds and display them
+	## Get all keybinds and display them
 	var map: Array[StringName] = UserOptions.get_all_keybinds() # InputMap.get_actions()
 	#print_debug(map)
 	
 	for action in map:
-		# Label
-		var label = Label.new()
-		label.text = action
-		keybind_labels.add_child(label)
+		# We're doing Glyph (right column) first in order to get its minimum size, to scale
+		# the Label properly. Kind of a workaround, there's probably a way to set fixed size.
 		
-		# Glyph
+		## Glyph
 		var inputs: Array[InputEvent] = InputMap.action_get_events(action)
 		var text: String
 		for input: InputEvent in inputs:
@@ -94,6 +92,12 @@ func populate_keybinds_ui() -> void:
 		glyph.text = text
 		glyph.pressed.connect(_on_keybinds_changing)
 		keybind_glyphs.add_child(glyph)
+		
+		## Label
+		var label = Label.new()
+		label.text = action
+		label.custom_minimum_size.y = glyph.get_combined_minimum_size().y
+		keybind_labels.add_child(label)
 
 func _on_configure_keybinds_button_pressed() -> void:
 	populate_keybinds_ui()
