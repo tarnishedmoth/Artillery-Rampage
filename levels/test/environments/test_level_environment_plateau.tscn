@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://xbu6vsgqj6ol"]
+[gd_scene load_steps=18 format=3 uid="uid://xbu6vsgqj6ol"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_ebxsw"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_hfb6e"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="10_w62ko"]
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="11_vkumi"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="12_rg0lq"]
+[ext_resource type="PackedScene" uid="uid://dvkouaun7cdld" path="res://environment/procedural_object_plains_spawner.tscn" id="14_gabuw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gabuw"]
 shader = ExtResource("3_kba6h")
@@ -60,6 +61,8 @@ default_ai_players = Vector2i(3, 4)
 num_ai_teams = 2
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
+
+[node name="ProceduralObjectPlainsSpawner" parent="GameLevel" instance=ExtResource("14_gabuw")]
 
 [editable path="GameLevel"]
 [editable path="GameLevel/Terrain"]

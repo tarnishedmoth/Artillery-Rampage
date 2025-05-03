@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://djpfk6t0465og"]
+[gd_scene load_steps=20 format=3 uid="uid://djpfk6t0465og"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_trgql"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_2spyf"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="12_7vibc"]
 [ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="13_apfms"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="14_qttkl"]
+[ext_resource type="PackedScene" uid="uid://dyoeqogv8xoye" path="res://environment/procedural_object_seaside_spawner.tscn" id="16_0f8xw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0f8xw"]
 shader = ExtResource("3_scv65")
@@ -74,6 +75,8 @@ scale = Vector2(7.02656, 4.6518)
 
 [node name="Player" parent="GameLevel" instance=ExtResource("14_qttkl")]
 position = Vector2(374, 479)
+
+[node name="ProceduralObjectTropicalSpawner" parent="GameLevel" instance=ExtResource("16_0f8xw")]
 
 [editable path="GameLevel"]
 [editable path="GameLevel/Terrain"]

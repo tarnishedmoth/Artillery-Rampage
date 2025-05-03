@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://wu7hqwxsows8"]
+[gd_scene load_steps=19 format=3 uid="uid://wu7hqwxsows8"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_jka4u"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_6fado"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="10_gsokq"]
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="11_0jupl"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="12_07oax"]
+[ext_resource type="PackedScene" uid="uid://dvkouaun7cdld" path="res://environment/procedural_object_plains_spawner.tscn" id="15_52q06"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_52q06"]
 shader = ExtResource("3_bl5yk")
@@ -74,6 +75,8 @@ ideal_min_spawn_separation = 250.0
 [node name="WaterHazard" parent="GameLevel" instance=ExtResource("5_eq7ts")]
 position = Vector2(691, 718)
 scale = Vector2(1.28, 0.68)
+
+[node name="ProceduralObjectPlainsSpawner" parent="GameLevel" instance=ExtResource("15_52q06")]
 
 [editable path="GameLevel"]
 [editable path="GameLevel/Terrain"]

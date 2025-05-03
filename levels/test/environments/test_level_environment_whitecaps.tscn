@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dwgn8g6vo2w3h"]
+[gd_scene load_steps=20 format=3 uid="uid://dwgn8g6vo2w3h"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_pnpmv"]
 [ext_resource type="AudioStream" uid="uid://o2aq3qhc7qb" path="res://music/SoundtrackWhitecaps.mp3" id="2_2r3lq"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="8_ea3ao"]
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="9_wirxa"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="10_i8u8w"]
+[ext_resource type="PackedScene" uid="uid://c0f6pn0mperks" path="res://environment/procedural_object_mountain_spawner.tscn" id="16_n0lpj"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n0lpj"]
 shader = ExtResource("4_qpo8v")
@@ -85,6 +86,8 @@ scale = Vector2(0.68, 0.68)
 texture = ExtResource("3_a2cra")
 centered = false
 offset = Vector2(-4, -214.915)
+
+[node name="ProceduralObjectMountainSpawner" parent="GameLevel" instance=ExtResource("16_n0lpj")]
 
 [editable path="GameLevel"]
 [editable path="GameLevel/Terrain"]

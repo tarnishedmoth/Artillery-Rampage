@@ -1,22 +1,16 @@
-[gd_scene load_steps=18 format=3 uid="uid://c1yqjq2qkx6cd"]
+[gd_scene load_steps=12 format=3 uid="uid://c1yqjq2qkx6cd"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_o0b5t"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="2_pqxmw"]
 [ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="3_d7mul"]
-[ext_resource type="PackedScene" uid="uid://cwssjadyxw2gg" path="res://environment/procedural_object_spawner.tscn" id="3_npmx6"]
 [ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="4_0pd85"]
-[ext_resource type="Script" uid="uid://bke3gd68u5yjw" path="res://environment/procedural_object_constraints.gd" id="4_3hpmn"]
-[ext_resource type="Resource" uid="uid://bow3ltxvkxclj" path="res://environment/trees/shatterable_tree_object_constraint.tres" id="5_5homu"]
 [ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="5_u8x03"]
 [ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="6_tqm7g"]
 [ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="7_hcfdf"]
 [ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="8_v1inc"]
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="9_vmfja"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="10_27pdu"]
-[ext_resource type="Resource" uid="uid://6vvcguyaaxie" path="res://environment/rocks/shatterable_rock01_constraints.tres" id="14_5homu"]
-[ext_resource type="Resource" uid="uid://0wgxqduf2coh" path="res://environment/rocks/shatterable_rock02_constraints.tres" id="15_2go1p"]
-[ext_resource type="Resource" uid="uid://d2iumnebtj2f3" path="res://buildings/lighthouse/light_house_constraints.tres" id="16_r0hmc"]
-[ext_resource type="Resource" uid="uid://4mjdfsy014xp" path="res://buildings/house_constraints.tres" id="17_b8pl5"]
+[ext_resource type="PackedScene" uid="uid://cymwi7ldb5pvo" path="res://environment/procedural_object_test_spawner.tscn" id="11_prswt"]
 
 [node name="TestLevelProcGen" type="Node2D"]
 
@@ -39,9 +33,7 @@ default_ai_players = Vector2i(1, 4)
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
 
-[node name="ProceduralObjectSpawner" parent="GameLevel" instance=ExtResource("3_npmx6")]
-objects = Array[ExtResource("4_3hpmn")]([ExtResource("5_5homu"), ExtResource("14_5homu"), ExtResource("15_2go1p"), ExtResource("16_r0hmc"), ExtResource("17_b8pl5")])
-randomize_object_priorities = true
+[node name="ProceduralObjectTestSpawner" parent="GameLevel" instance=ExtResource("11_prswt")]
 
 [editable path="GameLevel"]
 [editable path="GameLevel/Terrain"]
