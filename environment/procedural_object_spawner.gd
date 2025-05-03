@@ -7,13 +7,10 @@ class_name ProceduralObjectSpawner extends Node2D
 
 @export var spawn_screen_deadzone: float = 20.0
 
-# Need to wait for the terrain to finish building before doing raycasts
-const spawn_delay:float = 0.3
-
 var _sorted_insert_positions: Array[Rect2] = []
 
 func _ready() -> void:
-	await get_tree().create_timer(spawn_delay).timeout
+	await GameEvents.all_players_added
 
 	_find_and_insert_tank_bounds()
 	

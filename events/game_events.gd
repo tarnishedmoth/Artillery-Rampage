@@ -6,8 +6,13 @@ var current_level:GameLevel
 
 signal user_options_changed()
 
+## Called just before round started when all players have been added to the game
+signal all_players_added(level: GameLevel)
+
 signal round_started()
 signal round_ended()
+
+# Called when the game level is ready but before players and procedural spawning occurs
 signal level_loaded(level: GameLevel)
 
 signal turn_started(player: TankController)

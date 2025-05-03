@@ -36,6 +36,8 @@ func begin_round():
 	# Discover any placed child controller nodes
 	_add_manually_placed_units()
 	await _add_spawned_units()
+
+	GameEvents.all_players_added.emit(self)
 				
 	round_director.begin_round()
 		
