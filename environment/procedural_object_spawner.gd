@@ -76,8 +76,7 @@ func _place_objects(object_type : ProceduralObjectContraints) -> void:
 			var new_object:Node2D = object_scene.instantiate() as Node2D
 			assert(new_object != null, "ProceduralObjectSpawner(%s): _place_objects() - new_object is null" % [name])
 			
-			new_object.position = Vector2(point, y + object_type.spawn_y_offset)
-			bounding_box.position = new_object.position
+			new_object.position = Vector2(point, y) + object_type.bottom_center_offset
 			
 			_add_object(new_object, bounding_box)
 			spawn_count += 1
@@ -86,12 +85,22 @@ func _place_objects(object_type : ProceduralObjectContraints) -> void:
 			if spawn_count >= max_spawn_count:
 				break
 
-func _add_object(node: Node, bounds:Rect2) -> void:
+func _add_object(node: Node, bounds:Rect2) -> void:	
 	container.add_child(node)
 
+	bounds = _adjust_bounds_position(bounds, node)
 	# Add the bounding box to the sorted list
 	_insert_bounds(bounds)
-	
+
+func _get_existing_node_bounds_global(node: Node) -> Rect2:
+	var node_rect:Rect2 = node.get_rect()
+	return _adjust_bounds_position(node_rect, node)
+
+func _adjust_bounds_position(bounds:Rect2, node:Node) -> Rect2:
+	# Adjust bounds position to node position
+	bounds.position = node.to_global(bounds.position)
+	return bounds
+
 func _get_placement_y_at(bounds: Rect2, object_type : ProceduralObjectContraints, x: float) -> float:
 	var center_point_test := _get_ground_position(x)
 	if not center_point_test:
@@ -156,25 +165,24 @@ func _find_and_insert_tank_bounds() -> void:
 	print_debug("ProceduralObjectSpawner(%s): found %d tanks in scene" % [name, tanks.size()])
 	
 	for tank in tanks:
-		var bounds:Rect2 = tank.get_rect()
-		bounds.position = tank.global_position
+		var bounds:Rect2 = _get_existing_node_bounds_global(tank)
 		_insert_bounds(bounds)
 		
 func _insert_bounds(bounds:Rect2) -> void:
 	var insertPos:int = _sorted_insert_positions.bsearch_custom(bounds, _bounds_compare)
 	_sorted_insert_positions.insert(insertPos, bounds)
 	
-func _intersects_existing_spawned(pos: Vector2, object_type : ProceduralObjectContraints, bounds:Rect2) -> bool:
+func _intersects_existing_spawned(center_pos: Vector2, object_type : ProceduralObjectContraints, bounds:Rect2) -> bool:
 	if _sorted_insert_positions.is_empty():
 		return false
 
-	bounds.position = pos
-	var insertPos:int = _sorted_insert_positions.bsearch_custom(bounds, _bounds_compare)
-
-	# See if placing it here will intersect previous or the next
 	# Expand the bounds to include the spacing
 	bounds.size.x += object_type.min_spacing
 
+	bounds.position = center_pos - bounds.size * 0.5
+	var insertPos:int = _sorted_insert_positions.bsearch_custom(bounds, _bounds_compare)
+
+	# See if placing it here will intersect previous or the next
 	if insertPos > 0:
 		var prev_bounds:Rect2 = _sorted_insert_positions[insertPos - 1]
 		if bounds.intersects(prev_bounds):
@@ -197,8 +205,7 @@ func _get_bounding_box(root: Node) -> Rect2:
 	while not nodes.is_empty():
 		var node:Node = nodes.pop_back()
 		if node.has_method("get_rect") and node.has_method("to_global"):
-			var node_rect:Rect2 = node.get_rect()
-			node_rect.position = node.to_global(node_rect.position)
+			var node_rect:Rect2 = _get_existing_node_bounds_global(node)
 			rect = rect.merge(node_rect)
 		for child in node.get_children():
 			nodes.append(child)

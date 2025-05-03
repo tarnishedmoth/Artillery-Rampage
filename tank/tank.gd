@@ -121,9 +121,13 @@ func _to_string() -> String:
 	
 ## Returns the bounds of the tank in local coordinates
 func get_rect() -> Rect2:
-	return Rect2(0.0, 0.0,
-	 right_reference_point.position.x - left_reference_point.position.x, # Width
-	 bottom_reference_point.position.y - top_reference_point.position.y) # Height
+	var width:float = right_reference_point.position.x - left_reference_point.position.x
+	var height: float = bottom_reference_point.position.y - top_reference_point.position.y
+	
+	var center = position
+	var top_left = center - Vector2(width * 0.5, height * 0.5)
+	
+	return Rect2(top_left, Vector2(width, height))
 	
 func apply_pending_state(state: PlayerState) -> void:
 	# TODO: This feels hacky but _ready has already run for children when this is called
