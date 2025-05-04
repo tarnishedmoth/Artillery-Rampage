@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://b80y1iuls3wmg"]
+
+[ext_resource type="Shader" uid="uid://bx56bsqd5vkyg" path="res://tank/tank_damage.gdshader" id="1_jtv2c"]
+
+[resource]
+shader = ExtResource("1_jtv2c")
+shader_parameter/flash_cycle_time = 1.0
+shader_parameter/brightness_boost_factor = 5.0
+shader_parameter/glow_radius = 0.01
+shader_parameter/max_glow_strength = 0.5
+shader_parameter/start_time = 0.0

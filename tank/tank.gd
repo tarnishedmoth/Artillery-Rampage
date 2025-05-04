@@ -41,6 +41,11 @@ signal tank_stopped_falling(tank: Tank)
 @export var max_power_v_health:Curve
 @export var aim_deviation_v_health:Curve
 
+@export_group("Materials")
+@export var damage_material:ShaderMaterial
+@export_range(1.0, 10.0, 0.1) var damage_flash_duration: float = 2.0
+var damage_timer:Timer
+
 @onready var tankBody: TankBody = $TankBody
 
 @onready var bottom_reference_point = $TankBody/Bottom
@@ -98,6 +103,11 @@ func _on_update_color():
 
 func _ready() -> void:
 	GameEvents.turn_ended.connect(_on_turn_ended)
+
+	# Need to duplicate as we are using a uniform for the start_time and this is shared on all instances
+	# As not using "instance uniform" as this isn't available in compatibility rendering needed for web
+	if damage_material:
+		damage_material = damage_material.duplicate()
 	
 	_on_update_color()
 	scan_available_weapons()
@@ -264,11 +274,40 @@ func spawn_death_drop() -> void:
 	
 func _update_visuals_after_damage():
 	# TODO: This is placeholder but right now just darkening the tanks accordingly
-	var health_pct = health / max_health
-	var dark_pct = 1 - health_pct
+	var health_pct:float = health / max_health
+	var dark_pct:float = 1 - health_pct
 	
 	modulate = modulate.darkened(dark_pct)
 	turret.modulate = turret.modulate.darkened(dark_pct)
+
+	_activate_damage_shader()
+
+func _activate_damage_shader() -> void:
+	if material:
+		print_debug("Tank: %s - ignore as shader already set" % get_parent().name)
+		return
+	if not damage_material:
+		print_debug("Tank: %s - no damage material" % get_parent().name)
+		return
+	
+	var game_time_seconds: float = SceneManager.get_current_level_root().game_timer.time_seconds if SceneManager.get_current_level_root() else 0.0
+	damage_material.set_shader_parameter("start_time", game_time_seconds)
+
+	material = damage_material
+
+	# Set timer to expire
+	if not damage_timer:
+		damage_timer = Timer.new()
+		damage_timer.wait_time = damage_flash_duration
+		damage_timer.one_shot = true
+		damage_timer.autostart = false
+		damage_timer.timeout.connect(func():
+			print_debug("Tank: %s - damage timer expired" % get_parent().name)
+			material = null
+		)
+		add_child(damage_timer)
+
+	damage_timer.start()
 #endregion
 
 #region Movement
