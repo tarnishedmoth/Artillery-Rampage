@@ -1,6 +1,6 @@
 extends Node
 
-var keybinds:Dictionary[StringName,InputEvent] # action, keybind
+var keybinds:Dictionary[StringName,Array] # action, InputEvents TODO
 
 var show_tooltips:bool = true
 var show_hud:bool = true
@@ -8,7 +8,7 @@ var show_assist_trajectory_preview:bool = true
 
 var volume_music:float = 0.8
 var volume_sfx:float = 1.0
-var volume_voice:float = 0.8
+var volume_speech:float = 1.0
 
 func _ready() -> void:
 	enforce_options()
@@ -21,25 +21,58 @@ func enforce_options() -> void:
 func audio_bus_check() -> void:
 	var music_bus = AudioServer.get_bus_index("Music")
 	var sfx_bus = AudioServer.get_bus_index("SFX")
+	var speech_bus = AudioServer.get_bus_index("Speech")
 	
 	AudioServer.set_bus_volume_db(music_bus, linear_to_db(volume_music))
 	AudioServer.set_bus_volume_db(sfx_bus, linear_to_db(volume_sfx))
+	AudioServer.set_bus_volume_db(speech_bus, linear_to_db(volume_speech))
 
+## TODO
 func apply_user_keybinds() -> void:
-	var index:int = 0
-	for action in get_all_keybinds():
-		#change_keybind(action, keybinds[action])
-		pass
+	#var index:int = 0
+	#for action in keybinds:
+		#change_keybinds(action)
+	pass
 		
 		
 func reset_all_keybinds_to_default() -> void:
 	InputMap.load_from_project_settings()
 	
 func change_keybind(action, new_key) -> void:
-	# Take an InputEvent and reassign it to a new key
-	print_debug("TODO Keybind ", action, " should be changed to new key ", new_key)
-	pass
+	# TODO make this save/loadable with keybinds dictionary
+	InputMap.action_erase_events(action)
+	InputMap.action_add_event(action, new_key)
+	print_debug("New bind: ", action, get_glyphs(action))
 	
+## Not working
+#func change_keybinds(action) -> void:
+	#if action is not StringName: action = StringName(action)
+	#
+	#var iter:int = 0
+	#if action in get_all_keybinds():
+		#InputMap.action_erase_events(action)
+		#for bind in keybinds[action]:
+			#InputMap.action_add_event(action, bind)
+			#iter+=1
+	#print_debug("Assigned ", iter, " keybinds to ", action)
+#
+#func add_keybind(action, new_key) -> void:
+	#if action is not StringName: action = StringName(action)
+	#
+	#if action in get_all_keybinds():
+		#keybinds[action].append(new_key)
+		#print_debug("Added key")
+	#change_keybinds(action)
+	#
+#func remove_keybind(action, key) -> void:
+	#if action is not StringName: action = StringName(action)
+	#
+	#if key in get_glyphs(action):
+		#if keybinds.has(action):
+			#if keybinds[action].has(key):
+				#keybinds[action].erase(key)
+		#print_debug("Removed key")
+	#change_keybinds(action)
 	
 func get_all_keybinds() -> Array[StringName]: ## Returns InputMap.get_actions()
 	var actions: Array[StringName]

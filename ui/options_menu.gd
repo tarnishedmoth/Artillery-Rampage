@@ -9,6 +9,8 @@ signal closed
 
 @onready var music_volume_slider: HSlider = %MusicVolumeSlider
 @onready var sfx_volume_slider: HSlider = %SFXVolumeSlider
+@onready var speech_volume_slider: HSlider = %SpeechVolumeSlider
+
 
 @onready var options: VBoxContainer = $Options
 @onready var keybinds: PanelContainer = $Keybinds
@@ -22,8 +24,10 @@ signal closed
 
 var cached_music_volume: float
 var cached_sfx_volume: float
+var cached_speech_volume: float
 
 var capturing_input:bool = false
+var _last_input_event:InputEvent
 
 func _ready() -> void:
 	set_initial_states()
@@ -50,9 +54,10 @@ func set_initial_states() -> void:
 	
 	music_volume_slider.set_value_no_signal(UserOptions.volume_music)
 	sfx_volume_slider.set_value_no_signal(UserOptions.volume_sfx)
-	
+	speech_volume_slider.set_value_no_signal(UserOptions.volume_speech)
 	cached_music_volume = music_volume_slider.value
 	cached_sfx_volume = sfx_volume_slider.value
+	cached_speech_volume = speech_volume_slider.value
 	
 func apply_changes() -> void:
 	# Apply all options
@@ -61,6 +66,7 @@ func apply_changes() -> void:
 	UserOptions.show_assist_trajectory_preview = show_trajectory_toggle.is_pressed()
 	UserOptions.volume_music = music_volume_slider.value
 	UserOptions.volume_sfx = sfx_volume_slider.value
+	UserOptions.volume_speech = speech_volume_slider.value
 	apply_volume_settings_to_audio_bus()
 	
 	# Emit signal
@@ -69,11 +75,16 @@ func apply_changes() -> void:
 func apply_volume_settings_to_audio_bus() -> void:
 	var music_bus = AudioServer.get_bus_index("Music")
 	var sfx_bus = AudioServer.get_bus_index("SFX")
+	var speech_bus = AudioServer.get_bus_index("Speech")
 	
 	AudioServer.set_bus_volume_db(music_bus, linear_to_db(UserOptions.volume_music))
 	AudioServer.set_bus_volume_db(sfx_bus, linear_to_db(UserOptions.volume_sfx))
+	AudioServer.set_bus_volume_db(speech_bus, linear_to_db(speech_volume_slider.value))
 	
 func reset_changed_cached_settings() -> void:
+	sfx_volume_slider.value = cached_sfx_volume
+	music_volume_slider.value = cached_music_volume
+	speech_volume_slider.value = cached_speech_volume
 	apply_volume_settings_to_audio_bus()
 	
 func close_options_menu() -> void:
@@ -121,13 +132,6 @@ func populate_keybinds_ui() -> void:
 func _on_configure_keybinds_button_pressed() -> void:
 	populate_keybinds_ui()
 	keybinds.show()
-	
-func _on_keybinds_changing(action: StringName) -> void:
-	print_debug(action)
-	
-	keybind_changing.show()
-	keybind_changing_label.text = action
-	keybind_changing_glyph.text = str(UserOptions.get_glyphs(action))
 
 func _on_keybinds_confirm_changes_pressed() -> void:
 	# TODO apply changes
@@ -147,13 +151,24 @@ func _on_music_volume_slider_drag_ended(value_changed: bool) -> void:
 		var music_bus = AudioServer.get_bus_index("Music")
 		AudioServer.set_bus_volume_db(music_bus, linear_to_db(music_volume_slider.value))
 
-
 func _on_sfx_volume_slider_drag_ended(value_changed: bool) -> void:
 	if value_changed:
 		var sfx_bus = AudioServer.get_bus_index("SFX")
 		AudioServer.set_bus_volume_db(sfx_bus, linear_to_db(sfx_volume_slider.value))
 		
+func _on_speech_volume_slider_drag_ended(value_changed: bool) -> void:
+	if value_changed:
+		var speech_bus = AudioServer.get_bus_index("Speech")
+		AudioServer.set_bus_volume_db(speech_bus, linear_to_db(speech_volume_slider.value))
+		
 ## Keybinds Changing Window
+func _on_keybinds_changing(action: StringName) -> void:
+	print_debug(action)
+	
+	keybind_changing.show()
+	keybind_changing_label.text = action
+	keybind_changing_glyph.text = str(UserOptions.get_glyphs(action))
+	
 func _on_keybind_changing_visibility_changed() -> void:
 	# We need to capture the users inputs if this window is showing to prevent it from
 	# doing unintended things.
@@ -163,9 +178,12 @@ func _on_keybind_changing_visibility_changed() -> void:
 	else:
 		capturing_input = false
 		print_debug("Released input capture...")
+		# Refresh the UI in case we changed something
+		populate_keybinds_ui()
 		
 func _on_keybind_changing_input_pressed(event: InputEvent) -> void:
 	print(event)
+	_last_input_event = event
 	keybind_changing_glyph.text = event.as_text()
 	
 func _on_keybind_changing_cancel_pressed() -> void:
@@ -173,5 +191,6 @@ func _on_keybind_changing_cancel_pressed() -> void:
 
 func _on_keybind_changing_apply_pressed() -> void:
 	# Assign the keybind
-	UserOptions.change_keybind(keybind_changing_label.text, keybind_changing_glyph.text)
+	# TODO multiple keybinds
+	UserOptions.change_keybind(keybind_changing_label.text, _last_input_event)
 	keybind_changing.hide()
