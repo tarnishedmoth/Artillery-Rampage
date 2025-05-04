@@ -63,7 +63,9 @@ func get_area() -> float:
 	return area
 
 func get_rect() -> Rect2:
-	return TerrainUtils.get_polygon_bounds(_mesh.polygon)
+	var bounds:Rect2 = TerrainUtils.get_polygon_bounds(_mesh.polygon)
+	bounds.position += to_local(_mesh.global_position)
+	return bounds
 
 func _recenter_polygon() -> void:
 	# Should recenter the polygon about its new center of mass (centroid)

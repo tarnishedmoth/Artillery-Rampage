@@ -39,6 +39,7 @@ func _place_objects(object_type : ProceduralObjectContraints) -> void:
 	container.add_child(prototype_object);
 	# Get the bounding box of the prototype object
 	var bounding_box:Rect2 = _get_bounding_box(prototype_object)
+	bounding_box.position = prototype_object.to_local(bounding_box.position)
 	container.remove_child(prototype_object)
 	prototype_object.queue_free()
 
@@ -76,18 +77,23 @@ func _place_objects(object_type : ProceduralObjectContraints) -> void:
 			var new_object:Node2D = object_scene.instantiate() as Node2D
 			assert(new_object != null, "ProceduralObjectSpawner(%s): _place_objects() - new_object is null" % [name])
 			
-			new_object.position = Vector2(point, y) + object_type.bottom_center_offset
+			var bottom_center_offset:Vector2 = compute_center_bottom_offset(bounding_box)
+			new_object.position = Vector2(point, y) + bottom_center_offset
 			
-			_add_object(new_object, bounding_box)
+			_add_object(new_object, bounding_box, bottom_center_offset)
 			spawn_count += 1
 			print_debug("ProceduralObjectSpawner(%s): Spawned object %s at %s" % [name, object_scene.resource_name, new_object.position])
 			
 			if spawn_count >= max_spawn_count:
 				break
 
-func _add_object(node: Node, bounds:Rect2) -> void:	
+func compute_center_bottom_offset(bounds:Rect2) -> Vector2:
+	return Vector2(bounds.position.x + bounds.size.x * 0.5, -(bounds.position.y + bounds.size.y))
+
+func _add_object(node: Node, bounds:Rect2, bottom_center_offset:Vector2) -> void:	
 	container.add_child(node)
 
+	bounds.position += bottom_center_offset
 	bounds = _adjust_bounds_position(bounds, node)
 	# Add the bounding box to the sorted list
 	_insert_bounds(bounds)
@@ -176,16 +182,12 @@ func _intersects_existing_spawned(bottom_center_pos: Vector2, object_type : Proc
 	if _sorted_insert_positions.is_empty():
 		return false
 
-	# Expand the bounds to include the spacing
-	bounds.size.x += 2 * object_type.min_spacing
-
 	# translate to bottom center and then position bounds at top left corner
-	#var global_bounds_pos:Vector2 = bottom_center_pos + object_type.bottom_center_offset - Vector2(bounds.size.x * 0.5, bounds.size.y)
-	var global_bounds_pos:Vector2 = bottom_center_pos - bounds.size * 0.5
-
-	bounds.position = global_bounds_pos
-
-
+	bounds.position += compute_center_bottom_offset(bounds)
+	# Expand the left and right sides to include the spacing
+	bounds = bounds.grow_individual(object_type.min_spacing, 0.0, object_type.min_spacing, 0.0)
+	
+	bounds.position += bottom_center_pos
 	var insertPos:int = _sorted_insert_positions.bsearch_custom(bounds, _bounds_compare)
 
 	# See if placing it here will intersect previous or the next

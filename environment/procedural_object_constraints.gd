@@ -11,8 +11,5 @@ class_name ProceduralObjectContraints extends Resource
 ## max slant that this object can spawn on
 @export_range(0, 90, 1.0) var max_slant_angle_deg: float = 10.0
 
-## Offset of the root node in the object scene to place it on the ground and centered horizontally
-@export var bottom_center_offset: Vector2
-
 ## Min spacing to other objects
 @export var adjacent_constraints: Dictionary[PackedScene, float] = {}

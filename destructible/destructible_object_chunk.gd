@@ -115,7 +115,9 @@ func get_area() -> float:
 	return TerrainUtils.calculate_polygon_area(_mesh.polygon)
 
 func get_rect() -> Rect2:
-	return TerrainUtils.get_polygon_bounds(get_destructible_local())
+	var bounds:Rect2 = TerrainUtils.get_polygon_bounds(_mesh.polygon)
+	bounds.position += to_local(_mesh.global_position)
+	return bounds
 	
 func _integrate_forces(_state: PhysicsDirectBodyState2D) -> void:
 	# If the collision polygon is dirty, update the collision polygon
