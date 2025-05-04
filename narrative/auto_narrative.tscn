@@ -15,4 +15,4 @@ elements_environment = Array[String](["this general area", "this macrobiome", "t
 elements_weather = Array[String](["very rainy", "very windy", "a bit windy", "slightly windy", "sunny", "clear", "a little humid", "wet like a swamp", "uncomfortable", "harsh"])
 elements_circumstance = Array[String](["it's in the air", "it's up to god,", "we don't know what we're getting into", "they don't know what's coming"])
 elements_poscompare = Array[String](["I've seen this before", "a walk in the park", "practically a cakewalk", "easy as pie"])
-elements_negcompare = Array[String](["nothing like I've seen before", "nothing good can come from it", "we're better off without", "I'd avoid that", "I wouldn't make that deal", "I'd pass on that one", "I'd rather go another way", "another way seems prefereable", "some other solution would be better"])
+elements_negcompare = Array[String](["nothing like I've seen before", "nothing good can come from it", "we're better off without", "I'd avoid that", "I wouldn't make that deal", "I'd pass on that one", "I'd rather go another way", "another way seems preferable", "some other solution would be better"])

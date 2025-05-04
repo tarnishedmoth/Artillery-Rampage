@@ -138,7 +138,7 @@ const STEPS_WRITING:Array[String] = [
 	"Capping environment energy...",
 	"Cascading shadows...",
 	"Queueing soundtrack...",
-	"Supeceding parent methods...",
+	"Superceding parent methods...",
 	"Reparenting orphaned nodes...",
 	"Commemorating annual events...",
 	"Congregating masses...",

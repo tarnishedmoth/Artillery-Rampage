@@ -26,7 +26,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_l35kj")
 script = ExtResource("1_n5gvg")
-texts = [NodePath("Container/StorySlides/Slide/StoryText"), NodePath("Container/StorySlides/Slide2/StoryText")]
+texts = [NodePath("Container/StorySlides/Slide/StoryText"), NodePath("Container/StorySlides/Slide2/StoryText"), NodePath("Container/StorySlides/Slide3/StoryText")]
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
@@ -75,7 +75,20 @@ size_flags_vertical = 4
 theme = ExtResource("2_l35kj")
 text = "Approaching the beachfront!
 
-The conditions are [WEATHER]... it won't deter us. Might as well be any old Sunday. Looking at [FACTION], we're prepared. We're expecting to face them [ENVIRONMENT]. Maybe [CIRCUMSTANCE]... let's try it."
+The conditions are [WEATHER]... We're up against [FACTION]. We have no clear advantage in [ENVIRONMENT], but that won't deter us. Maybe [CIRCUMSTANCE]... we can't fail."
+fit_content = true
+visible_characters_behavior = 1
+
+[node name="Slide3" type="CenterContainer" parent="Container/StorySlides"]
+visible = false
+layout_mode = 2
+
+[node name="StoryText" type="RichTextLabel" parent="Container/StorySlides/Slide3"]
+custom_minimum_size = Vector2(1024, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("2_l35kj")
+text = "We've considered peaceful negotiations... but [NEGCOMPARE]. We have to take back these lands, from coast to coast. [NONSENSE] let's start here."
 fit_content = true
 visible_characters_behavior = 1
 

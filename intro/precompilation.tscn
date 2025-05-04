@@ -4,7 +4,7 @@
 
 [node name="Precompilation" type="Node2D"]
 script = ExtResource("1_sca42")
-scene_folders = Array[String](["res://effects/post_processing", "res://items", "res://items/weapon_projectiles", "res://items/weapon_projectiles/explosions", "res://items/rubble", "res://weapons", "res://buildings", "res://buildings/lighthouse", "res://effects/hazard/water", "res://environment/trees", "res://tank"])
+scene_folders = Array[String](["res://buildings", "res://buildings/lighthouse", "res://effects/post_processing", "res://effects/hazard/water", "res://environment/rocks", "res://environment/trees", "res://items", "res://items/weapon_projectiles", "res://items/weapon_projectiles/explosions", "res://items/rubble", "res://tank", "res://terrain", "res://weapons"])
 
 [node name="InstancesContainer" type="Node2D" parent="."]
 unique_name_in_owner = true
