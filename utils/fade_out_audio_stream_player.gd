@@ -53,7 +53,7 @@ func switch_stream_and_play(in_stream: AudioStream, restart:bool = false, fade_o
 	print_debug("%s: playing %s at volume=%f" % [name, _last_audio_res, volume_linear])
 	play()
 	
-func fade_out(duration: float) -> void:
+func fade_out(duration: float = default_fade_out) -> void:
 	if not playing:
 		print_debug("%s: No audio currently playing, returning immediately" % [name])
 		return

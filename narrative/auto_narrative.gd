@@ -40,7 +40,7 @@ const Elements:Array[String] = [
 
 var output:String
 
-func _ready() -> void:
+func _enter_tree() -> void:
 	elements_nonsense.shuffle()
 	elements_faction.shuffle()
 	elements_environment.shuffle()
@@ -72,7 +72,7 @@ func replace_story_keywords(source:String) -> String:
 	
 	for element in Elements:
 		var syntax = ElementSyntax.left(1) + element + ElementSyntax.right(1)
-		print(syntax)
+		#print(syntax)
 		
 		var finished = false
 		while not finished:

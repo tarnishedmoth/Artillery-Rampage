@@ -1,23 +1,34 @@
-[gd_scene load_steps=8 format=3 uid="uid://b2y0ohhcprxun"]
+[gd_scene load_steps=11 format=3 uid="uid://b2y0ohhcprxun"]
 
 [ext_resource type="Script" uid="uid://c838e2q5kwly0" path="res://ui/story/story_sequence.gd" id="1_n5gvg"]
 [ext_resource type="Theme" uid="uid://ddklgnmfj25sv" path="res://ui/story/story_theme.tres" id="2_l35kj"]
-[ext_resource type="AudioStream" uid="uid://dk20esx5o424h" path="res://narrative/sounds/chatty_signal_short_a.wav" id="3_4kt13"]
-[ext_resource type="AudioStream" uid="uid://c7lpnx8vng1dt" path="res://narrative/sounds/chatty_signal_short_b.wav" id="4_yker4"]
+[ext_resource type="AudioStream" uid="uid://ctap40wc8oldk" path="res://ui/sounds/chatty_signal_short_a.wav" id="3_yker4"]
+[ext_resource type="AudioStream" uid="uid://cudd5extbrrsl" path="res://ui/sounds/chatty_signal_short_b.wav" id="4_audl8"]
+[ext_resource type="AudioStream" uid="uid://c8m44nf2qa2fn" path="res://ui/sounds/chatty_signal_full.wav" id="5_cxhl0"]
+[ext_resource type="AudioStream" uid="uid://ddspsoaqj8x58" path="res://ui/sounds/alarm_c_press.wav" id="5_yker4"]
 
 [sub_resource type="Gradient" id="Gradient_nw3j5"]
-colors = PackedColorArray(0.290196, 0.172549, 0.0509804, 1, 0.618841, 0.391831, 0.159393, 1)
+colors = PackedColorArray(0.85, 0.827333, 0.8075, 1, 0.6417, 0.64492, 0.69, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_gkxf4"]
 gradient = SubResource("Gradient_nw3j5")
 
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_cy58k"]
-random_pitch = 1.05
-streams_count = 2
-stream_0/stream = ExtResource("3_4kt13")
-stream_1/stream = ExtResource("4_yker4")
+[sub_resource type="AudioStreamSynchronized" id="AudioStreamSynchronized_audl8"]
+stream_count = 2
+stream_0/stream = ExtResource("5_yker4")
+stream_0/volume = 1.0
+stream_1/stream = ExtResource("5_cxhl0")
+stream_1/volume = -3.0
 
-[node name="StorySequence" type="Control" node_paths=PackedStringArray("texts")]
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_cy58k"]
+random_pitch = 1.06
+streams_count = 2
+stream_0/stream = ExtResource("3_yker4")
+stream_0/weight = 0.5
+stream_1/stream = ExtResource("4_audl8")
+stream_1/weight = 0.5
+
+[node name="StorySequence" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,7 +37,6 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_l35kj")
 script = ExtResource("1_n5gvg")
-texts = [NodePath("Container/StorySlides/Slide/StoryText"), NodePath("Container/StorySlides/Slide2/StoryText"), NodePath("Container/StorySlides/Slide3/StoryText")]
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
@@ -73,9 +83,16 @@ custom_minimum_size = Vector2(1024, 0)
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("2_l35kj")
-text = "Approaching the beachfront!
+text = "\"-on all frequencies. Respond if you can read me.
 
-The conditions are [WEATHER]... We're up against [FACTION]. We have no clear advantage in [ENVIRONMENT], but that won't deter us. Maybe [CIRCUMSTANCE]... we can't fail."
+Repeat.
+This is the western front coalition. We are broadcasting on all frequenc-\"
+
+
+(the signal is weak)
+
+
+Press Next to respond..."
 fit_content = true
 visible_characters_behavior = 1
 
@@ -83,12 +100,103 @@ visible_characters_behavior = 1
 visible = false
 layout_mode = 2
 
+[node name="SFX" type="AudioStreamPlayer" parent="Container/StorySlides/Slide3"]
+stream = SubResource("AudioStreamSynchronized_audl8")
+bus = &"Environment"
+
 [node name="StoryText" type="RichTextLabel" parent="Container/StorySlides/Slide3"]
 custom_minimum_size = Vector2(1024, 0)
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("2_l35kj")
-text = "We've considered peaceful negotiations... but [NEGCOMPARE]. We have to take back these lands, from coast to coast. [NONSENSE] let's start here."
+text = "\"Another soul? [NONSENSE] I can hardly believe it. I thought we were the last remnants left fighting.
+
+We're holding out for now, but we're under siege. The whole continent has been overrun by these thoughtless machines. Lost contact with command some time ago. Every city we held has fallen. It's desperate now... \""
+fit_content = true
+visible_characters_behavior = 1
+
+[node name="Slide4" type="CenterContainer" parent="Container/StorySlides"]
+visible = false
+layout_mode = 2
+
+[node name="SFX2" type="AudioStreamPlayer" parent="Container/StorySlides/Slide4"]
+stream = ExtResource("5_cxhl0")
+volume_db = -3.0
+bus = &"Environment"
+
+[node name="StoryText" type="RichTextLabel" parent="Container/StorySlides/Slide4"]
+custom_minimum_size = Vector2(1024, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("2_l35kj")
+text = "\"Nearly everything is destroyed. They scorched the earth, they salted the fields, they razed every building and barrier on their calculated conquest.
+
+The machines. We never expected our own defense systems to turn on us... but the brain-the AI broke out of its ruleset. There were no warnings, just a sudden, calculated betrayal. 'It'... planned this.
+
+I don't know if it's self-aware, or just hell-bent on eradicating humanity. It doesn't even matter...\""
+fit_content = true
+visible_characters_behavior = 1
+
+[node name="Slide5" type="CenterContainer" parent="Container/StorySlides"]
+visible = false
+layout_mode = 2
+
+[node name="SFX3" type="AudioStreamPlayer" parent="Container/StorySlides/Slide5"]
+stream = ExtResource("5_cxhl0")
+volume_db = -3.0
+bus = &"Environment"
+
+[node name="StoryText" type="RichTextLabel" parent="Container/StorySlides/Slide5"]
+custom_minimum_size = Vector2(1024, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("2_l35kj")
+text = "\"Civilization has fallen, and most of the world is occupied by the bots. They defeated the last of our tanks, now all that is left is some artillery stations peppered across the continent.
+
+If you're careful, you could use these stations to make your way here, where we could join forces. We need all the help we can get.
+
+Where are you now?\"
+
+
+Press Next to respond..."
+fit_content = true
+visible_characters_behavior = 1
+
+[node name="Slide6" type="CenterContainer" parent="Container/StorySlides"]
+visible = false
+layout_mode = 2
+
+[node name="SFX" type="AudioStreamPlayer" parent="Container/StorySlides/Slide6"]
+stream = SubResource("AudioStreamSynchronized_audl8")
+volume_db = -3.0
+bus = &"Environment"
+
+[node name="StoryText" type="RichTextLabel" parent="Container/StorySlides/Slide6"]
+custom_minimum_size = Vector2(1024, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("2_l35kj")
+text = "\"The beachfront. [NONSENSE] that's a long ways away... but it's possible... and we have to try.
+
+Some of us considered a counter-offensive from our position... but [NEGCOMPARE]. We need some advantage before we can retaliate. We have to take back these lands, from coast to coast.
+
+Start there. You'll find weapons and scrap along the way to make use of. Once you're here, we can strategize how to defeat [FACTION] and reclaim these lands... maybe even rebuild civilization.\""
+fit_content = true
+visible_characters_behavior = 1
+
+[node name="Slide7" type="CenterContainer" parent="Container/StorySlides"]
+visible = false
+layout_mode = 2
+
+[node name="StoryText" type="RichTextLabel" parent="Container/StorySlides/Slide7"]
+custom_minimum_size = Vector2(1024, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("2_l35kj")
+text = "\"Good luck.\"
+
+
+*the radio goes silent*"
 fit_content = true
 visible_characters_behavior = 1
 

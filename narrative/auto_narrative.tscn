@@ -13,6 +13,6 @@ elements_nonsense = Array[String](["Hm.", "Hmph.", "Humph.", "Hrm.", "Huh.", "He
 elements_faction = Array[String](["the bots", "the enemy", "all of our enemies", "this new wave", "this foe", "today's welcoming party", " the onslaught", "the enemy faction", "hostiles", "red artillery", "threats", "special threats"])
 elements_environment = Array[String](["this general area", "this macrobiome", "this particular environment", "the place we're in", "our location", "this place", "this area", "the surrounding parts", "from roughly here to there"])
 elements_weather = Array[String](["very rainy", "very windy", "a bit windy", "slightly windy", "sunny", "clear", "a little humid", "wet like a swamp", "uncomfortable", "harsh"])
-elements_circumstance = Array[String](["it's in the air", "it's up to god,", "we don't know what we're getting into", "they don't know what's coming"])
+elements_circumstance = Array[String](["it's in the air", "it's up to god", "we don't know what we're getting into", "they don't know what's coming"])
 elements_poscompare = Array[String](["I've seen this before", "a walk in the park", "practically a cakewalk", "easy as pie"])
 elements_negcompare = Array[String](["nothing like I've seen before", "nothing good can come from it", "we're better off without", "I'd avoid that", "I wouldn't make that deal", "I'd pass on that one", "I'd rather go another way", "another way seems preferable", "some other solution would be better"])
