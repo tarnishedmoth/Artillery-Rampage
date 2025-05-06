@@ -103,7 +103,6 @@ func _on_update_color():
 
 func _ready() -> void:
 	GameEvents.turn_ended.connect(_on_turn_ended)
-
 	# Need to duplicate as we are using a uniform for the start_time and this is shared on all instances
 	# As not using "instance uniform" as this isn't available in compatibility rendering needed for web
 	if damage_material:

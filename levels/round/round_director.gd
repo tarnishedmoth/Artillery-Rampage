@@ -3,6 +3,11 @@ class_name RoundDirector extends Node
 var tank_controllers: Array = []
 var active_player_index: int = -1
 
+var turns_since_damage: int = 0
+
+@export
+var lightning_time: int = 3
+
 @export 
 var physics_check_time: float = 0.25
 
@@ -99,6 +104,7 @@ func begin_round() -> bool:
 	for controller: TankController in tank_controllers:
 		controller.tank.tank_killed.connect(_on_tank_killed)
 		controller.intent_to_act.connect(_on_player_intent_to_act)
+		controller.tank.tank_took_damage.connect(_on_tank_damage.unbind(4))
 		
 		controller.begin_round()
 		
@@ -174,6 +180,8 @@ func next_player() -> void:
 		#active_player_index = -1
 		#return false
 		
+	if turns_since_damage > lightning_time:
+		trigger_lightning()
 	active_player_index = (active_player_index + 1) % tank_controllers.size()
 	var active_player = tank_controllers[active_player_index]
 	
@@ -187,6 +195,8 @@ func next_player() -> void:
 	
 func _on_turn_ended(controller: TankController) -> void:
 	print("Turn ended for " + controller.name)
+	turns_since_damage += 1
+	print("Turns since damage: " + str(turns_since_damage))
 	if awaiting_intentions > 0:
 		print_debug("Turn ended but awaiting %d intentions from player" % [controller])
 		return
@@ -230,6 +240,9 @@ func is_any_tank_falling() -> bool:
 			return true
 	return false
 	
+func _on_tank_damage():
+	turns_since_damage = 0
+	
 func _on_tank_killed(tank: Tank, _instigatorController: Node2D, _instigator: Node2D):
 	# Need to reset the active player index when removing the controller
 	var tank_controller_to_remove: TankController = tank.owner
@@ -255,6 +268,10 @@ func _on_player_intent_to_act(action: Callable, owner: Object) -> void:
 	awaiting_intentions -= 1
 	if awaiting_intentions < 1:
 		execute_all_actions()
+		
+func trigger_lightning():
+	turns_since_damage = 0
+	print("Zap")
 
 #region Game State
 func create_new_gamestate() -> GameState:
@@ -301,4 +318,5 @@ class GameState extends Resource: # Resource supports save/load
 	func _check_action_owner(action: Action, check: TankController, invert:bool = false) -> bool:
 		if action.caller == check: return true if not invert else false
 		else: return false if not invert else true
+	
 #endregion
