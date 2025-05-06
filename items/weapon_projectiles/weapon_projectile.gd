@@ -58,6 +58,8 @@ var run_collision_logic:bool = true ## Whether to affect damageables & destructi
 @export var destructible_scale_multiplier_scalar:float = 1.0 # ModProjectile
 
 var calculated_hit: bool
+var destroyed:bool
+
 var owner_tank: Tank;
 var source_weapon: Weapon # The weapon we came from
 var firing_container
@@ -133,7 +135,11 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 func get_destructible_component() -> CollisionPolygon2D:
 	return destructible_component
 
-func on_body_entered(_body: PhysicsBody2D):
+func on_body_entered(body: PhysicsBody2D):
+	explode(body)
+
+## Runs damage logic and explodes if an interaction occurs
+func explode(collided_body: PhysicsBody2D = null):
 	# Need to do a sweep to see all the things we have influenced
 	# Need to be sure not to "double-damage" things both from influence and from direct hit
 	# The body here is the direct hit body that will trigger the projectile to explode if an interaction happens
@@ -143,7 +149,7 @@ func on_body_entered(_body: PhysicsBody2D):
 		return
 	
 	var had_interaction:bool = false
-	if _body.get_collision_layer_value(10): # ProjectileBlocker (shield, etc) hack
+	if is_instance_valid(collided_body) and collided_body.get_collision_layer_value(10): # ProjectileBlocker (shield, etc) hack
 		# FIXME if not inside_of_players_shield...:
 		had_interaction = true
 	var affected_nodes = _find_interaction_overlaps()
@@ -175,14 +181,19 @@ func on_body_entered(_body: PhysicsBody2D):
 				destructed_processed_set[root_node] = root_node
 	## end for
 
-	# Process damage at end as took max damage if there were multiple collidors on single damageable root node
+	# Process damage at end as took max damage if there were multiple colliders on single damageable root node
 	for damageable_node in damaged_processed_map:
 		var damage: float = damaged_processed_map[damageable_node]
 		damage_damageable_node(damageable_node, damage) # I want to hook here without overriding this function
 
 	# Explode
 	if had_interaction and should_explode_on_impact: destroy()
-		
+
+## Explodes if supported and then ensures that the projectile is destroyed
+func explode_and_force_destroy(body: PhysicsBody2D = null):
+	explode(body)
+	destroy()
+	
 func damage_damageable_node(damageable_node: Node, damage:float) -> void:
 	damageable_node.take_damage(get_instigator(), self, damage)
 	GameEvents.took_damage.emit(damageable_node, get_instigator(), self, global_position)
@@ -207,11 +218,18 @@ func center_destructible_on_impact_point(destructible: CollisionPolygon2D) -> Ve
 	return contact_point
 
 func destroy():
+	if destroyed:
+		print_debug("WeaponProjectile(%s): Already destroyed" % name)
+		return
+		
+	destroyed = true
+	print_debug("WeaponProjectile(%s): Destroying" % name)
+
 	if explosion_to_spawn:
 		spawn_explosion(explosion_to_spawn)
 	
 	_apply_post_processing()
-	
+		
 	completed_lifespan.emit()
 	queue_free()
 	

@@ -141,7 +141,7 @@ func projectile_elastic(projectile: WeaponProjectile):
 		if speed <= elastic_min_velocity_threshold * elastic_min_velocity_threshold:
 			print_debug("Hit bottom %s with small velocity=%s - destroying" % [str(pos), projectile.linear_velocity])
 			#Delete projectile
-			projectile.destroy()
+			projectile.explode_and_force_destroy()
 		else:
 			print_debug("Hit bottom %s with velocity=%s; speed=%f above threshold" % [str(pos), projectile.linear_velocity, sqrt(speed)])
 	
@@ -161,7 +161,7 @@ func projectile_warp(projectile: WeaponProjectile):
 		print_debug("Hit bottom %s - destroying" % [str(pos)])
 		GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Bottom)
 		#Delete projectile
-		projectile.destroy()
+		projectile.explode_and_force_destroy()
 	
 	projectile.global_position = pos
 
@@ -171,15 +171,15 @@ func projectile_none(projectile: WeaponProjectile):
 	if(pos.x <= bounds.position.x):
 		print_debug("Hit left side %s at %s" % [projectile.name, projectile.global_position])
 		GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Left)
-		projectile.destroy()
+		projectile.explode_and_force_destroy()
 	elif pos.x >= bounds.position.x + bounds.size.x:
 		print_debug("Hit right side %s at %s" % [projectile.name, projectile.global_position])
 		GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Right)
-		projectile.destroy()
+		projectile.explode_and_force_destroy()
 	elif pos.y >= bounds.position.y + bounds.size.y:
 		print_debug("Hit bottom %s at %s" % [projectile.name, projectile.global_position])
 		GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Bottom)
-		projectile.destroy()
+		projectile.explode_and_force_destroy()
 		
 func _adjust_interaction_velocity(projectile: WeaponProjectile, new_dir:Vector2) -> void:
 	var speed:float = projectile.linear_velocity.length()
