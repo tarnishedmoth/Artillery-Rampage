@@ -184,7 +184,7 @@ func reset_orientation() -> void:
 # TODO: Account for new curve errors
 func aim_at(angle_rads: float) -> void:
 	turret.rotation = clampf(angle_rads, deg_to_rad(min_angle), deg_to_rad(max_angle))
-	GameEvents.emit_aim_updated(owner)
+	GameEvents.aim_updated.emit(owner)
 	
 func aim_delta(angle_rads_delta: float) -> void:
 	aim_at(turret.rotation + angle_rads_delta)
@@ -193,7 +193,7 @@ func aim_delta(angle_rads_delta: float) -> void:
 func set_power_percent(power_pct: float) -> void:
 	power = clampf(power_pct * max_power / 100.0, 0.0, max_power)
 	#print_debug("power_pct=" + str(power_pct) + "; power=" + str(power))
-	GameEvents.emit_power_updated(owner)
+	GameEvents.power_updated.emit(owner)
 
 ## [0-100]
 func set_power_delta(power_pct_delta: float) -> void:

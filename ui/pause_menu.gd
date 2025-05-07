@@ -3,7 +3,7 @@ extends Control
 var paused = false;
 
 @onready var options_menu: PanelContainer = %OptionsMenu
-@onready var pause_menu: VBoxContainer = %PauseMenu
+@onready var pause_menu: Control = %PauseMenu
 
 @onready var exit_to_desktop_button: Button = %QuitToDesktop
 

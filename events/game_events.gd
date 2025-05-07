@@ -39,30 +39,3 @@ signal wall_interaction(walls: Walls, projectile: WeaponProjectile, interaction_
 signal took_damage(object: Node, instigatorController: Node2D, instigator: Node2D, contact_point: Vector2)
 
 @warning_ignore_restore("unused_signal")
-
-func emit_turn_started(player: TankController):
-	emit_signal("turn_started", player)
-
-func emit_turn_ended(player: TankController):
-	emit_signal("turn_ended", player)
-
-func emit_aim_updated(player: TankController):
-	emit_signal("aim_updated", player)
-
-func emit_power_updated(player: TankController):
-	emit_signal("power_updated", player)
-
-func emit_round_started():
-	emit_signal("round_started")
-
-func emit_round_ended():
-	emit_signal("round_ended")
-	
-func emit_weapon_fired(weapon : Weapon):
-	emit_signal("weapon_fired", weapon)
-
-func emit_projectile_fired(projectile : WeaponProjectile):
-	emit_signal("projectile_fired", projectile)
-
-func emit_wind_updated(wind: Wind):
-	emit_signal("wind_updated", wind)

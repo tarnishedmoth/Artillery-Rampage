@@ -20,7 +20,7 @@ var wind: Vector2 = Vector2():
 	set(value):
 		wind = value
 		print_debug("Wind(%s): set to %s" % [name, str(value)])
-		GameEvents.emit_wind_updated(self)
+		GameEvents.wind_updated.emit(self)
 	get:
 		return wind
 

@@ -96,8 +96,8 @@ func _ready() -> void:
 		modulate = color
 
 	apply_all_mods() # This may not be desired but it probably is. If the weapon's stats are retained across matches, this could double the effect unintentionally
-		
-	GameEvents.emit_projectile_fired(self)
+	
+	GameEvents.projectile_fired.emit(self)
 	
 func modulate_enabled() -> bool:
 	return true

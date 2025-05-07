@@ -490,7 +490,7 @@ func _shoot(power:float = fire_velocity) -> void:
 			## This has no game effects right now.
 			## It could be useful for things like screen shake, camera behavior, other reactions.
 			## (The logic for turn changes happens elsewhere.)
-			GameEvents.emit_weapon_fired(self)
+			GameEvents.weapon_fired.emit(self)
 	else:
 		## Alternative handling for continuous weapons
 		push_error("Continuous fire is not yet supported.")

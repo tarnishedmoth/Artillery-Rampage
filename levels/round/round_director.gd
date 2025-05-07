@@ -114,7 +114,7 @@ func begin_round() -> bool:
 	# TODO: Maybe remove this before release
 	await _async_check_and_await_falling()
 	
-	GameEvents.emit_round_started()
+	GameEvents.round_started.emit()
 	
 	#return next_player()
 	return next_turn()
@@ -189,7 +189,7 @@ func next_player() -> void:
 	
 	awaiting_intentions += 1
 	active_player.begin_turn()
-	GameEvents.emit_turn_started(active_player)
+	GameEvents.turn_started.emit(active_player)
 	
 	#return true
 	
@@ -204,7 +204,7 @@ func _on_turn_ended(controller: TankController) -> void:
 	await _async_check_and_await_falling()
 	
 	if !next_turn():
-		GameEvents.emit_round_ended()
+		GameEvents.round_ended.emit()
 #endregion
 
 func all_players() -> void:

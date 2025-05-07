@@ -1,11 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://btq3rsvojx8jg"]
+[gd_scene load_steps=8 format=3 uid="uid://btq3rsvojx8jg"]
 
 [ext_resource type="Script" uid="uid://h6u2jfcquhy4" path="res://ui/pause_menu.gd" id="1_4r0b1"]
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="1_smh4t"]
 [ext_resource type="PackedScene" uid="uid://da23m08ml50op" path="res://ui/options_menu.tscn" id="3_pulrp"]
+[ext_resource type="Theme" uid="uid://somhyiu2b38w" path="res://ui/themes/control_theme_tooltips.tres" id="4_avurv"]
+[ext_resource type="Script" uid="uid://dppl1kjawyh70" path="res://ui/events_log.gd" id="4_npydk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uvw1r"]
 bg_color = Color(0, 0, 0, 0.427451)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_avurv"]
+content_margin_left = 32.0
 
 [node name="PauseMenu" type="Control"]
 process_mode = 3
@@ -35,56 +40,64 @@ offset_top = -256.0
 offset_right = 256.0
 offset_bottom = 256.0
 
-[node name="PauseMenu" type="VBoxContainer" parent="Panel"]
+[node name="PauseMenu" type="Control" parent="Panel"]
 unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PauseMenu"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -74.0
+offset_left = -138.0
 offset_top = -64.0
-offset_right = 74.0
+offset_right = 138.0
 offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="Panel/PauseMenu"]
+[node name="Label" type="Label" parent="Panel/PauseMenu/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "PAUSED"
 horizontal_alignment = 1
 
-[node name="Resume" type="Button" parent="Panel/PauseMenu"]
+[node name="Resume" type="Button" parent="Panel/PauseMenu/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("1_smh4t")
 text = "RESUME"
 
-[node name="Options" type="Button" parent="Panel/PauseMenu"]
+[node name="Options" type="Button" parent="Panel/PauseMenu/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("1_smh4t")
 text = "OPTIONS"
 
-[node name="NewGame" type="Button" parent="Panel/PauseMenu"]
+[node name="NewGame" type="Button" parent="Panel/PauseMenu/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("1_smh4t")
 text = "NEW GAME"
 
-[node name="MainMenu" type="Button" parent="Panel/PauseMenu"]
+[node name="MainMenu" type="Button" parent="Panel/PauseMenu/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = ExtResource("1_smh4t")
 text = "MAIN MENU"
 
-[node name="QuitToDesktop" type="Button" parent="Panel/PauseMenu"]
+[node name="QuitToDesktop" type="Button" parent="Panel/PauseMenu/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -92,9 +105,42 @@ size_flags_vertical = 4
 theme = ExtResource("1_smh4t")
 text = "QUIT TO DESKTOP"
 
+[node name="EventsLog" type="PanelContainer" parent="Panel/PauseMenu"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 420.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_avurv")
+script = ExtResource("4_npydk")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PauseMenu/EventsLog"]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="Panel/PauseMenu/EventsLog/VBoxContainer"]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+
+[node name="EventsLogRichText" type="RichTextLabel" parent="Panel/PauseMenu/EventsLog/VBoxContainer"]
+light_mask = 0
+custom_minimum_size = Vector2(420, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("4_avurv")
+bbcode_enabled = true
+scroll_following = true
+shortcut_keys_enabled = false
+vertical_alignment = 1
+
+[node name="Spacer2" type="Control" parent="Panel/PauseMenu/EventsLog/VBoxContainer"]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+
 [connection signal="closed" from="Panel/OptionsMenu" to="." method="_on_options_menu_closed"]
-[connection signal="pressed" from="Panel/PauseMenu/Resume" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="Panel/PauseMenu/Options" to="." method="_on_options_pressed"]
-[connection signal="pressed" from="Panel/PauseMenu/NewGame" to="." method="_on_new_game_pressed"]
-[connection signal="pressed" from="Panel/PauseMenu/MainMenu" to="." method="_on_main_menu_pressed"]
-[connection signal="pressed" from="Panel/PauseMenu/QuitToDesktop" to="." method="_on_quit_to_desktop_pressed"]
+[connection signal="pressed" from="Panel/PauseMenu/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Panel/PauseMenu/VBoxContainer/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Panel/PauseMenu/VBoxContainer/NewGame" to="." method="_on_new_game_pressed"]
+[connection signal="pressed" from="Panel/PauseMenu/VBoxContainer/MainMenu" to="." method="_on_main_menu_pressed"]
+[connection signal="pressed" from="Panel/PauseMenu/VBoxContainer/QuitToDesktop" to="." method="_on_quit_to_desktop_pressed"]
