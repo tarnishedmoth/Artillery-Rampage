@@ -126,14 +126,14 @@ func _get_placement_y_at(bounds: Rect2, object_type : ProceduralObjectContraints
 	var right_point:Vector2 = right_point_test.position
 
 	# Now need to check if the angle between center_point_test to left and right is within the constraint max angle
-	var angle_left:float = absf(rad_to_deg(left_point.angle_to_point(center_point)))
+	var angle_left:float = MathUtils.get_angle_deg_between_points(left_point, center_point)
 	if angle_left > object_type.max_slant_angle_deg:
 		return -1
-	var angle_right:float = absf(rad_to_deg(center_point.angle_to_point(right_point)))
+	var angle_right:float = MathUtils.get_angle_deg_between_points(center_point, right_point)
 	if angle_right > object_type.max_slant_angle_deg:
 		return -1
 	# also test left to right
-	var angle_all:float = absf(rad_to_deg(left_point.angle_to_point(right_point)))
+	var angle_all:float = MathUtils.get_angle_deg_between_points(left_point, right_point)
 	if angle_all > object_type.max_slant_angle_deg:
 		return -1
 		

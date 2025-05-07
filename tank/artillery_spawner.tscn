@@ -6,3 +6,4 @@
 [node name="ArtillerySpawner" type="Node"]
 script = ExtResource("1_2ysy7")
 artillery_ai_types = Array[PackedScene]([ExtResource("2_33h1m")])
+min_boundary_x_distance = 80.0
