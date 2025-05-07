@@ -5,6 +5,8 @@ extends PanelContainer
 
 @onready var rich: RichTextLabel = $VBoxContainer/EventsLogRichText
 
+var _last_record_input:String
+
 func _ready() -> void:
 	# Hook into the func _on_bus
 	GameEvents.user_options_changed.connect(_on_user_options_changed)
@@ -20,16 +22,28 @@ func _ready() -> void:
 	GameEvents.weapon_fired.connect(_on_weapon_fired)
 	GameEvents.took_damage.connect(_on_took_damage)
 	
+## Takes an input and formats it with the time, and multiplier counter if identical to previous, then adds it to the UI.
 func record(text:String) -> void:
-	var entry:String
-	# Get game time
-	entry = bold("["+Time.get_time_string_from_system()+"]")
-	entry = entry + ": " + text
-	rich.text = rich.text + "\n" + entry
+	var entry:String # This will hold our output.
 	
-func ital(text) -> String: return "[i]" + str(text) + "[/i]"
-func bold(text) -> String: return "[b]" + str(text) + "[/b]"
-func underl(text) -> String: return "[u]" + str(text) + "[/u]"
+	if text == _last_record_input: # Needs a multiplier:
+		if rich.text.ends_with("]."): # More than 2x:
+			var parts:PackedStringArray = rich.text.rsplit("[", false, 1) # Delimiter split into exactly two pieces.
+			var count:int = parts[1].to_int() + 1 # to_int() strips any non-numbers conveniently.
+			rich.text = parts[0]+brac(str(count)+"x")+"." # i.e., [6x]. We can't (could) use BBCode formatting because it greatly affects our delimiter parsing.
+		else:
+			rich.text = rich.text + " [2x]."
+	else:
+		entry = bold(brac(Time.get_time_string_from_system())) # Get HH:MM:SS
+		entry = entry + ": " + text # Formatting
+		
+		rich.text = rich.text + "\n" + entry # New line and append
+	_last_record_input = text # Cache
+	
+func ital(v) -> String: return "[i]" + str(v) + "[/i]"
+func bold(v) -> String: return "[b]" + str(v) + "[/b]"
+func underl(v) -> String: return "[u]" + str(v) + "[/u]"
+func brac(v) -> String: return "[" + str(v) + "]"
 
 # Signal reacts
 #region
@@ -66,7 +80,7 @@ func _on_wind_updated(wind: Wind):
 func _on_projectile_fired(projectile : WeaponProjectile): pass
 func _on_weapon_fired(weapon : Weapon):
 	var player_name = weapon.parent_tank.controller.name
-	record(underl(player_name) + " fired their " + ital(weapon.display_name))
+	record(underl(player_name) + " used " + ital(weapon.display_name) +".")
 
 func _on_collectible_collected(collected: CollectibleItem): pass
 func _on_personnel_requested_pickup(unit: PersonnelUnit): pass
