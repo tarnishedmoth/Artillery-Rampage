@@ -6,4 +6,5 @@
 shader = ExtResource("1_jtv2c")
 shader_parameter/flash_cycle_time = 1.0
 shader_parameter/brightness_boost_factor = 5.0
+shader_parameter/period_start_alpha = 0.0
 shader_parameter/start_time = 0.0
