@@ -10,6 +10,8 @@ class_name StoryRoundSummary extends Control
 @onready var damage_done:HUDElement = %DamageDone
 @onready var health_lost:HUDElement = %HealthLost
 @onready var grade:HUDElement = %Grade
+@onready var personnel:HUDElement = %Personnel
+@onready var scrap:HUDElement = %Scrap
 
 @onready var tooltipper:TextSequence = %StoryTooltips
 @onready var auto_narrative:AutoNarrative = %AutoNarrative
@@ -72,12 +74,28 @@ func _update_attributes() -> void:
 	if not stats:
 		return
 		
-	# TODO: Make this more dynamic
+	# TODO: Make this more dynamic - use curves
+	var personnel_change:int = 0
+	var scrap_change:int = 0
+
 	if stats.won:
-		PlayerAttributes.personnel += _grade
+		personnel_change = ceil(_grade / 2.0)
+		# TODO: Track total units damaged even if not killed
+		scrap_change = stats.kills * 3
 	else:
-		# TODO: Can trigger game over condition if personnel drops to 0
-		PlayerAttributes.personnel = maxi(PlayerAttributes.personnel - 1, 0)
+		personnel_change =  -floori((grade_to_letter.size() - _grade) / 3.0)
+
+	# TODO: Can trigger game over condition if personnel drops to 0
+	PlayerAttributes.personnel = maxi(PlayerAttributes.personnel + personnel_change, 0)
+	PlayerAttributes.scrap = maxi(PlayerAttributes.scrap + scrap_change, 0)
+
+	personnel.set_value(_fmt_attr(PlayerAttributes.personnel, personnel_change))
+	scrap.set_value(_fmt_attr(PlayerAttributes.scrap, scrap_change))
+	
+	# TODO: Maybe do this from StatTracker as player could game the system and quit here and it wouldn't save
+	# Here we are explicitly forcing a save
+	SaveStateManager.save_tree_state()
+
 func _on_next_pressed() -> void:
 	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
 
@@ -105,7 +123,7 @@ func _calculate_outcome(grade: int) -> AutoNarrative.Outcomes:
 	match _fmt_grade(grade):
 		"A+", "A", "A-" : return AutoNarrative.Outcomes.MIRACLE
 		"B+", "B", "B-": return AutoNarrative.Outcomes.SUCCESS
-		"C+", "C", "C-" : AutoNarrative.Outcomes.NEUTRAL
+		"C+", "C", "C-" : return AutoNarrative.Outcomes.NEUTRAL
 		"D+", "D", "D-" : return AutoNarrative.Outcomes.FAILURE
 	return AutoNarrative.Outcomes.CATASTROPHE
 	
@@ -116,6 +134,14 @@ func _calculate_outcome(grade: int) -> AutoNarrative.Outcomes:
 		
 func _fmt_grade(grade: int) -> String:
 	return grade_to_letter.get(grade, "A+")
+		
+func _fmt_attr(value: int, delta:int) -> String:
+	if delta > 0:
+		return "%d (+%d)" % [value, delta]
+	elif delta < 0:
+		return "%d (-%d)" % [value, delta]
+	else:
+		return "%d" % value
 		
 func _calculate_grade() -> int:
 	# If won look at damage ratio and take into account kills
