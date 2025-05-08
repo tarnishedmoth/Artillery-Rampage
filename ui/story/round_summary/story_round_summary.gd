@@ -44,10 +44,11 @@ func _ready() -> void:
 	if stats.won:
 		title.set_value("Victory!")
 		background.texture = win_background
+		
 	else:
 		title.set_value("Defeat :(")
 		background.texture = lose_background
-		
+				
 	_grade = _calculate_grade()
 	# Hiding grade if you lose
 	if stats.won:
@@ -64,6 +65,19 @@ func _ready() -> void:
 	
 	_play_audio()
 	
+	_update_attributes.call_deferred()
+
+func _update_attributes() -> void:
+	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
+	if not stats:
+		return
+		
+	# TODO: Make this more dynamic
+	if stats.won:
+		PlayerAttributes.personnel += _grade
+	else:
+		# TODO: Can trigger game over condition if personnel drops to 0
+		PlayerAttributes.personnel = maxi(PlayerAttributes.personnel - 1, 0)
 func _on_next_pressed() -> void:
 	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
 

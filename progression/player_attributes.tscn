@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://diqui7byoheak"]
+
+[ext_resource type="Script" uid="uid://b0s1nty4uylqg" path="res://progression/player_attributes.gd" id="1_c3dai"]
+[ext_resource type="Resource" uid="uid://be7k7mj4xp3s8" path="res://progression/player_attribute_defaults.tres" id="2_1j6ak"]
+
+[node name="PlayerAttributes" type="Node" groups=["Savable"]]
+script = ExtResource("1_c3dai")
+player_attribute_defaults = ExtResource("2_1j6ak")
