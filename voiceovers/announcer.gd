@@ -182,7 +182,7 @@ func _on_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2
 		var damage_pct:float = _last_enemy_damage / tank.max_health
 		var projectile:WeaponProjectile = instigator as WeaponProjectile
 		var max_damage_to_max_health:float = projectile.max_damage  / tank.max_health
-		if damage_pct <= enemy_health_fraction_overkill_threshold and max_damage_to_max_health >= max_damage_to_max_health:
+		if damage_pct <= enemy_health_fraction_overkill_threshold and max_damage_to_max_health >= max_health_multipler_overkill_threshold:
 			print_debug("%s: Player triggered overkill with %s on %s" % [name, projectile.source_weapon.display_name, tank.owner])
 			_queued_announcements.push_back(overkill_sfx_res)
 
