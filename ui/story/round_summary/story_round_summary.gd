@@ -20,6 +20,7 @@ class_name StoryRoundSummary extends Control
 @onready var lose_audio: AudioStreamPlayer = %RoundLoseAudio
 
 var _grade:int = 0
+var _is_game_over:bool = false
 
 static var letter_to_grade:Dictionary[String, int]
 static var grade_to_letter:Dictionary[int, String]
@@ -91,18 +92,22 @@ func _update_attributes() -> void:
 
 	personnel.set_value(_fmt_attr(PlayerAttributes.personnel, personnel_change))
 	scrap.set_value(_fmt_attr(PlayerAttributes.scrap, scrap_change))
-	
+
 	# TODO: Maybe do this from StatTracker as player could game the system and quit here and it wouldn't save
 	# Here we are explicitly forcing a save
 	SaveStateManager.save_tree_state()
+
+	_is_game_over = PlayerAttributes.personnel <= 0
 
 func _on_next_pressed() -> void:
 	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
 
 	if stats and stats.won:
 		SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap)
-	else:
+	elif not _is_game_over:
 		SceneManager.restart_level()
+	else:
+		SceneManager.switch_scene_keyed(SceneManager.SceneKeys.GameOver)
 
 func _play_audio() -> void:
 	if RoundStatTracker.round_data.won:
@@ -139,9 +144,9 @@ func _fmt_attr(value: int, delta:int) -> String:
 	if delta > 0:
 		return "%d (+%d)" % [value, delta]
 	elif delta < 0:
-		return "%d (-%d)" % [value, delta]
+		return "%d (%d)" % [value, delta]
 	else:
-		return "%d" % value
+		return "%d (+0)" % value
 		
 func _calculate_grade() -> int:
 	# If won look at damage ratio and take into account kills

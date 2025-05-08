@@ -6,14 +6,15 @@ func _ready():
 	pass # Replace with function body.
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
-
 func _on_retry_pressed():
-	get_tree().change_scene_to_file("res://levels/test/test_level_01.tscn")
+	# TODO: Code duplication with main menu - move this into scene manager
+	PlayerStateManager.enable = true
+	SaveStateManager.add_state_flag(SceneManager.new_story_selected)
+	SceneManager.play_mode = SceneManager.PlayMode.STORY
+
+	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryStart)
 
 
 func _on_quit_pressed():
-	get_tree().change_scene_to_file("res://levels/main_menu.tscn")
+	# FIXME: Need to clear saved state for story at this point as out of personnel
+	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.MainMenu)

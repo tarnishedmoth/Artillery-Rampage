@@ -19,6 +19,8 @@ class SceneKeys:
 	const StoryStart:StringName = &"StoryStart"
 	const RoundSummary:StringName = &"RoundSummary"
 
+	const GameOver:StringName = &"GameOver"
+
 # We expect to reference the above keys with a const "preload" of a packed scene 
 # or reference to a unique name (possibly for pause menu)
 
@@ -31,6 +33,7 @@ const main_menu_scene_file = "res://levels/main_menu.tscn"
 const story_start_scene_file = "res://ui/story/story_sequence.tscn"
 const story_map_scene_file = "res://ui/story/map/story_map_scene.tscn"
 const story_round_summary_scene_file = "res://ui/story/round_summary/story_round_summary.tscn"
+const game_over_scene_file = "res://levels/game_over.tscn"
 
 var _story_level_state_scene:PackedScene = preload("res://levels/story_level_state.tscn")
 
@@ -146,6 +149,8 @@ func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 			await switch_scene_file(story_map_scene_file)
 		SceneKeys.RoundSummary:
 			await switch_scene_file(story_round_summary_scene_file)
+		SceneKeys.GameOver:
+			await switch_scene_file(game_over_scene_file)
 		_:
 			push_error("Unhandled scene key=%s" % [key])
 	
