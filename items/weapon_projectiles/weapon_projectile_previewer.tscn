@@ -14,16 +14,26 @@ collision_mask = 0
 script = ExtResource("1_jyx67")
 color = Color(0.344546, 1, 0.828132, 1)
 max_lifetime = 1.0
+should_explode_on_impact = false
 damage_falloff_type = 0
 min_falloff_distance = 0.0
 max_falloff_distance = 100.0
 min_damage = 0.0
 max_damage = 0.0
 destructible_scale_multiplier = Vector2(0, 0)
-should_explode_on_impact = false
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = SubResource("PlaceholderTexture2D_0eddw")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_r23e2")
+
+[node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="."]
+z_index = 20
+scale = Vector2(0.183745, 0.183745)
+amount = 100
+lifetime = 5.0
+gravity = Vector2(0, 0)
+scale_amount_min = 4.0
+scale_amount_max = 4.0
+color = Color(1, 1, 1, 0.501961)
