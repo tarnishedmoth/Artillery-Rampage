@@ -71,6 +71,15 @@ func save_tree_state() -> void:
 		
 	_save()
 
+func clear_save_state_by_key(key:StringName) -> void:
+	if not save_state or not save_state.state:
+		print_debug("No save state is available")
+		return
+	
+	if save_state.state.has(key):
+		save_state.state.erase(key)
+	_save()
+
 func _save() -> void:
 	_save_strategy.call()
 

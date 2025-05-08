@@ -16,5 +16,6 @@ func _on_retry_pressed():
 
 
 func _on_quit_pressed():
-	# FIXME: Need to clear saved state for story at this point as out of personnel
+	# TODO: Maybe do this from round summary
+	SaveStateManager.clear_save_state_by_key(StoryLevelState.SAVE_STATE_KEY)
 	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.MainMenu)
