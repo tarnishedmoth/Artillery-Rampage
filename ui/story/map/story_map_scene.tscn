@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bh3bmcratw025"]
+[gd_scene load_steps=12 format=3 uid="uid://bh3bmcratw025"]
 
 [ext_resource type="Script" uid="uid://d3mw66c4x3kum" path="res://ui/story/map/story_map_scene.gd" id="1_5v7n8"]
 [ext_resource type="Theme" uid="uid://ddklgnmfj25sv" path="res://ui/story/story_theme.tres" id="1_nmkcg"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://ya2fn3ef1h2j" path="res://ui/story/map/story_level_node_unknown.tscn" id="4_cestf"]
 [ext_resource type="Material" uid="uid://bigbcyue3woos" path="res://ui/story/map/materials/grayscale_material.tres" id="5_8dcih"]
 [ext_resource type="Script" uid="uid://df7r7bwm230pa" path="res://ui/array_seq_view_hide.gd" id="6_8dcih"]
+[ext_resource type="PackedScene" uid="uid://8hat5mrejfwr" path="res://ui/story/round_summary/round_summary_hud_element.tscn" id="7_b87u6"]
 [ext_resource type="PackedScene" uid="uid://b4hy7hmnoewje" path="res://narrative/auto_narrative.tscn" id="7_mer82"]
 
 [sub_resource type="Gradient" id="Gradient_mer82"]
@@ -37,6 +38,33 @@ offset_bottom = 718.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_tggun")
+
+[node name="AttributeLabels" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 1100.0
+offset_top = 20.0
+offset_right = 1209.0
+offset_bottom = 92.0
+
+[node name="PersonnelHUD" parent="AttributeLabels" instance=ExtResource("7_b87u6")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" parent="AttributeLabels/PersonnelHUD" index="0"]
+text = "Personnel:"
+
+[node name="Value" parent="AttributeLabels/PersonnelHUD" index="1"]
+text = ""
+
+[node name="ScrapHUD" parent="AttributeLabels" instance=ExtResource("7_b87u6")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" parent="AttributeLabels/ScrapHUD" index="0"]
+text = "Scrap:"
+
+[node name="Value" parent="AttributeLabels/ScrapHUD" index="1"]
+text = ""
 
 [node name="StoryTooltips" type="MarginContainer" parent="." node_paths=PackedStringArray("sequence")]
 unique_name_in_owner = true
@@ -103,3 +131,6 @@ text = "Next"
 unique_name_in_owner = true
 
 [connection signal="pressed" from="Buttons/NextButton" to="." method="_on_next_button_pressed"]
+
+[editable path="AttributeLabels/PersonnelHUD"]
+[editable path="AttributeLabels/ScrapHUD"]

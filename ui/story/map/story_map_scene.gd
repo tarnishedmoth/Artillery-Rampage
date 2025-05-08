@@ -20,12 +20,15 @@ class_name StoryMapScene extends Control
 # TODO: This probably belongs more on the round summary but experimenting with it here
 @onready var auto_narrative:AutoNarrative = %AutoNarrative
 
+@onready var personnel_hud:HUDElement = %PersonnelHUD
+@onready var scrap_hud:HUDElement = %ScrapHUD
+
 var _story_levels_resource:StoryLevelsResource
 var _next_level_index:int
 
 func _ready() -> void:
 	if graph_container.get_child_count() == 0:
-		_create_graph()
+		_update()
 
 #region Savable
 
@@ -37,7 +40,7 @@ func update_save_state(save:SaveState) -> void:
 
 func restore_from_save_state(save: SaveState) -> void:
 	_save_state = save
-	_create_graph()
+	_update()
 	_save_state = null
 	
 func _create_save_state() -> Dictionary:
@@ -89,6 +92,10 @@ func _create_nodes_from_save_state(saved_state: StoryMapSaveState) -> Array[Stor
 func _on_next_button_pressed() -> void:
 	SceneManager.next_level()
 
+func _update() -> void:
+	_create_graph()
+	_update_hud()
+	
 func _create_graph() -> void:
 	_clear_graph()
 	
@@ -134,6 +141,10 @@ func _calculate_bounds() -> Rect2:
 	
 	return bounds
 
+func _update_hud() -> void:
+	personnel_hud.set_value(PlayerAttributes.personnel)
+	scrap_hud.set_value(PlayerAttributes.scrap)
+	
 func _generate_nodes() -> Array[StoryLevelNode]:
 	var levels:Array[StoryLevel] = _story_levels_resource.levels
 	
@@ -221,7 +232,7 @@ func _create_story_level_node(index:int, metadata:StoryLevel) -> StoryLevelNode:
 func _new_explored_node(metadata: StoryLevel) -> StoryLevelNode:
 	return _new_story_level_node_from_metadata(metadata)
 
-func _new_unknown_node(metadata: StoryLevel) -> StoryLevelNode:
+func _new_unknown_node(_metadata: StoryLevel) -> StoryLevelNode:
 	return _new_story_level_node(unknown_node_prototype)
 	
 func _new_discovered_node(metadata: StoryLevel) -> StoryLevelNode:
