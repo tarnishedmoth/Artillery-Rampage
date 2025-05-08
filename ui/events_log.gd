@@ -90,7 +90,7 @@ func _on_copter_left_airspace(copter): pass
 
 func _on_wall_interaction(walls: Walls, projectile: WeaponProjectile, interaction_location: Walls.WallInteractionLocation): pass
 
-func _on_took_damage(object: Node, instigatorController: Node2D, instigator: Node2D, contact_point: Vector2):
+func _on_took_damage(object: Node, instigatorController: Node2D, instigator: Node2D, contact_point: Vector2, damage: float):
 	var player_name = instigatorController.name
 	record(underl(player_name) + " damaged something.")
 	# TODO I don't know at this moment if we can get the damage dealt from this setup.

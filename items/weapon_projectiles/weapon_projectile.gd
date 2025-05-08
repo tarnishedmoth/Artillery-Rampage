@@ -175,7 +175,8 @@ func explode(collided_body: PhysicsBody2D = null):
 				var contact_point: Vector2 = center_destructible_on_impact_point(destructible_component)
 				
 				root_node.damage(self, contact_point, destructible_scale_multiplier)
-				GameEvents.took_damage.emit(root_node, get_instigator(), self, contact_point)
+				# Pass 0 for damage as destructible components don't take health-based damage
+				GameEvents.took_damage.emit(root_node, get_instigator(), self, contact_point, 0.0)
 
 				had_interaction = true
 				destructed_processed_set[root_node] = root_node
@@ -196,7 +197,7 @@ func explode_and_force_destroy(body: PhysicsBody2D = null):
 	
 func damage_damageable_node(damageable_node: Node, damage:float) -> void:
 	damageable_node.take_damage(get_instigator(), self, damage)
-	GameEvents.took_damage.emit(damageable_node, get_instigator(), self, global_position)
+	GameEvents.took_damage.emit(damageable_node, get_instigator(), self, global_position, damage)
 
 func get_instigator() -> Node2D:
 	return owner_tank.get_parent() as Node2D if is_instance_valid(owner_tank) else null

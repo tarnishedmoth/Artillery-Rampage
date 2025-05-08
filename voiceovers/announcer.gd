@@ -259,7 +259,7 @@ func _on_turn_started(player: TankController) -> void:
 	
 #region Vandalism
 
-func _on_object_took_damage(object: Node, instigatorController: Node2D, _instigator: Node2D, _contact_point: Vector2) -> void:
+func _on_object_took_damage(object: Node, instigatorController: Node2D, _instigator: Node2D, _contact_point: Vector2, _damage: float) -> void:
 	print_debug("%s: Object took damage - name=%s" % [name, object.name])
 	
 	# Ignore things not damaged by player
