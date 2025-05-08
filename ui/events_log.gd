@@ -7,6 +7,9 @@ extends PanelContainer
 
 var _last_record_input:String
 
+var _damage_last_player:String
+var _damage_recipients:Dictionary[String,float] = {}
+
 func _ready() -> void:
 	# Hook into the func _on_bus
 	GameEvents.user_options_changed.connect(_on_user_options_changed)
@@ -61,6 +64,7 @@ func _on_turn_started(player: TankController):
 	record(underl(player.name) + " started their turn.")
 func _on_turn_ended(player: TankController):
 	#TODO conditional for simultaneous fire
+	_accumulate_and_record_tank_damage(player)
 	record(underl(player.name) + " ended their turn.")
 
 func _on_player_added(player: TankController): record(underl(player.name) + " joined the fray.")
@@ -92,6 +96,25 @@ func _on_wall_interaction(walls: Walls, projectile: WeaponProjectile, interactio
 
 func _on_took_damage(object: Node, instigatorController: Node2D, instigator: Node2D, contact_point: Vector2, damage: float):
 	var player_name = instigatorController.name
-	record(underl(player_name) + " damaged something.")
-	# TODO I don't know at this moment if we can get the damage dealt from this setup.
+	var taker_name = object.controller.name if object is Tank else null
+	
+	if player_name != _damage_last_player: _damage_recipients.clear() # Empty the damaged cache
+	elif taker_name != null:
+		if taker_name in _damage_recipients: # This thing has been damaged this turn.
+			_damage_recipients[taker_name] += damage # Add to previous
+		else:
+			_damage_recipients[taker_name] = damage # First instance
+	else:
+		# Not a tank
+		if is_zero_approx(damage):
+			pass # Terrain
+		else:
+			# Damageable object of some kind
+			record(underl(player_name) + " damaged something for " + bold(int(damage))+".")
+	_damage_last_player = player_name
+		
+func _accumulate_and_record_tank_damage(_player: TankController) -> void:
+	# TODO per player to support simultaneous mode
+	for damaged in _damage_recipients:
+		record(underl(_damage_last_player) + " damaged " + underl(damaged) + " for " + bold(int(_damage_recipients[damaged]))+".")
 #endregion
