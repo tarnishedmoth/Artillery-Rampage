@@ -84,6 +84,7 @@ theme = ExtResource("1_smh4t")
 text = "OPTIONS"
 
 [node name="NewGame" type="Button" parent="Panel/PauseMenu/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4

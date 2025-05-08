@@ -13,7 +13,7 @@ func _ready():
 		exit_to_desktop_button.hide()
 		
 	if not SceneManager.play_mode == SceneManager.PlayMode.PLAY_NOW:
-		%PauseMenu.get_node("NewGame").hide()
+		%PauseMenu.get_node("%NewGame").hide()
 	hide()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
