@@ -1,5 +1,6 @@
-[gd_scene load_steps=15 format=3 uid="uid://dps6lqs28tqa1"]
+[gd_scene load_steps=16 format=3 uid="uid://dps6lqs28tqa1"]
 
+[ext_resource type="Script" uid="uid://c3j0v57tdn8jy" path="res://controller/player/initial_aim.gd" id="1_5t8u5"]
 [ext_resource type="Script" uid="uid://drk5s6oo6lloa" path="res://controller/player/player.gd" id="1_t03mm"]
 [ext_resource type="PackedScene" uid="uid://dvr6bm2hlj5h4" path="res://tank/tank.tscn" id="2_3s1jp"]
 [ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="3_tmyes"]
@@ -21,6 +22,10 @@ weapons_container = NodePath("Weapons")
 
 [node name="Tank" parent="." groups=["Player"] instance=ExtResource("2_3s1jp")]
 color = Color(0.145098, 0.227451, 0.00392157, 1)
+
+[node name="SetInitialAim" type="Node" parent="Tank"]
+script = ExtResource("1_5t8u5")
+start_angle = 20.0
 
 [node name="TrajectoryPreviewer" type="Timer" parent="."]
 autostart = true
