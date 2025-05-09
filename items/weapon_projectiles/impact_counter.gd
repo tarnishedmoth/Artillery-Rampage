@@ -28,7 +28,7 @@ func _physics_process(delta: float) -> void:
 	if _buffer > 0.0:
 		_buffer = maxf(0.0, _buffer-delta)
 
-func _on_weapon_projectile_body_entered(body: Node) -> void:
+func _on_weapon_projectile_body_entered(_body: Node) -> void:
 	if _buffer > 0.0 or _armed: return
 	
 	count += 1

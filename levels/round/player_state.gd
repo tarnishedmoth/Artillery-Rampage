@@ -70,19 +70,19 @@ static func deserialize_from_save_state(save: SaveState) -> PlayerState:
 	state.health = serialized_player_state.health
 	state.max_health = serialized_player_state.max_health
 	
-	var weapons:Array[Weapon] = []
+	var _weapons:Array[Weapon] = []
 	for w in serialized_player_state.weapons:
 		if w.has("res"):
 			var weapon:Weapon = SaveState.safe_load_scene(w.res) as Weapon
 			if weapon:
 				weapon.current_ammo = w.ammo
-				weapons.push_back(weapon)
+				_weapons.push_back(weapon)
 			else:
 				push_warning("PlayerState: weapon is not valid - skipping")
 		else:
 			push_warning("PlayerState: weapon does not have res - skipping")
 	
-	state.weapons = weapons
+	state.weapons = _weapons
 	
 	return state
 

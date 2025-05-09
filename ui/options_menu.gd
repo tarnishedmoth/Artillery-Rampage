@@ -113,7 +113,7 @@ func populate_keybinds_ui() -> void:
 		
 		## Glyph
 		var inputs: Array[InputEvent] = InputMap.action_get_events(action)
-		var text: String
+		var text: String = ""
 		for input: InputEvent in inputs:
 			if not text.is_empty(): text += ", " # Add a separator
 			text += input.as_text()

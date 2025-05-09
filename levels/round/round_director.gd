@@ -208,10 +208,10 @@ func _on_turn_ended(controller: TankController) -> void:
 #endregion
 
 func all_players() -> void:
-	for player:TankController in tank_controllers:
-		print_debug("Turn beginning for %s" % [player.name])
+	for instance:TankController in tank_controllers:
+		print_debug("Turn beginning for %s" % [instance.name])
 		awaiting_intentions += 1
-		player.begin_turn()
+		instance.begin_turn()
 		
 func execute_all_actions() -> void:
 	var actions = current_gamestate.get_actions()
@@ -262,9 +262,9 @@ func _on_tank_killed(tank: Tank, _instigatorController: Node2D, _instigator: Nod
 		if active_player_index < 0:
 			active_player_index = tank_controllers.size() - 1
 
-func _on_player_intent_to_act(action: Callable, owner: Object) -> void:
+func _on_player_intent_to_act(action: Callable, apply_to: Object) -> void:
 	print_debug("Received action: ",action)
-	current_gamestate.queue_action(action, owner)
+	current_gamestate.queue_action(action, apply_to)
 	awaiting_intentions -= 1
 	if awaiting_intentions < 1:
 		execute_all_actions()

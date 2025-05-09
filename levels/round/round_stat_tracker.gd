@@ -28,6 +28,7 @@ func _ready() -> void:
 	GameEvents.player_added.connect(_on_player_added)
 	GameEvents.turn_started.connect(_on_turn_started)
 	
+@warning_ignore_start("unused_parameter")
 func _on_level_loaded(level: GameLevel) -> void:
 	_current_level = level
 	print_debug("%s: Level loaded - (name=%s)" % [name, _current_level.level_name])	

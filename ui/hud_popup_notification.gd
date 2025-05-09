@@ -69,8 +69,8 @@ func _destroy_after_lifetime() -> void:
 func _on_lifetime_timer_timeout() -> void:
 	fade_out(0.9)
 
-static func constructor(message:String, pulse_array:Array = PulsePresets.Three)-> PopupNotification:
+static func constructor(_message:String, pulse_array:Array = PulsePresets.Three)-> PopupNotification:
 	var obj = HUD_POPUP_NOTIFICATION.instantiate()
-	obj.message = message
+	obj.message = _message
 	obj.actual_pulses = pulse_array
 	return obj

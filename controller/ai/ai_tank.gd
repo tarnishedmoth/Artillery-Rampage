@@ -26,6 +26,7 @@ func begin_turn():
 	
 	print_debug("%s - AI began turn" % [get_parent()])
 	var popup = popup_message("Thinking...", PopupNotification.PulsePresets.Two, 2.5)
+	popups.append(popup)
 	
 	before_state_selection()
 	

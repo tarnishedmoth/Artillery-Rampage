@@ -206,6 +206,7 @@ func _on_precompilation_progress_changed(progress:float) -> void:
 	#if progress >= 0.98: _tween_to_end()
 	
 func _on_precompilation_entities_count_changed(count:int) -> void:
+	@warning_ignore("integer_division")
 	add_imaginary_steps(count / 3)
 	%NumberOfEntitiesUI.text = str(count) + " entities"
 

@@ -23,6 +23,7 @@ target_weapon_name = "leadball"
 
 [sub_resource type="Resource" id="Resource_tekog"]
 script = ExtResource("5_d8jwv")
+display_name = "Mystery"
 components_weapon_mods = Array[ExtResource("4_1lrpj")]([SubResource("Resource_i55pa")])
 components_projectile_mods = Array[ExtResource("3_83rhi")]([SubResource("Resource_457dn")])
 

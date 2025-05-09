@@ -34,11 +34,10 @@ var target_weapon:String:
 				names = names + ", " + mod.target_weapon_name
 		return names
 
-
-func apply_all_mods(player:Player, weapons:Array[Weapon]) -> void:
-	# apply mods where they need to go
-	# weapons hold projectile mods to apply at spawn time
-	var target_weapon
+## apply mods where they need to go
+## weapons hold projectile mods to apply at spawn time
+## Player is not used but retained parameter to not break existing code at this time
+func apply_all_mods(_player:Player, weapons:Array[Weapon]) -> void:
 	for mod in components_weapon_mods:
 		for weapon in weapons:
 			if mod.target_weapon_name.to_lower() == weapon.display_name.to_lower(): # this is lousy
@@ -58,19 +57,23 @@ func randomize(selectable_types:Array[ModBundle.Types], number_of_mods:int = 1, 
 		var type = selectable_types[type_rand]
 		
 		if type == Types.ANY:
-			type = randi_range(1, Types.size()) # Pick one
+			type = randi_range(1, Types.size()) as Types # Pick one
 		
 		match type:
 			Types.WEAPON:
 				mod = _new_rand_mod_weapon()
+				components_weapon_mods.append(mod)
 			Types.PROJECTILE:
 				mod = _new_rand_mod_projectile()
+				components_projectile_mods.append(mod)
 			#Types.TANK:
 				#pass
 			#Types.PLAYER:
 				#pass
 			#Types.WORLD:
 				#pass
+			_:
+				mod = null
 	pass
 	
 func clear_all() -> void:

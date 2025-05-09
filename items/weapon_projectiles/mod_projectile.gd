@@ -68,8 +68,8 @@ func get_property_key(modifiable: Modifiables = property) -> String:
 	return text_representation.to_lower()
 
 # Code constructors
-func configure_and_apply(projectile_to_attach_to: WeaponProjectile, property: Modifiables, operation: Operations, value:float) -> void:
-	property = property
-	operation = operation
-	value = value
+func configure_and_apply(projectile_to_attach_to: WeaponProjectile, _property: Modifiables, _operation: Operations, _value:float) -> void:
+	property = _property
+	operation = _operation
+	value = _value
 	projectile_to_attach_to.apply_mod(self)

@@ -520,7 +520,7 @@ func _on_weapon_changed(new_weapon: Weapon) -> void:
 	push_weapon_update_to_hud(new_weapon)
 
 ## TURN CHANGE
-func _on_weapon_actions_completed(weapon: Weapon) -> void:
+func _on_weapon_actions_completed(_weapon: Weapon) -> void:
 	# ---TURN CHANGEOVER HAPPENS HERE---
 	# More than one action / phase could be supported
 	actions_completed.emit(self)

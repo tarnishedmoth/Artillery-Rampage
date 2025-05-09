@@ -12,11 +12,11 @@ class_name StoryLevelNode extends Control
 ## Minimum angle with the x-axis for an edge
 @export_range(0.0, 90.0, 1.0) var max_edge_angle:float = 75.0
 
-func set_label(name: StringName) -> void:
-	label.text = name
+func set_label(set_text: StringName) -> void:
+	label.text = set_text
 	
-func set_icon_texture(texture: Texture2D) -> void:
-	icon.texture = texture
+func set_icon_texture(set_texture: Texture2D) -> void:
+	icon.texture = set_texture
 
-func set_icon_material(material: Material) -> void:
-	icon.material = material
+func set_icon_material(set_material: Material) -> void:
+	icon.material = set_material

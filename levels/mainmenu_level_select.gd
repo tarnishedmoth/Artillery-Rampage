@@ -44,8 +44,9 @@ func _ready() -> void:
 	
 	visibility_changed.connect(_on_visibility_changed)
 	
-func refresh_list(path) -> void:
-	var items: Array
+func refresh_list(path_strings:Array[String]) -> void:
+	# Clear existing
+	for control in menu_levels_list.get_children(): control.queue_free()
 	
 	# Add always available levels
 	if levels_always_selectable and not levels_always_selectable.levels.is_empty():
@@ -53,29 +54,34 @@ func refresh_list(path) -> void:
 		for level in levels_always_selectable.levels:
 			add_menu_item(level, _on_level_selected)
 	
+	if not path_strings.is_empty():
+		_generate_menu_from_paths(path_strings)
+	
 	# Debug builds only
 	# for scene in levels folder and subfolders make a new button that triggers the func for loading its level
 	if scan_all_levels:
 		var pathstrings: Array[String]
 		print_debug("Debug build detected: scanning all levels")
-		add_menu_item() # Empty spacer
+		add_menu_item() # Add an empty spacer
 		add_menu_item("DEBUG", _on_level_selected)
 		
 		# Get the filenames & directory names we need
 		for directory in levels_folders_paths:
 			pathstrings.append_array(recursive_files_and_folders(directory))
-		
-		# Generate the menu
-		var current_directory:String
-		for pathstring:String in pathstrings:
-			if not pathstring.ends_with("tscn"):
-				# Directory
-				current_directory = pathstring
-				add_menu_item(current_directory, _on_level_selected)
-			else:
-				# Level
-				var composite_path = current_directory+"/"+pathstring
-				add_menu_item(composite_path, _on_level_selected)
+		_generate_menu_from_paths(pathstrings)
+				
+func _generate_menu_from_paths(pathstrings:Array[String]) -> void:
+	# Generate the menu
+	var current_directory:String
+	for pathstring:String in pathstrings:
+		if not pathstring.ends_with("tscn"):
+			# Directory
+			current_directory = pathstring
+			add_menu_item(current_directory, _on_level_selected)
+		else:
+			# Level
+			var composite_path = current_directory+"/"+pathstring
+			add_menu_item(composite_path, _on_level_selected)
 		
 func recursive_files_and_folders(directory) -> Array:
 	#print(directory)
@@ -105,12 +111,14 @@ func add_menu_item(item = null, press_call:Callable = _on_level_selected) -> voi
 		entry = ButtonLevelFile.new(
 			str(story_level.scene_res_path), # Full file path
 			story_level.name, # Display text
-			_on_level_selected) # Callable
+			press_call # Callable
+			)
 	elif item is PackedScene:
 		entry = ButtonLevelPackedScene.new(
 			item,
 			"Level",
-			_on_level_selected)
+			press_call # Callable
+			)
 	elif item is String:
 		if not item.ends_with("tscn"):
 			# Directory
@@ -120,7 +128,8 @@ func add_menu_item(item = null, press_call:Callable = _on_level_selected) -> voi
 			entry = ButtonLevelFile.new(
 				str(item), # Full file path
 				item.trim_suffix(".tscn"), # Display text
-				_on_level_selected) # Callable
+				press_call # Callable
+				)
 	
 	menu_levels_list.add_child(entry)
 	
@@ -131,7 +140,7 @@ func load_level(level) -> void:
 		SceneManager.switch_scene(level.scene)
 	
 func _on_visibility_changed() -> void:
-	if visible: refresh_list("res://levels/")
+	if visible: refresh_list(["res://levels/"])
 	
 func _on_level_selected(button:ButtonLevel) -> void: #Expects file path
 	selected_level = button
