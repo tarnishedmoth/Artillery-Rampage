@@ -98,14 +98,17 @@ var projectile_mods: Array[ModProjectile]
 ## This many scenes are spawned and set up each time this weapon shoots.
 ## This provides for shotgun behavior. It is preferable to using [member always_shoot_for_count] with
 ## [code]use_fire_rate = false[/code], because they are instanced all at once.
-@export var number_of_scenes_to_spawn:int = 1
+@export var number_of_scenes_to_spawn:int = 1:
+	get: return maxi(1, number_of_scenes_to_spawn)
 
 ## @experimental:
 ## If greater than zero, when Shoot() is called, weapon will fire as frequently as it can based on fire-rate for this duration in seconds.
-@export var always_shoot_for_duration:float = 0.0
+@export var always_shoot_for_duration:float = 0.0:
+	get(): return maxf(0.0, always_shoot_for_duration)
 ## When fired, weapon will shoot this many times, separated by fire rate delay.
 ## Keep in mind that each shot will spawn [member number_of_scenes_to_spawn].
-@export var always_shoot_for_count:int = 1
+@export var always_shoot_for_count:int = 1:
+	get(): return maxi(1, always_shoot_for_count)
 ## @experimental: Emit signals necessary for game logic. Disable for alternate use cases.
 ## Implemented as a fix for TrajectoryPreviewer--see [Tank].
 @export var emit_action_signals:bool = true
@@ -134,7 +137,8 @@ var current_barrel: int = 0
 ## will only have 3 deducted.[br]
 ## Following that example, if the [Weapon] were shot five times, there would be 50 instances of
 ## [member scene_to_spawn], and the [Weapon] will have spent 15 ammo.
-@export var ammo_used_per_shot: int = 1
+@export var ammo_used_per_shot: int = 1:
+	get: return maxi(0, ammo_used_per_shot)
 ## If [code]true[/code], use a finite ammo supply. Calling [method reload] will set [member current_ammo] to
 ## be equal to [member magazine_capacity], if there is a [member magazine] available.[br][br]
 ## If [code]false[/code], calling [method reload] will always refill the [member current_ammo] to its
@@ -144,9 +148,11 @@ var current_barrel: int = 0
 ## [code]current_ammo + (magazines * magazine_capacity)[/code]. See [member use_magazines].[br][br]
 ## [b]Note:[/b] Magazines don't actually hold ammo, they simply represent the ability to reload
 ## [member current_ammo] to [member magazine_capacity].
-@export var magazines: int = 3
+@export var magazines: int = 3:
+	get: return maxi(0, magazines)
 ## The number to set [member current_ammo] to upon [method reload]. See [member use_magazines].
-@export var magazine_capacity: int = 16
+@export var magazine_capacity: int = 16:
+	get: return maxi(1, magazine_capacity)
 ## The time in seconds it takes to set [member current_ammo], during which the [Weapon] can not be fired.
 @export var reload_delay_time: float = 2.0
 
