@@ -49,6 +49,7 @@ var enemy_names: Array[String] = [
 	"Blasteroid", "Brave Little Turret", "Missfire", "Shockwave", "Old Boomer",
 	"Plink Panther", "Buster Rhimes", "Crapshot", "Thomas", "Forge Clooney",
 	"Dedre Lode", "Blaster Chief", "KiloNuke Dukem", "Spare Parts", "Luna Tick",
+	"Grateful Lead",
 ]
 
 # Called when the node enters the scene tree for the first time.

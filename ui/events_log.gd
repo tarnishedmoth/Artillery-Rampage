@@ -2,6 +2,7 @@
 ## Log important round events for the player to recall or learn if they missed them.
 #class_name PauseMenuLogUI
 extends PanelContainer
+@warning_ignore_start("unused_parameter")
 
 @onready var rich: RichTextLabel = $VBoxContainer/EventsLogRichText
 

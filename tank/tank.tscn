@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dvr6bm2hlj5h4"]
+[gd_scene load_steps=17 format=3 uid="uid://dvr6bm2hlj5h4"]
 
 [ext_resource type="Script" uid="uid://capm81lvak2c3" path="res://tank/tank.gd" id="1_0iy80"]
 [ext_resource type="Script" uid="uid://iirywjtssovs" path="res://tank/tank_body.gd" id="2_o5qn2"]
@@ -18,6 +18,24 @@ size = Vector2(26, 26)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bbvof"]
 size = Vector2(6, 30.8)
+
+[sub_resource type="Gradient" id="Gradient_rfeyq"]
+colors = PackedColorArray(0.19, 0.187625, 0.1843, 1, 0.140447, 0.140447, 0.140447, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_x1oaf"]
+gradient = SubResource("Gradient_rfeyq")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.8, 0.8)
+
+[sub_resource type="Curve" id="Curve_16yu1"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.266667, 0.730649), 1.33058, 1.33058, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_61qm2"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [node name="Tank" type="Node2D" node_paths=PackedStringArray("shooting_trajectory_indicator") groups=["Damageable", "DamageableRoot", "Unit"]]
 script = ExtResource("1_0iy80")
@@ -76,6 +94,30 @@ position = Vector2(13, 0)
 
 [node name="Top" type="Marker2D" parent="TankBody"]
 position = Vector2(0, -13)
+
+[node name="DamagedParticles" type="CPUParticles2D" parent="TankBody"]
+unique_name_in_owner = true
+z_index = -1
+amount = 10
+texture = SubResource("GradientTexture2D_x1oaf")
+lifetime = 2.8
+explosiveness = 0.01
+lifetime_randomness = 0.2
+emission_shape = 1
+emission_sphere_radius = 8.0
+direction = Vector2(0, -1)
+spread = 24.0
+gravity = Vector2(0, -16)
+initial_velocity_min = 12.0
+initial_velocity_max = 28.0
+angular_velocity_min = 10.0
+angular_velocity_max = 50.0
+angle_min = -45.0
+angle_max = 45.0
+scale_amount_min = 0.3
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_16yu1")
+color_ramp = SubResource("Gradient_61qm2")
 
 [node name="FiredWeaponContainer" type="Node" parent="."]
 

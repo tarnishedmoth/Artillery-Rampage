@@ -13,16 +13,16 @@ signal tank_stopped_falling(tank: Tank)
 @export var drop_on_death:PackedScene ## Scene is spawned at tank's global position when it dies.
 @export var shooting_trajectory_indicator:Weapon
 
-@export var min_angle:float = -90
-@export var max_angle:float = 90
+@export var min_angle:float = -90.0
+@export var max_angle:float = 90.0
 
 ## Weapon power output is decreased when health isn't full.
 ## @deprecated: Use [member weapon_max_power_range] instead.
 @export var weapon_max_power_health_mult:float = 10 # Didn't comment out in case there are scenes with modified export property values
 ## When [method _update_attributes] is called, [member max_power] is linearly interpolated using ([member health]/[member max_health]) as delta.
 @export var weapon_max_power_range:Vector2 = Vector2(300.0,1000.0)
-@export var max_health:float = 100
-@export var ground_trace_distance:float = 1000
+@export var max_health:float = 100.0
+@export var ground_trace_distance:float = 1000.0
 
 @export var turret_shot_angle_offset:float = -90 ## @deprecated: - corrected the rotation of the marker2D and math instead
 
@@ -94,6 +94,8 @@ var debuff_emp_charge:float = 0.0
 		
 #@onready var controller:TankController = get_parent()
 @onready var controller = get_parent()
+@onready var damaged_particles: CPUParticles2D = %DamagedParticles
+
 
 func _on_update_color():
 	modulate = color
@@ -112,6 +114,7 @@ func _ready() -> void:
 	scan_available_weapons()
 	
 	health = max_health
+	damaged_particles.emitting = false
 
 	# Setters not called in _ready so need to call this manually
 	_update_attributes()
@@ -272,6 +275,12 @@ func spawn_death_drop() -> void:
 	container.add_child.call_deferred(spawn)
 	
 func _update_visuals_after_damage():
+	if (health/max_health) < 0.75: # Percentage
+		if not damaged_particles.emitting:
+			damaged_particles.emitting = true
+		damaged_particles.amount = lerp(int(7), int(16), 1.0-(health/max_health))
+		damaged_particles.lifetime = lerpf(2.6, 4.2, 1.0-(health/max_health))
+	
 	# TODO: This is placeholder but right now just darkening the tanks accordingly
 	var health_pct:float = health / max_health
 	var dark_pct:float = 1 - health_pct

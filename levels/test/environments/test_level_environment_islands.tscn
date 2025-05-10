@@ -44,6 +44,10 @@ fractal_gain = 0.605
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
 texture_resources = Array[ExtResource("2_2spyf")]([SubResource("Resource_msmqt")])
 
+[node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk" index="0"]
+visible = true
+polygon = PackedVector2Array()
+
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
 polygon = PackedVector2Array(-101.563, 166.176, -57.8125, 107.353, 21.0938, 138.235, 60.9375, 326.471, 114.844, 145.588, 132.813, 116.176, 233.594, 85.2941, 271.875, 141.176, 327.344, 355.882, 379.688, 139.706, 408.594, 102.941, 549.219, 100, 571.875, 139.706, 630.469, 367.647, 698.438, 142.647, 810.156, 61.7647, 848.438, 61.7647, 946.875, 175, 945, 445, -103, 448)
 

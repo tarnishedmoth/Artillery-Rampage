@@ -40,6 +40,10 @@ func begin_round():
 	GameEvents.all_players_added.emit(self)
 				
 	round_director.begin_round()
+	
+func setup_new_unit(unit:TankController) -> void:
+	round_director.add_controller(unit)
+	connect_events(unit)
 		
 func _on_player_killed(in_player: Player) -> void:
 	# Must free player as the player class does not do this when the tank is killed
@@ -70,13 +74,11 @@ func _on_round_ended() -> void:
 func _add_manually_placed_units():
 	for child in get_children():
 		if child is TankController:
-			round_director.add_controller(child)
-			connect_events(child)
+			setup_new_unit(child)
 
 func _add_spawned_units():
 	for controller in await spawner.spawn_all(terrain):
-		round_director.add_controller(controller)
-		connect_events(controller)
+		setup_new_unit(controller)
 		
 func connect_events(controller: TankController) -> void:
 	if controller is Player:

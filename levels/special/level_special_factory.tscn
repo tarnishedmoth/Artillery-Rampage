@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bpq3kfwju28e8"]
+[gd_scene load_steps=26 format=3 uid="uid://bpq3kfwju28e8"]
 
 [ext_resource type="Script" uid="uid://bfl71q3d57n8s" path="res://levels/game_level.gd" id="1_8ylxn"]
 [ext_resource type="Script" uid="uid://ehj364xag1df" path="res://utils/game_timer.gd" id="2_iwr3d"]
@@ -20,6 +20,8 @@
 [ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="18_ba3th"]
 [ext_resource type="PackedScene" uid="uid://bamvmc2k56pyk" path="res://effects/post_processing/post_processing.tscn" id="19_pk5c6"]
 [ext_resource type="PackedScene" uid="uid://dlh1i2cvw3mim" path="res://voiceovers/announcer.tscn" id="20_8saf5"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="21_iwr3d"]
+[ext_resource type="Script" uid="uid://dlosg08ehpwdc" path="res://levels/special/factory.gd" id="22_ja3hk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_chthv"]
 shader = ExtResource("6_xu7nj")
@@ -27,6 +29,9 @@ shader_parameter/speed = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_60ghs"]
 size = Vector2(1248, 688)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iwr3d"]
+size = Vector2(324.5, 20)
 
 [node name="LevelSpecialFactory" type="Node2D"]
 
@@ -69,6 +74,12 @@ z_index = -10
 position = Vector2(118, 444)
 scale = Vector2(1.28, 0.68)
 
+[node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk" index="0"]
+polygon = PackedVector2Array()
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+polygon = PackedVector2Array(-103.125, 7.35297, -53.9063, -16.1765, 19.5313, -36.7647, 75, -36.7647, 128.906, -2.94116, 168.75, 17.647, 221.875, 10.2941, 274.219, -26.4706, 304.688, -79.4117, 322.656, -142.647, 337.5, -169.118, 360.156, -169.118, 378.906, -130.882, 399.219, -32.353, 435.938, 50, 468.75, 72.0588, 596.094, 82.353, 941.406, 82.353, 945, 445, -103, 448)
+
 [node name="Walls" parent="GameLevel" instance=ExtResource("10_hw8a8")]
 unique_name_in_owner = true
 wall_randomization_weights = Dictionary[int, float]({
@@ -108,4 +119,32 @@ unique_name_in_owner = true
 
 [node name="Announcer" parent="GameLevel" instance=ExtResource("20_8saf5")]
 
+[node name="Player" parent="GameLevel" instance=ExtResource("21_iwr3d")]
+position = Vector2(173, 404)
+enable_damage_before_first_turn = false
+
+[node name="Factory" type="Node2D" parent="GameLevel"]
+position = Vector2(884, 499)
+script = ExtResource("22_ja3hk")
+
+[node name="Polygon2D" type="Polygon2D" parent="GameLevel/Factory"]
+polygon = PackedVector2Array(4, 0, 4, -80, 308, -80, 308, 0)
+uv = PackedVector2Array(-364, 40, -364, -40, -60, -40, -60, 40)
+
+[node name="Conveyor" type="AnimatableBody2D" parent="GameLevel/Factory"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameLevel/Factory/Conveyor"]
+position = Vector2(146.25, -25)
+shape = SubResource("RectangleShape2D_iwr3d")
+
+[node name="Polygon2D" type="Polygon2D" parent="GameLevel/Factory/Conveyor"]
+polygon = PackedVector2Array(-15.8578, -19.2205, -15.8578, -35.2205, 144.142, -35.2205, 144.142, -19.2205)
+uv = PackedVector2Array(-20, -16, -20, -32, 140, -32, 140, -16)
+
+[node name="Spawnpoint" type="Marker2D" parent="GameLevel/Factory/Conveyor"]
+unique_name_in_owner = true
+position = Vector2(126, -41)
+
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]
