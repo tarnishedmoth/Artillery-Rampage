@@ -104,15 +104,15 @@ func _check_for_specified_positions() -> void:
 		if child is Marker2D:
 			_specified_positions.push_back(child)
 
-func _instantiate_controller_scene_at(scene: PackedScene, position: Vector2) -> TankController:
-	if !scene:
+func _instantiate_controller_scene_at(_scene: PackedScene, _position: Vector2) -> TankController:
+	if !_scene:
 		push_error("ArtillerySpawner(%s): Unable to create TankController from NULL scene" % [name])
 		return null
-	var instance := scene.instantiate() as TankController
+	var instance := _scene.instantiate() as TankController
 	if instance:
-		instance.global_position = position
+		instance.global_position = _position
 	else:
-		push_error("ArtillerySpawner(%s): Unable to create TankController from packed scene=%s" % [name, scene])
+		push_error("ArtillerySpawner(%s): Unable to create TankController from packed scene=%s" % [name, _scene])
 	
 	return instance
 

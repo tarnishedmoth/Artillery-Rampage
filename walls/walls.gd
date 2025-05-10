@@ -189,7 +189,7 @@ func _adjust_interaction_velocity(projectile: WeaponProjectile, new_dir:Vector2)
 	projectile.linear_velocity = new_velocity
 		 
 func _on_projectile_fired(projectile: WeaponProjectile) -> void:
-	print_debug("Wind(%s) - Tracking projectile fired - %s - %s" % [name, projectile.name, str(projectile.global_position)])
+	#print_debug("%s - Tracking projectile fired - %s - %s" % [name, projectile.name, str(projectile.global_position)])
 	tracked_projectiles.append(projectile)
 
 	# Need to bind the extra projectile argument to connect
@@ -197,6 +197,6 @@ func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 
 # Bind arguments are passed as an array
 func _on_projectile_destroyed(projectile: WeaponProjectile) -> void:
-	print_debug("Wind(%s): Projectile Destroyed=%s" % [name, projectile.name])
+	#print_debug("%s: Projectile Destroyed=%s" % [name, projectile.name])
 
 	tracked_projectiles.erase(projectile)

@@ -112,6 +112,8 @@ func _on_target_expired(target: Target) -> void:
 	if targets.is_empty(): disengage()
 	
 func _on_projectile_fired(projectile: WeaponProjectile) -> void:
+	if not projectile.max_damage > 0.0: return
+	
 	# If not on the same team, start tracking the projectile.
 	if disabled: return
 	if projectile.owner_tank:

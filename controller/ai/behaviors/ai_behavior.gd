@@ -383,6 +383,7 @@ func _target_is_player_and_has_not_fired(target: TankController) -> bool:
 	return !has_player_fired and target is Player
 
 func _on_projectile_fired(projectile: WeaponProjectile) -> void:
+	if not projectile.max_damage > 0.0: return # Ignore trajectory previewer, flares, etc
 	if projectile.owner_tank and projectile.owner_tank.owner is Player:
 		print_debug("%s: Player has fired - %s" % [name, projectile.owner_tank.owner.name])
 		has_player_fired = true

@@ -224,7 +224,7 @@ func destroy():
 		return
 		
 	destroyed = true
-	print_debug("WeaponProjectile(%s): Destroying" % name)
+	#print_debug("WeaponProjectile(%s): Destroying" % name)
 
 	if explosion_to_spawn:
 		spawn_explosion(explosion_to_spawn)

@@ -31,6 +31,8 @@ var awaiting_intentions:int = 0
 ## player_goes_first will be honored if set
 @export var shuffle_order:bool = true
 
+var special_level_logic:bool = false
+
 var player: Player:
 	get:
 		var index:int = _get_player_index()
@@ -69,6 +71,8 @@ var player: Player:
 		existing.queue_free()
 		
 func _ready():
+	GameEvents.player_added.connect(_on_player_added)
+	
 	current_gamestate = create_new_gamestate() # TODO: loading saved gamestate
 	
 	fall_check_timer = Timer.new()
@@ -82,6 +86,12 @@ func _ready():
 func add_controller(tank_controller: TankController) -> void:
 	tank_controllers.append(tank_controller)
 	GameEvents.player_added.emit(tank_controller)
+	
+func _on_player_added(controller:TankController) -> void:
+	# Check if we need to start/cycle turns.
+	if special_level_logic:
+		if not awaiting_intentions > 0:
+			next_turn()
 	
 func _on_fall_check_timeout():
 	_fall_check_elapsed_time += fall_check_timer.wait_time
@@ -146,6 +156,10 @@ func _swap_players(first_index: int, second_index: int) -> void:
 
 func check_players() -> bool:
 	# If there are 1 or 0 players left then the round is over
+	if special_level_logic:
+		# Allow for managed situations with only the Player left
+		if tank_controllers.size() >= 1:
+			return true
 	if tank_controllers.size() <= 1:
 		active_player_index = -1
 		return false
@@ -175,11 +189,6 @@ func next_turn() -> bool:
 	return true
 
 func next_player() -> void:
-	## If there are 1 or 0 players left then the round is over
-	#if tank_controllers.size() <= 1:
-		#active_player_index = -1
-		#return false
-		
 	if turns_since_damage > lightning_time:
 		trigger_lightning()
 	active_player_index = (active_player_index + 1) % tank_controllers.size()
@@ -190,8 +199,6 @@ func next_player() -> void:
 	awaiting_intentions += 1
 	active_player.begin_turn()
 	GameEvents.turn_started.emit(active_player)
-	
-	#return true
 	
 func _on_turn_ended(controller: TankController) -> void:
 	print("Turn ended for " + controller.name)
@@ -263,7 +270,7 @@ func _on_tank_killed(tank: Tank, _instigatorController: Node2D, _instigator: Nod
 			active_player_index = tank_controllers.size() - 1
 
 func _on_player_intent_to_act(action: Callable, apply_to: Object) -> void:
-	print_debug("Received action: ",action)
+	print_debug("Received action: ",action,apply_to.name)
 	current_gamestate.queue_action(action, apply_to)
 	awaiting_intentions -= 1
 	if awaiting_intentions < 1:

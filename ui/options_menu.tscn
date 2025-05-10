@@ -1,14 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://da23m08ml50op"]
+[gd_scene load_steps=4 format=3 uid="uid://da23m08ml50op"]
 
 [ext_resource type="Script" uid="uid://cyry0di35umy7" path="res://ui/options_menu.gd" id="1_6vtbd"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sbkqv"]
 bg_color = Color(0.462291, 0.462291, 0.46229, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_m3s5d"]
-font_size = 12
-shadow_size = 4
-shadow_color = Color(0, 0, 0, 0.25098)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ibk6l"]
 bg_color = Color(0.347817, 0.347817, 0.347817, 1)
@@ -253,12 +248,6 @@ layout_mode = 2
 [node name="Reset" type="Button" parent="Keybinds/VBoxContainer/MarginContainer/VBoxContainer/ConfirmButtons"]
 layout_mode = 2
 text = "Reset All"
-
-[node name="REMOVE_ME" type="Label" parent="Keybinds/VBoxContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "This menu is not yet functional. :)"
-label_settings = SubResource("LabelSettings_m3s5d")
-horizontal_alignment = 1
 
 [node name="KeybindChanging" type="PanelContainer" parent="Keybinds"]
 layout_mode = 2

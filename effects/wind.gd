@@ -48,11 +48,11 @@ func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind(projectile))
 	_active_projectile_set[projectile] = projectile
 
-	print_debug("Wind(%s): on_projectile_fired: %s - tracking=%d" % [name, projectile.name, _active_projectile_set.size()])
+	#print_debug("%s: on_projectile_fired: %s - tracking=%d" % [name, projectile.name, _active_projectile_set.size()])
 
 func _on_projectile_destroyed(projectile: WeaponProjectile) -> void:
 	_active_projectile_set.erase(projectile)
-	print_debug("Wind(%s): on_projectile_destroyed: %s - tracking=%d" % [name, projectile.name, _active_projectile_set.size()])
+	#print_debug("%s: on_projectile_destroyed: %s - tracking=%d" % [name, projectile.name, _active_projectile_set.size()])
 	
 func _apply_wind_to_active_projectiles(delta: float) -> void:
 	for projectile in _active_projectile_set:

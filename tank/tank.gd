@@ -294,8 +294,8 @@ func _update_visuals_after_damage():
 	if (health/max_health) <= threshold: # Percentage
 		if not damaged_smoke_particles.emitting:
 			damaged_smoke_particles.emitting = true
-		damaged_smoke_particles.amount = lerp(int(5), int(14), 1.0-(health/threshold))
-		damaged_smoke_particles.lifetime = lerpf(1.0, 5.0, 1.0-(health/threshold))
+		damaged_smoke_particles.amount = lerp(int(5), int(14), 1.0-(health/(max_health*threshold)))
+		damaged_smoke_particles.lifetime = lerpf(1.0, 5.0, 1.0-(health/(max_health*threshold)))
 	
 	var health_pct:float = health / max_health
 	var dark_pct:float = 1 - health_pct

@@ -7,6 +7,7 @@ signal player_killed(player: Player)
 
 @export var aim_speed_degs_per_sec = 45
 @export var power_pct_per_sec = 30
+var input_modifier:float = 1.0
 
 @export var debug_controls:bool = false
 
@@ -38,23 +39,33 @@ func begin_turn():
 func _get_tank():
 	return _tank
 	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-		
-	if Input.is_action_pressed("aim_left"):
-		aim(-delta)
-	if Input.is_action_pressed("aim_right"):
-		aim(delta)
-	if Input.is_action_just_pressed("shoot"):
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("shoot"):
 		shoot()
-	if Input.is_action_pressed("power_increase"):
-		set_power(delta * power_pct_per_sec)
-	if Input.is_action_pressed("power_decrease"):
-		set_power(-delta * power_pct_per_sec)
-	if Input.is_action_just_pressed("cycle_next_weapon"):
+	if event.is_action_pressed("cycle_next_weapon"):
 		if can_shoot: tank.equip_next_weapon()
-	if Input.is_action_just_pressed("cycle_weapon_mode"):
+	if event.is_action_pressed("cycle_weapon_mode"):
 		if can_shoot: tank.next_weapon_mode()
+	if event.is_action_pressed("fine_control"):
+		input_modifier = 0.15
+	elif event.is_action_released("fine_control"):
+		input_modifier = 1.0
+
+func _process(delta: float) -> void:
+	if Input.is_action_pressed("aim_left"):
+		aim(-delta*input_modifier)
+	if Input.is_action_pressed("aim_right"):
+		aim(delta*input_modifier)
+	#if Input.is_action_just_pressed("shoot"):
+		#shoot()
+	if Input.is_action_pressed("power_increase"):
+		set_power(delta*input_modifier * power_pct_per_sec)
+	if Input.is_action_pressed("power_decrease"):
+		set_power(-delta*input_modifier * power_pct_per_sec)
+	#if Input.is_action_just_pressed("cycle_next_weapon"):
+		#if can_shoot: tank.equip_next_weapon()
+	#if Input.is_action_just_pressed("cycle_weapon_mode"):
+		#if can_shoot: tank.next_weapon_mode()
 		
 func aim(delta: float) -> void:
 	if !can_aim : return
