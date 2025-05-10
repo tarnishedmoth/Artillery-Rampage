@@ -36,6 +36,10 @@ func _ready() -> void:
 		_request_sync_polygons()
 
 func damage(projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
+	if _collision_dirty:
+		print_debug("DestructibleObjectChunk(%s) - skipping as damage already in progress" % name)
+		return
+
 	owner.damage(self, projectile, contact_point, poly_scale)
 
 # TODO: Collision will never update if set use_mesh_as_collision to false so maybe remove this option	
