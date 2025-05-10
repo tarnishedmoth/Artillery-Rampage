@@ -94,13 +94,14 @@ func shatter_with_velocity(impact_velocity: Vector2) -> Array[Node2D]:
 		await get_tree().physics_frame
 
 		var new_polys: Array[PackedVector2Array] = _create_shatter_polys()
+		var poly_separation: PackedVector2Array = _poly_ops.calculate_shatter_poly_separation(new_polys)
 		new_bodies.resize(new_polys.size())
 
 		var impact_velocity_dir: Vector2 = impact_velocity.normalized()
 
 		for i in range(new_polys.size()):
 			var new_poly: PackedVector2Array = new_polys[i]
-			new_bodies[i] = _create_body_from_poly(new_poly, impact_velocity_dir)
+			new_bodies[i] = _create_body_from_poly(new_poly, impact_velocity_dir, poly_separation[i])
 	else:
 		print_debug("%s - shatter iteration limit reached" % [name])
 	delete()
@@ -117,7 +118,7 @@ func _create_shatter_polys() -> Array[PackedVector2Array]:
 	var max_area: float = maxf(min_shatter_area, area * max_shatter_area_fract)
 	return _poly_ops.shatter(_mesh.polygon, min_shatter_area, max_area)
 
-func _create_body_from_poly(poly: PackedVector2Array, impact_velocity_dir: Vector2) -> ShatterableObjectBody:
+func _create_body_from_poly(poly: PackedVector2Array, impact_velocity_dir: Vector2, position_offset: Vector2) -> ShatterableObjectBody:
 	var new_instance: ShatterableObjectBody = duplicate()
 	
 	# Have to wait for the instance to enter the tree before accessing polygon on mesh
@@ -130,7 +131,7 @@ func _create_body_from_poly(poly: PackedVector2Array, impact_velocity_dir: Vecto
 	
 	new_instance.density = density
 	
-	new_instance.position = position
+	new_instance.position = position + position_offset
 	new_instance.rotation = rotation
 	
 	var impulse:Vector2 = _randomize_impact_velocity_dir(impact_velocity_dir) * randf_range(min_body_impulse, max_body_impulse)

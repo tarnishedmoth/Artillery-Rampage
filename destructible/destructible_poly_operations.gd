@@ -334,8 +334,6 @@ func shatter(poly: PackedVector2Array, min_area: float, max_area: float) -> Arra
 		if not poly_points.is_empty() and TerrainUtils.calculate_polygon_area(poly_points) >= absolute_min_area:
 			poly_points_list.append(poly_points)
 
-	separate_polys(poly_points_list, chunk_separation_bounds_radius_fraction, max_chunk_separation)
-
 	return poly_points_list
 
 # Offset the centroid of the triangle formed by p1, p2, and p3 so that the fracture isn't always predictable
@@ -400,7 +398,10 @@ func _points_to_poly(points: PackedVector2Array) -> PackedVector2Array:
 	# Use a convex hull to create polygon from points
 	return Geometry2D.convex_hull(points)
 
-func separate_polys(poly_points_list: Array[PackedVector2Array], max_radius_fraction: float, max_distance: float) -> void:
+func calculate_shatter_poly_separation(poly_points_list: Array[PackedVector2Array]) -> PackedVector2Array:
+	return _calculate_poly_separation(poly_points_list, chunk_separation_bounds_radius_fraction, max_chunk_separation)
+
+func _calculate_poly_separation(poly_points_list: Array[PackedVector2Array], max_radius_fraction: float, max_distance: float) -> PackedVector2Array:
 	var all_points: PackedVector2Array = []
 	for poly in poly_points_list:
 		all_points.append_array(poly)
@@ -408,9 +409,12 @@ func separate_polys(poly_points_list: Array[PackedVector2Array], max_radius_frac
 	var bounds := Circle.create_from_points(all_points)
 
 	var separation_distance: float = minf(bounds.radius * max_radius_fraction, max_distance)
+	var separation: PackedVector2Array = []
+	separation.resize(all_points.size())
 
 	# offset polygon by distance from center of the bounds scaled by max_distance
-	for poly in poly_points_list:
+	for i in poly_points_list.size():
+		var poly: PackedVector2Array = poly_points_list[i]
 		var centroid: Vector2 = TerrainUtils.polygon_centroid(poly)
 		var offset: Vector2 = centroid - bounds.center
 
@@ -418,7 +422,6 @@ func separate_polys(poly_points_list: Array[PackedVector2Array], max_radius_frac
 		var offset_dir: Vector2 = offset / maxf(0.001, offset_length)
 
 		var translation: Vector2 = offset_dir * separation_distance * (offset_length / bounds.radius)
-		
-		# translate all the points in the polygon
-		for i in poly.size():
-			poly[i] += translation
+		separation[i] = translation
+
+	return separation
