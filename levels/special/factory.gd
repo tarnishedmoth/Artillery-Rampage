@@ -8,6 +8,9 @@ extends Node2D
 ## If there is already an artillery at the end, artillery can queue behind it
 ## and will immediately deploy when the end artillery dies, effectively replacing it.
 
+signal conveyor_advanced
+signal artillery_spawned
+
 @export var schedule:Dictionary[int,int] ## Turn Count, Number to Spawn
 @export var damageable_components:Array[DestructibleObject] # Maybe?
 @export var conveyor_length:int = 4
@@ -18,11 +21,11 @@ var conveyor_slots:Array[ConveyorSlot]
 var turn_counter:int = 0
 
 @onready var spawnpoint: Marker2D = %Spawnpoint
-var game_level:GameLevel:
-	get: return get_parent() # GameLevel
+@onready var game_level:GameLevel = get_parent()
 
 
 func _ready() -> void:
+	%RoundDirector.special_level_logic = true
 	GameEvents.turn_ended.connect(_on_turn_ended) # For turn based logic
 	
 	for component in damageable_components: # Observe the components that the player must destroy to kill the factory.
@@ -36,41 +39,75 @@ func _ready() -> void:
 			)
 		conveyor_slots.append(new_slot)
 		
-	check_turn()
+	call_deferred("check_turn")
 
-func spawn_new_artillery() -> void:
-	var artillery:TankController
-	# TODO Make the artillery
+func try_spawn_new_artillery() -> bool:
+	var slot = conveyor_slots[0]
+	if slot.is_occupied:
+		print_debug("Force advancing conveyor.")
+		advance_conveyor()
+		await conveyor_advanced
+		if slot.is_occupied:
+			print_debug("Slot ", slot.number, " still occupied. (Belt is full?) Cancelling spawn.")
+			return false # Belt is full
+		
+	## Something with how the decoupled tankBody physics object results in
+	## strange positional offsets so we have to set it after we spawn...
+	slot.occupant = game_level.spawner.spawn_unit(Vector2(0,0), true, self)
+	slot.occupant.global_position = slot.global_position
+	slot.physics_body.freeze = true
+	
+	artillery_spawned.emit()
+	return true
 	
 func check_turn() -> void:
 	if turn_counter in schedule:
 		for to_spawn in schedule[turn_counter]:
-			spawn_new_artillery()
+			print_debug("Trying spawn ", to_spawn+1, " of ", schedule[turn_counter])
+			var did_spawn = await try_spawn_new_artillery()
 			
 func advance_conveyor() -> void:
-	for slot in conveyor_slots.size():
+	var slot = conveyor_slots.back().number
+	while slot >= 0:
+		print_debug("Advancing slot ", slot)
 		if conveyor_slots[slot].is_occupied:
-			var move_tween = create_tween()
-			if conveyor_slots[slot+1] != null:
+			if slot+1 < conveyor_slots.size():
+				if conveyor_slots[slot+1].is_occupied:
+					print_debug("Next slot is full, cancelling advance.")
+					return
+				var move_tween = create_tween()
 				var next_position:Vector2 = conveyor_slots[slot+1].global_position
-				move_tween.tween_property(conveyor_slots[slot].occupant, "global_position", next_position, conveyor_move_duration).set_trans(Tween.TRANS_SINE)
-				move_tween.tween_callback(_reassign_slots.bind(conveyor_slots[slot], conveyor_slots[slot+1]))
+				#conveyor_slots[slot].occupant.global_position = next_position
+				move_tween.tween_property(conveyor_slots[slot].occupant, "global_position", next_position, conveyor_move_duration).set_trans(Tween.TRANS_SPRING)
+				#move_tween.tween_callback(_reassign_slots.bind(conveyor_slots[slot], conveyor_slots[slot+1]))
+				move_tween.tween_callback(conveyor_advanced.emit)
+				_reassign_slots(conveyor_slots[slot], conveyor_slots[slot+1])
 			else:
 				#End of the line
 				activate_artillery(conveyor_slots[slot].occupant)
-				
+				conveyor_advanced.emit()
+		else:
+			# Empty slot
+			pass
+		slot -= 1
+		continue
+		
+func activate_artillery(artillery:TankController) -> void:
+	print_debug("Activating artillery ", artillery.name)
+	game_level.activate_tank_controller(artillery) # Gives it turns
+	artillery.tank.tankBody.freeze = false
+	
 func _reassign_slots(from:ConveyorSlot, to:ConveyorSlot) -> void:
+	if to.is_occupied:
+		print_debug("Reassigning to full slot!")
 	to.occupant = from.occupant
 	from.occupant = null
-	
-func activate_artillery(artillery:TankController) -> void:
-	game_level.setup_new_unit(artillery) # Gives it turns
 	
 func defeated() -> void:
 	#End the round
 	pass
 
-func _on_turn_ended() -> void:
+func _on_turn_ended(_tank:TankController) -> void:
 	turn_counter += 1
 	advance_conveyor()
 	check_turn()
@@ -83,6 +120,12 @@ func _on_component_destroyed(component) -> void:
 class ConveyorSlot:
 	var number:int
 	var occupant:TankController
+	var physics_body:TankBody:
+		get:
+			if is_occupied:
+				return occupant.tank.tankBody
+			else:
+				return null
 	var is_occupied:bool:
 		get: return true if occupant else false
 	var global_position:Vector2
