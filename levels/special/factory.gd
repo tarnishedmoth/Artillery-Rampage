@@ -61,7 +61,8 @@ func try_spawn_new_artillery() -> bool:
 	return true
 	
 func check_turn() -> void:
-	if turn_counter in schedule:
+	#if turn_counter in schedule:
+	if schedule.has(turn_counter):
 		for to_spawn in schedule[turn_counter]:
 			print_debug("Trying spawn ", to_spawn+1, " of ", schedule[turn_counter])
 			var did_spawn = await try_spawn_new_artillery()

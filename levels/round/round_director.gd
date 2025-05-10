@@ -203,10 +203,14 @@ func next_turn() -> bool:
 	return true
 
 func next_player() -> void:
+	await get_tree().process_frame
 	if turns_since_damage > lightning_time:
 		trigger_lightning()
 	active_player_index = (active_player_index + 1) % tank_controllers.size()
 	var active_player = tank_controllers[active_player_index]
+	if not is_instance_valid(active_player):
+		active_player = tank_controllers.front()
+		print_debug("Invalid active player, resetting to front of array.")
 	
 	print_debug("Turn beginning for %s" % [active_player.name])
 	
