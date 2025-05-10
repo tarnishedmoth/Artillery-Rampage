@@ -198,7 +198,7 @@ func _on_turn_ended(controller: TankController) -> void:
 	turns_since_damage += 1
 	print("Turns since damage: " + str(turns_since_damage))
 	if awaiting_intentions > 0:
-		print_debug("Turn ended but awaiting %d intentions from player" % [controller])
+		print_debug("Turn ended but awaiting %s intentions from player" % [controller.name])
 		return
 	
 	await _async_check_and_await_falling()
