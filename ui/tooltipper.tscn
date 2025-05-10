@@ -39,7 +39,7 @@ layout_mode = 2
 
 [node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipPower"]
 layout_mode = 2
-text = "power_increase / power_decrease"
+text = "[power_increase] / [power_decrease]"
 
 [node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/TooltipPower"]
 custom_minimum_size = Vector2(16, 0)
@@ -55,7 +55,7 @@ layout_mode = 2
 
 [node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipAim"]
 layout_mode = 2
-text = "aim_left / aim_right"
+text = "[aim_left] / [aim_right]"
 
 [node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/TooltipAim"]
 custom_minimum_size = Vector2(16, 0)
@@ -71,7 +71,7 @@ layout_mode = 2
 
 [node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipShoot"]
 layout_mode = 2
-text = "shoot"
+text = "[shoot]"
 
 [node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/TooltipShoot"]
 custom_minimum_size = Vector2(16, 0)
@@ -87,7 +87,7 @@ layout_mode = 2
 
 [node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipChangeWeapon"]
 layout_mode = 2
-text = "cycle_next_weapon"
+text = "[cycle_next_weapon]"
 
 [node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/TooltipChangeWeapon"]
 custom_minimum_size = Vector2(16, 0)

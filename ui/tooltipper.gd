@@ -83,6 +83,7 @@ func replace_keybind_glyphs(text: String) -> String: # I don't understand why th
 				replacement_text += ", "
 			replacement_text += glyph
 		#print_debug(new_text, action, replacement_text)
+		action = "[" + action + "]" # Making syntax to restrain it
 		new_text = new_text.replace(action, replacement_text)
 	
 	return new_text
