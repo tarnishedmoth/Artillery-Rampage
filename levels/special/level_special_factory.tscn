@@ -144,19 +144,20 @@ schedule = Dictionary[int, int]({
 })
 
 [node name="Polygon2D" type="Polygon2D" parent="GameLevel/Factory"]
-visible = false
+color = Color(0, 0, 0, 0.552941)
 polygon = PackedVector2Array(4, 0, 4, -80, 308, -80, 308, 0)
 uv = PackedVector2Array(-364, 40, -364, -40, -60, -40, -60, 40)
 
 [node name="Conveyor" type="AnimatableBody2D" parent="GameLevel/Factory"]
-collision_layer = 2
-collision_mask = 2
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GameLevel/Factory/Conveyor"]
 position = Vector2(146.25, -25)
 shape = SubResource("RectangleShape2D_iwr3d")
 
 [node name="Polygon2D" type="Polygon2D" parent="GameLevel/Factory/Conveyor"]
+color = Color(0.314316, 0.314316, 0.314316, 1)
 polygon = PackedVector2Array(-15.8578, -19.2205, -15.8578, -35.2205, 144.142, -35.2205, 144.142, -19.2205)
 uv = PackedVector2Array(-20, -16, -20, -32, 140, -32, 140, -16)
 

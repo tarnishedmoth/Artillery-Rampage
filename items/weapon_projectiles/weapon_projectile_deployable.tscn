@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://btemialk4ka7v"]
+[gd_scene load_steps=6 format=3 uid="uid://bujg3bse74t3h"]
 
 [ext_resource type="Script" uid="uid://btecvempmygq6" path="res://items/weapon_projectiles/weapon_projectile_deployable.gd" id="1_rlat4"]
 [ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="2_7jnxy"]
@@ -17,12 +17,12 @@ sfx_trigger = NodePath("Trigger")
 deploy_scene_to_spawn = ExtResource("2_p7lln")
 deploy_number = 2
 deploy_velocity_impulse = 10.0
+should_explode_on_impact = false
 min_falloff_distance = 1.0
 max_falloff_distance = 100.0
 min_damage = 0.0
 max_damage = 0.0
 destructible_scale_multiplier = Vector2(1, 1)
-should_explode_on_impact = false
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_7jnxy")

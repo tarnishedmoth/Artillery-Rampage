@@ -84,7 +84,8 @@ func _ready():
 	add_child(fall_check_timer)
 	
 func add_controller(tank_controller: TankController) -> void:
-	tank_controllers.append(tank_controller)
+	if not tank_controller in tank_controllers:
+		tank_controllers.append(tank_controller)
 	
 	for controller:TankController in tank_controllers:
 		connect_controller(controller)
@@ -100,9 +101,10 @@ func connect_controller(controller: TankController) -> void:
 	
 func _on_player_added(controller:TankController) -> void:
 	# Check if we need to start/cycle turns.
-	if special_level_logic:
-		if not awaiting_intentions > 0:
-			next_turn()
+	pass
+	#if special_level_logic:
+		#if not awaiting_intentions > 0:
+			#next_turn()
 	
 func _on_fall_check_timeout():
 	_fall_check_elapsed_time += fall_check_timer.wait_time
@@ -167,8 +169,11 @@ func check_players() -> bool:
 	# If there are 1 or 0 players left then the round is over
 	if special_level_logic:
 		# Allow for managed situations with only the Player left
-		if tank_controllers.size() >= 1:
-			return true
+		for controller in tank_controllers:
+			if controller is Player:
+				print_debug("Special Level: Player is alive. Check passed.")
+				return true
+		print_debug("Special Level: Player not found. Check failed. \n", tank_controllers)
 	if tank_controllers.size() <= 1:
 		active_player_index = -1
 		return false
@@ -205,7 +210,7 @@ func next_player() -> void:
 	
 	print_debug("Turn beginning for %s" % [active_player.name])
 	
-	awaiting_intentions += 1
+	awaiting_intentions += active_player.actions_per_turn
 	active_player.begin_turn()
 	GameEvents.turn_started.emit(active_player)
 	

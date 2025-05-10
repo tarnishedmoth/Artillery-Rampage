@@ -48,5 +48,5 @@ func is_falling() -> bool:
 	#var result:bool =  abs(angular_velocity) >= 0.1 || linear_velocity.length_squared() >= 0.001
 	
 	#print("tank: " +  get_parent().get_parent().name + " (is_falling=" + str(result) + ") - angular_velocity=" + str(angular_velocity) + ";linear_velocity=" + str(linear_velocity.length()))
-	var result:bool = !is_sleeping()
+	var result:bool = !is_sleeping() && !freeze
 	return result

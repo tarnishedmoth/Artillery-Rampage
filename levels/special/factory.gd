@@ -95,7 +95,7 @@ func advance_conveyor() -> void:
 func activate_artillery(artillery:TankController) -> void:
 	print_debug("Activating artillery ", artillery.name)
 	game_level.activate_tank_controller(artillery) # Gives it turns
-	artillery.tank.tankBody.freeze = false
+	set_deferred("artillery.tank.tankBody:freeze", false)
 	
 func _reassign_slots(from:ConveyorSlot, to:ConveyorSlot) -> void:
 	if to.is_occupied:

@@ -17,12 +17,12 @@ sfx_trigger = NodePath("Trigger")
 deploy_scene_to_spawn = ExtResource("2_y5dgi")
 deploy_number = 2
 deploy_velocity_impulse = 10.0
+should_explode_on_impact = false
 min_falloff_distance = 1.0
 max_falloff_distance = 100.0
 min_damage = 0.0
 max_damage = 0.0
 destructible_scale_multiplier = Vector2(1, 1)
-should_explode_on_impact = false
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("3_4bu3i")

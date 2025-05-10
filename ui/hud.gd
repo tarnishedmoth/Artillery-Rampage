@@ -41,6 +41,7 @@ func _on_turn_started(player: TankController) -> void:
 	_update_health(player)
 	_on_aim_updated(player)
 	_on_power_updated(player)
+	_on_weapon_updated(player.tank.get_equipped_weapon())
 
 func _on_took_damage(tank: Tank, _instigatorController: Node2D, _instigator: Node2D, _amount: float):
 	if tank.owner == _active_player:
@@ -80,6 +81,8 @@ func _get_direction_string(value: float) -> String:
 	return "▶" if value >= 0 else "◀"
 	
 func _on_weapon_updated(weapon: Weapon) -> void:
+	if weapon.parent_tank.controller != _active_player:
+		return
 	weapon_text.set_label(weapon.display_name)
 	weapon_text.set_value(str(weapon.current_ammo) if weapon.use_ammo else char(9854))
 

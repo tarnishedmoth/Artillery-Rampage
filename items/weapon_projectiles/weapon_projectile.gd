@@ -174,9 +174,9 @@ func explode(collided_body: PhysicsBody2D = null):
 			if root_node and root_node not in destructed_processed_set:
 				var contact_point: Vector2 = center_destructible_on_impact_point(destructible_component)
 				
-				root_node.damage(self, contact_point, destructible_scale_multiplier)
 				# Pass 0 for damage as destructible components don't take health-based damage
 				GameEvents.took_damage.emit(root_node, get_instigator(), self, contact_point, 0.0)
+				root_node.damage(self, contact_point, destructible_scale_multiplier)
 
 				had_interaction = true
 				destructed_processed_set[root_node] = root_node

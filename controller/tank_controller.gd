@@ -7,6 +7,8 @@ var _initial_fall_damage:bool
 signal intent_to_act(action: Callable, owner: Object)
 ## This is set each turn start with the return of [method check_if_must_skip_actions].
 var can_take_action:bool = true
+## This allows for shooting more than once per turn, for instance.
+var actions_per_turn:int = 1
 
 ## Set player state that has been loaded from previous round
 var pending_state: PlayerState

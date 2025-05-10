@@ -160,6 +160,8 @@ func populate_player_state(state: PlayerState) -> void:
 func _physics_process(delta: float) -> void:
 	if !tankBody.is_gravity_enabled():
 		return
+	if tankBody.freeze:
+		return
 	
 	global_position = tankBody.global_position
 	tankBody.position = Vector2.ZERO

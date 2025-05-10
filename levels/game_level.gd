@@ -34,7 +34,7 @@ func begin_round():
 	# to then create the necessary controllers and tanks from it
 	# For now just loading in the instance from the scene
 	# Discover any placed child controller nodes
-	_add_manually_placed_units()
+	await _add_manually_placed_units()
 	await _create_procedural_units()
 
 	GameEvents.all_players_added.emit(self)
@@ -42,8 +42,8 @@ func begin_round():
 	round_director.begin_round()
 	
 func activate_tank_controller(unit:TankController) -> void:
-	round_director.add_controller(unit)
 	connect_events(unit)
+	round_director.add_controller(unit)
 		
 func _on_player_killed(in_player: Player) -> void:
 	# Must free player as the player class does not do this when the tank is killed
