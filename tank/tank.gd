@@ -94,7 +94,7 @@ var debuff_emp_charge:float = 0.0
 		
 #@onready var controller:TankController = get_parent()
 @onready var controller = get_parent()
-@onready var damaged_particles: CPUParticles2D = %DamagedParticles
+@onready var damaged_smoke_particles: CPUParticles2D = %DamagedSmokeParticles
 
 
 func _on_update_color():
@@ -114,7 +114,7 @@ func _ready() -> void:
 	scan_available_weapons()
 	
 	health = max_health
-	damaged_particles.emitting = false
+	damaged_smoke_particles.emitting = false
 
 	# Setters not called in _ready so need to call this manually
 	_update_attributes()
@@ -250,19 +250,21 @@ func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float
 		_update_visuals_after_damage()
 	
 	print_debug("Tank %s took %f damage; health=%f" % [ get_parent().name, actual_damage, health])
-	emit_signal("tank_took_damage", self, instigatorController, instigator, actual_damage)
+	tank_took_damage.emit(self, instigatorController, instigatorController, actual_damage)
+	
 	if health <= 0:
-		emit_signal("tank_killed", self, instigatorController, instigator)
+		tank_killed.emit(self, instigatorController, instigator)
 		
 func take_emp(instigatorController: Node2D, instigator: Node2D, charge:float) -> void:
 	var actual_charge = charge * debuff_emp_conductivity_multiplier
 	debuff_emp_charge += actual_charge
 	
 	print_debug("Tank %s took %f EMP charge; total=%f" % [ get_parent().name, actual_charge, debuff_emp_charge])
-	emit_signal("tank_took_emp", self, instigatorController, instigator, actual_charge)
+	tank_took_emp.emit(self, instigatorController, instigator, actual_charge)
 		
 func kill():
 	print_debug("Tank: %s Killed" % [get_parent().name])
+	_separate_particles_to_despawn(damaged_smoke_particles)
 	if drop_on_death:
 		spawn_death_drop()
 	GameEvents.player_died.emit(controller)
@@ -271,17 +273,30 @@ func kill():
 func spawn_death_drop() -> void:
 	var spawn = drop_on_death.instantiate()
 	spawn.global_position = global_position
-	var container = SceneManager.current_scene ## Change later if wanted
+	var container = _get_scene_container()
 	container.add_child.call_deferred(spawn)
 	
-func _update_visuals_after_damage():
-	if (health/max_health) < 0.75: # Percentage
-		if not damaged_particles.emitting:
-			damaged_particles.emitting = true
-		damaged_particles.amount = lerp(int(7), int(16), 1.0-(health/max_health))
-		damaged_particles.lifetime = lerpf(2.6, 4.2, 1.0-(health/max_health))
+func _separate_particles_to_despawn(particles:CPUParticles2D) -> void:
+	particles.reparent(_get_scene_container())
+	particles.emitting = false
+	particles.finished.connect(particles.queue_free)
+
+func _get_scene_container() -> Node2D:
+	var container = SceneManager.get_current_level_root()
+	if container == null:
+		container = SceneManager.current_scene
+	if container.has_method("get_container"):
+		container = container.get_container()
+	return container
 	
-	# TODO: This is placeholder but right now just darkening the tanks accordingly
+func _update_visuals_after_damage():
+	var threshold = 0.75
+	if (health/max_health) < threshold: # Percentage
+		if not damaged_smoke_particles.emitting:
+			damaged_smoke_particles.emitting = true
+		damaged_smoke_particles.amount = lerp(int(5), int(16), 1.0-(health/threshold))
+		damaged_smoke_particles.lifetime = lerpf(1.8, 4.2, 1.0-(health/threshold))
+	
 	var health_pct:float = health / max_health
 	var dark_pct:float = 1 - health_pct
 	
@@ -292,10 +307,10 @@ func _update_visuals_after_damage():
 
 func _activate_damage_shader() -> void:
 	if material:
-		print_debug("Tank: %s - ignore as shader already set" % get_parent().name)
+		#print_debug("Tank: %s - ignore as shader already set" % get_parent().name)
 		return
 	if not damage_material:
-		print_debug("Tank: %s - no damage material" % get_parent().name)
+		#print_debug("Tank: %s - no damage material" % get_parent().name)
 		return
 	
 	var game_time_seconds: float = SceneManager.get_current_level_root().game_timer.time_seconds if SceneManager.get_current_level_root() else 0.0
@@ -425,13 +440,13 @@ func get_weapon_fire_locations() -> Marker2D:
 	## Only returns one item not multiple!
 	return weapon_fire_location
 
-func get_fired_weapon_container() -> Node:
-	var root = SceneManager.get_current_level_root()
-	if root == null:
-		root = SceneManager.current_scene
-	if root.has_method("get_container"):
-		return root.get_container()
-	else: return self
+func get_fired_weapon_container() -> Node: return _get_scene_container()
+	#var root = SceneManager.get_current_level_root()
+	#if root == null:
+		#root = SceneManager.current_scene
+	#if root.has_method("get_container"):
+		#return root.get_container()
+	#else: return self
 	
 func set_equipped_weapon(index:int) -> void:
 	if current_equipped_weapon in weapons:

@@ -50,7 +50,7 @@ var enemy_names: Array[String] = [
 	"Plink Panther", "Buster Rhimes", "Crapshot", "Thomas", "Forge Clooney",
 	"Dedre Lode", "Blaster Chief", "KiloNuke Dukem", "Spare Parts", "Luna Tick",
 	"Grateful Lead", "Ratcheting Crank", "Gigadeath", "Blammstein", "Leadfinger",
-	"Nuke Skyfaller", "Trinity", "Liquid Flank", "Tank Rampage", "Montbombery",
+	"Nuke Skylobber", "Trinity", "Liquid Flank", "Tank Rampage", "Montbombery",
 	"HomingTeam", "Lobber Breaker", "Boolint Gloatstring", "Kaboomerang", "Broomhilda",
 	"Boomer Simpson",  "Count Flakula", "Napalma Anderson", "Blammo Baggins",
 	"Mad Muzzle", "Boom Hower", "Recoil Kid", "Flintboom", "Boom Chakalaka", "Crater Tot",

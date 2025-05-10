@@ -95,14 +95,15 @@ position = Vector2(13, 0)
 [node name="Top" type="Marker2D" parent="TankBody"]
 position = Vector2(0, -13)
 
-[node name="DamagedParticles" type="CPUParticles2D" parent="TankBody"]
+[node name="DamagedSmokeParticles" type="CPUParticles2D" parent="TankBody"]
 unique_name_in_owner = true
 z_index = -1
-amount = 10
+emitting = false
 texture = SubResource("GradientTexture2D_x1oaf")
 lifetime = 2.8
 explosiveness = 0.01
 lifetime_randomness = 0.2
+draw_order = 1
 emission_shape = 1
 emission_sphere_radius = 8.0
 direction = Vector2(0, -1)
