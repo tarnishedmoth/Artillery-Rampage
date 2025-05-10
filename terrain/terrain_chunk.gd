@@ -24,6 +24,8 @@ class TerrainTexture:
 
 const surface_delta_y: float = 1.0
 
+var _can_be_updated:bool = true
+
 var falling:bool = false:
 	set(value):
 		if value != falling:
@@ -92,12 +94,27 @@ func _replace_contents_local(new_poly: PackedVector2Array, immediate:bool) -> vo
 	
 	print_poly("_replace_contents_local", new_poly)
 
+	var deferred_updates: Array[Node] = []
+
 	if(immediate):
 		terrainMesh.polygon = new_poly
 	else:
-		terrainMesh.set_deferred("polygon", new_poly)
-	collisionMesh.set_deferred("polygon", new_poly)
-	overlapMesh.set_deferred("polygon", new_poly)
+		deferred_updates.push_back(terrainMesh)
+
+	deferred_updates.push_back(collisionMesh)
+	deferred_updates.push_back(overlapMesh)	
+
+	_set_polygon_deferred(deferred_updates, new_poly)
+
+func _set_polygon_deferred(polygon_nodes: Array[Node], new_poly: PackedVector2Array) -> void:
+	_can_be_updated = false
+
+	var deferred_updater: Callable = func():
+		for node in polygon_nodes:
+			node.polygon = new_poly
+		_can_be_updated = true
+
+	deferred_updater.call_deferred()
 
 class UpdateFlags:
 	const Immediate:int = 1
@@ -144,11 +161,16 @@ func get_terrain_local() -> PackedVector2Array:
 	
 func delete() -> void:
 	print("TerrainChunk(%s) - delete" % [name])
+	_can_be_updated = false
 	queue_free.call_deferred()
 	
 # Based on https://www.youtube.com/watch?v=FiKsyOLacwA
 # poly_scale will determine the size of the explosion that destroys the terrain
 func damage(projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
+	if not _can_be_updated:
+		print_debug("%s: damage - damage already in progress - ignoring new damage event" % name)
+		return
+		
 	owner.damage(self, projectile, contact_point, poly_scale)
 
 func is_surface_point(vertex: Vector2) -> bool:

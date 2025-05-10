@@ -10,6 +10,10 @@
 
 [node name="GameLevel" parent="." instance=ExtResource("1_1c8ff")]
 
+[node name="RoundDirector" parent="GameLevel" index="7"]
+player_goes_first = true
+shuffle_order = false
+
 [node name="Enemy1" parent="GameLevel" instance=ExtResource("2_xlxda")]
 position = Vector2(479, 278)
 
@@ -37,5 +41,7 @@ position = Vector2(934, 407)
 [node name="Player" parent="GameLevel" instance=ExtResource("3_oxojq")]
 position = Vector2(120, 427)
 
+[editable path="GameLevel"]
+[editable path="GameLevel/Walls"]
 [editable path="GameLevel/Enemy1"]
 [editable path="GameLevel/Enemy2"]
