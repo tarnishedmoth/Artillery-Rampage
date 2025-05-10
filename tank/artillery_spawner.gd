@@ -95,7 +95,7 @@ func spawn_all(terrain: Terrain, ai_players: Vector2i = Vector2i(), human_player
 	if !await _calculate_spawn_positions(terrain, total_spawns):
 		push_warning("ArtillerySpawner(%s): Unable to generate requested spawn count=%d; generated=%d" % [name, total_spawns, _used_positions.size()])
 		
-	var spawned_list := _spawn_units(num_human)
+	var spawned_list := spawn_multiple_units(_used_positions, num_human)
 	
 	return spawned_list
 
@@ -258,42 +258,50 @@ func _attach_weapons(attach_to:TankController,weapon_scenes:Array[PackedScene]) 
 			weapons.append(instance)
 	attach_to.attach_weapons(weapons)
 	
-func _spawn_units(num_human: int) -> Array[TankController]:
+func spawn_multiple_units(positions:Array[Vector2], num_human:int, parent = self) -> Array[TankController]:
 	var all_spawned : Array[TankController] = []
 	
-	var ai_count:int = 0
-	
-	for i in range(0, _used_positions.size()):
-		var scene:PackedScene
-		var is_ai:bool = false
-		
+	for i in range(0, positions.size()):
+		var spawned
 		if i < num_human:
-			scene = player_type
+			spawned = spawn_unit(positions[i], false, parent)
 		else:
-			is_ai = true
-			ai_count += 1
-			scene = artillery_ai_types.pick_random()
-		var spawned := _instantiate_controller_scene_at(scene, _used_positions[i])
-		if spawned:
-			# Disable fall damage - important especially for the procedural spawning as right now we generate points on a slant
-			# Must be done before adding to the scene tree
-			spawned.enable_damage_before_first_turn = false
-
-			add_child(spawned)
-			if is_ai:
-				spawned.name = enemy_names[ (ai_count - 1) % enemy_names.size()] # Give AI random names
-				if artillery_ai_starting_weapons:
-					var weapons_to_attach:Array[PackedScene]
-					weapons_to_attach.append(_choose_starting_weapon())
-					_attach_weapons(spawned, weapons_to_attach)
-			# Child nodes are null until added to the scene
-			init_controller_props(spawned)
+			spawned = spawn_unit(positions[i], true, parent)
 			
+		if spawned:
 			all_spawned.push_back(spawned)
 
 	_assign_teams(all_spawned)
-
 	return all_spawned
+
+func spawn_unit(_global_position:Vector2, is_ai:bool = true, parent = self) -> TankController:
+	var scene:PackedScene
+	
+	if not is_ai:
+		scene = player_type
+	else:
+		scene = artillery_ai_types.pick_random()
+	var spawned := _instantiate_controller_scene_at(scene, _global_position)
+	if spawned:
+		# Disable fall damage - important especially for the procedural spawning as right now we generate points on a slant
+		# Must be done before adding to the scene tree
+		spawned.enable_damage_before_first_turn = false
+
+		parent.add_child(spawned)
+		if is_ai:
+			## Give AI random names
+			var display_name = enemy_names.pick_random()
+			enemy_names.erase(display_name)
+			spawned.name = display_name
+			if artillery_ai_starting_weapons:
+				var weapons_to_attach:Array[PackedScene]
+				weapons_to_attach.append(_choose_starting_weapon())
+				_attach_weapons(spawned, weapons_to_attach)
+		# Child nodes are null until added to the scene
+		init_controller_props(spawned)
+		return spawned
+	else:
+		return null
 
 func _assign_teams(spawned: Array[TankController]) -> void:
 	if num_ai_teams <= 0:
