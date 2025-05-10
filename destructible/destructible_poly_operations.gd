@@ -43,6 +43,13 @@ class_name DestructiblePolyOperations extends Node
 @export_category("Shatter")
 @export_range(0, 100, 0.1) var absolute_min_area: float = 50.0
 
+@export_category("Shatter")
+@export_range(0, 100, 1.0) var max_chunk_separation: float = 20.0
+
+@export_category("Shatter")
+@export_range(0, 1, 0.01) var chunk_separation_bounds_radius_fraction: float = 0.5
+
+
 func smooth(poly: PackedVector2Array, bounds: Circle) -> PackedVector2Array:
 	if poly.size() < 3:
 		return poly
@@ -224,6 +231,7 @@ func shatter(poly: PackedVector2Array, min_area: float, max_area: float) -> Arra
 	var points: PackedVector2Array = poly.duplicate()
 	var last_point_count:int = 0
 	var indices: PackedInt32Array = []
+
 	for i in range(max_iterations):
 		last_point_count = points.size()
 		indices = Geometry2D.triangulate_delaunay(points)
@@ -326,10 +334,12 @@ func shatter(poly: PackedVector2Array, min_area: float, max_area: float) -> Arra
 		if not poly_points.is_empty() and TerrainUtils.calculate_polygon_area(poly_points) >= absolute_min_area:
 			poly_points_list.append(poly_points)
 
+	separate_polys(poly_points_list, chunk_separation_bounds_radius_fraction, max_chunk_separation)
+
 	return poly_points_list
 
 # Offset the centroid of the triangle formed by p1, p2, and p3 so that the fracture isn't always predictable
-# Doc calculations in barycentric coordinates for efficiency and to stay within triangle
+# Do calculations in barycentric coordinates for efficiency and to stay within triangle
 func _offset_centroid(p1: Vector2, p2: Vector2, p3: Vector2) -> Vector2:
 	# Centroid in barycentric coordinates
 	var w1:float = 1 / 3.0
@@ -389,3 +399,26 @@ func _offset_centroid(p1: Vector2, p2: Vector2, p3: Vector2) -> Vector2:
 func _points_to_poly(points: PackedVector2Array) -> PackedVector2Array:
 	# Use a convex hull to create polygon from points
 	return Geometry2D.convex_hull(points)
+
+func separate_polys(poly_points_list: Array[PackedVector2Array], max_radius_fraction: float, max_distance: float) -> void:
+	var all_points: PackedVector2Array = []
+	for poly in poly_points_list:
+		all_points.append_array(poly)
+
+	var bounds := Circle.create_from_points(all_points)
+
+	var separation_distance: float = minf(bounds.radius * max_radius_fraction, max_distance)
+
+	# offset polygon by distance from center of the bounds scaled by max_distance
+	for poly in poly_points_list:
+		var centroid: Vector2 = TerrainUtils.polygon_centroid(poly)
+		var offset: Vector2 = centroid - bounds.center
+
+		var offset_length: float = offset.length()
+		var offset_dir: Vector2 = offset / maxf(0.001, offset_length)
+
+		var translation: Vector2 = offset_dir * separation_distance * (offset_length / bounds.radius)
+		
+		# translate all the points in the polygon
+		for i in poly.size():
+			poly[i] += translation
