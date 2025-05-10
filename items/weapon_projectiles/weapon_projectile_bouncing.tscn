@@ -25,9 +25,9 @@ max_contacts_reported = 1
 script = ExtResource("1_6h8cr")
 should_explode_on_impact = false
 explosion_to_spawn = ExtResource("2_het2b")
-min_falloff_distance = 8.0
-max_falloff_distance = 75.0
-max_damage = 50.0
+min_falloff_distance = 25.0
+max_falloff_distance = 80.0
+max_damage = 60.0
 destructible_scale_multiplier = Vector2(6, 6)
 
 [node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="."]

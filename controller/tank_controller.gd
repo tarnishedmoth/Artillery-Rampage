@@ -17,7 +17,7 @@ var pending_state: PlayerState
 @export var team:int = -1
 
 var popups:Array
-
+var signals_connected:bool = false
 var _active_turn:bool = false
 
 func _ready() -> void:

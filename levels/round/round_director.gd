@@ -85,7 +85,18 @@ func _ready():
 	
 func add_controller(tank_controller: TankController) -> void:
 	tank_controllers.append(tank_controller)
+	
+	for controller:TankController in tank_controllers:
+		connect_controller(controller)
+	
 	GameEvents.player_added.emit(tank_controller)
+	
+func connect_controller(controller: TankController) -> void:
+	if not controller.signals_connected:
+		controller.tank.tank_killed.connect(_on_tank_killed)
+		controller.intent_to_act.connect(_on_player_intent_to_act)
+		controller.tank.tank_took_damage.connect(_on_tank_damage.unbind(4))
+		controller.signals_connected = true
 	
 func _on_player_added(controller:TankController) -> void:
 	# Check if we need to start/cycle turns.
@@ -112,9 +123,7 @@ func begin_round() -> bool:
 	GameEvents.turn_ended.connect(_on_turn_ended)
 	
 	for controller: TankController in tank_controllers:
-		controller.tank.tank_killed.connect(_on_tank_killed)
-		controller.intent_to_act.connect(_on_player_intent_to_act)
-		controller.tank.tank_took_damage.connect(_on_tank_damage.unbind(4))
+		connect_controller(controller)
 		
 		controller.begin_round()
 		

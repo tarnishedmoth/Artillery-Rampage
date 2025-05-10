@@ -15,7 +15,7 @@ script = ExtResource("1_2tiaa")
 color = Color(0.269993, 0.362554, 0.0951998, 1)
 explosion_to_spawn = ExtResource("2_a22a1")
 damage_falloff_type = 2
-min_falloff_distance = 60.0
+min_falloff_distance = 50.0
 max_falloff_distance = 160.0
 min_damage = 15.0
 max_damage = 125.0
@@ -35,13 +35,6 @@ scale = Vector2(0.183745, 0.183745)
 texture = ExtResource("2_o52mh")
 
 [node name="PhysicsShape" type="CollisionShape2D" parent="."]
-shape = ExtResource("3_41yey")
-
-[node name="Overlap" type="Area2D" parent="."]
-collision_layer = 2
-collision_mask = 31
-
-[node name="OverlapCollisionShape" type="CollisionShape2D" parent="Overlap"]
 shape = ExtResource("3_41yey")
 
 [node name="Destructible" type="CollisionPolygon2D" parent="."]

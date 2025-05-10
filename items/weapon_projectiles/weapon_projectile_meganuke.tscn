@@ -40,13 +40,6 @@ texture = ExtResource("3_6ghyx")
 [node name="PhysicsShape" type="CollisionShape2D" parent="."]
 shape = ExtResource("4_u3320")
 
-[node name="Overlap" type="Area2D" parent="."]
-collision_layer = 2
-collision_mask = 31
-
-[node name="OverlapCollisionShape" type="CollisionShape2D" parent="Overlap"]
-shape = ExtResource("4_u3320")
-
 [node name="Destructible" type="CollisionPolygon2D" parent="."]
 scale = Vector2(1.07263, 1.07263)
 polygon = PackedVector2Array(-5.59373, 1.86458, -5.59373, 0, -4.66144, -2.79687, -2.79687, -4.66144, 0, -5.59373, 2.79687, -4.66144, 4.66144, -2.79687, 5.59373, 0, 4.66144, 2.79687, 2.79687, 4.66144, 0, 5.59373, -2, 5, -4, 4)

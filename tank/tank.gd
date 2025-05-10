@@ -95,6 +95,7 @@ var debuff_emp_charge:float = 0.0
 #@onready var controller:TankController = get_parent()
 @onready var controller = get_parent()
 @onready var damaged_smoke_particles: CPUParticles2D = %DamagedSmokeParticles
+var windspeed:float = 0.0
 
 
 func _on_update_color():
@@ -114,6 +115,7 @@ func _ready() -> void:
 	scan_available_weapons()
 	
 	health = max_health
+	
 	damaged_smoke_particles.emitting = false
 
 	# Setters not called in _ready so need to call this manually
@@ -294,8 +296,13 @@ func _update_visuals_after_damage():
 	if (health/max_health) <= threshold: # Percentage
 		if not damaged_smoke_particles.emitting:
 			damaged_smoke_particles.emitting = true
-		damaged_smoke_particles.amount = lerp(int(5), int(14), 1.0-(health/(max_health*threshold)))
+		#damaged_smoke_particles.amount = lerp(int(5), int(14), 1.0-(health/(max_health*threshold)))
 		damaged_smoke_particles.lifetime = lerpf(1.0, 5.0, 1.0-(health/(max_health*threshold)))
+		var game_level = SceneManager.get_current_level_root()
+		if game_level != null:
+			windspeed = game_level.wind.wind.x * 0.5
+		damaged_smoke_particles.gravity.x = windspeed
+		print_debug(windspeed, " is windspeed")
 	
 	var health_pct:float = health / max_health
 	var dark_pct:float = 1 - health_pct
