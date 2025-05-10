@@ -16,6 +16,8 @@ var remainder:int # The number of scenes left to spawn.
 
 #region Public
 func run() -> void:
+	SceneManager.is_precompiler_running = true
+	
 	# Probably need to be on screen to get the benefit
 	if not visible: show()
 	await get_tree().process_frame
@@ -24,7 +26,7 @@ func run() -> void:
 	await precompile_all_configured_scenes()
 	
 	# TODO Reset the game state in case anything was altered
-	
+	SceneManager.is_precompiler_running = false
 	completed.emit()
 
 ## The main method
@@ -104,6 +106,8 @@ func spawn_and_fire(container:Node, scene: PackedScene) -> void:
 	elif instance is MegaNukeExplosion:
 		instance.get_game_time_seconds = func(): return 0.0 # Missing shader function
 		container.add_child(instance)
+	elif instance is ProceduralTerrainModifier:
+		pass # Not needed
 	else:
 		# All unhandled types
 		container.add_child(instance)

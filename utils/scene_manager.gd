@@ -2,6 +2,7 @@ extends Node
 
 @export var levels_always_selectable: StoryLevelsResource ## These levels are immediately & always available to select.
 var is_switching_scene: bool
+var is_precompiler_running:bool = false
 
 enum PlayMode {
 	DIRECT, # Happens with playing level directly
@@ -70,7 +71,9 @@ func get_current_level_root() -> GameLevel:
 		if _current_level_root_node.is_inside_tree():
 			return _current_level_root_node
 	else:
-		push_warning("Trying to access root outside of game level.")
+		# TODO precompiler bypass
+		if not is_precompiler_running:
+			push_warning("Trying to access root outside of game level.")
 		_current_level_root_node = null
 	return null
 

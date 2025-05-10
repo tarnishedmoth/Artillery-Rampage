@@ -68,10 +68,10 @@ var enemy_names: Array[String] = [
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	enemy_names.shuffle()
-	_populate_specified_positions()
+	_check_for_specified_positions()
 
 # Vector2i has [min,max] for each type
-func spawn_all(terrain: Terrain, ai_players: Vector2i = Vector2i(), human_players: Vector2i = Vector2i()) -> Array[TankController]:
+func populate_random_on_terrain(terrain: Terrain, ai_players: Vector2i = Vector2i(), human_players: Vector2i = Vector2i()) -> Array[TankController]:
 	_used_positions.clear()
 	_all_positions.clear()
 	_placed_positions.clear()
@@ -99,7 +99,7 @@ func spawn_all(terrain: Terrain, ai_players: Vector2i = Vector2i(), human_player
 	
 	return spawned_list
 
-func _populate_specified_positions() -> void:
+func _check_for_specified_positions() -> void:
 	for child in get_children():
 		if child is Marker2D:
 			_specified_positions.push_back(child)

@@ -35,13 +35,13 @@ func begin_round():
 	# For now just loading in the instance from the scene
 	# Discover any placed child controller nodes
 	_add_manually_placed_units()
-	await _add_spawned_units()
+	await _create_procedural_units()
 
 	GameEvents.all_players_added.emit(self)
 				
 	round_director.begin_round()
 	
-func setup_new_unit(unit:TankController) -> void:
+func activate_tank_controller(unit:TankController) -> void:
 	round_director.add_controller(unit)
 	connect_events(unit)
 		
@@ -74,11 +74,11 @@ func _on_round_ended() -> void:
 func _add_manually_placed_units():
 	for child in get_children():
 		if child is TankController:
-			setup_new_unit(child)
+			activate_tank_controller(child)
 
-func _add_spawned_units():
-	for controller in await spawner.spawn_all(terrain):
-		setup_new_unit(controller)
+func _create_procedural_units():
+	for controller in await spawner.populate_random_on_terrain(terrain):
+		activate_tank_controller(controller)
 		
 func connect_events(controller: TankController) -> void:
 	if controller is Player:
