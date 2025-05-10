@@ -35,9 +35,20 @@ var _placed_positions: Array[Vector2] = []
 var _spawn_test_size: float = default_spawn_test_size
 
 var enemy_names: Array[String] = [
-	"Billy", "Rob", "Don", "Jerry", "Peter", "Amanda", "Alex", "Alexa", 
-	"Betty", "Suzy", "Ann", "Andy", "Mike", "Becky", "Molly", "Erica", "Eric",
-	"Harry", "Ian", "Fred", "Phil", "Cindy", "Daisy", "Tanky", "Arty"
+	"Blasty", "Leadhead", "Loose Cannon", "Bombs-a-lot", "Stand Still", "The Arcster",
+	"Deadeye", "Bingo", "Kablewy", "Inferno", "Silo", "Big Guns", "Steady Aim",
+	"Lobster", "Scrapheap", "General Malfunction", "Big Clank", "Shellraiser",
+	"Armorgeddon", "Rico Shay", "Tankerbell", "No Roll Model", "Tank Sinatra",
+	"Barrel Streep", "Tanky Winky", "Tankenstein", "Solid Flank", "Jack & Flakster",
+	"Sly Boomer", "Twisted Metal", "Splinter Shell", "Howit Sir", "Longlob",
+	"Arc Nemesis", "The Lobfather", "The Soprammos", "Aims Bond", "Better Call Ball",
+	"Stranger Plinks", "The Lob-it", "Ms. L. Guidance", "Indy Wreck", "Bunker Buster Keaton",
+	"Splash Damage", "General Radius", "Volley Parton", "Aiming Byhouse", "Betty Boom",
+	"Sabrina Sharpshooter", "Julie Aim Roberts", "Mortaricia", "Billie Dieless",
+	"Tremor Maker", "Havoc", "Ruiner", "Scorcher", "Striker", "Powderkeg", "Boomstick",
+	"Blasteroid", "Brave Little Turret", "Missfire", "Shockwave", "Old Boomer",
+	"Plink Panther", "Buster Rhimes", "Crapshot", "Thomas", "Forge Clooney",
+	"Dedre Lode", "Blaster Chief", "KiloNuke Dukem", "Spare Parts", "Luna Tick",
 ]
 
 # Called when the node enters the scene tree for the first time.

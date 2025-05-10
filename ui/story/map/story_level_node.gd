@@ -18,5 +18,5 @@ func set_label(set_text: StringName) -> void:
 func set_icon_texture(set_texture: Texture2D) -> void:
 	icon.texture = set_texture
 
-func set_icon_material(set_material: Material) -> void:
-	icon.material = set_material
+func set_icon_material(_material: Material) -> void:
+	icon.material = _material

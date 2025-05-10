@@ -1,3 +1,111 @@
-[gd_scene format=3 uid="uid://bpq3kfwju28e8"]
+[gd_scene load_steps=23 format=3 uid="uid://bpq3kfwju28e8"]
+
+[ext_resource type="Script" uid="uid://bfl71q3d57n8s" path="res://levels/game_level.gd" id="1_8ylxn"]
+[ext_resource type="Script" uid="uid://ehj364xag1df" path="res://utils/game_timer.gd" id="2_iwr3d"]
+[ext_resource type="PackedScene" uid="uid://bg64wc8fibctr" path="res://ui/hud.tscn" id="3_ja3hk"]
+[ext_resource type="PackedScene" uid="uid://btq3rsvojx8jg" path="res://ui/pause_menu.tscn" id="4_x3i4c"]
+[ext_resource type="PackedScene" uid="uid://dgmcs2um4230a" path="res://ui/ui_game_sfx.tscn" id="5_jppc8"]
+[ext_resource type="Shader" uid="uid://bpm1kus70ig4j" path="res://background_items/background.gdshader" id="6_xu7nj"]
+[ext_resource type="Texture2D" uid="uid://dp0yqs3ec4c18" path="res://terrain/sky-tile.png" id="7_u84lg"]
+[ext_resource type="Script" uid="uid://d1h6tovc4c4ol" path="res://background_items/background.gd" id="8_fbuyd"]
+[ext_resource type="PackedScene" uid="uid://l1x5kvupj7so" path="res://terrain/terrain.tscn" id="9_b5rak"]
+[ext_resource type="PackedScene" uid="uid://b7vpl03hcrs3e" path="res://walls/walls.tscn" id="10_hw8a8"]
+[ext_resource type="PackedScene" uid="uid://bogp8cydgto88" path="res://personnel/pickup_copter.tscn" id="11_5dbbs"]
+[ext_resource type="PackedScene" uid="uid://boa5a2v0w2ag0" path="res://terrain/floor.tscn" id="12_vl2c1"]
+[ext_resource type="PackedScene" uid="uid://no0hhhxjq8ql" path="res://effects/wind.tscn" id="13_2i235"]
+[ext_resource type="Script" uid="uid://c34my4i57wvu7" path="res://levels/round/round_director.gd" id="14_h1k02"]
+[ext_resource type="PackedScene" uid="uid://d3q2cfp8mqu2x" path="res://tank/artillery_spawner.tscn" id="15_k8tcd"]
+[ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="16_4t21x"]
+[ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="17_put14"]
+[ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="18_ba3th"]
+[ext_resource type="PackedScene" uid="uid://bamvmc2k56pyk" path="res://effects/post_processing/post_processing.tscn" id="19_pk5c6"]
+[ext_resource type="PackedScene" uid="uid://dlh1i2cvw3mim" path="res://voiceovers/announcer.tscn" id="20_8saf5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_chthv"]
+shader = ExtResource("6_xu7nj")
+shader_parameter/speed = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_60ghs"]
+size = Vector2(1248, 688)
 
 [node name="LevelSpecialFactory" type="Node2D"]
+
+[node name="GameLevel" type="Node2D" parent="."]
+script = ExtResource("1_8ylxn")
+level_name = &"Factory"
+
+[node name="GameTimer" type="Node" parent="GameLevel"]
+unique_name_in_owner = true
+process_mode = 1
+script = ExtResource("2_iwr3d")
+
+[node name="UI" type="CanvasLayer" parent="GameLevel"]
+unique_name_in_owner = true
+layer = 100
+
+[node name="HUD" parent="GameLevel/UI" instance=ExtResource("3_ja3hk")]
+unique_name_in_owner = true
+
+[node name="PauseMenu" parent="GameLevel/UI" instance=ExtResource("4_x3i4c")]
+visible = false
+
+[node name="UI_Game_SFX" parent="GameLevel/UI" instance=ExtResource("5_jppc8")]
+
+[node name="Background" type="TextureRect" parent="GameLevel"]
+z_index = -100
+material = SubResource("ShaderMaterial_chthv")
+offset_right = 2048.0
+offset_bottom = 2048.0
+texture = ExtResource("7_u84lg")
+expand_mode = 1
+stretch_mode = 1
+script = ExtResource("8_fbuyd")
+wind_scoll_scale = 2.0
+min_wind_scroll_speed = 2.0
+
+[node name="Terrain" parent="GameLevel" instance=ExtResource("9_b5rak")]
+unique_name_in_owner = true
+z_index = -10
+position = Vector2(118, 444)
+scale = Vector2(1.28, 0.68)
+
+[node name="Walls" parent="GameLevel" instance=ExtResource("10_hw8a8")]
+unique_name_in_owner = true
+wall_randomization_weights = Dictionary[int, float]({
+0: 0.7
+})
+
+[node name="CollisionShape2D" parent="GameLevel/Walls/PlayableArea" index="0"]
+position = Vector2(636, 358)
+shape = SubResource("RectangleShape2D_60ghs")
+
+[node name="LeftBlockingWall" parent="GameLevel/Walls/BlockingAreas" index="0"]
+position = Vector2(-11, -2)
+
+[node name="PickupCopter" parent="GameLevel/Walls" instance=ExtResource("11_5dbbs")]
+position = Vector2(640, -192)
+
+[node name="Floor" parent="GameLevel" instance=ExtResource("12_vl2c1")]
+unique_name_in_owner = true
+position = Vector2(-2, 731)
+
+[node name="Wind" parent="GameLevel" instance=ExtResource("13_2i235")]
+unique_name_in_owner = true
+wind_scale = 200.0
+
+[node name="RoundDirector" type="Node" parent="GameLevel"]
+unique_name_in_owner = true
+script = ExtResource("14_h1k02")
+player_goes_first = true
+shuffle_order = false
+
+[node name="ArtillerySpawner" parent="GameLevel" instance=ExtResource("15_k8tcd")]
+unique_name_in_owner = true
+artillery_ai_starting_weapons = Array[PackedScene]([ExtResource("16_4t21x"), ExtResource("17_put14"), ExtResource("18_ba3th")])
+
+[node name="PostProcessing" parent="GameLevel" instance=ExtResource("19_pk5c6")]
+unique_name_in_owner = true
+
+[node name="Announcer" parent="GameLevel" instance=ExtResource("20_8saf5")]
+
+[editable path="GameLevel/Walls"]
