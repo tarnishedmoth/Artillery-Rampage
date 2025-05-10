@@ -108,18 +108,19 @@ func _create_graph() -> void:
 		return
 		
 	var nodes:Array[StoryLevelNode] =_generate_or_load_nodes()
-	
+	var active_node:StoryLevelNode = nodes[_next_level_index]
+
 	#region Populate Edges
 	for i in range(1, nodes.size()):
 		var prev_node:StoryLevelNode = nodes[i - 1]
 		var next_node:StoryLevelNode = nodes[i]
 		
 		if prev_node and next_node:
-			graph_container.add_child(_edge_from_to(prev_node, next_node))
+			var animate:bool = next_node == active_node
+			graph_container.add_child(_edge_from_to(prev_node, next_node, animate))
 	#endregion	
 
 	var next_level:StoryLevel = _story_levels_resource.levels[_next_level_index]
-	var active_node:StoryLevelNode = nodes[_next_level_index]
 
 	_create_scrolling_narrative(next_level, active_node)	
 
@@ -257,12 +258,15 @@ func _new_story_level_node(prototype: PackedScene) -> StoryLevelNode:
 	graph_container.add_child(node)
 	return node
 	
-func _edge_from_to(from: StoryLevelNode, to: StoryLevelNode) -> StoryLevelEdge:
+func _edge_from_to(from: StoryLevelNode, to: StoryLevelNode, animate:bool) -> StoryLevelEdge:
 	var edge:StoryLevelEdge = edge_node_prototype.instantiate() as StoryLevelEdge
 	
 	edge.position = Vector2.ZERO
 	edge.from = from.position + from.right_edge.position
 	edge.to = to.position + to.left_edge.position
+
+	if not animate:
+		edge.num_arrow_animations = 0
 	
 	print_debug("%s: Add edge(%s->%s) - [%s, %s]" % [name, from.label.text, to.label.text, edge.from, edge.to])
 	
