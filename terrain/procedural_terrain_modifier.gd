@@ -131,7 +131,7 @@ func _modify_chunk(chunk: TerrainChunk, viewport_bounds: Rect2, _terrain_bounds:
 			
 			# Set y to be same height as previous by default unless empty
 			if not new_terrain_vertices.is_empty():
-				last_point.y = new_terrain_vertices[new_terrain_vertices.size() - 1].y
+				last_point.y = new_terrain_vertices[-1].y
 			new_terrain_vertices.push_back(last_point)
 						
 			var direction:float = signf(next_point.x - last_point.x)
@@ -157,7 +157,7 @@ func _modify_chunk(chunk: TerrainChunk, viewport_bounds: Rect2, _terrain_bounds:
 				
 				# Smooth out first point, which was last point added before the new vertices
 				if j == 0:
-					new_terrain_vertices[new_terrain_vertices.size() - 1].y = new_point.y
+					new_terrain_vertices[-1].y = new_point.y
 				
 				new_terrain_vertices.push_back(new_point)
 				
@@ -196,7 +196,7 @@ func _seed_terrain(terrain_vertices : PackedVector2Array, viewport_bounds: Rect2
 			x += side_stride
 	
 	populate_side.call(viewport_bounds.position.x,  top_y, 1.0)
-	populate_side.call(terrain_vertices[terrain_vertices.size() - 1].x, bottom_y, -1.0)
+	populate_side.call(terrain_vertices[-1].x, bottom_y, -1.0)
 	
 # Scale to [0,1] as noise is [-1,1]
 func _sample_height_frac(x: float) -> float:
