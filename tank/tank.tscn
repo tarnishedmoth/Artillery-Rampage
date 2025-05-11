@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dvr6bm2hlj5h4"]
+[gd_scene load_steps=18 format=3 uid="uid://dvr6bm2hlj5h4"]
 
 [ext_resource type="Script" uid="uid://capm81lvak2c3" path="res://tank/tank.gd" id="1_0iy80"]
 [ext_resource type="Script" uid="uid://iirywjtssovs" path="res://tank/tank_body.gd" id="2_o5qn2"]
@@ -9,6 +9,7 @@
 [ext_resource type="Material" uid="uid://b80y1iuls3wmg" path="res://tank/tank_damage.tres" id="5_16yu1"]
 [ext_resource type="PackedScene" uid="uid://8ypb526keg0k" path="res://weapons/weapon_trajectory_previewer.tscn" id="7_hqpr6"]
 [ext_resource type="Script" uid="uid://cu7a4bvlikg2j" path="res://tank/fall_damage_causer.gd" id="8_5poe7"]
+[ext_resource type="PackedScene" uid="uid://c2yvcwfpdhnvx" path="res://weapons/weapon_beam_trajectory_previewer.tscn" id="9_ucdxg"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1pofo"]
 friction = 100.0
@@ -37,10 +38,11 @@ point_count = 3
 [sub_resource type="Gradient" id="Gradient_61qm2"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
-[node name="Tank" type="Node2D" node_paths=PackedStringArray("shooting_trajectory_indicator") groups=["Damageable", "DamageableRoot", "Unit"]]
+[node name="Tank" type="Node2D" node_paths=PackedStringArray("shooting_trajectory_indicator", "beam_trajectory_indicator") groups=["Damageable", "DamageableRoot", "Unit"]]
 script = ExtResource("1_0iy80")
 drop_on_death = ExtResource("2_qlwk0")
 shooting_trajectory_indicator = NodePath("WeaponTrajectoryPreviewer")
+beam_trajectory_indicator = NodePath("WeaponBeamTrajectoryPreviewer")
 max_power_v_health = ExtResource("3_6i2oc")
 aim_deviation_v_health = ExtResource("4_cvubm")
 damage_material = ExtResource("5_16yu1")
@@ -127,6 +129,9 @@ color_ramp = SubResource("Gradient_61qm2")
 [node name="WeaponTrajectoryPreviewer" parent="." instance=ExtResource("7_hqpr6")]
 accuracy_angle_spread = 0.0174533
 use_fire_rate = false
+emit_action_signals = false
+
+[node name="WeaponBeamTrajectoryPreviewer" parent="." instance=ExtResource("9_ucdxg")]
 emit_action_signals = false
 
 [node name="FallDamageCauser" type="Node" parent="."]

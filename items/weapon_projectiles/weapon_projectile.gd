@@ -101,6 +101,9 @@ func _ready() -> void:
 	
 func modulate_enabled() -> bool:
 	return true
+
+func is_affected_by_wind() -> bool:
+	return true
 	
 func set_sources(tank:Tank,weapon:Weapon) -> void:
 	owner_tank = tank

@@ -11,7 +11,10 @@ signal tank_started_falling(tank: Tank)
 signal tank_stopped_falling(tank: Tank)
 
 @export var drop_on_death:PackedScene ## Scene is spawned at tank's global position when it dies.
+## Trajectory Indicator for for projectile-based weapons
 @export var shooting_trajectory_indicator:Weapon
+## Trajectory Indicator for for based-based weapons
+@export var beam_trajectory_indicator:Weapon
 
 @export var min_angle:float = -90.0
 @export var max_angle:float = 90.0
@@ -494,6 +497,8 @@ func scan_available_weapons() -> void:
 	
 	if shooting_trajectory_indicator:
 		shooting_trajectory_indicator.connect_to_tank(self)
+	if beam_trajectory_indicator:
+		beam_trajectory_indicator.connect_to_tank(self)
 	
 	var parent = get_parent()
 	if parent is TankController:
@@ -522,7 +527,10 @@ func push_weapon_update_to_hud(weapon: Weapon = get_equipped_weapon()) -> void:
 	
 ## This method is not used by this class, instead it's used by [Player].
 func visualize_trajectory() -> void:
-	if shooting_trajectory_indicator:
+	# Maybe this needs to be refactored too
+	if beam_trajectory_indicator and current_equipped_weapon.name == "WeaponLaser": 
+		beam_trajectory_indicator.shoot(power)
+	elif shooting_trajectory_indicator:
 		# TODO account for variable mass in WeaponProjectile, and power multiplier in Weapon
 		# The projectile "weapon_projectile_previewer.tscn" has a mass of 1kg, which is what
 		# we've used on the default weapon Lead Ball since the start. Some projectiles

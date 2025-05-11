@@ -56,5 +56,5 @@ func _on_projectile_destroyed(projectile: WeaponProjectile) -> void:
 	
 func _apply_wind_to_active_projectiles(delta: float) -> void:
 	for projectile in _active_projectile_set:
-		if is_instance_valid(projectile) and not projectile is WeaponBeam:
+		if is_instance_valid(projectile) and projectile.is_affected_by_wind():
 			projectile.apply_central_force(force * delta)

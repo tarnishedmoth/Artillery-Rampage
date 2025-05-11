@@ -5,6 +5,9 @@ var speed = 8
 func modulate_enabled() -> bool:
 	return false
 
+func is_affected_by_wind() -> bool:
+	return false
+
 func _physics_process(_delta: float) -> void:
 	super._physics_process(_delta)
 	$PhysicsShape.position.x += speed

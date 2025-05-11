@@ -17,13 +17,13 @@ linear_damp = 2.0
 script = ExtResource("1_nrlx4")
 color = Color(1, 0.79431, 0.315851, 1)
 max_lifetime = 5.0
+should_explode_on_impact = false
 damage_falloff_type = 0
 min_falloff_distance = 0.0
 max_falloff_distance = 100.0
 min_damage = 0.0
 max_damage = 0.0
 destructible_scale_multiplier = Vector2(0, 0)
-should_explode_on_impact = false
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = SubResource("PlaceholderTexture2D_0eddw")

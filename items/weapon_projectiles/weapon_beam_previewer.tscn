@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=3 uid="uid://dpt2imtnlyy03"]
+
+[ext_resource type="Script" uid="uid://br34432vn12nw" path="res://items/weapon_projectiles/weapon_beam_previewer.gd" id="1_qnhm3"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_jg7vf"]
+size = Vector2(9, 9)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cg7s6"]
+radius = 4.0
+
+[node name="WeaponBeamPreviewer" type="RigidBody2D"]
+collision_layer = 0
+collision_mask = 0
+gravity_scale = 0.0
+script = ExtResource("1_qnhm3")
+color = Color(0.345098, 1, 0.827451, 1)
+max_lifetime = 1.0
+should_explode_on_impact = false
+damage_falloff_type = 0
+min_falloff_distance = 0.0
+max_falloff_distance = 100.0
+min_damage = 0.0
+max_damage = 0.0
+destructible_scale_multiplier = Vector2(0, 0)
+metadata/_custom_type_script = "uid://br34432vn12nw"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("PlaceholderTexture2D_jg7vf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_cg7s6")
+
+[node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="."]
+z_index = 20
+scale = Vector2(0.183745, 0.183745)
+amount = 100
+lifetime = 5.0
+gravity = Vector2(0, 0)
+scale_amount_min = 4.0
+scale_amount_max = 4.0
+color = Color(1, 1, 1, 0.501961)
