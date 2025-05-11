@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dkx7i7521cj8d"]
+
+[ext_resource type="Script" uid="uid://bv5dlwrubdns2" path="res://tank/aim_damage_wobble.gd" id="1_tgl35"]
+
+[node name="AimDamageWobble" type="Node"]
+process_mode = 1
+script = ExtResource("1_tgl35")
+
+[node name="CooldownTimer" type="Timer" parent="."]
+wait_time = 0.1
+ignore_time_scale = true

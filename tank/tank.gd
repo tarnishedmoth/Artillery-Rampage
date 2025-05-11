@@ -224,6 +224,8 @@ func _update_attributes():
 		var previous_deviation:float = angle_deviation
 		angle_deviation = angle_error_sign * aim_deviation_v_health.sample(health_delta)
 		get_weapon_fire_locations().rotation_degrees += angle_deviation - previous_deviation
+	# TODO: elif the aim_damage_wobble node is in the hierarchy, disable changing the max power at all with damage and just set to weapon_max_power_range.y (1000)
+	# After these systems stabilize can remove the temporary experiment feature flags
 	else:
 		max_power = lerpf(weapon_max_power_range.x, weapon_max_power_range.y, health_delta)
 	

@@ -94,6 +94,9 @@ class AIWaitingState extends AIActionState:
 	func _next_state() -> AIActionState: return AIAimingState.new(parent)
 
 # Aiming at target
+# TODO: While in the aiming state need to turn off the wobble behavior or maybe it will work itself out
+# if have a cooldown on after aim_delta or aim_at called to not fight with it for a duration and the canceling stacks
+# and keeps resetting the timer to start the wobbling effect
 class AIAimingState extends AIActionState:
 	
 	var rads_sec: float
@@ -182,6 +185,12 @@ class AISelectWeaponState extends AIActionState:
 	func _next_state() -> AIActionState: return AIShootingState.new(parent)
 
 # Delay time after ready to shoot to actually shooting
+# TODO: tankActionResult has the desired aim angle. If the turret is wobbling need to try and time when to shoot with appropriate random error
+# Probably need to do nothing for min_ai_shoot_delay time and then try to time up to max_ai_shoot_delay_time
+# One way to hack this is to override _do_execute. Initially set the total time to the max_ai_shoot_delay time to force shoot by then
+# Then in _do_execute if detect right time to shoot after ai_shoot_delay_time elapses, then set total_time = elapsed_time which will cause exit to fire and
+# shooting to occur
+# All of this only occurs if the wobbling behavior is active so would need to search for that node type in the tree
 class AIShootingState extends AIActionState:
 	func _init(in_parent: AITank):
 		super(in_parent)
