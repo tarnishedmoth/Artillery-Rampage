@@ -536,7 +536,9 @@ func visualize_trajectory() -> void:
 		shooting_trajectory_indicator.power_launch_speed_mult = current_equipped_weapon.power_launch_speed_mult
 		var projectile_data = current_equipped_weapon.get_projectile_instance()
 		if "mass" in projectile_data:
-			shooting_trajectory_indicator.enforce_projectile_mass(projectile_data.mass)
+			shooting_trajectory_indicator.enforce_projectile_property("mass", projectile_data.mass)
+		if "is_affected_by_wind" in projectile_data:
+			shooting_trajectory_indicator.enforce_projectile_property("is_affected_by_wind", projectile_data.is_affected_by_wind)
 			
 		shooting_trajectory_indicator.shoot(power)
 		
