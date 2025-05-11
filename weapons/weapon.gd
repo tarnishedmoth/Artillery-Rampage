@@ -199,6 +199,9 @@ var _awaiting_lifespan_completion: int ## Internal: Counter for [signal weapon_a
 var mode:int = 0 ## Subclasses and components can make use of this counter.
 var modes_total:int = 0 ## Subclasses and components can make use of this counter.
 
+var _enforced_projectile_mass = null
+var _cached_projectile_instance
+
 @onready var _starting_ammo:int = current_ammo ## Internal: Cache of [member current_ammo] on instantiation.
 @onready var _starting_magazines:int = magazines ## Internal: Cache of [member magazines] on instantiation.
 
@@ -454,6 +457,23 @@ func next_mode() -> void:
 	if mode >= modes_total:
 		mode = 0
 	mode_change.emit(mode)
+	
+## Pass a float as a parameter to override the [member WeaponProjectile.mass] of each spawned projectile at time of spawn.
+## Pass anything else to remand this behavior to [WeaponProjectile].
+func enforce_projectile_mass(mass) -> void:
+	if mass is float:
+		_enforced_projectile_mass = clampf(mass, 0.001, 9999.9)
+	else:
+		_enforced_projectile_mass = null
+
+func get_projectile_instance() -> Object:
+	if not _cached_projectile_instance or _cached_projectile_instance == null:
+		if scene_to_spawn and scene_to_spawn.can_instantiate():
+			_cached_projectile_instance = scene_to_spawn.instantiate()
+		else:
+			push_error("Can't instantiate scene_to_spawn.")
+			_cached_projectile_instance = null
+	return _cached_projectile_instance
 
 ## Emits death signals if appropriate and calls [method queue_free].
 func destroy() -> void:
@@ -514,11 +534,12 @@ func _shoot(power:float = fire_velocity) -> void:
 	
 ## Instances the [member scene_to_spawn], configures critical properties and signals for [WeaponProjectile],
 ## childs it to the [member GameLevel.container_for_spawnables] or [member SceneManager.current_scene],
-## then applies transforms and velocity, making use of [member accuracy_angle_spread].
+## then applies transforms and velocity, making use of [member accuracy_angle_spread]. If there is a
+## [member _enforced_projectile_mass], it is applied to the [member WeaponProjectile.mass]. See [method enforce_projectile_mass].
 func _spawn_projectile(power: float = fire_velocity) -> void:
 	var barrel = barrels[current_barrel]
 	if scene_to_spawn and scene_to_spawn.can_instantiate():
-		var new_shot = scene_to_spawn.instantiate() as RigidBody2D
+		var new_shot = scene_to_spawn.instantiate()
 		
 		var container = SceneManager.get_current_level_root()
 		if container == null:
@@ -528,6 +549,8 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 		
 		if new_shot is WeaponProjectile:
 			new_shot.set_sources(parent_tank,self)
+			if _enforced_projectile_mass != null:
+				new_shot.mass = _enforced_projectile_mass as float
 			new_shot.apply_all_mods(projectile_mods)
 			_add_projectile_awaiting(new_shot) # Uses signals in class
 		

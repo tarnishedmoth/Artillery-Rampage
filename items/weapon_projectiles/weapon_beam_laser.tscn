@@ -21,6 +21,7 @@ contact_monitor = true
 max_contacts_reported = 3
 script = ExtResource("1_gil0t")
 max_lifetime = 5.0
+is_affected_by_wind = false
 metadata/_custom_type_script = "uid://luaehj85b40i"
 
 [node name="BeamSprite" type="Sprite2D" parent="."]

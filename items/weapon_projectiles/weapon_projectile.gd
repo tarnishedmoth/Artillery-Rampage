@@ -26,7 +26,7 @@ signal completed_lifespan ## Tracked by Weapon class
 ## When [member kill_after_turns_elapsed] is used, this time emits [signal completed_lifespan].
 @export var max_lifetime: float = 10.0
 @export_range(0,99) var kill_after_turns_elapsed:int = 0 ## If >0, destroys after turns passed.
-
+@export var is_affected_by_wind:bool = true ## Whether or not [Wind] tracks and applies forces to this object.
 ## Indicate whether this projectile should destroy itself after an interaction.
 ## See [method disarm] and [method arm] to change the state at runtime.
 @export var should_explode_on_impact:bool = true
@@ -100,9 +100,6 @@ func _ready() -> void:
 	GameEvents.projectile_fired.emit(self)
 	
 func modulate_enabled() -> bool:
-	return true
-
-func is_affected_by_wind() -> bool:
 	return true
 	
 func set_sources(tank:Tank,weapon:Weapon) -> void:

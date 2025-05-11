@@ -531,14 +531,13 @@ func visualize_trajectory() -> void:
 	if beam_trajectory_indicator and current_equipped_weapon.name == "WeaponLaser": 
 		beam_trajectory_indicator.shoot(power)
 	elif shooting_trajectory_indicator:
-		# TODO account for variable mass in WeaponProjectile, and power multiplier in Weapon
-		# The projectile "weapon_projectile_previewer.tscn" has a mass of 1kg, which is what
-		# we've used on the default weapon Lead Ball since the start. Some projectiles
-		# have different masses, which only really has an effect with the wind calculations.
-		# power_launch_speed_mult in Weapon is a direct multiplier on initial velocity
-		# and needs to be accounted for an accurate prediction.
-		#     I think I'm better off rigging Weapon to show its trajectory innately
-		# instead of trying to mirror another object on the fly.
+		# Lets be real I was definitely better off rigging Weapon to show its trajectory innately
+		# instead of trying to mirror another object on the fly lol but this works.
+		shooting_trajectory_indicator.power_launch_speed_mult = current_equipped_weapon.power_launch_speed_mult
+		var projectile_data = current_equipped_weapon.get_projectile_instance()
+		if "mass" in projectile_data:
+			shooting_trajectory_indicator.enforce_projectile_mass(projectile_data.mass)
+			
 		shooting_trajectory_indicator.shoot(power)
 		
 
