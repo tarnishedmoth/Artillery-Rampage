@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://dmtjm8de7ep32"]
+[gd_scene load_steps=7 format=3 uid="uid://dmtjm8de7ep32"]
 
 [ext_resource type="Script" uid="uid://bmbbgbcsobixw" path="res://controller/ai/ai_tank.gd" id="1_x14qc"]
 [ext_resource type="PackedScene" uid="uid://dvr6bm2hlj5h4" path="res://tank/tank.tscn" id="2_1btk6"]
 [ext_resource type="Curve" uid="uid://b2dfkabw102hh" path="res://controller/ai/default_error_pct_v_deg_sec.tres" id="2_y282y"]
 [ext_resource type="Script" uid="uid://br5jh5gjskryb" path="res://controller/ai/ai_tank_state_machine.gd" id="3_7xwap"]
+[ext_resource type="PackedScene" uid="uid://bg55ibumro1a5" path="res://controller/ai/ai_aim_damage_wobble.tscn" id="4_jsnjk"]
 [ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="4_qpyk8"]
 
 [node name="AITank" type="Node2D" node_paths=PackedStringArray("weapons_container")]
@@ -12,6 +13,8 @@ wobble_error_pct_v_deg_sec = ExtResource("2_y282y")
 weapons_container = NodePath("Weapons")
 
 [node name="Tank" parent="." groups=["Bot"] instance=ExtResource("2_1btk6")]
+
+[node name="AimDamageWobble" parent="Tank" instance=ExtResource("4_jsnjk")]
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("3_7xwap")
