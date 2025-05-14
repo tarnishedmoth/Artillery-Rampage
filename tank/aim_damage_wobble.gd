@@ -45,9 +45,8 @@ func _ready() -> void:
 	
 	_tank = get_parent() as Tank
 	if not _tank:
-		# Scene may be instantiated for shader check so check we are in a game level
-		# Cannot use SceneManager.game_level as the ready hasn't fired yet for that
-		if get_tree().has_group(Groups.GameLevel):
+		# Scene may be instantiated for shader check so check we are not in the precompiler
+		if not SceneManager.is_precompiler_running:
 			push_error("%s - Parent must be a Tank but was %s, skipping" % [name, str(get_parent().name) if get_parent() else "NULL"])
 		return 
 	
