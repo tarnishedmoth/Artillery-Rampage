@@ -99,9 +99,6 @@ func _connect_player_events() -> void:
 	GameEvents.aim_updated.connect(_on_aim_updated)
 	GameEvents.turn_started.connect(_on_turn_started)
 	GameEvents.turn_ended.connect(_on_turn_ended)
-	
-	# Cooldown when aim updated so if player or AI trying to aim we don't mess with the angle
-	_cooldown_timer.timeout.connect(_on_cooldown_fired)
 
 func _on_damage(_in_tank: Tank, _instigatorController: Node2D, _instigator: Node2D, amount: float) -> void:
 	var total_damage_pct:float = (_tank.max_health - _tank.health) / _tank.max_health
@@ -123,12 +120,9 @@ func _on_damage(_in_tank: Tank, _instigatorController: Node2D, _instigator: Node
 func _on_aim_updated(player: TankController) -> void:
 	if player != _player or _modifying_aim:
 		return
-	
-	# External player action, engage cooldown
+		
+	# External player action, engage cooldown so if player or AI trying to aim we don't mess with the angle
 	_cooldown_timer.start()
-	
-func _on_cooldown_fired() -> void:
-	pass
 	
 func _is_active() -> bool:
 	return enabled and _turn_active and _cooldown_timer.is_stopped()
