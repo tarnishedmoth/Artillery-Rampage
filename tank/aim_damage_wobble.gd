@@ -25,16 +25,16 @@ class_name AimDamageWobble extends Node
 
 var _tank: Tank
 var _player: TankController
-var _enabled:bool = false
+var enabled:bool = false
 var _turn_active:bool = false
 
 # Need a separate bool to track when we call aim_delta to recognize when a callback fires 
 # due to us changing the aim vs an external player or AI action
 
 var _modifying_aim:bool = false
-var _current_deviation:float 
-var _current_deviation_period:float
-var _current_rads_per_sec:float
+var current_deviation:float 
+var current_deviation_period:float
+var current_rads_per_sec:float
 
 var _deviation_delta_time:float
 
@@ -58,19 +58,19 @@ func _process(delta_time: float) -> void:
 	
 	# Ease in/out
 	# Alpha within each of the 4 phases
-	var delta_phase_alpha:float = fmod((_deviation_delta_time + delta_time) / _current_deviation_period, 0.25) * 4.0
+	var delta_phase_alpha:float = fmod((_deviation_delta_time + delta_time) / current_deviation_period, 0.25) * 4.0
 	# Ease returns a number 0-1 so need to scale it to the original alpha to get the multiplier
 	var ease_factor:float = ease(delta_phase_alpha, aim_easing) / maxf(delta_phase_alpha, 1e-4)
 	var eased_delta:float = delta_time * ease_factor
 
 	# Gives us the current total delta within a current cycle
-	_deviation_delta_time = fmod(_deviation_delta_time + eased_delta, _current_deviation_period)
+	_deviation_delta_time = fmod(_deviation_delta_time + eased_delta, current_deviation_period)
 
 	# Value 0-1 within current cycle
-	var deviation_alpha: float = _deviation_delta_time / _current_deviation_period
+	var deviation_alpha: float = _deviation_delta_time / current_deviation_period
 	var phase_sign:float = _get_phase_sign(deviation_alpha)
 
-	var aim_delta_rads := phase_sign * _current_rads_per_sec * eased_delta
+	var aim_delta_rads := phase_sign * current_rads_per_sec * eased_delta
 
 	_modifying_aim = true
 	_tank.aim_delta(aim_delta_rads)
@@ -105,17 +105,17 @@ func _on_damage(_in_tank: Tank, _instigatorController: Node2D, _instigator: Node
 	var total_damage_pct:float = (_tank.max_health - _tank.health) / _tank.max_health
 
 	var deviation_deg = aim_deviation_v_damage.sample(total_damage_pct)
-	_enabled = not is_zero_approx(deviation_deg) and deviation_deg > 0
+	enabled = not is_zero_approx(deviation_deg) and deviation_deg > 0
 
-	if _enabled:
+	if enabled:
 		# Convert to rads for tank.aim_delta
-		_current_deviation = deg_to_rad(deviation_deg)
-		_current_deviation_period = aim_deviation_period_v_damage.sample(total_damage_pct)
+		current_deviation = deg_to_rad(deviation_deg)
+		current_deviation_period = aim_deviation_period_v_damage.sample(total_damage_pct)
 		# Have to sweep across the 4 phases
-		_current_rads_per_sec = _current_deviation / _current_deviation_period * 4.0
+		current_rads_per_sec = current_deviation / current_deviation_period * 4.0
 
 	print_debug("%s(%s) - took %f damage: total_damage_pct=%f -> enabled=%s; deviation=%f; period=%f" % 
-		[name, _player, amount, total_damage_pct, _enabled, deviation_deg, _current_deviation_period]
+		[name, _player, amount, total_damage_pct, enabled, deviation_deg, current_deviation_period]
 	)
 
 func _on_aim_updated(player: TankController) -> void:
@@ -129,7 +129,7 @@ func _on_cooldown_fired() -> void:
 	pass
 	
 func _is_active() -> bool:
-	return _enabled and _turn_active and _cooldown_timer.is_stopped()
+	return enabled and _turn_active and _cooldown_timer.is_stopped()
 
 func _on_turn_started(player: TankController) -> void:
 	if player != _player:

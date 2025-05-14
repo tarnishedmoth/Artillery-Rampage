@@ -1,15 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://bv60c2jq15ovf"]
+[gd_scene load_steps=9 format=3 uid="uid://bv60c2jq15ovf"]
 
 [ext_resource type="Script" uid="uid://cnnjhwvrmv5jr" path="res://levels/test/test_level_new_damage.gd" id="1_m0w0l"]
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="2_13ilf"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="3_m0vbc"]
 [ext_resource type="PackedScene" uid="uid://dkx7i7521cj8d" path="res://tank/aim_damage_wobble.tscn" id="4_13ilf"]
+[ext_resource type="PackedScene" uid="uid://bg55ibumro1a5" path="res://controller/ai/ai_aim_damage_wobble.tscn" id="4_m0vbc"]
 [ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="4_m40no"]
 [ext_resource type="PackedScene" uid="uid://158k4fde7cpd" path="res://controller/ai/behaviors/brute_ai_behavior.tscn" id="5_c3x2q"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="6_i82na"]
 
 [node name="TestLevelNewDamage" type="Node2D"]
 script = ExtResource("1_m0w0l")
+player_health_pct = 1.0
 
 [node name="GameLevel" parent="." instance=ExtResource("2_13ilf")]
 
@@ -27,7 +29,7 @@ position = Vector2(479, 278)
 [node name="Tank" parent="GameLevel/Enemy1" index="0"]
 color = Color(0.682353, 0.713726, 0.219608, 1)
 
-[node name="AimDamageWobble" parent="GameLevel/Enemy1/Tank" index="5" instance=ExtResource("4_13ilf")]
+[node name="AimDamageWobble" parent="GameLevel/Enemy1/Tank" index="5" instance=ExtResource("4_m0vbc")]
 
 [node name="LobberAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("4_m40no")]
 forces_mask = 15
@@ -38,7 +40,7 @@ position = Vector2(1100, 426)
 [node name="Tank" parent="GameLevel/Enemy2" index="0"]
 color = Color(0.137255, 0.180392, 0.701961, 1)
 
-[node name="AimDamageWobble" parent="GameLevel/Enemy2/Tank" index="5" instance=ExtResource("4_13ilf")]
+[node name="AimDamageWobble" parent="GameLevel/Enemy2/Tank" index="5" instance=ExtResource("4_m0vbc")]
 
 [node name="BruteAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("5_c3x2q")]
 

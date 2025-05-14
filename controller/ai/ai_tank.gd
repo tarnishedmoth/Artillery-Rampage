@@ -15,6 +15,8 @@ class_name AITank extends TankController
 @export var min_ai_shoot_delay_time = 0.2
 @export var max_ai_shoot_delay_time = 1.8
 
+@export var wobble_error_pct_v_deg_sec: Curve
+
 var current_action_state: AIActionState
 var target_result: TankActionResult
 
@@ -114,7 +116,7 @@ class AIAimingState extends AIActionState:
 		total_time = total_delta / rads_sec
 		
 		print_debug("%s - AI Aim: degrees_sec=%f; target_angle=%f; total_delta=%f; total_time=%f"
-		 % [parent.get_parent().name, deg_to_rad(rads_sec), rad_to_deg(target_rads), rad_to_deg(total_delta), total_time])
+		 % [parent.name, deg_to_rad(rads_sec), rad_to_deg(target_rads), rad_to_deg(total_delta), total_time])
 		
 	func _next_state() -> AIActionState: return AIPoweringState.new(parent)
 
@@ -153,7 +155,7 @@ class AIPoweringState extends AIActionState:
 			total_time = total_delta / power_sec
 			
 		print_debug("%s - AI Power: power_sec=%f; target_power=%f; total_delta=%f; total_time=%f"
-		 % [parent.get_parent().name, power_sec, target_power, total_delta, total_time])
+		 % [parent.name, power_sec, target_power, total_delta, total_time])
 	func _next_state() -> AIActionState: return AISelectWeaponState.new(parent)
 
 	func _do_execute(delta: float) -> void:
@@ -185,17 +187,53 @@ class AISelectWeaponState extends AIActionState:
 	func _next_state() -> AIActionState: return AIShootingState.new(parent)
 
 # Delay time after ready to shoot to actually shooting
-# TODO: tankActionResult has the desired aim angle. If the turret is wobbling need to try and time when to shoot with appropriate random error
-# Probably need to do nothing for min_ai_shoot_delay time and then try to time up to max_ai_shoot_delay_time
-# One way to hack this is to override _do_execute. Initially set the total time to the max_ai_shoot_delay time to force shoot by then
-# Then in _do_execute if detect right time to shoot after ai_shoot_delay_time elapses, then set total_time = elapsed_time which will cause exit to fire and
-# shooting to occur
-# All of this only occurs if the wobbling behavior is active so would need to search for that node type in the tree
+# If wobbling is occuring, then
+# tankActionResult has the desired aim angle. If the turret is wobbling need to try and time when to shoot with appropriate random error
+# To make things more unpredictable, we are still waiting the initial total_time and then AI has remaining time up to the max delay time to try and time it
+# The faster the turret is wobbling the more error-prone the timing will be and will also scale by the magnitude of the wobble.
 class AIShootingState extends AIActionState:
+	var _wobble_active:bool = false
+	var _desired_angle_rads:float
+	var _angle_error_rads:float
+	var _min_wait_time:float
+
 	func _init(in_parent: AITank):
 		super(in_parent)
-		total_time = randf_range(parent.min_ai_shoot_delay_time, parent.max_ai_shoot_delay_time)
+		_min_wait_time = randf_range(parent.min_ai_shoot_delay_time, parent.max_ai_shoot_delay_time)
+
+		var parent_children:Array[Node] = in_parent.tank.get_children()
+		var wobble_node_index:int = parent_children.find_custom(func(c:Node) -> bool: return c is AimDamageWobble)
+		var wobble_node:AimDamageWobble = null
+
+		if wobble_node_index >= 0 and in_parent.wobble_error_pct_v_deg_sec:
+			wobble_node = parent_children[wobble_node_index] as AimDamageWobble
+			_wobble_active = wobble_node.enabled
+
+		if  _wobble_active:
+			var wobble_deg_sec:float = rad_to_deg(wobble_node.current_rads_per_sec)
+			var wobble_angle:float = rad_to_deg(wobble_node.current_deviation)
+			var error_pct:float = in_parent.wobble_error_pct_v_deg_sec.sample(wobble_deg_sec)
+			_angle_error_rads = deg_to_rad(error_pct * wobble_angle)
+
+			_desired_angle_rads = in_parent.target_result.angle
+			total_time = parent.max_ai_shoot_delay_time
+		else:
+			total_time = _min_wait_time
+
+	func _do_execute(_delta: float) -> void:
+		if not _wobble_active or elapsed_time <= _min_wait_time:
+			return
 		
+		# Determine if it is the right time to shoot
+		var current_angle:float = parent.tank.get_turret_rotation()
+		var angle_diff := absf(angle_difference(_desired_angle_rads, current_angle))
+		if angle_diff <= _angle_error_rads:
+			# Triggers exit condition
+			total_time = elapsed_time
+			print_debug("%s - AI Shoot - Triggering fire during wobble: current_angle=%f; target_angle=%f; angle_error=%f; elapsed_time=%fs; min_wait_time=%f; max_time=%fs" %
+				[parent.name, rad_to_deg(current_angle), rad_to_deg(_desired_angle_rads), rad_to_deg(_angle_error_rads), elapsed_time, _min_wait_time, parent.max_ai_shoot_delay_time])
+
+	# Last State	
 	func _exit():
 		parent.tank.shoot()
-	# Last state
+	

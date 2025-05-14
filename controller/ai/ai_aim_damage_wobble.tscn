@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bg55ibumro1a5"]
+
+[ext_resource type="PackedScene" uid="uid://dkx7i7521cj8d" path="res://tank/aim_damage_wobble.tscn" id="1_s7wos"]
+
+[node name="AimDamageWobble" instance=ExtResource("1_s7wos")]
+
+[node name="CooldownTimer" parent="." index="0"]
+wait_time = 0.05
