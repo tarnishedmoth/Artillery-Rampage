@@ -28,7 +28,7 @@ shader_parameter/speed = 0.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_60ghs"]
 size = Vector2(1248, 688)
 
-[node name="GameLevel" type="Node2D"]
+[node name="GameLevel" type="Node2D" groups=["GameLevel"]]
 script = ExtResource("1_c8wet")
 
 [node name="GameTimer" type="Node" parent="."]

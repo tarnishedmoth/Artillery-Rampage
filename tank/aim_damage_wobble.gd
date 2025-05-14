@@ -45,7 +45,10 @@ func _ready() -> void:
 	
 	_tank = get_parent() as Tank
 	if not _tank:
-		push_error("%s - Parent must be a Tank but was %s, skipping" % [name, str(get_parent().name) if get_parent() else "NULL"])
+		# Scene may be instantiated for shader check so check we are in a game level
+		# Cannot use SceneManager.game_level as the ready hasn't fired yet for that
+		if get_tree().has_group(Groups.GameLevel):
+			push_error("%s - Parent must be a Tank but was %s, skipping" % [name, str(get_parent().name) if get_parent() else "NULL"])
 		return 
 	
 	# Wait for player to be ready before enabling
