@@ -118,7 +118,18 @@ func _create_shatter_polys() -> Array[PackedVector2Array]:
 	var max_area: float = maxf(min_shatter_area, area * max_shatter_area_fract)
 	return _poly_ops.shatter(_mesh.polygon, min_shatter_area, max_area)
 
-func _create_body_from_poly(poly: PackedVector2Array, impact_velocity_dir: Vector2, position_offset: Vector2) -> ShatterableObjectBody:
+func _create_body_from_poly(poly: PackedVector2Array, impact_velocity_dir: Vector2, position_offset: Vector2) -> Node2D:
+	var new_instance: Node2D = _new_node_from_poly(poly, position_offset)
+	
+	if new_instance is RigidBody2D:
+		_apply_impulse_to_new_body(new_instance, poly, impact_velocity_dir)
+		_adjust_new_body_collision(new_instance)
+
+	return new_instance
+
+## Overridable by subclasses to change which body actually spawned in different circumstances
+## By default creates a duplicate of itself with adjusted poly and mass
+func _new_node_from_poly(poly: PackedVector2Array, position_offset: Vector2) -> Node2D:
 	var new_instance: ShatterableObjectBody = duplicate()
 	
 	# Have to wait for the instance to enter the tree before accessing polygon on mesh
@@ -134,10 +145,14 @@ func _create_body_from_poly(poly: PackedVector2Array, impact_velocity_dir: Vecto
 	new_instance.position = position + position_offset
 	new_instance.rotation = rotation
 	
+	return new_instance
+	
+func _apply_impulse_to_new_body(new_instance:RigidBody2D, poly: PackedVector2Array, impact_velocity_dir: Vector2) -> void:
 	var impulse:Vector2 = _randomize_impact_velocity_dir(impact_velocity_dir) * randf_range(min_body_impulse, max_body_impulse)
 	var location: Vector2 = _get_random_point_in_or_near_poly(poly)
 	new_instance.apply_impulse(impulse, location)
-
+	
+func _adjust_new_body_collision(new_instance:RigidBody2D) -> void:
 	# Don't have the pieces collide with the tank if configured
 	if not shattered_pieces_should_collide_with_tank:
 		new_instance.collision_mask &= ~Collisions.Layers.tank
@@ -145,9 +160,7 @@ func _create_body_from_poly(poly: PackedVector2Array, impact_velocity_dir: Vecto
 		for unit in get_tree().get_nodes_in_group(Groups.Unit):
 			if unit is Tank:
 				unit.tankBody.add_collision_exception_with(new_instance)
-
-	return new_instance
-
+	
 func _randomize_impact_velocity_dir(impact_velocity_dir: Vector2) -> Vector2:
 	var angle_dev: float = deg_to_rad(randf_range(min_velocity_angle_dev, max_velocity_angle_dev))
 	var random_angle: float = angle_dev * MathUtils.randf_sgn()

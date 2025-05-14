@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dunveja8n84fm"]
+[gd_scene load_steps=6 format=3 uid="uid://dunveja8n84fm"]
 
 [ext_resource type="PackedScene" uid="uid://bekgd5xyqpiwk" path="res://destructible/shatter/shatterable_object_body.tscn" id="1_wvxla"]
 [ext_resource type="Script" uid="uid://ds10ktte0ohyg" path="res://terrain/shatterable_terrain_chunk_body.gd" id="2_ol8a2"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="3_pqxsq"]
 [ext_resource type="Resource" uid="uid://d3wya431x5exo" path="res://terrain/terrain_chunk_texture.tres" id="4_iq0xs"]
+[ext_resource type="Script" uid="uid://drmphl37ptnyi" path="res://destructible/shatter/shatter_delaunay.gd" id="5_iq0xs"]
 
 [node name="ShatterableTerrainChunkBody" instance=ExtResource("1_wvxla")]
 collision_layer = 8
@@ -12,3 +13,7 @@ texture_resources = Array[ExtResource("3_pqxsq")]([ExtResource("4_iq0xs")])
 shatter_impulse_threshold = 1.0
 impulse_shatter_enabled = true
 density = 2.0
+
+[node name="ShatterDelaunay" type="Node" parent="DestructiblePolyOperations" index="0"]
+script = ExtResource("5_iq0xs")
+metadata/_custom_type_script = "uid://drmphl37ptnyi"

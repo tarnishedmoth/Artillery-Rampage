@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bmq6a5rs3s8jg"]
+[gd_scene load_steps=4 format=3 uid="uid://bmq6a5rs3s8jg"]
 
 [ext_resource type="PackedScene" uid="uid://bekgd5xyqpiwk" path="res://destructible/shatter/shatterable_object_body.tscn" id="1_q66tl"]
 [ext_resource type="Texture2D" uid="uid://v4em4vxjcqki" path="res://environment/trees/tree1.png" id="2_oasgw"]
+[ext_resource type="Script" uid="uid://drmphl37ptnyi" path="res://destructible/shatter/shatter_delaunay.gd" id="3_lc063"]
 
 [node name="ShatterableTreeBody" instance=ExtResource("1_q66tl")]
 mass = 1000.0
@@ -14,3 +15,7 @@ texture = ExtResource("2_oasgw")
 texture_offset = Vector2(-9.26, 61.18)
 texture_scale = Vector2(3, 3)
 polygon = PackedVector2Array(19, 51, 80, 50, 74.63, 43, 45.63, 34, 44.63, 24, 49.63, 6, 56.63, -5, 80.63, 0, 88.63, -8, 86.63, -18, 78.63, -27, 90.63, -31, 97.63, -39, 100.63, -48, 74.63, -57, 69.63, -54, 60.63, -60, 42.63, -60, 36.63, -47, 40.63, -42, 34.63, -41, 26.63, -44, 22.63, -41, 14.63, -39, 10.63, -33, 12, -22, 16.63, -21, 19.63, -19, 19.63, -10, 27.63, -3, 39.63, 0, 47.63, -3, 42.63, 18, 40.63, 33, 28.63, 40)
+
+[node name="ShatterDelaunay" type="Node" parent="DestructiblePolyOperations" index="0"]
+script = ExtResource("3_lc063")
+metadata/_custom_type_script = "uid://drmphl37ptnyi"
