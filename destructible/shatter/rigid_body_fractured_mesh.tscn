@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://cviwupaxgc5yn"]
+
+[ext_resource type="Script" uid="uid://op4fpw4r7x45" path="res://destructible/shatter/rigid_body_fractured_mesh.gd" id="1_lnnvs"]
+
+[node name="RigidBodyFracturedMesh" type="Node2D"]
+script = ExtResource("1_lnnvs")
+metadata/_custom_type_script = "uid://op4fpw4r7x45"

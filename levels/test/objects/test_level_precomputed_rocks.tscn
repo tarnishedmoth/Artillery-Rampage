@@ -1,0 +1,53 @@
+[gd_scene load_steps=7 format=3 uid="uid://bk75v2p1hkxee"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_r2jtd"]
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_n7k0q"]
+[ext_resource type="PackedScene" uid="uid://6b6y8xulf247" path="res://controller/ai/behaviors/rando_ai_behavior.tscn" id="3_fphaq"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="4_3cefk"]
+[ext_resource type="PackedScene" uid="uid://3v701qdrjblk" path="res://environment/rocks/precomputed/precomputed_shatterable_rock01.tscn" id="5_r2jtd"]
+[ext_resource type="PackedScene" uid="uid://csxcn63v0ed70" path="res://environment/rocks/precomputed/precomputed_shatterable_rock02.tscn" id="6_n7k0q"]
+
+[node name="TestLevelLighthouse" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_r2jtd")]
+
+[node name="RoundDirector" parent="GameLevel" index="7"]
+player_goes_first = true
+shuffle_order = false
+
+[node name="Enemy1" parent="GameLevel" instance=ExtResource("2_n7k0q")]
+position = Vector2(479, 278)
+
+[node name="Tank" parent="GameLevel/Enemy1" index="0"]
+color = Color(0.682353, 0.713726, 0.219608, 1)
+
+[node name="RandoAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_fphaq")]
+
+[node name="Enemy2" parent="GameLevel" instance=ExtResource("2_n7k0q")]
+position = Vector2(1100, 426)
+
+[node name="Tank" parent="GameLevel/Enemy2" index="0"]
+color = Color(0.137255, 0.180392, 0.701961, 1)
+
+[node name="RandoAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_fphaq")]
+
+[node name="Player" parent="GameLevel" instance=ExtResource("4_3cefk")]
+position = Vector2(120, 427)
+
+[node name="ShatterableRock5" parent="GameLevel" instance=ExtResource("5_r2jtd")]
+position = Vector2(47.348, 436.749)
+
+[node name="ShatterableRock6" parent="GameLevel" instance=ExtResource("5_r2jtd")]
+position = Vector2(977, 437)
+
+[node name="ShatterableRock7" parent="GameLevel" instance=ExtResource("6_n7k0q")]
+position = Vector2(1205, 439)
+
+[node name="ShatterableRock8" parent="GameLevel" instance=ExtResource("6_n7k0q")]
+position = Vector2(309, 503)
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/Enemy1"]
+[editable path="GameLevel/Enemy2"]

@@ -1,0 +1,48 @@
+[gd_scene load_steps=4 format=3 uid="uid://djnfu3j4lajsg"]
+
+[ext_resource type="PackedScene" uid="uid://cviwupaxgc5yn" path="res://destructible/shatter/rigid_body_fractured_mesh.tscn" id="1_fxxw1"]
+[ext_resource type="PackedScene" uid="uid://cs0fys4qcxagn" path="res://destructible/rigid_mesh_body.tscn" id="2_gyebm"]
+[ext_resource type="Texture2D" uid="uid://bc2wv7vilbasc" path="res://environment/rocks/rocks.png" id="3_52hi0"]
+
+[node name="FracturedRocks01" instance=ExtResource("1_fxxw1")]
+
+[node name="RigidMeshBody" parent="." index="0" instance=ExtResource("2_gyebm")]
+
+[node name="Mesh" parent="RigidMeshBody" index="0"]
+position = Vector2(-27.46, -97.735)
+texture = ExtResource("3_52hi0")
+texture_offset = Vector2(22.155, -36.09)
+texture_scale = Vector2(3, 3)
+polygon = PackedVector2Array(-1, 95.94, -7, 88.94, -15, 82.94, -16, 65.94, -9, 59.94, -4, 56.94, 8.46, 66.735, 10.46, 80.735, 11.46, 93.735)
+
+[node name="RigidMeshBody2" parent="." index="1" instance=ExtResource("2_gyebm")]
+
+[node name="Mesh" parent="RigidMeshBody2" index="0"]
+position = Vector2(-27.46, -97.735)
+texture = ExtResource("3_52hi0")
+texture_offset = Vector2(22.155, -36.09)
+texture_scale = Vector2(3, 3)
+polygon = PackedVector2Array(29.46, 95.735, 13.46, 92.735, 14.46, 85.735, 17.46, 76.735, 14.46, 68.735, 5.46, 60.735, 0.459999, 55.735, 16, 45.94, 31.46, 43.735, 27.46, 63.735, 33.46, 75.735, 31.46, 91.735)
+
+[node name="RigidMeshBody3" parent="." index="2" instance=ExtResource("2_gyebm")]
+
+[node name="Mesh" parent="RigidMeshBody3" index="0"]
+position = Vector2(-27.46, -97.735)
+texture = ExtResource("3_52hi0")
+texture_offset = Vector2(22.155, -36.09)
+texture_scale = Vector2(3, 3)
+polygon = PackedVector2Array(60, 86.94, 52, 95.94, 37, 97.94, 37.46, 73.735, 33.46, 59.735, 34.46, 42.735, 45.46, 48.735, 47.46, 64.735, 49.46, 81.735)
+
+[node name="RigidMeshBody4" parent="." index="3" instance=ExtResource("2_gyebm")]
+
+[node name="Mesh" parent="RigidMeshBody4" index="0"]
+position = Vector2(-27.46, -97.735)
+texture = ExtResource("3_52hi0")
+texture_offset = Vector2(22.155, -36.09)
+texture_scale = Vector2(3, 3)
+polygon = PackedVector2Array(76, 50.94, 63.46, 64.735, 61.46, 82.735, 53.46, 74.735, 49.46, 48.735, 38.46, 41.735, 45, 38.94, 51, 36.94, 66, 48.94)
+
+[editable path="RigidMeshBody"]
+[editable path="RigidMeshBody2"]
+[editable path="RigidMeshBody3"]
+[editable path="RigidMeshBody4"]

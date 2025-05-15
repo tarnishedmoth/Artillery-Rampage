@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://cs0fys4qcxagn"]
+
+[ext_resource type="Script" uid="uid://ngrijjysw6cg" path="res://destructible/rigid_mesh_body.gd" id="1_axww7"]
+
+[node name="RigidMeshBody" type="RigidBody2D"]
+collision_layer = 16
+collision_mask = 315
+mass = 1000.0
+center_of_mass_mode = 1
+script = ExtResource("1_axww7")
+
+[node name="Mesh" type="Polygon2D" parent="."]
+
+[node name="Collision" type="CollisionPolygon2D" parent="."]

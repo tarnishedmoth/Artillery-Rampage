@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://da08sadj20twk"]
+
+[ext_resource type="PackedScene" uid="uid://bekgd5xyqpiwk" path="res://destructible/shatter/shatterable_object_body.tscn" id="1_ueltn"]
+[ext_resource type="Texture2D" uid="uid://bc2wv7vilbasc" path="res://environment/rocks/rocks.png" id="2_g7nyk"]
+[ext_resource type="Script" uid="uid://bgrgq01pr1mse" path="res://destructible/shatter/precomputed_shatterable_object_body.gd" id="2_y5n0b"]
+[ext_resource type="PackedScene" uid="uid://b18bf7d761m1d" path="res://environment/rocks/precomputed/fractured_rocks02_01.tscn" id="3_imve4"]
+
+[node name="PrecomputedShatterableRockBody" instance=ExtResource("1_ueltn")]
+mass = 1000.0
+center_of_mass_mode = 1
+script = ExtResource("2_y5n0b")
+fractured_mesh_sets = Array[PackedScene]([ExtResource("3_imve4")])
+min_body_impulse = 500.0
+max_body_impulse = 1000.0
+
+[node name="Mesh" parent="." index="0"]
+position = Vector2(-20.11, -100.735)
+texture = ExtResource("2_g7nyk")
+texture_offset = Vector2(32.98, 45.195)
+texture_scale = Vector2(4, 4)
+polygon = PackedVector2Array(64.46, 68.735, 63.46, 78.735, 64.46, 88.735, 56.46, 96.735, 38.46, 99.735, 20.46, 100.735, 1.46, 99.735, -13.54, 91.735, -30.54, 92.735, -29.54, 76.735, -20.54, 70.735, -18.54, 50.735, -10.54, 45.735, -0.540001, 37.735, 13.46, 34.735, 24.46, 29.735, 40.46, 30.735, 55.46, 37.735, 55.46, 50.735, 53.46, 58.735, 60.46, 61.735)

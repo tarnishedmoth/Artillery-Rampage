@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://sk5qpj3jxqgq"]
+
+[ext_resource type="PackedScene" uid="uid://bekgd5xyqpiwk" path="res://destructible/shatter/shatterable_object_body.tscn" id="1_r4gtu"]
+[ext_resource type="Script" uid="uid://bgrgq01pr1mse" path="res://destructible/shatter/precomputed_shatterable_object_body.gd" id="2_pq2pe"]
+
+[node name="PrecomputedShatterableObjectBody" instance=ExtResource("1_r4gtu")]
+script = ExtResource("2_pq2pe")
+fractured_mesh_sets = Array[PackedScene]([])

@@ -80,11 +80,9 @@ func damage(projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Ve
 	owner.damage(self, projectile, contact_point, poly_scale)
 	
 func shatter(projectile: WeaponProjectile, _destructible_poly_global: PackedVector2Array) -> Array[Node2D]:
-	var pieces: Array[Node2D] = []
 	if shatter_iteration < max_shatter_divisions:
-		var results: Array[Node2D] = await shatter_with_velocity(projectile.last_recorded_linear_velocity)
-		pieces.append_array(results)
-	return pieces
+		return await shatter_with_velocity(projectile.last_recorded_linear_velocity)
+	return []
 
 func shatter_with_velocity(impact_velocity: Vector2) -> Array[Node2D]:
 	var new_bodies: Array[Node2D] = []
@@ -93,19 +91,28 @@ func shatter_with_velocity(impact_velocity: Vector2) -> Array[Node2D]:
 		set_deferred("freeze", true)
 		await get_tree().physics_frame
 
-		var new_polys: Array[PackedVector2Array] = _create_shatter_polys()
-		var poly_separation: PackedVector2Array = _poly_ops.calculate_shatter_poly_separation(new_polys)
-		new_bodies.resize(new_polys.size())
-
-		var impact_velocity_dir: Vector2 = impact_velocity.normalized()
-
-		for i in range(new_polys.size()):
-			var new_poly: PackedVector2Array = new_polys[i]
-			new_bodies[i] = _create_body_from_poly(new_poly, impact_velocity_dir, poly_separation[i])
+		new_bodies = _create_shatter_nodes(impact_velocity)
 	else:
 		print_debug("%s - shatter iteration limit reached" % [name])
 	delete()
 
+	return new_bodies
+
+## Creates nodes in the shattered result
+## Can override to change the poly shatter behavior to return other kinds of nodes
+func _create_shatter_nodes(impact_velocity: Vector2) -> Array[Node2D]:
+	var new_bodies: Array[Node2D] = []
+	
+	var new_polys: Array[PackedVector2Array] = _create_shatter_polys()
+	var poly_separation: PackedVector2Array = _poly_ops.calculate_shatter_poly_separation(new_polys)
+	
+	new_bodies.resize(new_polys.size())
+
+	var impact_velocity_dir: Vector2 = impact_velocity.normalized()
+
+	for i in range(new_polys.size()):
+		var new_poly: PackedVector2Array = new_polys[i]
+		new_bodies[i] = _create_body_from_poly(new_poly, impact_velocity_dir, poly_separation[i])
 	return new_bodies
 
 func delete() -> void:
