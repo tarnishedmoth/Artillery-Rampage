@@ -22,13 +22,21 @@ func _ready() -> void:
 	if not _init_poly.is_empty():
 		print_debug("%s - initializing from specified poly of size=%d" % [name, _init_poly.size()])
 		mesh.polygon = _init_poly
-		_recenter_polygon()
 	if _init_owner:
 		owner = _init_owner
+
+	_recenter_polygon()
+
 	if is_zero_approx(area):
 		area = TerrainUtils.calculate_polygon_area(mesh.polygon)	
 	if density > 0 and area > 0:
 		mass = maxf(density * area, min_mass)
+	elif area > 0 and mass > 0:
+		density = mass / area
+	else:
+		push_warning("ShatterableObjectBody(%s) - Polygon area is zero, setting density to 1" % [name])
+		density = 1
+		mass = min_mass
 		
 	if use_mesh_as_collision:
 		_collision.set_deferred("position", mesh.position)

@@ -20,7 +20,7 @@ func _create_shatter_nodes(impact_velocity: Vector2) -> Array[Node2D]:
 		push_error("PrecomputedShatterableObjectBody(%s) - unable to instantiate %s as RigidBodyFracturedMesh" % [name, mesh_set.resource_path])
 		return []
 
-	var impact_velocity_dir: Vector2 = impact_velocity.normalized()
+	var impact_velocity_dir: Vector2 = _compute_impact_velocity_dir(impact_velocity)
 
 	# Need to add scene in order for the child nodes to be accessible
 	add_child(fracture_mesh_set)
@@ -42,7 +42,7 @@ func _create_shatter_nodes(impact_velocity: Vector2) -> Array[Node2D]:
 	return nodes
 
 func _init_node(new_instance:RigidMeshBody) -> void:
-	new_instance.owner = owner
+	new_instance._init_owner = owner
 		
 	new_instance.density = density
 	new_instance.position = position

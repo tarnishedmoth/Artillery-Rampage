@@ -38,7 +38,7 @@ var area: float = 0.0
 func _ready() -> void:
 	if SceneManager.is_precompiler_running:
 		return
-		
+
 	if not _init_poly.is_empty():
 		print_debug("%s - initializing from specified poly of size=%d" % [name, _init_poly.size()])
 		_mesh.polygon = _init_poly
@@ -118,7 +118,7 @@ func _create_shatter_nodes(impact_velocity: Vector2) -> Array[Node2D]:
 	
 	new_bodies.resize(new_polys.size())
 
-	var impact_velocity_dir: Vector2 = impact_velocity.normalized()
+	var impact_velocity_dir: Vector2 = _compute_impact_velocity_dir(impact_velocity)
 
 	for i in range(new_polys.size()):
 		var new_poly: PackedVector2Array = new_polys[i]
@@ -143,6 +143,9 @@ func _create_body_from_poly(poly: PackedVector2Array, impact_velocity_dir: Vecto
 		_adjust_new_body_collision(new_instance)
 
 	return new_instance
+
+func _compute_impact_velocity_dir(impact_velocity: Vector2) -> Vector2:
+	return impact_velocity.normalized() if not impact_velocity.is_equal_approx(Vector2.ZERO) else MathUtils.get_rand_vector2_dir()
 
 ## Overridable by subclasses to change which body actually spawned in different circumstances
 ## By default creates a duplicate of itself with adjusted poly and mass
