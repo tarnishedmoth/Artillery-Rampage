@@ -31,6 +31,8 @@ var _collision_dirty:bool
 var _initialized_mass_and_density:bool
 
 func _ready() -> void:
+	if SceneManager.is_precompiler_running:
+		return
 	if not _mesh.polygon.is_empty():
 		_set_initial_mass_and_density()
 		_request_sync_polygons()
