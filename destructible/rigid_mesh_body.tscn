@@ -8,6 +8,7 @@ collision_mask = 315
 mass = 1000.0
 center_of_mass_mode = 1
 script = ExtResource("1_axww7")
+invoke_ready = false
 
 [node name="Mesh" type="Polygon2D" parent="."]
 

@@ -47,3 +47,9 @@ func _init_node(new_instance:RigidMeshBody) -> void:
 	new_instance.density = density
 	new_instance.position = position
 	new_instance.rotation = rotation
+
+	# Skipped ready first time since needed to add to the tree in order to access the rigid body mesh instances
+	# Now need to opt-into it now that all init values are set and request ready to run again once node is added back in 
+	# tree in parent ShatterableObject
+	new_instance.invoke_ready = true
+	new_instance.request_ready()

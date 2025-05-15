@@ -15,10 +15,16 @@ var area: float = 0.0
 var _init_poly:PackedVector2Array = []
 var _init_owner: Node
 
+@export 
+var invoke_ready: bool = true
+
 # Note that should apply the offset position to the root position rather than the mesh position otherwise
 # will get rotation about the body center and this will cause a "hinge" rotation that is probably not desired
 
 func _ready() -> void:
+	if not invoke_ready or SceneManager.is_precompiler_running:
+		return
+	
 	if not _init_poly.is_empty():
 		print_debug("%s - initializing from specified poly of size=%d" % [name, _init_poly.size()])
 		mesh.polygon = _init_poly
@@ -37,7 +43,7 @@ func _ready() -> void:
 		push_warning("ShatterableObjectBody(%s) - Polygon area is zero, setting density to 1" % [name])
 		density = 1
 		mass = min_mass
-		
+
 	if use_mesh_as_collision:
 		_collision.set_deferred("position", mesh.position)
 		_collision.set_deferred("polygon", mesh.polygon)
@@ -69,6 +75,7 @@ func _recenter_polygon() -> void:
 
 func delete() -> void:
 	print_debug("ShatterableObjectBody(%s) - delete" % [name])
-	owner.body_deleted.emit(self)
+	if is_instance_valid(owner):
+		owner.body_deleted.emit(self)
 	
 	queue_free.call_deferred()

@@ -127,7 +127,8 @@ func _create_shatter_nodes(impact_velocity: Vector2) -> Array[Node2D]:
 
 func delete() -> void:
 	print_debug("ShatterableObjectBody(%s) - delete" % [name])
-	owner.body_deleted.emit(self)
+	if is_instance_valid(owner):
+		owner.body_deleted.emit(self)
 	
 	queue_free.call_deferred()
 
