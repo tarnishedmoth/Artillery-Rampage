@@ -12,4 +12,6 @@ invoke_ready = false
 
 [node name="Mesh" type="Polygon2D" parent="."]
 
-[node name="Collision" type="CollisionPolygon2D" parent="."]
+[node name="CollisionPolygon" type="CollisionPolygon2D" parent="."]
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]

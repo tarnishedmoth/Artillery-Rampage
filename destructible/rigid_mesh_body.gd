@@ -2,7 +2,8 @@
 class_name RigidMeshBody extends RigidBody2D
 
 @onready var mesh: Polygon2D = $Mesh
-@onready var _collision: CollisionPolygon2D = $Collision
+@onready var _collision: CollisionPolygon2D = $CollisionPolygon
+@onready var _collision_shape:CollisionShape2D = $CollisionShape
 
 @export var use_mesh_as_collision:bool = true
 @export var max_lifetime: float = 30.0
@@ -45,8 +46,19 @@ func _ready() -> void:
 		mass = min_mass
 
 	if use_mesh_as_collision:
-		_collision.set_deferred("position", mesh.position)
-		_collision.set_deferred("polygon", mesh.polygon)
+		(func() -> void:
+			_collision.disabled = false
+			_collision_shape.disabled = true
+			
+			_collision.position = mesh.position
+			_collision.polygon = mesh.polygon
+		).call_deferred()
+	else: # Use the collision shape
+		(func() -> void:
+			_collision_shape.disabled = false
+			_collision.disabled = true
+		).call_deferred()
+		
 	if max_lifetime > 0:
 		print_debug("%s - Setting lifetime to %f" % [name, max_lifetime])
 		var timer: Timer = Timer.new()

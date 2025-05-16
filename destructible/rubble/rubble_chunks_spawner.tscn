@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://d0fthn43xgog3"]
+
+[ext_resource type="Script" uid="uid://cm17wtqpmxrwg" path="res://destructible/rubble/rubble_chunks_spawner.gd" id="1_dltt0"]
+[ext_resource type="Script" uid="uid://dncglgy7n0c4f" path="res://destructible/destructible_poly_operations.gd" id="2_6knkq"]
+
+[node name="RubbleChunksSpawner" type="Node"]
+script = ExtResource("1_dltt0")
+
+[node name="DestructiblePolyOperations" type="Node" parent="."]
+script = ExtResource("2_6knkq")
+metadata/_custom_type_script = "uid://dncglgy7n0c4f"
+
+[node name="RubbleSpawnContainer" type="Node" parent="."]
+
+[node name="RubblePrototypes" type="Node" parent="."]

@@ -254,3 +254,15 @@ func _calculate_poly_separation(poly_points_list: Array[PackedVector2Array], max
 		separation[i] = translation
 
 	return separation
+
+func get_destroyed_polys(destructible_shape:PackedVector2Array, final_result:PackedVector2Array) -> PackedVector2Array:
+	var intersect_result: Array[PackedVector2Array] = Geometry2D.intersect_polygons(destructible_shape, final_result)
+
+	intersect_result = intersect_result.filter(
+		func(result:PackedVector2Array):
+			return TerrainUtils.is_visible_polygon(result)
+	)
+
+	intersect_result.sort_custom(TerrainUtils.largest_poly_first)
+
+	return intersect_result.front() if not intersect_result.is_empty() else []
