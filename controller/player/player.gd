@@ -42,6 +42,8 @@ func _get_tank():
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("shoot"):
 		shoot()
+	if event.is_action_pressed("cycle_prev_weapon"):
+		if can_shoot: tank.equip_prev_weapon()
 	if event.is_action_pressed("cycle_next_weapon"):
 		if can_shoot: tank.equip_next_weapon()
 	if event.is_action_pressed("cycle_weapon_mode"):

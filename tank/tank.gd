@@ -511,16 +511,23 @@ func scan_available_weapons() -> void:
 		w.connect_to_tank(self)
 	equip_next_weapon()
 
+func equip_prev_weapon() -> void:
+	equip_weapon_at_index(current_equipped_weapon_index - 1)
+
 func equip_next_weapon() -> void:
+	equip_weapon_at_index(current_equipped_weapon_index + 1)
+
+func equip_weapon_at_index(index: int) -> void:
 	if weapons.is_empty():
 		printt(self,"No weapons available to equip.")
 		return
-	var next_index = current_equipped_weapon_index + 1
-	if next_index >= weapons.size(): # Index 0 would be size of 1.
-		next_index = 0
-	set_equipped_weapon(next_index)
+	if index < 0:
+		index = weapons.size() - 1
+	elif index >= weapons.size():
+		index = 0
+	set_equipped_weapon(index)
 	prints(self,"cycled weapon to", current_equipped_weapon.display_name)
-	
+
 func next_weapon_mode() -> void:
 	var weapon = get_equipped_weapon()
 	weapon.next_mode()
