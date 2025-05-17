@@ -12,7 +12,7 @@ gradient = SubResource("Gradient_iuc4f")
 fill = 1
 
 [sub_resource type="Gradient" id="Gradient_clfbe"]
-colors = PackedColorArray(0.392157, 0.392157, 0.392157, 1, 1, 1, 1, 0)
+colors = PackedColorArray(0.27, 0.207225, 0.1485, 0.705882, 1, 0.834667, 0.68, 0)
 
 [node name="RigidMeshBody" instance=ExtResource("1_iuc4f")]
 collision_mask = 314
@@ -29,11 +29,11 @@ texture = SubResource("GradientTexture2D_clfbe")
 
 [node name="SmokeParticles" type="CPUParticles2D" parent="." index="3"]
 emitting = false
-amount = 20
+amount = 10
 texture = ExtResource("2_clfbe")
-lifetime = 1.5
+lifetime = 2.0
 one_shot = true
-explosiveness = 0.25
+explosiveness = 0.1
 randomness = 0.35
 lifetime_randomness = 0.5
 direction = Vector2(0, -1)
