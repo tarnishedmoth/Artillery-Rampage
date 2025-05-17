@@ -39,6 +39,9 @@ func begin_turn():
 func _get_tank():
 	return _tank
 	
+func _do_replace_tank(new_tank:Tank) -> void:
+	_tank = new_tank
+	
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("shoot"):
 		shoot()

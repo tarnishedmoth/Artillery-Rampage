@@ -43,6 +43,9 @@ func before_state_selection():
 func _get_tank():
 	return _tank
 	
+func _do_replace_tank(new_tank:Tank) -> void:
+	_tank = new_tank
+
 func _process(delta: float) -> void:
 	# Action completed
 	if !is_instance_valid(current_action_state):

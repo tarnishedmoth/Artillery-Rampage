@@ -1,5 +1,6 @@
 ## Abstract base class for AI and player controllers
 class_name TankController extends Node2D
+
 @export var enable_damage_before_first_turn:bool = true 
 var _initial_fall_damage:bool
 @export var weapons_container:Node = self ## Keep all Weapon components in here. If unassigned, self is used.
@@ -21,6 +22,8 @@ var pending_state: PlayerState
 var popups:Array
 var signals_connected:bool = false
 var _active_turn:bool = false
+
+const tank_override_meta_key:StringName = &"tank_override"
 
 func _ready() -> void:
 	tank.actions_completed.connect(_on_tank_actions_completed)
@@ -102,6 +105,36 @@ func _get_tank() -> Tank:
 	push_error("abstract function")
 	return null
 	
+## Call before adding controller to scene to swap out the tank that will be used
+## This should be done before to avoid any scene tree init issues
+## Can use this to allow player to select a different type of tank to use - light, heavy, etc
+func replace_tank(new_tank:Tank) -> void:
+	# replace existing tank with new_tank
+	if is_instance_valid(tank) and tank.get_parent() == self:
+		var current_index:int = tank.get_index()
+		remove_child(tank)
+		tank.queue_free()
+		add_child(new_tank)
+		move_child(new_tank, current_index)
+		# Remove any meta flags
+		remove_meta(tank_override_meta_key)
+
+		_do_replace_tank(new_tank)
+	else:
+		# Flag for later
+		set_meta(tank_override_meta_key, new_tank)
+
+## Override in derived class to replace _tank
+func _do_replace_tank(_new_tank:Tank) -> void:
+	pass
+
+func _enter_tree() -> void:
+	if not has_meta(tank_override_meta_key):
+		return
+	var tank_override:Tank = get_meta(tank_override_meta_key) as Tank
+	if is_instance_valid(tank_override):
+		replace_tank(tank_override)
+		
 func get_weapons() -> Array[Weapon]:
 	var weapons:Array[Weapon]
 	for w in weapons_container.get_children():
