@@ -94,7 +94,6 @@ func spawn_and_fire(container:Node, scene: PackedScene) -> void:
 	
 	var dont_clear:bool = false
 	if instance is Weapon:
-		instance._game_precompiling = true
 		container.add_child(instance)
 		instance.shoot() # Spawns things
 	elif instance is WeaponProjectile:

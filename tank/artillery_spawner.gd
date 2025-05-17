@@ -58,11 +58,16 @@ var enemy_names: Array[String] = [
 	"Big Smoke", "Showdown", "Craterhead", "Meteora", "Supremo", "Shelluminati",
 	"Ms Direct", "Buzz Bombardier", "Bang Ladesh", "Cannon O'Brian", "Crush Limbomb",
 	"The Pulveriser", "Highway Spar", "Kabloom Affleck", "Exploderman",
-	"Tank You Next", "Shelliot Page", "Shellex", "Tanky Kong", "Big Damage", "Lead Shrapnel-in",
+	"Tank You Next", "Shelliot Page", "Shellex", "Tanky Kong", "Big Damage", "Lead Scraplin",
 	"Freddie Dead", "Mortar Combat", "The Blast Ronin", "Bombsylvania", "Dr Boomlove",
 	"Gunpowder", "The Shellector", "Bombparts", "Leadnought", "Arc Angel", "Lord Farshot",
 	"Lead Reckoning", "Lead or Alive", "Lead Island", "Lead Rising", "Lead Money",
-	"Fallout", "Major Reach", "Shellvester Stallone", "Down Ranger",
+	"Filthy Fallout", "Major Reach", "Shellvester Stallone", "Down Ranger", "ShazBot",
+	"Hullbuster", "Ironed Men", "Doctor Strays", "The Boominator", "Lead Better", "Wet Lead",
+	"Ducks Go Flak", "Pillar of Bombem", "Aiming Lou Wood", "Bomb Crews", "Bomb Hanks",
+	"Kate Wins It", "Scope Leo", "Orlando Boom", "Nicolas Rage", "Bruce Will Miss",
+	"Sandra Bullet", "Bomb Haul End", "Barton Plink", "Earthquaker", "Bombstation Vita",
+	"Bomb Box Series X", "Team Rocket", "Cannonball Z", "Aimbot", "Center Strike",
 ]
 
 # Called when the node enters the scene tree for the first time.
