@@ -1,10 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://c0f6pn0mperks"]
+[gd_scene load_steps=7 format=3 uid="uid://c0f6pn0mperks"]
 
 [ext_resource type="PackedScene" uid="uid://cwssjadyxw2gg" path="res://environment/procedural_object_spawner.tscn" id="1_hf5vp"]
 [ext_resource type="Script" uid="uid://bke3gd68u5yjw" path="res://environment/procedural_object_constraints.gd" id="2_ueylu"]
 [ext_resource type="Resource" uid="uid://6vvcguyaaxie" path="res://environment/rocks/shatterable_rock01_constraints.tres" id="3_ybhmk"]
 [ext_resource type="Resource" uid="uid://0wgxqduf2coh" path="res://environment/rocks/shatterable_rock02_constraints.tres" id="4_ija65"]
+[ext_resource type="Resource" uid="uid://dc5j54tnccd2d" path="res://environment/rocks/precomputed/precomputed_shatterable_rock01_constraints.tres" id="5_ija65"]
+[ext_resource type="Resource" uid="uid://daqpk2vponnaa" path="res://environment/rocks/precomputed/precomputed_shatterable_rock02_constraints.tres" id="6_e8yk4"]
 
 [node name="ProceduralObjectMountainSpawner" instance=ExtResource("1_hf5vp")]
-objects = Array[ExtResource("2_ueylu")]([ExtResource("3_ybhmk"), ExtResource("4_ija65")])
+objects = Array[ExtResource("2_ueylu")]([ExtResource("3_ybhmk"), ExtResource("4_ija65"), ExtResource("5_ija65"), ExtResource("6_e8yk4")])
 randomize_object_priorities = true

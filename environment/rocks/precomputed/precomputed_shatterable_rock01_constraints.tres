@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ProceduralObjectContraints" load_steps=3 format=3 uid="uid://dc5j54tnccd2d"]
 
-[ext_resource type="PackedScene" path="res://environment/rocks/precomputed/precomputed_shatterable_rock01.tscn" id="1_b2dvb"]
+[ext_resource type="PackedScene" uid="uid://3v701qdrjblk" path="res://environment/rocks/precomputed/precomputed_shatterable_rock01.tscn" id="1_b2dvb"]
 [ext_resource type="Script" uid="uid://bke3gd68u5yjw" path="res://environment/procedural_object_constraints.gd" id="2_4rw4e"]
 
 [resource]
