@@ -21,3 +21,17 @@ class CompositeMasks:
 	# Tanks are staggered so shouldn't need to snap down on top of other tanks
 	const tank_snap: int = obstacle
 	const visibility: int = Layers.tank | Layers.terrain | Layers.world_body
+
+func add_exception_for_layer_and_group(in_body: Node, layer:int, group:StringName) -> void:
+	in_body.collision_mask &= ~layer
+	# Layers and masks could still match on the other side so add instance exception with bodies in group node
+	for unit in get_tree().get_nodes_in_group(group):
+		# Add exception for all rigid bodies
+		var nodes:Array[Node] = []
+		nodes.push_back(unit)
+		while not nodes.is_empty():
+			var node:Node = nodes.pop_back()
+			var rigid_body_node:RigidBody2D = node as RigidBody2D
+			if rigid_body_node:
+				rigid_body_node.add_collision_exception_with(in_body)
+			nodes.append_array(node.get_children())

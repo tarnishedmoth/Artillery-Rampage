@@ -34,9 +34,9 @@ shape = SubResource("CircleShape2D_f40h2")
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="CollisionShape2D"]
 amount = 1
+texture = SubResource("GradientTexture2D_3xfcq")
 lifetime = 5.0
 explosiveness = 1.0
-texture = SubResource("GradientTexture2D_3xfcq")
 emission_shape = 5
 emission_points = PackedVector2Array(10, 0)
 emission_normals = PackedVector2Array()

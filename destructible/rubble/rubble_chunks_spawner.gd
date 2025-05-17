@@ -5,8 +5,12 @@ class_name RubbleChunksSpawner extends Node
 @export var min_body_impulse:float = 100
 @export var max_body_impulse:float = 200
 
+@export var max_rubble_count:int = 10
+
 @export var min_velocity_angle_dev: float = 0
 @export var max_velocity_angle_dev: float = 90
+
+@export_range(0.1,1.0,0.01) var spawn_radius_fraction:float = 0.5
 
 @onready var rubble_container:Node = $RubbleSpawnContainer
 @onready var rubble_prototypes_container = $RubblePrototypes
@@ -60,7 +64,7 @@ func spawn_rubble(destructible_poly_global:PackedVector2Array, orig_poly_global:
 	var bounding_circle:= Circle.create_from_points(hole_poly_global)
 
 	var used_area:float = 0.0
-	var last_index:int = rubble_candidates.size()
+	var last_index:int = mini(rubble_candidates.size(), max_rubble_count)
 
 	# Keep trying to add successively until no piece can meet the total area restriction
 	while last_index > 0:
@@ -75,21 +79,23 @@ func spawn_rubble(destructible_poly_global:PackedVector2Array, orig_poly_global:
 			rubble_piece_indices.push_back(i)
 			largest_index_match = i
 			used_area = new_used_area
-		last_index = largest_index_match + 1
+		last_index = mini(largest_index_match + 1, max_rubble_count - rubble_piece_indices.size())
 
 	var angle_steps:int = 6
 	var num_rings:int = ceili(rubble_piece_indices.size() / float(angle_steps))
-	var radius_step:float = bounding_circle.radius / (num_rings + 1)
+	var radius_step:float = (bounding_circle.radius * spawn_radius_fraction) / (num_rings + 1)
 
 	var spawn_radius: float = radius_step
 	var angle_index:int = 0
 	var circle_center:Vector2 = bounding_circle.center
 
+	var impact_velocity_dir:Vector2 = Vector2.UP
+
 	for index in rubble_piece_indices:
 		var rubble_prototype:RigidMeshBody = rubble_prototypes[index]
 		var new_instance: RigidMeshBody = rubble_prototype.duplicate()
 		
-		#TODO: Space out in concentric rings in the bounding circle to try and separate the pieces as much as possible
+		#Space out in concentric rings in the bounding circle to try and separate the pieces as much as possible
 		# Physics engine will do the rest
 		var angle:float = TAU / angle_steps * angle_index
 		var pos:Vector2 = Vector2(
@@ -97,22 +103,24 @@ func spawn_rubble(destructible_poly_global:PackedVector2Array, orig_poly_global:
 			spawn_radius * sin(angle) + circle_center.y
 		)
 
-		_init_node(new_instance, pos, Vector2.UP)
-		rubble_container.add_child(new_instance)
-
+		_init_node(new_instance, pos)
+		(func():
+			rubble_container.add_child(new_instance)
+			Collisions.add_exception_for_layer_and_group(new_instance, Collisions.Layers.tank, Groups.Unit)
+			_apply_impulse_to_new_body(new_instance, new_instance.mesh.polygon, impact_velocity_dir)
+		).call_deferred()
+		
 		if angle_index < angle_steps - 1:
 			angle_index += 1
 		else:
 			angle_index = 0
 			spawn_radius += radius_step
 
-func _init_node(new_instance:RigidMeshBody, position:Vector2, impact_velocity_dir:Vector2) -> void:
+func _init_node(new_instance:RigidMeshBody, position:Vector2) -> void:
 	new_instance._init_owner = owner
 	new_instance.max_lifetime = max_lifetime
 	new_instance.position = position
 	new_instance.rotation = randf_range(-PI, PI)
-
-	_apply_impulse_to_new_body(new_instance, new_instance.mesh.polygon, impact_velocity_dir)
 
 #region impulse
 

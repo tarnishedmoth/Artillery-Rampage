@@ -1,7 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://d0fthn43xgog3"]
+[gd_scene load_steps=8 format=3 uid="uid://d0fthn43xgog3"]
 
 [ext_resource type="Script" uid="uid://cm17wtqpmxrwg" path="res://destructible/rubble/rubble_chunks_spawner.gd" id="1_dltt0"]
 [ext_resource type="Script" uid="uid://dncglgy7n0c4f" path="res://destructible/destructible_poly_operations.gd" id="2_6knkq"]
+[ext_resource type="PackedScene" uid="uid://dxaeplme20jmc" path="res://destructible/rubble/rubble_mesh_body.tscn" id="3_ugiis"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sd8a1"]
+radius = 2.7
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ugiis"]
+radius = 5.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sd8a1"]
+radius = 3.7
+height = 9.2
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ohyf2"]
 
 [node name="RubbleChunksSpawner" type="Node"]
 script = ExtResource("1_dltt0")
@@ -13,3 +26,48 @@ metadata/_custom_type_script = "uid://dncglgy7n0c4f"
 [node name="RubbleSpawnContainer" type="Node" parent="."]
 
 [node name="RubblePrototypes" type="Node" parent="."]
+
+[node name="Rubble01" parent="RubblePrototypes" instance=ExtResource("3_ugiis")]
+mass = 10.0
+
+[node name="Mesh" parent="RubblePrototypes/Rubble01" index="0"]
+position = Vector2(1, 2)
+polygon = PackedVector2Array(-1, 1, -3, 0, -4, -1, -3, -4, 0, -5, 2, -3, 2, -1)
+
+[node name="CollisionShape" parent="RubblePrototypes/Rubble01" index="2"]
+shape = SubResource("CircleShape2D_sd8a1")
+
+[node name="Rubble02" parent="RubblePrototypes" instance=ExtResource("3_ugiis")]
+
+[node name="Mesh" parent="RubblePrototypes/Rubble02" index="0"]
+position = Vector2(1, 2)
+polygon = PackedVector2Array(-1, 2, -3, 3, -5, 0, -6, -5, -2, -6, 0, -7, 3, -6, 4, -2, 2, -1, 1, 1)
+
+[node name="CollisionShape" parent="RubblePrototypes/Rubble02" index="2"]
+shape = SubResource("CircleShape2D_ugiis")
+disabled = true
+
+[node name="Rubble03" parent="RubblePrototypes" instance=ExtResource("3_ugiis")]
+
+[node name="Mesh" parent="RubblePrototypes/Rubble03" index="0"]
+position = Vector2(-0.305, 2.41)
+polygon = PackedVector2Array(-1, 2, -2, 2, -2, 1, -3, -2, -2, -5, 0, -7, 4, -5, 4, -3, 2, -1, 1, 1)
+
+[node name="CollisionShape" parent="RubblePrototypes/Rubble03" index="2"]
+shape = SubResource("CapsuleShape2D_sd8a1")
+disabled = true
+
+[node name="Rubble04" parent="RubblePrototypes" instance=ExtResource("3_ugiis")]
+
+[node name="Mesh" parent="RubblePrototypes/Rubble04" index="0"]
+position = Vector2(-1.16, 1.715)
+polygon = PackedVector2Array(-7.695, 3.59, -8.695, -0.41, -6.695, -3.41, -5.695, -7.41, -4.695, -9.41, 1.16, -11.715, 5.305, -10.41, 7.305, -6.41, 11.305, -3.41, 9.305, 2.59, 6.305, 6.59, 3.16, 8.285, -3.84, 7.285)
+
+[node name="CollisionShape" parent="RubblePrototypes/Rubble04" index="2"]
+shape = SubResource("CircleShape2D_ohyf2")
+disabled = true
+
+[editable path="RubblePrototypes/Rubble01"]
+[editable path="RubblePrototypes/Rubble02"]
+[editable path="RubblePrototypes/Rubble03"]
+[editable path="RubblePrototypes/Rubble04"]

@@ -8,6 +8,7 @@ class_name RigidMeshBody extends RigidBody2D
 @export var use_mesh_as_collision:bool = true
 @export var max_lifetime: float = 30.0
 @export var min_mass: float = 50
+@export var recenter_polygon:bool = true 
 
 @export
 var density: float = 0.0
@@ -29,10 +30,12 @@ func _ready() -> void:
 	if not _init_poly.is_empty():
 		print_debug("%s - initializing from specified poly of size=%d" % [name, _init_poly.size()])
 		mesh.polygon = _init_poly
+		recenter_polygon = true
 	if _init_owner:
 		owner = _init_owner
 
-	_recenter_polygon()
+	if recenter_polygon:
+		_recenter_polygon()
 
 	if is_zero_approx(area):
 		area = TerrainUtils.calculate_polygon_area(mesh.polygon)	
@@ -87,7 +90,7 @@ func _recenter_polygon() -> void:
 
 func delete() -> void:
 	print_debug("ShatterableObjectBody(%s) - delete" % [name])
-	if is_instance_valid(owner):
+	if is_instance_valid(owner) and owner.has_signal("body_deleted"):
 		owner.body_deleted.emit(self)
 	
 	queue_free.call_deferred()

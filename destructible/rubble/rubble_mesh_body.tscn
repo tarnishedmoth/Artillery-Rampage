@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://dxaeplme20jmc"]
+
+[ext_resource type="PackedScene" uid="uid://cs0fys4qcxagn" path="res://destructible/rigid_mesh_body.tscn" id="1_iuc4f"]
+
+[sub_resource type="Gradient" id="Gradient_iuc4f"]
+colors = PackedColorArray(0.15, 0.08525, 0.039, 1, 0.22, 0.155833, 0.11, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_clfbe"]
+gradient = SubResource("Gradient_iuc4f")
+fill = 1
+
+[node name="RigidMeshBody" instance=ExtResource("1_iuc4f")]
+collision_mask = 314
+mass = 50.0
+center_of_mass_mode = 0
+use_mesh_as_collision = false
+min_mass = 10.0
+recenter_polygon = false
+invoke_ready = true
+
+[node name="Mesh" parent="." index="0"]
+texture = SubResource("GradientTexture2D_clfbe")

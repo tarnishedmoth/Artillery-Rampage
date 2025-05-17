@@ -176,11 +176,7 @@ func _apply_impulse_to_new_body(new_instance:RigidBody2D, poly: PackedVector2Arr
 func _adjust_new_body_collision(new_instance:RigidBody2D) -> void:
 	# Don't have the pieces collide with the tank if configured
 	if not shattered_pieces_should_collide_with_tank:
-		new_instance.collision_mask &= ~Collisions.Layers.tank
-		# Layers and masks could still match on the tank side so get all the units in group and add instance exception
-		for unit in get_tree().get_nodes_in_group(Groups.Unit):
-			if unit is Tank:
-				unit.tankBody.add_collision_exception_with(new_instance)
+		Collisions.add_exception_for_layer_and_group(new_instance, Collisions.Layers.tank, Groups.Unit)
 	
 func _randomize_impact_velocity_dir(impact_velocity_dir: Vector2) -> Vector2:
 	var angle_dev: float = deg_to_rad(randf_range(min_velocity_angle_dev, max_velocity_angle_dev))

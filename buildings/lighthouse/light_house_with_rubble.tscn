@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://bplhuf5eai7td"]
+
+[ext_resource type="PackedScene" uid="uid://sa0oyrt453vy" path="res://buildings/lighthouse/light_house.tscn" id="1_41bif"]
+[ext_resource type="PackedScene" uid="uid://d0fthn43xgog3" path="res://destructible/rubble/rubble_chunks_spawner.tscn" id="2_edqsm"]
+
+[node name="Lighthouse" instance=ExtResource("1_41bif")]
+
+[node name="RubbleChunksSpawner" parent="." index="2" instance=ExtResource("2_edqsm")]
