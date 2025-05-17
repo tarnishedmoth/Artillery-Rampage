@@ -20,6 +20,19 @@ static func polygon_centroid(polygon: PackedVector2Array) -> Vector2:
 
 	return centroid
 
+static func get_polygon_edge_normals(polygon: PackedVector2Array) -> PackedVector2Array:
+	var normals: PackedVector2Array = []
+	
+	for i in range(1,polygon.size()):
+		var p1: Vector2 = polygon[i - 1]
+		var p2: Vector2 = polygon[i]
+		var edge: Vector2 = p2 - p1
+		
+		var normal: Vector2 = edge.normalized().rotated(-PI / 2)
+		normals.append(normal)
+		
+	return normals
+
 static func calculate_barycentric_coordinates(p: Vector2, v1: Vector2, v2: Vector2, v3: Vector2) -> PackedFloat64Array:
 	var area_abc: float = calculate_triangle_area(v1, v2, v3)
 

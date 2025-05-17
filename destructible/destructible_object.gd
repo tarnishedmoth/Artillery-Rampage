@@ -26,6 +26,8 @@ signal chunk_destroyed(object: DestructibleObjectChunk)
 
 @onready var _destructible_shape_calculator: DestructibleShapeCalculator = $DestructibleShapeCalculator
 
+var rubble_chunks_spawner: RubbleChunksSpawner
+
 func _ready() -> void:
 	var initial_chunks := get_chunks()
 	if !initial_chunks:
@@ -33,6 +35,10 @@ func _ready() -> void:
 		initial_chunks.push_back(_add_new_chunk())
 
 	initial_chunk_name = initial_chunks[0].name
+
+	rubble_chunks_spawner = find_rubble_chunk_spawner()
+	if rubble_chunks_spawner:
+		print_debug("%s - Using rubble chunk spawner %s" % [name, rubble_chunks_spawner.name])
 	
 	for chunk in initial_chunks:
 		chunk.owner = self
@@ -41,6 +47,12 @@ func _ready() -> void:
 		chunk_update_flags |= DestructibleObjectChunk.UpdateFlags.Crumble
 	if smoothing:
 		chunk_update_flags |= DestructibleObjectChunk.UpdateFlags.Smooth
+
+func find_rubble_chunk_spawner() -> RubbleChunksSpawner:
+	for child in get_children():
+		if child is RubbleChunksSpawner:
+			return child
+	return null
 
 func get_chunk_count() -> int:
 	var count:int = 0
@@ -56,12 +68,12 @@ func damage(chunk: DestructibleObjectChunk, projectile: WeaponProjectile, contac
 	var projectile_poly: CollisionPolygon2D = projectile.get_destructible_component()
 	var projectile_poly_global: PackedVector2Array = _destructible_shape_calculator.get_projectile_poly_global(projectile_poly, poly_scale)
 	
-	# Transform terrain polygon to world space
+	# Transform destructible polygon to world space
 	var destructible_poly_global: PackedVector2Array = chunk.get_destructible_global()
 	
 	# Do clipping operations in global space
 	var clipping_results = Geometry2D.clip_polygons(destructible_poly_global, projectile_poly_global)
-	
+		
 	# This means the chunk was destroyed so we need to queue_free
 	if clipping_results.is_empty():
 		print_debug("damage(%s) completely destroyed by poly=%s" % [name, projectile_poly.owner.name])
@@ -72,6 +84,9 @@ func damage(chunk: DestructibleObjectChunk, projectile: WeaponProjectile, contac
 	print_debug("damage(%s) Clip result with %s - Changing from size of %d to %d" 
 		% [name, projectile_poly.owner.name, destructible_poly_global.size(), updated_destructible_poly.size()])
 	
+	if rubble_chunks_spawner:
+		rubble_chunks_spawner.spawn_rubble(projectile_poly_global, destructible_poly_global)
+
 	# This could result in new chunks breaking off
 	var destructible_chunk_results := chunk.replace_contents(updated_destructible_poly, projectile_poly_global, chunk_update_flags)
 	if !destructible_chunk_results.is_empty():
