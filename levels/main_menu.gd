@@ -72,7 +72,7 @@ func _on_play_now_pressed() -> void:
 	
 	var level: StoryLevel = SceneManager.levels_always_selectable.levels.pick_random()
 	if level:
-		SceneManager.switch_scene_file(level.scene_res_path)
+		SceneManager.switch_scene_file(level.scene_res_path, 0.0)
 
 func _on_story_pressed() -> void:
 	print_debug("Start button")
@@ -80,7 +80,7 @@ func _on_story_pressed() -> void:
 	SaveStateManager.add_state_flag(SceneManager.new_story_selected)
 	SceneManager.play_mode = SceneManager.PlayMode.STORY
 
-	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryStart)
+	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryStart, 0.0)
 
 func _on_level_select_pressed() -> void:
 	print_debug("Level select button")
@@ -117,4 +117,4 @@ func _on_continue_story_pressed() -> void:
 		
 	SceneManager.play_mode = SceneManager.PlayMode.STORY
 	StorySaveUtils.set_story_level_index()
-	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap)
+	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap, 0.0)

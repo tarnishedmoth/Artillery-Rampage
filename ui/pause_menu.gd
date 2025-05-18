@@ -37,7 +37,7 @@ func _on_resume_pressed():
 	toggle_visibility()
 
 func _on_main_menu_pressed() -> void:
-	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.MainMenu)
+	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.MainMenu, 0.0)
 
 func _on_quit_to_desktop_pressed() -> void:
 	get_tree().quit()

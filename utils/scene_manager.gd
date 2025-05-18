@@ -71,7 +71,6 @@ func get_current_level_root() -> GameLevel:
 		if _current_level_root_node.is_inside_tree():
 			return _current_level_root_node
 	else:
-		# TODO precompiler bypass
 		if not is_precompiler_running:
 			push_warning("Trying to access root outside of game level.")
 		_current_level_root_node = null
@@ -142,18 +141,18 @@ func level_complete() -> void:
 func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 	match key:
 		SceneKeys.MainMenu:
-			await switch_scene_file(main_menu_scene_file)
+			await switch_scene_file(main_menu_scene_file, delay)
 		SceneKeys.RandomStart:
 			await next_level(delay)
 		SceneKeys.StoryStart:
 			_current_level_index = -1
-			await switch_scene_file(story_start_scene_file)
+			await switch_scene_file(story_start_scene_file, delay)
 		SceneKeys.StoryMap:
-			await switch_scene_file(story_map_scene_file)
+			await switch_scene_file(story_map_scene_file, delay)
 		SceneKeys.RoundSummary:
-			await switch_scene_file(story_round_summary_scene_file)
+			await switch_scene_file(story_round_summary_scene_file, delay)
 		SceneKeys.GameOver:
-			await switch_scene_file(game_over_scene_file)
+			await switch_scene_file(game_over_scene_file, delay)
 		_:
 			push_error("Unhandled scene key=%s" % [key])
 	
@@ -181,11 +180,10 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	else:
 		await get_tree().process_frame
 	
-	is_switching_scene = false
-	
 	var root = get_tree().root
 	var root_current_scene = root.get_child(root.get_child_count() - 1)
 	root_current_scene.free()
+	is_switching_scene = false
 	
 	# Await in case the loading is done async
 	var new_scene:Resource = await switchFunc.call()
@@ -201,8 +199,6 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	# So replaced all references to this
 	get_tree().root.add_child(current_scene)
 	get_tree().current_scene = current_scene
-	
-	#await get_tree().process_frame
 
 	SaveStateManager.restore_tree_state()
 	

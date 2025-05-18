@@ -25,7 +25,7 @@ var turn_counter:int = 0
 
 
 func _ready() -> void:
-	%RoundDirector.special_level_logic = true
+	%RoundDirector.directed_by_external_script = true
 	GameEvents.turn_ended.connect(_on_turn_ended) # For turn based logic
 	
 	for component in damageable_components: # Observe the components that the player must destroy to kill the factory.
@@ -106,7 +106,8 @@ func _reassign_slots(from:ConveyorSlot, to:ConveyorSlot) -> void:
 	
 func defeated() -> void:
 	#End the round
-	pass
+	#TODO would be cool if the factory exploded first
+	%RoundDirector.end_round()
 
 func _on_turn_ended(_tank:TankController) -> void:
 	turn_counter += 1

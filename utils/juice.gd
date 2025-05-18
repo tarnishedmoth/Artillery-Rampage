@@ -13,3 +13,8 @@ static func fade_in(node, speed:float = SNAPPY, from:Color = Color.TRANSPARENT) 
 	var tween = node.create_tween()
 	tween.tween_property(node, "modulate", Color.WHITE, speed).from(from)
 	return tween
+
+static func fade_out(node, speed:float = SNAPPY, to:Color = Color.BLACK) -> Tween:
+	var tween = node.create_tween()
+	tween.tween_property(node, "modulate", to, speed)
+	return tween

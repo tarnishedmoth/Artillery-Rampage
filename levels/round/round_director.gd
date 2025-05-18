@@ -31,7 +31,8 @@ var awaiting_intentions:int = 0
 ## player_goes_first will be honored if set
 @export var shuffle_order:bool = true
 
-var special_level_logic:bool = false
+var directed_by_external_script:bool = false ## If true, the round does not end if only the Player is alive.
+var _directed_by_external_script_condition:bool = false ## See [method end_round].
 
 var player: Player:
 	get:
@@ -100,11 +101,7 @@ func connect_controller(controller: TankController) -> void:
 		controller.signals_connected = true
 	
 func _on_player_added(controller:TankController) -> void:
-	# Check if we need to start/cycle turns.
 	pass
-	#if special_level_logic:
-		#if not awaiting_intentions > 0:
-			#next_turn()
 	
 func _on_fall_check_timeout():
 	_fall_check_elapsed_time += fall_check_timer.wait_time
@@ -167,13 +164,20 @@ func _swap_players(first_index: int, second_index: int) -> void:
 
 func check_players() -> bool:
 	# If there are 1 or 0 players left then the round is over
-	if special_level_logic:
+	if directed_by_external_script:
 		# Allow for managed situations with only the Player left
-		for controller in tank_controllers:
-			if controller is Player:
-				print_debug("Special Level: Player is alive. Check passed.")
-				return true
-		print_debug("Special Level: Player not found. Check failed. \n", tank_controllers)
+		if not _directed_by_external_script_condition:
+			for controller in tank_controllers:
+				if controller is Player:
+					# Player alive
+					print_debug("Special Level: Player is alive. Check passed.")
+					return true
+			# Player dead
+			print_debug("Special Level: Player not found. Check failed. \n", tank_controllers)
+			return false
+		else:
+			# Managed condition is true
+			return false
 	if tank_controllers.size() <= 1:
 		active_player_index = -1
 		return false
@@ -189,6 +193,11 @@ func check_players() -> bool:
 			return true
 	# All players are on the same team
 	return false
+	
+## This method is used by special levels with scripted behavior to allow for different gameplay.
+## See Factory (level_special_factory.tscn).
+func end_round() -> void:
+	_directed_by_external_script_condition = true
 		
 #region Turn Based
 func next_turn() -> bool:
