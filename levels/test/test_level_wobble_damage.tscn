@@ -9,7 +9,6 @@
 
 [node name="TestLevelNewDamage" type="Node2D"]
 script = ExtResource("1_m0w0l")
-player_health_pct = 1.0
 
 [node name="GameLevel" parent="." instance=ExtResource("2_13ilf")]
 
