@@ -121,12 +121,16 @@ func replace_tank(new_tank:Tank) -> void:
 		var current_index:int = current_tank.get_index()
 		var existing_owner:Node = current_tank.owner
 
+		var controller_added_children: Array[Node] = _duplicate_controller_added_tank_nodes(current_tank)
 		remove_child(current_tank)
 		current_tank.queue_free()
-		
+
 		_do_replace_tank(new_tank)
 
 		add_child(new_tank)
+		for child in controller_added_children:
+			new_tank.add_child(child)
+			
 		new_tank.owner = existing_owner
 
 		move_child(new_tank, current_index)
@@ -144,6 +148,19 @@ func replace_tank(new_tank:Tank) -> void:
 		# Flag for later
 		set_meta(tank_override_meta_key, new_tank)
 
+func _duplicate_controller_added_tank_nodes(current_tank: Tank) -> Array[Node]:
+	var controller_added_children: Array[Node] = []
+
+	for child in current_tank.get_children():
+		# FIXME: This does not work as expected - want to isolate nodes added to the Tank directly from controller vs those "native" to the tank scene
+		if child is AimDamageWobble or child is InitialAim:
+			controller_added_children.append(child.duplicate())
+		#print_debug("TankController(%s) - child:%s; scene_file_path=%s; child_path=%s" % [name, child.name, scene_file_path, child.scene_file_path])
+		#if scene_file_path == child.scene_file_path:
+			#print_debug("TankController(%s) - _duplicate_controller_added_tank_nodes: Adding child %s" % [name, child.name])
+			#controller_added_children.append(child.duplicate())
+	return controller_added_children
+	
 ## Override in derived class to replace _tank
 ## new_tank is not yet in the tree
 func _do_replace_tank(_new_tank:Tank) -> void:

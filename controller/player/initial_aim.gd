@@ -1,4 +1,4 @@
-extends Node
+class_name InitialAim extends Node
 
 var _my_tank:Tank
 
