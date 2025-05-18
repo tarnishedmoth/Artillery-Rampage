@@ -19,6 +19,11 @@ func _ready() -> void:
 
 	PlayerUpgrades.acquired_upgrade.connect(_on_acquired_upgrade)
 
+func on_tank_added() -> void:
+	super.on_tank_added()
+	
+	tank.tank_killed.connect(_on_tank_tank_killed)
+	
 func begin_round() -> void:
 	super.begin_round()
 	

@@ -22,6 +22,3 @@ script = ExtResource("3_7xwap")
 [node name="Weapons" type="Node" parent="."]
 
 [node name="WeaponLeadBall" parent="Weapons" instance=ExtResource("4_qpyk8")]
-
-[connection signal="tank_killed" from="Tank" to="." method="_on_tank_tank_killed"]
-[connection signal="tank_took_damage" from="Tank" to="." method="_on_tank_tank_took_damage"]

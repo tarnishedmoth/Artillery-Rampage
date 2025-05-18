@@ -26,16 +26,20 @@ var _active_turn:bool = false
 const tank_override_meta_key:StringName = &"tank_override"
 
 func _ready() -> void:
+	GameEvents.connect("turn_ended", _on_turn_ended)
+	GameEvents.connect("turn_started", _on_turn_started)
+
+	on_tank_added()
+
+## Called when tank is added to the scene
+## Normally this is called in [member _ready] but also called when replacing the tank in [member replace_tank]
+func on_tank_added() -> void:
 	tank.actions_completed.connect(_on_tank_actions_completed)
 
 	# Need to auto-end turn if killed during active turn and other intents will not fire
 	tank.tank_killed.connect(_on_tank_killed)
-
-	GameEvents.connect("turn_ended", _on_turn_ended)
-	GameEvents.connect("turn_started", _on_turn_started)
-	
 	_initial_fall_damage = tank.enable_fall_damage
-	
+
 	if !enable_damage_before_first_turn:
 		print_debug("TankController(%s) - _ready: Disable fall damage before first turn" % [name])
 		tank.enable_fall_damage = false
@@ -110,21 +114,38 @@ func _get_tank() -> Tank:
 ## Can use this to allow player to select a different type of tank to use - light, heavy, etc
 func replace_tank(new_tank:Tank) -> void:
 	# replace existing tank with new_tank
-	if is_instance_valid(tank) and tank.get_parent() == self:
-		var current_index:int = tank.get_index()
-		remove_child(tank)
-		tank.queue_free()
+	var current_tank:Tank = _get_tank()
+
+	if is_instance_valid(current_tank) and current_tank.get_parent() == self:
+		# Put new tank in same child order as original tank
+		var current_index:int = current_tank.get_index()
+		var existing_owner:Node = current_tank.owner
+
+		remove_child(current_tank)
+		current_tank.queue_free()
+		
+		_do_replace_tank(new_tank)
+
 		add_child(new_tank)
+		new_tank.owner = existing_owner
+
 		move_child(new_tank, current_index)
-		# Remove any meta flags
+
+		# Remove any meta flags so this doesn't get repeated
 		remove_meta(tank_override_meta_key)
 
-		_do_replace_tank(new_tank)
+		on_tank_added()
+
+		GameEvents.tank_changed.emit(self, current_tank, new_tank)
+
+		# TODO: This doesn't copy over any of the child nodes of tank added to the tank controller
+		# Such as the set_initial_aim or the new wobble damage nodes
 	else:
 		# Flag for later
 		set_meta(tank_override_meta_key, new_tank)
 
 ## Override in derived class to replace _tank
+## new_tank is not yet in the tree
 func _do_replace_tank(_new_tank:Tank) -> void:
 	pass
 

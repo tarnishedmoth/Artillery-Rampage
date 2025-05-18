@@ -21,6 +21,8 @@ signal turn_ended(player: TankController)
 signal player_added(player: TankController)
 signal player_died(player: TankController)
 
+signal tank_changed(player: TankController, old_tank:Tank, new_tank: Tank)
+
 signal wind_updated(wind: Wind)
 signal aim_updated(player: TankController)
 signal power_updated(player: TankController)

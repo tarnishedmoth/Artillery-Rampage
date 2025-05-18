@@ -245,6 +245,18 @@ func connect_to_tank(tank: Tank) -> void:
 	configure_barrels()
 	reload()
 
+## Should be called by a [Tank] when exiting tree to disconnect this [Weapon].
+## [br][br]
+func disconnect_from_tank(tank: Tank) -> void:
+	if parent_tank != tank:
+		return
+
+	is_configured = false
+	is_equipped = false
+	is_reloading = false
+	
+	barrels.clear()
+
 ## The [Weapon] must be [member is_equipped] to be fired. This method also uses sound effects if configured.
 ## See [member sfx_equip] & [member sfx_idle].
 func equip() -> void:

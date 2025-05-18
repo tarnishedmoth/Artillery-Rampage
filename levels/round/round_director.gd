@@ -84,6 +84,9 @@ func _ready():
 	
 	add_child(fall_check_timer)
 	
+func _enter_tree() -> void:
+	GameEvents.tank_changed.connect(_on_tank_changed)
+
 func add_controller(tank_controller: TankController) -> void:
 	if not tank_controller in tank_controllers:
 		tank_controllers.append(tank_controller)
@@ -100,7 +103,11 @@ func connect_controller(controller: TankController) -> void:
 		controller.tank.tank_took_damage.connect(_on_tank_damage.unbind(4))
 		controller.signals_connected = true
 	
-func _on_player_added(controller:TankController) -> void:
+func _on_tank_changed(controller: TankController, _old_tank: Tank, new_tank: Tank) -> void:
+	if controller in tank_controllers and controller.signals_connected:
+		new_tank.tank_killed.connect(_on_tank_killed)
+	
+func _on_player_added(_controller:TankController) -> void:
 	pass
 	
 func _on_fall_check_timeout():

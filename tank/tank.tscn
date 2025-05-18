@@ -128,7 +128,6 @@ color_ramp = SubResource("Gradient_61qm2")
 
 [node name="WeaponTrajectoryPreviewer" parent="." instance=ExtResource("7_hqpr6")]
 accuracy_angle_spread = 0.0174533
-use_fire_rate = false
 emit_action_signals = false
 
 [node name="WeaponBeamTrajectoryPreviewer" parent="." instance=ExtResource("9_ucdxg")]

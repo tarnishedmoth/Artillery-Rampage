@@ -23,6 +23,12 @@ var target_result: TankActionResult
 func _ready() -> void:
 	super._ready()
 
+func on_tank_added() -> void:
+	super.on_tank_added()
+	
+	tank.tank_killed.connect(_on_tank_tank_killed)
+	tank.tank_took_damage.connect(_on_tank_tank_took_damage)
+
 func begin_turn():
 	super.begin_turn()
 	

@@ -61,5 +61,4 @@ current_ammo = 3
 
 [node name="WeaponLaser" parent="Weapons" instance=ExtResource("13_4e8rn")]
 
-[connection signal="tank_killed" from="Tank" to="." method="_on_tank_tank_killed"]
 [connection signal="timeout" from="TrajectoryPreviewer" to="." method="_on_trajectory_previewer_timeout"]

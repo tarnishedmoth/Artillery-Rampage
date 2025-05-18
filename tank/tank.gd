@@ -133,6 +133,9 @@ func _ready() -> void:
 	tankBody.contact_monitor = true
 	tankBody.max_contacts_reported = 1
 
+func _exit_tree() -> void:
+	disconnect_from_weapons()
+	
 func _to_string() -> String:
 	return name
 	
@@ -510,6 +513,10 @@ func scan_available_weapons() -> void:
 		#w.barrels.append(weapon_fire_location) # Moved to Weapon class
 		w.connect_to_tank(self)
 	equip_next_weapon()
+
+func disconnect_from_weapons() -> void:
+	for w in weapons:
+		w.disconnect_from_tank(self)
 
 func equip_prev_weapon() -> void:
 	equip_weapon_at_index(current_equipped_weapon_index - 1)
