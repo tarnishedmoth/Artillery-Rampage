@@ -152,13 +152,12 @@ func _duplicate_controller_added_tank_nodes(current_tank: Tank) -> Array[Node]:
 	var controller_added_children: Array[Node] = []
 
 	for child in current_tank.get_children():
-		# FIXME: This does not work as expected - want to isolate nodes added to the Tank directly from controller vs those "native" to the tank scene
-		if child is AimDamageWobble or child is InitialAim:
+		# By default the scene root that the node is part of is the owner
+		# If the child's owner is the tank, then it was part of the tank scene
+		# We want to duplicate any children that have the TankController as the owner 
+		# as these were added the controller derived scene
+		if child.owner == self:
 			controller_added_children.append(child.duplicate())
-		#print_debug("TankController(%s) - child:%s; scene_file_path=%s; child_path=%s" % [name, child.name, scene_file_path, child.scene_file_path])
-		#if scene_file_path == child.scene_file_path:
-			#print_debug("TankController(%s) - _duplicate_controller_added_tank_nodes: Adding child %s" % [name, child.name])
-			#controller_added_children.append(child.duplicate())
 	return controller_added_children
 	
 ## Override in derived class to replace _tank
