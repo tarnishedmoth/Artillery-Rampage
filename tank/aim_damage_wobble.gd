@@ -4,6 +4,13 @@
 ## Non-intrusive on the player controller as we already account for when the player is aiming to try not to fight with player's desired angle
 class_name AimDamageWobble extends Node
 
+## Makes wobble animation start. Must be activated each turn 
+signal activate_wobble
+
+## Indicates whether wobbling is enabled and ready to be activated
+## Fires whenever the enabled state changes. This does not fire each turn
+signal wobble_toggled(enabled:bool)
+
 ## Deviation range vs damage pct
 @export var aim_deviation_v_damage:Curve
 
@@ -38,6 +45,8 @@ var current_rads_per_sec:float
 
 var _deviation_delta_time:float
 
+var _is_wobble_activated:bool = false
+
 func _ready() -> void:
 	if not aim_deviation_v_damage or not aim_deviation_period_v_damage:
 		push_error("%s - aim deviation curves not specified, skipping" % name)
@@ -53,6 +62,9 @@ func _ready() -> void:
 	# Wait for player to be ready before enabling
 	GameEvents.player_added.connect(_on_player_added)
 
+	activate_wobble.connect(_on_wobble_activated)
+
+# TODO: Needs to start at a max deviation as otherwise player could button mash to defeat it
 
 func _process(delta_time: float) -> void:
 	if not _is_active():
@@ -104,6 +116,7 @@ func _on_damage(_in_tank: Tank, _instigatorController: Node2D, _instigator: Node
 	var total_damage_pct:float = (_tank.max_health - _tank.health) / _tank.max_health
 
 	var deviation_deg = aim_deviation_v_damage.sample(total_damage_pct)
+	var prev_enabled := enabled
 	enabled = not is_zero_approx(deviation_deg) and deviation_deg > 0
 
 	if enabled:
@@ -117,6 +130,9 @@ func _on_damage(_in_tank: Tank, _instigatorController: Node2D, _instigator: Node
 		[name, _player, amount, total_damage_pct, enabled, deviation_deg, current_deviation_period]
 	)
 
+	if prev_enabled != enabled:
+		wobble_toggled.emit(enabled)
+
 func _on_aim_updated(player: TankController) -> void:
 	if player != _player or _modifying_aim:
 		return
@@ -125,7 +141,8 @@ func _on_aim_updated(player: TankController) -> void:
 	_cooldown_timer.start()
 	
 func _is_active() -> bool:
-	return enabled and _turn_active and _cooldown_timer.is_stopped()
+	# TODO: Some of these bools are redundant, need to clean up
+	return _is_wobble_activated and enabled and _turn_active and _cooldown_timer.is_stopped()
 
 func _on_turn_started(player: TankController) -> void:
 	if player != _player:
@@ -140,3 +157,7 @@ func _on_turn_ended(player: TankController) -> void:
 
 	print_debug("%s(%s) turn ended" % [name, _player])
 	_turn_active = false
+	_is_wobble_activated = false
+
+func _on_wobble_activated() -> void:
+	_is_wobble_activated = true

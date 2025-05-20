@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cv6jn11xopuo0"]
+
+[ext_resource type="Script" uid="uid://b4jxfu3g8vrqk" path="res://tank/auto_activate_wobble.gd" id="1_tits7"]
+
+[node name="AutoActivateWobble" type="Node"]
+script = ExtResource("1_tits7")
