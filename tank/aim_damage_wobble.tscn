@@ -4,7 +4,7 @@
 [ext_resource type="Curve" uid="uid://sxsnqhe6wtno" path="res://tank/aim_deviation_v_damage_pct.tres" id="2_ykmao"]
 [ext_resource type="Curve" uid="uid://b0w23x6b4x2qy" path="res://tank/aim_deviation_period_v_damage_pct.tres" id="3_8kjnb"]
 
-[node name="AimDamageWobble" type="Node"]
+[node name="AimDamageWobble" type="Node2D"]
 process_mode = 1
 script = ExtResource("1_tgl35")
 aim_deviation_v_damage = ExtResource("2_ykmao")

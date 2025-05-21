@@ -2,7 +2,7 @@
 ## Intended to be used by Player where HUD is shown for visual feedback
 ## Intercepts shoot, 
 ## checks if wobble is currently enabled (damage taken) and activates an interface for timing that syncs with the deviation of the wobble
-extends Node
+extends Node2D
 
 ## Connect the controller for the tank
 @export

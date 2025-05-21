@@ -36,7 +36,7 @@ controller = NodePath("../../..")
 aim_damage_wobble = NodePath("..")
 
 [node name="WobbleDamageMeter" parent="Tank/AimDamageWobble/PlayerActivateWobble" index="0" node_paths=PackedStringArray("aim_damage_wobble")]
-position = Vector2(-21, -85)
+position = Vector2(0, -74)
 aim_damage_wobble = NodePath("../..")
 
 [node name="TrajectoryPreviewer" type="Timer" parent="."]

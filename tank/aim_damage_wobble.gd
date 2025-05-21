@@ -2,7 +2,7 @@
 ## With this system max power should remain at 100% after damage
 ## Requires changes in the AITank to account for the timing aspect when this node is in the tree
 ## Non-intrusive on the player controller as we already account for when the player is aiming to try not to fight with player's desired angle
-class_name AimDamageWobble extends Node
+class_name AimDamageWobble extends Node2D
 
 ## Makes wobble animation start. Must be activated each turn 
 signal activate_wobble
