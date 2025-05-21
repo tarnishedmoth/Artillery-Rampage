@@ -138,6 +138,10 @@ func get_destructible_component() -> CollisionPolygon2D:
 func on_body_entered(body: PhysicsBody2D):
 	explode(body)
 
+## Hook function for derived classes to take additional actions when having an interaction between the destructible component and another node
+func _on_destructible_component_interaction(in_destructible_component: CollisionPolygon2D, destructible_node:Node) -> void:
+	pass
+
 ## Runs damage logic and explodes if an interaction occurs
 func explode(collided_body: PhysicsBody2D = null):
 	# Need to do a sweep to see all the things we have influenced
@@ -154,50 +158,74 @@ func explode(collided_body: PhysicsBody2D = null):
 		had_interaction = true
 	var affected_nodes = _find_interaction_overlaps()
 	
+	#region Node Group Determination
+
+	var processed_nodes_set: Dictionary[Node, bool] = {}
 	var damaged_processed_map: Dictionary[Node, float] = {}
-	var destructed_processed_set: Dictionary[Node, Node] = {}
+	var destructed_processed_map: Dictionary[Node, Vector2] = {}
 
 	for node in affected_nodes:
-		## See if this node is a "Damageable" or a "Destructable"
-		## Damageable:
+		# See if this node is a "Damageable" or a "Destructable"
+		# Damageable:
 		var root_node: Node = Groups.get_parent_in_group(node, Groups.Damageable)
 		if root_node:
 			var damage_amount = _calculate_damage(node)
 			if damage_amount > 0:
 				had_interaction = true
 				damaged_processed_map[root_node] = maxf(damage_amount, damaged_processed_map.get(root_node, 0.0))
+				processed_nodes_set[root_node] = true
 				
-		## Destructible:
+		# Destructible:
 		# -Some projectiles don't have a destructible node and don't damage the terrain or other shatterable things.
 		if destructible_component:
 			root_node = Groups.get_parent_in_group(node, Groups.Destructible)
-			if root_node and root_node not in destructed_processed_set:
+			if root_node and root_node not in destructed_processed_map:
+				_on_destructible_component_interaction(destructible_component, root_node)
 				var contact_point: Vector2 = center_destructible_on_impact_point(destructible_component)
-				
-				# Pass 0 for damage as destructible components don't take health-based damage
-				GameEvents.took_damage.emit(root_node, get_instigator(), self, contact_point, 0.0)
-				root_node.damage(self, contact_point, destructible_scale_multiplier)
 
 				had_interaction = true
-				destructed_processed_set[root_node] = root_node
-	## end for
+				destructed_processed_map[root_node] = contact_point
+				processed_nodes_set[root_node] = true
+	#endregion
 
+	#region Events and Damage Dispatch
+
+	# Process events for destructible components and combine for those that are the same
 	# Process damage at end as took max damage if there were multiple colliders on single damageable root node
-	for damageable_node in damaged_processed_map:
-		var damage: float = damaged_processed_map[damageable_node]
-		damage_damageable_node(damageable_node, damage) # I want to hook here without overriding this function
+	# Also process destructible components at end as some may also be damageable and want to emit a single global event
+
+	var instigator := get_instigator()
+
+	for node in processed_nodes_set:
+		# Default damage to 0 if this is only a destructible node and not also damageable
+		var damage_amount:float = damaged_processed_map.get(node, 0.0)
+		# Default to global_position for contact point if this is just a damageable node
+		var contact_point:Vector2 = destructed_processed_map.get(node, global_position)
+
+		if node.is_in_group(Groups.Destructible):
+			node.damage(self, contact_point, destructible_scale_multiplier)
+		if node.is_in_group(Groups.Damageable):
+			node.take_damage(instigator, self, damage_amount)
+
+		GameEvents.took_damage.emit(node, instigator, self, contact_point, damage_amount)
+	
+	#endregion
 
 	# Explode
-	if had_interaction and should_explode_on_impact: destroy()
+	if had_interaction and should_explode_on_impact: 
+		destroy()
+	
 
 ## Explodes if supported and then ensures that the projectile is destroyed
 func explode_and_force_destroy(body: PhysicsBody2D = null):
 	explode(body)
 	destroy()
 	
-func damage_damageable_node(damageable_node: Node, damage:float) -> void:
-	damageable_node.take_damage(get_instigator(), self, damage)
-	GameEvents.took_damage.emit(damageable_node, get_instigator(), self, global_position, damage)
+## Damages a damageable group node only
+## Kept for compatibility with weapon_projectile_emp
+func damage_damageable_node(damageable_node: Node, damage_amount:float) -> void:
+	damageable_node.take_damage(get_instigator(), self, damage_amount)
+	GameEvents.took_damage.emit(damageable_node, get_instigator(), self, global_position, damage_amount)
 
 func get_instigator() -> Node2D:
 	return owner_tank.get_parent() as Node2D if is_instance_valid(owner_tank) else null
@@ -271,6 +299,9 @@ func _determine_contact_point(movement_dir: Vector2, radius: float) -> Vector2:
 		return global_position
 	return result["position"]
 
+func _get_collision_transform() -> Transform2D:
+	return Transform2D(0, global_position)
+
 func _find_interaction_overlaps() -> Array[Node2D]:
 	var space_state = get_world_2d().direct_space_state
 	
@@ -280,7 +311,7 @@ func _find_interaction_overlaps() -> Array[Node2D]:
 	params.collide_with_bodies = true
 	params.collision_mask = Collisions.CompositeMasks.damageable
 	params.margin = Collisions.default_collision_margin
-	params.transform = Transform2D(0, global_position)
+	params.transform = _get_collision_transform()
 	params.exclude = [self]
 	
 	# More optimized shape creation for interfacing with the physics server
