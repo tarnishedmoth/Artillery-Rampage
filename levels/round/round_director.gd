@@ -8,6 +8,9 @@ var turns_since_damage: int = 0
 @export
 var lightning_time: int = 3
 
+@export
+var lightning_strength: float = 25.0
+
 @export 
 var physics_check_time: float = 0.25
 
@@ -312,7 +315,8 @@ func _on_player_intent_to_act(action: Callable, apply_to: Object) -> void:
 		
 func trigger_lightning():
 	turns_since_damage = 0
-	print("Zap")
+	var random_target = tank_controllers.pick_random()
+	random_target.tank.take_damage(random_target, random_target.tank, lightning_strength)
 
 #region Game State
 func create_new_gamestate() -> GameState:
