@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://cbtb48ot1p2x2"]
+
+[ext_resource type="Script" uid="uid://c2do87ghnne1q" path="res://tank/wobble_damage_meter.gd" id="1_4ans2"]
+
+[node name="WobbleDamageMeter" type="Node2D"]
+z_index = 1000
+script = ExtResource("1_4ans2")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = 1000
+z_as_relative = false
+offset_left = -20.0
+offset_top = -12.0
+offset_right = 21.0
+offset_bottom = 10.0
+color = Color(0, 0.0784314, 1, 0.537255)

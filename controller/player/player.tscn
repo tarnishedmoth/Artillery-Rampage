@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dkx7i7521cj8d" path="res://tank/aim_damage_wobble.tscn" id="4_oobv2"]
 [ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="5_arar1"]
 [ext_resource type="PackedScene" uid="uid://hlpewhe5vg2k" path="res://weapons/weapon_leadball_shotgun.tscn" id="5_lcvh8"]
-[ext_resource type="PackedScene" uid="uid://cv6jn11xopuo0" path="res://tank/auto_activate_wobble.tscn" id="5_okrbn"]
+[ext_resource type="PackedScene" uid="uid://bbj5ejo8inm0x" path="res://tank/player_activate_wobble.tscn" id="5_okrbn"]
 [ext_resource type="PackedScene" uid="uid://dychmx0p2ex84" path="res://weapons/weapon_bouncing_ball.tscn" id="6_4e8rn"]
 [ext_resource type="PackedScene" uid="uid://cbek5kw6n2l41" path="res://weapons/weapon_emp.tscn" id="6_c14li"]
 [ext_resource type="PackedScene" uid="uid://bx3va4wmvmw4o" path="res://weapons/weapon_MIRV.tscn" id="7_8sa47"]
@@ -31,9 +31,13 @@ start_angle = 20.0
 
 [node name="AimDamageWobble" parent="Tank" instance=ExtResource("4_oobv2")]
 
-[node name="AutoActivateWobble" parent="Tank/AimDamageWobble" node_paths=PackedStringArray("controller", "aim_damage_wobble") instance=ExtResource("5_okrbn")]
+[node name="PlayerActivateWobble" parent="Tank/AimDamageWobble" node_paths=PackedStringArray("controller", "aim_damage_wobble") instance=ExtResource("5_okrbn")]
 controller = NodePath("../../..")
 aim_damage_wobble = NodePath("..")
+
+[node name="WobbleDamageMeter" parent="Tank/AimDamageWobble/PlayerActivateWobble" index="0" node_paths=PackedStringArray("aim_damage_wobble")]
+position = Vector2(-21, -85)
+aim_damage_wobble = NodePath("../..")
 
 [node name="TrajectoryPreviewer" type="Timer" parent="."]
 autostart = true
@@ -67,3 +71,5 @@ current_ammo = 3
 [node name="WeaponLaser" parent="Weapons" instance=ExtResource("13_4e8rn")]
 
 [connection signal="timeout" from="TrajectoryPreviewer" to="." method="_on_trajectory_previewer_timeout"]
+
+[editable path="Tank/AimDamageWobble/PlayerActivateWobble"]

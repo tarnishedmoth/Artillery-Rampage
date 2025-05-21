@@ -16,6 +16,8 @@ var _turn_active:bool = false
 var _wobble_ready:bool = false
 
 func _ready() -> void:
+	if SceneManager.is_precompiler_running:
+		return
 	if not controller or not aim_damage_wobble:
 		push_error("%s - Missing configuration; controller=%s; aim_damage_wobble=%s" % [name, controller, aim_damage_wobble])
 		return

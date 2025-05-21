@@ -10,6 +10,7 @@ signal activate_wobble
 ## Indicates whether wobbling is enabled and ready to be activated
 ## Fires whenever the enabled state changes. This does not fire each turn
 signal wobble_toggled(enabled:bool)
+signal wobble_updated
 
 ## Deviation range vs damage pct
 @export var aim_deviation_v_damage:Curve
@@ -41,13 +42,20 @@ var _turn_active:bool = false
 var _modifying_aim:bool = false
 var current_deviation:float 
 var current_deviation_period:float
+var deviation_alpha:float
 var current_rads_per_sec:float
 
 var _deviation_delta_time:float
 
 var _is_wobble_activated:bool = false
 
+var wobble_activated: bool:
+	get: return _is_wobble_activated
+
 func _ready() -> void:
+	if SceneManager.is_precompiler_running:
+		return
+		
 	if not aim_deviation_v_damage or not aim_deviation_period_v_damage:
 		push_error("%s - aim deviation curves not specified, skipping" % name)
 		return
@@ -81,18 +89,20 @@ func _process(delta_time: float) -> void:
 	_deviation_delta_time = fmod(_deviation_delta_time + eased_delta, current_deviation_period)
 
 	# Value 0-1 within current cycle
-	var deviation_alpha: float = _deviation_delta_time / current_deviation_period
-	var phase_sign:float = _get_phase_sign(deviation_alpha)
+	deviation_alpha = _deviation_delta_time / current_deviation_period
+	var phase_sign:float = get_phase_sign(deviation_alpha)
 
 	var aim_delta_rads := phase_sign * current_rads_per_sec * eased_delta
 
 	_modifying_aim = true
 	_tank.aim_delta(aim_delta_rads)
 	_modifying_aim = false
+	
+	wobble_updated.emit()
 
-func _get_phase_sign(deviation_alpha:float) -> float:
+func get_phase_sign(in_deviation_alpha:float) -> float:
 	# Determine the phase of the animation (1-4)
-	var phase:int = ceili(deviation_alpha * 4.0)
+	var phase:int = ceili(in_deviation_alpha * 4.0)
 	#print_debug("phase=%d" % phase)
 	match phase:
 		1,4: return -1.0

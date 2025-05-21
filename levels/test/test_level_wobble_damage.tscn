@@ -44,4 +44,3 @@ position = Vector2(120, 427)
 [editable path="GameLevel/Walls"]
 [editable path="GameLevel/Enemy1"]
 [editable path="GameLevel/Enemy2"]
-[editable path="GameLevel/Player"]
