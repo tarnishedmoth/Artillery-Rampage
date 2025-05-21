@@ -102,4 +102,7 @@ func _find_nearest_target() -> Vector2:
 	if show_debug_targets:
 		debug_target.show()
 		debug_target2.show()
+	# catch-all
+	if not is_instance_valid(nearest_target):
+		nearest_target = self # Lol
 	return nearest_target.global_position
