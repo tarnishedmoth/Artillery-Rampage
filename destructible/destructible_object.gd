@@ -1,12 +1,11 @@
 class_name DestructibleObject extends Node2D
 
+@export var display_name: String ## Used for UI.
 @export_category("Chunk")
 @export var chunk_scene: PackedScene
 
 @export_category("Destruction")
 @export var crumbling:bool = false
-
-@export_category("Destruction")
 @export var create_new_chunks:bool = false
 
 @export_category("Smoothing")

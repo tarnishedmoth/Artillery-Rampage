@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://d32uo8rsaysp3" path="res://buildings/lighthouse/light_house_chunk.tscn" id="2_5d6b8"]
 
 [node name="Lighthouse" instance=ExtResource("1_4bptg")]
+display_name = "a lighthouse"
 chunk_scene = ExtResource("2_5d6b8")
 crumbling = true
 

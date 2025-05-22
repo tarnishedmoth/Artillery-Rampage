@@ -97,21 +97,30 @@ func _on_wall_interaction(walls: Walls, projectile: WeaponProjectile, interactio
 
 func _on_took_damage(object: Node, instigatorController: Node2D, instigator: Node2D, contact_point: Vector2, damage: float):
 	var player_name = instigatorController.name
-	var taker_name = object.controller.name if object is Tank else null
+	
+	var taker_name:String = ""
+	if object is Tank:
+		taker_name = object.controller.name as String
+	elif "display_name" in object:
+		# DestructibleObject
+		taker_name = object.display_name as String
+	elif is_zero_approx(damage):
+		# Terrain.
+		return
+	if taker_name.is_empty(): taker_name = "something"
+	
+	if "health" in object:
+		if object.health <= 0.0:
+			# TODO random words that mean "destroyed" for funsies
+			record(underl(player_name) + " destroyed " + underl(taker_name) + ".")
+			return
 	
 	if player_name != _damage_last_player: _damage_recipients.clear() # Empty the damaged cache
-	elif taker_name != null:
-		if taker_name in _damage_recipients: # This thing has been damaged this turn.
-			_damage_recipients[taker_name] += damage # Add to previous
-		else:
-			_damage_recipients[taker_name] = damage # First instance
+	# Check if this thing has been damaged this turn.
+	if taker_name in _damage_recipients:
+		_damage_recipients[taker_name] += damage # Add to previous
 	else:
-		# Not a tank
-		if is_zero_approx(damage):
-			pass # Terrain
-		else:
-			# Damageable object of some kind
-			record(underl(player_name) + " damaged something for " + bold(int(damage))+".")
+		_damage_recipients[taker_name] = damage # First instance
 	_damage_last_player = player_name
 		
 func _accumulate_and_record_tank_damage(_player: TankController) -> void:
