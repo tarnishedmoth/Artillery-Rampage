@@ -27,7 +27,7 @@ invoke_ready = true
 [node name="Mesh" parent="." index="0"]
 texture = SubResource("GradientTexture2D_clfbe")
 
-[node name="SmokeParticles" type="CPUParticles2D" parent="." index="3"]
+[node name="SmokeParticles" type="CPUParticles2D" parent="." index="3" groups=["Wind_CPUParticles2D"]]
 emitting = false
 amount = 10
 texture = ExtResource("2_clfbe")
