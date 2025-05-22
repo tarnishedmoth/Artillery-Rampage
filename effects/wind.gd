@@ -59,7 +59,8 @@ func _apply_wind_to_active_projectiles(delta: float) -> void:
 		if is_instance_valid(projectile) and projectile.is_affected_by_wind:
 			projectile.apply_central_force(force * delta)
 			
-	for group_member:CPUParticles2D in get_tree().get_nodes_in_group("Wind_CPUParticles2D"):
-		var windspeed:float = wind.x * 0.5
-		if group_member.gravity.x != windspeed:
-			group_member.gravity.x = windspeed
+	for group_member in get_tree().get_nodes_in_group("Wind_CPUParticles2D"):
+		if group_member is CPUParticles2D:
+			var windspeed:float = wind.x * 0.5
+			if group_member.gravity.x != windspeed:
+				group_member.gravity.x = windspeed

@@ -81,7 +81,7 @@ position = Vector2(13, 0)
 [node name="Top" type="Marker2D" parent="TankBody"]
 position = Vector2(0, -13)
 
-[node name="DamagedSmokeParticles" parent="TankBody" groups=["Wind_CPUParticles2D"] instance=ExtResource("8_adwvx")]
+[node name="DamagedSmokeParticles" parent="TankBody" instance=ExtResource("8_adwvx")]
 unique_name_in_owner = true
 
 [node name="FiredWeaponContainer" type="Node" parent="."]
