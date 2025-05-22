@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://xnyh8uolctrv"]
 
-[ext_resource type="Script" uid="uid://bacs4oxxgmiqp" path="res://buildings/evaporator/damageable_destructible_object.gd" id="1_f3koo"]
+[ext_resource type="Script" uid="uid://bacs4oxxgmiqp" path="res://destructible/damageable_destructible_object.gd" id="1_f3koo"]
 [ext_resource type="PackedScene" uid="uid://c2imoahrkuj2r" path="res://buildings/evaporator/evaporator_chunk.tscn" id="2_f3koo"]
 [ext_resource type="Script" uid="uid://cj4ks2od2ywxd" path="res://destructible/destructible_shape_calculator.gd" id="2_qoh1s"]
 
