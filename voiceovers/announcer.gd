@@ -88,6 +88,8 @@ const water_kill_sfx_res:StringName = &"res://voiceovers/water-kill.mp3"
 # You accidentally take yourself out with your own shot
 const whoopsies_sfx_res:StringName = &"res://voiceovers/whoopsies.mp3"
 
+const round_start_sfx_res:StringName = &"res://music/round_start_voice.wav"
+
 func _ready() -> void:
 	GameEvents.level_loaded.connect(_on_level_loaded)
 	GameEvents.round_started.connect(_on_round_started)
@@ -115,11 +117,15 @@ func _on_level_loaded(level: GameLevel) -> void:
 func _on_round_started() -> void:
 	# This is called AFTER all players added
 	print_debug("%s: Round Started - level=%s" % [name, _game_level.level_name])
+		
 	_num_opponents = _game_level.round_director.tank_controllers.size() - 1
 	
 	if is_avalance_level:
 		print_debug("%s - subscribing to terrain fracture events for avalanche level" % name)
 		_game_level.terrain.chunk_split.connect(_on_terrain_chunk_split)
+
+	# Play round start
+	announcer_player.switch_stream_res_and_play(round_start_sfx_res)
 
 func _on_terrain_chunk_split(chunk: Node2D,  new_chunk: Node2D) -> void:
 	# Only record when chunk splits off of the main chunk which will be of type TerrainChunk
