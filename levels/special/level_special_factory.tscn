@@ -29,7 +29,7 @@
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="21_k8tcd"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="22_4t21x"]
 [ext_resource type="Script" uid="uid://dlosg08ehpwdc" path="res://levels/special/factory.gd" id="22_ja3hk"]
-[ext_resource type="PackedScene" uid="uid://sa0oyrt453vy" path="res://buildings/lighthouse/light_house.tscn" id="30_5dbbs"]
+[ext_resource type="PackedScene" uid="uid://xnyh8uolctrv" path="res://buildings/evaporator/evaporator.tscn" id="30_5dbbs"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_chthv"]
 shader = ExtResource("6_xu7nj")
@@ -86,7 +86,7 @@ scale = Vector2(1.28, 0.68)
 polygon = PackedVector2Array()
 
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
-polygon = PackedVector2Array(-103.125, 7.35297, -53.9063, -16.1765, 19.5313, -36.7647, 75, -36.7647, 128.906, -2.94116, 168.75, 17.647, 221.875, 10.2941, 274.219, -26.4706, 304.688, -79.4117, 322.656, -142.647, 337.5, -169.118, 360.156, -169.118, 378.906, -130.882, 399.219, -32.353, 435.938, 50, 468.75, 72.0588, 596.094, 82.353, 941.406, 82.353, 945, 445, -103, 448)
+polygon = PackedVector2Array(-103.125, 7.35297, -53.9063, -16.1765, 19.5313, -36.7647, 75, -36.7647, 128.906, -2.94116, 168.75, 17.647, 229.688, 20.5883, 289.844, 4.41174, 321.094, -29.4117, 335.156, -72.0588, 345.313, -107.353, 361.719, -120.588, 377.344, -107.353, 384.375, -63.2353, 387.5, 4.41174, 394.531, 82.353, 596.094, 82.353, 941.406, 82.353, 945, 445, -103, 448)
 
 [node name="Walls" parent="GameLevel" instance=ExtResource("10_hw8a8")]
 unique_name_in_owner = true
@@ -133,7 +133,7 @@ position = Vector2(173, 404)
 enable_damage_before_first_turn = false
 
 [node name="Factory" type="Node2D" parent="GameLevel" node_paths=PackedStringArray("damageable_components")]
-position = Vector2(884, 499)
+position = Vector2(934, 500)
 script = ExtResource("22_ja3hk")
 schedule = Dictionary[int, int]({
 0: 2,
@@ -166,10 +166,13 @@ schedule = Dictionary[int, int]({
 99: 4,
 100: 4
 })
-damageable_components = [NodePath("Lighthouse")]
+damageable_components = [NodePath("Evaporator"), NodePath("Evaporator2")]
 
-[node name="Lighthouse" parent="GameLevel/Factory" instance=ExtResource("30_5dbbs")]
-position = Vector2(347, 2)
+[node name="Evaporator" parent="GameLevel/Factory" instance=ExtResource("30_5dbbs")]
+position = Vector2(-276, 0)
+
+[node name="Evaporator2" parent="GameLevel/Factory" instance=ExtResource("30_5dbbs")]
+position = Vector2(-191, 0)
 
 [node name="Polygon2D" type="Polygon2D" parent="GameLevel/Factory"]
 color = Color(0, 0, 0, 0.552941)

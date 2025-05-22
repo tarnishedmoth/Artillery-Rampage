@@ -110,7 +110,8 @@ func defeated() -> void:
 	%RoundDirector.end_round()
 
 func _on_turn_ended(_tank:TankController) -> void:
-	turn_counter += 1
+	#turn_counter += 1
+	set_deferred("turn_counter", turn_counter+1) # Maybe bugfix
 	advance_conveyor()
 	check_turn()
 

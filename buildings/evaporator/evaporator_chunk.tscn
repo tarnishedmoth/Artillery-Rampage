@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://c2imoahrkuj2r"]
+
+[ext_resource type="Script" uid="uid://bmi1wdvbuh06w" path="res://destructible/destructible_object_chunk.gd" id="1_ipi37"]
+[ext_resource type="Script" uid="uid://dncglgy7n0c4f" path="res://destructible/destructible_poly_operations.gd" id="2_4nqxq"]
+
+[node name="DestructibleObjectChunk" type="RigidBody2D" groups=["Destructible"]]
+collision_layer = 16
+collision_mask = 315
+mass = 12000.0
+center_of_mass_mode = 1
+center_of_mass = Vector2(0, -100)
+max_contacts_reported = 1
+script = ExtResource("1_ipi37")
+smooth_influence_scale = 0.25
+min_mass = 1600.0
+destroy_below_min_mass = true
+
+[node name="Mesh" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-16, -16, -16, -48, -40, -72, -40, -144, -16, -144, -8, -152, 8, -152, 16, -144, 40, -144, 40, -72, 16, -48, 16, -16, 32, 0, -32, 0)
+
+[node name="Collision" type="CollisionPolygon2D" parent="."]
+position = Vector2(0, 0.649994)
+polygon = PackedVector2Array(-16, -16, -16, -48, -40, -72, -40, -144, -16, -144, -8, -152, 8, -152, 16, -144, 40, -144, 40, -72, 16, -48, 16, -16, 32, 0, -32, 0)
+
+[node name="DestructiblePolyOperations" type="Node" parent="."]
+script = ExtResource("2_4nqxq")
