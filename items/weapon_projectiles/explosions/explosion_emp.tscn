@@ -70,7 +70,7 @@ pitch_scale = 0.7
 bus = &"Guns"
 area_mask = 2
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." groups=["Wind_CPUParticles2D"]]
 amount = 12
 lifetime = 1.4
 explosiveness = 1.0
