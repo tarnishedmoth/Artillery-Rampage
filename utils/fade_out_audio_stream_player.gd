@@ -8,20 +8,31 @@ class_name FadeOutAudioStreamPlayer extends AudioStreamPlayer
 @export var priority_dictionary: Dictionary[StringName, int] = {}
 
 var _last_audio_res:StringName
+var _orig_volume:float
 
-func switch_stream_res_if_not_playing(stream_resource: StringName) -> void:
+func _init() -> void:
+	_orig_volume = volume_linear
+
+func _ready() -> void:
+	finished.connect(_on_finished)
+
+func _on_finished() -> void:
+	print_debug("%s: finished" % name)
+	volume_linear = _orig_volume
+	
+func switch_stream_res_if_not_playing(stream_resource: StringName, volume:float = volume_linear) -> void:
 	if playing:		
 		print_debug("%s: switch_stream_res_if_not_playing - %s - existing audio is playing, return" % [name, stream_resource])
 		return
-	switch_stream_res_and_play(stream_resource)
+	switch_stream_res_and_play(stream_resource, volume)
 
-func switch_stream_if_not_playing(in_stream: AudioStream) -> void:
+func switch_stream_if_not_playing(in_stream: AudioStream, volume:float = volume_linear) -> void:
 	if playing:		
 		print_debug("%s: switch_stream_res_if_not_playing - existing audio is playing, return" % [name])
 		return
-	switch_stream_and_play(in_stream)
+	switch_stream_and_play(in_stream, volume)
 	
-func switch_stream_res_and_play(stream_resource: StringName, restart:bool = false, fade_out_duration:float = default_fade_out) -> void:
+func switch_stream_res_and_play(stream_resource: StringName, volume:float = volume_linear, restart:bool = false, fade_out_duration:float = default_fade_out) -> void:
 	var audio: AudioStream = load(stream_resource) as AudioStream
 	if not audio:
 		push_warning("%s: Could not load %s as an AudioStream" % [name, stream_resource])
@@ -38,9 +49,9 @@ func switch_stream_res_and_play(stream_resource: StringName, restart:bool = fals
 				return
 				
 		_last_audio_res = stream_resource
-		switch_stream_and_play(audio, true, fade_out_duration)
+		switch_stream_and_play(audio, volume, true, fade_out_duration)
 	
-func switch_stream_and_play(in_stream: AudioStream, restart:bool = false, fade_out_duration:float = default_fade_out) -> void:
+func switch_stream_and_play(in_stream: AudioStream, volume:float = volume_linear, restart:bool = false, fade_out_duration:float = default_fade_out) -> void:
 	if playing and not restart and in_stream == stream:
 		return
 	await fade_out(fade_out_duration)
@@ -50,6 +61,9 @@ func switch_stream_and_play(in_stream: AudioStream, restart:bool = false, fade_o
 		return
 		
 	stream = in_stream
+	_orig_volume = volume_linear
+	volume_linear = volume
+
 	print_debug("%s: playing %s at volume=%f" % [name, _last_audio_res, volume_linear])
 	play()
 	
@@ -64,7 +78,6 @@ func fade_out(duration: float = default_fade_out) -> void:
 		
 	print_debug("%s: fade_out: begin - duration=%fs" % [name, duration])
 	
-	var orig_volume:float = volume_linear
 	var tween:Tween = get_tree().create_tween()
 	tween.tween_property(self, "volume_linear", 0.0, duration)
 	
@@ -73,5 +86,5 @@ func fade_out(duration: float = default_fade_out) -> void:
 	# Necessary to allow next sound to play
 	await get_tree().process_frame
 
-	volume_linear = orig_volume
+	volume_linear = _orig_volume
 	print_debug("%s: fade_out: end" % name)

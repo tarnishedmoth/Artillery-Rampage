@@ -7,6 +7,7 @@
 process_mode = 1
 script = ExtResource("1_ik160")
 announcement_queue_turn_delay = 0.25
+round_start_volume = 0.5
 
 [node name="AnnouncerSfx" parent="." instance=ExtResource("2_fp170")]
 bus = &"Speech"

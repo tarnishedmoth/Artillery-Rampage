@@ -89,6 +89,8 @@ const water_kill_sfx_res:StringName = &"res://voiceovers/water-kill.mp3"
 const whoopsies_sfx_res:StringName = &"res://voiceovers/whoopsies.mp3"
 
 const round_start_sfx_res:StringName = &"res://music/round_start_voice.wav"
+@export_range(0.0, 1.0, 0.01) 
+var round_start_volume:float = 0.75
 
 func _ready() -> void:
 	GameEvents.level_loaded.connect(_on_level_loaded)
@@ -125,7 +127,7 @@ func _on_round_started() -> void:
 		_game_level.terrain.chunk_split.connect(_on_terrain_chunk_split)
 
 	# Play round start
-	announcer_player.switch_stream_res_and_play(round_start_sfx_res)
+	announcer_player.switch_stream_res_and_play(round_start_sfx_res, round_start_volume)
 
 func _on_terrain_chunk_split(chunk: Node2D,  new_chunk: Node2D) -> void:
 	# Only record when chunk splits off of the main chunk which will be of type TerrainChunk
