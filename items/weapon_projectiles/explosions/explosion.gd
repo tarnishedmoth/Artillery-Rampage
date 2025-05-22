@@ -1,15 +1,19 @@
 class_name Explosion extends Node2D
+## Starts SFX and Particles and frees itself once all are finished.
+##
+## This class only handles [CPUParticles2D] and [AudioStreamPlayer2D] at this time.
+## It will wait until all nodes assigned in the Inspector export properties have
+## emitted their finished signal. [b]Assigning a node that loops will prevent this
+## node from queue_free().[/b]
+## [br]
+## Note that the [Wind] automatically applies itself using [member CPUParticles2D.gravity]
+## in [i]_physics_process[/i] to all members of the [b]Wind_CPUParticles2D[/b] Global Group.
+## [br]
+## It might make sense for this to also have the functionality for damage, even
+## if the math for it remains in the WeaponProjectile class...
 
 signal started
 signal completed
-
-## Starts SFX and Particles and frees itself once all are finished.
-## This class only handles CPUParticles2D and AudioStreamPlayer2D at this time.
-## It will wait until all nodes assigned in the Inspector export properties have
-## emitted their finished signal. Assigning a node that loops will prevent this
-## node from queue_free().
-## It might make sense for this to also have the functionality for damage, if we
-## move it from the WeaponProjectile class.
 
 ## Will wait until all emit [signal finished] to [method queue_free] this object.
 @export var particles:Array[CPUParticles2D]
@@ -26,6 +30,10 @@ var _finished_particles:int = 0
 
 func _ready() -> void:
 	play_all()
+	
+func destroy() -> void:
+	completed.emit()
+	queue_free()
 	
 func play_all() -> void:
 	var emitted:int = 0
@@ -51,14 +59,15 @@ func play_all() -> void:
 		
 	started.emit()
 		
-func check_all_finished() -> void:
+func check_all_finished() -> bool:
 	if _finished_particles == particles.size() and _finished_sfx == sfx.size():
-		completed.emit()
-		queue_free()
+		return true
+	else:
+		return false
 		
 func free_after_delay() -> void:
 	await get_tree().create_timer(5.0).timeout
-	queue_free()
+	destroy()
 	
 func fade_light(light: PointLight2D) -> void:
 	var light_tween = create_tween()
@@ -68,9 +77,11 @@ func fade_light(light: PointLight2D) -> void:
 func _on_sfx_finished() -> void:
 	_finished_sfx += 1
 	if _finished_sfx == sfx.size():
-		check_all_finished()
+		if check_all_finished():
+			destroy()
 
 func _on_particles_finished() -> void:
 	_finished_particles += 1
 	if _finished_particles == particles.size():
-		check_all_finished()
+		if check_all_finished():
+			destroy()
