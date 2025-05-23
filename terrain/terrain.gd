@@ -27,6 +27,8 @@ const TerrainChunkScene: PackedScene = preload("res://terrain/terrain_chunk.tscn
 @export var destructible_chunk_scene: PackedScene
 @export var destructible_area_threshold_range:Vector2
 
+@onready var rubble_chunks_spawner:RubbleChunksSpawner = $RubbleChunksSpawner
+
 ## ShatterableObject derived scenes
 @export_category("Shatterable")
 
@@ -132,11 +134,8 @@ func damage(terrainChunk: TerrainChunk, projectile: WeaponProjectile, contact_po
 	print("damage(" + name + ") Clip result with " + projectile_poly.owner.name +
 	 " - Changing from size of " + str(terrain_poly_global.size()) + " to " + str(updated_terrain_poly.size()))
 
-	#print("old poly (WORLD):")
-	#print_poly(terrain_poly_global)
-	#print("new poly (WORLD):")
-	#print_poly(updated_terrain_poly)
-	
+	rubble_chunks_spawner.spawn_rubble(projectile_poly_global, terrain_poly_global)
+
 	# This could result in new chunks breaking off
 	var terrain_chunk_results := terrainChunk.replace_contents(updated_terrain_poly, projectile_poly_global)
 	if !terrain_chunk_results.is_empty():

@@ -41,6 +41,9 @@ func _extract_rubble_prototypes() -> void:
 	print_debug("%s - Found %d rubble prototypes" % [name, rubble_prototypes.size()])
 
 func spawn_rubble(destructible_poly_global:PackedVector2Array, orig_poly_global:PackedVector2Array) -> void:
+	if max_rubble_count <= 0:
+		return
+	
 	if not rubble_prototypes:
 		print_debug("%s - spawn_rubble called with no rubble prototypes" % name)
 		return

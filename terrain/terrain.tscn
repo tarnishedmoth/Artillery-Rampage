@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://l1x5kvupj7so"]
+[gd_scene load_steps=7 format=3 uid="uid://l1x5kvupj7so"]
 
 [ext_resource type="Script" uid="uid://brvqwsm80eblg" path="res://terrain/terrain.gd" id="1_4p40s"]
 [ext_resource type="Script" uid="uid://cj4ks2od2ywxd" path="res://destructible/destructible_shape_calculator.gd" id="1_cuql0"]
 [ext_resource type="PackedScene" uid="uid://dmbj0iglwwo7x" path="res://terrain/terrain_chunk.tscn" id="2_3bd8x"]
 [ext_resource type="PackedScene" uid="uid://blq5nrj7cm2f3" path="res://terrain/destructible_terrain_chunk.tscn" id="2_7nt5j"]
 [ext_resource type="PackedScene" uid="uid://vdbf13j8n2f4" path="res://terrain/shatterable_terrain_chunk.tscn" id="3_mk5yb"]
+[ext_resource type="PackedScene" uid="uid://d0fthn43xgog3" path="res://destructible/rubble/rubble_chunks_spawner.tscn" id="6_mk5yb"]
 
 [node name="Terrain" type="Node2D" groups=["DamageableRoot"]]
 z_index = -100
@@ -18,3 +19,7 @@ shatterable_area_threshold_range = Vector2(100, 4000)
 
 [node name="DestructibleShapeCalculator" type="Node" parent="."]
 script = ExtResource("1_cuql0")
+
+[node name="RubbleChunksSpawner" parent="." instance=ExtResource("6_mk5yb")]
+max_lifetime = 10.0
+max_rubble_count = 5
