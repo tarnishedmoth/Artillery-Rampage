@@ -74,7 +74,7 @@ func _apply_wind_to_active_projectiles(delta: float) -> void:
 			projectile.apply_central_force(force * delta)
 			
 func _apply_wind_to_particles(group:Array) -> void:
-	var windspeed:float = wind.x * 0.5
+	var windspeed:float = wind.x * 0.8
 	for member in group:
 		if member.gravity.x != windspeed:
 			member.gravity.x = windspeed
