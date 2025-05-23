@@ -2,9 +2,9 @@ extends Control
 
 var paused = false;
 
+@onready var events_log: PauseMenuLogUI = %EventsLog
 @onready var options_menu: PanelContainer = %OptionsMenu
 @onready var pause_menu: Control = %PauseMenu
-
 @onready var exit_to_desktop_button: Button = %QuitToDesktop
 
 ## Super secret cheat codes (shh!)
@@ -28,8 +28,15 @@ var CheatCodes:Dictionary[Array, Cheats] = {
 	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.RIGHT,Keys.RIGHT,Keys.LEFT,Keys.UP]: Cheats.INSTAKILL,
 }
 var input_buffer:Array[Keys]
+var input_buffer_listening:bool = false
+var input_buffer_clearing_timer:Timer = Timer.new()
+var input_buffer_clearing_timer_wait_time:float = 3.5
 
 func _ready():
+	input_buffer_clearing_timer.one_shot = true # We start this timer every time we capture an input.
+	add_child(input_buffer_clearing_timer)
+	input_buffer_clearing_timer.timeout.connect(_on_input_buffer_clearing_timer_timeout)
+	
 	if OS.get_name() == "Web":
 		exit_to_desktop_button.hide()
 		
@@ -44,7 +51,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		toggle_visibility()
 		
 func _input(event: InputEvent) -> void:
-	if paused:
+	if paused && input_buffer_listening:
 		var buffer_action:Keys
 		if event.is_action_pressed("aim_left"): buffer_action = Keys.LEFT
 		elif event.is_action_pressed("aim_right"): buffer_action = Keys.RIGHT
@@ -57,6 +64,9 @@ func _input(event: InputEvent) -> void:
 		while input_buffer.size() > 8:
 			input_buffer.remove_at(0)
 			continue
+		# We want to force the user to enter a combination within a timeframe.
+		if input_buffer_clearing_timer.is_stopped():
+			input_buffer_clearing_timer.start(input_buffer_clearing_timer_wait_time)
 		_check_cheat_code_entered(input_buffer)
 
 func toggle_visibility():
@@ -64,10 +74,15 @@ func toggle_visibility():
 	
 	if paused:
 		self.show()
-		get_tree().paused = paused
+		get_tree().paused = true
+		
+		input_buffer_listening = true
 	else:
 		self.hide()
-		get_tree().paused = paused	
+		get_tree().paused = false
+		
+		input_buffer_listening = false
+	input_buffer.clear()
 	
 
 func _on_resume_pressed():
@@ -82,11 +97,12 @@ func _on_quit_to_desktop_pressed() -> void:
 func _on_options_pressed() -> void:
 	pause_menu.hide()
 	options_menu.show()
+	input_buffer_listening = false
 
 func _on_options_menu_closed() -> void:
 	pause_menu.show()
 	options_menu.hide()
-
+	input_buffer_listening = true
 
 func _on_new_game_pressed() -> void:
 	# Start a new quick match
@@ -97,6 +113,7 @@ func _on_new_game_pressed() -> void:
 	var level: StoryLevel = SceneManager.levels_always_selectable.levels.pick_random()
 	if level:
 		SceneManager.switch_scene_file(level.scene_res_path)
+
 
 func _check_cheat_code_entered(code:Array[Keys]) -> void:
 	if input_buffer in CheatCodes:
@@ -140,6 +157,7 @@ func _check_cheat_code_entered(code:Array[Keys]) -> void:
 				tank.apply_scale(Vector2(0.75,0.75))
 				
 		print_debug("-- CHEAT: ", cheat_name) # TODO log in pause menu events log
+		events_log.record("CHEAT ENTERED: "+ cheat_name)
 
 func _get_player_controller() -> Player:
 	var player = null
@@ -149,3 +167,6 @@ func _get_player_controller() -> Player:
 				player = unit.controller
 				break
 	return player
+
+func _on_input_buffer_clearing_timer_timeout() -> void:
+	input_buffer.clear()
