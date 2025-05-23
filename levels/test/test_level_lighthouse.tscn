@@ -1,14 +1,26 @@
-[gd_scene load_steps=6 format=3 uid="uid://tg7woc7sphy8"]
+[gd_scene load_steps=9 format=3 uid="uid://tg7woc7sphy8"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_rg2kl"]
+[ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_piky0"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_ykylo"]
 [ext_resource type="PackedScene" uid="uid://6b6y8xulf247" path="res://controller/ai/behaviors/rando_ai_behavior.tscn" id="3_7oti4"]
+[ext_resource type="Texture2D" uid="uid://ba7dq172ainja" path="res://terrain/terrain-strata-beach.png" id="3_nqshv"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="4_lwxpp"]
 [ext_resource type="PackedScene" uid="uid://sa0oyrt453vy" path="res://buildings/lighthouse/light_house.tscn" id="5_kdojx"]
+
+[sub_resource type="Resource" id="Resource_fi6ty"]
+script = ExtResource("2_piky0")
+texture = ExtResource("3_nqshv")
+repeat = 3
+offset = Vector2(0, 360)
+metadata/_custom_type_script = "uid://43ab121okvpb"
 
 [node name="TestLevelLighthouse" type="Node2D"]
 
 [node name="GameLevel" parent="." instance=ExtResource("1_rg2kl")]
+
+[node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
+texture_resources = Array[ExtResource("2_piky0")]([SubResource("Resource_fi6ty")])
 
 [node name="Enemy1" parent="GameLevel" instance=ExtResource("2_ykylo")]
 position = Vector2(479, 278)

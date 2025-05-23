@@ -1,12 +1,21 @@
-[gd_scene load_steps=13 format=3 uid="uid://bt3ao4phr2w10"]
+[gd_scene load_steps=16 format=3 uid="uid://bt3ao4phr2w10"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_hr00p"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_aoyoi"]
+[ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_j7aeg"]
 [ext_resource type="Shader" uid="uid://jnl644tjjk1s" path="res://effects/hazard/water/water_hazard.gdshader" id="3_85cl6"]
 [ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_axj0u"]
+[ext_resource type="Texture2D" uid="uid://ctk3c5ibo2pmg" path="res://terrain/terrain-strata-sand.png" id="3_djkkf"]
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="4_d3cex"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="5_xyt2g"]
 [ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="6_scx2d"]
+
+[sub_resource type="Resource" id="Resource_d4u4r"]
+script = ExtResource("2_j7aeg")
+texture = ExtResource("3_djkkf")
+repeat = 2
+offset = Vector2(0, 0)
+metadata/_custom_type_script = "uid://43ab121okvpb"
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_0mct0"]
 
@@ -38,6 +47,9 @@ shader_parameter/offset2 = Vector2(0.04, 0.04)
 [node name="TestLevelWater" type="Node2D"]
 
 [node name="GameLevel" parent="." instance=ExtResource("1_hr00p")]
+
+[node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
+texture_resources = Array[ExtResource("2_j7aeg")]([SubResource("Resource_d4u4r")])
 
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
 polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 209.375, 61.7647, 232.813, -132.353, 260.938, -132.353, 476.563, -407.353, 609, -8, 937, -3, 945, 445, -103, 448)
