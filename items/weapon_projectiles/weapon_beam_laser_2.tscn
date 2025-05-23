@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=3 uid="uid://snkt2d10iu1i"]
+
+[ext_resource type="Script" uid="uid://ci78gx0frupym" path="res://items/weapon_projectiles/weapon_beam_2.gd" id="1_5q0cl"]
+
+[sub_resource type="Gradient" id="Gradient_mhdbg"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ppf4e"]
+gradient = SubResource("Gradient_mhdbg")
+width = 8
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mhdbg"]
+size = Vector2(1, 8)
+
+[node name="WeaponBeam2" type="RigidBody2D"]
+gravity_scale = 0.0
+script = ExtResource("1_5q0cl")
+max_lifetime = 5.0
+is_affected_by_wind = false
+should_explode_on_impact = false
+destructible_scale_multiplier = Vector2(1, 1)
+metadata/_custom_type_script = "uid://ci78gx0frupym"
+
+[node name="BeamSprite" type="Sprite2D" parent="."]
+rotation = 1.5708
+texture = SubResource("GradientTexture1D_ppf4e")
+
+[node name="PhysicsShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_mhdbg")
+
+[node name="DestructibleOLD" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(0.5, 4, -0.5, 4, -0.5, -4, 0.5, -4)
+
+[node name="LaserEnd" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="LaserEnd"]
+visible = false
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+color = Color(0.778615, 0.524467, 1, 1)
+
+[node name="Destructible" type="CollisionPolygon2D" parent="."]
+scale = Vector2(1.07263, 1.07263)
+polygon = PackedVector2Array(-5.59373, 1.86458, -5.59373, 0, -4.66144, -2.79687, -2.79687, -4.66144, 0, -5.59373, 2.79687, -4.66144, 4.66144, -2.79687, 5.59373, 0, 4.66144, 2.79687, 2.79687, 4.66144, 0, 5.59373, -2, 5, -4, 4)

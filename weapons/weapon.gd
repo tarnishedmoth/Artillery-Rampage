@@ -576,7 +576,7 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 			aim_angle += deviation
 			# TODO this should also rotate the object
 		
-		if new_shot is RigidBody2D and new_shot is not WeaponBeam:
+		if new_shot is RigidBody2D and new_shot is not WeaponBeam and new_shot is not WeaponBeam2:
 			var velocity = Vector2(power, 0.0)
 			new_shot.linear_velocity = velocity.rotated(aim_angle)
 			# TODO alternative for other types of objects?

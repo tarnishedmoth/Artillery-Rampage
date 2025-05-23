@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dps6lqs28tqa1"]
+[gd_scene load_steps=19 format=3 uid="uid://dps6lqs28tqa1"]
 
 [ext_resource type="Script" uid="uid://c3j0v57tdn8jy" path="res://controller/player/initial_aim.gd" id="1_5t8u5"]
 [ext_resource type="Script" uid="uid://drk5s6oo6lloa" path="res://controller/player/player.gd" id="1_t03mm"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://bbj5ejo8inm0x" path="res://tank/player_activate_wobble.tscn" id="5_okrbn"]
 [ext_resource type="PackedScene" uid="uid://dychmx0p2ex84" path="res://weapons/weapon_bouncing_ball.tscn" id="6_4e8rn"]
 [ext_resource type="PackedScene" uid="uid://cbek5kw6n2l41" path="res://weapons/weapon_emp.tscn" id="6_c14li"]
+[ext_resource type="PackedScene" uid="uid://b4sy4hh23outk" path="res://weapons/weapon_laser_2.tscn" id="6_d3jwv"]
 [ext_resource type="PackedScene" uid="uid://bx3va4wmvmw4o" path="res://weapons/weapon_MIRV.tscn" id="7_8sa47"]
 [ext_resource type="PackedScene" uid="uid://dnc0x4uvh6tq8" path="res://weapons/weapon_meganuke.tscn" id="7_dhpe0"]
 [ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="8_j0lm5"]
@@ -69,6 +70,8 @@ current_ammo = 3
 [node name="WeaponMissileHoming" parent="Weapons" instance=ExtResource("10_lvkgb")]
 
 [node name="WeaponLaser" parent="Weapons" instance=ExtResource("13_4e8rn")]
+
+[node name="WeaponLaser2" parent="Weapons" instance=ExtResource("6_d3jwv")]
 
 [connection signal="timeout" from="TrajectoryPreviewer" to="." method="_on_trajectory_previewer_timeout"]
 

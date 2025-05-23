@@ -541,6 +541,8 @@ func visualize_trajectory() -> void:
 	# Maybe this needs to be refactored too
 	if beam_trajectory_indicator and current_equipped_weapon.name == "WeaponLaser": 
 		beam_trajectory_indicator.shoot(power)
+	elif beam_trajectory_indicator and current_equipped_weapon.name == "WeaponLaser2": 
+		beam_trajectory_indicator.shoot(power)
 	elif shooting_trajectory_indicator:
 		# Lets be real I was definitely better off rigging Weapon to show its trajectory innately
 		# instead of trying to mirror another object on the fly lol but this works.
