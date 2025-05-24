@@ -29,8 +29,6 @@ metadata/_custom_type_script = "uid://dncglgy7n0c4f"
 
 [node name="Rubble01" parent="RubblePrototypes" instance=ExtResource("3_ugiis")]
 mass = 10.0
-re_emission_impulse_threshold = 750.0
-re_emission_min_speed = 5.0
 
 [node name="Mesh" parent="RubblePrototypes/Rubble01" index="0"]
 position = Vector2(1, 2)
@@ -48,8 +46,6 @@ scale_amount_min = 0.05
 scale_amount_max = 0.15
 
 [node name="Rubble02" parent="RubblePrototypes" instance=ExtResource("3_ugiis")]
-re_emission_impulse_threshold = 750.0
-re_emission_min_speed = 5.0
 
 [node name="Mesh" parent="RubblePrototypes/Rubble02" index="0"]
 position = Vector2(1, 2)
@@ -68,8 +64,6 @@ lifetime_randomness = 0.25
 scale_amount_max = 0.2
 
 [node name="Rubble03" parent="RubblePrototypes" instance=ExtResource("3_ugiis")]
-re_emission_impulse_threshold = 750.0
-re_emission_min_speed = 5.0
 
 [node name="Mesh" parent="RubblePrototypes/Rubble03" index="0"]
 position = Vector2(-0.305, 2.41)
@@ -88,8 +82,6 @@ lifetime_randomness = 0.25
 scale_amount_max = 0.25
 
 [node name="Rubble04" parent="RubblePrototypes" instance=ExtResource("3_ugiis")]
-re_emission_impulse_threshold = 750.0
-re_emission_min_speed = 5.0
 
 [node name="Mesh" parent="RubblePrototypes/Rubble04" index="0"]
 position = Vector2(-1.16, 1.715)
