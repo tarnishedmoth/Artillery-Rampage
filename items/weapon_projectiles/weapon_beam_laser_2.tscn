@@ -19,7 +19,7 @@ script = ExtResource("1_5q0cl")
 max_lifetime = 5.0
 is_affected_by_wind = false
 should_explode_on_impact = false
-destructible_scale_multiplier = Vector2(1, 1)
+destructible_scale_multiplier = Vector2(2, 2)
 metadata/_custom_type_script = "uid://ci78gx0frupym"
 
 [node name="BeamSprite" type="Sprite2D" parent="."]

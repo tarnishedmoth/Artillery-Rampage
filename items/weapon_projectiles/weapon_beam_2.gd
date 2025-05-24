@@ -4,24 +4,27 @@ var speed = 8
 
 @onready var laser_end = $LaserEnd
 
+var can_travel = true
+var time_since_last_hit = 0
+var time_to_wait_between_hits = 0.75
+
 func modulate_enabled() -> bool:
 	return false
 
 func _calculate_damage(target: Node2D) -> float:
-	return 100
+	return 50
 
 func _physics_process(_delta: float) -> void:
-	super._physics_process(_delta)
-	# treat laser as a ray, not a projectile
-	#$PhysicsShape.position.x += speed
-	#$PhysicsShape.scale.x += 2 * speed
-	#$Destructible.position.x += speed
-	#$Destructible.scale.x += 2 * speed
-	$BeamSprite.position.x += speed / 2
-	$BeamSprite.scale.y += speed
-	
-	laser_end.position.x += speed
-	see_if_beam_collides_with_anything()
+	super._physics_process(_delta)	
+	if can_travel:
+		$BeamSprite.position.x += speed / 2
+		$BeamSprite.scale.y += speed
+		laser_end.position.x += speed
+		see_if_beam_collides_with_anything()
+	else:
+		time_since_last_hit += _delta
+		if time_since_last_hit >= time_to_wait_between_hits:
+			can_travel = true
 
 func see_if_beam_collides_with_anything():
 	var space_state = get_world_2d().direct_space_state
@@ -32,6 +35,8 @@ func see_if_beam_collides_with_anything():
 	var result: Dictionary = space_state.intersect_ray(query_params)
 	if result.size() > 0:
 		explode()
+		can_travel = false
+		time_since_last_hit = 0
 
 ## Override to return laser transform
 func _get_collision_transform() -> Transform2D:
