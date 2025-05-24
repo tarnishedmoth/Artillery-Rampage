@@ -1,49 +1,44 @@
 [gd_scene load_steps=5 format=3 uid="uid://cbtb48ot1p2x2"]
 
 [ext_resource type="Script" uid="uid://c2do87ghnne1q" path="res://tank/wobble_damage_meter.gd" id="1_4ans2"]
+[ext_resource type="Texture2D" uid="uid://c7d3bvsy3kofi" path="res://tank/aim_meter.png" id="2_v4l5l"]
 
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_4ans2"]
-parameter_name = "Color"
-default_value_enabled = true
-
-[sub_resource type="VisualShader" id="VisualShader_v4l5l"]
+[sub_resource type="Shader" id="Shader_v4l5l"]
 code = "shader_type canvas_item;
-render_mode blend_mix;
-
-uniform vec4 Color : source_color = vec4(1.000000, 1.000000, 1.000000, 1.000000);
-
-
 
 void fragment() {
-// ColorParameter:2
-	vec4 n_out2p0 = Color;
-
-
-// Output:0
-	COLOR.rgb = vec3(n_out2p0.xyz);
-
-
+	// Overrides any inherited modulated color as we want to draw it in its original state
+ 	COLOR = texture(TEXTURE, UV);
 }
 "
-mode = 1
-flags/light_only = false
-nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_4ans2")
-nodes/fragment/2/position = Vector2(-120, 160)
-nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_71oaf"]
-shader = SubResource("VisualShader_v4l5l")
-shader_parameter/Color = Color(1, 1, 1, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b1pqb"]
+shader = SubResource("Shader_v4l5l")
 
 [node name="WobbleDamageMeter" type="Node2D"]
 z_index = 1000
+z_as_relative = false
 script = ExtResource("1_4ans2")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-z_index = 1000
-material = SubResource("ShaderMaterial_71oaf")
-offset_left = -20.0
-offset_top = -12.0
-offset_right = 21.0
-offset_bottom = 10.0
-color = Color(0, 0.0784314, 1, 0.537255)
+[node name="TextureRect" type="TextureRect" parent="."]
+z_index = 100
+z_as_relative = false
+material = SubResource("ShaderMaterial_b1pqb")
+offset_left = -48.0
+offset_top = -49.0
+offset_right = 80.0
+offset_bottom = 79.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_v4l5l")
+
+[node name="TopLinePos" type="Marker2D" parent="."]
+position = Vector2(0, -15)
+
+[node name="BottomLinePos" type="Marker2D" parent="."]
+position = Vector2(0, 13)
+
+[node name="RightLinePos" type="Marker2D" parent="."]
+position = Vector2(41, -1)
+
+[node name="LeftLinePos" type="Marker2D" parent="."]
+position = Vector2(-41, 0)

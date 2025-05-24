@@ -99,7 +99,7 @@ func _process(delta_time: float) -> void:
 	_modifying_aim = false
 	
 	wobble_updated.emit()
-
+	
 func get_phase_sign(in_deviation_alpha:float) -> float:
 	# Determine the phase of the animation (1-4)
 	var phase:int = ceili(in_deviation_alpha * 4.0)

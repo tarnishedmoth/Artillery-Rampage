@@ -14,17 +14,20 @@ extends RigidMeshBody
 var _emission_count:int = 0
 
 func _init() -> void:
+	# Won't ever turn on unless do this when constructed
+	contact_monitor = true
+		
+func _ready() -> void:
+	if not invoke_ready or SceneManager.is_precompiler_running:
+		return
+	super._ready()
+
 	if enable_contact_re_emission:
 		contact_monitor = true
 		max_contacts_reported = 1
 	else:
 		contact_monitor = false
 		max_contacts_reported = 0
-		
-func _ready() -> void:
-	if not invoke_ready or SceneManager.is_precompiler_running:
-		return
-	super._ready()
 	
 	cooldown_timer.timeout.connect(_on_cooldown_timeout)
 	

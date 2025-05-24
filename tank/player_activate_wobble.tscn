@@ -7,3 +7,6 @@
 script = ExtResource("1_4re4v")
 
 [node name="WobbleDamageMeter" parent="." instance=ExtResource("2_lxkn6")]
+marker_circle_arc_angle_deg = 30.0
+indicator_color = Color(0, 0, 0, 1)
+indicator_width = 3.0
