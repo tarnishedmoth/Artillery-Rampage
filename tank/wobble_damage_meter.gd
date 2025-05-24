@@ -42,7 +42,10 @@ func _on_wobble_updated() -> void:
 	queue_redraw()
 	
 func _draw() -> void:
+	# Aim wobble has 4 equal phases
+	# 1 - Center to left, 2 - Left to center, 3 - Center to right, 4 - Right to center
 	var quarter:float = _deviation * 4.0
+	# Get quarter fraction
 	var phase_deviation:float = fmod(quarter, 1.0)
 	var phase:int = ceili(quarter)
 	
@@ -52,7 +55,7 @@ func _draw() -> void:
 	match phase:
 		1:
 			x_alpha = lerpf(0.5, 0.0, phase_deviation)
-			angle = -phase_deviation * _marker_circle_arc_angle_rads
+			angle = lerpf(0.0, -phase_deviation * _marker_circle_arc_angle_rads, phase_deviation)
 		2:
 			x_alpha = lerpf(0.0, 0.5, phase_deviation)
 			angle = lerpf(-_marker_circle_arc_angle_rads, 0.0, x_alpha)
@@ -72,3 +75,4 @@ func _draw() -> void:
 	
 	draw_line(start, end, indicator_color,indicator_width, true)
 	
+	# print_debug("%s - phase=%d, x_alpha=%f, angle=%f" % [name, phase, x_alpha, rad_to_deg(angle)])

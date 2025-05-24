@@ -72,7 +72,12 @@ func _ready() -> void:
 
 	activate_wobble.connect(_on_wobble_activated)
 
+	reset_wobble()
+
 # TODO: Needs to start at a max deviation as otherwise player could button mash to defeat it
+func reset_wobble() -> void:
+	deviation_alpha = 0.0
+	_deviation_delta_time = 0.0
 
 func _process(delta_time: float) -> void:
 	if not _is_active():
@@ -149,6 +154,7 @@ func _on_aim_updated(player: TankController) -> void:
 		
 	# External player action, engage cooldown so if player or AI trying to aim we don't mess with the angle
 	_cooldown_timer.start()
+	reset_wobble()
 	
 func _is_active() -> bool:
 	# TODO: Some of these bools are redundant, need to clean up
