@@ -38,7 +38,7 @@ position = Vector2(0, -15)
 position = Vector2(0, 13)
 
 [node name="RightLinePos" type="Marker2D" parent="."]
-position = Vector2(41, -1)
+position = Vector2(47, -1)
 
 [node name="LeftLinePos" type="Marker2D" parent="."]
-position = Vector2(-41, 0)
+position = Vector2(-47, 0)

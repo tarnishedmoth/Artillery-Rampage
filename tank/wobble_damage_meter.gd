@@ -5,7 +5,7 @@ class_name WobbleDamagerMeter extends Node2D
 var aim_damage_wobble: AimDamageWobble
 
 @export
-var marker_circle_arc_angle_deg:float = 15
+var marker_circle_arc_angle_deg:float = 30
 
 @export
 var indicator_color:Color = Color.BLACK
@@ -67,11 +67,11 @@ func _draw() -> void:
 			angle = lerpf(_marker_circle_arc_angle_rads, 0.0, phase_deviation)
 		
 	var x:float = lerpf(left_line_pos.position.x, right_line_pos.position.x, x_alpha)
-	
 	var dv:Vector2 = Vector2.UP.rotated(angle) * _dy
 	
-	var start:Vector2 = Vector2(x, bottom_line_pos.position.y)
-	var end:Vector2 = start + dv
-	
+	# Keep top y the same
+	var end:Vector2 = Vector2(x, top_line_pos.position.y)
+	var start:Vector2 = end - dv
+
 	draw_line(start, end, indicator_color,indicator_width, true)
 	
