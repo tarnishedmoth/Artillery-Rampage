@@ -5,7 +5,7 @@ class_name WobbleDamagerMeter extends Node2D
 var aim_damage_wobble: AimDamageWobble
 
 @export
-var marker_circle_arc_angle_deg:float = 30
+var marker_circle_arc_angle_deg:float = 15
 
 @export
 var indicator_color:Color = Color.BLACK
@@ -75,4 +75,3 @@ func _draw() -> void:
 	
 	draw_line(start, end, indicator_color,indicator_width, true)
 	
-	# print_debug("%s - phase=%d, x_alpha=%f, angle=%f" % [name, phase, x_alpha, rad_to_deg(angle)])
