@@ -1,12 +1,17 @@
 extends RigidMeshBody
 
 @onready var _smoke_particles:CPUParticles2D = $SmokeParticles
+@onready var cooldown_timer:Timer = $CappedEmissionCooldownTimer
 
 @export_group("Particles")
 
 @export var enable_contact_re_emission:bool = true
 @export var re_emission_impulse_threshold:float = 750
 @export var re_emission_min_speed:float = 5
+
+@export_range(1,100,1,"or_greater") var max_emissions:int = 3
+
+var _emission_count:int = 0
 
 func _init() -> void:
 	if enable_contact_re_emission:
@@ -21,10 +26,24 @@ func _ready() -> void:
 		return
 	super._ready()
 	
+	cooldown_timer.timeout.connect(_on_cooldown_timeout)
+	
 	_emit_particles()
 
+func _on_cooldown_timeout() -> void:
+	print_debug("%s: Smoke particle emission cooldown completed" % name)
+	_emission_count = 0
+	
 func _emit_particles() -> void:
-	print_debug("%s: Playing smoke particles" % name)
+	if _emission_count >= max_emissions:
+		return
+		
+	_emission_count += 1
+	print_debug("%s: Playing smoke particles; count=%d" % [name, _emission_count])
+
+	if _emission_count == max_emissions:
+		cooldown_timer.start()
+		
 	_smoke_particles.restart()
 	
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:

@@ -22,6 +22,7 @@ script = ExtResource("2_16cdi")
 enable_contact_re_emission = true
 re_emission_impulse_threshold = 750.0
 re_emission_min_speed = 5.0
+max_emissions = 3
 use_mesh_as_collision = false
 min_mass = 10.0
 recenter_polygon = false
@@ -49,3 +50,7 @@ angular_velocity_max = 20.0
 scale_amount_min = 0.1
 scale_amount_max = 0.3
 color_ramp = SubResource("Gradient_clfbe")
+
+[node name="CappedEmissionCooldownTimer" type="Timer" parent="." index="4"]
+wait_time = 10.0
+one_shot = true
