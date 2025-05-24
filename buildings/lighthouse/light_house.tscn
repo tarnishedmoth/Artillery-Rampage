@@ -7,5 +7,6 @@
 display_name = "a lighthouse"
 chunk_scene = ExtResource("2_5d6b8")
 crumbling = true
+create_new_chunks = true
 
 [node name="LighthouseChunk" parent="." index="0" instance=ExtResource("2_5d6b8")]

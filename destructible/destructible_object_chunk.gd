@@ -149,6 +149,17 @@ func _replace_contents_local(new_poly: PackedVector2Array, immediate:bool) -> vo
 ## Can be overridden to take additional actions
 func _update_poly_local(new_poly: PackedVector2Array) -> void:
 	_mesh.polygon = new_poly
+	_recenter_polygon()
+
+func _recenter_polygon() -> void:
+	# Should recenter the polygon about its new center of mass (centroid)
+	var centroid: Vector2 = TerrainUtils.polygon_centroid(_mesh.polygon)
+	# We want the centroid to be the rigid body center
+	#position = Vector2.ZERO
+	#_mesh.position = -centroid
+	center_of_mass_mode = CENTER_OF_MASS_MODE_CUSTOM
+	#center_of_mass = Vector2.ZERO
+	center_of_mass = centroid
 
 class UpdateFlags:
 	const Immediate:int = 1
