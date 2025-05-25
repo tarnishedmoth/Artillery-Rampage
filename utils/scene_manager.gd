@@ -184,7 +184,13 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	var root_current_scene = root.get_child(root.get_child_count() - 1)
 	root_current_scene.free()
 	is_switching_scene = false
-	
+
+	if OS.is_debug_build():
+		await get_tree().process_frame
+		print_debug("**********BEGIN ORPHAN NODES**********")
+		print_orphan_nodes()		
+		print_debug("**********END ORPHAN NODES**********")
+
 	# Await in case the loading is done async
 	var new_scene:Resource = await switchFunc.call()
 	

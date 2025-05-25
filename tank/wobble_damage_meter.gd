@@ -74,4 +74,3 @@ func _draw() -> void:
 	var start:Vector2 = end - dv
 
 	draw_line(start, end, indicator_color,indicator_width, true)
-	

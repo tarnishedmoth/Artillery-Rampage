@@ -218,6 +218,10 @@ func _ready() -> void:
 	weapon_actions_completed.connect(_on_weapon_actions_completed)
 	apply_all_mods() # If the weapon's state is retained across scene trees, this could stack the effect unintentionally.
 	
+func _exit_tree() -> void:
+	if is_instance_valid(_cached_projectile_instance):
+		_cached_projectile_instance.queue_free()
+	
 func _process(_delta: float) -> void:
 	if is_shooting: ## Shooting for duration or count.
 		_shoot(_shoot_for_duration_power)

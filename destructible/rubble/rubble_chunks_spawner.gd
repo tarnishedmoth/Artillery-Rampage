@@ -19,9 +19,10 @@ class_name RubbleChunksSpawner extends Node
 var rubble_prototypes:Array[RigidMeshBody] = []
 
 func _ready() -> void:
-	_extract_rubble_prototypes()
+	if not SceneManager.is_precompiler_running:
+		_extract_rubble_prototypes()
 	
-func _exit_tree():
+func _exit_tree() -> void:
 	for prototype in rubble_prototypes:
 		if is_instance_valid(prototype):
 			prototype.queue_free()
