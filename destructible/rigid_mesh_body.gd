@@ -93,5 +93,6 @@ func delete() -> void:
 	var tweener = Juice.fade_out(self)
 	if is_instance_valid(owner) and owner.has_signal("body_deleted"):
 		owner.body_deleted.emit(self)
-		
+	
+	await tweener.finished
 	queue_free.call_deferred()
