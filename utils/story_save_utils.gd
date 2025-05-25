@@ -7,7 +7,14 @@ static func story_save_exists() -> bool:
 		return false
 	var state : Dictionary[StringName, Dictionary] = save.state
 	
-	return state.has(StoryLevelState.SAVE_STATE_KEY)
+	var exists:bool = state.has(StoryLevelState.SAVE_STATE_KEY)
+	return exists
+	
+static func get_story_save() -> Dictionary:
+	if not story_save_exists():
+		return {}
+	
+	return SaveStateManager.save_state.state.get(StoryLevelState.SAVE_STATE_KEY)
 
 static func set_story_level_index() -> void:
 	var save:SaveState = SaveStateManager.save_state

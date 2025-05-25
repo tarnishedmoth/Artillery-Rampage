@@ -6,6 +6,9 @@ var current_level:GameLevel
 
 signal user_options_changed()
 
+signal save_state_restored()
+signal save_state_persisted()
+
 ## Called just before round started when all players have been added to the game
 signal all_players_added(level: GameLevel)
 

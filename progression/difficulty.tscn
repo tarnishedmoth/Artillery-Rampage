@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://chqcjcl46o68o"]
+
+[ext_resource type="Script" uid="uid://ckq7n6pv8x3j0" path="res://progression/difficulty.gd" id="1_njbg1"]
+
+[node name="Difficulty" type="Node" groups=["Savable"]]
+script = ExtResource("1_njbg1")

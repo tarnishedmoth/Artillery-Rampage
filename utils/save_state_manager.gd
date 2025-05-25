@@ -33,6 +33,7 @@ var save_state:SaveState
 
 var _flag_consumers:Dictionary[StringName, Dictionary] = {}
 
+
 ## Adds a flag that can be read in deserializers that need to ignore state in a certain context
 # such as a new story mode
 func add_state_flag(flag:StringName) -> void:
@@ -50,26 +51,61 @@ func consume_state_flag(flag:StringName, consumer_key:StringName) -> bool:
 func reset_save() -> void:
 	save_state = SaveState.new()
 	_save()
+
+func restore_node_state(node:Node, force_file_reload:bool = false) -> void:
+	if not node or not node.is_in_group(Groups.Savable):
+		push_error("%s: node=%s is not Savable" % [name, node])
+		return
 	
+	_restore_state(func() -> Array[Node]:
+		return [node],
+	 SaveState.SaveContext.Node,
+	 force_file_reload)
+
 func restore_tree_state(force_file_reload:bool = false) -> void:
+	_restore_state(func() -> Array[Node]:
+		return get_tree().get_nodes_in_group(Groups.Savable),
+	 SaveState.SaveContext.Tree,
+	 force_file_reload)
+
+func _restore_state(nodes_getter:Callable, context:SaveState.SaveContext, force_file_reload:bool = false) -> void:
 	if force_file_reload and FileAccess.file_exists(save_path):
 		save_state = _load()
 	if not save_state.state:
 		print_debug("No save state is available")
 		return
-		
-	for node in get_tree().get_nodes_in_group(Groups.Savable):
+
+	save_state.context = context
+
+	for node in nodes_getter.call():
 		node.restore_from_save_state(save_state)
+
+	GameEvents.save_state_restored.emit()
 	
+func save_node_state(node:Node) -> void:
+	if not node or not node.is_in_group(Groups.Savable):
+		push_error("%s: node=%s is not Savable" % [name, node])
+		return
+	
+	_save_state(func() -> Array[Node]: return [node], SaveState.SaveContext.Node)
+
 func save_tree_state() -> void:
-	var nodes:Array[Node] = get_tree().get_nodes_in_group(Groups.Savable)
+	_save_state(func() -> Array[Node]:
+		return get_tree().get_nodes_in_group(Groups.Savable),
+	SaveState.SaveContext.Tree)
+
+func _save_state(nodes_getter:Callable, context:SaveState.SaveContext,) -> void:
+	var nodes:Array[Node] = nodes_getter.call()
 	if not nodes:
 		return
-		
+
+	save_state.context = context	
 	for node in nodes:
 		node.update_save_state(save_state)
 		
 	_save()
+
+	GameEvents.save_state_persisted.emit()
 
 func clear_save_state_by_key(key:StringName) -> void:
 	if not save_state or not save_state.state:

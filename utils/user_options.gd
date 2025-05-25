@@ -11,6 +11,8 @@ var volume_sfx:float = 1.0
 var volume_speech:float = 1.0
 
 func _ready() -> void:
+	GameEvents.user_options_changed.connect(_on_options_applied)
+
 	enforce_options()
 
 func enforce_options() -> void:
@@ -91,3 +93,30 @@ func get_glyphs(action: StringName) -> Array[String]:
 		texts.append(event.as_text())
 	
 	return texts
+
+#region Savable
+const SAVE_STATE_KEY:StringName = &"UserOptions"
+
+func restore_from_save_state(save: SaveState) -> void:
+	if not save.state.has(SAVE_STATE_KEY):
+		return
+	var state:Dictionary = save.state[SAVE_STATE_KEY]
+
+	show_tooltips = state.show_tooltips
+	show_hud = state.show_hud
+	show_assist_trajectory_preview = state.show_assist_trajectory_preview
+	
+func update_save_state(save:SaveState) -> void:
+	# Only save on explicit node trigger (see below)
+	if save.context != SaveState.SaveContext.Node:
+		return
+	var state:Dictionary = save.state.get_or_add(SAVE_STATE_KEY, {})
+	
+	state.show_tooltips = show_tooltips
+	state.show_hud = show_hud
+	state.show_assist_trajectory_preview = show_assist_trajectory_preview
+	
+func _on_options_applied() -> void:
+	# Explicitly save the options when they are applied
+	SaveStateManager.save_node_state(self)
+#endregion

@@ -19,6 +19,14 @@ class_name SaveState
 # Can attach the game state to this
 var state: Dictionary[StringName, Dictionary] = {}
 
+enum SaveContext
+{
+	Node,
+	Tree
+}
+
+var context:SaveContext = SaveContext.Tree
+
 static func safe_load_scene(scene_file:String) -> Node:
 	if not scene_file:
 		return null

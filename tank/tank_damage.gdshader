@@ -13,7 +13,7 @@ uniform float start_time;
 
 float brightness_alpha(float elapsed_time) {
 	// Period is the lifetime and phase shift by PI / 2 so that clamped value ranges from 0 to 1
-	// if period_start_alpha is 0, then it starts at 0 and if 1 it starts at 1 
+	// if period_start_alpha is 0, then it starts at 0 and if 1 it starts at 1
 	return (sin((TAU * elapsed_time / flash_cycle_time) + PI * (period_start_alpha - 0.5)) * 0.5) + 0.5;
 }
 
@@ -23,6 +23,6 @@ void fragment() {
 
 	float brightness_alpha = brightness_alpha(elapsed_time);
 	color.rgb *= brightness_alpha * brightness_boost_factor;
-	
+
 	COLOR = color;
 }

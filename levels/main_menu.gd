@@ -93,6 +93,7 @@ func _on_level_select_pressed() -> void:
 
 func _on_options_pressed() -> void:
 	print_debug("Options button")
+
 	options_menu.show()
 	main_menu.hide()
 
@@ -101,6 +102,7 @@ func _on_quit_pressed() -> void:
 	
 func _on_options_menu_closed() -> void:
 	print_debug("Options menu closed -- main menu")
+
 	options_menu.hide()
 	main_menu.show()
 

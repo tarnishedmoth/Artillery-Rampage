@@ -144,6 +144,8 @@ func level_complete() -> void:
 func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 	match key:
 		SceneKeys.MainMenu:
+			# Make sure option state loaded
+			SaveStateManager.restore_node_state(UserOptions)
 			await switch_scene_file(main_menu_scene_file, delay)
 		SceneKeys.RandomStart:
 			await next_level(delay)
