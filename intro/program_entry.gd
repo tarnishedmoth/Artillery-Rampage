@@ -2,7 +2,7 @@ extends Control
 
 func _ready() -> void:
 	modulate = Color.BLACK
-	%HomeTeamIcon.modulate = Color.TRANSPARENT
+	%GameIcon.modulate = Color.TRANSPARENT
 	%MadeInGodot.modulate = Color.TRANSPARENT
 	#%Precompilation.modulate = Color.TRANSPARENT
 	%ProgressUI.modulate = Color.TRANSPARENT
@@ -12,8 +12,8 @@ func _ready() -> void:
 	%ProgressUI.start()
 	
 	var tween = create_tween()
-	tween.tween_property(%HomeTeamIcon, "modulate", Color.WHITE, Juice.PATIENT).set_ease(Tween.EASE_OUT)
-	tween.tween_property(%HomeTeamIcon, "position:y", %HomeTeamIcon.position.y - 256.0, Juice.VERYLONG).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.tween_property(%GameIcon, "modulate", Color.WHITE, Juice.PATIENT).set_ease(Tween.EASE_OUT)
+	tween.tween_property(%GameIcon, "position:y", %GameIcon.position.y - 256.0, Juice.VERYLONG).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	tween.parallel()
 	tween.tween_property(%MadeInGodot, "modulate", Color.WHITE, Juice.LONG).set_ease(Tween.EASE_IN)
 	

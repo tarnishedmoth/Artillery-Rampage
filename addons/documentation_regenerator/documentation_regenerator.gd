@@ -20,7 +20,7 @@ const SCRIPTS = [
 ]
 
 func _ready() -> void:
-	print_rich("[bgcolor=WHITE] - - - - [b][color=#54B0BD]Welcome, HomeTeam Game Dev - - - - ")
+	print_rich("[bgcolor=WHITE] - - - - [b][color=#54B0BD]Welcome to Artillery Rampage - - - - ")
 	
 	if Engine.is_editor_hint():
 		#ResourceSaver.save(preload()) # Moved to for loop
