@@ -52,11 +52,11 @@ func animate() -> void:
 			tween.tween_property(self, "modulate", Color.TRANSPARENT, actual_pulses[pulse]/2)
 		index += 1
 
-func fade_out(duration:float) -> void:
-	var tween = create_tween()
-	tween.tween_property(self, "modulate", Color.TRANSPARENT, duration)
-	await tween.finished
-	#print("Cleared popup")
+func fade_out(duration:float = Juice.PATIENT) -> void:
+	Juice.fade_out(self, duration).tween_callback(destroy)
+	
+func destroy() -> void:
+	#print_debug("Cleared popup")
 	completed_lifetime.emit(self)
 	queue_free()
 	
@@ -67,7 +67,7 @@ func _destroy_after_lifetime() -> void:
 	timer.start(lifetime)
 	
 func _on_lifetime_timer_timeout() -> void:
-	fade_out(0.9)
+	fade_out()
 
 static func constructor(_message:String, pulse_array:Array = PulsePresets.Three)-> PopupNotification:
 	var obj = HUD_POPUP_NOTIFICATION.instantiate()

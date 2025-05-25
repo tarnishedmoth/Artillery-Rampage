@@ -55,6 +55,7 @@ func next_slide() -> void:
 	if not found: %Radio.play()
 	
 	if button_highlight_tween: button_highlight_tween.kill()
+	# This makes a slow flashing effect
 	button_highlight_tween = create_tween()
 	button_highlight_tween.tween_property(%NextButton, "modulate", %NextButton.modulate, Juice.SMOOTH).from(Color.TRANSPARENT)
 	button_highlight_tween.tween_property(%NextButton, "modulate", %NextButton.modulate, Juice.PATIENT).from(Color.TRANSPARENT)

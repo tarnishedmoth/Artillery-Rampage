@@ -57,7 +57,10 @@ var _last_scene_resource:Resource
 # Only the last game level scene
 var _last_game_level_resource:Resource
 
+@onready var loading_bg: ColorRect = $LoadingBG
+
 func _ready()->void:
+	loading_bg.hide()
 	var root = get_tree().root
 	current_scene = root.get_child(root.get_child_count() - 1)
 	
@@ -182,6 +185,7 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	
 	var root = get_tree().root
 	var root_current_scene = root.get_child(root.get_child_count() - 1)
+	await loading_screen(true)
 	root_current_scene.free()
 	is_switching_scene = false
 
@@ -207,7 +211,7 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	get_tree().current_scene = current_scene
 
 	SaveStateManager.restore_tree_state()
-	
+	loading_screen(false)
 	get_tree().paused = false
 
 func _on_GameLevel_loaded(level:GameLevel) -> void:
@@ -220,3 +224,16 @@ func _on_GameLevel_loaded(level:GameLevel) -> void:
 	_current_level_root_node = level
 
 	_last_game_level_resource = _last_scene_resource
+
+func loading_screen(_visible:bool) -> bool:
+	if not is_instance_valid(loading_bg): return false
+	if _visible:
+		var fade_in = Juice.fade_in(loading_bg)
+		for child in loading_bg.get_children():
+			Juice.fade_in(child, Juice.LONG)
+		loading_bg.show()
+		await fade_in.finished
+		return true
+	else:
+		loading_bg.hide()
+		return true

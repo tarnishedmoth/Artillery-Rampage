@@ -90,7 +90,7 @@ func _recenter_polygon() -> void:
 
 func delete() -> void:
 	print_debug("ShatterableObjectBody(%s) - fade out + delete" % [name])
-	await Juice.fade_out(self, Juice.SMOOTH, Color.TRANSPARENT).finished
+	var tweener = Juice.fade_out(self)
 	if is_instance_valid(owner) and owner.has_signal("body_deleted"):
 		owner.body_deleted.emit(self)
 		

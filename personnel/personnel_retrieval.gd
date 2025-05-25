@@ -66,8 +66,7 @@ func destroy() -> void:
 	if _is_dead: return
 	_full_pockets = true
 	
-	var tween = create_tween()
-	tween.tween_property(self, "modulate", Color.TRANSPARENT, 1.0)
+	var tween = Juice.fade_out(self, Juice.PATIENT)
 	tween.tween_callback(queue_free)
 	
 func die_after_lifetime(lifetime:float = max_lifetime) -> void:
@@ -82,8 +81,7 @@ func die() -> void:
 	lock_rotation = false
 	
 	died.emit()
-	var tween = create_tween()
-	tween.tween_property(self, "modulate", Color.TRANSPARENT, 10.0)
+	var tween = Juice.fade_out(self, Juice.VERYLONG)
 	tween.tween_callback(queue_free)
 	
 func request_pickup() -> void:

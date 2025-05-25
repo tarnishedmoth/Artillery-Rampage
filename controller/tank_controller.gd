@@ -259,7 +259,7 @@ func popup_message(message:String, pulses:Array = PopupNotification.PulsePresets
 	
 func clear_all_popups() -> void:
 	for popup:PopupNotification in popups:
-		popup.fade_out(0.75)
+		popup.fade_out()
 	
 # Popup stacking
 func _on_popup_completed_lifetime(popup: PopupNotification) -> void:

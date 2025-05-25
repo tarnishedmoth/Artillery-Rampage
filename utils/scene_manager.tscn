@@ -1,9 +1,39 @@
-[gd_scene load_steps=3 format=3 uid="uid://diy1qhcffvn7e"]
+[gd_scene load_steps=4 format=3 uid="uid://diy1qhcffvn7e"]
 
 [ext_resource type="Script" uid="uid://cen6rpbslhy48" path="res://utils/scene_manager.gd" id="1_olrhd"]
 [ext_resource type="Resource" uid="uid://b20xhiq7ab52i" path="res://levels/conf/story_levels_resource.tres" id="2_f8pd1"]
+[ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="3_7vcms"]
 
 [node name="SceneManager" type="Node"]
 script = ExtResource("1_olrhd")
 levels_always_selectable = ExtResource("2_f8pd1")
 story_levels = ExtResource("2_f8pd1")
+
+[node name="LoadingBG" type="ColorRect" parent="."]
+modulate = Color(0, 0, 0, 1)
+top_level = true
+z_index = 4096
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="LoadingBG"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -70.0
+offset_top = -11.5
+offset_right = 70.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_7vcms")
+text = "Loading..."

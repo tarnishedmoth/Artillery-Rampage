@@ -27,4 +27,6 @@ func _on_precompilation_completed() -> void:
 	var tween = create_tween()
 	tween.tween_interval(Juice.SMOOTH)
 	tween.tween_property(self, "modulate", Color.BLACK, Juice.FAST).set_trans(Tween.TRANS_QUAD)
-	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.MainMenu, 0.0)
+	tween.tween_callback(
+		SceneManager.switch_scene_keyed.bind(SceneManager.SceneKeys.MainMenu, 0.0)
+		)

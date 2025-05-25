@@ -193,11 +193,9 @@ func start() -> void:
 	
 func exit() -> void:
 	# Wait, and then exit
-	var tween = create_tween()
-	#tween.tween_interval(finished_wait)
-	tween.tween_property(%ProgressBarUI, "modulate", Color.TRANSPARENT, Juice.PATIENT)
-	tween.tween_callback(%LoadingLabel.set.bind("text", ""))
-	await tween.finished
+	var fade_out_tweener = Juice.fade_out(%ProgressBarUI)
+	fade_out_tweener.tween_callback(%LoadingLabel.set.bind("text", ""))
+	await fade_out_tweener.finished
 	running = false
 
 func _on_precompilation_progress_changed(progress:float) -> void:
@@ -230,9 +228,9 @@ func add_imaginary_steps(quantity:int, show_immediately:bool = false) -> void:
 #region Inner classes
 ## Purely decorative label with juice
 class ProgressStep extends Label:
-	var attack:float = 0.2 ## Transition into view
-	var hold:float = 0.85 ## Time to remain in place
-	var release:float = 0.6 ## Transition out of view
+	var attack:float = Juice.SNAP ## Transition into view
+	var hold:float = Juice.PATIENT ## Time to remain in place
+	var release:float = Juice.SMOOTH ## Transition out of view
 	
 	var immediate:bool = false ## Play immediately on ready.
 	
@@ -263,8 +261,7 @@ class ProgressStep extends Label:
 		# Juice
 		tween.tween_property(self, "self_modulate", Color.WHITE, attack)
 		tween.tween_interval(hold)
-		await tween.finished
-		stop()
+		tween.tween_callback(stop)
 		
 	func stop() -> void:
 		if tween: tween.kill()

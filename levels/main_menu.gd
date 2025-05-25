@@ -21,9 +21,10 @@ var credits_list_is_focused:bool = false
 
 
 #region--Virtuals
+func _init() -> void:
+	modulate = Color.BLACK # For fade-in
+	
 func _ready() -> void:
-	# Editor convenience
-	modulate = Color.BLACK
 	main_menu.show()
 	level_select_menu.hide()
 	
@@ -40,7 +41,7 @@ func _ready() -> void:
 	
 	# Fade in
 	await get_tree().process_frame
-	await Juice.fade_in(self, Juice.SNAP, Color.BLACK).finished
+	await Juice.fade_in(self, Juice.SMOOTH, Color.BLACK).finished
 	AudioServer.set_bus_mute(AudioServer.get_bus_index("SFX"), false) # Unmute SFX bus
 #endregion
 
