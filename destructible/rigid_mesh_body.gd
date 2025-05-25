@@ -93,4 +93,5 @@ func delete() -> void:
 	if is_instance_valid(owner) and owner.has_signal("body_deleted"):
 		owner.body_deleted.emit(self)
 	
+	await Juice.fade_out(self, Juice.SMOOTH, Color.TRANSPARENT).finished
 	queue_free.call_deferred()
