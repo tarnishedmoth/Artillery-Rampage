@@ -40,8 +40,9 @@ var _velocity:Vector2
 func _ready() -> void:
 	if get_parent() is Terrain: # Should always be true I'm guessing except in precompiler
 		terrain = get_parent()
-		# Apply any transform scales
-		apply_transform_scales_to_polygon2d()
+		if terrain.initial_chunk_name.is_empty():
+			# We are the first in the scene
+			apply_transform_scales_to_polygon2d()
 	
 	# Make sure the collision and visual polygon the same
 	collisionMesh.set_deferred("polygon", terrainMesh.polygon)
@@ -54,7 +55,7 @@ func _ready() -> void:
 	
 	print_poly("_ready", collisionMesh.polygon)
 	
-## Move vertices using xform.scale as a multiplier to correct for use in editor
+## Move vertices using xform.scale as a multiplier to correct for use in editor.
 func apply_transform_scales_to_polygon2d() -> void:
 	#  Gather all the relevant transforms from Terrain downward and multiply them together
 	var total_scale: Vector2 = Vector2.ONE
