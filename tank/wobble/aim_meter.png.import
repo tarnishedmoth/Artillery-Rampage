@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c7d3bvsy3kofi"
-path="res://.godot/imported/aim_meter.png-30167fea609a2a6b6569cb4abb06c043.ctex"
+path="res://.godot/imported/aim_meter.png-6a9c6f54d02ec4e063c163c398bb6c6c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tank/aim_meter.png"
-dest_files=["res://.godot/imported/aim_meter.png-30167fea609a2a6b6569cb4abb06c043.ctex"]
+source_file="res://tank/wobble/aim_meter.png"
+dest_files=["res://.godot/imported/aim_meter.png-6a9c6f54d02ec4e063c163c398bb6c6c.ctex"]
 
 [params]
 

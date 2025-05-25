@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://br5jh5gjskryb" path="res://controller/ai/ai_tank_state_machine.gd" id="3_7xwap"]
 [ext_resource type="PackedScene" uid="uid://bg55ibumro1a5" path="res://controller/ai/ai_aim_damage_wobble.tscn" id="4_jsnjk"]
 [ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="4_qpyk8"]
-[ext_resource type="PackedScene" uid="uid://cv6jn11xopuo0" path="res://tank/auto_activate_wobble.tscn" id="5_0g2yd"]
+[ext_resource type="PackedScene" uid="uid://cv6jn11xopuo0" path="res://tank/wobble/auto_activate_wobble.tscn" id="5_0g2yd"]
 
 [node name="AITank" type="Node2D" node_paths=PackedStringArray("weapons_container")]
 script = ExtResource("1_x14qc")

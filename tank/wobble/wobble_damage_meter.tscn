@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cbtb48ot1p2x2"]
 
-[ext_resource type="Script" uid="uid://c2do87ghnne1q" path="res://tank/wobble_damage_meter.gd" id="1_4ans2"]
-[ext_resource type="Texture2D" uid="uid://c7d3bvsy3kofi" path="res://tank/aim_meter.png" id="2_v4l5l"]
+[ext_resource type="Script" uid="uid://c2do87ghnne1q" path="res://tank/wobble/wobble_damage_meter.gd" id="1_4ans2"]
+[ext_resource type="Texture2D" uid="uid://c7d3bvsy3kofi" path="res://tank/wobble/aim_meter.png" id="2_v4l5l"]
 
 [sub_resource type="Shader" id="Shader_v4l5l"]
 code = "shader_type canvas_item;

@@ -26,6 +26,18 @@ position = Vector2(479, 278)
 [node name="Tank" parent="GameLevel/Enemy1" index="0"]
 color = Color(0.682353, 0.713726, 0.219608, 1)
 
+[node name="AutoActivateWobble" parent="GameLevel/Enemy1/Tank/AimDamageWobble" index="1"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+script = null
+
 [node name="LobberAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("4_m40no")]
 forces_mask = 15
 
@@ -34,6 +46,18 @@ position = Vector2(1100, 426)
 
 [node name="Tank" parent="GameLevel/Enemy2" index="0"]
 color = Color(0.137255, 0.180392, 0.701961, 1)
+
+[node name="AutoActivateWobble" parent="GameLevel/Enemy2/Tank/AimDamageWobble" index="1"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+script = null
 
 [node name="BruteAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("5_c3x2q")]
 
