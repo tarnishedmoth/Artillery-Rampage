@@ -10,6 +10,11 @@ var volume_music:float = 0.8
 var volume_sfx:float = 1.0
 var volume_speech:float = 1.0
 
+var difficulty:Difficulty.DifficultyLevel:
+	get: return Difficulty.current_difficulty
+	set(value): 
+		Difficulty.current_difficulty = value
+
 func _ready() -> void:
 	GameEvents.user_options_changed.connect(_on_options_applied)
 
@@ -115,6 +120,9 @@ func update_save_state(save:SaveState) -> void:
 	state.show_tooltips = show_tooltips
 	state.show_hud = show_hud
 	state.show_assist_trajectory_preview = show_assist_trajectory_preview
+	
+	# Force the difficulty option to save as well
+	Difficulty.update_save_state(save)
 	
 func _on_options_applied() -> void:
 	# Explicitly save the options when they are applied

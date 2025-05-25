@@ -28,6 +28,10 @@ func _ready() -> void:
 	save_state = _load()
 	if not save_state:
 		save_state = SaveState.new()
+	else:
+		# restore initial tree state
+		restore_tree_state.call_deferred()
+
 
 var save_state:SaveState
 

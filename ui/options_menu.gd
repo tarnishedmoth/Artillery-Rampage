@@ -6,11 +6,11 @@ signal closed
 @onready var show_tooltips_toggle: CheckButton = %ShowTooltipsToggle
 @onready var show_hud_toggle: CheckButton = %ShowHUDToggle
 @onready var show_trajectory_toggle: CheckButton = %ShowTrajectoryToggle
+@onready var difficulty_option:OptionButton = %DifficultyOption
 
 @onready var music_volume_slider: HSlider = %MusicVolumeSlider
 @onready var sfx_volume_slider: HSlider = %SFXVolumeSlider
 @onready var speech_volume_slider: HSlider = %SpeechVolumeSlider
-
 
 @onready var options: VBoxContainer = $Options
 @onready var keybinds: PanelContainer = $Keybinds
@@ -51,6 +51,7 @@ func set_initial_states() -> void:
 	show_tooltips_toggle.set_pressed_no_signal(UserOptions.show_tooltips)
 	show_hud_toggle.set_pressed_no_signal(UserOptions.show_hud)
 	show_trajectory_toggle.set_pressed_no_signal(UserOptions.show_assist_trajectory_preview)
+	set_initial_value(difficulty_option, int(UserOptions.difficulty))
 	
 	music_volume_slider.set_value_no_signal(UserOptions.volume_music)
 	sfx_volume_slider.set_value_no_signal(UserOptions.volume_sfx)
@@ -59,11 +60,20 @@ func set_initial_states() -> void:
 	cached_sfx_volume = sfx_volume_slider.value
 	cached_speech_volume = speech_volume_slider.value
 	
+func set_initial_value(option_button:OptionButton, index: int):
+	option_button.set_block_signals(true)  # Prevent event firing
+	option_button.select(index)
+	option_button.set_block_signals(false)  # Re-enable signals
+	
 func apply_changes() -> void:
 	# Apply all options
 	UserOptions.show_tooltips = show_tooltips_toggle.is_pressed()
 	UserOptions.show_hud = show_hud_toggle.is_pressed()
 	UserOptions.show_assist_trajectory_preview = show_trajectory_toggle.is_pressed()
+	
+	if difficulty_option.selected >= 0:
+		UserOptions.difficulty = difficulty_option.selected as Difficulty.DifficultyLevel
+	
 	UserOptions.volume_music = music_volume_slider.value
 	UserOptions.volume_sfx = sfx_volume_slider.value
 	UserOptions.volume_speech = speech_volume_slider.value

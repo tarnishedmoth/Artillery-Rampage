@@ -108,6 +108,25 @@ text = "Preview Trajectory"
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="Difficulty" type="HBoxContainer" parent="Options/MarginContainer/VBoxContainer/Options"]
+layout_mode = 2
+alignment = 2
+
+[node name="Difficulty" type="Label" parent="Options/MarginContainer/VBoxContainer/Options/Difficulty"]
+layout_mode = 2
+text = "Difficulty"
+
+[node name="DifficultyOption" type="OptionButton" parent="Options/MarginContainer/VBoxContainer/Options/Difficulty"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 3
+popup/item_0/text = "Easy"
+popup/item_0/id = 0
+popup/item_1/text = "Normal"
+popup/item_1/id = 1
+popup/item_2/text = "Hard"
+popup/item_2/id = 2
+
 [node name="VolumeSliders" type="HBoxContainer" parent="Options/MarginContainer/VBoxContainer/Options"]
 layout_mode = 2
 
