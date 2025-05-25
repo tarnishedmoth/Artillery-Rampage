@@ -7,11 +7,12 @@ class TerrainTexture:
 	@export var offset: Vector2
 	
 	
-@onready var overlap = $Overlap
-@onready var terrainMesh = $Polygon2D
-@onready var collisionMesh = $CollisionPolygon2D
-@onready var overlapMesh = $Overlap/CollisionPolygon2D
-@onready var destructiblePolyOperations = $DestructiblePolyOperations
+@onready var overlap: Area2D = $Overlap
+@onready var terrainMesh: Polygon2D = $Polygon2D
+@onready var collisionMesh: CollisionPolygon2D = $CollisionPolygon2D
+@onready var overlapMesh: CollisionPolygon2D = $Overlap/CollisionPolygon2D
+@onready var destructiblePolyOperations: DestructiblePolyOperations = $DestructiblePolyOperations
+var terrain: Terrain
 
 @export_range(0, 10.0) var gravity_scale:float = 1.0
 
@@ -37,6 +38,11 @@ var falling:bool = false:
 var _velocity:Vector2
 
 func _ready() -> void:
+	if get_parent() is Terrain: # Should always be true I'm guessing except in precompiler
+		terrain = get_parent()
+		# Apply any transform scales
+		apply_transform_scales_to_polygon2d()
+	
 	# Make sure the collision and visual polygon the same
 	collisionMesh.set_deferred("polygon", terrainMesh.polygon)
 	overlapMesh.set_deferred("polygon", terrainMesh.polygon)
@@ -44,11 +50,36 @@ func _ready() -> void:
 	if !falling:
 		falling = initially_falling
 	
-	_apply_textures()
+	apply_textures()
 	
 	print_poly("_ready", collisionMesh.polygon)
 	
-func _apply_textures() -> void:
+## Move vertices using xform.scale as a multiplier to correct for use in editor
+func apply_transform_scales_to_polygon2d() -> void:
+	#  Gather all the relevant transforms from Terrain downward and multiply them together
+	var total_scale: Vector2 = Vector2.ONE
+	#  Add up our scales
+	total_scale *= terrain.transform.get_scale()
+	total_scale *= self.transform.get_scale()
+	total_scale *= terrainMesh.transform.get_scale()
+	#  Reset our nodes' scales
+	terrain.set_scale(Vector2.ONE)
+	self.set_scale(Vector2.ONE)
+	terrainMesh.set_scale(Vector2.ONE)
+		
+	if total_scale != Vector2.ONE:
+		# Make a copy of our polygon data
+		var vertices:PackedVector2Array = terrainMesh.polygon.duplicate() # This returns a copy
+		# Not sure why you can't do "for vertex in vertices: vertex *= foo", but that doesn't modify the item. Shrug
+		for i in vertices.size():
+			# Apply the scale to the vertex position
+			vertices[i] *= total_scale
+		
+		# Apply our new polygon to the Polygon2D
+		terrainMesh.set_polygon(vertices)
+		print_debug("Corrected terrain scale of ", total_scale)
+	
+func apply_textures() -> void:
 	# give the terrain a texture like rock or grass
 	# idea: we could load multiple textures!
 	# maybe texture chosen by chunk size (big=grass, small=blackened)
@@ -214,4 +245,3 @@ func get_bounds_global():
 
 func _to_string() -> String:
 	return name
-	

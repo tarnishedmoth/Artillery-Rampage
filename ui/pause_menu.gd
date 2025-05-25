@@ -17,15 +17,19 @@ enum Cheats{
 	GROW,
 	SHRINK,
 	INSTAKILL,
+	NO_WIND,
+	MAX_WIND,
 	}
 var CheatCodes:Dictionary[Array, Cheats] = {
 	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.LEFT,Keys.RIGHT,Keys.LEFT,Keys.RIGHT]: Cheats.FULL_HEALTH,
-	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.RIGHT,Keys.LEFT,Keys.RIGHT,Keys.LEFT]: Cheats.FULL_AMMO,
 	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.LEFT,Keys.UP,Keys.RIGHT,Keys.DOWN]: Cheats.RELOCATE,
-	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.UP,Keys.UP,Keys.UP,Keys.DOWN]: Cheats.LIGHTNING,
+	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.RIGHT,Keys.LEFT,Keys.RIGHT,Keys.LEFT]: Cheats.FULL_AMMO,
 	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.RIGHT,Keys.RIGHT,Keys.RIGHT,Keys.DOWN]: Cheats.SHRINK,
 	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.RIGHT,Keys.RIGHT,Keys.RIGHT,Keys.UP]: Cheats.GROW,
 	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.RIGHT,Keys.RIGHT,Keys.LEFT,Keys.UP]: Cheats.INSTAKILL,
+	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.UP,Keys.UP,Keys.UP,Keys.DOWN]: Cheats.LIGHTNING,
+	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.UP,Keys.UP,Keys.LEFT,Keys.DOWN]: Cheats.NO_WIND,
+	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.UP,Keys.UP,Keys.RIGHT,Keys.DOWN]: Cheats.MAX_WIND,
 }
 var input_buffer:Array[Keys]
 var input_buffer_listening:bool = false
@@ -137,7 +141,7 @@ func _check_cheat_code_entered(code:Array[Keys]) -> void:
 				current_weapon.enforce_projectile_property("damage_multiplier", 9999.9)
 				
 			Cheats.RELOCATE:
-				cheat_name = "RELOCATE"
+				cheat_name = "RELOCATE - TODO nonfunctional"
 				# TODO ;)
 				
 			Cheats.LIGHTNING:
@@ -155,6 +159,20 @@ func _check_cheat_code_entered(code:Array[Keys]) -> void:
 				cheat_name = "SHRINK"
 				var tank = _get_player_controller().tank
 				tank.apply_scale(Vector2(0.75,0.75))
+				
+			Cheats.NO_WIND:
+				cheat_name = "WINDLESS"
+				var level_root = SceneManager.get_current_level_root()
+				if level_root is GameLevel:
+					level_root.wind.wind = Vector2.ZERO
+			
+			Cheats.MAX_WIND:
+				cheat_name = "SUPERBREEZE"
+				var level_root = SceneManager.get_current_level_root()
+				if level_root is GameLevel:
+					var sign:float = 1.0 if level_root.wind.wind.x >= 0.0 else -1.0
+					level_root.wind.wind = Vector2(level_root.wind.wind_max * sign, 0.0)
+				
 				
 		print_debug("-- CHEAT: ", cheat_name) # TODO log in pause menu events log
 		events_log.record("CHEAT ENTERED: "+ cheat_name)
