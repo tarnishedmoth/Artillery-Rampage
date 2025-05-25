@@ -89,9 +89,9 @@ func _recenter_polygon() -> void:
 	center_of_mass = Vector2.ZERO
 
 func delete() -> void:
-	print_debug("ShatterableObjectBody(%s) - delete" % [name])
+	print_debug("ShatterableObjectBody(%s) - fade out + delete" % [name])
+	await Juice.fade_out(self, Juice.SMOOTH, Color.TRANSPARENT).finished
 	if is_instance_valid(owner) and owner.has_signal("body_deleted"):
 		owner.body_deleted.emit(self)
-	
-	await Juice.fade_out(self, Juice.SMOOTH, Color.TRANSPARENT).finished
+		
 	queue_free.call_deferred()
