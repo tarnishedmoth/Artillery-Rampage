@@ -85,9 +85,10 @@ script = ExtResource("8_2f270")
 label = "EMP Charge:"
 parameter_path = "debuff_emp_charge"
 
-[node name="WeaponEMP" parent="GameLevel/Player/Weapons" index="0" instance=ExtResource("8_rvgrj")]
+[node name="WeaponEMP2" parent="GameLevel/Player/Weapons" index="0" instance=ExtResource("8_rvgrj")]
 use_ammo = false
 
 [editable path="GameLevel/Enemy1"]
 [editable path="GameLevel/Enemy2"]
 [editable path="GameLevel/Player"]
+[editable path="GameLevel/Player/Tank/AimDamageWobble/PlayerActivateWobble"]

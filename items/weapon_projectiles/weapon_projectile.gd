@@ -203,9 +203,11 @@ func explode(collided_body: PhysicsBody2D = null):
 		var contact_point:Vector2 = destructed_processed_map.get(node, global_position)
 
 		if node.is_in_group(Groups.Destructible):
-			node.damage(self, contact_point, destructible_scale_multiplier)
+			damage_destructible_node(node, instigator, self, contact_point, destructible_scale_multiplier)
+			#node.damage(self, contact_point, destructible_scale_multiplier)
 		if node.is_in_group(Groups.Damageable):
-			node.take_damage(instigator, self, damage_amount)
+			damage_damageable_node(node, instigator, self, damage_amount)
+			#node.take_damage(instigator, self, damage_amount)
 
 		GameEvents.took_damage.emit(node, instigator, self, contact_point, damage_amount)
 	
@@ -215,17 +217,24 @@ func explode(collided_body: PhysicsBody2D = null):
 	if had_interaction and should_explode_on_impact: 
 		destroy()
 	
-
-## Explodes if supported and then ensures that the projectile is destroyed
-func explode_and_force_destroy(body: PhysicsBody2D = null):
-	explode(body)
-	destroy()
+## For use with a Damageable group nodes only.
+## This method exists to be overridden by classes extending [WeaponProjectile], as a hook.
+func damage_damageable_node(
+	damageable:Node, instigator:Node, projectile:WeaponProjectile,
+	damage_amount:float
+	) -> void:
 	
-## Damages a damageable group node only
-## Kept for compatibility with weapon_projectile_emp
-func damage_damageable_node(damageable_node: Node, damage_amount:float) -> void:
-	damageable_node.take_damage(get_instigator(), self, damage_amount)
-	GameEvents.took_damage.emit(damageable_node, get_instigator(), self, global_position, damage_amount)
+	damageable.take_damage(instigator, projectile, damage_amount)
+	
+## For use with a Destructible group nodes only.
+## This method exists to be overridden by classes extending [WeaponProjectile], as a hook.
+@warning_ignore("unused_parameter")
+func damage_destructible_node(
+	destructible:Node, instigator:Node, projectile:WeaponProjectile,
+	contact_point:Vector2, destructible_scale_multiplier:Vector2
+	) -> void:
+	
+	destructible.damage(projectile, contact_point, destructible_scale_multiplier)
 
 func get_instigator() -> Node2D:
 	return owner_tank.get_parent() as Node2D if is_instance_valid(owner_tank) else null
@@ -246,6 +255,11 @@ func center_destructible_on_impact_point(destructible: CollisionPolygon2D) -> Ve
 	
 	return contact_point
 
+## Explodes if supported and then ensures that the projectile is destroyed
+func explode_and_force_destroy(body: PhysicsBody2D = null):
+	explode(body)
+	destroy()
+	
 func destroy():
 	if destroyed:
 		print_debug("WeaponProjectile(%s): Already destroyed" % name)
