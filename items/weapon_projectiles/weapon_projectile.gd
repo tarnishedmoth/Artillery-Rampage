@@ -33,6 +33,7 @@ signal completed_lifespan ## Tracked by Weapon class
 var run_collision_logic:bool = true ## Whether to affect damageables & destructibles on collision. See [method arm] and [method disarm].
 
 @export var explosion_to_spawn:PackedScene
+@export var rescale_explosion:Vector2 = Vector2(1.0,1.0)
 
 @export var upgrades: Array[ModProjectile] ## For upgrades and nerfs at runtime
 
@@ -143,16 +144,16 @@ func _on_destructible_component_interaction(in_destructible_component: Collision
 	pass
 
 ## Runs damage logic and explodes if an interaction occurs
-func explode(collided_body: PhysicsBody2D = null):
+func explode(collided_body: PhysicsBody2D = null, force:bool = false):
 	# Need to do a sweep to see all the things we have influenced
-	# Need to be sure not to "double-damage" things both from influence and from direct hit
+	# Need to be sure not to "double-damage" things both from influence and from direct hit 
 	# The body here is the direct hit body that will trigger the projectile to explode if an interaction happens
 	if not run_collision_logic:
 		return
 	if calculated_hit:
 		return
 	
-	var had_interaction:bool = false
+	var had_interaction:bool = false if not force else true
 	if is_instance_valid(collided_body) and collided_body.get_collision_layer_value(10): # ProjectileBlocker (shield, etc) hack
 		# FIXME if not inside_of_players_shield...:
 		had_interaction = true
@@ -256,8 +257,8 @@ func center_destructible_on_impact_point(destructible: CollisionPolygon2D) -> Ve
 	return contact_point
 
 ## Explodes if supported and then ensures that the projectile is destroyed
-func explode_and_force_destroy(body: PhysicsBody2D = null):
-	explode(body)
+func explode_and_force_destroy(body:PhysicsBody2D = null, force:bool = false):
+	explode(body, force)
 	destroy()
 	
 func destroy():
@@ -283,10 +284,12 @@ func destroy_after_lifetime(lifetime:float = max_lifetime) -> void:
 	timer.start(lifetime)
 	
 func spawn_explosion(scene:PackedScene) -> void:
-	var instance
+	var instance:Explosion
 	if scene.can_instantiate():
 		instance = scene.instantiate()
 		instance.global_position = global_position
+		if rescale_explosion != Vector2.ONE:
+			instance.apply_scale(rescale_explosion)
 		# Per - weapon_projectile.gd:191 @ spawn_explosion(): Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.
 		if not firing_container: firing_container = _get_container()
 		firing_container.add_child.call_deferred(instance)
