@@ -80,7 +80,15 @@ func _on_player_took_damage(_tank: Tank, instigatorController: Node2D, _instigat
 func _on_enemy_took_damage(_tank: Tank, instigatorController: Node2D, _instigator: Node2D, amount: float) -> void:
 	# Make sure player was instigator
 	if instigatorController != _player:
-		print_debug("%s: Ignore enemy took damage as wasn't by player - instigator=%s" % [name, instigatorController.name])	
+		var _name:String
+		if is_instance_valid(instigatorController):
+			if "name" in instigatorController:
+				_name = instigatorController.name
+			else:
+				_name = instigatorController.to_string()
+		else:
+			_name = "Nil"
+		print_debug("%s: Ignore enemy took damage as wasn't by player - instigator=%s" % [name, _name])
 		return
 		
 	round_data.damage_done += amount

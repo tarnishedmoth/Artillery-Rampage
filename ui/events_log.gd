@@ -95,7 +95,11 @@ func _on_copter_left_airspace(copter): pass
 func _on_wall_interaction(walls: Walls, projectile: WeaponProjectile, interaction_location: Walls.WallInteractionLocation): pass
 
 func _on_took_damage(object: Node, instigatorController: Node2D, instigator: Node2D, contact_point: Vector2, damage: float):
-	var player_name = instigatorController.name
+	var player_name
+	if not is_instance_valid(instigatorController):
+		player_name = "Natural phenomena"
+	else:
+		player_name = instigatorController.name
 	
 	var taker_name:String = ""
 	if object is Tank:
