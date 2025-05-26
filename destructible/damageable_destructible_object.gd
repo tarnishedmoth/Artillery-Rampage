@@ -6,7 +6,9 @@ var health: float = starting_health
 @export var can_be_emp_charged:bool = false
 @export var emp_conductivity_multiplier:float = 1.0 ## Incoming charge is multiplied by this figure
 @export var emp_discharge_per_turn:float = 60.0 ## This much charge is subtracted each turn end.
-var emp_charge:float = 0.0
+var emp_charge:float = 0.0:
+	set(value):
+		emp_charge = maxf(value, 0.0)
 
 ## [b][i]Non-tank damageable object should define these signals as well as the take_damage function.[/i][/b]
 ## Something to note is that the WeaponProjectile class actually emits

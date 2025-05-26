@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dvr6bm2hlj5h4"]
+[gd_scene load_steps=17 format=3 uid="uid://dvr6bm2hlj5h4"]
 
 [ext_resource type="Script" uid="uid://capm81lvak2c3" path="res://tank/tank.gd" id="1_0iy80"]
 [ext_resource type="Script" uid="uid://iirywjtssovs" path="res://tank/tank_body.gd" id="2_o5qn2"]
@@ -11,6 +11,8 @@
 [ext_resource type="Script" uid="uid://cu7a4bvlikg2j" path="res://tank/fall_damage_causer.gd" id="8_5poe7"]
 [ext_resource type="PackedScene" uid="uid://eqdcshl1me76" path="res://effects/smoke_particles.tscn" id="8_adwvx"]
 [ext_resource type="PackedScene" uid="uid://c2yvcwfpdhnvx" path="res://weapons/weapon_beam_trajectory_previewer.tscn" id="9_ucdxg"]
+[ext_resource type="Script" uid="uid://bybxweqiag1x8" path="res://items/weapon_projectiles/explosions/emp_discharger.gd" id="12_0knov"]
+[ext_resource type="PackedScene" uid="uid://b15v5mova33di" path="res://items/weapon_projectiles/weapon_projectile_emp_widespread.tscn" id="13_sdcn4"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1pofo"]
 friction = 100.0
@@ -97,3 +99,8 @@ emit_action_signals = false
 unique_name_in_owner = true
 script = ExtResource("8_5poe7")
 metadata/_custom_type_script = "uid://cu7a4bvlikg2j"
+
+[node name="EMPDischarger" type="Node" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("12_0knov")
+target = NodePath("..")
+scene_to_spawn = ExtResource("13_sdcn4")
