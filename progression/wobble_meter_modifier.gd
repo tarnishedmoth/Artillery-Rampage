@@ -37,6 +37,7 @@ func _update_wobble(difficulty: Difficulty.DifficultyLevel) -> void:
 	if modifier_resource.enabled and modifier_resource.aim_deviation_period_v_damage and modifier_resource.aim_deviation_v_damage:
 		_existing_wobble.aim_deviation_v_damage = modifier_resource.aim_deviation_v_damage
 		_existing_wobble.aim_deviation_period_v_damage = modifier_resource.aim_deviation_period_v_damage
+		_existing_wobble.recalculate_wobble()
 
 func _on_difficulty_changed(new_difficulty: Difficulty.DifficultyLevel, _old_difficulty: Difficulty.DifficultyLevel) -> void:
 	_update_wobble(new_difficulty)

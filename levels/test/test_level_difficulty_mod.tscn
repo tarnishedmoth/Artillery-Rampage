@@ -15,7 +15,7 @@
 
 [node name="TestLevelDifficultyMod" type="Node2D"]
 script = ExtResource("1_abf0i")
-starting_difficulty = 0
+starting_difficulty = 1
 
 [node name="GameLevel" parent="." instance=ExtResource("1_l06wc")]
 
