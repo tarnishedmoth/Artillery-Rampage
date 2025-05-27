@@ -1,0 +1,43 @@
+[gd_scene load_steps=13 format=3 uid="uid://1dsdhj70v2o2"]
+
+[ext_resource type="Script" uid="uid://cunwra7xuebfm" path="res://levels/test/test_level_difficulty_mod.gd" id="1_abf0i"]
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_l06wc"]
+[ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="2_jhtvm"]
+[ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="3_abf0i"]
+[ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="4_54mni"]
+[ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="5_jpb4y"]
+[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="6_wmu7v"]
+[ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="7_sj1nb"]
+[ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="8_wxbgl"]
+[ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="9_sgiwu"]
+[ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="10_5cc5r"]
+[ext_resource type="PackedScene" uid="uid://cduo8m7j3bl8g" path="res://progression/difficulty_modifier.tscn" id="11_jhtvm"]
+
+[node name="TestLevelDifficultyMod" type="Node2D"]
+script = ExtResource("1_abf0i")
+starting_difficulty = 0
+
+[node name="GameLevel" parent="." instance=ExtResource("1_l06wc")]
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+polygon = PackedVector2Array()
+
+[node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("2_jhtvm")]
+additional_vertices = 100
+replace_existing_heights = true
+height_win_size_min_variation = -0.185
+height_win_size_max_variation = 0.18
+
+[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+artillery_ai_types = Array[PackedScene]([ExtResource("3_abf0i"), ExtResource("4_54mni"), ExtResource("5_jpb4y"), ExtResource("6_wmu7v"), ExtResource("7_sj1nb"), ExtResource("8_wxbgl"), ExtResource("9_sgiwu"), ExtResource("10_5cc5r")])
+default_ai_players = Vector2i(1, 4)
+default_human_players = Vector2i(1, 1)
+ideal_min_spawn_separation = 250.0
+
+[node name="DifficultyModifier" parent="GameLevel" instance=ExtResource("11_jhtvm")]
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/ArtillerySpawner"]

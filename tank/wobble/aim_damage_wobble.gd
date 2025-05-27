@@ -128,7 +128,12 @@ func _connect_player_events() -> void:
 	GameEvents.turn_ended.connect(_on_turn_ended)
 
 func _on_damage(_in_tank: Tank, _instigatorController: Node2D, _instigator: Node2D, amount: float) -> void:
-	var total_damage_pct:float = (_tank.max_health - _tank.health) / _tank.max_health
+	recalculate_wobble()
+
+	print_debug("%s(%s) - took %f damage" % [name, _player, amount])
+
+func recalculate_wobble() -> void:
+	var total_damage_pct:float = _get_total_damage_pct()
 
 	var deviation_deg = aim_deviation_v_damage.sample(total_damage_pct)
 	var prev_enabled := enabled
@@ -141,12 +146,17 @@ func _on_damage(_in_tank: Tank, _instigatorController: Node2D, _instigator: Node
 		# Have to sweep across the 4 phases
 		current_rads_per_sec = current_deviation / current_deviation_period * 4.0
 
-	print_debug("%s(%s) - took %f damage: total_damage_pct=%f -> enabled=%s; deviation=%f; period=%f" % 
-		[name, _player, amount, total_damage_pct, enabled, deviation_deg, current_deviation_period]
+	print_debug("%s(%s) - recalculate_wobble: total_damage_pct=%f -> enabled=%s; deviation=%f; period=%f" % 
+		[name, _player, total_damage_pct, enabled, deviation_deg, current_deviation_period]
 	)
 
 	if prev_enabled != enabled:
 		wobble_toggled.emit(enabled)
+
+func _get_total_damage_pct() -> float:
+	if not is_instance_valid(_tank):
+		return 0.0
+	return  (_tank.max_health - _tank.health) / _tank.max_health
 
 func _on_aim_updated(player: TankController) -> void:
 	if player != _player or _modifying_aim:

@@ -25,5 +25,5 @@ func _update_fall_Damage(difficulty: Difficulty.DifficultyLevel) -> void:
 	print_debug("%s - Update Fall damage for Player to %s" % [name, str(enable_fall_damage)])
 	_player_tank.enable_fall_damage = enable_fall_damage
 
-func _on_difficulty_changed(new_difficulty: Difficulty.DifficultyLevel, old_difficulty: Difficulty.DifficultyLevel) -> void:
+func _on_difficulty_changed(new_difficulty: Difficulty.DifficultyLevel, _old_difficulty: Difficulty.DifficultyLevel) -> void:
 	_update_fall_Damage(new_difficulty)
