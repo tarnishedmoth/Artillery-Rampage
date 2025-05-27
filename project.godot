@@ -61,6 +61,7 @@ DamageableRoot="Root node in the damageable or destructible tree - e.g. Terrain 
 TerrainChunk="Class that can be used as a child in Terrain system. Allows for destructible and shatterable objects in addition to standard static TerrainChunk"
 GameLevel="GameLevel node"
 Wind_CPUParticles2D="CPUParticles2D that should be blown around by wind"
+WobbleActivator="Activation node for the wobble damage mechanic"
 
 [input]
 

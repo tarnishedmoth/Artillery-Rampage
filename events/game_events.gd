@@ -5,6 +5,7 @@ var current_level:GameLevel
 @warning_ignore_start("unused_signal")
 
 signal user_options_changed()
+signal difficulty_changed(new_difficulty: Difficulty.DifficultyLevel, old_difficulty: Difficulty.DifficultyLevel)
 
 signal save_state_restored()
 signal save_state_persisted()

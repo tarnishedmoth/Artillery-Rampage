@@ -15,10 +15,16 @@ var current_difficulty:DifficultyLevel:
 	get:
 		return story_difficulty if SceneManager.play_mode == SceneManager.PlayMode.STORY else default_play_difficulty
 	set(value):
+		var old_value:DifficultyLevel
 		if SceneManager.play_mode == SceneManager.PlayMode.STORY:
+			old_value = story_difficulty
 			story_difficulty = value
 		else:
+			old_value = default_play_difficulty
 			default_play_difficulty = value
+		
+		if old_value != value:
+			GameEvents.difficulty_changed.emit(value, old_value)
 			
 #region Savable
 

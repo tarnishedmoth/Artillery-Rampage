@@ -17,6 +17,11 @@ var aim_damage_wobble:AimDamageWobble
 var _turn_active:bool = false
 var _wobble_ready:bool = false
 
+## Toggle this to disable the wobble mechanic
+## Note this is also changed by the difficulty modifier
+@export
+var enabled = true
+
 func _ready() -> void:
 	if SceneManager.is_precompiler_running:
 		return
@@ -32,7 +37,7 @@ func _ready() -> void:
 	wobble_damage_meter.hide()
 
 func _input(event: InputEvent) -> void:
-	if not _turn_active or not _wobble_ready:
+	if not _turn_active or not _wobble_ready or not enabled:
 		return
 
 	if event.is_action_pressed("shoot"):
@@ -68,9 +73,9 @@ func _on_turn_started(player: TankController) -> void:
 	print_debug("%s(%s) turn started" % [name, player])
 	_turn_active = true
 	
-func _on_wobble_toggled(enabled:bool) -> void:
-	print_debug("%s(%s) wobble toggled=%s" % [name, controller, enabled])
-	_wobble_ready = enabled
+func _on_wobble_toggled(wobble_enabled:bool) -> void:
+	print_debug("%s(%s) wobble toggled=%s" % [name, controller, wobble_enabled])
+	_wobble_ready = wobble_enabled
 	
 
 func _on_turn_ended(player: TankController) -> void:

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://ehm0k0yuoqit" path="res://tank/wobble/player_activate_wobble.gd" id="1_4re4v"]
 [ext_resource type="PackedScene" uid="uid://cbtb48ot1p2x2" path="res://tank/wobble/wobble_damage_meter.tscn" id="2_lxkn6"]
 
-[node name="PlayerActivateWobble" type="Node2D"]
+[node name="PlayerActivateWobble" type="Node2D" groups=["WobbleActivator"]]
 script = ExtResource("1_4re4v")
 
 [node name="WobbleDamageMeter" parent="." instance=ExtResource("2_lxkn6")]

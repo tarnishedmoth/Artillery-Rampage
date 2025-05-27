@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://cduo8m7j3bl8g"]
+
+[ext_resource type="Script" uid="uid://bgoyiun1jpv3o" path="res://progression/difficulty_modifier.gd" id="1_2dwr4"]
+[ext_resource type="Script" uid="uid://cao3jj7glqw8u" path="res://progression/ai_spawning_modifier.gd" id="2_d0wel"]
+[ext_resource type="Script" uid="uid://bswkyil2uop61" path="res://progression/wobble_meter_modifier.gd" id="3_61jql"]
+[ext_resource type="Script" uid="uid://quym8uf6ujsg" path="res://progression/fall_damage_modifier.gd" id="4_dvlup"]
+
+[node name="DifficultyModifier" type="Node"]
+script = ExtResource("1_2dwr4")
+
+[node name="AISpawningModifier" type="Node" parent="."]
+script = ExtResource("2_d0wel")
+
+[node name="WobbleMeterModifier" type="Node" parent="."]
+script = ExtResource("3_61jql")
+
+[node name="FallDamageModifier" type="Node" parent="."]
+script = ExtResource("4_dvlup")
