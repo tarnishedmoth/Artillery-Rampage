@@ -34,8 +34,7 @@ func restore_from_save_state(save: SaveState) -> void:
 	if SceneManager.play_mode == SceneManager.PlayMode.STORY:
 		var story_save:Dictionary = StorySaveUtils.get_story_save()
 		if story_save and story_save.has(SAVE_STATE_KEY):
-			# TODO: Storying default difficulty as 
-			story_difficulty = story_save[SAVE_STATE_KEY][SAVE_STATE_KEY]
+			story_difficulty = story_save[SAVE_STATE_KEY]
 			print_debug("%s: Restoring story difficulty to %s" % [name, str(story_difficulty)])
 	elif save.state.has(UserOptions.SAVE_STATE_KEY):
 		var options_data:Dictionary = save.state.get(UserOptions.SAVE_STATE_KEY)
