@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://uaih1d1o2vd7"]
+[gd_scene load_steps=24 format=3 uid="uid://uaih1d1o2vd7"]
 
 [ext_resource type="Script" uid="uid://bfl71q3d57n8s" path="res://levels/game_level.gd" id="1_c8wet"]
 [ext_resource type="Script" uid="uid://ehj364xag1df" path="res://utils/game_timer.gd" id="1_x4c1e"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="12_xykdc"]
 [ext_resource type="PackedScene" uid="uid://bamvmc2k56pyk" path="res://effects/post_processing/post_processing.tscn" id="19_onnnh"]
 [ext_resource type="PackedScene" uid="uid://dlh1i2cvw3mim" path="res://voiceovers/announcer.tscn" id="20_k1cdv"]
+[ext_resource type="PackedScene" uid="uid://cduo8m7j3bl8g" path="res://progression/difficulty_modifier.tscn" id="21_rs00r"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_chthv"]
 shader = ExtResource("6_y871r")
@@ -98,5 +99,7 @@ artillery_ai_starting_weapons = Array[PackedScene]([ExtResource("10_nmusx"), Ext
 unique_name_in_owner = true
 
 [node name="Announcer" parent="." instance=ExtResource("20_k1cdv")]
+
+[node name="DifficultyModifier" parent="." instance=ExtResource("21_rs00r")]
 
 [editable path="Walls"]

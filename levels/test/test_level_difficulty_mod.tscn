@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://1dsdhj70v2o2"]
+[gd_scene load_steps=12 format=3 uid="uid://1dsdhj70v2o2"]
 
 [ext_resource type="Script" uid="uid://cunwra7xuebfm" path="res://levels/test/test_level_difficulty_mod.gd" id="1_abf0i"]
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_l06wc"]
@@ -11,7 +11,6 @@
 [ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="8_wxbgl"]
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="9_sgiwu"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="10_5cc5r"]
-[ext_resource type="PackedScene" uid="uid://cduo8m7j3bl8g" path="res://progression/difficulty_modifier.tscn" id="11_jhtvm"]
 
 [node name="TestLevelDifficultyMod" type="Node2D"]
 script = ExtResource("1_abf0i")
@@ -33,8 +32,6 @@ artillery_ai_types = Array[PackedScene]([ExtResource("3_abf0i"), ExtResource("4_
 default_ai_players = Vector2i(1, 4)
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
-
-[node name="DifficultyModifier" parent="GameLevel" instance=ExtResource("11_jhtvm")]
 
 [editable path="GameLevel"]
 [editable path="GameLevel/Terrain"]
