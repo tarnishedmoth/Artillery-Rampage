@@ -144,9 +144,12 @@ func level_complete() -> void:
 func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 	match key:
 		SceneKeys.MainMenu:
-			# Make sure option state loaded
-			SaveStateManager.restore_node_state(UserOptions)
-			await switch_scene_file(main_menu_scene_file, delay)
+			await switch_scene_file(main_menu_scene_file, delay, func() -> void:
+				# Clear out the play mode when going back to main menu
+				play_mode = PlayMode.DIRECT
+				# Make sure option state loaded
+				SaveStateManager.restore_node_state(UserOptions)
+			)
 		SceneKeys.RandomStart:
 			await next_level(delay)
 		SceneKeys.StoryStart:
@@ -161,15 +164,25 @@ func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 		_:
 			push_error("Unhandled scene key=%s" % [key])
 	
-func switch_scene(scene: PackedScene, delay: float = default_delay) -> void:
+func switch_scene(scene: PackedScene, delay: float = default_delay, before_load:Callable = Callable()) -> void:
 	var display_name = str(scene)
 	print_debug("switch_scene: %s, delay=%f" % [display_name, delay])
-	await _switch_scene(func()->Resource: return scene, delay)
+	await _switch_scene(
+		func()->Resource:
+			if before_load:
+				before_load.call()
+			return scene,
+	 delay)
 	
-func switch_scene_file(scene: String, delay: float = default_delay) -> void:
+func switch_scene_file(scene: String, delay: float = default_delay, before_load:Callable = Callable()) -> void:
 	print_debug("switch_scene_file: %s, delay=%f" % [scene, delay])
 	# TODO: Consider using resource loader to load async during the delay period
-	await _switch_scene(func()->Resource: return load(scene), delay)
+	await _switch_scene(
+		func()->Resource:
+			if before_load:
+				before_load.call()
+			return load(scene), 
+	delay)
 
 func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	if is_switching_scene:
