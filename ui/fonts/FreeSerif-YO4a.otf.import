@@ -2,7 +2,7 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://cb5drvh0e7jll"
+uid="uid://djx6mjgmk2546"
 path="res://.godot/imported/FreeSerif-YO4a.otf-7209dda7a2fa0a1f68e3ab2fb23db622.fontdata"
 
 [deps]
@@ -26,15 +26,10 @@ subpixel_positioning=4
 keep_rounding_remainders=true
 oversampling=0.0
 Fallbacks=null
-fallbacks=[Resource("res://ui/fonts/Symbola-AjYx.ttf")]
+fallbacks=[]
 Compress=null
 compress=true
-preload=[{
-"chars": [],
-"glyphs": [],
-"name": "New Configuration",
-"size": Vector2i(16, 0)
-}]
+preload=[]
 language_support={}
 script_support={}
 opentype_features={}

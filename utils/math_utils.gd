@@ -13,3 +13,6 @@ static func get_angle_deg_between_points(a:Vector2, b:Vector2) -> float:
 
 static func get_rand_vector2_dir() -> Vector2:
 	return Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)).normalized()
+	
+
+#Practice commit - will delete
