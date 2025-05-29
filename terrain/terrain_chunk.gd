@@ -12,7 +12,12 @@ class TerrainTexture:
 @onready var collisionMesh: CollisionPolygon2D = $CollisionPolygon2D
 @onready var overlapMesh: CollisionPolygon2D = $Overlap/CollisionPolygon2D
 @onready var destructiblePolyOperations: DestructiblePolyOperations = $DestructiblePolyOperations
+
 var terrain: Terrain
+
+# a grass or rock "crust" using a textured Line2D to outline chunk
+var outlineMeshEnabled: bool = true
+var outlineMesh: Line2D
 
 @export_range(0, 10.0) var gravity_scale:float = 1.0
 
@@ -53,6 +58,11 @@ func _ready() -> void:
 	
 	apply_textures()
 	
+	# a textured line around the outside of the shape (for grass, etc)
+	if outlineMeshEnabled :
+		init_outline_mesh()
+		regenerate_outline_mesh()
+	
 	print_poly("_ready", collisionMesh.polygon)
 	
 ## Move vertices using xform.scale as a multiplier to correct for use in editor.
@@ -80,6 +90,10 @@ func apply_transform_scales_to_polygon2d() -> void:
 		terrainMesh.set_polygon(vertices)
 		print_debug("Corrected terrain scale of ", total_scale)
 	
+	# and make sure the outline matches the adjusted verts
+	regenerate_outline_mesh()
+
+	
 func apply_textures() -> void:
 	# give the terrain a texture like rock or grass
 	# idea: we could load multiple textures!
@@ -99,6 +113,34 @@ func apply_textures() -> void:
 		if resource.matches(self):
 			resource.apply_to(self)
 			break
+			
+	
+func init_outline_mesh() -> void:
+	if !outlineMeshEnabled : return
+	if outlineMesh != null : return
+	outlineMesh = Line2D.new()
+	outlineMesh.texture_mode = Line2D.LINE_TEXTURE_TILE
+	outlineMesh.closed = true
+	outlineMesh.default_color = Color.DARK_SLATE_GRAY
+	outlineMesh.width = 8
+	# as a child of this chunk so it moves too:
+	add_child(outlineMesh)
+	
+func regenerate_outline_mesh() -> void:
+	if !outlineMeshEnabled : return
+	if outlineMesh == null : init_outline_mesh()
+	
+	# the slow way:
+	# outlineMesh.clear_points()
+	# for i in terrainMesh.polygon.size():
+	# 	outlineMesh.add_point(terrainMesh.polygon[i])
+	
+	# the faster yet safe way
+	# outlineMesh.points = terrainMesh.polygon.duplicate()
+	
+	# the very fast but DANGEROUS way
+	outlineMesh.points = terrainMesh.polygon
+	
 	
 func _physics_process(delta: float) -> void:
 	if !falling: return
@@ -145,6 +187,7 @@ func _set_polygon_deferred(polygon_nodes: Array[Node], new_poly: PackedVector2Ar
 		for node in polygon_nodes:
 			node.polygon = new_poly
 		_can_be_updated = true
+		if outlineMeshEnabled : regenerate_outline_mesh()
 
 	deferred_updater.call_deferred()
 
