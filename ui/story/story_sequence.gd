@@ -73,4 +73,4 @@ func _on_skip() -> void:
 
 	
 func _go_to_next_scene() -> void:
-	await SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap, 0)
+	await SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryDifficultySelect, 0)
