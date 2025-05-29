@@ -1,0 +1,126 @@
+[gd_resource type="Resource" script_class="ShopItemsResource" load_steps=29 format=3 uid="uid://kpcvdmtfoeh3"]
+
+[ext_resource type="Script" uid="uid://c4t1rw2yd6b0j" path="res://progression/shop/shop_item_resource.gd" id="1_553xf"]
+[ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="2_52sja"]
+[ext_resource type="Script" uid="uid://b1iamd2aakw8y" path="res://progression/shop/shop_items_resource.gd" id="2_iqp04"]
+[ext_resource type="PackedScene" uid="uid://hlpewhe5vg2k" path="res://weapons/weapon_leadball_shotgun.tscn" id="3_n85w6"]
+[ext_resource type="PackedScene" uid="uid://dychmx0p2ex84" path="res://weapons/weapon_bouncing_ball.tscn" id="4_ye3h0"]
+[ext_resource type="PackedScene" uid="uid://cbek5kw6n2l41" path="res://weapons/weapon_emp.tscn" id="5_y3obe"]
+[ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="6_bpk74"]
+[ext_resource type="PackedScene" uid="uid://dnc0x4uvh6tq8" path="res://weapons/weapon_meganuke.tscn" id="7_ye3h0"]
+[ext_resource type="PackedScene" uid="uid://ccl2oyo13754i" path="res://weapons/weapon_MiniMIRV.tscn" id="8_y3obe"]
+[ext_resource type="PackedScene" uid="uid://bx3va4wmvmw4o" path="res://weapons/weapon_MIRV.tscn" id="9_4u6sx"]
+[ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="10_kc67y"]
+[ext_resource type="PackedScene" uid="uid://do2r411gtohhx" path="res://weapons/weapon_missile_homing.tscn" id="11_xingv"]
+[ext_resource type="PackedScene" uid="uid://evwfga4yj1nk" path="res://weapons/weapon_laser.tscn" id="12_hcws4"]
+[ext_resource type="PackedScene" uid="uid://b4sy4hh23outk" path="res://weapons/weapon_laser_2.tscn" id="13_rnwgx"]
+[ext_resource type="PackedScene" uid="uid://whswocs0q861" path="res://weapons/weapon_deployable_personnelretrieval.tscn" id="14_4u6sx"]
+
+[sub_resource type="Resource" id="Resource_553xf"]
+script = ExtResource("1_553xf")
+item_scene = ExtResource("2_52sja")
+unlock_cost = 3
+refill_cost = 0.05
+refill_cost_type = 0
+metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
+
+[sub_resource type="Resource" id="Resource_80d23"]
+script = ExtResource("1_553xf")
+item_scene = ExtResource("3_n85w6")
+unlock_cost = 4
+refill_cost = 0.1
+refill_cost_type = 0
+metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
+
+[sub_resource type="Resource" id="Resource_gbq34"]
+script = ExtResource("1_553xf")
+item_scene = ExtResource("4_ye3h0")
+unlock_cost = 3
+refill_cost = 0.2
+refill_cost_type = 0
+metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
+
+[sub_resource type="Resource" id="Resource_5cnqm"]
+script = ExtResource("1_553xf")
+item_scene = ExtResource("5_y3obe")
+unlock_cost = 5
+refill_cost = 1.0
+refill_cost_type = 0
+metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
+
+[sub_resource type="Resource" id="Resource_4u6sx"]
+script = ExtResource("1_553xf")
+item_scene = ExtResource("6_bpk74")
+unlock_cost = 6
+refill_cost = 1.0
+refill_cost_type = 0
+metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
+
+[sub_resource type="Resource" id="Resource_kc67y"]
+script = ExtResource("1_553xf")
+item_scene = ExtResource("7_ye3h0")
+unlock_cost = 12
+refill_cost = 4.0
+refill_cost_type = 0
+metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
+
+[sub_resource type="Resource" id="Resource_bpk74"]
+script = ExtResource("1_553xf")
+item_scene = ExtResource("8_y3obe")
+unlock_cost = 3
+refill_cost = 0.5
+refill_cost_type = 0
+metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
+
+[sub_resource type="Resource" id="Resource_fyeof"]
+script = ExtResource("1_553xf")
+item_scene = ExtResource("9_4u6sx")
+unlock_cost = 6
+refill_cost = 1.0
+refill_cost_type = 0
+metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
+
+[sub_resource type="Resource" id="Resource_cuna2"]
+script = ExtResource("1_553xf")
+item_scene = ExtResource("10_kc67y")
+unlock_cost = 4
+refill_cost = 0.5
+refill_cost_type = 0
+metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
+
+[sub_resource type="Resource" id="Resource_1p51g"]
+script = ExtResource("1_553xf")
+item_scene = ExtResource("11_xingv")
+unlock_cost = 6
+refill_cost = 1.0
+refill_cost_type = 0
+metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
+
+[sub_resource type="Resource" id="Resource_cxkli"]
+script = ExtResource("1_553xf")
+item_scene = ExtResource("12_hcws4")
+unlock_cost = 6
+refill_cost = 0.5
+refill_cost_type = 0
+metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
+
+[sub_resource type="Resource" id="Resource_p8a76"]
+script = ExtResource("1_553xf")
+item_scene = ExtResource("13_rnwgx")
+unlock_cost = 8
+refill_cost = 1.0
+refill_cost_type = 0
+metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
+
+[sub_resource type="Resource" id="Resource_excop"]
+script = ExtResource("1_553xf")
+item_scene = ExtResource("14_4u6sx")
+unlock_cost = 3
+refill_cost = 1.0
+refill_cost_type = 0
+metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
+
+[resource]
+script = ExtResource("2_iqp04")
+items = Array[ExtResource("1_553xf")]([SubResource("Resource_553xf"), SubResource("Resource_80d23"), SubResource("Resource_gbq34"), SubResource("Resource_5cnqm"), SubResource("Resource_4u6sx"), SubResource("Resource_kc67y"), SubResource("Resource_bpk74"), SubResource("Resource_fyeof"), SubResource("Resource_cuna2"), SubResource("Resource_1p51g"), SubResource("Resource_cxkli"), SubResource("Resource_p8a76"), SubResource("Resource_excop")])
+metadata/_custom_type_script = "uid://b1iamd2aakw8y"
