@@ -32,6 +32,7 @@ UserOptions="*res://utils/user_options.tscn"
 Difficulty="*res://progression/difficulty.tscn"
 PlayerStateManager="*res://levels/round/player_state_manager.tscn"
 PlayerAttributes="*res://progression/player_attributes.tscn"
+StoryModeManager="*res://story/story_mode_manager.tscn"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 
 [display]

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://by7xd6ncp1g7c"]
+
+[ext_resource type="Script" uid="uid://bxbfn64mb8yh0" path="res://story/reset_starting_weapons.gd" id="1_4y0es"]
+
+[node name="ResetStartingWeapons" type="Node"]
+script = ExtResource("1_4y0es")

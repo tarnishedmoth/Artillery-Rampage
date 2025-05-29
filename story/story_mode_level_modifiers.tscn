@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://st86yx533wjj"]
+
+[ext_resource type="PackedScene" uid="uid://by7xd6ncp1g7c" path="res://story/reset_starting_weapons.tscn" id="1_133an"]
+
+[node name="StoryModeLevelModifiers" type="Node"]
+
+[node name="ResetStartingWeapons" parent="." instance=ExtResource("1_133an")]

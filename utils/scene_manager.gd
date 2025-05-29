@@ -223,6 +223,8 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	current_scene = new_scene.instantiate()
 	_last_scene_resource = new_scene
 
+	GameEvents.scene_switched.emit(current_scene)
+
 	#current_scene.scene_file_path = new_scene.resource_path
 	
 	# Somehow get_tree().current_scene is null inside _ready of the loaded scene

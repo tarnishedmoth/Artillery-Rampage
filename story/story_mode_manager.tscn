@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://5j3gwghcbxtg"]
+
+[ext_resource type="Script" uid="uid://bmp3v6isu43p2" path="res://story/story_mode_manager.gd" id="1_ebw2n"]
+
+[node name="StoryModeManager" type="Node"]
+script = ExtResource("1_ebw2n")

@@ -16,8 +16,11 @@ signal all_players_added(level: GameLevel)
 signal round_started()
 signal round_ended()
 
-# Called when the game level is ready but before players and procedural spawning occurs
+## Called when the game level is ready but before players and procedural spawning occurs
 signal level_loaded(level: GameLevel)
+
+## Called when a new root scene is instantiated but before it is added to the tree
+signal scene_switched(scene: Node)
 
 signal turn_started(player: TankController)
 signal turn_ended(player: TankController)
