@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://cxb6b42bgqvel"]
+
+[ext_resource type="PackedScene" uid="uid://dfqpo363uk5q1" path="res://ui/story/shop/weapon_buy.tscn" id="1_7inv6"]
+[ext_resource type="PackedScene" uid="uid://bfei0rked6csm" path="res://ui/story/shop/ammo_purchase.tscn" id="2_03bpo"]
+
+[node name="ShopWeaponRow" type="HBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Weapon" type="Label" parent="."]
+layout_mode = 2
+text = "Leadball Shotgun"
+
+[node name="WeaponBuy" parent="." instance=ExtResource("1_7inv6")]
+layout_mode = 2
+
+[node name="AmmoPurchase" parent="." instance=ExtResource("2_03bpo")]
+layout_mode = 2
+
+[node name="ShopWeaponRow" type="Control" parent="."]
+layout_mode = 2

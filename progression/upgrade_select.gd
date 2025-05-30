@@ -5,4 +5,4 @@ func _on_button_upgrade_a_selected(button: ButtonUpgradeSelection) -> void:
 
 
 func _on_continue_button_pressed() -> void:
-	SceneManager.next_level()
+	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryShop)

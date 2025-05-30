@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://dfqpo363uk5q1"]
+
+[node name="WeaponBuy" type="VBoxContainer"]
+offset_right = 78.0
+
+[node name="BuyRow" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="BuyRow"]
+layout_mode = 2
+text = "Buy"
+
+[node name="BuyButton" type="CheckButton" parent="BuyRow"]
+layout_mode = 2
+
+[node name="CurrentAmmoRow" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CurrentAmmoRow"]
+layout_mode = 2
+text = "Ammo"
+
+[node name="CurrentAmmo" type="Label" parent="CurrentAmmoRow"]
+layout_mode = 2
+text = "3"
+
+[node name="WeaponBuy" type="Control" parent="."]
+layout_mode = 2

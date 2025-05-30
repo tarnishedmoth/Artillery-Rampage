@@ -20,6 +20,8 @@ class SceneKeys:
 	const StoryStart:StringName = &"StoryStart"
 	const StoryDifficultySelect:StringName = &"StoryDifficultySelect"
 	const RoundSummary:StringName = &"RoundSummary"
+	const StoryShop:StringName = &"StoryShop"
+	const UpgradeSelect:StringName = &"UpgradeSelect"
 
 	const GameOver:StringName = &"GameOver"
 
@@ -38,6 +40,8 @@ const story_start_scene_file = "res://ui/story/story_sequence.tscn"
 const story_map_scene_file = "res://ui/story/map/story_map_scene.tscn"
 const story_round_summary_scene_file = "res://ui/story/round_summary/story_round_summary.tscn"
 const story_difficulty_select_scene_file = "res://ui/story/story_difficulty_select.tscn"
+const upgrade_select_scene_file = "res://progression/upgrade_select.tscn"
+const story_shop_scene_file = "res://ui/story/shop/story_shop.tscn"
 
 const game_over_scene_file = "res://levels/game_over.tscn"
 
@@ -161,7 +165,11 @@ func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 			_current_level_index = -1
 			await switch_scene_file(story_start_scene_file, delay)
 		SceneKeys.StoryDifficultySelect:
-			await switch_scene_file(story_difficulty_select_scene_file)
+			await switch_scene_file(story_difficulty_select_scene_file, delay)
+		SceneKeys.UpgradeSelect:
+			await switch_scene_file(upgrade_select_scene_file, delay)
+		SceneKeys.StoryShop:
+			await switch_scene_file(story_shop_scene_file, delay)
 		SceneKeys.StoryMap:
 			await switch_scene_file(story_map_scene_file, delay)
 		SceneKeys.RoundSummary:

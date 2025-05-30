@@ -103,7 +103,7 @@ func _on_next_pressed() -> void:
 	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
 
 	if stats and stats.won:
-		SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap)
+		SceneManager.switch_scene_keyed(SceneManager.SceneKeys.UpgradeSelect)
 	elif not _is_game_over:
 		SceneManager.restart_level()
 	else:
