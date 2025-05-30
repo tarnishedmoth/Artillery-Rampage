@@ -118,6 +118,7 @@ func _on_continue_story_pressed() -> void:
 		print_debug("Continue story button is disabled")
 		return
 		
+	PlayerStateManager.enable = true
 	SceneManager.play_mode = SceneManager.PlayMode.STORY
 	StorySaveUtils.set_story_level_index()
 	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap, 0.0)

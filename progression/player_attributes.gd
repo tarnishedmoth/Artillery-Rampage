@@ -21,6 +21,15 @@ var scrap:int:
 
 var _dirty:bool = false
 
+## Used for debugging to avoid reading or writing save state
+func ignore_save_state() -> void:
+	if not OS.is_debug_build():
+		push_error("ignore_save_state() should only be used in debug builds")
+		return
+	
+	print_debug("ignore_save_state() called, will not save or restore player attributes")
+	remove_from_group(Groups.Savable)
+
 func _ready() -> void:
 	personnel = player_attribute_defaults.personnel
 	scrap = 0

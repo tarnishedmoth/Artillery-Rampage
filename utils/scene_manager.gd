@@ -216,6 +216,8 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	var root = get_tree().root
 	var root_current_scene = root.get_child(root.get_child_count() - 1)
 	await loading_screen(true)
+	
+	GameEvents.scene_leaving.emit(root_current_scene)
 	root_current_scene.free()
 	is_switching_scene = false
 

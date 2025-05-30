@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c7lj6oxnabp8f"]
+
+[ext_resource type="Script" uid="uid://b4rurcijd5t8b" path="res://levels/test/story/test_level_story_shop.gd" id="1_5ca1y"]
+
+[node name="TestLevelStoryShop" type="Node2D"]
+script = ExtResource("1_5ca1y")
+scrap = 5
+personnel = 1

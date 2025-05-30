@@ -86,7 +86,6 @@ func _update_attributes() -> void:
 	else:
 		personnel_change =  -floori((grade_to_letter.size() - _grade) / 3.0)
 
-	# TODO: Can trigger game over condition if personnel drops to 0
 	PlayerAttributes.personnel = maxi(PlayerAttributes.personnel + personnel_change, 0)
 	PlayerAttributes.scrap = maxi(PlayerAttributes.scrap + scrap_change, 0)
 
