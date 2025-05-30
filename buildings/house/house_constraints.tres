@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ProceduralObjectContraints" load_steps=3 format=3 uid="uid://4mjdfsy014xp"]
 
-[ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="1_fgbhf"]
+[ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house/house.tscn" id="1_fgbhf"]
 [ext_resource type="Script" uid="uid://bke3gd68u5yjw" path="res://environment/procedural_object_constraints.gd" id="1_ugrae"]
 
 [resource]

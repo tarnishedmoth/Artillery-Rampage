@@ -10,7 +10,7 @@ extends Node
 var health: float
 
 #var image = Image.load_from_file("res://buildings/house.png") # This method only works during development per ImageTexture documentation
-var image_resource = load("res://buildings/house.png")
+var image_resource = load("res://buildings/house/house.png")
 var image: Image = image_resource.get_image()
 var texture = ImageTexture.create_from_image(image)
 

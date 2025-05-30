@@ -6,7 +6,7 @@
 [ext_resource type="Resource" uid="uid://6vvcguyaaxie" path="res://environment/rocks/shatterable_rock01_constraints.tres" id="4_bfmp2"]
 [ext_resource type="Resource" uid="uid://0wgxqduf2coh" path="res://environment/rocks/shatterable_rock02_constraints.tres" id="5_bbsww"]
 [ext_resource type="Resource" uid="uid://vxgyqenvli85" path="res://buildings/lighthouse/light_house_with_rubble_constraints.tres" id="6_4l52k"]
-[ext_resource type="Resource" uid="uid://4mjdfsy014xp" path="res://buildings/house_constraints.tres" id="7_ys72j"]
+[ext_resource type="Resource" uid="uid://4mjdfsy014xp" path="res://buildings/house/house_constraints.tres" id="7_ys72j"]
 [ext_resource type="Resource" uid="uid://dc5j54tnccd2d" path="res://environment/rocks/precomputed/precomputed_shatterable_rock01_constraints.tres" id="8_bfmp2"]
 [ext_resource type="Resource" uid="uid://daqpk2vponnaa" path="res://environment/rocks/precomputed/precomputed_shatterable_rock02_constraints.tres" id="9_bbsww"]
 

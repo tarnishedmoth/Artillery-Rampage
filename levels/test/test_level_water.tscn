@@ -6,7 +6,7 @@
 [ext_resource type="Shader" uid="uid://jnl644tjjk1s" path="res://effects/hazard/water/water_hazard.gdshader" id="3_85cl6"]
 [ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_axj0u"]
 [ext_resource type="Texture2D" uid="uid://ctk3c5ibo2pmg" path="res://terrain/terrain-strata-sand.png" id="3_djkkf"]
-[ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="4_d3cex"]
+[ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house/house.tscn" id="4_d3cex"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="5_xyt2g"]
 [ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="6_scx2d"]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cq5edhs86n8r1"]
 
-[ext_resource type="Texture2D" uid="uid://fpvqrf4pg0dw" path="res://buildings/house.png" id="1_gx8ve"]
-[ext_resource type="Script" uid="uid://buirvonvotrff" path="res://buildings/house.gd" id="1_y8bli"]
+[ext_resource type="Texture2D" uid="uid://fpvqrf4pg0dw" path="res://buildings/house/house.png" id="1_gx8ve"]
+[ext_resource type="Script" uid="uid://buirvonvotrff" path="res://buildings/house/house.gd" id="1_y8bli"]
 
 [node name="House" type="Node2D" groups=["Damageable"]]
 script = ExtResource("1_y8bli")

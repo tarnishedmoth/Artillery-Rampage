@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_15hwa"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_b4uer"]
 [ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_di33p"]
-[ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house.tscn" id="4_igqu3"]
+[ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house/house.tscn" id="4_igqu3"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="5_xjt6c"]
 [ext_resource type="Script" uid="uid://ctrs8xq1khhs2" path="res://weapons/mod_weapon.gd" id="6_vhdtx"]
 [ext_resource type="Script" uid="uid://cevnfqipg6slo" path="res://items/weapon_projectiles/mod_projectile.gd" id="7_pm7vn"]
