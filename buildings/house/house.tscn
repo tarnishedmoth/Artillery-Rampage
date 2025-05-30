@@ -1,41 +1,12 @@
 [gd_scene load_steps=3 format=3 uid="uid://cq5edhs86n8r1"]
 
-[ext_resource type="Texture2D" uid="uid://fpvqrf4pg0dw" path="res://buildings/house/house.png" id="1_gx8ve"]
-[ext_resource type="Script" uid="uid://buirvonvotrff" path="res://buildings/house/house.gd" id="1_y8bli"]
+[ext_resource type="PackedScene" uid="uid://b00kdwwjo4hg8" path="res://destructible/destructible_object.tscn" id="1_27ra4"]
+[ext_resource type="PackedScene" uid="uid://bghbtqjx0jdge" path="res://buildings/house/house_chunk.tscn" id="2_rtr4g"]
 
-[node name="House" type="Node2D" groups=["Damageable"]]
-script = ExtResource("1_y8bli")
+[node name="House" instance=ExtResource("1_27ra4")]
+display_name = "a lighthouse"
+chunk_scene = ExtResource("2_rtr4g")
+crumbling = true
+create_new_chunks = true
 
-[node name="HouseBody" type="RigidBody2D" parent="."]
-collision_layer = 16
-collision_mask = 63
-mass = 1000.0
-
-[node name="HouseBodySprite" type="Sprite2D" parent="HouseBody"]
-texture = ExtResource("1_gx8ve")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="HouseBody"]
-visible = false
-polygon = PackedVector2Array(-15, -32, -26, -15, -26, 31, 27, 31, 27, -14, 16, -32)
-
-[node name="HealthLabel" type="Label" parent="."]
-visible = false
-offset_left = -28.0
-offset_top = -53.0
-offset_right = 22.0
-offset_bottom = -30.0
-text = "100"
-
-[node name="HouseHealthbar" type="Node2D" parent="."]
-visible = false
-position = Vector2(-20, -39)
-
-[node name="RedPart" type="ColorRect" parent="HouseHealthbar"]
-offset_right = 40.0
-offset_bottom = 4.0
-color = Color(1, 0, 0, 1)
-
-[node name="GreenPart" type="ColorRect" parent="HouseHealthbar"]
-offset_right = 40.0
-offset_bottom = 4.0
-color = Color(0, 1, 0, 1)
+[node name="HouseChunk" parent="." index="0" instance=ExtResource("2_rtr4g")]

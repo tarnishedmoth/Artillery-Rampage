@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ProceduralObjectContraints" load_steps=3 format=3 uid="uid://dx0cckaiubclj"]
+
+[ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house/house.tscn" id="1_qh6ju"]
+[ext_resource type="Script" uid="uid://bke3gd68u5yjw" path="res://environment/procedural_object_constraints.gd" id="2_8uhr2"]
+
+[resource]
+script = ExtResource("2_8uhr2")
+scene = ExtResource("1_qh6ju")
+min_spacing = 0.0
+count = Vector2i(1, 2)
+max_slant_angle_deg = 10.0
+adjacent_constraints = Dictionary[PackedScene, float]({})
+metadata/_custom_type_script = "uid://bke3gd68u5yjw"

@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://bghbtqjx0jdge"]
+
+[ext_resource type="PackedScene" uid="uid://cklh78tsa5qcj" path="res://destructible/destructible_object_chunk.tscn" id="1_ujuko"]
+[ext_resource type="Texture2D" uid="uid://fpvqrf4pg0dw" path="res://buildings/house/house.png" id="2_f1c82"]
+
+[node name="HouseChunk" instance=ExtResource("1_ujuko")]
+mass = 1000.0
+min_mass = 100.0
+destroy_below_min_mass = true
+
+[node name="Mesh" parent="." index="0"]
+position = Vector2(-26, -129)
+texture = ExtResource("2_f1c82")
+texture_offset = Vector2(6, -64.5)
+polygon = PackedVector2Array(10, 66, -7, 83, -2, 84, -2, 129, 55, 129, 55, 85, 58, 82, 43, 66)
+
+[node name="DestructiblePolyOperations" parent="." index="2"]
+crumble_x_min_dist = 25.0
+crack_delta_min = 4.0
+crack_delta_max = 15.0
+crumble_y_step_max = 25.0
+crumble_x_jitter = 5.0
