@@ -1,7 +1,10 @@
-[gd_scene format=3 uid="uid://dpxoc5ysgsvep"]
+[gd_scene load_steps=2 format=3 uid="uid://dpxoc5ysgsvep"]
+
+[ext_resource type="Script" uid="uid://djgsu21x88pgk" path="res://ui/story/shop/resource_shop_row.gd" id="1_h7ms6"]
 
 [node name="ResourceRow" type="HBoxContainer"]
 theme_override_constants/separation = 20
+script = ExtResource("1_h7ms6")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 2

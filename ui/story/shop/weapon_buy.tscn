@@ -1,7 +1,10 @@
-[gd_scene format=3 uid="uid://dfqpo363uk5q1"]
+[gd_scene load_steps=2 format=3 uid="uid://dfqpo363uk5q1"]
+
+[ext_resource type="Script" uid="uid://4u26wmoacngc" path="res://ui/story/shop/weapon_buy.gd" id="1_qgamc"]
 
 [node name="WeaponBuy" type="VBoxContainer"]
 offset_right = 78.0
+script = ExtResource("1_qgamc")
 
 [node name="BuyRow" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -11,6 +14,7 @@ layout_mode = 2
 text = "Buy"
 
 [node name="BuyButton" type="CheckButton" parent="BuyRow"]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="CurrentAmmoRow" type="HBoxContainer" parent="."]
@@ -21,8 +25,6 @@ layout_mode = 2
 text = "Ammo"
 
 [node name="CurrentAmmo" type="Label" parent="CurrentAmmoRow"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "3"
-
-[node name="WeaponBuy" type="Control" parent="."]
-layout_mode = 2

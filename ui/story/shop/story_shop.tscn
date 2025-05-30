@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://o55c1iigswjc"]
 
 [ext_resource type="Script" uid="uid://blcakxdcf5gn4" path="res://ui/story/shop/story_shop.gd" id="1_po24w"]
-[ext_resource type="PackedScene" uid="uid://cxb6b42bgqvel" path="res://ui/story/shop/shop_weapon_row.tscn" id="2_3g7ak"]
 [ext_resource type="PackedScene" uid="uid://dpxoc5ysgsvep" path="res://ui/story/shop/resource_shop_row.tscn" id="2_gms1v"]
+[ext_resource type="Resource" uid="uid://kpcvdmtfoeh3" path="res://progression/shop/shop_items.tres" id="2_xg2qo"]
 
 [node name="StoryShop" type="Control"]
 layout_mode = 3
@@ -12,6 +12,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_po24w")
+item_resources = ExtResource("2_xg2qo")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -52,21 +53,6 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
-
-[node name="ShopWeaponRow" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ItemsPanel/ItemsContainer" instance=ExtResource("2_3g7ak")]
-layout_mode = 2
-
-[node name="ShopWeaponRow2" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ItemsPanel/ItemsContainer" instance=ExtResource("2_3g7ak")]
-layout_mode = 2
-
-[node name="ShopWeaponRow3" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ItemsPanel/ItemsContainer" instance=ExtResource("2_3g7ak")]
-layout_mode = 2
-
-[node name="ShopWeaponRow4" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ItemsPanel/ItemsContainer" instance=ExtResource("2_3g7ak")]
-layout_mode = 2
-
-[node name="ShopWeaponRow5" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ItemsPanel/ItemsContainer" instance=ExtResource("2_3g7ak")]
-layout_mode = 2
 
 [node name="ButtonsContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
