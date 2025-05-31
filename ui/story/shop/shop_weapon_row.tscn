@@ -9,18 +9,32 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_03bpo")
 
-[node name="Weapon" type="Label" parent="."]
+[node name="DescriptionContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Weapon" type="Label" parent="DescriptionContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
 text = "Leadball Shotgun"
+
+[node name="CostLabel" type="Label" parent="DescriptionContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
 
 [node name="WeaponBuy" parent="." instance=ExtResource("1_7inv6")]
 layout_mode = 2
 size_flags_horizontal = 10
+size_flags_vertical = 0
 alignment = 2
 
 [node name="AmmoPurchase" parent="." instance=ExtResource("2_03bpo")]
 layout_mode = 2
 size_flags_horizontal = 8
+size_flags_vertical = 0
 alignment = 2
 
 [node name="ShopWeaponRow" type="Control" parent="."]

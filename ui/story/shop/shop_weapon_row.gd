@@ -2,7 +2,9 @@ class_name ShopWeaponRow extends HBoxContainer
 
 var shop_item:ShopItemResource
 
-@onready var weapon_label: Label = $Weapon
+@onready var weapon_label: Label = %Weapon
+@onready var cost_label: Label = %CostLabel
+
 @onready var weapon_buy_control: WeaponBuyControl = $WeaponBuy
 @onready var ammo_purchase_control: AmmoPurchaseControl = $AmmoPurchase
 
@@ -14,6 +16,18 @@ signal on_ammo_state_changed(weapon: Weapon, new_ammo: int, old_ammo: int)
 func _exit_tree() -> void:
 	if is_instance_valid(_weapon):
 		_weapon.queue_free()
+
+var enabled:bool:
+	get: return weapon_buy_control.enabled or ammo_purchase_control.enabled
+	set(value):
+		weapon_buy_control.enabled = value
+		# TODO: What to do about the ammo control if we could have afforded to buy it
+		# Will need to get more granular in the story shop control and cast it to weapon and check individual costs
+		ammo_purchase_control.enabled = value
+
+func reset() -> void:
+	weapon_buy_control.reset()
+	ammo_purchase_control.reset()
 		
 func _ready() -> void:
 	if not shop_item:
@@ -37,6 +51,11 @@ func _ready() -> void:
 	weapon_buy_control.weapon = _weapon
 	weapon_buy_control.player_state = player_state
 	weapon_buy_control.update()
+	
+	if weapon_buy_control.already_owned:
+		cost_label.text = "(Owned)"
+	else:
+		cost_label.text = "%d %s" % [shop_item.unlock_cost, ShopItemResource.CostType.keys()[shop_item.unlock_cost_type]]
 	
 	if not _weapon.use_ammo:
 		ammo_purchase_control.visible = false

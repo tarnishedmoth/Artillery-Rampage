@@ -19,8 +19,9 @@ enum ItemType
 @export var item_type:ItemType = ItemType.Weapon
 
 ## Cost to initially unlock the item
-## This always costs scrap
 @export var unlock_cost:int
+
+@export var unlock_cost_type:CostType = CostType.Scrap
 
 ## Cost to refill per unit health or in case of weapons per ammo shot
 ## Fractional amounts will be always rounded up (ceili) when determining cost

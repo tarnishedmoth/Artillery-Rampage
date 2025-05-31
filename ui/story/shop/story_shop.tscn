@@ -34,6 +34,7 @@ text = "Item Shop"
 horizontal_alignment = 1
 
 [node name="ResourceRow" parent="MarginContainer/VBoxContainer" instance=ExtResource("2_gms1v")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
@@ -73,4 +74,5 @@ layout_mode = 2
 text = "Done
 "
 
+[connection signal="pressed" from="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ButtonsContainer/Reset" to="." method="_on_reset_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ButtonsContainer/Done" to="." method="_on_done_pressed"]

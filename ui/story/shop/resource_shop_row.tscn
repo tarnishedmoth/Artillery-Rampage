@@ -16,7 +16,8 @@ layout_mode = 2
 layout_mode = 2
 text = "Scrap: "
 
-[node name="Value" type="Label" parent="PanelContainer/Scrap"]
+[node name="ScrapValue" type="Label" parent="PanelContainer/Scrap"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "10"
 
@@ -30,6 +31,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Personnel:"
 
-[node name="Value" type="Label" parent="PanelContainer2/Personnel"]
+[node name="PersonnelValue" type="Label" parent="PanelContainer2/Personnel"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "5"

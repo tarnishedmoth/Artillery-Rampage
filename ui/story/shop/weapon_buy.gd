@@ -5,15 +5,27 @@ class_name WeaponBuyControl extends VBoxContainer
 
 var weapon:Weapon
 var player_state:PlayerState
+var already_owned:bool
 
 var enabled:bool:
 	get: return not buy_button.disabled
-	
+	set(value):
+		# Cannot change state if already owned as cannot buy
+		if already_owned:
+			return
+		else:
+			buy_button.disabled = not value
+
+func reset() -> void:
+	enabled = true
+	buy_button.set_pressed_no_signal(false)
+		
 func update() -> void:
 	# Can only buy if don't already have
 	var owned_index:int = player_state.weapons.find_custom(func(w): return w.scene_file_path == weapon.scene_file_path)
+	already_owned = owned_index != -1
 	
-	buy_button.disabled = owned_index != -1
+	buy_button.disabled = already_owned
 	# TODO: Doesn't account for magazines - maybe need a total_ammo derived property on the weapon for this
 	if weapon.use_ammo:
 		current_ammo.text = "%d" % player_state.weapons[owned_index].current_ammo if owned_index != -1 else "%d" % weapon.current_ammo
