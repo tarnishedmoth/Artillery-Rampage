@@ -61,7 +61,8 @@ func _on_round_ended() -> void:
 	if not player:
 		return
 	# Capture the state of the player at the end of the round
-	player_state = player.create_player_state()
+	# Retain any previously unlocked weapons
+	player_state = player.create_player_state().include_unlocks_from(player_state)
 
 	# Will become invalid when the instance is destroyed by the current SceneTree
 	player = null

@@ -11,6 +11,9 @@ class_name PlayerState
 
 # Create explicit private variable so we can access in the "destructor" notification
 var _weapons: Array[Weapon]
+var _all_unlocked_weapon_scenes: Array[String]
+
+var _empty_weapon_cache: Dictionary[String, Weapon] = {}
 
 var weapons: Array[Weapon]:
 	set(value):
@@ -35,6 +38,37 @@ var weapons: Array[Weapon]:
 var health: float
 var max_health: float
 
+func include_unlocks_from(other:PlayerState) -> PlayerState:
+	if not other:
+		return self
+	
+	# Retain any unlocked weapons so take union
+	for unlock in other._all_unlocked_weapon_scenes:
+		if not unlock in _all_unlocked_weapon_scenes:
+			_all_unlocked_weapon_scenes.push_back(unlock)
+
+	return self
+func get_empty_weapon_if_unlocked(scene_file_path:String) -> Weapon:
+	if not scene_file_path in _all_unlocked_weapon_scenes:
+		return null
+	var weapon:Weapon = _empty_weapon_cache.get(scene_file_path)
+	if weapon:
+		return weapon
+	
+	var scene:PackedScene = load(scene_file_path) as PackedScene
+	if not scene or not scene.can_instantiate():
+		push_error("PlayerState: scene_file_path=%s is not a PackedScene for weapon" % [scene_file_path])
+		return null
+	weapon = scene.instantiate() as Weapon
+	if not scene:
+		push_error("PlayerState: scene_file_path=%s -> %s is not a PackedScene for weapon" % [scene, scene_file_path])
+		return null
+
+	weapon.current_ammo = 0
+	_empty_weapon_cache[scene_file_path] = weapon
+
+	return weapon
+
 func get_weapons_copy() -> Array[Weapon]:
 	var copy: Array[Weapon] = []
 	copy.resize(weapons.size())
@@ -49,6 +83,11 @@ func _notification(what: int) -> void:
 			if is_instance_valid(w):
 				w.queue_free()
 		_weapons.clear()
+
+		for w in _empty_weapon_cache.values():
+			if is_instance_valid(w):
+				w.queue_free()
+		_empty_weapon_cache.clear()
 
 # Don't add to Savable group as this is managed by PlayerStateManager
 #region Savable
@@ -81,8 +120,10 @@ static func deserialize_from_save_state(save: SaveState) -> PlayerState:
 				push_warning("PlayerState: weapon is not valid - skipping")
 		else:
 			push_warning("PlayerState: weapon does not have res - skipping")
-	
 	state.weapons = _weapons_array
+
+	if serialized_player_state.has("unlocks"):
+		state._all_unlocked_weapon_scenes = serialized_player_state["unlocks"].get("weapons", [])
 	
 	return state
 
@@ -95,13 +136,26 @@ func serialize_save_state(game_state:SaveState) -> void:
 	
 	for w in weapons:
 		if is_instance_valid(w):
-			var weapon_state: Dictionary = {}
-			weapon_state.res = w.scene_file_path
-			weapon_state.ammo = w.current_ammo
+			var res:String = w.scene_file_path
+			if not res in _all_unlocked_weapon_scenes:
+				_all_unlocked_weapon_scenes.push_back(res)
+			var weapon_state: Dictionary = _create_weapon_state(w)
 			serialized_weapon_state.push_back(weapon_state)
 		else:
 			push_warning("PlayerState: weapon is not valid - skipping")
 
 	serialized_player_state.weapons = serialized_weapon_state
+	serialized_player_state.unlocks = {
+		weapons = _all_unlocked_weapon_scenes
+	}
 	game_state.state[SAVE_STATE_KEY] = serialized_player_state
+
+func _create_weapon_state(weapon: Weapon) -> Dictionary:
+	var weapon_state: Dictionary = {}
+
+	weapon_state.res = weapon.scene_file_path
+	weapon_state.ammo = weapon.current_ammo
+
+	return weapon_state
+
 #endregion

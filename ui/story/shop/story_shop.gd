@@ -13,6 +13,7 @@ const weapon_row_scene:PackedScene = preload("res://ui/story/shop/shop_weapon_ro
 class ItemPurchaseState:
 	var item:ShopItemResource
 	var existing_item: Node
+	var already_in_inventory:bool
 	var new_item:Node
 	var ui_control:Control
 	var buy:bool
@@ -52,15 +53,21 @@ func _ready() -> void:
 		
 		# Here we could choose which UI scene to instantitate by item type
 		# TODO: Maybe we show all items, even those player can't afford so they know what to work for?
-		var existing_weapon:Weapon = existing_weapons.get(item.item_scene.resource_path)
+		var item_scene_path:String = item.item_scene.resource_path
+		var existing_weapon:Weapon = existing_weapons.get(item_scene_path)
+		var in_inventory:bool = is_instance_valid(existing_weapon)
+		if not in_inventory:
+			existing_weapon = player_state.get_empty_weapon_if_unlocked(item_scene_path)
+
 		if (existing_weapon and existing_weapon.use_ammo) or (not existing_weapon and can_afford_to_buy_item(item)):
 			var weapon_row = weapon_row_scene.instantiate()
 
 			var purchase_state:ItemPurchaseState = ItemPurchaseState.new()
 			purchase_state.item = item
 			purchase_state.existing_item = existing_weapon
+			purchase_state.already_in_inventory = in_inventory
 			purchase_state.ui_control = weapon_row
-			_purchase_item_state_dictionary[item.item_scene.resource_path] = purchase_state
+			_purchase_item_state_dictionary[item_scene_path] = purchase_state
 			
 			weapon_row.shop_item = item
 			items_container.add_child(weapon_row)
@@ -117,15 +124,18 @@ func _apply_weapon(player_state: PlayerState, purchase_state: ItemPurchaseState)
 		# So make sure affect the actual array instance
 		store_existing_weapon.current_ammo += purchase_state.refill_amount
 		if purchase_state.refill_amount > 0:
-			# Set back on original weapon
-			var existing_weapon_index:int = player_state.weapons.find_custom(func(w)->bool: return w.scene_file_path == store_existing_weapon.scene_file_path)
-			if existing_weapon_index != -1:
-				print_debug("%s: Purchased %d ammo for weapon %s" % [name, purchase_state.refill_amount, store_existing_weapon.display_name])
-				player_state.weapons[existing_weapon_index].current_ammo = store_existing_weapon.current_ammo
-			else:
-				push_error("%s: Store weapon copy for %s could not be found in player state weapons!" % [name, store_existing_weapon.display_name])
-				# Best we can do at this point is refund the cost
-				_update_state_refill_cost(purchase_state, 0, 0)
+			if purchase_state.already_in_inventory:
+				# Set back on original weapon
+				var existing_weapon_index:int = player_state.weapons.find_custom(func(w)->bool: return w.scene_file_path == store_existing_weapon.scene_file_path)
+				if existing_weapon_index != -1:
+					print_debug("%s: Purchased %d ammo for weapon %s" % [name, purchase_state.refill_amount, store_existing_weapon.display_name])
+					player_state.weapons[existing_weapon_index].current_ammo = store_existing_weapon.current_ammo
+				else:
+					push_error("%s: Store weapon copy for %s could not be found in player state weapons!" % [name, store_existing_weapon.display_name])
+					# Best we can do at this point is refund the cost
+					_update_state_refill_cost(purchase_state, 0, 0)
+			else: # If this was a previous unlock but not in inventory then treat similar to new item
+				player_state.weapons.push_back(store_existing_weapon.duplicate())
 	elif purchase_state.buy:
 		assert(purchase_state.new_item)
 
