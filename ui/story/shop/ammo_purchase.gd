@@ -5,6 +5,8 @@ var ammo:int
 # TODO: This should be set based on weapon limits and how much can be afforded
 var max_ammo:int = 99
 
+var _increment:int
+
 var item: ShopItemResource
 var weapon: Weapon
 
@@ -28,7 +30,7 @@ var enabled:bool:
 		
 		if not value:
 			ammo = 0
-			_update_ammo_text()
+			_update_labels(0)
 
 func reset() -> void:
 	# Toggle so all state reset
@@ -36,13 +38,14 @@ func reset() -> void:
 	enabled = true
 	
 func initialize() -> void:
+	_increment = item.get_increment_for_fractional_cost()
 	_update_labels(0)
 
 func _on_increment_pressed() -> void:
-	_update(1)
+	_update(_increment)
 
 func _on_decrement_pressed() -> void:
-	_update(-1)
+	_update(-_increment)
 
 func _update(delta:int) -> void:
 	var previous_ammo:int = ammo

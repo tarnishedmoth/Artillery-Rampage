@@ -31,3 +31,8 @@ enum ItemType
 
 func get_refill_cost(count: float) -> int:
 	return ceili(count * refill_cost)
+
+## Gets the refill multiplier that will keep the cost <= 1
+## If > 1 just return 1
+func get_increment_for_fractional_cost() -> int:
+	return floori(1.0 / refill_cost) if refill_cost < 1.0 else 1
