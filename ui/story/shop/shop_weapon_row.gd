@@ -8,6 +8,9 @@ var shop_item:ShopItemResource
 
 var _weapon:Weapon
 
+signal on_buy_state_changed(weapon: Weapon, buy:bool)
+signal on_ammo_state_changed(weapon: Weapon, new_ammo: int, old_ammo: int)
+
 func _exit_tree() -> void:
 	if is_instance_valid(_weapon):
 		_weapon.queue_free()
@@ -27,6 +30,7 @@ func _ready() -> void:
 	_weapon = weapon_scene.instantiate() as Weapon
 	if not _weapon:
 		push_error("%s: Invalid weapon scene specified for shop item: %s" % [name, weapon_scene.resource_path])
+		return
 	
 	weapon_label.text = _weapon.display_name
 	
@@ -34,3 +38,18 @@ func _ready() -> void:
 	weapon_buy_control.player_state = player_state
 	weapon_buy_control.update()
 	
+	if not _weapon.use_ammo:
+		ammo_purchase_control.visible = false
+	
+	_connect_signals()
+	
+func _connect_signals() -> void:
+	if weapon_buy_control.enabled:
+		weapon_buy_control.buy_button.toggled.connect(func(toggled_on:bool)->void:
+			on_buy_state_changed.emit(_weapon, toggled_on)
+		)
+	
+	if ammo_purchase_control.enabled:
+		ammo_purchase_control.ammo_updated.connect(func(new_ammo:int, old_ammo:int)->void:
+			on_ammo_state_changed.emit(_weapon, new_ammo, old_ammo)
+		)

@@ -6,8 +6,17 @@ enum CostType
 	Personnel
 }
 
+enum ItemType
+{
+	Weapon,
+	Upgrade #Buy an additional procedurally generated upgrade for an existing item
+}
+
 ## Weapon or tank unit scene
 @export var item_scene:PackedScene
+
+## Type of the item
+@export var item_type:ItemType = ItemType.Weapon
 
 ## Cost to initially unlock the item
 ## This always costs scrap

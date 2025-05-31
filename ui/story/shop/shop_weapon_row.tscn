@@ -15,9 +15,13 @@ text = "Leadball Shotgun"
 
 [node name="WeaponBuy" parent="." instance=ExtResource("1_7inv6")]
 layout_mode = 2
+size_flags_horizontal = 10
+alignment = 2
 
 [node name="AmmoPurchase" parent="." instance=ExtResource("2_03bpo")]
 layout_mode = 2
+size_flags_horizontal = 8
+alignment = 2
 
 [node name="ShopWeaponRow" type="Control" parent="."]
 layout_mode = 2

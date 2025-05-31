@@ -12,8 +12,8 @@ func _ready() -> void:
 		return
 		
 	if scrap >= 0 or personnel >= 0:
-		PlayerAttributes.scrap = scrap if scrap >= 0 else 0
-		PlayerAttributes.personnel = personnel if personnel >= 0 else 1
+		PlayerAttributes.scrap = maxi(scrap,0)
+		PlayerAttributes.personnel = maxi(personnel, 1)
 		PlayerAttributes.ignore_save_state()
 		
 	# Set up story precondition state
