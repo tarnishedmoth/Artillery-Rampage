@@ -11,7 +11,7 @@ var shop_item:ShopItemResource
 var _weapon:Weapon
 
 signal on_buy_state_changed(weapon: Weapon, buy:bool)
-signal on_ammo_state_changed(weapon: Weapon, new_ammo: int, old_ammo: int)
+signal on_ammo_state_changed(weapon: Weapon, new_ammo: int, old_ammo: int, cost:int)
 
 func _exit_tree() -> void:
 	if is_instance_valid(_weapon):
@@ -55,11 +55,15 @@ func _ready() -> void:
 	if weapon_buy_control.already_owned:
 		cost_label.text = "(Owned)"
 	else:
-		cost_label.text = "%d %s" % [shop_item.unlock_cost, ShopItemResource.CostType.keys()[shop_item.unlock_cost_type]]
+		cost_label.text = ShopUtils.format_cost(shop_item.unlock_cost,shop_item.unlock_cost_type)
 	
 	if not _weapon.use_ammo:
 		ammo_purchase_control.visible = false
-	
+	else:
+		ammo_purchase_control.item = shop_item
+		ammo_purchase_control.weapon = _weapon
+		ammo_purchase_control.initialize()
+		
 	_connect_signals()
 	
 func _connect_signals() -> void:

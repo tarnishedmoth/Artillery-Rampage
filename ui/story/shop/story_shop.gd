@@ -124,8 +124,8 @@ func _update_resources_control_state() -> void:
 		PlayerAttributes.personnel - pending_personnel_spend
 	)
 
-func _on_weapon_ammo_state_changed(weapon: Weapon, new_ammo:int, old_ammo:int) -> void:
-	print_debug("%s - Weapon Ammo State changed for %s - new_ammo=%d; old_ammo=%d" % [name, weapon.display_name, new_ammo, old_ammo])
+func _on_weapon_ammo_state_changed(weapon: Weapon, new_ammo:int, old_ammo:int, cost:int) -> void:
+	print_debug("%s - Weapon Ammo State changed for %s - new_ammo=%d; old_ammo=%d; cost=%d" % [name, weapon.display_name, new_ammo, old_ammo, cost])
 	
 	var state: ItemPurchaseState = _purchase_item_state_dictionary[weapon.scene_file_path]
 	# TODO: Scrap cost implementation based on purchased ammo

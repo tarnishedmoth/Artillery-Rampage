@@ -28,3 +28,6 @@ enum ItemType
 @export var refill_cost:float
 
 @export var refill_cost_type:CostType = CostType.Scrap
+
+func get_refill_cost(count: float) -> int:
+	return ceili(count * refill_cost)

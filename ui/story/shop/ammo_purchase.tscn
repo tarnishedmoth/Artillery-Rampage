@@ -16,13 +16,14 @@ layout_mode = 2
 size_flags_vertical = 0
 text = "0"
 
-[node name="Spacer" type="Control" parent="VBoxContainer"]
-layout_mode = 2
-
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
 text = "Ammo"
+
+[node name="Cost" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
 layout_mode = 2

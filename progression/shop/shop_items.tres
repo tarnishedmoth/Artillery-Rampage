@@ -19,7 +19,9 @@
 [sub_resource type="Resource" id="Resource_553xf"]
 script = ExtResource("1_553xf")
 item_scene = ExtResource("2_52sja")
+item_type = 0
 unlock_cost = 3
+unlock_cost_type = 0
 refill_cost = 0.05
 refill_cost_type = 0
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
@@ -27,7 +29,9 @@ metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 [sub_resource type="Resource" id="Resource_80d23"]
 script = ExtResource("1_553xf")
 item_scene = ExtResource("3_n85w6")
+item_type = 0
 unlock_cost = 4
+unlock_cost_type = 0
 refill_cost = 0.1
 refill_cost_type = 0
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
@@ -35,7 +39,9 @@ metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 [sub_resource type="Resource" id="Resource_gbq34"]
 script = ExtResource("1_553xf")
 item_scene = ExtResource("4_ye3h0")
+item_type = 0
 unlock_cost = 3
+unlock_cost_type = 0
 refill_cost = 0.2
 refill_cost_type = 0
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
@@ -43,7 +49,9 @@ metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 [sub_resource type="Resource" id="Resource_5cnqm"]
 script = ExtResource("1_553xf")
 item_scene = ExtResource("5_y3obe")
+item_type = 0
 unlock_cost = 5
+unlock_cost_type = 0
 refill_cost = 1.0
 refill_cost_type = 0
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
@@ -51,7 +59,9 @@ metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 [sub_resource type="Resource" id="Resource_4u6sx"]
 script = ExtResource("1_553xf")
 item_scene = ExtResource("6_bpk74")
+item_type = 0
 unlock_cost = 6
+unlock_cost_type = 0
 refill_cost = 1.0
 refill_cost_type = 0
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
@@ -59,7 +69,9 @@ metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 [sub_resource type="Resource" id="Resource_kc67y"]
 script = ExtResource("1_553xf")
 item_scene = ExtResource("7_ye3h0")
+item_type = 0
 unlock_cost = 12
+unlock_cost_type = 0
 refill_cost = 4.0
 refill_cost_type = 0
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
@@ -67,7 +79,9 @@ metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 [sub_resource type="Resource" id="Resource_bpk74"]
 script = ExtResource("1_553xf")
 item_scene = ExtResource("8_y3obe")
+item_type = 0
 unlock_cost = 3
+unlock_cost_type = 0
 refill_cost = 0.5
 refill_cost_type = 0
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
@@ -75,7 +89,9 @@ metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 [sub_resource type="Resource" id="Resource_fyeof"]
 script = ExtResource("1_553xf")
 item_scene = ExtResource("9_4u6sx")
+item_type = 0
 unlock_cost = 6
+unlock_cost_type = 0
 refill_cost = 1.0
 refill_cost_type = 0
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
@@ -83,7 +99,9 @@ metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 [sub_resource type="Resource" id="Resource_cuna2"]
 script = ExtResource("1_553xf")
 item_scene = ExtResource("10_kc67y")
+item_type = 0
 unlock_cost = 4
+unlock_cost_type = 0
 refill_cost = 0.5
 refill_cost_type = 0
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
@@ -91,7 +109,9 @@ metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 [sub_resource type="Resource" id="Resource_1p51g"]
 script = ExtResource("1_553xf")
 item_scene = ExtResource("11_xingv")
+item_type = 0
 unlock_cost = 6
+unlock_cost_type = 0
 refill_cost = 1.0
 refill_cost_type = 0
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
@@ -99,7 +119,9 @@ metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 [sub_resource type="Resource" id="Resource_cxkli"]
 script = ExtResource("1_553xf")
 item_scene = ExtResource("12_hcws4")
+item_type = 0
 unlock_cost = 6
+unlock_cost_type = 0
 refill_cost = 0.5
 refill_cost_type = 0
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
@@ -107,7 +129,9 @@ metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 [sub_resource type="Resource" id="Resource_p8a76"]
 script = ExtResource("1_553xf")
 item_scene = ExtResource("13_rnwgx")
+item_type = 0
 unlock_cost = 8
+unlock_cost_type = 0
 refill_cost = 1.0
 refill_cost_type = 0
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
@@ -115,7 +139,9 @@ metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 [sub_resource type="Resource" id="Resource_excop"]
 script = ExtResource("1_553xf")
 item_scene = ExtResource("14_4u6sx")
+item_type = 0
 unlock_cost = 3
+unlock_cost_type = 0
 refill_cost = 1.0
 refill_cost_type = 0
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
