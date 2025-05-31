@@ -120,7 +120,7 @@ func _on_new_game_pressed() -> void:
 
 
 func _check_cheat_code_entered(code:Array[Keys]) -> void:
-	if input_buffer in CheatCodes:
+	if code in CheatCodes:
 		var cheat_name:String
 		
 		match CheatCodes[input_buffer]:

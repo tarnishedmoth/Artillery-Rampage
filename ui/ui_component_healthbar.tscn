@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://o3v5fd18tutn"]
+
+[ext_resource type="Script" uid="uid://dgt14ile3fy2f" path="res://ui/ui_component_healthbar.gd" id="1_lui74"]
+[ext_resource type="Theme" uid="uid://somhyiu2b38w" path="res://ui/themes/control_theme_tooltips.tres" id="2_fogv2"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_fogv2"]
+color = Color(1, 0, 0, 1)
+thickness = 4
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_6k88a"]
+color = Color(0, 0.333333, 1, 1)
+thickness = 4
+
+[node name="UiComponentHealthbar" type="Node2D"]
+script = ExtResource("1_lui74")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -32.0
+offset_right = 32.0
+offset_bottom = 4.0
+grow_horizontal = 2
+theme = ExtResource("2_fogv2")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/background = SubResource("StyleBoxLine_fogv2")
+theme_override_styles/fill = SubResource("StyleBoxLine_6k88a")
+step = 0.1
+value = 100.0
+rounded = true
+allow_greater = true
+show_percentage = false

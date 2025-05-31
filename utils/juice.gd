@@ -37,14 +37,14 @@ static func advanced_fade(
 	speed:float = SMOOTH,
 	to:Color = Color.TRANSPARENT,
 	trans:Tween.TransitionType = Tween.TransitionType.TRANS_SINE,
-	ease = null
+	easing = null
 	) -> Tween:
 		
 	var tween:Tween = node.create_tween()
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tween.set_trans(trans)
-	if ease is Tween.EaseType:
-		tween.set_ease(ease)
+	if easing is Tween.EaseType:
+		tween.set_ease(easing)
 		
 	tween.tween_property(node, "modulate", to, speed)
 	
