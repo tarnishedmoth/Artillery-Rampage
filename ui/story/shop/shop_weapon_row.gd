@@ -17,18 +17,28 @@ func _exit_tree() -> void:
 	if is_instance_valid(_weapon):
 		_weapon.queue_free()
 
-var enabled:bool:
-	get: return weapon_buy_control.enabled or ammo_purchase_control.enabled
+#region Shop Row Interface 
+var buy_enabled:bool:
+	get: return weapon_buy_control.enabled
 	set(value):
 		weapon_buy_control.enabled = value
-		# TODO: What to do about the ammo control if we could have afforded to buy it
-		# Will need to get more granular in the story shop control and cast it to weapon and check individual costs
+
+var refill_enabled:bool:
+	get: return ammo_purchase_control.enabled
+	set(value):
 		ammo_purchase_control.enabled = value
+
+var refill_purchase_enabled:bool:
+	get: return ammo_purchase_control.purchase_enabled
+	set(value):
+		ammo_purchase_control.purchase_enabled = value
 
 func reset() -> void:
 	weapon_buy_control.reset()
 	ammo_purchase_control.reset()
-		
+
+#endregion
+
 func _ready() -> void:
 	if not shop_item:
 		push_error("%s: No shop item set!" % name)
@@ -73,6 +83,6 @@ func _connect_signals() -> void:
 		)
 	
 	if ammo_purchase_control.enabled:
-		ammo_purchase_control.ammo_updated.connect(func(new_ammo:int, old_ammo:int)->void:
-			on_ammo_state_changed.emit(_weapon, new_ammo, old_ammo)
+		ammo_purchase_control.ammo_updated.connect(func(new_ammo:int, old_ammo:int, cost:int)->void:
+			on_ammo_state_changed.emit(_weapon, new_ammo, old_ammo, cost)
 		)

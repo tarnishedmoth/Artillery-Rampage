@@ -16,11 +16,13 @@ class ItemPurchaseState:
 	var new_item:Node
 	var ui_control:Control
 	var buy:bool
-	var additional_ammo:int
+	var refill_amount:int
+	var refill_cost:int
 	
 	func reset() -> void:
 		buy = false
-		additional_ammo = 0
+		refill_cost = 0
+		refill_amount = 0
 		ui_control.reset()
 	
 ## Keyed by the scene file path of the instantiated item
@@ -48,7 +50,8 @@ func _ready() -> void:
 		if not item.item_scene:
 			continue
 		
-		# Here we could choose which UI scene to instantitate by item type 
+		# Here we could choose which UI scene to instantitate by item type
+		# TODO: Maybe we show all items, even those player can't afford so they know what to work for?
 		var existing_weapon:Weapon = existing_weapons.get(item.item_scene.resource_path)
 		if (existing_weapon and existing_weapon.use_ammo) or (not existing_weapon and can_afford_to_buy_item(item)):
 			var weapon_row = weapon_row_scene.instantiate()
@@ -65,10 +68,25 @@ func _ready() -> void:
 			weapon_row.on_buy_state_changed.connect(_on_weapon_buy_state_changed)
 			weapon_row.on_ammo_state_changed.connect(_on_weapon_ammo_state_changed)
 
+	_update_row_states()
+	
 func can_afford_to_buy_item(item: ShopItemResource) -> bool:
 	if item.unlock_cost_type == ShopItemResource.CostType.Scrap:
 		return PlayerAttributes.scrap - item.unlock_cost - pending_scrap_spend - min_remaining_scrap >= 0
 	return PlayerAttributes.personnel - item.unlock_cost - pending_personnel_spend - min_remaining_personnel >= 0
+
+
+func can_afford_to_refill_any(item: ShopItemResource) -> bool:
+	var avail_spend:int
+	if item.refill_cost_type == ShopItemResource.CostType.Scrap:
+		avail_spend = PlayerAttributes.scrap - pending_scrap_spend - min_remaining_scrap
+	else:
+		avail_spend = PlayerAttributes.personnel - pending_personnel_spend - min_remaining_personnel
+	
+	if avail_spend <= 0:
+		return false
+
+	return avail_spend - item.get_refill_cost(1) >= 0
 				
 func _on_done_pressed() -> void:
 	_apply_changes()
@@ -91,9 +109,9 @@ func _apply_weapon(player_state: PlayerState, purchase_state: ItemPurchaseState)
 	var existing_weapon:Weapon = purchase_state.existing_item as Weapon
 	if existing_weapon:
 		# TODO: Take into account magazines
-		existing_weapon.current_ammo += purchase_state.additional_ammo
-		if purchase_state.additional_ammo > 0:
-			print_debug("%s: Purchased %d ammo for weapon %s" % [name, purchase_state.additional_ammo, existing_weapon.display_name])
+		existing_weapon.current_ammo += purchase_state.refill_amount
+		if purchase_state.refill_amount > 0:
+			print_debug("%s: Purchased %d ammo for weapon %s" % [name, purchase_state.refill_amount, existing_weapon.display_name])
 	elif purchase_state.buy:
 		assert(purchase_state.new_item)
 
@@ -128,22 +146,33 @@ func _on_weapon_ammo_state_changed(weapon: Weapon, new_ammo:int, old_ammo:int, c
 	print_debug("%s - Weapon Ammo State changed for %s - new_ammo=%d; old_ammo=%d; cost=%d" % [name, weapon.display_name, new_ammo, old_ammo, cost])
 	
 	var state: ItemPurchaseState = _purchase_item_state_dictionary[weapon.scene_file_path]
-	# TODO: Scrap cost implementation based on purchased ammo
-	# TODO: Update pending spend and enabled state of those that can still be afforded
 
-	state.additional_ammo = new_ammo
+	state.refill_amount = new_ammo
+	
+	var cost_delta:int = cost - state.refill_cost
+	if state.item.refill_cost_type == ShopItemResource.CostType.Scrap:
+		pending_scrap_spend += cost_delta
+	else:
+		pending_personnel_spend += cost_delta
+
+	state.refill_cost = cost
+
+	_update_resources_control_state()
+	_update_row_states()
 
 func _update_row_states() -> void:
 	for purchase_state_key in _purchase_item_state_dictionary:
 		var purchase_state:ItemPurchaseState = _purchase_item_state_dictionary[purchase_state_key]
-		# If not yet buying make sure still have enough
-		# TODO: Account for ammo cost
-		if purchase_state.buy or purchase_state.existing_item:
-			continue
-		
 		var item: ShopItemResource = purchase_state.item
-		purchase_state.ui_control.enabled = can_afford_to_buy_item(item)
 
+		# If not yet buying make sure still have enough
+		if not purchase_state.buy and not purchase_state.existing_item:
+			purchase_state.ui_control.buy_enabled = can_afford_to_buy_item(item)
+			# Cannot refill before buy
+			purchase_state.ui_control.refill_enabled = false
+		else:
+			purchase_state.ui_control.refill_enabled = true
+			purchase_state.ui_control.refill_purchase_enabled = can_afford_to_refill_any(item)
 
 func _on_reset_pressed() -> void:
 	pending_personnel_spend = 0

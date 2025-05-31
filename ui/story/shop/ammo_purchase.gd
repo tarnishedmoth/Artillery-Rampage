@@ -32,6 +32,13 @@ var enabled:bool:
 			ammo = 0
 			_update_labels(0)
 
+var purchase_enabled:bool:
+	get: return enabled and not increment_button.disabled
+	set(value):
+		if not enabled:
+			return
+		increment_button.disabled = not value
+		
 func reset() -> void:
 	# Toggle so all state reset
 	enabled = false
