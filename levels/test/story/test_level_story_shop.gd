@@ -17,7 +17,7 @@ func _ready() -> void:
 		PlayerAttributes.ignore_save_state()
 		
 	# Set up story precondition state
-	# COpied from main_menu.gd _on_continue_story_presse
+	# Copied from main_menu.gd _on_continue_story_pressed
 	PlayerStateManager.enable = true
 	SceneManager.play_mode = SceneManager.PlayMode.STORY
 	StorySaveUtils.set_story_level_index()

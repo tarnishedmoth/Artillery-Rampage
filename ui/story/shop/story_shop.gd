@@ -105,13 +105,27 @@ func _apply_changes() -> void:
 			_:
 				push_warning("%s: Unsupported item type %s found for purchase_state item=%s" % [name, str(purchase_state.item.item_type), purchase_state.item.resource_path])
 	
+	# Apply resource costs
+	PlayerAttributes.scrap = PlayerAttributes.scrap - pending_scrap_spend
+	PlayerAttributes.personnel = PlayerAttributes.personnel - pending_personnel_spend
+	
 func _apply_weapon(player_state: PlayerState, purchase_state: ItemPurchaseState)  -> void:
-	var existing_weapon:Weapon = purchase_state.existing_item as Weapon
-	if existing_weapon:
+	var store_existing_weapon:Weapon = purchase_state.existing_item as Weapon
+	if store_existing_weapon:
 		# TODO: Take into account magazines
-		existing_weapon.current_ammo += purchase_state.refill_amount
+		# Object reference may have been swapped out in PlayerState due to how save system works
+		# So make sure affect the actual array instance
+		store_existing_weapon.current_ammo += purchase_state.refill_amount
 		if purchase_state.refill_amount > 0:
-			print_debug("%s: Purchased %d ammo for weapon %s" % [name, purchase_state.refill_amount, existing_weapon.display_name])
+			# Set back on original weapon
+			var existing_weapon_index:int = player_state.weapons.find_custom(func(w)->bool: return w.scene_file_path == store_existing_weapon.scene_file_path)
+			if existing_weapon_index != -1:
+				print_debug("%s: Purchased %d ammo for weapon %s" % [name, purchase_state.refill_amount, store_existing_weapon.display_name])
+				player_state.weapons[existing_weapon_index].current_ammo = store_existing_weapon.current_ammo
+			else:
+				push_error("%s: Store weapon copy for %s could not be found in player state weapons!" % [name, store_existing_weapon.display_name])
+				# Best we can do at this point is refund the cost
+				_update_state_refill_cost(purchase_state, 0, 0)
 	elif purchase_state.buy:
 		assert(purchase_state.new_item)
 
@@ -146,8 +160,13 @@ func _on_weapon_ammo_state_changed(weapon: Weapon, new_ammo:int, old_ammo:int, c
 	print_debug("%s - Weapon Ammo State changed for %s - new_ammo=%d; old_ammo=%d; cost=%d" % [name, weapon.display_name, new_ammo, old_ammo, cost])
 	
 	var state: ItemPurchaseState = _purchase_item_state_dictionary[weapon.scene_file_path]
+	_update_state_refill_cost(state, new_ammo, cost)
 
-	state.refill_amount = new_ammo
+	_update_resources_control_state()
+	_update_row_states()
+
+func _update_state_refill_cost(state: ItemPurchaseState, refill_amount: int, cost:int) -> void:
+	state.refill_amount = refill_amount
 	
 	var cost_delta:int = cost - state.refill_cost
 	if state.item.refill_cost_type == ShopItemResource.CostType.Scrap:
@@ -156,10 +175,7 @@ func _on_weapon_ammo_state_changed(weapon: Weapon, new_ammo:int, old_ammo:int, c
 		pending_personnel_spend += cost_delta
 
 	state.refill_cost = cost
-
-	_update_resources_control_state()
-	_update_row_states()
-
+	
 func _update_row_states() -> void:
 	for purchase_state_key in _purchase_item_state_dictionary:
 		var purchase_state:ItemPurchaseState = _purchase_item_state_dictionary[purchase_state_key]
