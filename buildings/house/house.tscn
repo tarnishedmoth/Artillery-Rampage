@@ -1,12 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://cq5edhs86n8r1"]
+[gd_scene load_steps=4 format=3 uid="uid://cq5edhs86n8r1"]
 
 [ext_resource type="PackedScene" uid="uid://b00kdwwjo4hg8" path="res://destructible/destructible_object.tscn" id="1_27ra4"]
 [ext_resource type="PackedScene" uid="uid://bghbtqjx0jdge" path="res://buildings/house/house_chunk.tscn" id="2_rtr4g"]
+[ext_resource type="PackedScene" uid="uid://d0fthn43xgog3" path="res://destructible/rubble/rubble_chunks_spawner.tscn" id="3_27ra4"]
 
 [node name="House" instance=ExtResource("1_27ra4")]
-display_name = "a lighthouse"
+display_name = "House"
 chunk_scene = ExtResource("2_rtr4g")
 crumbling = true
 create_new_chunks = true
 
 [node name="HouseChunk" parent="." index="0" instance=ExtResource("2_rtr4g")]
+
+[node name="RubbleChunksSpawner" parent="." index="2" instance=ExtResource("3_27ra4")]

@@ -71,10 +71,10 @@ position = Vector2(701, 674)
 scale = Vector2(7.02656, 4.6518)
 
 [node name="House2" parent="GameLevel" instance=ExtResource("14_1h4me")]
-position = Vector2(450, 390)
+position = Vector2(439, 441)
 
 [node name="House3" parent="GameLevel" instance=ExtResource("14_1h4me")]
-position = Vector2(374, 389)
+position = Vector2(352, 442)
 
 [node name="ShatterableTree" parent="GameLevel" instance=ExtResource("15_we1am")]
 position = Vector2(48, 432)

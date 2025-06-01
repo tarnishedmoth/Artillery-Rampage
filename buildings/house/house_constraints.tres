@@ -6,9 +6,8 @@
 [resource]
 script = ExtResource("1_ugrae")
 scene = ExtResource("1_fgbhf")
-min_spacing = 0.0
+min_spacing = 20.0
 count = Vector2i(1, 2)
 max_slant_angle_deg = 10.0
-bottom_center_offset = Vector2(0, -30)
 adjacent_constraints = Dictionary[PackedScene, float]({})
 metadata/_custom_type_script = "uid://bke3gd68u5yjw"
