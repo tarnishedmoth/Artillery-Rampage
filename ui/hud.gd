@@ -49,10 +49,7 @@ func _on_took_damage(tank: Tank, _instigatorController: Node2D, _instigator: Nod
 		
 func _update_health(player: TankController) -> void:
 	var tank:Tank = player.tank
-	
-	# Round pct to nearest tenth
-	var pct:float = roundf(tank.health / tank.max_health * 1000.0) / 10.0
-	health_text.set_value("%.1f%%" % pct)
+	health_text.set_value(UIUtils.get_health_pct_display(tank.health, tank.max_health))
 
 func _on_turn_ended(player: TankController) -> void:
 	# Disconnect when no longer the active player

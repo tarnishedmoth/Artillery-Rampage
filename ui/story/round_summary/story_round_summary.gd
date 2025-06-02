@@ -64,7 +64,9 @@ func _ready() -> void:
 	turns.set_value(stats.turns)
 	kills.set_value(stats.kills)
 	damage_done.set_value("%.1f" % stats.damage_done)
-	health_lost.set_value("%.1f" % (stats.max_health - stats.final_health))
+	# Show health lost bot has absolute value and percentage of max
+	var health_lost_amount:float = stats.start_health - stats.final_health
+	health_lost.set_value(UIUtils.get_health_pct_display(health_lost_amount, stats.max_health))
 	
 	_play_audio()
 	
@@ -154,7 +156,7 @@ func _calculate_grade() -> int:
 	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
 
 	# Damage to health lost ratio
-	var damage_to_health:float = stats.damage_done / maxf(stats.max_health - stats.final_health, 1.0)
+	var damage_to_health:float = stats.damage_done / maxf(stats.start_health - stats.final_health, 1.0)
 	var kills_to_turns: float = stats.kills / maxf(stats.turns, 1.0)
 	
 	var grade:int = 0

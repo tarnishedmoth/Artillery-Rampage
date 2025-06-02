@@ -1,6 +1,7 @@
 extends Node
 
 class RoundData:
+	var start_health:float
 	var final_health:float
 	var max_health:float
 	# Ideally health_lost should be max_health - final_health unless player takes damage before level starts
@@ -38,6 +39,7 @@ func _on_round_started() -> void:
 	round_data = RoundData.new()
 	if is_instance_valid(_player):
 		round_data.max_health = _player.tank.max_health
+		round_data.start_health = _player.tank.health
 	round_data.level_name = _current_level.name
 	print_debug("%s: Round Started - (level=%s)" % [name, round_data.level_name])	
 

@@ -161,8 +161,7 @@ func apply_pending_state(state: PlayerState) -> void:
 	max_health = state.max_health
 	health = state.health
 
-	#TODO: Temporary fix to apply health visuals
-	_update_visuals_after_damage()
+	_update_visuals_after_damage(false)
 
 func populate_player_state(state: PlayerState) -> void:
 	state.max_health = max_health
@@ -308,7 +307,7 @@ func _get_scene_container() -> Node2D:
 		container = container.get_container()
 	return container
 	
-func _update_visuals_after_damage():
+func _update_visuals_after_damage(damage_shader:bool = true):
 	var threshold = 0.75
 	if (health/max_health) <= threshold: # Percentage
 		if not damaged_smoke_particles.emitting:
@@ -322,7 +321,8 @@ func _update_visuals_after_damage():
 	modulate = modulate.darkened(dark_pct)
 	turret.modulate = turret.modulate.darkened(dark_pct)
 
-	_activate_damage_shader()
+	if damage_shader:
+		_activate_damage_shader()
 
 func _activate_damage_shader() -> void:
 	if material:
