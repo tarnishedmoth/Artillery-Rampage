@@ -20,6 +20,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_smh4t")
 script = ExtResource("1_4r0b1")
 
 [node name="Panel" type="Panel" parent="."]

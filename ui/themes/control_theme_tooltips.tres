@@ -1,4 +1,7 @@
-[gd_resource type="Theme" format=3 uid="uid://somhyiu2b38w"]
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://somhyiu2b38w"]
+
+[ext_resource type="FontFile" uid="uid://djx6mjgmk2546" path="res://ui/fonts/FreeSerif-YO4a.otf" id="1_d7wqm"]
 
 [resource]
+default_font = ExtResource("1_d7wqm")
 default_font_size = 12
