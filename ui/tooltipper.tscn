@@ -22,7 +22,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="MouseHoverControlAutohide" parent="PanelContainer" instance=ExtResource("3_t7mwf")]
-layout_mode = 2
 
 [node name="TooltipsPlayerTurn" type="MarginContainer" parent="PanelContainer" node_paths=PackedStringArray("sequence")]
 unique_name_in_owner = true
