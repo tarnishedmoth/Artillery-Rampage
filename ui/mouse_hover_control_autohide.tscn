@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dmwukvmiaj1bj"]
+
+[ext_resource type="Script" uid="uid://bm6b2b76bvcb4" path="res://ui/mouse_hover_control_autohide.gd" id="1_6u6f5"]
+
+[node name="MouseHoverControlAutohide" type="Node"]
+script = ExtResource("1_6u6f5")
