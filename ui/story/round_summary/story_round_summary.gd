@@ -106,9 +106,19 @@ func _on_next_pressed() -> void:
 	if stats and stats.won:
 		SceneManager.switch_scene_keyed(SceneManager.SceneKeys.UpgradeSelect)
 	elif not _is_game_over:
-		SceneManager.restart_level()
+		_restart_level()
 	else:
 		SceneManager.switch_scene_keyed(SceneManager.SceneKeys.GameOver)
+
+func _restart_level() -> void:
+	# If player state is defined make sure we restart with full health as already took the personnel hit
+	var player_state:PlayerState = PlayerStateManager.player_state
+	if player_state:
+		player_state.health = player_state.max_health
+	else:
+		push_warning("%s: No player state was defined when restarting level - unable to reset player health" % name)
+
+	SceneManager.restart_level()
 
 func _play_audio() -> void:
 	if RoundStatTracker.round_data.won:
