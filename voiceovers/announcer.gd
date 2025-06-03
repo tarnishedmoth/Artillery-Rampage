@@ -315,7 +315,7 @@ func _on_tank_stopped_falling(tank: Tank) -> void:
 		_falling_players.erase(controller.get_instance_id())
 
 func _check_gravity_damage_announce(tank: Tank, _instigator_controller: Node2D, instigator: Node2D, amount: float) -> void:
-	# For gravity damage the instigatorController is self and instigator is tank itself
+	# For gravity damage the instigatorController is the fall damage causer  and instigator is tank itself
 	# TODO: Have a damage type and falling as this type or have a separate event to distinguish more reliably
 	# For fall damage instigator will be the tank itself but the instigator_controller could be another player that caused the fall
 	if instigator != tank or not tank.owner:

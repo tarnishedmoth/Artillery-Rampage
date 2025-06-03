@@ -268,7 +268,7 @@ func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float
 		_update_visuals_after_damage()
 	
 	print_debug("Tank %s took %f damage; health=%f" % [ get_parent().name, actual_damage, health])
-	tank_took_damage.emit(self, instigatorController, instigatorController, actual_damage)
+	tank_took_damage.emit(self, instigatorController, instigator, actual_damage)
 	
 	if health <= 0:
 		tank_killed.emit(self, instigatorController, instigator)
