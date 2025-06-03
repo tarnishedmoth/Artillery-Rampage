@@ -45,6 +45,7 @@ offset_right = 159.0
 offset_bottom = 92.0
 
 [node name="MouseHoverControlAutohide" parent="VBoxContainer" instance=ExtResource("2_spcu4")]
+unhide_delay = 0.1
 
 [node name="background" type="Sprite2D" parent="VBoxContainer"]
 position = Vector2(-20, -30)
@@ -87,6 +88,7 @@ offset_right = 1264.0
 offset_bottom = 92.0
 
 [node name="MouseHoverControlAutohide" parent="VBoxContainer2" instance=ExtResource("2_spcu4")]
+unhide_delay = 0.1
 
 [node name="background" type="Sprite2D" parent="VBoxContainer2"]
 position = Vector2(-30, -20)
@@ -113,6 +115,7 @@ texture = ExtResource("5_toij6")
 stretch_mode = 3
 
 [node name="MouseHoverControlAutohide" parent="CenterBackground" instance=ExtResource("2_spcu4")]
+unhide_delay = 0.1
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="CenterBackground"]
 layout_mode = 1
