@@ -119,10 +119,16 @@ func init_outline_mesh() -> void:
 	if !outlineMeshEnabled : return
 	if outlineMesh != null : return
 	outlineMesh = Line2D.new()
+	outlineMesh.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	outlineMesh.texture_mode = Line2D.LINE_TEXTURE_TILE
 	outlineMesh.closed = true
 	outlineMesh.default_color = Color.DARK_SLATE_GRAY
-	outlineMesh.width = 8
+	outlineMesh.width = 32
+	# is there a second entry in resources set in the editor?
+	if texture_resources.size() > 1 :
+		outlineMesh.set_texture(texture_resources[1].texture)
+	else: # load a default
+		outlineMesh.set_texture(load("res://terrain/terrain-outline-grass.png"))
 	# as a child of this chunk so it moves too:
 	add_child(outlineMesh)
 	
