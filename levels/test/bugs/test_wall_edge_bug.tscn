@@ -12,7 +12,7 @@
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
 polygon = PackedVector2Array(-104, -8, 66, -4, 264.844, -4.41174, 609, -8, 937, -3, 945, 445, -103, 448)
 
-[node name="Wind" parent="GameLevel" index="5"]
+[node name="Wind" parent="GameLevel" index="6"]
 wind_max = 0
 
 [node name="Enemy1" parent="GameLevel" instance=ExtResource("2_q6bx3")]
@@ -32,3 +32,4 @@ position = Vector2(13, 423)
 [editable path="GameLevel/Walls"]
 [editable path="GameLevel/Enemy1"]
 [editable path="GameLevel/Player"]
+[editable path="GameLevel/Player/Tank/AimDamageWobble/PlayerActivateWobble"]

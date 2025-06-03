@@ -12,13 +12,13 @@ var instigator_controller:TankController:
 		return _nearest_owner
 		
 		
-func _on_object_took_damage(object: Node, hit_controller: Node2D, _instigator: Node2D, contact_point: Vector2, damage: float) -> void:
+func _on_object_took_damage(object: Node, hit_controller: Node2D, instigator: Node2D, contact_point: Vector2, damage: float) -> void:
 	var object_root:Node = Groups.get_parent_in_group(object, Groups.DamageableRoot)
 
 	if object_root is not Terrain or hit_controller is not TankController:
 		return
 
-	print_debug("%s: object=%s hit_controller=%s instigator=%s contact_point=%s damage=%f" % [name, object.name, hit_controller.name, _instigator.name, contact_point, damage])
+	print_debug("%s: object=%s hit_controller=%s instigator=%s contact_point=%s damage=%f" % [name, object.name, hit_controller.name, instigator.name, contact_point, damage])
 
 	# Calculate dist squared to the contact_point
 	var dist_squared: float = owner.global_position.distance_squared_to(contact_point)

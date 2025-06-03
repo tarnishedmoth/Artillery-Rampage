@@ -26,8 +26,8 @@ var _active_turn:bool = false
 const tank_override_meta_key:StringName = &"tank_override"
 
 func _ready() -> void:
-	GameEvents.connect("turn_ended", _on_turn_ended)
-	GameEvents.connect("turn_started", _on_turn_started)
+	GameEvents.turn_ended.connect(_on_turn_ended)
+	GameEvents.turn_started.connect(_on_turn_started)
 
 	on_tank_added()
 
@@ -63,9 +63,7 @@ func begin_round() -> void:
 
 func begin_turn() -> void:
 	_active_turn = true
-
-	#tank.reset_orientation()
-	tank.enable_fall_damage = _initial_fall_damage
+	
 	tank.push_weapon_update_to_hud() # TODO: fix for simultaneous fire game
 	can_take_action = check_if_must_skip_actions() # Check this in Player/AI for behavior. Will submit an empty action (to skip) this turn, if true.
 	
@@ -205,6 +203,10 @@ func _on_turn_ended(_player: TankController) -> void:
 func _on_turn_started(_player: TankController) -> void:
 	# Ony any player turn started, stop simulating physics
 	tank.reset_orientation()
+	
+	# Enable fall damage for all players once the first turn starts if previously disabled
+	# as the initial positions have settled by first player start
+	tank.enable_fall_damage = _initial_fall_damage
 
 func _on_tank_actions_completed(_tank: Tank) -> void:
 	end_turn()

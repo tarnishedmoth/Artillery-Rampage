@@ -178,6 +178,8 @@ func _on_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2
 		_kill_count = 0
 		_first_kill_time = now
 	_kill_count += 1
+
+	print_debug("%s: Killed %s - Consecutive Count=%d" % [name, tank.owner, _kill_count])
 	
 	if _kill_count >= 3 and _kill_count == _num_opponents:
 		print_debug("%s: Annihilated all %d opponents!" % [name, _num_opponents])

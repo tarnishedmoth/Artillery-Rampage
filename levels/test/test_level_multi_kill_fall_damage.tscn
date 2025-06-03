@@ -1,0 +1,63 @@
+[gd_scene load_steps=5 format=3 uid="uid://bxs0uocl0q4o5"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_0iahd"]
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_1vuon"]
+[ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_k7nuw"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="4_nfume"]
+
+[node name="TestLevel01" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_0iahd")]
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+polygon = PackedVector2Array(-104, -8, 66, -4, 233.077, -5.23077, 245.313, -519.118, 311.719, -520.588, 330.469, -10.2941, 937, -3, 945, 445, -103, 448)
+
+[node name="Wind" parent="GameLevel" index="6"]
+wind_min = 0
+wind_max = 0
+
+[node name="RoundDirector" parent="GameLevel" index="7"]
+player_goes_first = true
+shuffle_order = false
+
+[node name="Enemy1" parent="GameLevel" instance=ExtResource("2_1vuon")]
+position = Vector2(443, 78)
+enable_damage_before_first_turn = false
+
+[node name="Tank" parent="GameLevel/Enemy1" index="0"]
+color = Color(0.682353, 0.713726, 0.219608, 1)
+
+[node name="LobberAiBehavior" parent="GameLevel/Enemy1/StateMachine" index="0" instance=ExtResource("3_k7nuw")]
+forces_mask = 15
+
+[node name="Enemy2" parent="GameLevel" instance=ExtResource("2_1vuon")]
+position = Vector2(472, 77)
+enable_damage_before_first_turn = false
+
+[node name="Tank" parent="GameLevel/Enemy2" index="0"]
+color = Color(0.137255, 0.180392, 0.701961, 1)
+
+[node name="LobberAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_k7nuw")]
+forces_mask = 15
+
+[node name="Enemy3" parent="GameLevel" instance=ExtResource("2_1vuon")]
+position = Vector2(502, 76)
+enable_damage_before_first_turn = false
+
+[node name="Tank" parent="GameLevel/Enemy3" index="0"]
+color = Color(0.137255, 0.180392, 0.701961, 1)
+
+[node name="LobberAiBehavior" parent="GameLevel/Enemy3/StateMachine" index="0" instance=ExtResource("3_k7nuw")]
+forces_mask = 15
+
+[node name="Player" parent="GameLevel" instance=ExtResource("4_nfume")]
+position = Vector2(120, 427)
+enable_damage_before_first_turn = false
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/Enemy1"]
+[editable path="GameLevel/Enemy2"]
+[editable path="GameLevel/Enemy3"]
