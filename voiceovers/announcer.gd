@@ -42,6 +42,7 @@ enum SpecialShotType {
 
 var _stamped_announcements:Array[StampedAnnouncement] = []
 var _queued_announcements:Array[StringName] = []
+var _queued_announcements_triggered:bool = false
 
 var _objects_vandalized_by_player:Dictionary[int,bool] = {}
 var _falling_players:Dictionary[int,float] = {}
@@ -140,6 +141,7 @@ func _on_terrain_chunk_split(chunk: Node2D,  new_chunk: Node2D) -> void:
 	
 func _on_round_ended() -> void:
 	print_debug("%s: Round ended -  level=%s" % [name, _game_level.level_name])
+	_flush_queued_announcements()
 	
 	_game_level = null
 	_player = null
@@ -197,10 +199,26 @@ func _on_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2
 			_queued_announcements.push_back(overkill_sfx_res)
 
 func _on_turn_ended(__player: TankController) -> void:
-	await get_tree().create_timer(announcement_queue_turn_delay).timeout
-	_trigger_queued_announcement()
+	_trigger_queued_announcement_with_delay()
 
 #region Announcement Batching
+
+func _flush_queued_announcements() -> void:
+	_trigger_queued_announcement_with_delay(0.0)
+
+func _trigger_queued_announcement_with_delay(delay:float = announcement_queue_turn_delay) -> void:
+	if _queued_announcements_triggered:
+		print_debug("%s - announcements trigger already in process" % name)
+		return
+		
+	_queued_announcements_triggered = true
+	if delay > 0:
+		await get_tree().create_timer(delay).timeout
+
+	# Do before trigger call in case it throws an exception so annoucers aren't permanently disabled
+	_queued_announcements_triggered = false
+
+	_trigger_queued_announcement()
 
 func _trigger_queued_announcement() -> void:
 	print_debug("%s: Trigger queued announcements: %d" % [name, _queued_announcements.size()])
@@ -238,7 +256,7 @@ func _trigger_highest_priority_sfx(announcements: Array[StringName]) -> void:
 			return announcer_player.priority_dictionary.get(a, -1) > announcer_player.priority_dictionary.get(b, -1)
 	)
 	
-	if !announcements.is_empty():
+	if not announcements.is_empty():
 		announcer_player.switch_stream_res_and_play(announcements.front())
 		announcements.clear()
 
@@ -259,6 +277,8 @@ func _on_enemy_took_damage(tank: Tank, instigatorController: Node2D, instigator:
 		
 func _on_turn_started(player: TankController) -> void:
 	print_debug("%s: Player turn started" % [name])
+	_flush_queued_announcements()
+
 	_last_turn_player = player
 	if player == _player:
 		_kill_count = 0
