@@ -1,7 +1,7 @@
 extends Label
 
 func _ready() -> void:
-	PlayerUpgrades.acquired_upgrade.connect(_on_acquired_upgrade)
+	PlayerUpgrades.acquired_upgrade.connect(_on_acquired_upgrade.unbind(1))
 	
 
 func update() -> void:

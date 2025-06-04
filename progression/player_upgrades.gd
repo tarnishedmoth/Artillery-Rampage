@@ -15,7 +15,7 @@ func acquire_upgrade(mod_bundle:ModBundle) -> void:
 func _on_acquired_upgrade(mod_bundle:ModBundle) -> void:
 	print_debug("Acquired upgrade")
 	current_upgrades.append(mod_bundle)
-	acquired_upgrade.emit()
+	acquired_upgrade.emit(mod_bundle)
 	
 #func _on_changed_upgrades() -> void:
 	#pass

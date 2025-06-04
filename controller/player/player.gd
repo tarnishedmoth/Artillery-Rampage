@@ -111,8 +111,8 @@ func _on_tank_tank_killed(tank_unit: Tank, instigatorController: Node2D, instiga
 	tank_unit.kill()
 	emit_signal("player_killed", self)
 
-func _on_acquired_upgrade() -> void:
-	load_new_upgrade(PlayerUpgrades.get_current_upgrades().back()) # Get the newest item
+func _on_acquired_upgrade(bundle: ModBundle) -> void:
+	load_new_upgrade(bundle)
 
 func _on_trajectory_previewer_timeout() -> void:
 	if UserOptions.show_assist_trajectory_preview and can_shoot:
