@@ -43,11 +43,11 @@ func _ready() -> void:
 	if not shop_item:
 		push_error("%s: No shop item set!" % name)
 		return
-	var player_state := PlayerStateManager.player_state
+	var player_state: PlayerState = PlayerStateManager.player_state
 	if not player_state:
 		push_error("%s: No player_state exists!" % name)
 		return
-	var weapon_scene:PackedScene = shop_item.item_scene
+	var weapon_scene: PackedScene = shop_item.item_scene
 	if not weapon_scene or not weapon_scene.can_instantiate():
 		push_error("%s: Invalid weapon scene specified for shop item: %s" % [name, weapon_scene])
 		return

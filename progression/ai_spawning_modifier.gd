@@ -24,7 +24,7 @@ func _on_level_loaded(level:GameLevel) -> void:
 	
 func _modify_artillery_spawner(spawner: ArtillerySpawner) -> void:
 	var ai_count:Vector2i = _default_ai_players
-	var current_difficulty := Difficulty.current_difficulty
+	var current_difficulty: Difficulty.DifficultyLevel = Difficulty.current_difficulty
 	
 	var ai_count_spread:Vector2 = ai_count_spread_diff.get(current_difficulty, Vector2(0.0, 1.0))
 	var disable_teams:bool = disable_teams_diff.get(current_difficulty, false)
