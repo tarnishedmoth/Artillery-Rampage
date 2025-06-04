@@ -38,10 +38,33 @@ var target_weapon:String:
 ## weapons hold projectile mods to apply at spawn time
 ## Player is not used but retained parameter to not break existing code at this time
 func apply_all_mods(_player:Player, weapons:Array[Weapon]) -> void:
+	
+	# Group by weapon name and then add the mods to the list for the weapon and apply
+	var mods_by_weapon_key:Dictionary[String, Array] = {}
+	var weapons_by_key:Dictionary[String, Weapon] = {}
+
+	for weapon in weapons:
+			# TODO: Can use scene_file_path instead as the identifier assuming the node has a scene associated with it
+			# See story_shop.gd for an example searching for "scene_file_path" usage to identify weapons
+			var key:String = weapon.display_name.to_lower() # this is lousy
+			weapons_by_key[key] = weapon
+
 	for mod in components_weapon_mods:
-		for weapon in weapons:
-			if mod.target_weapon_name.to_lower() == weapon.display_name.to_lower(): # this is lousy
-				weapon.apply_mod(mod)
+		var mod_key:String =  mod.target_weapon_name.to_lower()
+		var mods:Array = mods_by_weapon_key.get_or_add(mod_key, [])
+		mods.push_back(mod)
+
+	# Apply all the mods for the weapon at once
+	for mod_key in mods_by_weapon_key:
+		var mods:Array = mods_by_weapon_key[mod_key]
+		var weapon:Weapon = weapons_by_key.get(mod_key)
+		if not weapon:
+			push_warning("ModBundle: Could not find weapon for key=%s" % mod_key)
+			continue
+		# function no longer exists!
+		#weapon.apply_mod(mod)
+		#mod.modify_weapon(weapon)
+		weapon.attach_mods(mods, true)
 
 ## Was looking for the most efficient random bool method and came across a discussion;
 ## I appreciated this method proposed by a contributor.
@@ -53,11 +76,11 @@ func randomize(selectable_types:Array[ModBundle.Types], number_of_mods:int = 1, 
 	
 	for i in number_of_mods:
 		var mod # Could be any mod type
-		var type_rand:int = randi_range(0, selectable_types.size())
+		var type_rand:int = randi_range(0, selectable_types.size() - 1)
 		var type = selectable_types[type_rand]
 		
 		if type == Types.ANY:
-			type = randi_range(1, Types.size()) as Types # Pick one
+			type = randi_range(1, Types.size() - 1) as Types # Pick one
 		
 		match type:
 			Types.WEAPON:
@@ -172,6 +195,7 @@ func _new_rand_mod_projectile() -> ModProjectile:
 	return mod
 
 func _add_to_display_name_components(name:String, value) -> void:
-	if display_name_components[name]:
+	if display_name_components.has(name):
 		display_name_components[name] += value
-	else: display_name_components[name] = value
+	else: 
+		display_name_components[name] = value

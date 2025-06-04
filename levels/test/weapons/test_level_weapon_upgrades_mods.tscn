@@ -230,21 +230,22 @@ weapon_mods = Array[ExtResource("6_vhdtx")]([SubResource("Resource_r3usa"), SubR
 [node name="WeaponLeadballShotgun" parent="GameLevel/Player/Weapons" index="2"]
 weapon_mods = Array[ExtResource("6_vhdtx")]([SubResource("Resource_vrrd8")])
 
-[node name="WeaponKilonuke" parent="GameLevel/Player/Weapons" index="3"]
+[node name="WeaponKilonuke" parent="GameLevel/Player/Weapons" index="5"]
 weapon_mods = Array[ExtResource("6_vhdtx")]([SubResource("Resource_aln8v")])
 
-[node name="WeaponMeganuke" parent="GameLevel/Player/Weapons" index="4"]
+[node name="WeaponMeganuke" parent="GameLevel/Player/Weapons" index="6"]
 weapon_mods = Array[ExtResource("6_vhdtx")]([SubResource("Resource_qk1fn")])
 
-[node name="WeaponDeployableMIRV" parent="GameLevel/Player/Weapons" index="5"]
+[node name="WeaponDeployableMIRV" parent="GameLevel/Player/Weapons" index="8"]
 weapon_mods = Array[ExtResource("6_vhdtx")]([SubResource("Resource_j8wbp")])
 
-[node name="WeaponMissile" parent="GameLevel/Player/Weapons" index="6"]
+[node name="WeaponMissile" parent="GameLevel/Player/Weapons" index="9"]
 weapon_mods = Array[ExtResource("6_vhdtx")]([SubResource("Resource_uu3pv")])
 
-[node name="WeaponMissileHoming" parent="GameLevel/Player/Weapons" index="7"]
+[node name="WeaponMissileHoming" parent="GameLevel/Player/Weapons" index="10"]
 weapon_mods = Array[ExtResource("6_vhdtx")]([SubResource("Resource_uxsfy"), SubResource("Resource_n64nw"), SubResource("Resource_gr7kh")])
 
 [editable path="GameLevel/Enemy1"]
 [editable path="GameLevel/Enemy2"]
 [editable path="GameLevel/Player"]
+[editable path="GameLevel/Player/Tank/AimDamageWobble/PlayerActivateWobble"]

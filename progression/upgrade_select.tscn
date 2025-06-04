@@ -27,7 +27,7 @@ display_name = "Mystery"
 components_weapon_mods = Array[ExtResource("4_1lrpj")]([SubResource("Resource_i55pa")])
 components_projectile_mods = Array[ExtResource("3_83rhi")]([SubResource("Resource_457dn")])
 
-[node name="UpgradeSelect" type="Control"]
+[node name="UpgradeSelect" type="Control" node_paths=PackedStringArray("upgrade_buttons_container")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,6 +35,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_dt2xf")
+upgrade_buttons_container = NodePath("MarginContainer/HBoxContainer")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -51,6 +52,13 @@ theme_override_constants/margin_bottom = 64
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="ButtonUpgradeRandom" type="Button" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Receive random upgrade"
+script = ExtResource("2_qujwc")
+randomize_mod = true
 
 [node name="ButtonUpgradeA" type="Button" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -69,7 +77,9 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ContinueButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
+disabled = true
 text = "Continue"
 
 [node name="UpgradesList" type="Label" parent="MarginContainer/HBoxContainer"]
@@ -78,5 +88,6 @@ size_flags_horizontal = 3
 text = "Current Upgrades:"
 script = ExtResource("6_qqn3m")
 
+[connection signal="selected" from="MarginContainer/HBoxContainer/ButtonUpgradeRandom" to="." method="_on_button_upgrade_random_selected"]
 [connection signal="selected" from="MarginContainer/HBoxContainer/ButtonUpgradeA" to="." method="_on_button_upgrade_a_selected"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
