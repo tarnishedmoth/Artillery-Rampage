@@ -37,6 +37,7 @@ func _ready() -> void:
 	var player_state:PlayerState = PlayerStateManager.player_state
 	if not player_state:
 		push_warning("PlayerStateManager.player_state is null, no existing weapon info")
+		player_state = PlayerState.new()
 	else:
 		for weapon in player_state.weapons:
 			existing_weapons[weapon.scene_file_path] = weapon
