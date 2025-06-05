@@ -152,12 +152,12 @@ func _new_rand_mod_weapon() -> ModWeapon:
 			## Projectile shooting velocity.
 			mod.property = ModWeapon.Modifiables.POWER_LAUNCH_SPEED_MULT
 			mod.operation = ModWeapon.Operations.MULTIPLY
-			buff = chance(80)
+			buff = chance(90)
 			if buff:
 				mod.value = randf_range(randfn(0.25,0.25),0.99)
 				_add_to_display_name_components("Increase Max Power", mod.value)
 			else:
-				mod.value = randf_range(randfn(2.5, 0.5),randfn(8.5,4.0))
+				mod.value = randf_range(randfn(1.5, 0.5),randfn(3.0,1.0))
 				_add_to_display_name_components("Reduce Max Power", mod.value)
 		4:
 			## Keep this weapon even when out of ammo.
