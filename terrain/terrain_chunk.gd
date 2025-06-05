@@ -122,8 +122,14 @@ func init_outline_mesh() -> void:
 	outlineMesh.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	outlineMesh.texture_mode = Line2D.LINE_TEXTURE_TILE
 	outlineMesh.closed = true
-	#outlineMesh.default_color = Color.DARK_SLATE_GRAY
-	outlineMesh.width = 32
+
+	# FIXME:
+	# none of these corner styles look right: 
+	# "obtuse angles" will stretch the texture badly
+	# to fix, we may need to add more points to the curve?
+	outlineMesh.joint_mode = Line2D.LINE_JOINT_SHARP # _BEVEL _SHARP _ROUND
+	outlineMesh.width = 64
+
 	# is there a second entry in resources set in the editor?
 	if texture_resources.size() > 1 :
 		outlineMesh.set_texture(texture_resources[1].texture)
