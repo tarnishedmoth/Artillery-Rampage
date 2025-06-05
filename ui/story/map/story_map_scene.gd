@@ -150,7 +150,7 @@ func _update_hud() -> void:
 	if player_state:
 		health_hud.set_value(UIUtils.get_health_pct_display(player_state.health, player_state.max_health))
 	else:
-		print_debug("%s: No player state health found - defaulting to 100.0%" % name)
+		print_debug("%s: No player state health found - defaulting to 100.0%%" % name)
 		health_hud.set_value(UIUtils.get_health_pct_display(1.0, 1.0))
 	
 func _generate_nodes() -> Array[StoryLevelNode]:
