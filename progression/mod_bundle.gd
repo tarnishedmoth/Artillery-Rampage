@@ -5,7 +5,10 @@ class_name ModBundle extends Resource
 ## different tweakable properties. This class should be able to have a component of
 ## each available aspect of the player's control that we want to upgrade through
 ## game progression.
-@export var display_name:String = "Mystery"
+
+const DEFAULT_DISPLAY_NAME:String = "Mystery"
+
+@export var display_name:String = DEFAULT_DISPLAY_NAME
 var display_name_components:Dictionary
 @export_group("Components", "component_")
 @export var components_weapon_mods:Array[ModWeapon]
@@ -222,22 +225,33 @@ func _to_string() -> String:
 
 func serialize() -> Dictionary:
 	var dict:Dictionary = {}
-	
-	dict["weapons"] = _serialize_mod_array(components_weapon_mods)
-	dict["projectiles"] = _serialize_mod_array(components_projectile_mods)
+
+	dict["display_name"] = display_name
+	dict["name_components"] = display_name_components
+	dict["weapons"] = ModUtils.serialize_mod_array(components_weapon_mods)
+	dict["projectiles"] = ModUtils.serialize_mod_array(components_projectile_mods)
 
 	return dict
 
 static func deserialize(state: Dictionary) -> ModBundle:
-	# TODO:
-	return null
+	if not state:
+		return null
+		
+	var bundle = ModBundle.new()
 
-func _serialize_mod_array(array) -> Array[Dictionary]:
-	var mod_array:Array[Dictionary] = []
-	mod_array.resize(array.size())
-	for i in array.size():
-		mod_array[i] = array[i].serialize()
-	
-	return mod_array
+	bundle.display_name = state.get("display_name", DEFAULT_DISPLAY_NAME)
+	bundle.display_name_components = state.get("name_components", {})
+	bundle.components_weapon_mods = ModUtils.deserialize_mod_array(
+		state.get("weapons", [] as Array[Dictionary]),
+		[] as Array[ModWeapon],
+		Callable(ModWeapon.deserialize)
+	)
+	bundle.components_projectile_mods = ModUtils.deserialize_mod_array(
+		state.get("projectiles", [] as Array[Dictionary]),
+		[] as Array[ModProjectile],
+		Callable(ModProjectile.deserialize)
+	)
+
+	return bundle
 
 #endregion

@@ -130,11 +130,29 @@ func configure_and_apply(weapon_to_attach_to: Weapon, _property: Modifiables, _o
 #region Savable
 
 func serialize() -> Dictionary:
-	# TODO:
-	return {}
+	var data:Dictionary = {}
+
+	data["property"] = EnumUtils.enum_to_string(Modifiables, property)
+	data["operation"] = EnumUtils.enum_to_string(Operations, operation)
+	data["value"] = value
+	data["projectiles"] = ModUtils.serialize_mod_array(projectile_mods)
+
+	return data
 
 static func deserialize(state: Dictionary) -> ModWeapon:
-	# TODO:
-	return null
+	if not state:
+		return null
+	
+	var mod: ModWeapon = ModWeapon.new()
 
+	mod.property = EnumUtils.enum_from_string(Modifiables, state.get("property", ""))
+	mod.operation = EnumUtils.enum_from_string(Operations, state.get("operation", ""))
+	mod.value = state.get("value", 0.0)
+	mod.projectile_mods = ModUtils.deserialize_mod_array(
+		state.get("projectiles", [] as Array[Dictionary]),
+		[] as Array[ModProjectile],
+		Callable(ModProjectile.deserialize)
+	)
+
+	return mod
 #endregion
