@@ -90,3 +90,15 @@ func configure_and_apply(projectile_to_attach_to: WeaponProjectile, _property: M
 	operation = _operation
 	value = _value
 	projectile_to_attach_to.apply_mod(self)
+
+#region Savable
+
+func serialize() -> Dictionary:
+	# TODO:
+	return {}
+
+static func deserialize(state: Dictionary) -> ModWeapon:
+	# TODO:
+	return null
+
+#endregion

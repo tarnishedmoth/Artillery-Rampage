@@ -126,3 +126,15 @@ func configure_and_apply(weapon_to_attach_to: Weapon, _property: Modifiables, _o
 	operation = _operation
 	value = _value
 	weapon_to_attach_to.apply_mod(self)
+
+#region Savable
+
+func serialize() -> Dictionary:
+	# TODO:
+	return {}
+
+static func deserialize(state: Dictionary) -> ModWeapon:
+	# TODO:
+	return null
+
+#endregion

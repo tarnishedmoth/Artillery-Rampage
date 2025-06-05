@@ -16,17 +16,28 @@ func _on_acquired_upgrade(mod_bundle:ModBundle) -> void:
 	print_debug("Acquired upgrade")
 	current_upgrades.append(mod_bundle)
 	acquired_upgrade.emit(mod_bundle)
+
+#region Savable
+
+const SAVE_STATE_KEY:StringName = &"PlayerUpgrades"
+
+func restore_from_save_state(save: SaveState) -> void:
+	var story_save:Dictionary = StorySaveUtils.get_story_save()
+	if not story_save or not story_save.has(SAVE_STATE_KEY):
+		current_upgrades = []
+		return
 	
-#func _on_changed_upgrades() -> void:
-	#pass
+	# TODO:
 
-func save_upgrades() -> void:
-	#TODO?
-	pass
+func update_save_state(save:SaveState) -> void:
+	if SceneManager.play_mode == SceneManager.PlayMode.STORY:
+		var story_save:Dictionary = StorySaveUtils.get_story_save()
+		if not story_save:
+			return
+		
+	# TODO:
 
-func load_upgrades() -> void:
-	#TODO?
-	pass
+#endregion
 
 
 static func generate_random_upgrade(types:Array[ModBundle.Types], layers:int = 1) -> ModBundle:

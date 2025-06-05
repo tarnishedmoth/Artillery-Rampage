@@ -217,3 +217,27 @@ func _to_string() -> String:
 			parts.push_back("%.2f" % value)
 	
 	return " ".join(parts)
+
+#region Savable
+
+func serialize() -> Dictionary:
+	var dict:Dictionary = {}
+	
+	dict["weapons"] = _serialize_mod_array(components_weapon_mods)
+	dict["projectiles"] = _serialize_mod_array(components_projectile_mods)
+
+	return dict
+
+static func deserialize(state: Dictionary) -> ModBundle:
+	# TODO:
+	return null
+
+func _serialize_mod_array(array) -> Array[Dictionary]:
+	var mod_array:Array[Dictionary] = []
+	mod_array.resize(array.size())
+	for i in array.size():
+		mod_array[i] = array[i].serialize()
+	
+	return mod_array
+
+#endregion
