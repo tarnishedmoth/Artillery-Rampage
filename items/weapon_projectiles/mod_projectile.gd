@@ -66,6 +66,23 @@ func modify_projectile(projectile: WeaponProjectile) -> void:
 func get_property_key(modifiable: Modifiables = property) -> String:
 	var text_representation:String = Modifiables.find_key(modifiable)
 	return text_representation.to_lower()
+	
+func get_property_value_to_string() -> String:
+	return str(value) if operation != Operations.SET_TRUE and operation != Operations.SET_FALSE else ""
+		
+
+func operation_to_string() -> String:
+	match operation:
+		Operations.MULTIPLY: return "*"
+		Operations.ADD : return "+"
+		Operations.SUBTRACT: return "-"
+		Operations.SET : return "="
+		Operations.SET_TRUE: return "is true"
+		Operations.SET_FALSE: return "is false"
+		_: return "OPERATION %s" % operation
+
+func _to_string() -> String:
+	return "%s %s %s" % [get_property_key(), operation_to_string(), get_property_value_to_string()]
 
 # Code constructors
 func configure_and_apply(projectile_to_attach_to: WeaponProjectile, _property: Modifiables, _operation: Operations, _value:float) -> void:

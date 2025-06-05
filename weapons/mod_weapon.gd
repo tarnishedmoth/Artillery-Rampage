@@ -84,9 +84,41 @@ func modify_weapon(weapon: Weapon) -> void:
 			# This way applies it inline though projectile mods not yet supported
 			weapon.apply_new_mod(mod)
 
-func get_property_key(modifiable: Modifiables) -> String:
+func get_property_key(modifiable: Modifiables = property) -> String:
 	var text_representation:String = Modifiables.find_key(modifiable)
 	return text_representation.to_lower()
+
+func get_property_value_to_string() -> String:
+	return str(value) if operation != Operations.SET_TRUE and operation != Operations.SET_FALSE else ""
+		
+
+func operation_to_string() -> String:
+	match operation:
+		Operations.MULTIPLY: return "x"
+		Operations.ADD : return "+"
+		Operations.SUBTRACT: return "-"
+		Operations.SET : return "="
+		Operations.SET_TRUE: return "is true"
+		Operations.SET_FALSE: return "is false"
+		_: return "OPERATION %s" % operation
+
+func _to_string() -> String:
+	var parts:PackedStringArray = []
+	if target_weapon_name:
+		parts.push_back(target_weapon_name + ":")
+	parts.push_back(get_property_key())
+	parts.push_back(operation_to_string())
+
+	var property_value_str:String = get_property_value_to_string()
+	if property_value_str:
+		parts.push_back(property_value_str)
+
+	if projectile_mods:
+		parts.push_back("with")
+		for proj_mod in projectile_mods:
+			parts.push_back(proj_mod.to_string())
+
+	return " ".join(parts)
 
 # Code constructors
 func configure_and_apply(weapon_to_attach_to: Weapon, _property: Modifiables, _operation: Operations, _value:float) -> void:

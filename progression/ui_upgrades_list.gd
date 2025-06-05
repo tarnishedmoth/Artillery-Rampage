@@ -5,19 +5,13 @@ func _ready() -> void:
 	
 
 func update() -> void:
-	var upgrades = PlayerUpgrades.get_current_upgrades()
-	var master_string:String = text
+	var upgrades: Array[ModBundle] = PlayerUpgrades.get_current_upgrades()
+	var bundle_strings: PackedStringArray = []
 	
-	for mod:ModBundle in upgrades:
-		var new_txt:String
-		for mod_weapon:ModWeapon in mod.components_weapon_mods:
-			new_txt += mod_weapon.target_weapon_name
-			new_txt += "\n"
-			for mod_projectile:ModProjectile in mod_weapon.projectile_mods:
-				new_txt += String(mod_projectile.get_property_key())
-		master_string += new_txt
+	for mod in upgrades:
+		bundle_strings.push_back(mod.to_string())
 	
-	text = master_string
+	text = "\n".join(bundle_strings)
 
 func get_current_upgrades() -> String:
 	return String()

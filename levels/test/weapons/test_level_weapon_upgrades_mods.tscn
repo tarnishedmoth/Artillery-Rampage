@@ -21,6 +21,7 @@ property = 9
 operation = 0
 value = 1.35
 target_weapon_name = ""
+target_weapon_scene_path = ""
 
 [sub_resource type="Resource" id="Resource_r3usa"]
 script = ExtResource("6_vhdtx")
@@ -29,6 +30,7 @@ property = 1
 operation = 0
 value = 3.0
 target_weapon_name = ""
+target_weapon_scene_path = ""
 
 [sub_resource type="Resource" id="Resource_iv45d"]
 script = ExtResource("6_vhdtx")
@@ -37,6 +39,7 @@ property = 0
 operation = 0
 value = 3.0
 target_weapon_name = ""
+target_weapon_scene_path = ""
 
 [sub_resource type="Resource" id="Resource_q1fvi"]
 script = ExtResource("6_vhdtx")
@@ -45,6 +48,7 @@ property = 11
 operation = 5
 value = 1.0
 target_weapon_name = ""
+target_weapon_scene_path = ""
 
 [sub_resource type="Resource" id="Resource_ol5be"]
 script = ExtResource("7_pm7vn")
@@ -65,6 +69,7 @@ property = 5
 operation = 0
 value = 2.0
 target_weapon_name = ""
+target_weapon_scene_path = ""
 
 [sub_resource type="Resource" id="Resource_0l7vj"]
 script = ExtResource("7_pm7vn")
@@ -91,6 +96,7 @@ property = 0
 operation = 0
 value = 3.0
 target_weapon_name = ""
+target_weapon_scene_path = ""
 
 [sub_resource type="Resource" id="Resource_d5qvi"]
 script = ExtResource("7_pm7vn")
@@ -105,6 +111,7 @@ property = 1
 operation = 3
 value = 2.0
 target_weapon_name = ""
+target_weapon_scene_path = ""
 
 [sub_resource type="Resource" id="Resource_biscp"]
 script = ExtResource("7_pm7vn")
@@ -119,6 +126,7 @@ property = 1
 operation = 0
 value = 2.0
 target_weapon_name = ""
+target_weapon_scene_path = ""
 
 [sub_resource type="Resource" id="Resource_j8wbp"]
 script = ExtResource("6_vhdtx")
@@ -127,6 +135,7 @@ property = 1
 operation = 1
 value = 1.0
 target_weapon_name = ""
+target_weapon_scene_path = ""
 
 [sub_resource type="Resource" id="Resource_kaakm"]
 script = ExtResource("7_pm7vn")
@@ -153,6 +162,7 @@ property = 11
 operation = 5
 value = 1.0
 target_weapon_name = ""
+target_weapon_scene_path = ""
 
 [sub_resource type="Resource" id="Resource_uxsfy"]
 script = ExtResource("6_vhdtx")
@@ -161,6 +171,7 @@ property = 2
 operation = 3
 value = 5.0
 target_weapon_name = ""
+target_weapon_scene_path = ""
 
 [sub_resource type="Resource" id="Resource_n64nw"]
 script = ExtResource("6_vhdtx")
@@ -169,6 +180,7 @@ property = 12
 operation = 4
 value = 1.0
 target_weapon_name = ""
+target_weapon_scene_path = ""
 
 [sub_resource type="Resource" id="Resource_c7fdi"]
 script = ExtResource("7_pm7vn")
@@ -189,6 +201,7 @@ property = 5
 operation = 3
 value = 6.0
 target_weapon_name = ""
+target_weapon_scene_path = ""
 
 [node name="TestLevel01" type="Node2D"]
 

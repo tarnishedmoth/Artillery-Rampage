@@ -197,3 +197,23 @@ func _add_to_display_name_components(name:String, value) -> void:
 		display_name_components[name] += value
 	else: 
 		display_name_components[name] = value
+
+func _to_string() -> String:
+	var parts:PackedStringArray = []
+
+	if components_weapon_mods:
+		# Assume the weapon mods in the bundle all apply to the same weapon which is true in the randomized mod bundle
+		var weapon_name = components_weapon_mods.front().target_weapon_name
+		if weapon_name:
+			parts.push_back(weapon_name)
+			parts.push_back("with")
+	
+	for display_name_key in display_name_components:
+		parts.push_back(display_name_key + ":")
+		var value:Variant = display_name_components[display_name_key]
+		if value is not float:
+			parts.push_back(str(value))
+		else:
+			parts.push_back("%.2f" % value)
+	
+	return " ".join(parts)
