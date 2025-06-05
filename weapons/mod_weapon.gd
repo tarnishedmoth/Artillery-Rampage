@@ -38,9 +38,11 @@ enum Modifiables {
 
 ## Can be used to retain mods across matches and reapply them.
 @export_placeholder("Only needs set if not attached to weapon.") var target_weapon_name:String
+@export_placeholder("Only needs set if not attached to weapon.") var target_weapon_scene_path:String
 
 func modify_weapon(weapon: Weapon) -> void:
 	target_weapon_name = weapon.display_name # keep track
+	target_weapon_scene_path = weapon.scene_file_path
 	var property_string:String = get_property_key(property)
 	var current_value = weapon.get(property_string) # This could be float, int, or bool
 	var new_value = current_value # Should set the type??
@@ -78,6 +80,8 @@ func modify_weapon(weapon: Weapon) -> void:
 	
 	if not projectile_mods.is_empty():
 		for mod in projectile_mods:
+			# TODO: Maybe this should use the new system that appens the mod to the projectile mod list on the weapon?
+			# This way applies it inline though projectile mods not yet supported
 			weapon.apply_new_mod(mod)
 
 func get_property_key(modifiable: Modifiables) -> String:

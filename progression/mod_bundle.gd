@@ -44,13 +44,11 @@ func apply_all_mods(_player:Player, weapons:Array[Weapon]) -> void:
 	var weapons_by_key:Dictionary[String, Weapon] = {}
 
 	for weapon in weapons:
-			# TODO: Can use scene_file_path instead as the identifier assuming the node has a scene associated with it
-			# See story_shop.gd for an example searching for "scene_file_path" usage to identify weapons
-			var key:String = weapon.display_name.to_lower() # this is lousy
+			var key:String = weapon.scene_file_path
 			weapons_by_key[key] = weapon
 
 	for mod in components_weapon_mods:
-		var mod_key:String =  mod.target_weapon_name.to_lower()
+		var mod_key:String =  mod.target_weapon_scene_path
 		var mods:Array = mods_by_weapon_key.get_or_add(mod_key, [])
 		mods.push_back(mod)
 

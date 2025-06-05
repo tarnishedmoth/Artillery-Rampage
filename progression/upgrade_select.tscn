@@ -20,6 +20,7 @@ property = 1
 operation = 3
 value = 2.0
 target_weapon_name = "leadball"
+target_weapon_scene_path = "res://weapons/weapon_leadball.tscn"
 
 [sub_resource type="Resource" id="Resource_tekog"]
 script = ExtResource("5_d8jwv")
