@@ -154,10 +154,10 @@ func _new_rand_mod_weapon() -> ModWeapon:
 			mod.operation = ModWeapon.Operations.MULTIPLY
 			buff = chance(90)
 			if buff:
-				mod.value = randf_range(randfn(0.25,0.25),0.99)
+				mod.value = randf_range(maxf(0.1, randfn(0.5,0.25)),0.99)
 				_add_to_display_name_components("Increase Max Power", mod.value)
 			else:
-				mod.value = randf_range(randfn(1.5, 0.5),randfn(3.0,1.0))
+				mod.value = maxf(randf_range(randfn(1.5, 0.5),randfn(3.0, 1.0)), 1.1)
 				_add_to_display_name_components("Reduce Max Power", mod.value)
 		4:
 			## Keep this weapon even when out of ammo.
