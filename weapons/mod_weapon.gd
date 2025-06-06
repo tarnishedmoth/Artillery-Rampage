@@ -135,6 +135,8 @@ func serialize() -> Dictionary:
 	data["property"] = EnumUtils.enum_to_string(Modifiables, property)
 	data["operation"] = EnumUtils.enum_to_string(Operations, operation)
 	data["value"] = value
+	data["name"] = target_weapon_name
+	data["scene"] = target_weapon_scene_path
 	data["projectiles"] = ModUtils.serialize_mod_array(projectile_mods)
 
 	return data
@@ -148,6 +150,8 @@ static func deserialize(state: Dictionary) -> ModWeapon:
 	mod.property = EnumUtils.enum_from_string(Modifiables, state.get("property", ""))
 	mod.operation = EnumUtils.enum_from_string(Operations, state.get("operation", ""))
 	mod.value = state.get("value", 0.0)
+	mod.target_weapon_name = state.get("name", "")
+	mod.target_weapon_scene_path = state.get("scene", "")
 	mod.projectile_mods = ModUtils.deserialize_mod_array(
 		state.get("projectiles", [] as Array[Dictionary]),
 		[] as Array[ModProjectile],
