@@ -1,18 +1,38 @@
-[gd_scene load_steps=4 format=3 uid="uid://f62gmbwtqiwg"]
+[gd_scene load_steps=7 format=3 uid="uid://f62gmbwtqiwg"]
 
 [ext_resource type="Script" uid="uid://cm2b1mrcm6tml" path="res://items/weapon_projectiles/weapon_projectile.gd" id="1_jyx67"]
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_0eddw"]
-size = Vector2(9, 9)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_r23e2"]
 radius = 4.0
 
-[node name="WeaponProjectileFlare" type="RigidBody2D"]
+[sub_resource type="Gradient" id="Gradient_t0hxi"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.271008, 0.514706, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_8w257"]
+gradient = SubResource("Gradient_t0hxi")
+width = 12
+height = 12
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.9, 0.1)
+
+[sub_resource type="Curve" id="Curve_qwyd8"]
+_limits = [0.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 1.69767), -2.81488, 0.0, 0, 0, Vector2(0.34739, 0.43961), -0.097135, -0.097135, 0, 0, Vector2(1, 0), -0.773404, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_qwyd8"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.059322, 1)
+colors = PackedColorArray(1, 1, 1, 0.176471, 1, 1, 1, 1, 1, 1, 1, 0.447059)
+
+[node name="WeaponProjectilePreviewer" type="RigidBody2D"]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_jyx67")
-color = Color(0.344546, 1, 0.828132, 1)
+color = Color(1, 1, 1, 1)
 max_lifetime = 1.0
 should_explode_on_impact = false
 damage_falloff_type = 0
@@ -22,18 +42,21 @@ min_damage = 0.0
 max_damage = 0.0
 destructible_scale_multiplier = Vector2(0, 0)
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = SubResource("PlaceholderTexture2D_0eddw")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_r23e2")
 
 [node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="."]
 z_index = 20
-scale = Vector2(0.183745, 0.183745)
-amount = 100
-lifetime = 5.0
+amount = 30
+texture = SubResource("GradientTexture2D_8w257")
+draw_order = 1
+emission_shape = 4
+emission_points = PackedVector2Array(-0.5, -0.5, 0.5, 0, -0.2, 0.5)
+emission_colors = PackedColorArray()
 gravity = Vector2(0, 0)
-scale_amount_min = 4.0
-scale_amount_max = 4.0
-color = Color(1, 1, 1, 0.501961)
+angular_velocity_min = 20.0
+angular_velocity_max = 40.0
+angle_max = 359.0
+scale_amount_curve = SubResource("Curve_qwyd8")
+color = Color(0, 0.558202, 0.857334, 1)
+color_ramp = SubResource("Gradient_qwyd8")
