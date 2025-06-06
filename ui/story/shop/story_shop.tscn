@@ -37,42 +37,42 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(300, 400)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 20
 
-[node name="ItemsPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ItemsPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer"]
 layout_mode = 2
 
-[node name="ItemsContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ItemsPanel"]
+[node name="ItemsContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="ButtonsContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="ButtonsContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 25
 alignment = 2
 
-[node name="Reset" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ButtonsContainer"]
+[node name="Reset" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Reset"
 
-[node name="Done" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ButtonsContainer"]
+[node name="Done" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Done
 "
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ButtonsContainer/Reset" to="." method="_on_reset_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ButtonsContainer/Done" to="." method="_on_done_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer/Reset" to="." method="_on_reset_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer/Done" to="." method="_on_done_pressed"]
