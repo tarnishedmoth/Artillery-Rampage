@@ -33,6 +33,7 @@ func restore_from_save_state(_save: SaveState) -> void:
 	var story_save:Dictionary = StorySaveUtils.get_story_save()
 	if not story_save or not story_save.has(SAVE_STATE_KEY) or SaveStateManager.consume_state_flag(SceneManager.new_story_selected, SAVE_STATE_KEY):
 		print_debug("PlayerUpgrades: New Story - clearing upgrades")
+		_dirty = true
 		return
 	
 	var upgrade_state:Dictionary = story_save[SAVE_STATE_KEY]
