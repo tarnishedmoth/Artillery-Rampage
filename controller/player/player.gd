@@ -95,6 +95,8 @@ func shoot() -> void:
 		can_aim = false
 	else:
 		# Didn't shoot.
+		# Should be safe to assume you're out of ammo.
+		popup_message("Out of ammo!", PopupNotification.PulsePresets.Two, 1.75)
 		pass
 	
 func load_and_apply_upgrades() -> void:
