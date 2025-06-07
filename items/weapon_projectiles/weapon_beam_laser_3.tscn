@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bffrf0jumcsap"]
+
+[ext_resource type="Script" uid="uid://dcadsd3apky27" path="res://items/weapon_projectiles/weapon_non_physical_beam.gd" id="1_yuec4"]
+
+[node name="WeaponNonPhysicalBeam" type="Node2D"]
+script = ExtResource("1_yuec4")
+metadata/_custom_type_script = "uid://dcadsd3apky27"

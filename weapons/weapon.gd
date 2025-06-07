@@ -68,6 +68,9 @@ var projectile_mods: Array[ModProjectile]
 
 
 @export_group("Behavior")
+
+@export_enum("Projectile", "Beam") var trajectory_indicator_type: String = "Projectile"
+
 ## Inaccuracy of projectiles fired. A value of 0.0 is always perfectly accurate.
 @export_range(0.0,360,0.0001,"radians_as_degrees") var accuracy_angle_spread: float = 0.0
 
