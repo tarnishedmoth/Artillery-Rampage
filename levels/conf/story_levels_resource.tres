@@ -83,16 +83,16 @@ weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u")])
 weapon_count = Vector2i(1, 1)
 metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
-[sub_resource type="Resource" id="Resource_walwf"]
-script = ExtResource("2_s2f7y")
-weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw")])
-weapon_count = Vector2i(2, 4)
-metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
-
 [sub_resource type="Resource" id="Resource_2kbrt"]
 script = ExtResource("2_s2f7y")
 weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw")])
 weapon_count = Vector2i(2, 2)
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_walwf"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw")])
+weapon_count = Vector2i(2, 4)
 metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
 [sub_resource type="Resource" id="Resource_w4otv"]
@@ -113,16 +113,16 @@ weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), Ex
 weapon_count = Vector2i(1, 2)
 metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
-[sub_resource type="Resource" id="Resource_8ak2e"]
-script = ExtResource("2_s2f7y")
-weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("8_njefd"), ExtResource("9_2kbrt")])
-weapon_count = Vector2i(2, 4)
-metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
-
 [sub_resource type="Resource" id="Resource_numv4"]
 script = ExtResource("2_s2f7y")
 weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw")])
 weapon_count = Vector2i(2, 3)
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_8ak2e"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("8_njefd"), ExtResource("9_2kbrt")])
+weapon_count = Vector2i(2, 4)
 metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
 [sub_resource type="Resource" id="Resource_yxy2j"]
@@ -143,16 +143,16 @@ weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), Ex
 weapon_count = Vector2i(1, 3)
 metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
-[sub_resource type="Resource" id="Resource_j6akc"]
-script = ExtResource("2_s2f7y")
-weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("8_njefd"), ExtResource("9_wt4ba"), ExtResource("10_walwf"), ExtResource("9_2kbrt")])
-weapon_count = Vector2i(3, 5)
-metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
-
 [sub_resource type="Resource" id="Resource_2p4tj"]
 script = ExtResource("2_s2f7y")
 weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("10_walwf"), ExtResource("9_2kbrt")])
 weapon_count = Vector2i(3, 4)
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_j6akc"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("8_njefd"), ExtResource("9_wt4ba"), ExtResource("10_walwf"), ExtResource("9_2kbrt")])
+weapon_count = Vector2i(3, 5)
 metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
 [sub_resource type="Resource" id="Resource_tj162"]
@@ -173,16 +173,16 @@ weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), Ex
 weapon_count = Vector2i(1, 3)
 metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
-[sub_resource type="Resource" id="Resource_y2f26"]
-script = ExtResource("2_s2f7y")
-weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("8_njefd"), ExtResource("9_wt4ba"), ExtResource("10_walwf"), ExtResource("12_6s3ft"), ExtResource("9_2kbrt")])
-weapon_count = Vector2i(3, 5)
-metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
-
 [sub_resource type="Resource" id="Resource_lppl1"]
 script = ExtResource("2_s2f7y")
 weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("10_walwf"), ExtResource("9_2kbrt"), ExtResource("12_6s3ft")])
 weapon_count = Vector2i(3, 4)
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_y2f26"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("8_njefd"), ExtResource("9_wt4ba"), ExtResource("10_walwf"), ExtResource("12_6s3ft"), ExtResource("9_2kbrt")])
+weapon_count = Vector2i(3, 5)
 metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
 [sub_resource type="Resource" id="Resource_xxtnw"]
@@ -203,16 +203,16 @@ weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), Ex
 weapon_count = Vector2i(2, 4)
 metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
-[sub_resource type="Resource" id="Resource_fw35h"]
-script = ExtResource("2_s2f7y")
-weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("8_njefd"), ExtResource("9_wt4ba"), ExtResource("10_walwf"), ExtResource("12_6s3ft"), ExtResource("9_2kbrt"), ExtResource("13_6s3ft")])
-weapon_count = Vector2i(4, 6)
-metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
-
 [sub_resource type="Resource" id="Resource_mu23i"]
 script = ExtResource("2_s2f7y")
 weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("10_walwf"), ExtResource("9_2kbrt"), ExtResource("12_6s3ft")])
 weapon_count = Vector2i(4, 5)
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_fw35h"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("8_njefd"), ExtResource("9_wt4ba"), ExtResource("10_walwf"), ExtResource("12_6s3ft"), ExtResource("9_2kbrt"), ExtResource("13_6s3ft")])
+weapon_count = Vector2i(4, 6)
 metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
 [sub_resource type="Resource" id="Resource_ssq1b"]
