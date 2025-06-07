@@ -5,3 +5,6 @@ class_name AIStoryConfig extends Resource
 
 ## Range of weapons to spawn
 @export var weapon_count: Vector2i = Vector2i(1,1)
+
+## Overrides the configured AI types to spawn
+@export var artillery_ai_types: Array[PackedScene]

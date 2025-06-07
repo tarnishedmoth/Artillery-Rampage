@@ -41,10 +41,16 @@ func _on_level_loaded(level:GameLevel) -> void:
 	_modify_artillery_spawner(level.spawner)
 
 func _modify_artillery_spawner(spawner: ArtillerySpawner) -> void:
-	print_debug("%s: Modify Artillery Spawner - difficulty=%s; ai_weapons=%s; ai_weapon_count=%s" % \
-		[name, EnumUtils.enum_to_string(Difficulty.DifficultyLevel, Difficulty.current_difficulty), _ai_config.weapons.map(func(w): return w.resource_path), str(_ai_config.weapon_count)])
+	print_debug("%s: Modify Artillery Spawner - difficulty=%s; ai_types=%s; ai_weapons=%s; ai_weapon_count=%s" % \
+		[name, EnumUtils.enum_to_string(Difficulty.DifficultyLevel, Difficulty.current_difficulty), _debug_map_scene_array(_ai_config.artillery_ai_types), _debug_map_scene_array(_ai_config.weapons), str(_ai_config.weapon_count)])
 	
 	spawner.artillery_ai_starting_weapons = _ai_config.weapons
 	spawner.artillery_ai_starting_weapon_count = _ai_config.weapon_count
 	
+	if _ai_config.artillery_ai_types:
+		spawner.artillery_ai_types = _ai_config.artillery_ai_types
+
 	# Spawn counts handled by the general difficulty modifier
+
+func _debug_map_scene_array(scene_array) -> Array:
+	return scene_array.map(func(w): return w.resource_path)
