@@ -27,6 +27,11 @@ var wind: Vector2 = Vector2():
 	get:
 		return wind
 
+var wind_size:float:
+	get:
+		# No y component
+		return absf(wind.x)
+
 var force: Vector2:
 	get:
 		return wind * wind_scale
