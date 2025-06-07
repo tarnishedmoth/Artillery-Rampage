@@ -1,7 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://st86yx533wjj"]
+[gd_scene load_steps=3 format=3 uid="uid://st86yx533wjj"]
 
 [ext_resource type="PackedScene" uid="uid://by7xd6ncp1g7c" path="res://story/reset_starting_weapons.tscn" id="1_133an"]
+[ext_resource type="PackedScene" uid="uid://xilh5u6q7okn" path="res://story/adjust_ai_starting_weapons.tscn" id="2_21rxa"]
 
 [node name="StoryModeLevelModifiers" type="Node"]
 
 [node name="ResetStartingWeapons" parent="." instance=ExtResource("1_133an")]
+
+[node name="AdjustEnemyStartingWeapons" parent="." instance=ExtResource("2_21rxa")]

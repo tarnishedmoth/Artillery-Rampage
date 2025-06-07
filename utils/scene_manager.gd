@@ -59,6 +59,10 @@ var current_scene:Node = null:
 	get: return current_scene if current_scene else get_tree().current_scene
 	set(value):
 		current_scene = value
+
+var current_story_level:StoryLevel:
+	get:
+		return _current_story_level if play_mode == PlayMode.STORY else null
 	
 # Any scene, even if it is a UI scene and not a game level scene
 var _last_scene_resource:Resource
@@ -103,6 +107,7 @@ func restart_level(delay: float = default_delay) -> void:
 func next_level(delay: float = default_delay) -> void:
 	if !story_levels or !story_levels.levels:
 		push_error("No levels available to load")
+		return
 	# TODO: When using procedural maps may need a different strategy or may want to shuffle the levels on start
 	# The procedural map could just be a specific scene that has some base configuration and then generates on ready
 	# Or we could start proc-gening the next scene during current scene and then just keep in memory and present it here

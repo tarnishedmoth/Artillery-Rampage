@@ -39,7 +39,7 @@ func _modify_artillery_spawner(spawner: ArtillerySpawner) -> void:
 	else:
 		spawner.num_ai_teams = _default_num_ai_teams
 		
-	print_debug("%s: Modify Artillery Spawner for %s - ai_count_spread=%s; ai_players=%s; disable_teams=%s" % [name, str(current_difficulty), str(ai_count_spread), str(spawner.default_ai_players), str(disable_teams)])
+	print_debug("%s: Modify Artillery Spawner for %s - ai_count_spread=%s; ai_players=%s; disable_teams=%s" % [name, EnumUtils.enum_to_string(Difficulty.DifficultyLevel, current_difficulty), str(ai_count_spread), str(spawner.default_ai_players), str(disable_teams)])
 
 func _on_difficulty_changed(_new_difficulty: Difficulty.DifficultyLevel, _old_difficulty: Difficulty.DifficultyLevel) -> void:
 	if is_instance_valid(_artillery_spawner):
