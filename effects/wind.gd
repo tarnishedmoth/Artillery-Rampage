@@ -18,6 +18,13 @@ var wind_max:int = 100
 @export_range(-1.0, 1.0, 0.01, "or_greater")
 var wind_sign_bias:float = 0
 
+@export_category("Wind")
+@export_range(0, 1e9, 1, "or_greater")
+var max_per_orbit_variance:int = 0
+
+var _variance_delta:int = 0
+var _current_variance_amount:int = 0
+
 var wind: Vector2 = Vector2():
 	set(value):
 		wind = value
@@ -49,10 +56,37 @@ func _ready() -> void:
 	# Check for anything set up before we got here.
 	for node in get_tree().get_nodes_in_group(ParticlesGroupName):
 		_check_and_add_particles(node)
+
+	if max_per_orbit_variance > 0 and wind_max - wind_min > 0:
+		print_debug("%s: max_per_orbit_variance=%d - listening for cycles" % [name, max_per_orbit_variance])
+		GameEvents.orbit_cycled.connect(_on_orbit_cycled)
 		
+func _on_orbit_cycled() -> void:
+	var new_variance:int = _new_variance()
+	if new_variance != 0:
+		_variance_delta += new_variance
+		_current_variance_amount = new_variance
+		print_debug("%s: Orbit Cycled - wind changed by %d: Total Variance=%d" % [name, new_variance, _variance_delta])
+		wind = Vector2(wind.x + new_variance, 0.0)
+
 func _randomize_wind() -> int:
 	# Increase "no-wind" probability by allowing negative and then clamping to zero if the random number is < 0
 	return max(randi_range(wind_min, wind_max), 0) * (1 if randf() <= 0.5 + wind_sign_bias * 0.5 else -1)
+
+func _new_variance() -> int:
+	var min_value:int = maxi(-max_per_orbit_variance, wind_min - roundi(wind.x))
+	var max_value:int = mini(max_per_orbit_variance, wind_max - roundi(wind.x))
+
+	if _variance_delta > 0:
+		max_value -= _variance_delta
+	elif _variance_delta < 0:
+		min_value -= _variance_delta
+
+	var new_variance:int = randi_range(min_value, max_value)
+
+	print_debug("%s: Variance changed from %d -> %d from [%d, %d]" % [name, _current_variance_amount, new_variance, min_value, max_value])
+
+	return new_variance
 
 func _physics_process(delta: float) -> void:
 	if _active_projectile_set.is_empty():
