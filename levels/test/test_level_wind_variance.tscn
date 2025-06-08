@@ -10,9 +10,6 @@
 
 [node name="GameLevel" parent="." instance=ExtResource("1_vvubb")]
 
-[node name="Wind" parent="GameLevel" index="6"]
-max_per_orbit_variance = 10
-
 [node name="RoundDirector" parent="GameLevel" index="7"]
 player_goes_first = true
 shuffle_order = false

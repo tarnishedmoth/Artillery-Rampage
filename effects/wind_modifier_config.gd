@@ -18,6 +18,10 @@ var difficulties:PackedStringArray:
 @export_range(0, 1e9, 1, "or_greater")
 var wind_max_abs:int = 100
 
+## Changes the max wind variance if >= 0
+@export
+var wind_max_variance:int = -1
+
 var wall_type_values:Array[Walls.WallType] = []
 var difficulty_values:Array[Difficulty.DifficultyLevel] = []
 
@@ -31,3 +35,6 @@ func apply_to(wind:Wind) -> void:
 		var existing_wind:Vector2 = wind.wind
 		wind.wind = wind_max_abs / wind_size * existing_wind
 		print_debug("WindModifierConfig: Clamp wind from %s to %s" % [existing_wind, wind.wind])
+	if wind_max_variance >= 0:
+		print_debug("WindModifierConfig: Change wind max variance from %d to %d" % [wind.max_per_orbit_variance, wind_max_variance])
+		wind.max_per_orbit_variance = wind_max_variance
