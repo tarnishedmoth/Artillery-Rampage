@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" uid="uid://ci78gx0frupym" path="res://items/weapon_projectiles/weapon_beam_2.gd" id="1_5q0cl"]
 
-[sub_resource type="Gradient" id="Gradient_mhdbg"]
+[sub_resource type="Gradient" id="Gradient_5q0cl"]
 offsets = PackedFloat32Array(0, 0.5, 1)
 colors = PackedColorArray(0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_ppf4e"]
-gradient = SubResource("Gradient_mhdbg")
+gradient = SubResource("Gradient_5q0cl")
 width = 8
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mhdbg"]

@@ -463,7 +463,16 @@ func stop_all_sounds(_only_looping: bool = true) -> void: # TODO args
 func _add_projectile_awaiting(projectile: WeaponProjectile) -> void:
 	projectile.completed_lifespan.connect(_on_projectile_completed_lifespan) # So we know when the projectile is finished.
 	_awaiting_lifespan_completion += 1
-	
+
+## Related to [signal weapon_actions_completed].
+## [br]Connects the
+## [beam projectile]'s
+## [signal WeaponNonPhysicalBeam.completed_lifespan]
+## and increments an internal counter.
+func _add_beam_awaiting(beam: WeaponNonPhysicalBeam) -> void:
+	beam.completed_lifespan.connect(_on_projectile_completed_lifespan)
+	_awaiting_lifespan_completion += 1
+
 ## The [Weapon] class doesn't inherently use modes, but components and subclasses can make use of them.
 func next_mode() -> void:
 	## Or override this for functionality
@@ -570,29 +579,38 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 					print_debug("Setting property ", property, " to ", _enforced_projectile_properties[property])
 		
 		if new_shot is WeaponProjectile:
-			new_shot.set_sources(parent_tank,self)
-			new_shot.apply_all_mods(projectile_mods)
-			_add_projectile_awaiting(new_shot) # Uses signals in class
+			_setup_new_projectile(new_shot, barrel, power)
+		elif new_shot is WeaponNonPhysicalBeam:
+			_setup_new_beam(new_shot, barrel)
 		
 		container.add_child(new_shot)
-		new_shot.global_transform = barrel.global_transform # TODO micro offsets might be a good idea for shotguns etc
-		
-		var aim_angle = barrel.global_rotation
-		if accuracy_angle_spread != 0.0:
-			var deviation = randf_range(-accuracy_angle_spread,accuracy_angle_spread) / 2
-			aim_angle += deviation
-			# TODO this should also rotate the object
-		
-		if new_shot is RigidBody2D and new_shot is not WeaponBeam and new_shot is not WeaponBeam2:
-			var velocity = Vector2(power, 0.0)
-			new_shot.linear_velocity = velocity.rotated(aim_angle)
-			# TODO alternative for other types of objects?
-			# Can't think of a specific use yet.
-			
-		#container.add_child(new_shot) # Original location, testing earlier use above
 		
 		#print_debug("Shot fired with ", velocity, " at ", aim_angle)
 		projectile_spawned.emit(new_shot)
+
+## If [member scene_to_spawn] is a [WeaponProjectile], use this method for class-specific setup on the new shot.
+func _setup_new_projectile(new_shot: WeaponProjectile, barrel: Marker2D, power: float) -> void:
+	new_shot.set_sources(parent_tank,self)
+	new_shot.apply_all_mods(projectile_mods)
+	_add_projectile_awaiting(new_shot) # Uses signals in class
+	new_shot.global_transform = barrel.global_transform # TODO micro offsets might be a good idea for shotguns etc
+	
+	var aim_angle = barrel.global_rotation
+	if accuracy_angle_spread != 0.0:
+		var deviation = randf_range(-accuracy_angle_spread,accuracy_angle_spread) / 2
+		aim_angle += deviation
+		# TODO this should also rotate the object
+		
+	if new_shot is RigidBody2D and new_shot is not WeaponBeam and new_shot is not WeaponBeam2:
+		var velocity = Vector2(power, 0.0)
+		new_shot.linear_velocity = velocity.rotated(aim_angle)
+		# TODO alternative for other types of objects?
+		# Can't think of a specific use yet.
+
+## If [member scene_to_spawn] is a [WeaponNonPhysicalBeam], use this method for class-specific setup on the new shot.
+func _setup_new_beam(new_shot: WeaponNonPhysicalBeam, barrel: Marker2D) -> void:
+	_add_beam_awaiting(new_shot)
+	new_shot.global_position = barrel.global_position
 
 func _on_projectile_completed_lifespan() -> void:
 	_awaiting_lifespan_completion -= 1
