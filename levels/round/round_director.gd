@@ -145,7 +145,9 @@ func begin_round() -> bool:
 	GameEvents.round_started.emit()
 	
 	#return next_player()
-	return next_turn()
+
+	# Await as next_turn is async
+	return await next_turn()
 
 #region Turn Order
 func set_turn_order() -> void:
@@ -214,7 +216,7 @@ func next_turn() -> bool:
 	if not check_players(): return false
 	awaiting_intentions = 0
 	if not is_simultaneous_fire:
-		next_player() # Turn-based game
+		await next_player() # Turn-based game
 	else:
 		# Simultaneous fire
 		all_players()
@@ -247,7 +249,9 @@ func _on_turn_ended(controller: TankController) -> void:
 	
 	await _async_check_and_await_falling()
 	
-	if !next_turn():
+	var round_over:bool = not await next_turn()
+
+	if round_over:
 		GameEvents.round_ended.emit()
 #endregion
 
