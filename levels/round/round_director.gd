@@ -251,6 +251,11 @@ func _on_turn_ended(controller: TankController) -> void:
 	
 	var round_over:bool = not await next_turn()
 
+	# See if orbit completed
+	if active_player_index <= 0:
+		print_debug("Orbit completed")
+		GameEvents.orbit_cycled.emit()
+
 	if round_over:
 		GameEvents.round_ended.emit()
 #endregion

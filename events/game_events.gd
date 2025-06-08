@@ -27,6 +27,9 @@ signal scene_switched(scene: Node)
 signal turn_started(player: TankController)
 signal turn_ended(player: TankController)
 
+## Called when a full cycle of players has completed their actions within a round
+signal orbit_cycled()
+
 signal player_added(player: TankController)
 signal player_died(player: TankController)
 
