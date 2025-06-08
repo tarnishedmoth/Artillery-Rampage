@@ -611,6 +611,7 @@ func _setup_new_projectile(new_shot: WeaponProjectile, barrel: Marker2D, power: 
 func _setup_new_beam(new_shot: WeaponNonPhysicalBeam, barrel: Marker2D) -> void:
 	_add_beam_awaiting(new_shot)
 	new_shot.global_position = barrel.global_position
+	new_shot.aim_angle = barrel.global_rotation
 
 func _on_projectile_completed_lifespan() -> void:
 	_awaiting_lifespan_completion -= 1

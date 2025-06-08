@@ -18,6 +18,15 @@ metadata/_custom_type_script = "uid://dcadsd3apky27"
 rotation = 1.5708
 texture = SubResource("GradientTexture1D_yuec4")
 
+[node name="LaserStart" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="LaserStart"]
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+color = Color(0.139995, 0.711158, 0.973731, 1)
+
 [node name="LaserEnd" type="Node2D" parent="."]
 
 [node name="ColorRect" type="ColorRect" parent="LaserEnd"]
