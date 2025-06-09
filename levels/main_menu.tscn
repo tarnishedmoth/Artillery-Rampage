@@ -54,6 +54,7 @@ alignment_vertical = 0
 layout_mode = 2
 stream = ExtResource("5_6flho")
 autoplay = true
+loop = true
 
 [node name="MainMenu" type="VBoxContainer" parent="Controls"]
 unique_name_in_owner = true
