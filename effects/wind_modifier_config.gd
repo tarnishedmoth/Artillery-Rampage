@@ -30,11 +30,15 @@ func matches(game_level:GameLevel, difficulty:Difficulty.DifficultyLevel) -> boo
 	 		(not wall_type_values or game_level.walls.wall_mode in wall_type_values)
 
 func apply_to(wind:Wind) -> void:
-	var wind_size:float = wind.wind_size
-	if wind_size > wind_max_abs:
-		var existing_wind:Vector2 = wind.wind
-		wind.wind = wind_max_abs / wind_size * existing_wind
-		print_debug("WindModifierConfig: Clamp wind from %s to %s" % [existing_wind, wind.wind])
+	var current_wind_max:int = wind.wind_max
+	if current_wind_max > wind_max_abs:
+		var wind_scale:float = float(wind_max_abs) / current_wind_max
+		if wind.wind_min > 0:
+			wind.wind_min = roundi(wind.wind_min * wind_scale)
+		wind.wind_max = roundi(wind.wind_max * wind_scale)
+		# Re-randomize with new scales
+		wind.randomize_wind()
+		print_debug("WindModifierConfig: Scale wind max from %d to %d" % [current_wind_max, wind.wind_max])
 	if wind_max_variance >= 0:
 		print_debug("WindModifierConfig: Change wind max variance from %d to %d" % [wind.max_per_orbit_variance, wind_max_variance])
 		wind.max_per_orbit_variance = wind_max_variance

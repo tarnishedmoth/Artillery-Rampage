@@ -73,8 +73,7 @@ var _active_projectile_set: Dictionary[WeaponProjectile, WeaponProjectile] = {}
 var _active_particles_set: Array[CPUParticles2D]
 
 func _ready() -> void:
-	# Randomize the wind
-	wind = Vector2(_randomize_wind(), 0.0)
+	randomize_wind()
 	# Connect signal for projectiles
 	GameEvents.projectile_fired.connect(_on_projectile_fired)
 	# Connect signal for particles in group
@@ -87,7 +86,10 @@ func _ready() -> void:
 func _on_turn_orbit_cycled() -> void:
 	_vary_wind()
 
-func _randomize_wind() -> int:
+func randomize_wind() -> void:
+	wind = Vector2(_calculate_randomized_wind(), 0.0)
+
+func _calculate_randomized_wind() -> int:
 	# Increase "no-wind" probability by allowing negative and then clamping to zero if the random number is < 0
 	return maxi(randi_range(wind_min, wind_max), 0) * (1 if randf() <= 0.5 + wind_sign_bias * 0.5 else -1)
 
