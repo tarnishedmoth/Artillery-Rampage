@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bbu2pp1ggq3ya" path="res://levels/conf/story_level_resource.gd" id="1_3qnfp"]
 [ext_resource type="Script" uid="uid://byp83fig7pnv8" path="res://levels/conf/story_levels_resource.gd" id="1_e5mo0"]
 [ext_resource type="PackedScene" uid="uid://bch6pb81vhwb" path="res://ui/story/map/story_level_node.tscn" id="2_dfrvm"]
-[ext_resource type="Script" uid="uid://dwd2f2a37y3g0" path="res://story/ai_story_config.gd" id="2_s2f7y"]
+[ext_resource type="Script" path="res://story/ai_story_config.gd" id="2_s2f7y"]
 [ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="3_8ak2e"]
 [ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="3_k157v"]
 [ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="5_eaw1u"]
