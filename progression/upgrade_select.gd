@@ -22,7 +22,8 @@ func _on_button_upgrade_random_selected(button: ButtonUpgradeSelection) -> void:
 	_acquire_mod(button)
 	
 func _on_continue_button_pressed() -> void:
-	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryShop)
+	if not SceneManager.deque_transition():
+		SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryShop)
 
 func _acquire_mod(button: ButtonUpgradeSelection) -> void:
 	PlayerUpgrades.acquire_upgrade(button.get_mod_bundle())

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bquwvo2blan2o"]
+
+[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="1_13evg"]
+
+[node name="AITank" instance=ExtResource("1_13evg")]
+
+[node name="LobberAiBehavior" parent="StateMachine" index="0"]
+aim_error_chance = 0.5
+aim_deviation_degrees = 20.0
+aim_power_pct = 0.25
+min_power_pct = 0.15

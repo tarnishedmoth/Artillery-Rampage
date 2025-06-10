@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cduo8m7j3bl8g"]
+[gd_scene load_steps=19 format=3 uid="uid://cduo8m7j3bl8g"]
 
 [ext_resource type="Script" uid="uid://bgoyiun1jpv3o" path="res://progression/difficulty_modifier.gd" id="1_2dwr4"]
 [ext_resource type="Script" uid="uid://cao3jj7glqw8u" path="res://progression/ai_spawning_modifier.gd" id="2_d0wel"]
@@ -9,6 +9,8 @@
 [ext_resource type="Curve" uid="uid://br3eaxfead1dj" path="res://tank/aim_deviation_v_damage_pct_normal.tres" id="6_chi4f"]
 [ext_resource type="Curve" uid="uid://b0w23x6b4x2qy" path="res://tank/aim_deviation_period_v_damage_pct.tres" id="7_04cof"]
 [ext_resource type="Curve" uid="uid://sxsnqhe6wtno" path="res://tank/aim_deviation_v_damage_pct.tres" id="8_ee6b6"]
+[ext_resource type="Script" uid="uid://bap2hfkwr3md2" path="res://progression/wind_wall_combination_modifier.gd" id="10_6dka3"]
+[ext_resource type="Script" uid="uid://dlv5k6amb86bj" path="res://effects/wind_modifier_config.gd" id="11_chi4f"]
 
 [sub_resource type="Resource" id="Resource_jn5uf"]
 script = ExtResource("4_1lmxp")
@@ -28,6 +30,38 @@ enabled = true
 aim_deviation_v_damage = ExtResource("8_ee6b6")
 aim_deviation_period_v_damage = ExtResource("7_04cof")
 metadata/_custom_type_script = "uid://uwxnvktw8nbb"
+
+[sub_resource type="Resource" id="Resource_04cof"]
+script = ExtResource("11_chi4f")
+wall_types = PackedStringArray()
+difficulties = PackedStringArray("Normal")
+wind_max_abs = 50
+wind_max_variance = -1
+metadata/_custom_type_script = "uid://dlv5k6amb86bj"
+
+[sub_resource type="Resource" id="Resource_chi4f"]
+script = ExtResource("11_chi4f")
+wall_types = PackedStringArray("Elastic", "Accelerate", "Sticky")
+difficulties = PackedStringArray()
+wind_max_abs = 40
+wind_max_variance = -1
+metadata/_custom_type_script = "uid://dlv5k6amb86bj"
+
+[sub_resource type="Resource" id="Resource_ee6b6"]
+script = ExtResource("11_chi4f")
+wall_types = PackedStringArray("None")
+difficulties = PackedStringArray()
+wind_max_abs = 20
+wind_max_variance = -1
+metadata/_custom_type_script = "uid://dlv5k6amb86bj"
+
+[sub_resource type="Resource" id="Resource_lyrf2"]
+script = ExtResource("11_chi4f")
+wall_types = PackedStringArray()
+difficulties = PackedStringArray("Easy")
+wind_max_abs = 20
+wind_max_variance = 0
+metadata/_custom_type_script = "uid://dlv5k6amb86bj"
 
 [node name="DifficultyModifier" type="Node"]
 script = ExtResource("1_2dwr4")
@@ -55,3 +89,7 @@ disable_fall_damage = Dictionary[int, bool]({
 1: false,
 2: false
 })
+
+[node name="WindWallCombinationModifier" type="Node" parent="."]
+script = ExtResource("10_6dka3")
+wind_configs = Array[ExtResource("11_chi4f")]([SubResource("Resource_04cof"), SubResource("Resource_chi4f"), SubResource("Resource_ee6b6"), SubResource("Resource_lyrf2")])

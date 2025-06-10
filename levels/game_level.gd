@@ -21,7 +21,7 @@ func _ready() -> void:
 	container_for_spawnables = make_container_node() # For spawnables
 	GameEvents.level_loaded.emit(self)
 	
-	begin_round()
+	await begin_round()
 
 # This is called at the start of the round to enable input for players
 # TODO: We could pass in the global players data containing info about who is playing
@@ -39,7 +39,7 @@ func begin_round():
 
 	GameEvents.all_players_added.emit(self)
 				
-	round_director.begin_round()
+	await round_director.begin_round()
 	
 func activate_tank_controller(unit:TankController) -> void:
 	connect_events(unit)

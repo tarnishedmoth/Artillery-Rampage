@@ -5,11 +5,17 @@ class_name StoryLevel extends Resource
 @export var scene_res_path:StringName
 
 ## Name of the level as it should appear to the player.
-@export  var name:StringName
+@export var name:StringName
 
 ## Scene file that is subclass of StoryLevelNode
-@export  var ui_map_node:PackedScene
+@export var ui_map_node:PackedScene
 
 ## Text to display on the map node when moving to next level
 @export_group("Narrative")
 @export_multiline var narratives:Array[String]
+
+@export_group("AI")
+## Override to change the AI starting weapons for this story level by difficulty
+## If there is no entry for a particular difficulty then no modifications will be made
+## Enums did not work as enum keys in resources so needed to change to int
+@export var ai_config_by_difficulty:Dictionary[int, AIStoryConfig] = {}

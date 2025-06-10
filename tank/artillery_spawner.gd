@@ -2,6 +2,7 @@ class_name ArtillerySpawner extends Node
 
 @export var artillery_ai_types: Array[PackedScene] = []
 @export var artillery_ai_starting_weapons: Array[PackedScene] ## These must be of class Weapon
+@export var artillery_ai_starting_weapon_count:Vector2i = Vector2i()
 #@export var artillery_ai_upgrade_weapons: Array[PackedScene] # Could go this route
 @export var default_ai_players: Vector2i = Vector2i()
 ## Specify min and max team size. If < 1 then no teams will be assigned
@@ -249,9 +250,23 @@ func _choose_positions(count: int) -> void:
 	# Shuffle final positions since the AI to player ratio is based on the index
 	_used_positions.shuffle()
 	
-func _choose_starting_weapon(weapon_scenes:Array = artillery_ai_starting_weapons) -> PackedScene: # This will need to be refactored for multiple weapons but the other methods are ready
-	var choice = weapon_scenes.pick_random()
-	return choice
+func _choose_starting_weapons() -> Array[PackedScene]:
+	assert(not artillery_ai_starting_weapons.is_empty(), "_choose_starting_weapons called on empty artillery_ai_starting_weapons")
+	
+	var spawn_count:int = randi_range(
+		clampi(artillery_ai_starting_weapon_count.x, 1, artillery_ai_starting_weapons.size()),
+		clampi(artillery_ai_starting_weapon_count.y, 1, artillery_ai_starting_weapons.size()))
+	
+	# Duplicate as we will be shuffling
+	var weapons: Array[PackedScene] = artillery_ai_starting_weapons.duplicate()
+	weapons.shuffle()
+	
+	var chosen_weapons: Array[PackedScene] = []
+	chosen_weapons.resize(spawn_count)
+	for i in spawn_count:
+		chosen_weapons[i] = weapons[i]
+		
+	return chosen_weapons
 	
 func _attach_weapons(attach_to:TankController,weapon_scenes:Array[PackedScene]) -> void:
 	# TankController will update each call because it expects them all at once.
@@ -299,8 +314,7 @@ func spawn_unit(_global_position:Vector2, is_ai:bool = true, parent = self) -> T
 			enemy_names.erase(display_name)
 			spawned.name = display_name
 			if artillery_ai_starting_weapons:
-				var weapons_to_attach:Array[PackedScene]
-				weapons_to_attach.append(_choose_starting_weapon())
+				var weapons_to_attach:Array[PackedScene] = _choose_starting_weapons()
 				_attach_weapons(spawned, weapons_to_attach)
 		# Child nodes are null until added to the scene
 		init_controller_props(spawned)

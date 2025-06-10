@@ -72,7 +72,7 @@ func apply_all_mods(_player:Player, weapons:Array[Weapon]) -> void:
 ## -- This method via Chaosus on Github Godot issues #8721
 func chance(probability: int = 50) -> bool: return true if (randi() % 100) < probability else false
 
-func randomize(selectable_types:Array[ModBundle.Types], number_of_mods:int = 1, clearall:bool = true) -> void:
+func randomize(selectable_types:Array[ModBundle.Types], number_of_mods:int = 1, clearall:bool = true, chance_bias:int = 0) -> void:
 	if clearall: clear_all()
 	
 	for i in number_of_mods:
@@ -85,10 +85,10 @@ func randomize(selectable_types:Array[ModBundle.Types], number_of_mods:int = 1, 
 		
 		match type:
 			Types.WEAPON:
-				mod = _new_rand_mod_weapon()
+				mod = _new_rand_mod_weapon(chance_bias)
 				components_weapon_mods.append(mod)
 			Types.PROJECTILE:
-				mod = _new_rand_mod_projectile()
+				mod = _new_rand_mod_projectile(chance_bias)
 				components_projectile_mods.append(mod)
 			#Types.TANK:
 				#pass
@@ -107,7 +107,7 @@ func clear_all() -> void:
 	#component_player_mods.clear()
 	#component_world_mods.clear()
 
-func _new_rand_mod_weapon() -> ModWeapon:
+func _new_rand_mod_weapon(chance_bias:int = 0) -> ModWeapon:
 	var mod = ModWeapon.new()
 	var type:int = randi_range(0, 5)
 	var buff:bool # Buff or debuff. Probability is set per type.
@@ -116,7 +116,7 @@ func _new_rand_mod_weapon() -> ModWeapon:
 		0:
 			## Accuracy
 			mod.property = ModWeapon.Modifiables.ACCURACY_ANGLE_SPREAD
-			buff = chance(75)
+			buff = chance(75 + chance_bias)
 			if buff:
 				mod.operation = ModWeapon.Operations.MULTIPLY
 				mod.value = randf_range(randfn(0.5, 0.25), 0.95)
@@ -129,7 +129,7 @@ func _new_rand_mod_weapon() -> ModWeapon:
 			## Number of bullets to spawn.
 			## This is for MG (serial shooting) behavior.
 			mod.property = ModWeapon.Modifiables.ALWAYS_SHOOT_FOR_COUNT
-			buff = chance(80)
+			buff = chance(80 + chance_bias)
 			if buff:
 				mod.operation = ModWeapon.Operations.ADD
 				mod.value = randi_range(1,randi_range(1,5))
@@ -142,7 +142,7 @@ func _new_rand_mod_weapon() -> ModWeapon:
 			## Number of bullets to spawn.
 			## This is for shotgun (parallel shooting) behavior.
 			mod.property = ModWeapon.Modifiables.NUMBER_OF_SCENES_TO_SPAWN
-			buff = chance(80)
+			buff = chance(80 + chance_bias)
 			if buff:
 				mod.operation = ModWeapon.Operations.ADD
 				mod.value = randi_range(1,randi_range(1,5))
@@ -155,7 +155,7 @@ func _new_rand_mod_weapon() -> ModWeapon:
 			## Projectile shooting velocity.
 			mod.property = ModWeapon.Modifiables.POWER_LAUNCH_SPEED_MULT
 			mod.operation = ModWeapon.Operations.MULTIPLY
-			buff = chance(90)
+			buff = chance(90 + chance_bias)
 			if buff:
 				mod.value = randf_range(maxf(0.1, randfn(0.5,0.25)),0.99)
 				_add_to_display_name_components("Increase Max Power", mod.value)
@@ -177,7 +177,7 @@ func _new_rand_mod_weapon() -> ModWeapon:
 		5:
 			## Infinite Ammo
 			mod.property = ModWeapon.Modifiables.USE_AMMO
-			buff = chance(90)
+			buff = chance(90 + chance_bias)
 			if buff:
 				mod.operation = ModWeapon.Operations.SET_FALSE # Infinite ammo
 				# mod.value not needed
@@ -189,7 +189,7 @@ func _new_rand_mod_weapon() -> ModWeapon:
 	
 	return mod
 
-func _new_rand_mod_projectile() -> ModProjectile:
+func _new_rand_mod_projectile(chance_bias:int = 0) -> ModProjectile:
 	var mod = ModProjectile.new()
 	#TODO
 	push_error("Not implemented")
@@ -236,7 +236,7 @@ func serialize() -> Dictionary:
 static func deserialize(state: Dictionary) -> ModBundle:
 	if not state:
 		return null
-		
+
 	var bundle = ModBundle.new()
 
 	bundle.display_name = state.get("display_name", DEFAULT_DISPLAY_NAME)

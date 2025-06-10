@@ -5,3 +5,5 @@
 [node name="Wind" type="Node"]
 script = ExtResource("1_xlmkh")
 wind_scale = 500.0
+wind_min = 0
+max_per_orbit_variance = 20

@@ -104,13 +104,13 @@ func _on_next_pressed() -> void:
 	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
 
 	if stats and stats.won:
-		SceneManager.switch_scene_keyed(SceneManager.SceneKeys.UpgradeSelect)
+		_next_after_win()
 	elif not _is_game_over:
-		_restart_level()
+		_next_after_loss()
 	else:
 		SceneManager.switch_scene_keyed(SceneManager.SceneKeys.GameOver)
 
-func _restart_level() -> void:
+func _next_after_loss() -> void:
 	# If player state is defined make sure we restart with full health as already took the personnel hit
 	var player_state:PlayerState = PlayerStateManager.player_state
 	if player_state:
@@ -118,7 +118,19 @@ func _restart_level() -> void:
 	else:
 		push_warning("%s: No player state was defined when restarting level - unable to reset player health" % name)
 
-	SceneManager.restart_level()
+	# TODO: May want to only go to shop if have resources to spend
+	# Can handle this by queueing the transition and then dequeue_transition which will work for both cases
+	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryShop)
+
+	# Queue next transition after this
+	SceneManager.queue_transition("restart_level")
+
+func _next_after_win() -> void:
+	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.UpgradeSelect)
+
+	# Queue next transitions after this
+	SceneManager.queue_transition("switch_scene_keyed", [SceneManager.SceneKeys.StoryShop])
+	SceneManager.queue_transition("switch_scene_keyed", [SceneManager.SceneKeys.StoryMap])
 
 func _play_audio() -> void:
 	if RoundStatTracker.round_data.won:

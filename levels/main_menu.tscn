@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bpy071ovoevnq"]
+[gd_scene load_steps=9 format=3 uid="uid://bpy071ovoevnq"]
 
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="1_1lcqw"]
 [ext_resource type="Script" uid="uid://bn7hgaa71swpl" path="res://levels/main_menu.gd" id="1_3vdg5"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="3_tkm84"]
 [ext_resource type="Texture2D" uid="uid://dp0yqs3ec4c18" path="res://terrain/sky-tile.png" id="4_pppj1"]
 [ext_resource type="Script" uid="uid://dsphnlf4hpu7y" path="res://levels/mainmenu_level_select.gd" id="4_ryopc"]
+[ext_resource type="VideoStream" uid="uid://vnivder7uust" path="res://videos/main_menu.ogv" id="5_6flho"]
 [ext_resource type="PackedScene" uid="uid://da23m08ml50op" path="res://ui/options_menu.tscn" id="6_snioo"]
 
 [node name="MainMenu" type="Node2D" node_paths=PackedStringArray("revealables")]
@@ -27,6 +28,7 @@ offset_bottom = 40.0
 theme = ExtResource("1_1lcqw")
 
 [node name="FullBackgroundImage" type="TextureRect" parent="Controls"]
+visible = false
 modulate = Color(0.64, 0.64, 0.64, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -37,6 +39,22 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource("4_pppj1")
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="Controls"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment_horizontal = 0
+alignment_vertical = 0
+
+[node name="BackgroundVideo" type="VideoStreamPlayer" parent="Controls/AspectRatioContainer"]
+layout_mode = 2
+stream = ExtResource("5_6flho")
+autoplay = true
+loop = true
 
 [node name="MainMenu" type="VBoxContainer" parent="Controls"]
 unique_name_in_owner = true

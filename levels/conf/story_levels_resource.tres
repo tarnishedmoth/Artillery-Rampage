@@ -1,8 +1,27 @@
-[gd_resource type="Resource" script_class="StoryLevelsResource" load_steps=12 format=3 uid="uid://b20xhiq7ab52i"]
+[gd_resource type="Resource" script_class="StoryLevelsResource" load_steps=44 format=3 uid="uid://b20xhiq7ab52i"]
 
 [ext_resource type="Script" uid="uid://bbu2pp1ggq3ya" path="res://levels/conf/story_level_resource.gd" id="1_3qnfp"]
 [ext_resource type="Script" uid="uid://byp83fig7pnv8" path="res://levels/conf/story_levels_resource.gd" id="1_e5mo0"]
 [ext_resource type="PackedScene" uid="uid://bch6pb81vhwb" path="res://ui/story/map/story_level_node.tscn" id="2_dfrvm"]
+[ext_resource type="Script" uid="uid://dwd2f2a37y3g0" path="res://story/ai_story_config.gd" id="2_s2f7y"]
+[ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="3_8ak2e"]
+[ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="3_k157v"]
+[ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="5_eaw1u"]
+[ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="6_di2g2"]
+[ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="7_1y2yw"]
+[ext_resource type="PackedScene" uid="uid://do2r411gtohhx" path="res://weapons/weapon_missile_homing.tscn" id="8_njefd"]
+[ext_resource type="PackedScene" uid="uid://hlpewhe5vg2k" path="res://weapons/weapon_leadball_shotgun.tscn" id="9_2kbrt"]
+[ext_resource type="PackedScene" uid="uid://bx3va4wmvmw4o" path="res://weapons/weapon_MIRV.tscn" id="9_wt4ba"]
+[ext_resource type="PackedScene" uid="uid://ccl2oyo13754i" path="res://weapons/weapon_MiniMIRV.tscn" id="10_walwf"]
+[ext_resource type="PackedScene" uid="uid://dychmx0p2ex84" path="res://weapons/weapon_bouncing_ball.tscn" id="12_6s3ft"]
+[ext_resource type="PackedScene" uid="uid://dnc0x4uvh6tq8" path="res://weapons/weapon_meganuke.tscn" id="13_6s3ft"]
+
+[sub_resource type="Resource" id="Resource_eaw1u"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v")])
+weapon_count = Vector2i(1, 1)
+artillery_ai_types = Array[PackedScene]([ExtResource("3_8ak2e")])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
 [sub_resource type="Resource" id="Resource_ccn48"]
 script = ExtResource("1_3qnfp")
@@ -10,6 +29,23 @@ scene_res_path = &"res://levels/test/environments/test_level_environment_islands
 name = &"Islands"
 ui_map_node = ExtResource("2_dfrvm")
 narratives = Array[String](["We must push back these AI artillery and gain a foothold on the coast!"])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
+0: SubResource("Resource_eaw1u")
+})
+
+[sub_resource type="Resource" id="Resource_di2g2"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v")])
+weapon_count = Vector2i(1, 1)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_1y2yw"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u")])
+weapon_count = Vector2i(1, 1)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
 [sub_resource type="Resource" id="Resource_ls1ig"]
 script = ExtResource("1_3qnfp")
@@ -17,6 +53,24 @@ scene_res_path = &"res://levels/test/environments/test_level_environment_scorche
 name = &"Scorched Plains"
 ui_map_node = ExtResource("2_dfrvm")
 narratives = Array[String](["We are moving inland now!", "This land has taken heavy damage from the enemy."])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
+0: SubResource("Resource_di2g2"),
+2: SubResource("Resource_1y2yw")
+})
+
+[sub_resource type="Resource" id="Resource_njefd"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u")])
+weapon_count = Vector2i(1, 1)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_1jm8t"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2")])
+weapon_count = Vector2i(2, 2)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
 [sub_resource type="Resource" id="Resource_8g4lb"]
 script = ExtResource("1_3qnfp")
@@ -24,6 +78,31 @@ scene_res_path = &"res://levels/test/test_level_terrain_proc_gen.tscn"
 name = &"Spikey Hills"
 ui_map_node = ExtResource("2_dfrvm")
 narratives = Array[String](["This terrain will prove difficult.", "We must apply new tactics."])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
+0: SubResource("Resource_njefd"),
+2: SubResource("Resource_1jm8t")
+})
+
+[sub_resource type="Resource" id="Resource_wt4ba"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u")])
+weapon_count = Vector2i(1, 1)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_2kbrt"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw")])
+weapon_count = Vector2i(2, 2)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_walwf"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw")])
+weapon_count = Vector2i(2, 4)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
 [sub_resource type="Resource" id="Resource_w4otv"]
 script = ExtResource("1_3qnfp")
@@ -31,6 +110,32 @@ scene_res_path = &"res://levels/test/environments/test_level_environment_plains.
 name = &"Plains"
 ui_map_node = ExtResource("2_dfrvm")
 narratives = Array[String](["Back to the open land.", "We have made great progress against the enemy."])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
+0: SubResource("Resource_wt4ba"),
+1: SubResource("Resource_2kbrt"),
+2: SubResource("Resource_walwf")
+})
+
+[sub_resource type="Resource" id="Resource_6s3ft"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2")])
+weapon_count = Vector2i(1, 2)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_numv4"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw")])
+weapon_count = Vector2i(2, 3)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_8ak2e"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("8_njefd"), ExtResource("9_2kbrt")])
+weapon_count = Vector2i(2, 4)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
 [sub_resource type="Resource" id="Resource_yxy2j"]
 script = ExtResource("1_3qnfp")
@@ -38,6 +143,32 @@ scene_res_path = &"res://levels/test/test_level_terrain_proc_gen_fresh.tscn"
 name = &"New Heights"
 ui_map_node = ExtResource("2_dfrvm")
 narratives = Array[String](["This is a new and strange territory.", "Much variance!"])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
+0: SubResource("Resource_6s3ft"),
+1: SubResource("Resource_numv4"),
+2: SubResource("Resource_8ak2e")
+})
+
+[sub_resource type="Resource" id="Resource_aru85"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw")])
+weapon_count = Vector2i(1, 3)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_2p4tj"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("10_walwf"), ExtResource("9_2kbrt")])
+weapon_count = Vector2i(3, 4)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_j6akc"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("8_njefd"), ExtResource("9_wt4ba"), ExtResource("10_walwf"), ExtResource("9_2kbrt")])
+weapon_count = Vector2i(3, 5)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
 [sub_resource type="Resource" id="Resource_tj162"]
 script = ExtResource("1_3qnfp")
@@ -45,6 +176,32 @@ scene_res_path = &"res://levels/test/environments/test_level_environment_plateau
 name = &"Wild West"
 ui_map_node = ExtResource("2_dfrvm")
 narratives = Array[String](["I think I can see my house from up here!", "We must use the high ground!", ""])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
+0: SubResource("Resource_aru85"),
+1: SubResource("Resource_2p4tj"),
+2: SubResource("Resource_j6akc")
+})
+
+[sub_resource type="Resource" id="Resource_a1i58"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw")])
+weapon_count = Vector2i(1, 3)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_lppl1"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("10_walwf"), ExtResource("9_2kbrt"), ExtResource("12_6s3ft")])
+weapon_count = Vector2i(3, 4)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_y2f26"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("8_njefd"), ExtResource("9_wt4ba"), ExtResource("10_walwf"), ExtResource("12_6s3ft"), ExtResource("9_2kbrt")])
+weapon_count = Vector2i(3, 5)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
 [sub_resource type="Resource" id="Resource_xxtnw"]
 script = ExtResource("1_3qnfp")
@@ -52,6 +209,32 @@ scene_res_path = &"res://levels/test/environments/test_level_environment_whiteca
 name = &"Snow Caps"
 ui_map_node = ExtResource("2_dfrvm")
 narratives = Array[String](["I can't feel my toes!", "We must dispatch the enemy quickly and move onward to victory!"])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
+0: SubResource("Resource_a1i58"),
+1: SubResource("Resource_lppl1"),
+2: SubResource("Resource_y2f26")
+})
+
+[sub_resource type="Resource" id="Resource_uyxng"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("9_2kbrt"), ExtResource("10_walwf"), ExtResource("9_wt4ba")])
+weapon_count = Vector2i(2, 4)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_mu23i"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("10_walwf"), ExtResource("9_2kbrt"), ExtResource("12_6s3ft")])
+weapon_count = Vector2i(4, 5)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_fw35h"]
+script = ExtResource("2_s2f7y")
+weapons = Array[PackedScene]([ExtResource("3_k157v"), ExtResource("5_eaw1u"), ExtResource("6_di2g2"), ExtResource("7_1y2yw"), ExtResource("8_njefd"), ExtResource("9_wt4ba"), ExtResource("10_walwf"), ExtResource("12_6s3ft"), ExtResource("9_2kbrt"), ExtResource("13_6s3ft")])
+weapon_count = Vector2i(4, 6)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
 [sub_resource type="Resource" id="Resource_ssq1b"]
 script = ExtResource("1_3qnfp")
@@ -59,6 +242,11 @@ scene_res_path = &"res://levels/test/environments/test_level_environment_divide.
 name = &"The Great Divide"
 ui_map_node = ExtResource("2_dfrvm")
 narratives = Array[String](["There is a large gap between us and the enemy.", "Perhaps it will confuse the enemy."])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
+0: SubResource("Resource_uyxng"),
+1: SubResource("Resource_mu23i"),
+2: SubResource("Resource_fw35h")
+})
 
 [resource]
 script = ExtResource("1_e5mo0")

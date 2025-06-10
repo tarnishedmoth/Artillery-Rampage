@@ -15,6 +15,7 @@ stream_0/stream = ExtResource("3_ppygw")
 script = ExtResource("1_l583l")
 scene_to_spawn = ExtResource("2_l583l")
 display_name = "Laser"
+trajectory_indicator_type = "Beam"
 fire_velocity = 100000.0
 power_launch_speed_mult = 10.0
 use_ammo = true

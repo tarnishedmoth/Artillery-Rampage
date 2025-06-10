@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://xilh5u6q7okn"]
+
+[ext_resource type="Script" uid="uid://bfuy3q0gfvgqk" path="res://story/adjust_ai_story_difficulty.gd" id="1_rkp32"]
+
+[node name="AdjustAIStoryDifficulty" type="Node"]
+script = ExtResource("1_rkp32")

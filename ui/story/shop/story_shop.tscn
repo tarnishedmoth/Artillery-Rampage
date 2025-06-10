@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://o55c1iigswjc"]
+[gd_scene load_steps=5 format=3 uid="uid://o55c1iigswjc"]
 
 [ext_resource type="Script" uid="uid://blcakxdcf5gn4" path="res://ui/story/shop/story_shop.gd" id="1_po24w"]
 [ext_resource type="PackedScene" uid="uid://dpxoc5ysgsvep" path="res://ui/story/shop/resource_shop_row.tscn" id="2_gms1v"]
 [ext_resource type="Resource" uid="uid://kpcvdmtfoeh3" path="res://progression/shop/shop_items.tres" id="2_xg2qo"]
+[ext_resource type="Script" uid="uid://b8idjgo18fqvv" path="res://ui/story/shop/growing_scroll_container.gd" id="4_xg2qo"]
 
 [node name="StoryShop" type="Control"]
 layout_mode = 3
@@ -11,68 +12,84 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_po24w")
 item_resources = ExtResource("2_xg2qo")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 348.0
+grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Item Shop"
 horizontal_alignment = 1
 
-[node name="ResourceRow" parent="MarginContainer/VBoxContainer" instance=ExtResource("2_gms1v")]
+[node name="ResourceRow" parent="HBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_gms1v")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+clip_contents = true
 custom_minimum_size = Vector2(300, 400)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 20
 
-[node name="ItemsPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer" node_paths=PackedStringArray("target_container")]
 layout_mode = 2
+follow_focus = true
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
+script = ExtResource("4_xg2qo")
+max_size_y = 575.0
+target_container = NodePath("ItemsPanel/ItemsContainer")
 
-[node name="ItemsContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ItemsPanel"]
+[node name="ItemsPanel" type="PanelContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ItemsContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="ButtonsContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="ButtonsContainer" type="HBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 25
 alignment = 2
 
-[node name="Reset" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ButtonsContainer"]
+[node name="Reset" type="Button" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Reset"
 
-[node name="Done" type="Button" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ButtonsContainer"]
+[node name="Done" type="Button" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Done
 "
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ButtonsContainer/Reset" to="." method="_on_reset_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/ButtonsContainer/Done" to="." method="_on_done_pressed"]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer/Reset" to="." method="_on_reset_pressed"]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer/Done" to="." method="_on_done_pressed"]

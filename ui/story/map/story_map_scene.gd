@@ -109,7 +109,9 @@ func _create_graph() -> void:
 		return
 		
 	var nodes:Array[StoryLevelNode] =_generate_or_load_nodes()
-	var active_node:StoryLevelNode = nodes[_next_level_index]
+	var story_incomplete:bool = _next_level_index < nodes.size()
+	
+	var active_node:StoryLevelNode = nodes[_next_level_index] if story_incomplete else null
 
 	#region Populate Edges
 	for i in range(1, nodes.size()):
@@ -121,9 +123,9 @@ func _create_graph() -> void:
 			graph_container.add_child(_edge_from_to(prev_node, next_node, animate))
 	#endregion	
 
-	var next_level:StoryLevel = _story_levels_resource.levels[_next_level_index]
-
-	_create_scrolling_narrative(next_level, active_node)	
+	if story_incomplete: 
+		var next_level:StoryLevel = _story_levels_resource.levels[_next_level_index]
+		_create_scrolling_narrative(next_level, active_node)	
 
 func _generate_or_load_nodes() -> Array[StoryLevelNode]:
 	var saved_state: StoryMapSaveState = _get_save_state()

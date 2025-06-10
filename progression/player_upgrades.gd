@@ -33,6 +33,7 @@ func restore_from_save_state(_save: SaveState) -> void:
 	var story_save:Dictionary = StorySaveUtils.get_story_save()
 	if not story_save or not story_save.has(SAVE_STATE_KEY) or SaveStateManager.consume_state_flag(SceneManager.new_story_selected, SAVE_STATE_KEY):
 		print_debug("PlayerUpgrades: New Story - clearing upgrades")
+		_dirty = true
 		return
 	
 	var upgrade_state:Dictionary = story_save[SAVE_STATE_KEY]
@@ -69,9 +70,12 @@ func update_save_state(_save:SaveState) -> void:
 #endregion
 
 
-static func generate_random_upgrade(types:Array[ModBundle.Types], layers:int = 1) -> ModBundle:
+static func generate_random_upgrade(types:Array[ModBundle.Types], layers:int = 1, chance_bias:int = 0) -> ModBundle:
 	var upgrade = ModBundle.new()
-	upgrade.randomize(types, layers) # More than 1 layer means multiple Mods in a ModBundle. Use for 'rarity'.
+
+	# More than 1 layer means multiple Mods in a ModBundle. Use for 'rarity'.
+	# Chance bias pushes the probability more toward buff or de-buff. Use for shop
+	upgrade.randomize(types, layers, chance_bias)
 
 	var player_state:PlayerState = PlayerStateManager.player_state
 	if not player_state:
