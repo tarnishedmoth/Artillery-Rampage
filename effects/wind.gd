@@ -36,7 +36,7 @@ var max_per_orbit_variance:int = 0:
 			return
 		max_per_orbit_variance = value
 		# Only need to do if we are already in the tree and this being changed during gameplay
-		if get_parent():
+		if is_inside_tree():
 			# Wait until other values potentially changed since wind only changed per orbit
 			_update_variance.call_deferred()
 	get:

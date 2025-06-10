@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cduo8m7j3bl8g"]
+[gd_scene load_steps=20 format=3 uid="uid://cduo8m7j3bl8g"]
 
 [ext_resource type="Script" uid="uid://bgoyiun1jpv3o" path="res://progression/difficulty_modifier.gd" id="1_2dwr4"]
 [ext_resource type="Script" uid="uid://cao3jj7glqw8u" path="res://progression/ai_spawning_modifier.gd" id="2_d0wel"]
@@ -11,6 +11,7 @@
 [ext_resource type="Curve" uid="uid://sxsnqhe6wtno" path="res://tank/aim_deviation_v_damage_pct.tres" id="8_ee6b6"]
 [ext_resource type="Script" uid="uid://bap2hfkwr3md2" path="res://progression/wind_wall_combination_modifier.gd" id="10_6dka3"]
 [ext_resource type="Script" uid="uid://dlv5k6amb86bj" path="res://effects/wind_modifier_config.gd" id="11_chi4f"]
+[ext_resource type="Script" uid="uid://d06fhniubbobj" path="res://progression/player_goes_first.gd" id="12_04cof"]
 
 [sub_resource type="Resource" id="Resource_jn5uf"]
 script = ExtResource("4_1lmxp")
@@ -93,3 +94,6 @@ disable_fall_damage = Dictionary[int, bool]({
 [node name="WindWallCombinationModifier" type="Node" parent="."]
 script = ExtResource("10_6dka3")
 wind_configs = Array[ExtResource("11_chi4f")]([SubResource("Resource_04cof"), SubResource("Resource_chi4f"), SubResource("Resource_ee6b6"), SubResource("Resource_lyrf2")])
+
+[node name="PlayerGoesFirst" type="Node" parent="."]
+script = ExtResource("12_04cof")

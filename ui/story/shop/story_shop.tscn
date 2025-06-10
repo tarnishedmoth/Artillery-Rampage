@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://blcakxdcf5gn4" path="res://ui/story/shop/story_shop.gd" id="1_po24w"]
 [ext_resource type="PackedScene" uid="uid://dpxoc5ysgsvep" path="res://ui/story/shop/resource_shop_row.tscn" id="2_gms1v"]
 [ext_resource type="Resource" uid="uid://kpcvdmtfoeh3" path="res://progression/shop/shop_items.tres" id="2_xg2qo"]
-[ext_resource type="Script" path="res://ui/story/shop/growing_scroll_container.gd" id="4_xg2qo"]
+[ext_resource type="Script" uid="uid://b8idjgo18fqvv" path="res://ui/story/shop/growing_scroll_container.gd" id="4_xg2qo"]
 
 [node name="StoryShop" type="Control"]
 layout_mode = 3
