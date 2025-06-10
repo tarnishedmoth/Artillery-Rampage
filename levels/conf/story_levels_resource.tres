@@ -32,6 +32,7 @@ narratives = Array[String](["We must push back these AI artillery and gain a foo
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
 0: SubResource("Resource_eaw1u")
 })
+force_player_goes_first = true
 
 [sub_resource type="Resource" id="Resource_di2g2"]
 script = ExtResource("2_s2f7y")
@@ -57,6 +58,7 @@ ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
 0: SubResource("Resource_di2g2"),
 2: SubResource("Resource_1y2yw")
 })
+force_player_goes_first = false
 
 [sub_resource type="Resource" id="Resource_njefd"]
 script = ExtResource("2_s2f7y")
@@ -82,6 +84,7 @@ ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
 0: SubResource("Resource_njefd"),
 2: SubResource("Resource_1jm8t")
 })
+force_player_goes_first = false
 
 [sub_resource type="Resource" id="Resource_wt4ba"]
 script = ExtResource("2_s2f7y")
@@ -115,6 +118,7 @@ ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
 1: SubResource("Resource_2kbrt"),
 2: SubResource("Resource_walwf")
 })
+force_player_goes_first = false
 
 [sub_resource type="Resource" id="Resource_6s3ft"]
 script = ExtResource("2_s2f7y")
@@ -148,6 +152,7 @@ ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
 1: SubResource("Resource_numv4"),
 2: SubResource("Resource_8ak2e")
 })
+force_player_goes_first = false
 
 [sub_resource type="Resource" id="Resource_aru85"]
 script = ExtResource("2_s2f7y")
@@ -181,6 +186,7 @@ ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
 1: SubResource("Resource_2p4tj"),
 2: SubResource("Resource_j6akc")
 })
+force_player_goes_first = false
 
 [sub_resource type="Resource" id="Resource_a1i58"]
 script = ExtResource("2_s2f7y")
@@ -214,6 +220,7 @@ ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
 1: SubResource("Resource_lppl1"),
 2: SubResource("Resource_y2f26")
 })
+force_player_goes_first = false
 
 [sub_resource type="Resource" id="Resource_uyxng"]
 script = ExtResource("2_s2f7y")
@@ -247,6 +254,7 @@ ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
 1: SubResource("Resource_mu23i"),
 2: SubResource("Resource_fw35h")
 })
+force_player_goes_first = false
 
 [resource]
 script = ExtResource("1_e5mo0")

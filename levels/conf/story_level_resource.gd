@@ -19,3 +19,6 @@ class_name StoryLevel extends Resource
 ## If there is no entry for a particular difficulty then no modifications will be made
 ## Enums did not work as enum keys in resources so needed to change to int
 @export var ai_config_by_difficulty:Dictionary[int, AIStoryConfig] = {}
+
+@export_group("Level Modifiers")
+@export var force_player_goes_first:bool = false
