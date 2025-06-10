@@ -26,6 +26,7 @@ func _ready() -> void:
 	# replace CompressedTexture2D with an editable texture
 	$HouseBody/HouseBodySprite.texture = texture
 
+
 #region Damage and Death
 @warning_ignore("unused_parameter")
 func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float) -> void:
