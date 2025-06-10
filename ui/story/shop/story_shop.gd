@@ -98,7 +98,9 @@ func can_afford_to_refill_any(item: ShopItemResource) -> bool:
 				
 func _on_done_pressed() -> void:
 	_apply_changes()
-	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap)
+
+	if not SceneManager.deque_transition():
+		SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap)
 
 func _apply_changes() -> void:
 	# Update the player state with the new weapon states

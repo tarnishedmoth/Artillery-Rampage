@@ -72,6 +72,8 @@ var _last_game_level_resource:Resource
 
 @onready var loading_bg: ColorRect = $LoadingBG
 
+var _scene_queue:Array[Callable] = []
+
 func _ready()->void:
 	loading_bg.hide()
 	var root = get_tree().root
@@ -125,7 +127,25 @@ func set_story_level_index(index:int) -> bool:
 		return true
 	push_warning("Attempted to set invalid story level index=%d - expected [0, %d)" % [index, story_levels.levels.size()])
 	return false
-	
+
+## Pushes a scene transition to the scene queue by func_name on the SceneManager and arguments it should take
+func queue_transition(func_name:String, args: Array = []) -> void:
+	_scene_queue.push_back(Callable.create(self, func_name).bindv(args))
+
+## Dequeues and executes a scene transition if the scene callable queue is not empty; otherwise, returns false
+func deque_transition() -> bool:
+	if not _scene_queue.is_empty():
+		print_debug("Dequeue scene transition: queue_size=%d" % _scene_queue.size())
+		var transition:Callable = _scene_queue.pop_front()
+		transition.call()
+		return true
+	print_debug("Dequeue scene transition: queue empty - return false")
+	return false
+
+## Clears any scene transitions from the queue
+func clear_transitions() -> void:
+	_scene_queue.clear()
+
 # TODO: May move these branches out of the scene manager to keep it more single responsiblity
 func level_failed() -> void:
 	match play_mode:
@@ -159,6 +179,7 @@ func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 	match key:
 		SceneKeys.MainMenu:
 			await switch_scene_file(main_menu_scene_file, delay, func() -> void:
+				clear_transitions()
 				# Clear out the play mode when going back to main menu
 				play_mode = PlayMode.DIRECT
 				# Make sure option state loaded
