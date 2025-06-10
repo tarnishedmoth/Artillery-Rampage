@@ -1,5 +1,4 @@
 ## Keeps track of player state between rounds and establishes this state at the start of the round
-## TODO: Could use this as basis for data to auto-save/load player state from file
 extends Node
 
 ## Toggles whether player state tracking should be enabled
@@ -18,6 +17,7 @@ var enable:bool:
 
 var player: Player
 var player_state: PlayerState
+var _dirty:bool
 	
 func _connect_events() -> void:
 	if not GameEvents.round_started.is_connected(_on_round_started):
@@ -26,12 +26,16 @@ func _connect_events() -> void:
 		GameEvents.player_added.connect(_on_player_added)
 	if not GameEvents.round_ended.is_connected(_on_round_ended):
 		GameEvents.round_ended.connect(_on_round_ended)
+	if not GameEvents.level_loaded.is_connected(_on_level_loaded):
+		GameEvents.level_loaded.connect(_on_level_loaded)
 	
 func _disconnect_events() -> void:
 	if GameEvents.round_started.is_connected(_on_round_started):
 		GameEvents.round_started.disconnect(_on_round_started)
 	if GameEvents.player_added.is_connected(_on_player_added):
 		GameEvents.player_added.disconnect(_on_player_added)
+	if GameEvents.level_loaded.is_connected(_on_level_loaded):
+		GameEvents.level_loaded.disconnect(_on_level_loaded)
 
 	if is_instance_valid(player):
 		if player.tank.tank_killed.is_connected(_on_player_killed):
@@ -41,6 +45,9 @@ func _disconnect_events() -> void:
 			player.queue_free()
 		player = null
 		
+func _on_level_loaded(_level:GameLevel) -> void:
+	_dirty = false
+	
 func _on_round_started() -> void:
 	pass
 
@@ -58,19 +65,27 @@ func _on_player_added(p_player: TankController) -> void:
 	player.pending_state = player_state
 	
 func _on_round_ended() -> void:
-	if not player:
-		return
-	# Capture the state of the player at the end of the round
-	# Retain any previously unlocked weapons
-	player_state = player.create_player_state().include_unlocks_from(player_state)
+	# Player will only be valid here on win
+	_snapshot_player_state(true)
 
 	# Will become invalid when the instance is destroyed by the current SceneTree
 	player = null
 	
 func _on_player_killed(_tank: Tank, _instigatorController: Node2D, _instigator: Node2D) -> void:
-	# TODO: Temporarily while we figure out the rogue-like mechanics
-	pass
+	if _instigatorController == player:
+		_snapshot_player_state(false)
 
+func _snapshot_player_state(include_curr_health:bool) -> void:
+	if not player:
+		return
+
+	# Retain any previously unlocked weapons
+	var new_player_state:PlayerState = player.create_player_state().include_unlocks_from(player_state)
+	if not include_curr_health:
+		new_player_state.health = player_state.health if player_state else new_player_state.max_health
+	
+	player_state = new_player_state
+	_dirty = true
 #region Savable
 
 func restore_from_save_state(save: SaveState) -> void:
@@ -81,7 +96,10 @@ func restore_from_save_state(save: SaveState) -> void:
 		PlayerState.delete_save_state(save)
 		player_state = null
 		return
-		
+	if _dirty:
+		# We need to save state first
+		return	
+	
 	player_state = PlayerState.deserialize_from_save_state(save)
 	print_debug("%s: restore_from_save_state: %s" % [name, is_instance_valid(player_state)])
 
@@ -89,5 +107,6 @@ func update_save_state(game_state:SaveState) -> void:
 	if not enable or not player_state:
 		return
 	player_state.serialize_save_state(game_state)
+	_dirty = false
 	print_debug("%s: update_save_state" % name)
 #endregion
