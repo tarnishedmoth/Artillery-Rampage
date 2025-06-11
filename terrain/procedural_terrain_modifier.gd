@@ -1,7 +1,12 @@
-class_name ProceduralTerrainModifier extends Node
+class_name ProceduralTerrainModifier extends Node2D
 
 @export var noise_template : FastNoiseLite
 @export var randomize_seed:bool = true
+
+## Set to restrict the terrain modification to start at the given position
+@export var start_at:Node2D
+## Set to end the terrain modification at given position. Leave empty to modify to the end
+@export var stop_at:Node2D 
 
 @export_category("Generation")
 @export_range(0, 1000) var additional_vertices:int = 0
@@ -42,19 +47,36 @@ func _ready() -> void:
 	_modify_terrain()
 
 func _modify_terrain():
-
-	var viewport_bounds := _terrain.get_viewport_rect()
-	var current_terrain_bounds := _terrain.get_bounds_global()
+	# TODO: The original implementation uses the viewport_rect rather than the terrain global bounds
+	var terrain_bounds := _terrain.get_viewport_rect()
+	#var terrain_bounds := _terrain.get_bounds_global()
+	# Vertices will only be added or modified in given bounds
+	var modification_bounds := _get_modification_bounds_global(terrain_bounds)
 
 	for chunk in _terrain.get_chunks():
 		var terrain_chunk := chunk as TerrainChunk
 		if terrain_chunk:
-			_modify_chunk(terrain_chunk, viewport_bounds, current_terrain_bounds)
+			_modify_chunk(terrain_chunk, terrain_bounds, modification_bounds)
 
-func _modify_chunk(chunk: TerrainChunk, viewport_bounds: Rect2, _terrain_bounds: Rect2) -> void:
+func _get_modification_bounds_global(full_bounds:Rect2) -> Rect2:
+	var bounds:Rect2 = Rect2()
+	if start_at:
+		bounds.position.x = start_at.global_position.x
+		if stop_at:
+			bounds.size.x = stop_at.global_position.x - bounds.position.x
+		else: # Extend to the viewport
+			bounds.size.x = full_bounds.size.x - (bounds.size.x - full_bounds.position.x)
+		# Y position and size is same as full_bounds
+		bounds.position.y = full_bounds.position.y
+		bounds.size.y = full_bounds.size.y
+	else:
+		bounds = full_bounds
+	
+	return bounds
 
+func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bounds: Rect2) -> void:
 	var min_height := max_height_clearance
-	var max_height := viewport_bounds.size.y - min_height_value
+	var max_height := modification_bounds.size.y - min_height_value
 	var height_range := max_height - min_height
 	var terrain_vertices : PackedVector2Array = chunk.get_terrain_global()
 
@@ -75,6 +97,7 @@ func _modify_chunk(chunk: TerrainChunk, viewport_bounds: Rect2, _terrain_bounds:
 	# First modify any existing points
 	for i in terrain_vertices.size():
 		var vertex := terrain_vertices[i]
+		# TODO: only process vertex if its x value lies in the bounds
 
 		# Only modify exterior vertices
 		if !chunk.is_surface_point_global(vertex):
@@ -99,14 +122,14 @@ func _modify_chunk(chunk: TerrainChunk, viewport_bounds: Rect2, _terrain_bounds:
 		
 		if terrain_vertices.is_empty():
 			new_terrain = true
-			_seed_terrain(terrain_vertices, viewport_bounds, 4)
+			_seed_terrain(terrain_vertices, terrain_bounds, 4)
 			# HACK:
 			chunk.replace_contents(terrain_vertices, [], TerrainChunk.UpdateFlags.Immediate)
 		else:
 			new_terrain = false
 			
 		var total_vertices:int = terrain_vertices.size() + additional_vertices
-		var ideal_spacing:float = viewport_bounds.size.x / total_vertices
+		var ideal_spacing:float = modification_bounds.size.x / total_vertices
 				
 		var vertices_remaining := additional_vertices
 				
@@ -114,6 +137,8 @@ func _modify_chunk(chunk: TerrainChunk, viewport_bounds: Rect2, _terrain_bounds:
 		
 		for i in terrain_vertices.size():
 			# Last vertex should be on bottom but add the additional bounds check
+			# TODO: only process vertex additionally if lies in bounds
+			# Make sure using viewport_bounds check doesn't cause regression in existing single full modification case
 			if not chunk.is_surface_point_global(terrain_vertices[i]) or i == terrain_vertices.size() - 1:
 				new_terrain_vertices.push_back(terrain_vertices[i])
 				continue
@@ -181,13 +206,13 @@ func _modify_chunk(chunk: TerrainChunk, viewport_bounds: Rect2, _terrain_bounds:
 	# Update final terrain
 	chunk.replace_contents(new_terrain_vertices)
 
-func _seed_terrain(terrain_vertices : PackedVector2Array, viewport_bounds: Rect2, count: int) -> void:
-	var bottom_y:float = viewport_bounds.position.y + viewport_bounds.size.y
+func _seed_terrain(terrain_vertices : PackedVector2Array, bounds: Rect2, count: int) -> void:
+	var bottom_y:float = bounds.position.y + bounds.size.y
 	var top_y:float = bottom_y - min_height_value
 	
 	# Half on top and half on the bottom in a rectangle
 	var half_count: int = floori(count / 2.0)
-	var stride: float = viewport_bounds.size.x / (half_count - 1)
+	var stride: float = bounds.size.x / (half_count - 1)
 	
 	var populate_side: Callable = func(x: float, y: float, dir: float):
 		var side_stride:float = dir * stride
@@ -195,7 +220,7 @@ func _seed_terrain(terrain_vertices : PackedVector2Array, viewport_bounds: Rect2
 			terrain_vertices.push_back(Vector2(x, y))
 			x += side_stride
 	
-	populate_side.call(viewport_bounds.position.x,  top_y, 1.0)
+	populate_side.call(bounds.position.x,  top_y, 1.0)
 	populate_side.call(terrain_vertices[-1].x, bottom_y, -1.0)
 	
 # Scale to [0,1] as noise is [-1,1]
