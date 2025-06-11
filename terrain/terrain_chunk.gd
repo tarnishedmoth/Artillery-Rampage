@@ -31,6 +31,7 @@ var outlineMesh: Line2D
 const surface_delta_y: float = 1.0
 
 var _can_be_updated:bool = true
+var _deferred_update:DeferredPolygonUpdateApplier
 
 var falling:bool = false:
 	set(value):
@@ -177,7 +178,6 @@ func _physics_process(delta: float) -> void:
 	global_position += _velocity * delta
 
 func _replace_contents_local(new_poly: PackedVector2Array, immediate:bool) -> void:
-	
 	print_poly("_replace_contents_local", new_poly)
 
 	var deferred_updates: Array[Node] = []
@@ -193,15 +193,53 @@ func _replace_contents_local(new_poly: PackedVector2Array, immediate:bool) -> vo
 	_set_polygon_deferred(deferred_updates, new_poly)
 
 func _set_polygon_deferred(polygon_nodes: Array[Node], new_poly: PackedVector2Array) -> void:
-	_can_be_updated = false
+	# Cancel previous requested update
+	if _deferred_update and not _deferred_update.finished:
+		_deferred_update.cancel()
+	_deferred_update = DeferredPolygonUpdateApplier.new(self, polygon_nodes, new_poly)
 
-	var deferred_updater: Callable = func():
+	_deferred_update.apply()
+
+class DeferredPolygonUpdateApplier:
+	var _is_applied:bool
+	var _canceled:bool
+
+	var parent:TerrainChunk
+	var polygon_nodes: Array[Node]
+	var new_poly: PackedVector2Array
+
+	var finished:bool:
+		get:
+			return _is_applied or _canceled
+
+	func _init(in_parent:TerrainChunk, in_polygon_nodes: Array[Node], in_new_poly: PackedVector2Array):
+		self.parent = in_parent
+		self.polygon_nodes = in_polygon_nodes
+		self.new_poly = in_new_poly
+
+	func apply() -> void:
+		parent._can_be_updated = false
+		_do_apply.call_deferred()
+	
+	func cancel() -> void:
+		if finished:
+			return
+
+		parent._can_be_updated = true
+		_canceled = true
+	
+	func _do_apply() -> void:
+		if _canceled:
+			return
+
 		for node in polygon_nodes:
 			node.polygon = new_poly
-		_can_be_updated = true
-		if outlineMeshEnabled : regenerate_outline_mesh()
+		
+		if parent.outlineMeshEnabled: 
+			parent.regenerate_outline_mesh()
 
-	deferred_updater.call_deferred()
+		parent._can_be_updated = true
+		_is_applied = true
 
 class UpdateFlags:
 	const Immediate:int = 1
@@ -241,9 +279,16 @@ func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global
 func get_terrain_global() -> PackedVector2Array:
 	# Transform terrain polygon to world space
 	var terrain_global_transform: Transform2D = terrainMesh.global_transform
-	return terrain_global_transform * terrainMesh.polygon
+	return terrain_global_transform * get_terrain_local()
 
 func get_terrain_local() -> PackedVector2Array:
+	# Return pending update poly if it exists
+	if _deferred_update:
+		if not _deferred_update.finished:
+			return _deferred_update.new_poly
+		else:
+			# Free memory for completed or canceled pending state
+			_deferred_update = null
 	return terrainMesh.polygon
 	
 func delete() -> void:
@@ -277,11 +322,11 @@ func _is_in_terrain(point_local: Vector2) -> bool:
 	return Geometry2D.is_point_in_polygon(point_local, get_terrain_local())
 
 func get_area() -> float:
-	return TerrainUtils.calculate_polygon_area(terrainMesh.polygon)
+	return TerrainUtils.calculate_polygon_area(get_terrain_local())
 
 # Sort by largest first
 func compare(other: TerrainChunk) -> bool:
-	return terrainMesh.polygon.size() > other.terrainMesh.polygon.size()
+	return get_terrain_local().size() > other.get_terrain_local().size()
 	
 func print_poly(context: String, poly: PackedVector2Array) -> void:
 	if !OS.is_debug_build():
