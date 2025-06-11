@@ -74,6 +74,18 @@ func _get_modification_bounds_global(full_bounds:Rect2) -> Rect2:
 	
 	return bounds
 
+func _vertex_in_bounds(vertex:Vector2) -> bool:
+	# Check if x coordinate in bounds if this modifier has a start x
+	if start_at:
+		#if vertex.x < bounds.position.x:
+		if vertex.x < start_at.global_position.x:
+			return false
+	if stop_at:
+		#if vertex.x > bounds.position.x + bounds.size.x:
+		if vertex.x > stop_at.global_position.x:
+			return false
+	return true
+
 func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bounds: Rect2) -> void:
 	var min_height := max_height_clearance
 	var max_height := modification_bounds.size.y - min_height_value
@@ -97,11 +109,11 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 	# First modify any existing points
 	for i in terrain_vertices.size():
 		var vertex := terrain_vertices[i]
-		# TODO: only process vertex if its x value lies in the bounds
 
 		# Only modify exterior vertices
-		if !chunk.is_surface_point_global(vertex):
+		if not _vertex_in_bounds(vertex) or not chunk.is_surface_point_global(vertex):
 			continue
+
 		var raw_height_fract := _sample_height_frac(vertex.x)
 
 		var new_height:float
@@ -136,14 +148,13 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 		new_terrain_vertices = []
 		
 		for i in terrain_vertices.size():
+			var prev_point:Vector2 = terrain_vertices[i]
+
 			# Last vertex should be on bottom but add the additional bounds check
-			# TODO: only process vertex additionally if lies in bounds
-			# Make sure using viewport_bounds check doesn't cause regression in existing single full modification case
-			if not chunk.is_surface_point_global(terrain_vertices[i]) or i == terrain_vertices.size() - 1:
-				new_terrain_vertices.push_back(terrain_vertices[i])
+			if not _vertex_in_bounds(prev_point) or not chunk.is_surface_point_global(prev_point) or i == terrain_vertices.size() - 1:
+				new_terrain_vertices.push_back(prev_point)
 				continue
 			 			
-			var prev_point:Vector2 = terrain_vertices[i]
 			var next_point:Vector2 = terrain_vertices[i + 1]
 				
 			var total_to_add:int = mini(
