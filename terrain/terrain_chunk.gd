@@ -193,24 +193,15 @@ func _replace_contents_local(new_poly: PackedVector2Array, immediate:bool) -> vo
 	_set_polygon_deferred(deferred_updates, new_poly)
 
 func _set_polygon_deferred(polygon_nodes: Array[Node], new_poly: PackedVector2Array) -> void:
-	# Cancel previous requested update
-	if _deferred_update and not _deferred_update.finished:
-		_deferred_update.cancel()
+	# Cancel previous requested update by overwriting it which will free the previous ref counted instance and cancel any pending cals
 	_deferred_update = DeferredPolygonUpdateApplier.new(self, polygon_nodes, new_poly)
-
 	_deferred_update.apply()
 
 class DeferredPolygonUpdateApplier:
-	var _is_applied:bool
-	var _canceled:bool
-
+	var is_applied:bool
 	var parent:TerrainChunk
 	var polygon_nodes: Array[Node]
 	var new_poly: PackedVector2Array
-
-	var finished:bool:
-		get:
-			return _is_applied or _canceled
 
 	func _init(in_parent:TerrainChunk, in_polygon_nodes: Array[Node], in_new_poly: PackedVector2Array):
 		self.parent = in_parent
@@ -221,17 +212,7 @@ class DeferredPolygonUpdateApplier:
 		parent._can_be_updated = false
 		_do_apply.call_deferred()
 	
-	func cancel() -> void:
-		if finished:
-			return
-
-		parent._can_be_updated = true
-		_canceled = true
-	
 	func _do_apply() -> void:
-		if _canceled:
-			return
-
 		for node in polygon_nodes:
 			node.polygon = new_poly
 		
@@ -239,7 +220,7 @@ class DeferredPolygonUpdateApplier:
 			parent.regenerate_outline_mesh()
 
 		parent._can_be_updated = true
-		_is_applied = true
+		is_applied = true
 
 class UpdateFlags:
 	const Immediate:int = 1
@@ -284,10 +265,10 @@ func get_terrain_global() -> PackedVector2Array:
 func get_terrain_local() -> PackedVector2Array:
 	# Return pending update poly if it exists
 	if _deferred_update:
-		if not _deferred_update.finished:
+		if not _deferred_update.is_applied:
 			return _deferred_update.new_poly
 		else:
-			# Free memory for completed or canceled pending state
+			# Free memory lazily for completed state
 			_deferred_update = null
 	return terrainMesh.polygon
 	
