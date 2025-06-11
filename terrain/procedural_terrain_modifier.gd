@@ -9,29 +9,36 @@ class_name ProceduralTerrainModifier extends Node2D
 @export var stop_at:Node2D 
 
 @export_category("Generation")
+## Specify additional vertices to add evenly between the modification bounds
 @export_range(0, 1000) var additional_vertices:int = 0
 # TODO: May want to have a parameter for vertex density
 
 @export_category("Generation")
+## Set to true to completely replace existing height data in terrain and re-generate within min and max values.
 @export var replace_existing_heights:bool = false
 
+@export_category("Generation")
 ## Controls how far up from the current height we will deviate
 ## Should be negative to raise the terrain up
-@export_category("Generation")
 @export_range(-1,1,0.001) var height_win_size_min_variation:float = -0.1
 
+
+@export_category("Generation")
 ## Controls how far down from the current height we will deviate
 ## Should be positive to push the terrain down
-@export_category("Generation")
 @export_range(-1,1,0.001) var height_win_size_max_variation:float = 0.1
 
 @export_category("Generation")
+## Minimum height value from bottom of terrain value for min terrain height
 @export_range(0,100,0.01) var min_height_value:float = 20
 
 @export_category("Generation")
+## Minimum height value from top of viewport for max terrain height
 @export_range(0,1000,0.01) var max_height_clearance:float = 50
 
 @export_category("Generation")
+## Consistency in spacing of new terrain points.  Set to 1 for equal placement
+## and a lower value for a more random distribution.
 @export_range(0.1, 1, 0.01) var consistency:float = 0.5
 
 var _noise: FastNoiseLite
@@ -59,19 +66,17 @@ func _modify_terrain():
 			_modify_chunk(terrain_chunk, terrain_bounds, modification_bounds)
 
 func _get_modification_bounds_global(full_bounds:Rect2) -> Rect2:
-	var bounds:Rect2 = Rect2()
+	var bounds:Rect2 = full_bounds
 	if start_at:
 		bounds.position.x = start_at.global_position.x
-		if stop_at:
-			bounds.size.x = stop_at.global_position.x - bounds.position.x
-		else: # Extend to the viewport
-			bounds.size.x = full_bounds.size.x - (bounds.size.x - full_bounds.position.x)
-		# Y position and size is same as full_bounds
-		bounds.position.y = full_bounds.position.y
-		bounds.size.y = full_bounds.size.y
-	else:
-		bounds = full_bounds
-	
+	#else we start at the default position
+
+	if stop_at:
+		bounds.size.x = stop_at.global_position.x - bounds.position.x
+	elif start_at: # Extend to the viewport
+		bounds.size.x = full_bounds.size.x - (bounds.position.x - full_bounds.position.x)
+	# Y position and size is same as full_bounds
+
 	return bounds
 
 func _vertex_in_bounds(vertex:Vector2) -> bool:

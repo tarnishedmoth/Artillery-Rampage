@@ -14,15 +14,48 @@
 [node name="TestLevelProcGen" type="Node2D"]
 
 [node name="GameLevel" parent="." instance=ExtResource("1_e1yfj")]
+metadata/_edit_lock_ = true
+
+[node name="Background" parent="GameLevel" index="2"]
+metadata/_edit_lock_ = true
+
+[node name="Terrain" parent="GameLevel" index="3"]
+metadata/_edit_lock_ = true
+
+[node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
+metadata/_edit_lock_ = true
 
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
 polygon = PackedVector2Array()
 
-[node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("2_1qrbf")]
+[node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" node_paths=PackedStringArray("stop_at") instance=ExtResource("2_1qrbf")]
+stop_at = NodePath("End")
 additional_vertices = 100
 replace_existing_heights = true
 height_win_size_min_variation = -0.185
 height_win_size_max_variation = 0.18
+
+[node name="End" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier"]
+position = Vector2(566.406, 63.2353)
+
+[node name="ProceduralTerrainModifier2" parent="GameLevel/Terrain" index="2" node_paths=PackedStringArray("start_at") instance=ExtResource("2_1qrbf")]
+start_at = NodePath("Start")
+additional_vertices = 100
+replace_existing_heights = true
+height_win_size_min_variation = -0.4
+height_win_size_max_variation = 0.4
+consistency = 0.25
+
+[node name="Start" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier2"]
+position = Vector2(565.625, 8.82353)
+
+[node name="Walls" parent="GameLevel" index="4"]
+visible = false
+metadata/_edit_lock_ = true
+
+[node name="Floor" parent="GameLevel" index="5"]
+visible = false
+metadata/_edit_lock_ = true
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
 artillery_ai_types = Array[PackedScene]([ExtResource("3_luu03"), ExtResource("4_14i3r"), ExtResource("5_tnrs6"), ExtResource("6_ph5v2"), ExtResource("7_c3x50"), ExtResource("8_kgcot"), ExtResource("9_x8adl"), ExtResource("10_bxbra")])

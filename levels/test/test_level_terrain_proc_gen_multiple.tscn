@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cnxobxa6cybr7"]
+[gd_scene load_steps=12 format=3 uid="uid://cnxobxa6cybr7"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_gfn4v"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="2_b1mmj"]
@@ -11,20 +11,61 @@
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="9_lttpk"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="10_vlmy8"]
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_gfn4v"]
+seed = 8998234
+frequency = 0.1
+
 [node name="TestLevelProcGen" type="Node2D"]
 
 [node name="GameLevel" parent="." instance=ExtResource("1_gfn4v")]
+metadata/_edit_lock_ = true
+
+[node name="Background" parent="GameLevel" index="2"]
+metadata/_edit_lock_ = true
+
+[node name="Terrain" parent="GameLevel" index="3"]
+metadata/_edit_lock_ = true
 
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
 polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 195.313, 152.941, 204.688, 5.88232, 245.313, -1.47058, 272.656, -119.118, 277.344, -264.706, 352.344, -272.059, 405.469, -322.059, 475, -4.41174, 609, -8, 624.219, -161.765, 714.063, -155.882, 783.594, 127.941, 852.344, 130.882, 903.125, 138.235, 905.458, -3.48077, 937, -3, 945, 445, -103, 448)
 
-[node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("2_b1mmj")]
+[node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" node_paths=PackedStringArray("start_at", "stop_at") instance=ExtResource("2_b1mmj")]
+start_at = NodePath("Start")
+stop_at = NodePath("End")
 additional_vertices = 100
 height_win_size_min_variation = -0.15
 height_win_size_max_variation = 0.15
+metadata/_edit_lock_ = true
+
+[node name="Start" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier"]
+position = Vector2(27.3438, -41.1765)
+
+[node name="End" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier"]
+position = Vector2(472.656, -2.94117)
+
+[node name="ProceduralTerrainModifier2" parent="GameLevel/Terrain" index="2" node_paths=PackedStringArray("start_at") instance=ExtResource("2_b1mmj")]
+noise_template = SubResource("FastNoiseLite_gfn4v")
+start_at = NodePath("Start")
+additional_vertices = 50
+height_win_size_min_variation = -0.3
+height_win_size_max_variation = 0.3
+consistency = 0.25
+
+[node name="Start" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier2"]
+position = Vector2(597.656, -25)
+
+[node name="End" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier2"]
+position = Vector2(472.656, -2.94117)
+
+[node name="Walls" parent="GameLevel" index="4"]
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" parent="GameLevel/Walls/PlayableArea" index="0"]
+visible = false
 
 [node name="Floor" parent="GameLevel" index="5"]
 visible = false
+metadata/_edit_lock_ = true
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
 artillery_ai_types = Array[PackedScene]([ExtResource("3_42kpg"), ExtResource("4_m1k0x"), ExtResource("5_ox1j4"), ExtResource("6_xgrr2"), ExtResource("7_4y2cs"), ExtResource("8_1tbg5"), ExtResource("9_lttpk"), ExtResource("10_vlmy8")])
