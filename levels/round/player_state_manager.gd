@@ -38,9 +38,9 @@ func _disconnect_events() -> void:
 		GameEvents.level_loaded.disconnect(_on_level_loaded)
 
 	if is_instance_valid(player):
-		if player.tank.tank_killed.is_connected(_on_player_killed):
-			player.tank.tank_killed.disconnect(_on_player_killed)
-		if not player.get_parent():
+		if player.player_killed.is_connected(_on_player_killed):
+			player.player_killed.disconnect(_on_player_killed)
+		if not player.is_inside_tree():
 			# This means that duplicate/removed child node was never added to tree so we need to manually free
 			player.queue_free()
 		player = null
@@ -57,7 +57,7 @@ func _on_player_added(p_player: TankController) -> void:
 		return
 	player = p_player
 
-	player.tank.tank_killed.connect(_on_player_killed)
+	player.player_killed.connect(_on_player_killed)
 	if not player_state:
 		print_debug("%s - no player state, skipping" % [name])
 		return
@@ -71,9 +71,8 @@ func _on_round_ended() -> void:
 	# Will become invalid when the instance is destroyed by the current SceneTree
 	player = null
 	
-func _on_player_killed(_tank: Tank, _instigatorController: Node2D, _instigator: Node2D) -> void:
-	if _instigatorController == player:
-		_snapshot_player_state(false)
+func _on_player_killed(_player:Player) -> void:
+	_snapshot_player_state(false)
 
 func _snapshot_player_state(include_curr_health:bool) -> void:
 	if not player:

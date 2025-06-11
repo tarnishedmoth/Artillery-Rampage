@@ -82,7 +82,7 @@ func _create_procedural_units():
 		
 func connect_events(controller: TankController) -> void:
 	if controller is Player:
-		controller.connect("player_killed", _on_player_killed)
+		controller.player_killed.connect(_on_player_killed)
 		
 func make_container_node() -> Node2D:
 	var container = Node2D.new()

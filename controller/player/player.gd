@@ -111,7 +111,7 @@ func load_new_upgrade(upgrade:ModBundle) -> void:
 func _on_tank_tank_killed(tank_unit: Tank, instigatorController: Node2D, instigator: Node2D) -> void:
 	# player tank killed
 	tank_unit.kill()
-	emit_signal("player_killed", self)
+	player_killed.emit(self)
 
 func _on_acquired_upgrade(bundle: ModBundle) -> void:
 	load_new_upgrade(bundle)
