@@ -1,14 +1,15 @@
-[gd_scene load_steps=18 format=3 uid="uid://dvr6bm2hlj5h4"]
+[gd_scene load_steps=19 format=3 uid="uid://dvr6bm2hlj5h4"]
 
 [ext_resource type="Script" uid="uid://capm81lvak2c3" path="res://tank/tank.gd" id="1_0iy80"]
 [ext_resource type="Script" uid="uid://iirywjtssovs" path="res://tank/tank_body.gd" id="2_o5qn2"]
 [ext_resource type="PackedScene" uid="uid://bfovdi5eowpoe" path="res://items/collectible_item.tscn" id="2_qlwk0"]
 [ext_resource type="Curve" uid="uid://jlsv4hedfkw7" path="res://tank/max_power_v_health.tres" id="3_6i2oc"]
-[ext_resource type="Texture2D" uid="uid://banqgk8hu7ykt" path="res://tank/tank_placeholder_texture.tres" id="3_t17rk"]
 [ext_resource type="Curve" uid="uid://b18ca2qbmkjvy" path="res://tank/aim_deviation_v_health.tres" id="4_cvubm"]
 [ext_resource type="Material" uid="uid://b80y1iuls3wmg" path="res://tank/tank_damage.tres" id="5_16yu1"]
+[ext_resource type="Texture2D" uid="uid://m7e1fhio7k6v" path="res://tank/artillery-base.png" id="7_dewsc"]
 [ext_resource type="PackedScene" uid="uid://8ypb526keg0k" path="res://weapons/weapon_trajectory_previewer.tscn" id="7_hqpr6"]
 [ext_resource type="Script" uid="uid://cu7a4bvlikg2j" path="res://tank/fall_damage_causer.gd" id="8_5poe7"]
+[ext_resource type="Texture2D" uid="uid://bifkhqeyaoopt" path="res://tank/artillery-turret.png" id="8_73k0t"]
 [ext_resource type="PackedScene" uid="uid://eqdcshl1me76" path="res://effects/smoke_particles.tscn" id="8_adwvx"]
 [ext_resource type="PackedScene" uid="uid://c2yvcwfpdhnvx" path="res://weapons/weapon_beam_trajectory_previewer.tscn" id="9_ucdxg"]
 [ext_resource type="Script" uid="uid://bybxweqiag1x8" path="res://items/weapon_projectiles/explosions/emp_discharger.gd" id="12_0knov"]
@@ -46,8 +47,8 @@ script = ExtResource("2_o5qn2")
 
 [node name="TankBodySprite" type="Sprite2D" parent="TankBody"]
 use_parent_material = true
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("3_t17rk")
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("7_dewsc")
 
 [node name="TankBodyCollision" type="CollisionShape2D" parent="TankBody"]
 shape = SubResource("RectangleShape2D_qqqyu")
@@ -61,8 +62,8 @@ collision_mask = 15
 [node name="TurretSprite" type="Sprite2D" parent="TankBody/TankTurret"]
 use_parent_material = true
 position = Vector2(0.2, -10.88)
-scale = Vector2(0.05, 0.246875)
-texture = ExtResource("3_t17rk")
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("8_73k0t")
 
 [node name="TurretCollision" type="CollisionShape2D" parent="TankBody/TankTurret"]
 position = Vector2(0.2, -11.28)
