@@ -172,6 +172,8 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 				
 		new_terrain_vertices = []
 		
+		var last_added_index:int = -1
+		
 		for i in first_non_surface_index:
 			var curr_point:Vector2 = terrain_vertices[i]
 			var curr_point_in_bounds:bool = _vertex_in_bounds(curr_point)
@@ -181,6 +183,7 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 			var next_point_in_bounds:bool = _vertex_in_bounds(next_point)	
 
 			if not curr_point_in_bounds:
+				last_added_index = i
 				new_terrain_vertices.push_back(curr_point)
 				
 				# Interpolate point at start boundary
@@ -202,7 +205,8 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 			# Set y to be same height as previous by default unless empty
 			if not new_terrain_vertices.is_empty():
 				curr_point.y = new_terrain_vertices[-1].y
-				
+			
+			last_added_index = i	
 			new_terrain_vertices.push_back(curr_point)
 						
 			var direction:float = signf(next_point.x - curr_point.x)
@@ -242,9 +246,6 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 				else:
 					last_point = new_point
 			# end for total_to_add
-			
-			#if next_point_not_in_bounds:
-			#	new_terrain_vertices.push_back(next_point)
 				
 			vertices_remaining -= added_count
 			
@@ -255,8 +256,12 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 				break
 		# end for all terrain_vertices
 
-		# Add in the non surface points
-		for i in range(first_non_surface_index, terrain_vertices.size()):
+		# Add in the non surface points and any unprocessed original points
+		for i in range(mini(last_added_index + 1,first_non_surface_index), terrain_vertices.size()):
+			# Smooth out final section of unprocessed points to have same height as last processed one
+			# if i is 0 that means nothing was added and new_terrain_verticse would be empty and we skip that case too
+			if i < first_non_surface_index and i > 0 and start_at and not stop_at:
+				terrain_vertices[i].y = new_terrain_vertices[-1].y
 			new_terrain_vertices.push_back(terrain_vertices[i])
 	else:
 		new_terrain_vertices = terrain_vertices
