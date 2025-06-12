@@ -201,12 +201,8 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 			if total_to_add == 0:
 				print_debug("ProceduralTerrainModifier(%s): chunk=%s; vertex[%d]=%s- total_to_add=0" % [name, chunk.name, i, str(curr_point)])
 				continue
-							
-			# Set y to be same height as previous by default unless empty
-			if not new_terrain_vertices.is_empty():
-				curr_point.y = new_terrain_vertices[-1].y
 			
-			last_added_index = i	
+			last_added_index = i
 			new_terrain_vertices.push_back(curr_point)
 						
 			var direction:float = signf(next_point.x - curr_point.x)
