@@ -19,22 +19,22 @@ class_name ProceduralTerrainModifier extends Node2D
 
 @export_category("Generation")
 ## Controls how far up from the current height we will deviate
-## Should be negative to raise the terrain up
+## Should be negative to raise the terrain up [-1,1]
 @export_range(-1,1,0.001) var height_win_size_min_variation:float = -0.1
 
 
 @export_category("Generation")
 ## Controls how far down from the current height we will deviate
-## Should be positive to push the terrain down
+## Should be positive to push the terrain down [-1,1]
 @export_range(-1,1,0.001) var height_win_size_max_variation:float = 0.1
 
 @export_category("Generation")
 ## Minimum height value from bottom of terrain value for min terrain height
-@export_range(0,100,0.01) var min_height_value:float = 20
+@export_range(0,600,0.01) var min_height_value:float = 20
 
 @export_category("Generation")
 ## Minimum height value from top of viewport for max terrain height
-@export_range(0,1000,0.01) var max_height_clearance:float = 50
+@export_range(0,700,0.01) var max_height_clearance:float = 50
 
 @export_category("Generation")
 ## Consistency in spacing of new terrain points.  Set to 1 for equal placement
@@ -173,48 +173,46 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 		new_terrain_vertices = []
 		
 		for i in first_non_surface_index:
-			var last_point:Vector2 = terrain_vertices[i]
-			var last_point_in_bounds:bool = _vertex_in_bounds(last_point)
+			var curr_point:Vector2 = terrain_vertices[i]
+			var curr_point_in_bounds:bool = _vertex_in_bounds(curr_point)
 
 			# Guaranteed to be at least one more point since we stop at the interior vertices
 			var next_point:Vector2 = terrain_vertices[i + 1]
 			var next_point_in_bounds:bool = _vertex_in_bounds(next_point)	
 
-			if not last_point_in_bounds:
-				new_terrain_vertices.push_back(last_point)
+			if not curr_point_in_bounds:
+				new_terrain_vertices.push_back(curr_point)
 				
 				# Interpolate point at start boundary
 				if next_point_in_bounds:
-					last_point = _get_interpolated_start_point(last_point, next_point, modification_bounds)
+					curr_point = _get_interpolated_start_point(curr_point, next_point, modification_bounds)
 				else:
 					continue
 
-			# TODO: Issue is with fresh terrain and we have a start constraint, we may only match the last vertex and so nothing generated
-			# Extract below to a function so can create a new lerped point and add it to terrain		
-			# Issue here is that we need to clamp next_point to the bounds
-			# If we need to add a new point to do this then it will be the last iteration that adds points
 			if not next_point_in_bounds:
-				next_point = _get_interpolated_end_point(last_point, next_point, modification_bounds)
+				next_point = _get_interpolated_end_point(curr_point, next_point, modification_bounds)
 				
 			var total_to_add:int = mini(
-				int(next_point.distance_to(last_point) / ideal_spacing), vertices_remaining)
+				int(next_point.distance_to(curr_point) / ideal_spacing), vertices_remaining)
 			
 			if total_to_add == 0:
+				print_debug("ProceduralTerrainModifier(%s): chunk=%s; vertex[%d]=%s- total_to_add=0" % [name, chunk.name, i, str(curr_point)])
 				continue
 							
 			# Set y to be same height as previous by default unless empty
 			if not new_terrain_vertices.is_empty():
-				last_point.y = new_terrain_vertices[-1].y
+				curr_point.y = new_terrain_vertices[-1].y
 				
-			new_terrain_vertices.push_back(last_point)
+			new_terrain_vertices.push_back(curr_point)
 						
-			var direction:float = signf(next_point.x - last_point.x)
-			var ideal_height_inc: float = (next_point.y - last_point.y) / total_to_add
-			var min_x = minf(last_point.x, next_point.x)
-			var max_x = maxf(last_point.x, next_point.x)
+			var direction:float = signf(next_point.x - curr_point.x)
+			var ideal_height_inc: float = (next_point.y - curr_point.y) / total_to_add
+			var min_x = minf(curr_point.x, next_point.x)
+			var max_x = maxf(curr_point.x, next_point.x)
 			
 			var added_count:int = 0
-
+			var last_point:Vector2 = curr_point
+			
 			for j in total_to_add:
 				var x:float = last_point.x + direction * randf_range(ideal_spacing * consistency, ideal_spacing / consistency)
 				if x <= min_x or x >= max_x:
@@ -249,6 +247,10 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 			#	new_terrain_vertices.push_back(next_point)
 				
 			vertices_remaining -= added_count
+			
+			print_debug("ProceduralTerrainModifier(%s): chunk=%s; vertex[%d]=%s->%s- total_to_add=%d; added_count=%d; vertices_remaining=%d" \
+				% [name, chunk.name, i,  str(curr_point), str(next_point), total_to_add, added_count, vertices_remaining])
+
 			if vertices_remaining <= 0:
 				break
 		# end for all terrain_vertices

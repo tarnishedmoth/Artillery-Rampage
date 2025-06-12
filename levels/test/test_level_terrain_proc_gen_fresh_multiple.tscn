@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://co4ts4wumxclb"]
+[gd_scene load_steps=14 format=3 uid="uid://co4ts4wumxclb"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_e1yfj"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="2_1qrbf"]
@@ -10,6 +10,17 @@
 [ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="8_kgcot"]
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="9_x8adl"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="10_bxbra"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_e1yfj"]
+frequency = 0.005
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_1qrbf"]
+frequency = 0.0075
+fractal_lacunarity = 2.685
+fractal_gain = 0.77
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_luu03"]
+frequency = 0.03
 
 [node name="TestLevelProcGen" type="Node2D"]
 
@@ -29,25 +40,47 @@ metadata/_edit_lock_ = true
 polygon = PackedVector2Array()
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" node_paths=PackedStringArray("stop_at") instance=ExtResource("2_1qrbf")]
+noise_template = SubResource("FastNoiseLite_e1yfj")
 stop_at = NodePath("End")
 additional_vertices = 100
 replace_existing_heights = true
-height_win_size_min_variation = -0.185
-height_win_size_max_variation = 0.18
+height_win_size_min_variation = -0.05
+height_win_size_max_variation = 0.05
+max_height_clearance = 500.0
 
 [node name="End" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier"]
-position = Vector2(542.969, 63.2353)
+position = Vector2(330.469, 66.1765)
 
-[node name="ProceduralTerrainModifier2" parent="GameLevel/Terrain" index="2" node_paths=PackedStringArray("start_at") instance=ExtResource("2_1qrbf")]
+[node name="ProceduralTerrainModifier2" parent="GameLevel/Terrain" index="2" node_paths=PackedStringArray("start_at", "stop_at") instance=ExtResource("2_1qrbf")]
+noise_template = SubResource("FastNoiseLite_1qrbf")
+start_at = NodePath("Start")
+stop_at = NodePath("End")
+additional_vertices = 100
+replace_existing_heights = true
+height_win_size_min_variation = -0.075
+height_win_size_max_variation = 0.075
+min_height_value = 100.0
+max_height_clearance = 350.0
+
+[node name="Start" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier2"]
+position = Vector2(318.75, 14.7059)
+
+[node name="End" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier2"]
+position = Vector2(590.625, 61.7647)
+
+[node name="ProceduralTerrainModifier3" parent="GameLevel/Terrain" index="3" node_paths=PackedStringArray("start_at") instance=ExtResource("2_1qrbf")]
+noise_template = SubResource("FastNoiseLite_luu03")
 start_at = NodePath("Start")
 additional_vertices = 100
 replace_existing_heights = true
-height_win_size_min_variation = -0.4
-height_win_size_max_variation = 0.4
+height_win_size_min_variation = -0.8
+height_win_size_max_variation = 0.0
+min_height_value = 200.0
+max_height_clearance = 200.0
 consistency = 0.25
 
-[node name="Start" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier2"]
-position = Vector2(565.625, 8.82353)
+[node name="Start" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier3"]
+position = Vector2(546.875, 13.2353)
 
 [node name="Walls" parent="GameLevel" index="4"]
 visible = false
