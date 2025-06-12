@@ -36,7 +36,7 @@ height_win_size_min_variation = -0.185
 height_win_size_max_variation = 0.18
 
 [node name="End" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier"]
-position = Vector2(566.406, 63.2353)
+position = Vector2(542.969, 63.2353)
 
 [node name="ProceduralTerrainModifier2" parent="GameLevel/Terrain" index="2" node_paths=PackedStringArray("start_at") instance=ExtResource("2_1qrbf")]
 start_at = NodePath("Start")

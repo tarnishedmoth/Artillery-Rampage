@@ -91,6 +91,20 @@ func _vertex_in_bounds(vertex:Vector2) -> bool:
 			return false
 	return true
 
+func _get_interpolated_start_point(prev_point:Vector2, _next_point:Vector2, modification_bounds:Rect2) -> Vector2:
+	var clamped_prev_point:Vector2
+	clamped_prev_point.x = modification_bounds.position.x
+	# We end up just overwriting the y
+	clamped_prev_point.y = prev_point.y
+	#clamped_prev_point.y = lerpf(prev_point.y, next_point.y, (clamped_prev_point.x - prev_point.x) / (next_point.x - prev_point.x))
+	return clamped_prev_point
+
+func _get_interpolated_end_point(prev_point:Vector2, next_point:Vector2, modification_bounds:Rect2) -> Vector2:
+	var clamped_next_point:Vector2
+	clamped_next_point.x = modification_bounds.position.x + modification_bounds.size.x
+	clamped_next_point.y = lerpf(prev_point.y, next_point.y, (clamped_next_point.x - prev_point.x) / (next_point.x - prev_point.x))
+	return clamped_next_point
+		
 func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bounds: Rect2) -> void:
 	var min_height := max_height_clearance
 	var max_height := modification_bounds.size.y - min_height_value
@@ -111,12 +125,14 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 		max_variation
 	])
 	
+	var first_non_surface_index:int = _get_first_non_surface_index(chunk, terrain_vertices)
+
 	# First modify any existing points
-	for i in terrain_vertices.size():
+	for i in first_non_surface_index:
 		var vertex := terrain_vertices[i]
 
 		# Only modify exterior vertices
-		if not _vertex_in_bounds(vertex) or not chunk.is_surface_point_global(vertex):
+		if not _vertex_in_bounds(vertex):
 			continue
 
 		var raw_height_fract := _sample_height_frac(vertex.x)
@@ -140,8 +156,12 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 		if terrain_vertices.is_empty():
 			new_terrain = true
 			_seed_terrain(terrain_vertices, terrain_bounds, 4)
+			assert(not terrain_vertices.is_empty(), "Seed Terrain did not add any vertices")
 			# HACK:
 			chunk.replace_contents(terrain_vertices, [], TerrainChunk.UpdateFlags.Immediate)
+
+			# Need to recompute first non surface index
+			first_non_surface_index = _get_first_non_surface_index(chunk, terrain_vertices)
 		else:
 			new_terrain = false
 			
@@ -152,27 +172,40 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 				
 		new_terrain_vertices = []
 		
-		for i in terrain_vertices.size():
-			var prev_point:Vector2 = terrain_vertices[i]
+		for i in first_non_surface_index:
+			var last_point:Vector2 = terrain_vertices[i]
+			var last_point_in_bounds:bool = _vertex_in_bounds(last_point)
 
-			# Last vertex should be on bottom but add the additional bounds check
-			if not _vertex_in_bounds(prev_point) or not chunk.is_surface_point_global(prev_point) or i == terrain_vertices.size() - 1:
-				new_terrain_vertices.push_back(prev_point)
-				continue
-			 			
+			# Guaranteed to be at least one more point since we stop at the interior vertices
 			var next_point:Vector2 = terrain_vertices[i + 1]
+			var next_point_in_bounds:bool = _vertex_in_bounds(next_point)	
+
+			if not last_point_in_bounds:
+				new_terrain_vertices.push_back(last_point)
+				
+				# Interpolate point at start boundary
+				if next_point_in_bounds:
+					last_point = _get_interpolated_start_point(last_point, next_point, modification_bounds)
+				else:
+					continue
+
+			# TODO: Issue is with fresh terrain and we have a start constraint, we may only match the last vertex and so nothing generated
+			# Extract below to a function so can create a new lerped point and add it to terrain		
+			# Issue here is that we need to clamp next_point to the bounds
+			# If we need to add a new point to do this then it will be the last iteration that adds points
+			if not next_point_in_bounds:
+				next_point = _get_interpolated_end_point(last_point, next_point, modification_bounds)
 				
 			var total_to_add:int = mini(
-				int(next_point.distance_to(prev_point) / ideal_spacing), vertices_remaining)
+				int(next_point.distance_to(last_point) / ideal_spacing), vertices_remaining)
 			
 			if total_to_add == 0:
 				continue
-				
-			var last_point:Vector2 = prev_point
-			
+							
 			# Set y to be same height as previous by default unless empty
 			if not new_terrain_vertices.is_empty():
 				last_point.y = new_terrain_vertices[-1].y
+				
 			new_terrain_vertices.push_back(last_point)
 						
 			var direction:float = signf(next_point.x - last_point.x)
@@ -212,15 +245,33 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 					last_point = new_point
 			# end for total_to_add
 			
+			#if next_point_not_in_bounds:
+			#	new_terrain_vertices.push_back(next_point)
+				
 			vertices_remaining -= added_count
 			if vertices_remaining <= 0:
 				break
 		# end for all terrain_vertices
+
+		# Add in the non surface points
+		for i in range(first_non_surface_index, terrain_vertices.size()):
+			new_terrain_vertices.push_back(terrain_vertices[i])
 	else:
 		new_terrain_vertices = terrain_vertices
 	
 	# Update final terrain
 	chunk.replace_contents(new_terrain_vertices)
+
+func _get_first_non_surface_index(chunk: TerrainChunk, terrain_vertices: PackedVector2Array):
+	# Because of winding order find the first vertex that is not on the surface and that starts the interior sequence
+	var first_non_surface_index:int = terrain_vertices.size()
+	# First point is the edge which is sometimes considered a non surface point but we want to get to the right
+	for i in range(1, terrain_vertices.size()):
+		var vertex:Vector2 = terrain_vertices[i]
+		if not chunk.is_surface_point_global(vertex):
+			first_non_surface_index = i
+			break
+	return first_non_surface_index
 
 func _seed_terrain(terrain_vertices : PackedVector2Array, bounds: Rect2, count: int) -> void:
 	var bottom_y:float = bounds.position.y + bounds.size.y
