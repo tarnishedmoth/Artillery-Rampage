@@ -26,6 +26,7 @@ size = Vector2(26, 26)
 size = Vector2(6, 30.8)
 
 [node name="Tank" type="Node2D" node_paths=PackedStringArray("shooting_trajectory_indicator", "beam_trajectory_indicator") groups=["Damageable", "DamageableRoot", "Unit"]]
+texture_filter = 6
 script = ExtResource("1_0iy80")
 drop_on_death = ExtResource("2_qlwk0")
 shooting_trajectory_indicator = NodePath("WeaponTrajectoryPreviewer")
