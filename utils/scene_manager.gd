@@ -60,6 +60,7 @@ var play_mode:PlayMode:
 	get: return play_mode
 
 const new_story_selected:StringName = &"NewStory"
+const continue_story_selected:StringName = &"ContinueStory"
 
 var current_scene:Node = null:
 	get: return current_scene if current_scene else get_tree().current_scene

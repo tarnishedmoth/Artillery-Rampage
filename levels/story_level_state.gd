@@ -62,9 +62,12 @@ func restore_from_save_state(save: SaveState) -> void:
 	if not _dirty:
 		_restore_story_level_state(save)
 
+	# Only restore on continue state
 	if _requires_restore:
-		print_debug("%s: set story level index=%d" % [name, _last_completed_level])
-		SceneManager.set_story_level_index(_last_completed_level)
+		# Make sure only do this really once from continue story
+		if SaveStateManager.consume_state_flag(SceneManager.continue_story_selected, SAVE_STATE_KEY):
+			print_debug("%s: set story level index=%d" % [name, _last_completed_level])
+			SceneManager.set_story_level_index(_last_completed_level)
 		_requires_restore = false
 
 func update_save_state(save:SaveState) -> void:

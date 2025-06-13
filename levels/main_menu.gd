@@ -122,4 +122,7 @@ func _on_continue_story_pressed() -> void:
 		
 	PlayerStateManager.enable = true
 	SceneManager.play_mode = SceneManager.PlayMode.STORY
-	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap, 0.0)
+
+	SaveStateManager.add_state_flag(SceneManager.continue_story_selected)
+	await SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap, 0.0)
+	SaveStateManager.remove_state_flag(SceneManager.continue_story_selected)
