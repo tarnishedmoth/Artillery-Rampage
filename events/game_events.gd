@@ -19,6 +19,8 @@ signal round_ended()
 ## Called when the game level is ready but before players and procedural spawning occurs
 signal level_loaded(level: GameLevel)
 
+signal story_level_changed(index:int)
+
 ## Called right before a scene is freed when the scenes are being switched
 signal scene_leaving(scene: Node)
 ## Called when a new root scene is instantiated but before it is added to the tree

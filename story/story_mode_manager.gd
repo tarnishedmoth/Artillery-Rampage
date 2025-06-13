@@ -19,6 +19,9 @@ var story_mode_level_modifiers_scene:PackedScene
 @export
 var story_level_state_scene:PackedScene
 
+var _story_level_state:Node
+var _story_level_state_added:bool
+
 func _ready() -> void:
 	# Only connect if enable the story mode level modifiers
 	if not story_mode_level_modifiers_scene:
@@ -26,17 +29,29 @@ func _ready() -> void:
 
 	GameEvents.scene_switched.connect(_on_scene_switched)
 
+func _exit_tree() -> void:
+	if is_instance_valid(_story_level_state):
+		_story_level_state.queue_free()
+		
 func _on_scene_switched(new_scene: Node) -> void:
 	# Skip if not in story mode
 	if SceneManager.play_mode != SceneManager.PlayMode.STORY:
+		_remove_story_state()
 		return
 
 	# Make sure this is a game level and not some other kind of UI screen
 	var game_level: GameLevel = _get_game_level(new_scene)
 	if not game_level:
 		# Still add a story level state so that state is initialized properly
-		add_child(story_level_state_scene.instantiate())
+		if not _story_level_state_added:
+			if not is_instance_valid(_story_level_state):
+				_story_level_state = story_level_state_scene.instantiate()
+			add_child(_story_level_state)
+			_story_level_state_added = true
 		return
+	# Remove from the story mode manager tree since it will be added to the game level
+	else:
+		_remove_story_state()
 	
 	# First add story level state
 	game_level.add_child(story_level_state_scene.instantiate())
@@ -45,6 +60,11 @@ func _on_scene_switched(new_scene: Node) -> void:
 
 	var story_mode_level_modifiers:Node = story_mode_level_modifiers_scene.instantiate()
 	game_level.add_child(story_mode_level_modifiers)
+
+func _remove_story_state() -> void:
+	if _story_level_state_added:
+		remove_child(_story_level_state)
+		_story_level_state_added = false
 
 func _get_game_level(scene: Node) -> GameLevel:
 	var nodes:Array[Node] = [scene]

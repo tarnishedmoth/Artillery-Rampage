@@ -114,6 +114,8 @@ func next_level(delay: float = default_delay) -> void:
 	_current_level_index = (_current_level_index + 1) % story_levels.levels.size()
 	_current_story_level = story_levels.levels[_current_level_index]
 	
+	GameEvents.story_level_changed.emit(_current_level_index)
+
 	print_debug("Loading story level index=%d -> %s" % [_current_level_index, _current_story_level.name])
 
 	await switch_scene_file(_current_story_level.scene_res_path, delay)
@@ -123,6 +125,7 @@ func set_story_level_index(index:int) -> bool:
 	if index >= -1 and index < story_levels.levels.size():
 		print_debug("set story level index=%d" % [index])
 		_current_level_index = index
+		GameEvents.story_level_changed.emit(_current_level_index)
 		return true
 	push_warning("Attempted to set invalid story level index=%d - expected [0, %d)" % [index, story_levels.levels.size()])
 	return false

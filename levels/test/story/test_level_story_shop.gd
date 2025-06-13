@@ -20,7 +20,6 @@ func _ready() -> void:
 	# Copied from main_menu.gd _on_continue_story_pressed
 	PlayerStateManager.enable = true
 	SceneManager.play_mode = SceneManager.PlayMode.STORY
-	StorySaveUtils.set_story_level_index()
 
 	# Now load the story shop scene
 	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryShop, 0.0)

@@ -2,6 +2,6 @@
 
 [ext_resource type="Script" uid="uid://cw8aowoxv2x0k" path="res://levels/story_level_state.gd" id="1_hrbqc"]
 
-[node name="StoryLevelState" type="Node" groups=["Savable"]]
+[node name="StoryLevelState" type="Node" groups=["Savable", "StoryLevelState"]]
 script = ExtResource("1_hrbqc")
 metadata/_custom_type_script = "uid://cw8aowoxv2x0k"
