@@ -576,7 +576,7 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 			if property as StringName in new_shot:
 				if not new_shot.get(property) == _enforced_projectile_properties[property]: # Avoid triggering setters if already equal
 					new_shot.set(property, _enforced_projectile_properties[property])
-					print_debug("Setting property ", property, " to ", _enforced_projectile_properties[property])
+					print_debug(name, ": Setting property ", property, " to ", _enforced_projectile_properties[property])
 		
 		if new_shot is WeaponProjectile:
 			_setup_new_projectile(new_shot, barrel, power)

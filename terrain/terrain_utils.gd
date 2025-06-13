@@ -162,7 +162,7 @@ static func _determine_source_overlaps_target_vertices(source_poly: PackedVector
 				all_results.push_back(i)
 				break
 
-	if OS.is_debug_build():
+	if OS.is_debug_build() and OS.is_stdout_verbose():
 		var values: Array[int] = []
 		for index in all_results:
 			values.push_back(index)
@@ -438,15 +438,18 @@ static func _dfs_adjacent_triangles(graph: Dictionary[int, PackedInt32Array], no
 #region Debugging
 
 static func print_poly(context: String, poly: PackedVector2Array) -> void:
-	if !OS.is_debug_build():
+	if not OS.is_debug_build():
 		return
-		
-	var values: Array[Vector2] = []
-	for vector in poly:
-		values.push_back(vector)
-		
-	print_debug("%s: %d: [%s]"
-	 % [context, values.size(),
-	 ",".join(values.map(func(v : Vector2): return str(v)))])
+
+	if OS.is_stdout_verbose():	
+		var values: Array[Vector2] = []
+		for vector in poly:
+			values.push_back(vector)
+			
+		print_debug("%s: %d: [%s]"
+		% [context, values.size(),
+		",".join(values.map(func(v : Vector2): return str(v)))])
+	else:
+		print_debug("%s: %d" % [context, poly.size()])
 
 #endregion

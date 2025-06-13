@@ -212,7 +212,7 @@ func delete() -> void:
 	queue_free.call_deferred()
 
 func print_poly(context: String, poly: PackedVector2Array) -> void:
-	if !OS.is_debug_build():
+	if not OS.is_debug_build():
 		return
 		
 	return TerrainUtils.print_poly("DestructibleObjectChunk(%s) - %s" % [name, context], poly)

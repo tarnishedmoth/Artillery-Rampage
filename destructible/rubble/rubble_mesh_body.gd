@@ -34,7 +34,9 @@ func _ready() -> void:
 	_emit_particles()
 
 func _on_cooldown_timeout() -> void:
-	print_debug("%s: Smoke particle emission cooldown completed" % name)
+	if OS.is_stdout_verbose():
+		print_debug("%s: Smoke particle emission cooldown completed" % name)
+		
 	_emission_count = 0
 	
 func _emit_particles() -> void:
@@ -42,7 +44,9 @@ func _emit_particles() -> void:
 		return
 		
 	_emission_count += 1
-	print_debug("%s: Playing smoke particles; count=%d" % [name, _emission_count])
+	
+	if OS.is_stdout_verbose():
+		print_debug("%s: Playing smoke particles; count=%d" % [name, _emission_count])
 
 	if _emission_count == max_emissions:
 		cooldown_timer.start()
@@ -59,5 +63,5 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	var impulse:Vector2 = state.get_contact_impulse(0)
 	#print_debug("%s: Impulse=%f" % [name, impulse.length()])
 	
-	if impulse.length_squared() >= re_emission_impulse_threshold * re_emission_impulse_threshold: 
+	if impulse.length_squared() >= re_emission_impulse_threshold * re_emission_impulse_threshold:
 		_emit_particles()

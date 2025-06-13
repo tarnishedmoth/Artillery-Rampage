@@ -199,7 +199,8 @@ func _check_and_add_particles(node: Node) -> void:
 				node.tree_exiting.connect(_on_particles_group_member_freed.bind(node))
 				# Apply wind to the particles.
 				_apply_wind_to_particles([node])
-				print_debug("WIND: Found and added new group member! - ", node)
+				if OS.is_stdout_verbose():
+					print_debug("WIND: Found and added new group member! - ", node)
 
 func _on_wind_updated() -> void:
 	_apply_wind_to_particles(_active_particles_set)
