@@ -96,7 +96,7 @@ func _update_attributes() -> void:
 
 	# TODO: Maybe do this from StatTracker as player could game the system and quit here and it wouldn't save
 	# Here we are explicitly forcing a save
-	SaveStateManager.save_tree_state()
+	SaveStateManager.save_tree_state(&"StoryLevelFinished")
 
 	_is_game_over = PlayerAttributes.personnel <= 0
 

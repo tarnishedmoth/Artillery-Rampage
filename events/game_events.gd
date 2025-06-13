@@ -7,8 +7,8 @@ var current_level:GameLevel
 signal user_options_changed()
 signal difficulty_changed(new_difficulty: Difficulty.DifficultyLevel, old_difficulty: Difficulty.DifficultyLevel)
 
-signal save_state_restored()
-signal save_state_persisted()
+signal save_state_restored(context:SaveState.SaveContext, context_trigger:StringName)
+signal save_state_persisted(context:SaveState.SaveContext, context_trigger:StringName)
 
 ## Called just before round started when all players have been added to the game
 signal all_players_added(level: GameLevel)
@@ -20,6 +20,8 @@ signal round_ended()
 signal level_loaded(level: GameLevel)
 
 signal story_level_changed(index:int)
+
+signal play_mode_changed(old_mode:SceneManager.PlayMode, new_mode:SceneManager.PlayMode)
 
 ## Called right before a scene is freed when the scenes are being switched
 signal scene_leaving(scene: Node)

@@ -30,7 +30,7 @@ func _ready() -> void:
 		save_state = SaveState.new()
 	else:
 		# restore initial tree state
-		restore_tree_state.call_deferred()
+		restore_tree_state.call_deferred(SaveState.ContextTriggers.LOAD)
 
 
 var save_state:SaveState
@@ -42,6 +42,11 @@ var _flag_consumers:Dictionary[StringName, Dictionary] = {}
 # such as a new story mode
 func add_state_flag(flag:StringName) -> void:
 	_flag_consumers[flag] = {}
+
+## Explicitly clear a flag for deserializers if the state is no longer relevant to prevent
+## late reading of the state if the node wasn't in the tree when the flag was initially set and the restore_tree_state function called
+func remove_state_flag(flag:StringName) -> void:
+	_flag_consumers.erase(flag)
 
 ## Check if state flag currently set and schedule to remove it if found
 func consume_state_flag(flag:StringName, consumer_key:StringName) -> bool:
@@ -56,7 +61,9 @@ func reset_save() -> void:
 	save_state = SaveState.new()
 	_save()
 
-func restore_node_state(node:Node, force_file_reload:bool = false) -> void:
+	GameEvents.save_state_persisted.emit(SaveState.SaveContext.Reset, &"ResetSave")
+
+func restore_node_state(node:Node, context_trigger:StringName = "", force_file_reload:bool = false) -> void:
 	if not node or not node.is_in_group(Groups.Savable):
 		push_error("%s: node=%s is not Savable" % [name, node])
 		return
@@ -64,15 +71,17 @@ func restore_node_state(node:Node, force_file_reload:bool = false) -> void:
 	_restore_state(func() -> Array[Node]:
 		return [node],
 	 SaveState.SaveContext.Node,
+	 context_trigger,
 	 force_file_reload)
 
-func restore_tree_state(force_file_reload:bool = false) -> void:
+func restore_tree_state(context_trigger:StringName = "", force_file_reload:bool = false) -> void:
 	_restore_state(func() -> Array[Node]:
 		return get_tree().get_nodes_in_group(Groups.Savable),
 	 SaveState.SaveContext.Tree,
+	 context_trigger,
 	 force_file_reload)
 
-func _restore_state(nodes_getter:Callable, context:SaveState.SaveContext, force_file_reload:bool = false) -> void:
+func _restore_state(nodes_getter:Callable, context:SaveState.SaveContext, context_trigger:StringName, force_file_reload:bool = false) -> void:
 	if force_file_reload and FileAccess.file_exists(save_path):
 		save_state = _load()
 	if not save_state.state:
@@ -80,36 +89,40 @@ func _restore_state(nodes_getter:Callable, context:SaveState.SaveContext, force_
 		return
 
 	save_state.context = context
+	save_state.context_trigger = context_trigger
 
 	for node in nodes_getter.call():
 		node.restore_from_save_state(save_state)
 
-	GameEvents.save_state_restored.emit()
+	GameEvents.save_state_restored.emit(context, context_trigger)
 	
-func save_node_state(node:Node) -> void:
+func save_node_state(node:Node, context_trigger:StringName = "") -> void:
 	if not node or not node.is_in_group(Groups.Savable):
 		push_error("%s: node=%s is not Savable" % [name, node])
 		return
 	
-	_save_state(func() -> Array[Node]: return [node], SaveState.SaveContext.Node)
+	_save_state(func() -> Array[Node]: return [node], SaveState.SaveContext.Node, context_trigger)
 
-func save_tree_state() -> void:
+func save_tree_state(context_trigger:StringName = "") -> void:
 	_save_state(func() -> Array[Node]:
 		return get_tree().get_nodes_in_group(Groups.Savable),
-	SaveState.SaveContext.Tree)
+	SaveState.SaveContext.Tree,
+	context_trigger)
 
-func _save_state(nodes_getter:Callable, context:SaveState.SaveContext) -> void:
+func _save_state(nodes_getter:Callable, context:SaveState.SaveContext, context_trigger:StringName) -> void:
 	var nodes:Array[Node] = nodes_getter.call()
 	if not nodes:
 		return
 
-	save_state.context = context	
+	save_state.context = context
+	save_state.context_trigger = context_trigger
+
 	for node in nodes:
 		node.update_save_state(save_state)
 		
 	_save()
 
-	GameEvents.save_state_persisted.emit()
+	GameEvents.save_state_persisted.emit(context, context_trigger)
 
 func clear_save_state_by_key(key:StringName) -> void:
 	if not save_state or not save_state.state:
@@ -119,6 +132,8 @@ func clear_save_state_by_key(key:StringName) -> void:
 	if save_state.state.has(key):
 		save_state.state.erase(key)
 	_save()
+
+	GameEvents.save_state_persisted.emit(SaveState.SaveContext.ClearKey, key)
 
 func _save() -> void:
 	_save_strategy.call()

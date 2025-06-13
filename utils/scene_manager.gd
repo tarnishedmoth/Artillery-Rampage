@@ -49,7 +49,13 @@ var _current_level_index:int = -1
 var _current_level_root_node:GameLevel
 var _current_story_level:StoryLevel
 
-var play_mode:PlayMode
+var play_mode:PlayMode:
+	set(value):
+		if play_mode != value:
+			var old_value:PlayMode = play_mode
+			play_mode = value
+			GameEvents.play_mode_changed.emit(old_value, play_mode)
+	get: return play_mode
 
 const new_story_selected:StringName = &"NewStory"
 
@@ -185,7 +191,7 @@ func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 				# Clear out the play mode when going back to main menu
 				play_mode = PlayMode.DIRECT
 				# Make sure option state loaded
-				SaveStateManager.restore_node_state(UserOptions)
+				SaveStateManager.restore_node_state(UserOptions, UserOptions.name)
 			)
 		SceneKeys.RandomStart:
 			await next_level(delay)
@@ -231,7 +237,7 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	if is_switching_scene:
 		return
 	
-	SaveStateManager.save_tree_state()
+	SaveStateManager.save_tree_state(SaveState.ContextTriggers.SCENE_SWITCH)
 	
 	# Avoid two events causing a restart in the same game (e.g. player dies and leaves 1 player remaining)
 	is_switching_scene = true
@@ -272,7 +278,7 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	get_tree().root.add_child(current_scene)
 	get_tree().current_scene = current_scene
 
-	SaveStateManager.restore_tree_state()
+	SaveStateManager.restore_tree_state(SaveState.ContextTriggers.SCENE_SWITCH)
 	loading_screen(false)
 	get_tree().paused = false
 

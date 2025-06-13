@@ -28,4 +28,4 @@ static func new_story_save() -> void:
 	var save:SaveState = SaveStateManager.save_state
 	if save:
 		save.state.set(StoryLevelState.SAVE_STATE_KEY, {StoryLevelState.RUN_KEY: 1})
-		SaveStateManager.save_tree_state()
+		SaveStateManager.save_tree_state(&"NewStory")

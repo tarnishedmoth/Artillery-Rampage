@@ -19,13 +19,33 @@ class_name SaveState
 # Can attach the game state to this
 var state: Dictionary[StringName, Dictionary] = {}
 
+## Context in which the save operation is performed
 enum SaveContext
 {
+	## Single node and children being persisted, passed to saveables
 	Node,
-	Tree
+
+	## Full scene tree persisted, passed to saveables
+	Tree,
+
+	## Single key was cleared and saved - important for save_state_persisted event and only set from SaveManager.clear_save_state_by_key
+	ClearKey,
+
+	## Entire save file was reset - important for save_state_persisted event and only set from SaveManager.reset_save
+	Reset
 }
 
+## Context in which the save is being performed - See enum descriptions
 var context:SaveContext = SaveContext.Tree
+
+## Can be used alternative to the State flag system to check within savable implementations the exact context being called
+## With the save state flags, these flags are set but it's possible the node gets added later and then would consume the flag at the wrong time if the state is not cleared
+var context_trigger:StringName
+
+## Standard context trigger names
+class ContextTriggers:
+	const SCENE_SWITCH:StringName = &"SCENE_SWITCH"
+	const LOAD:StringName = &"LOAD"
 
 static func safe_load_scene(scene_file:String) -> Node:
 	if not scene_file:

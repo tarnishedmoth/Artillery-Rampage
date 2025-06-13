@@ -126,5 +126,5 @@ func update_save_state(save:SaveState) -> void:
 	
 func _on_options_applied() -> void:
 	# Explicitly save the options when they are applied
-	SaveStateManager.save_node_state(self)
+	SaveStateManager.save_node_state(self, name)
 #endregion
