@@ -17,6 +17,7 @@ class SceneKeys:
 	const RandomStart:StringName = &"RandomStart"
 	
 	const StoryMap:StringName = &"StoryMap"
+	const StoryComplete:StringName = &"StoryComplete"
 	const StoryStart:StringName = &"StoryStart"
 	const StoryDifficultySelect:StringName = &"StoryDifficultySelect"
 	const RoundSummary:StringName = &"RoundSummary"
@@ -38,6 +39,7 @@ const main_menu_scene_file = "res://levels/main_menu.tscn"
 # Story mode scenes
 const story_start_scene_file = "res://ui/story/story_sequence.tscn"
 const story_map_scene_file = "res://ui/story/map/story_map_scene.tscn"
+const story_complete_scene_file = "res://ui/story/story_completed.tscn"
 const story_round_summary_scene_file = "res://ui/story/round_summary/story_round_summary.tscn"
 const story_difficulty_select_scene_file = "res://ui/story/story_difficulty_select.tscn"
 const upgrade_select_scene_file = "res://progression/upgrade_select.tscn"
@@ -136,6 +138,11 @@ func set_story_level_index(index:int) -> bool:
 	push_warning("Attempted to set invalid story level index=%d - expected [0, %d)" % [index, story_levels.levels.size()])
 	return false
 
+func is_on_last_story_level() -> bool:
+	if not play_mode == PlayMode.STORY or not story_levels.levels:
+		return false
+	return _current_level_index == story_levels.levels.size() - 1
+
 ## Pushes a scene transition to the scene queue by func_name on the SceneManager and arguments it should take
 func queue_transition(func_name:String, args: Array = []) -> void:
 	_scene_queue.push_back(Callable.create(self, func_name).bindv(args))
@@ -206,6 +213,8 @@ func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 			await switch_scene_file(story_shop_scene_file, delay)
 		SceneKeys.StoryMap:
 			await switch_scene_file(story_map_scene_file, delay)
+		SceneKeys.StoryComplete:
+			await switch_scene_file(story_complete_scene_file, delay)
 		SceneKeys.RoundSummary:
 			await switch_scene_file(story_round_summary_scene_file, delay)
 		SceneKeys.GameOver:

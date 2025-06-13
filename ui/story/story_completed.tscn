@@ -1,0 +1,72 @@
+[gd_scene load_steps=5 format=3 uid="uid://by40b3dms4xj"]
+
+[ext_resource type="Script" uid="uid://cv27a066o2gl5" path="res://ui/story/story_completed.gd" id="1_7ik1a"]
+[ext_resource type="Theme" uid="uid://ddklgnmfj25sv" path="res://ui/story/story_theme.tres" id="1_qc4x1"]
+[ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="2_8r2ij"]
+[ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="4_lqido"]
+
+[node name="StoryCompleted" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_qc4x1")
+script = ExtResource("1_7ik1a")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="RunHeaderLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Story Mode Run %RUN% Complete!"
+
+[node name="Spacer" type="Control" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_8r2ij")
+
+[node name="Spacer2" type="Control" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Replay a new run with harder difficulty and more rewards?"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+alignment = 1
+
+[node name="Yes" type="Button" parent="CenterContainer/VBoxContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme = ExtResource("4_lqido")
+text = "Yes"
+
+[node name="No" type="Button" parent="CenterContainer/VBoxContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme = ExtResource("4_lqido")
+text = "No"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ButtonsContainer/Yes" to="." method="_on_yes_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ButtonsContainer/No" to="." method="_on_no_pressed"]

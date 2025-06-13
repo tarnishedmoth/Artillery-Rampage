@@ -130,7 +130,12 @@ func _next_after_win() -> void:
 
 	# Queue next transitions after this
 	SceneManager.queue_transition("switch_scene_keyed", [SceneManager.SceneKeys.StoryShop])
-	SceneManager.queue_transition("switch_scene_keyed", [SceneManager.SceneKeys.StoryMap])
+
+	# Check if on last level of run and trigger the run end screen instead in that case
+	if SceneManager.is_on_last_story_level():
+		SceneManager.queue_transition("switch_scene_keyed", [SceneManager.SceneKeys.StoryComplete])
+	else:
+		SceneManager.queue_transition("switch_scene_keyed", [SceneManager.SceneKeys.StoryMap])
 
 func _play_audio() -> void:
 	if RoundStatTracker.round_data.won:

@@ -22,6 +22,8 @@ const GameLevel:StringName = &"GameLevel"
 
 const WobbleActivator:StringName = &"WobbleActivator"
 
+const StoryLevelState:StringName = &"StoryLevelState"
+
 func get_parent_in_group(node: Node, group: StringName) -> Node:
 	if node.is_in_group(group):
 		return node
