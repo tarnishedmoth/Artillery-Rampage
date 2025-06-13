@@ -92,20 +92,21 @@ func restore_from_save_state(save: SaveState) -> void:
 		player_state = null
 		return
 	if SaveStateManager.consume_state_flag(SceneManager.new_story_selected, &"player"):
-		PlayerState.delete_save_state(save)
+		PlayerState.delete_save_state(StorySaveUtils.get_story_save(save))
 		player_state = null
 		return
 	if _dirty:
 		# We need to save state first
 		return	
 	
-	player_state = PlayerState.deserialize_from_save_state(save)
+	player_state = PlayerState.deserialize_from_save_state(StorySaveUtils.get_story_save(save))
 	print_debug("%s: restore_from_save_state: %s" % [name, is_instance_valid(player_state)])
 
 func update_save_state(game_state:SaveState) -> void:
 	if not enable or not player_state:
 		return
-	player_state.serialize_save_state(game_state)
+	var story_state:Dictionary = StorySaveUtils.get_story_save(game_state, true)
+	player_state.serialize_save_state(story_state)
 	_dirty = false
 	print_debug("%s: update_save_state" % name)
 #endregion

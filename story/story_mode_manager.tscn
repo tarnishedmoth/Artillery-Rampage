@@ -1,8 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://5j3gwghcbxtg"]
+[gd_scene load_steps=4 format=3 uid="uid://5j3gwghcbxtg"]
 
 [ext_resource type="Script" uid="uid://bmp3v6isu43p2" path="res://story/story_mode_manager.gd" id="1_ebw2n"]
 [ext_resource type="PackedScene" uid="uid://st86yx533wjj" path="res://story/story_mode_level_modifiers.tscn" id="2_41x6v"]
+[ext_resource type="PackedScene" uid="uid://c3vrjddr0r7hx" path="res://levels/story_level_state.tscn" id="3_k1spa"]
 
 [node name="StoryModeManager" type="Node"]
 script = ExtResource("1_ebw2n")
 story_mode_level_modifiers_scene = ExtResource("2_41x6v")
+story_level_state_scene = ExtResource("3_k1spa")

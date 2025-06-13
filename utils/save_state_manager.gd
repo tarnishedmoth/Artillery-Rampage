@@ -98,7 +98,7 @@ func save_tree_state() -> void:
 		return get_tree().get_nodes_in_group(Groups.Savable),
 	SaveState.SaveContext.Tree)
 
-func _save_state(nodes_getter:Callable, context:SaveState.SaveContext,) -> void:
+func _save_state(nodes_getter:Callable, context:SaveState.SaveContext) -> void:
 	var nodes:Array[Node] = nodes_getter.call()
 	if not nodes:
 		return
@@ -167,6 +167,10 @@ func _save_as_text() -> void:
 		push_error("%s: Failed to open file %s for writing" % [name, save_path])
 
 func _load_as_text() -> SaveState:
+	if not FileAccess.file_exists(save_path):
+		print_debug("%s: Save file %s does not exist" % [name, save_path])
+		return null
+		
 	var file = FileAccess.open(save_path, FileAccess.READ)
 	if file:
 		var save_state_str:String = file.get_as_text()

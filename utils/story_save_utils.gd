@@ -1,7 +1,10 @@
 class_name StorySaveUtils
 
-static func story_save_exists() -> bool:
-	var save:SaveState = SaveStateManager.save_state
+const RUN_KEY:StringName = &"Run"
+
+static func story_save_exists(save:SaveState = null) -> bool:
+	if not save:
+		save = SaveStateManager.save_state
 	
 	if not save or not save.state:
 		return false
@@ -10,11 +13,13 @@ static func story_save_exists() -> bool:
 	var exists:bool = state.has(StoryLevelState.SAVE_STATE_KEY)
 	return exists
 	
-static func get_story_save() -> Dictionary:
-	if not story_save_exists():
-		return {}
+static func get_story_save(save:SaveState = null, add_parent_if_not_exists:bool = false) -> Dictionary:
+	if not story_save_exists(save):
+		return {StoryLevelState.SAVE_STATE_KEY: {}} if add_parent_if_not_exists else {}
 	
-	return SaveStateManager.save_state.state.get(StoryLevelState.SAVE_STATE_KEY)
+	if not save:
+		save = SaveStateManager.save_state
+	return save.state.get(StoryLevelState.SAVE_STATE_KEY)
 
 static func set_story_level_index() -> void:
 	var save:SaveState = SaveStateManager.save_state
@@ -22,3 +27,13 @@ static func set_story_level_index() -> void:
 		return
 
 	StoryLevelState.restore_story_level_state(save)
+
+static func delete_story_save() -> void:
+	SaveStateManager.clear_save_state_by_key(StoryLevelState.SAVE_STATE_KEY)
+
+static func new_story_save() -> void:
+	delete_story_save()
+	var save:SaveState = SaveStateManager.save_state
+	if save:
+		save.state.set(StoryLevelState.SAVE_STATE_KEY, {RUN_KEY: 1})
+		SaveStateManager.save_tree_state()

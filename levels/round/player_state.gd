@@ -2,11 +2,6 @@
 ## Keeps track of persistent state across rounds
 ## used in conjunction with setting pending_state on the controller
 ## prior to adding it to the tree
-# TODO: Maybe extend from Resource so we can save/load using ResourceLoader/ResourceSaver as an easy
-# way to save/load player state from file
-# We would then wrap that in a SaveGameState that tracks other state like current level
-# and things not specific to the player
-# See https://docs.godotengine.org/en/stable/tutorials/io/saving_games.html
 class_name PlayerState
 
 # Create explicit private variable so we can access in the "destructor" notification
@@ -94,16 +89,16 @@ func _notification(what: int) -> void:
 
 const SAVE_STATE_KEY:StringName = &"player"
 
-static func delete_save_state(save: SaveState) -> void:
-	if save and save.state:
-		save.state.erase(SAVE_STATE_KEY)
+static func delete_save_state(root_state: Dictionary) -> void:
+	if root_state:
+		root_state.erase(SAVE_STATE_KEY)
 		
-static func deserialize_from_save_state(save: SaveState) -> PlayerState:
-	if not save or not save.state or not save.state.has(SAVE_STATE_KEY):
+static func deserialize_from_save_state(root_state: Dictionary) -> PlayerState:
+	if not root_state or not root_state.has(SAVE_STATE_KEY):
 		print_debug("No save state found")
 		return null
 	
-	var serialized_player_state: Dictionary = save.state[SAVE_STATE_KEY]
+	var serialized_player_state: Dictionary = root_state[SAVE_STATE_KEY]
 	var state:PlayerState = PlayerState.new()
 
 	state.health = serialized_player_state.health
@@ -127,7 +122,7 @@ static func deserialize_from_save_state(save: SaveState) -> PlayerState:
 	
 	return state
 
-func serialize_save_state(game_state:SaveState) -> void:
+func serialize_save_state(root_state:Dictionary) -> void:
 	var serialized_player_state:Dictionary = {}
 	serialized_player_state.health = health
 	serialized_player_state.max_health = max_health
@@ -148,7 +143,7 @@ func serialize_save_state(game_state:SaveState) -> void:
 	serialized_player_state.unlocks = {
 		weapons = _all_unlocked_weapon_scenes
 	}
-	game_state.state[SAVE_STATE_KEY] = serialized_player_state
+	root_state[SAVE_STATE_KEY] = serialized_player_state
 
 func _create_weapon_state(weapon: Weapon) -> Dictionary:
 	var weapon_state: Dictionary = {}

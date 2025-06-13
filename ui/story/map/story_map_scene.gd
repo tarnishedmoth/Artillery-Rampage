@@ -37,7 +37,8 @@ const SAVE_STATE_KEY:StringName = &"StoryMap"
 var _save_state:SaveState
 
 func update_save_state(save:SaveState) -> void:
-	save.state[SAVE_STATE_KEY] = _create_save_state()
+	var story_state:Dictionary = StorySaveUtils.get_story_save(save, true)
+	story_state[SAVE_STATE_KEY] = _create_save_state()
 
 func restore_from_save_state(save: SaveState) -> void:
 	_save_state = save
@@ -57,10 +58,11 @@ func _create_save_state() -> Dictionary:
 	return state
 
 func _get_save_state() -> StoryMapSaveState:
-	if not _save_state or not _save_state.state.has(SAVE_STATE_KEY) or SaveStateManager.consume_state_flag(SceneManager.new_story_selected, SAVE_STATE_KEY):
+	var story_state:Dictionary = StorySaveUtils.get_story_save(_save_state)
+	if not story_state or not story_state.has(SAVE_STATE_KEY) or SaveStateManager.consume_state_flag(SceneManager.new_story_selected, SAVE_STATE_KEY):
 		return null
 	
-	var saved_state:Dictionary = _save_state.state[SAVE_STATE_KEY]
+	var saved_state:Dictionary = story_state[SAVE_STATE_KEY]
 
 	var deserialized := StoryMapSaveState.new()
 	deserialized.nodes = saved_state["nodes"] as PackedVector2Array

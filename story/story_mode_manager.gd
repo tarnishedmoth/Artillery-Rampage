@@ -16,6 +16,9 @@ extends Node
 @export
 var story_mode_level_modifiers_scene:PackedScene
 
+@export
+var story_level_state_scene:PackedScene
+
 func _ready() -> void:
 	# Only connect if enable the story mode level modifiers
 	if not story_mode_level_modifiers_scene:
@@ -31,7 +34,12 @@ func _on_scene_switched(new_scene: Node) -> void:
 	# Make sure this is a game level and not some other kind of UI screen
 	var game_level: GameLevel = _get_game_level(new_scene)
 	if not game_level:
+		# Still add a story level state so that state is initialized properly
+		add_child(story_level_state_scene.instantiate())
 		return
+	
+	# First add story level state
+	game_level.add_child(story_level_state_scene.instantiate())
 	
 	print_debug("Applying story mode level modifiers to new_scene=%s" % [new_scene.scene_file_path])
 

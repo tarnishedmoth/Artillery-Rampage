@@ -6,9 +6,10 @@ var _game_level:GameLevel
 func _ready() -> void:
 	_game_level = get_parent() as GameLevel
 	if not _game_level:
-		push_error("Parent=%s is not a GameLevel" % [get_parent().name if get_parent() else &"NULL"])
+		print_debug("Parent=%s is not a GameLevel - not listening for round events" % [get_parent().name if get_parent() else &"NULL"])
 		return
 		
+	print_debug("Parent=%s is a GameLevel - connecting to round ended" % [get_parent().name])
 	GameEvents.round_ended.connect(_on_round_ended)
 	
 func _on_round_ended() -> void:
@@ -29,7 +30,7 @@ const _LEVEL_KEY:StringName = &"Level"
 
 func restore_from_save_state(save: SaveState) -> void:
 	if save and save.state and SaveStateManager.consume_state_flag(SceneManager.new_story_selected, SAVE_STATE_KEY):
-		save.state.erase(SAVE_STATE_KEY)
+		StorySaveUtils.get_story_save(save).erase(_LEVEL_KEY)
 		return
 		
 	# Set based on current scene value as state restored on continue through static function
@@ -46,22 +47,22 @@ func update_save_state(save:SaveState) -> void:
 	if not save or not save.state:
 		return
 	
-	if _last_completed_level >= 0:
-		var state:Dictionary = save.state.get_or_add(SAVE_STATE_KEY, {})
-		state[_LEVEL_KEY] = _last_completed_level
-		print_debug("set save state last completed level=%d" % [_last_completed_level])
+	# if _last_completed_level >= 0:
+	var state:Dictionary = save.state.get_or_add(SAVE_STATE_KEY, {})
+	state[_LEVEL_KEY] = _last_completed_level
+	print_debug("set save state last completed level=%d" % [_last_completed_level])
 	
 static func restore_story_level_state(save: SaveState) -> int:
 	if not save or not save.state:
 		return -1
 	
 	if not save.state.has(SAVE_STATE_KEY):
-		print_debug("No existing story level state found")
+		print_debug("No existing story state found")
 		return -1
 	
 	var state:Dictionary = save.state[SAVE_STATE_KEY]
 
-	var last_level:int = state.get(_LEVEL_KEY, 0)
+	var last_level:int = state.get(_LEVEL_KEY, -1)
 	print_debug("set story level index=%d" [last_level])
 	SceneManager.set_story_level_index(last_level)
 	

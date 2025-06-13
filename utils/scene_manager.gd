@@ -45,8 +45,6 @@ const story_shop_scene_file = "res://ui/story/shop/story_shop.tscn"
 
 const game_over_scene_file = "res://levels/game_over.tscn"
 
-var _story_level_state_scene:PackedScene = preload("res://levels/story_level_state.tscn")
-
 var _current_level_index:int = -1
 var _current_level_root_node:GameLevel
 var _current_story_level:StoryLevel
@@ -121,7 +119,8 @@ func next_level(delay: float = default_delay) -> void:
 	await switch_scene_file(_current_story_level.scene_res_path, delay)
 	
 func set_story_level_index(index:int) -> bool:
-	if index >= 0 and index < story_levels.levels.size():
+	# Allowing -1 to reset the state
+	if index >= -1 and index < story_levels.levels.size():
 		print_debug("set story level index=%d" % [index])
 		_current_level_index = index
 		return true
@@ -279,7 +278,6 @@ func _on_GameLevel_loaded(level:GameLevel) -> void:
 	
 	if _current_story_level:
 		level.name = _current_story_level.name
-		level.add_child(_story_level_state_scene.instantiate())
 		
 	_current_level_root_node = level
 

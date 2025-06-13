@@ -24,13 +24,13 @@ func _on_acquired_upgrade(mod_bundle:ModBundle) -> void:
 
 const SAVE_STATE_KEY:StringName = &"PlayerUpgrades"
 
-func restore_from_save_state(_save: SaveState) -> void:
+func restore_from_save_state(save: SaveState) -> void:
 	if SceneManager.play_mode != SceneManager.PlayMode.STORY:
 		return
 
 	current_upgrades.clear()
 
-	var story_save:Dictionary = StorySaveUtils.get_story_save()
+	var story_save:Dictionary = StorySaveUtils.get_story_save(save)
 	if SaveStateManager.consume_state_flag(SceneManager.new_story_selected, SAVE_STATE_KEY) or not story_save or not story_save.has(SAVE_STATE_KEY):
 		print_debug("PlayerUpgrades: New Story - clearing upgrades")
 		_dirty = true
@@ -49,11 +49,11 @@ func restore_from_save_state(_save: SaveState) -> void:
 	print_debug("PlayerUpgrades: Restored %d upgrades - %s" % [current_upgrade_data.size(), current_upgrade_data])
 
 
-func update_save_state(_save:SaveState) -> void:
+func update_save_state(save:SaveState) -> void:
 	if not _dirty or SceneManager.play_mode != SceneManager.PlayMode.STORY:
 		return
 
-	var story_save:Dictionary = StorySaveUtils.get_story_save()
+	var story_save:Dictionary = StorySaveUtils.get_story_save(save)
 	if not story_save:
 		return
 

@@ -31,7 +31,7 @@ var current_difficulty:DifficultyLevel:
 const SAVE_STATE_KEY:StringName = &"Difficulty"
 
 func restore_from_save_state(save: SaveState) -> void:
-	var story_save:Dictionary = StorySaveUtils.get_story_save()
+	var story_save:Dictionary = StorySaveUtils.get_story_save(save)
 	if story_save and story_save.has(SAVE_STATE_KEY):
 		story_difficulty = story_save[SAVE_STATE_KEY]
 		print_debug("%s: Restoring story difficulty to %s" % [name, str(story_difficulty)])
@@ -44,7 +44,7 @@ func restore_from_save_state(save: SaveState) -> void:
 
 func update_save_state(save:SaveState) -> void:
 	if SceneManager.play_mode == SceneManager.PlayMode.STORY:
-		var story_save:Dictionary = StorySaveUtils.get_story_save()
+		var story_save:Dictionary = StorySaveUtils.get_story_save(save)
 		if story_save:
 			story_save[SAVE_STATE_KEY] = story_difficulty
 			print_debug("%s: Saving story difficulty as %s" % [name, str(story_difficulty)])

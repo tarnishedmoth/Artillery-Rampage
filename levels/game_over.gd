@@ -17,5 +17,5 @@ func _on_retry_pressed():
 
 func _on_quit_pressed():
 	# TODO: Maybe do this from round summary
-	SaveStateManager.clear_save_state_by_key(StoryLevelState.SAVE_STATE_KEY)
+	StorySaveUtils.delete_story_save()
 	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.MainMenu)

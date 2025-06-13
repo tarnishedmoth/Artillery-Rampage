@@ -43,16 +43,17 @@ func restore_from_save_state(save: SaveState) -> void:
 	if SceneManager.play_mode != SceneManager.PlayMode.STORY:
 		return
 	
-	if save and save.state and SaveStateManager.consume_state_flag(SceneManager.new_story_selected, SAVE_STATE_KEY):
-		save.state.erase(SAVE_STATE_KEY)
+	var root_state:Dictionary = StorySaveUtils.get_story_save(save)
+	if SaveStateManager.consume_state_flag(SceneManager.new_story_selected, SAVE_STATE_KEY):
+		root_state.erase(SAVE_STATE_KEY)
 		
 		personnel = player_attribute_defaults.personnel
 		scrap = 0
 		_dirty = false
 		return
 
-	if save and save.state and save.state.has(SAVE_STATE_KEY):
-		var serialized_player_state: Dictionary = save.state[SAVE_STATE_KEY]
+	if root_state and root_state.has(SAVE_STATE_KEY):
+		var serialized_player_state: Dictionary = root_state[SAVE_STATE_KEY]
 
 		personnel = serialized_player_state.personnel if serialized_player_state.has("personnel") else player_attribute_defaults.personnel
 		scrap = serialized_player_state.scrap if serialized_player_state.has("scrap") else 0
@@ -65,10 +66,10 @@ func update_save_state(save:SaveState) -> void:
 		return
 
 	# Since this is a singleton, this function actually gets called before the state is loaded since SceneManager.play_mode is set to story in main menu
-	if not _dirty or not save or not save.state:
+	if not _dirty or not StorySaveUtils.story_save_exists(save):
 		return
 
-	var state:Dictionary = save.state.get_or_add(SAVE_STATE_KEY, {})
+	var state:Dictionary = StorySaveUtils.get_story_save(save).get_or_add(SAVE_STATE_KEY, {})
 
 	state.personnel = personnel
 	state.scrap = scrap
