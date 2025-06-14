@@ -39,8 +39,7 @@ var target_weapon:String:
 
 ## apply mods where they need to go
 ## weapons hold projectile mods to apply at spawn time
-## Player is not used but retained parameter to not break existing code at this time
-func apply_all_mods(_player:Player, weapons:Array[Weapon]) -> void:
+func apply_all_mods(weapons:Array[Weapon]) -> void:
 	
 	# Group by weapon name and then add the mods to the list for the weapon and apply
 	var mods_by_weapon_key:Dictionary[String, Array] = {}

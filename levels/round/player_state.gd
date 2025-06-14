@@ -156,3 +156,10 @@ func _create_weapon_state(weapon: Weapon) -> Dictionary:
 	return weapon_state
 
 #endregion
+
+func duplicate() -> PlayerState:
+	# Duplicate with a serialization clone since RefCounted doesn't support duplicate natively
+	var root_state:Dictionary = {}
+
+	serialize_save_state(root_state)
+	return deserialize_from_save_state(root_state)

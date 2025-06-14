@@ -100,12 +100,10 @@ func shoot() -> void:
 		pass
 	
 func load_and_apply_upgrades() -> void:
-	var mod_bundles:Array[ModBundle] = PlayerUpgrades.get_current_upgrades()
-	for bundle in mod_bundles:
-		bundle.apply_all_mods(self, get_weapons())
+	PlayerUpgrades.apply_all_upgrades(get_weapons())
 		
 func load_new_upgrade(upgrade:ModBundle) -> void:
-	upgrade.apply_all_mods(self, get_weapons())
+	upgrade.apply_all_mods(get_weapons())
 
 @warning_ignore("unused_parameter")
 func _on_tank_tank_killed(tank_unit: Tank, instigatorController: Node2D, instigator: Node2D) -> void:

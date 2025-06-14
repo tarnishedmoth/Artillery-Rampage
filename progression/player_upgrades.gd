@@ -10,6 +10,10 @@ var _dirty:bool
 func get_current_upgrades() -> Array[ModBundle]:
 	return current_upgrades
 
+func apply_all_upgrades(weapons: Array[Weapon]) -> void:
+	for bundle in current_upgrades:
+		bundle.apply_all_mods(weapons)
+
 func acquire_upgrade(mod_bundle:ModBundle) -> void:
 	_on_acquired_upgrade(mod_bundle)
 

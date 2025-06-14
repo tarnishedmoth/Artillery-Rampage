@@ -33,14 +33,11 @@ var pending_scrap_spend:int
 var pending_personnel_spend:int
 	
 func _ready() -> void:
+	var player_state:PlayerState =_initialize_player_state()
+
 	var existing_weapons:Dictionary[String, Weapon] = {}
-	var player_state:PlayerState = PlayerStateManager.player_state
-	if not player_state:
-		push_warning("PlayerStateManager.player_state is null, no existing weapon info")
-		player_state = PlayerState.new()
-	else:
-		for weapon in player_state.weapons:
-			existing_weapons[weapon.scene_file_path] = weapon
+	for weapon in player_state.weapons:
+		existing_weapons[weapon.scene_file_path] = weapon
 	
 	_update_resources_control_state()
 	
@@ -78,6 +75,21 @@ func _ready() -> void:
 
 	_update_row_states()
 	
+func _initialize_player_state() -> PlayerState:
+	var player_state:PlayerState = PlayerStateManager.player_state
+	if not player_state:
+		push_warning("PlayerStateManager.player_state is null, no existing weapon info")
+		return PlayerState.new()
+	
+	# PlayerState here is already a copy from the serialized state and the shop is shown after the round
+	# Upgrades are not applied by default to weapons in player state that was deserialized
+	# During gameplay that is ordinary done in the Player ready function
+	# We need the upgrades applied here as they affect the shop related to ammo - e.g. not requiring ammo and so shouldn't be able to purchase it
+	# If this changes later could use PlayerState.duplicate() to make a copy
+	PlayerUpgrades.apply_all_upgrades(player_state.weapons)
+
+	return player_state
+
 func can_afford_to_buy_item(item: ShopItemResource) -> bool:
 	if item.unlock_cost_type == ShopItemResource.CostType.Scrap:
 		return PlayerAttributes.scrap - item.unlock_cost - pending_scrap_spend - min_remaining_scrap >= 0
