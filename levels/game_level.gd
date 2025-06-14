@@ -30,11 +30,14 @@ func _ready() -> void:
 # Passing around a game-scoped object to results screens and new game scenes
 # could be more error prone than using an auto-load and just initializing it at the start of every game
 func begin_round():
+	# ensure a tick passes
+	await get_tree().process_frame
+
 	# TODO: This is where we will use the global "players data" auto-load singleton
 	# to then create the necessary controllers and tanks from it
 	# For now just loading in the instance from the scene
 	# Discover any placed child controller nodes
-	await _add_manually_placed_units()
+	_add_manually_placed_units()
 	await _create_procedural_units()
 
 	GameEvents.all_players_added.emit(self)
