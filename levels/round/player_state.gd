@@ -115,7 +115,9 @@ static func deserialize_from_save_state(root_state: Dictionary) -> PlayerState:
 				push_warning("PlayerState: weapon is not valid - skipping")
 		else:
 			push_warning("PlayerState: weapon does not have res - skipping")
-	state.weapons = _weapons_array
+	
+	# Don't use setter as it makes a copy and will cause a memory leak!
+	state._weapons = _weapons_array
 
 	if serialized_player_state.has("unlocks"):
 		state._all_unlocked_weapon_scenes = serialized_player_state["unlocks"].get("weapons", [])

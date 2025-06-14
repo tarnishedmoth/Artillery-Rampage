@@ -198,6 +198,7 @@ func switch_scene_keyed(key : StringName, delay: float = default_delay) -> void:
 				clear_transitions()
 				# Clear out the play mode when going back to main menu
 				play_mode = PlayMode.DIRECT
+				PlayerStateManager.enable = false
 				# Make sure option state loaded
 				SaveStateManager.restore_node_state(UserOptions, UserOptions.name)
 			)

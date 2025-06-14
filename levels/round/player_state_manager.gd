@@ -12,6 +12,7 @@ var enable:bool:
 		else:
 			print_debug("disable")
 			_disconnect_events()
+			_clear_state()
 	get:
 		return enable
 
@@ -19,6 +20,11 @@ var player: Player
 var player_state: PlayerState
 var _dirty:bool
 	
+func _clear_state()->void:
+	player = null
+	player_state = null
+	_dirty = false
+
 func _connect_events() -> void:
 	if not GameEvents.round_started.is_connected(_on_round_started):
 		GameEvents.round_started.connect(_on_round_started)
@@ -89,11 +95,11 @@ func _snapshot_player_state(include_curr_health:bool) -> void:
 
 func restore_from_save_state(save: SaveState) -> void:
 	if not enable:
-		player_state = null
+		_clear_state()
 		return
 	if SaveStateManager.consume_state_flag(SceneManager.new_story_selected, &"player"):
 		PlayerState.delete_save_state(StorySaveUtils.get_story_save(save))
-		player_state = null
+		_clear_state()
 		return
 	if _dirty:
 		# We need to save state first
