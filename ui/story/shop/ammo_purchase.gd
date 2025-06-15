@@ -38,10 +38,6 @@ var enabled:bool = true:
 		enabled = value
 		increment_button.disabled = not enabled
 		decrement_button.disabled = not enabled
-		
-		if not value:
-			ammo = 0
-			_update_labels(0)
 
 var purchase_enabled:bool:
 	get: return enabled and not increment_button.disabled
@@ -53,11 +49,13 @@ var purchase_enabled:bool:
 func reset(emit_signals:bool = false) -> void:
 	if emit_signals:
 		_update(-ammo)
-		
-	# Toggle so all state reset
-	enabled = false
-	enabled = true
-	
+	else:		
+		# Toggle so all state reset
+		enabled = false
+		enabled = true
+		ammo = 0
+		_update_labels(0)
+
 func initialize() -> void:
 	_increment = item.get_increment_for_fractional_cost()
 	_update_labels(0)
@@ -85,4 +83,7 @@ func _update_ammo_text() -> void:
 	count_label.text = "%d" % ammo
 	
 func _update_cost_text(cost: int) -> void:
-	cost_label.text = ShopUtils.format_cost(cost, item.refill_cost_type)
+	if item:
+		cost_label.text = ShopUtils.format_cost(cost, item.refill_cost_type)
+	else:
+		cost_label.text = ""
