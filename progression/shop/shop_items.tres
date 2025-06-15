@@ -12,9 +12,9 @@
 [ext_resource type="PackedScene" uid="uid://bx3va4wmvmw4o" path="res://weapons/weapon_MIRV.tscn" id="9_4u6sx"]
 [ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="10_kc67y"]
 [ext_resource type="PackedScene" uid="uid://do2r411gtohhx" path="res://weapons/weapon_missile_homing.tscn" id="11_xingv"]
-[ext_resource type="PackedScene" uid="uid://evwfga4yj1nk" path="res://weapons/weapon_laser.tscn" id="12_hcws4"]
-[ext_resource type="PackedScene" uid="uid://b4sy4hh23outk" path="res://weapons/weapon_laser_2.tscn" id="13_rnwgx"]
+[ext_resource type="PackedScene" uid="uid://u028oi7ixkmi" path="res://weapons/weapon_laser_3.tscn" id="12_5cnqm"]
 [ext_resource type="PackedScene" uid="uid://whswocs0q861" path="res://weapons/weapon_deployable_personnelretrieval.tscn" id="14_4u6sx"]
+[ext_resource type="PackedScene" uid="uid://b86jghsmvnyg8" path="res://weapons/weapon_shield.tscn" id="14_kc67y"]
 
 [sub_resource type="Resource" id="Resource_553xf"]
 script = ExtResource("1_553xf")
@@ -116,19 +116,9 @@ refill_cost = 1.0
 refill_cost_type = 0
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 
-[sub_resource type="Resource" id="Resource_cxkli"]
-script = ExtResource("1_553xf")
-item_scene = ExtResource("12_hcws4")
-item_type = 0
-unlock_cost = 6
-unlock_cost_type = 0
-refill_cost = 0.5
-refill_cost_type = 0
-metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
-
 [sub_resource type="Resource" id="Resource_p8a76"]
 script = ExtResource("1_553xf")
-item_scene = ExtResource("13_rnwgx")
+item_scene = ExtResource("12_5cnqm")
 item_type = 0
 unlock_cost = 8
 unlock_cost_type = 0
@@ -146,7 +136,17 @@ refill_cost = 1.0
 refill_cost_type = 0
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 
+[sub_resource type="Resource" id="Resource_xingv"]
+script = ExtResource("1_553xf")
+item_scene = ExtResource("14_kc67y")
+item_type = 0
+unlock_cost = 5
+unlock_cost_type = 0
+refill_cost = 1.0
+refill_cost_type = 0
+metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
+
 [resource]
 script = ExtResource("2_iqp04")
-items = Array[ExtResource("1_553xf")]([SubResource("Resource_553xf"), SubResource("Resource_80d23"), SubResource("Resource_gbq34"), SubResource("Resource_5cnqm"), SubResource("Resource_4u6sx"), SubResource("Resource_kc67y"), SubResource("Resource_bpk74"), SubResource("Resource_fyeof"), SubResource("Resource_cuna2"), SubResource("Resource_1p51g"), SubResource("Resource_cxkli"), SubResource("Resource_p8a76"), SubResource("Resource_excop")])
+items = Array[ExtResource("1_553xf")]([SubResource("Resource_553xf"), SubResource("Resource_80d23"), SubResource("Resource_gbq34"), SubResource("Resource_5cnqm"), SubResource("Resource_4u6sx"), SubResource("Resource_kc67y"), SubResource("Resource_bpk74"), SubResource("Resource_fyeof"), SubResource("Resource_cuna2"), SubResource("Resource_1p51g"), SubResource("Resource_p8a76"), SubResource("Resource_excop"), SubResource("Resource_xingv")])
 metadata/_custom_type_script = "uid://b1iamd2aakw8y"
