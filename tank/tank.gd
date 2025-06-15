@@ -65,6 +65,8 @@ var current_equipped_weapon_index: int = -1
 
 @onready var fall_damage_causer: FallDamageCauser = %FallDamageCauser
 @onready var parachute = %Parachute
+# used to check whether the parachute should deploy or not when tank falls
+var has_parachute:bool = false
 
 var health: float:
 	set(value):
@@ -437,7 +439,8 @@ func _calculate_fall_damage(start_position: Vector2, end_position: Vector2) -> f
 	return damage
 
 func started_falling() -> void:
-	parachute.show()
+	if has_parachute:
+		parachute.show()
 	if mark_falling:
 		return
 	print_debug("tank(%s) started falling at position=%s" % [get_parent().name, str(tankBody.global_position)])
@@ -446,7 +449,8 @@ func started_falling() -> void:
 	tank_started_falling.emit(self)
 
 func stopped_falling() -> void:
-	parachute.hide()
+	if has_parachute:
+		parachute.hide()
 	if !mark_falling:
 		return
 	
