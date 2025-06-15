@@ -17,16 +17,27 @@ var weapon: Weapon
 
 signal ammo_updated(new_ammo:int, old_ammo:int, cost:int)
 
-var _buttons_enabled:bool = true
-
-var enabled:bool:
-	get: return visible and _buttons_enabled
+## Alternative to visible where it takes up space but isn't rendered and non-interative
+var display:bool = true:
+	get: return visible and display
 	set(value):
-		if not visible:
+		display = value
+		
+		# Make it effectively invisible but still take up space in layout
+		modulate.a = 1.0 if value else 0.0
+		
+		var disable_buttons:bool = not display or not enabled
+		increment_button.disabled = disable_buttons
+		decrement_button.disabled = disable_buttons
+	
+var enabled:bool = true:
+	get: return display and enabled
+	set(value):
+		if not display:
 			return
-		_buttons_enabled = value
-		increment_button.disabled = not _buttons_enabled
-		decrement_button.disabled = not _buttons_enabled
+		enabled = value
+		increment_button.disabled = not enabled
+		decrement_button.disabled = not enabled
 		
 		if not value:
 			ammo = 0

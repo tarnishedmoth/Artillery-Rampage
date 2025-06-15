@@ -67,8 +67,10 @@ func _ready() -> void:
 	else:
 		cost_label.text = ShopUtils.format_cost(shop_item.unlock_cost,shop_item.unlock_cost_type)
 	
+	# TODO: If we support mod purchases may need to to change this state dynamically and expose as function
+	# Alternatively could swap out the child for a new instance of the weapon row so that everything is initialized properly
 	if not _weapon.use_ammo:
-		ammo_purchase_control.visible = false
+		ammo_purchase_control.display = false
 	else:
 		ammo_purchase_control.item = shop_item
 		ammo_purchase_control.weapon = _weapon

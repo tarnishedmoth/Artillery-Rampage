@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ShopItemsResource" load_steps=29 format=3 uid="uid://kpcvdmtfoeh3"]
+[gd_resource type="Resource" script_class="ShopItemsResource" load_steps=31 format=3 uid="uid://kpcvdmtfoeh3"]
 
 [ext_resource type="Script" uid="uid://c4t1rw2yd6b0j" path="res://progression/shop/shop_item_resource.gd" id="1_553xf"]
 [ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="2_52sja"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://u028oi7ixkmi" path="res://weapons/weapon_laser_3.tscn" id="12_5cnqm"]
 [ext_resource type="PackedScene" uid="uid://whswocs0q861" path="res://weapons/weapon_deployable_personnelretrieval.tscn" id="14_4u6sx"]
 [ext_resource type="PackedScene" uid="uid://b86jghsmvnyg8" path="res://weapons/weapon_shield.tscn" id="14_kc67y"]
+[ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="15_kc67y"]
 
 [sub_resource type="Resource" id="Resource_553xf"]
 script = ExtResource("1_553xf")
@@ -146,7 +147,17 @@ refill_cost = 1.0
 refill_cost_type = 0
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 
+[sub_resource type="Resource" id="Resource_hcws4"]
+script = ExtResource("1_553xf")
+item_scene = ExtResource("15_kc67y")
+item_type = 0
+unlock_cost = 0
+unlock_cost_type = 0
+refill_cost = 0.02
+refill_cost_type = 0
+metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
+
 [resource]
 script = ExtResource("2_iqp04")
-items = Array[ExtResource("1_553xf")]([SubResource("Resource_553xf"), SubResource("Resource_80d23"), SubResource("Resource_gbq34"), SubResource("Resource_5cnqm"), SubResource("Resource_4u6sx"), SubResource("Resource_kc67y"), SubResource("Resource_bpk74"), SubResource("Resource_fyeof"), SubResource("Resource_cuna2"), SubResource("Resource_1p51g"), SubResource("Resource_p8a76"), SubResource("Resource_excop"), SubResource("Resource_xingv")])
+items = Array[ExtResource("1_553xf")]([SubResource("Resource_553xf"), SubResource("Resource_80d23"), SubResource("Resource_gbq34"), SubResource("Resource_5cnqm"), SubResource("Resource_4u6sx"), SubResource("Resource_kc67y"), SubResource("Resource_bpk74"), SubResource("Resource_fyeof"), SubResource("Resource_cuna2"), SubResource("Resource_1p51g"), SubResource("Resource_p8a76"), SubResource("Resource_excop"), SubResource("Resource_xingv"), SubResource("Resource_hcws4")])
 metadata/_custom_type_script = "uid://b1iamd2aakw8y"

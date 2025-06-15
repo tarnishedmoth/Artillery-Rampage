@@ -45,19 +45,18 @@ func _ready() -> void:
 	sorted_items.sort_custom((func(a,b)->bool: return a.unlock_cost < b.unlock_cost))
 	
 	for item in sorted_items:
-		# Display a row if we have the item already and can improve the state of it or can afford to buy it
+		# Display a row if we have the item already or can afford to buy it
 		if not item.item_scene:
 			continue
 		
 		# Here we could choose which UI scene to instantitate by item type
-		# TODO: Maybe we show all items, even those player can't afford so they know what to work for?
 		var item_scene_path:String = item.item_scene.resource_path
 		var existing_weapon:Weapon = existing_weapons.get(item_scene_path)
 		var in_inventory:bool = is_instance_valid(existing_weapon)
 		if not in_inventory:
 			existing_weapon = player_state.get_empty_weapon_if_unlocked(item_scene_path)
 
-		if (existing_weapon and existing_weapon.use_ammo) or (not existing_weapon and can_afford_to_buy_item(item)):
+		if existing_weapon or (not existing_weapon and can_afford_to_buy_item(item)):
 			var weapon_row = weapon_row_scene.instantiate()
 
 			var purchase_state:ItemPurchaseState = ItemPurchaseState.new()
