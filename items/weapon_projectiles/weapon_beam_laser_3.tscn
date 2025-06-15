@@ -21,6 +21,7 @@ texture = SubResource("GradientTexture1D_yuec4")
 [node name="LaserStart" type="Node2D" parent="."]
 
 [node name="ColorRect" type="ColorRect" parent="LaserStart"]
+visible = false
 offset_left = -2.0
 offset_top = -2.0
 offset_right = 2.0
@@ -30,6 +31,7 @@ color = Color(0.139995, 0.711158, 0.973731, 1)
 [node name="LaserEnd" type="Node2D" parent="."]
 
 [node name="ColorRect" type="ColorRect" parent="LaserEnd"]
+visible = false
 offset_left = -2.0
 offset_top = -2.0
 offset_right = 2.0
@@ -37,5 +39,6 @@ offset_bottom = 2.0
 color = Color(0.778615, 0.524467, 1, 1)
 
 [node name="Destructible" type="CollisionPolygon2D" parent="."]
+visible = false
 scale = Vector2(1.07263, 1.07263)
 polygon = PackedVector2Array(-5.59373, 1.86458, -5.59373, 0, -4.66144, -2.79687, -2.79687, -4.66144, 0, -5.59373, 2.79687, -4.66144, 4.66144, -2.79687, 5.59373, 0, 4.66144, 2.79687, 2.79687, 4.66144, 0, 5.59373, -2, 5, -4, 4)

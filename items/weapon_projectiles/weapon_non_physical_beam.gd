@@ -18,7 +18,7 @@ signal completed_lifespan ## Tracked by Weapon class
 @export var falloff_distance_multiplier: float = 1.0 # ModProjectile
 
 @export_category("Destructible")
-@export var destructible_scale_multiplier:Vector2 = Vector2(1 , 1):
+@export var destructible_scale_multiplier:Vector2 = Vector2(2.0 , 2.0):
 	get: return destructible_scale_multiplier*destructible_scale_multiplier_scalar
 @export var destructible_scale_multiplier_scalar:float = 1.0 # ModProjectile
 
@@ -31,6 +31,10 @@ var speed: float = 800.0
 
 ## The angle of the barrel firing the beam. This will be used to determine the trajectory of the beam.
 var aim_angle: float
+
+var can_travel = true
+var time_since_last_hit = 0
+var time_to_wait_between_hits = 0.0075
 
 func _ready() -> void:
 	if has_node('Destructible'):
@@ -55,17 +59,20 @@ func destroy_after_lifetime(lifetime:float = max_lifetime) -> void:
 	timer.start(lifetime)
 
 func _process(delta):
-	var laser_end_velocity = Vector2(speed * delta, 0.0)
-	laser_end.position += laser_end_velocity.rotated(aim_angle)
-	
 	# Only move laser_start at the end of the beam's lifetime
 	#var laser_start_velocity = laser_end_velocity / 100
 	#laser_start.position += laser_start_velocity.rotated(aim_angle)
-	
-	$BeamSprite.global_rotation = aim_angle + deg_to_rad(90)
-	$BeamSprite.position =  (laser_end.position + laser_start.position) / 2
-	$BeamSprite.scale.y = laser_end.position.length() - laser_start.position.length()
-	see_if_beam_collides_with_anything()
+	if can_travel:
+		var laser_end_velocity = Vector2(speed * delta, 0.0)
+		laser_end.position += laser_end_velocity.rotated(aim_angle)
+		see_if_beam_collides_with_anything()
+		$BeamSprite.global_rotation = aim_angle + deg_to_rad(90)
+		$BeamSprite.position =  (laser_end.position + laser_start.position) / 2
+		$BeamSprite.scale.y = laser_end.position.length() - laser_start.position.length()
+	else:
+		time_since_last_hit += delta
+		if time_since_last_hit >= time_to_wait_between_hits:
+			can_travel = true
 
 func see_if_beam_collides_with_anything():
 	var space_state = get_world_2d().direct_space_state
@@ -75,9 +82,10 @@ func see_if_beam_collides_with_anything():
 	query_params.exclude = [self]
 	var result: Dictionary = space_state.intersect_ray(query_params)
 	if result.size() > 0:
+		laser_end.global_position = result.position
 		explode()
-		#can_travel = false
-		#time_since_last_hit = 0
+		can_travel = false
+		time_since_last_hit = 0
 
 func get_destructible_component() -> CollisionPolygon2D:
 	return destructible_component
