@@ -17,7 +17,6 @@ polygon = PackedVector2Array(-104, -8, 14.0625, -2.94116, -7.8125, 422.059, 320.
 wall_mode = 4
 
 [node name="Wind" parent="GameLevel" index="6"]
-wind_min = 0
 wind_max = 0
 
 [node name="RoundDirector" parent="GameLevel" index="7"]

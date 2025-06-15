@@ -235,7 +235,8 @@ func damage_destructible_node(
 	contact_point:Vector2, destructible_scale_multiplier:Vector2
 	) -> void:
 	
-	destructible.damage(projectile, contact_point, destructible_scale_multiplier)
+	var container = WeaponProjectilePhysicsContainer.new(self)
+	destructible.damage(container, contact_point, destructible_scale_multiplier)
 
 func get_instigator() -> Node2D:
 	return owner_tank.get_parent() as Node2D if is_instance_valid(owner_tank) else null

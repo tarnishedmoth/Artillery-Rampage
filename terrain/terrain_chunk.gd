@@ -279,7 +279,7 @@ func delete() -> void:
 	
 # Based on https://www.youtube.com/watch?v=FiKsyOLacwA
 # poly_scale will determine the size of the explosion that destroys the terrain
-func damage(projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
+func damage(projectile: WeaponPhysicsContainer, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
 	if not _can_be_updated:
 		print_debug("%s: damage - damage already in progress - ignoring new damage event" % name)
 		return

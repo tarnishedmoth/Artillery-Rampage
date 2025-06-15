@@ -71,7 +71,7 @@ class LastDamageInputs:
 	var projectile_linear_velocity: Vector2
 	var projectile_angular_velocity: float
 
-	func _init(in_projectile: WeaponProjectile, in_contact_point: Vector2, in_poly_scale: Vector2) -> void:
+	func _init(in_projectile: WeaponPhysicsContainer, in_contact_point: Vector2, in_poly_scale: Vector2) -> void:
 		self.contact_point = in_contact_point
 		self.poly_scale = in_poly_scale
 		self.projectile_linear_velocity = in_projectile.last_recorded_linear_velocity
@@ -106,7 +106,7 @@ func get_first_chunk() -> TerrainChunk:
 # TODO: Think projectile_poly should be a property of the WeaponProjectile and then can call .get_projectile_poly_global to
 # get the randomized damage polygon
 # Only static TerrainChunk objects are damaged this way - other destructible or shatterable chunks are handled in their respective classes
-func damage(terrainChunk: TerrainChunk, projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
+func damage(terrainChunk: TerrainChunk, projectile: WeaponPhysicsContainer, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
 	print_debug("%s - chunk=%s damaged by %s with poly_scale=%s" % [name, terrainChunk.name, projectile.name, poly_scale])
 
 	_last_damage_inputs = LastDamageInputs.new(projectile, contact_point, poly_scale)

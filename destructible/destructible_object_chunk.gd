@@ -37,7 +37,7 @@ func _ready() -> void:
 		_set_initial_mass_and_density()
 		_request_sync_polygons()
 
-func damage(projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
+func damage(projectile: WeaponPhysicsContainer, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
 	if _collision_dirty:
 		print_debug("DestructibleObjectChunk(%s) - skipping as damage already in progress" % name)
 		return

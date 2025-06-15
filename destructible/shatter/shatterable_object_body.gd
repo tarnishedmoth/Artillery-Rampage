@@ -86,10 +86,10 @@ func _recenter_polygon() -> void:
 	center_of_mass_mode = CENTER_OF_MASS_MODE_CUSTOM
 	center_of_mass = Vector2.ZERO
 
-func damage(projectile: WeaponProjectile, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
+func damage(projectile: WeaponPhysicsContainer, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
 	owner.damage(self, projectile, contact_point, poly_scale)
 	
-func shatter(projectile: WeaponProjectile, _destructible_poly_global: PackedVector2Array) -> Array[Node2D]:
+func shatter(projectile: WeaponPhysicsContainer, _destructible_poly_global: PackedVector2Array) -> Array[Node2D]:
 	if shatter_iteration < max_shatter_divisions:
 		return await shatter_with_velocity(projectile.last_recorded_linear_velocity)
 	return []

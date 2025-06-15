@@ -609,6 +609,7 @@ func _setup_new_projectile(new_shot: WeaponProjectile, barrel: Marker2D, power: 
 
 ## If [member scene_to_spawn] is a [WeaponNonPhysicalBeam], use this method for class-specific setup on the new shot.
 func _setup_new_beam(new_shot: WeaponNonPhysicalBeam, barrel: Marker2D) -> void:
+	new_shot.set_sources(parent_tank, self)
 	_add_beam_awaiting(new_shot)
 	new_shot.global_position = barrel.global_position
 	new_shot.aim_angle = barrel.global_rotation
