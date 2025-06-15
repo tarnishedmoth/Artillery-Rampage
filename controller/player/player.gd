@@ -27,7 +27,9 @@ func on_tank_added() -> void:
 func begin_round() -> void:
 	super.begin_round()
 	
-	# Make sure weapon states are up to date before applying upgades
+	# Make sure weapon states are up to date before applying upgrades
+	# Weapon applies any mods on it when it is added to the tree but we are adding the mods and applying after
+	# so there is no "double application" of weapon mods
 	load_and_apply_upgrades()
 	
 # Called at the start of a turn

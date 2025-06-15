@@ -7,6 +7,9 @@ signal acquired_upgrade(mod:ModBundle)
 var current_upgrades:Array[ModBundle]
 var _dirty:bool
 
+func _ready() -> void:
+	GameEvents.play_mode_changed.connect(_on_play_mode_changed)
+
 func get_current_upgrades() -> Array[ModBundle]:
 	return current_upgrades
 
@@ -23,6 +26,16 @@ func _on_acquired_upgrade(mod_bundle:ModBundle) -> void:
 
 	current_upgrades.append(mod_bundle)
 	acquired_upgrade.emit(mod_bundle)
+
+func _on_play_mode_changed(old_mode:SceneManager.PlayMode, new_mode: SceneManager.PlayMode) -> void:
+	if old_mode == SceneManager.PlayMode.STORY:
+		print_debug("%s: Reset upgrades after leaving story mode %s -> %s" \
+			% [name, EnumUtils.enum_to_string(SceneManager.PlayMode, old_mode), EnumUtils.enum_to_string(SceneManager.PlayMode, new_mode)])
+		clear()
+	
+func clear() -> void:
+	current_upgrades.clear()
+	_dirty = false
 
 #region Savable
 

@@ -5,7 +5,7 @@ var _game_level:GameLevel
 var _requires_restore:bool
 var _dirty:bool
 
-var _run:int
+var _run:int = 1
 
 var run_count: int:
 	get: return _run

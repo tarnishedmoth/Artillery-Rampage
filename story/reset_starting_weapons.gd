@@ -2,6 +2,8 @@
 ## as upgrades and weapons are earned through story progression and purchases through scrap and personnel
 extends Node
 
+var _level:GameLevel
+
 # Assumes that we are in story mode, though technically could use it for any game mode if want to reset the state
 func _ready() -> void:
 	# Skip if precompiler running
@@ -11,18 +13,18 @@ func _ready() -> void:
 
 func _on_level_loaded(level:GameLevel) -> void:
 	# Assumes that we only save when completing a level
-	# If this is not the first level, then there is nothing to do 
-	if SceneManager._current_level_index > 0:
-		print_debug("%s: Skip resetting weapons as level=%s is level %d" % [name, level.level_name, SceneManager._current_level_index])
-		return
-	
-	print_debug("%s: Will reset weapons as level=%s is the first level" % [name, level.level_name])
-	GameEvents.player_added.connect(_on_player_added)
+	_level = level
 
-func _on_player_added(player:TankController) -> void:
+	# Need to wait for round start to make sure all level state loaded
+	GameEvents.player_added.connect(_check_reset_weapons)
+	
+func _check_reset_weapons(player: TankController) -> void:
 	if not player is Player:
 		return
-	print_debug("%s: Reset weapons for player on first level" % [name])
+		
+	if not _should_reset_weapons(_level):
+		return
+	print_debug("%s: Reset weapons for player on first level=%s of first run" % [name, _level.level_name])
 
 	# Assumes first weapon is the default one that player should start with
 	var existing_weapons:Array[Weapon] = player.get_weapons()
@@ -36,3 +38,20 @@ func _on_player_added(player:TankController) -> void:
 
 	player.remove_all_weapons(true)
 	player.attach_weapons([default_starting_weapon])
+
+func _should_reset_weapons(level:GameLevel) -> bool:
+	# If this is not the first level or not the first run, then there is nothing to do 
+	if SceneManager._current_level_index > 0:
+		print_debug("%s: Skip resetting weapons as level=%s is level %d" % [name, level.level_name, SceneManager._current_level_index])
+		return false
+	
+	var story_level_state:StoryLevelState = get_tree().get_first_node_in_group(Groups.StoryLevelState) as StoryLevelState
+	if not story_level_state:
+		push_warning("%s: StoryLevelState not found in tree - unable to check run number" % name)
+		return true
+	
+	var run_count:int = story_level_state.run_count
+	if run_count > 1:
+		print_debug("%s: Skip resetting weapons as this is run %d" % [name, run_count])
+		return false
+	return true	

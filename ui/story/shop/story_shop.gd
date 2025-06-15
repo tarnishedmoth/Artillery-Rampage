@@ -155,7 +155,11 @@ func _apply_weapon(player_state: PlayerState, purchase_state: ItemPurchaseState)
 		assert(purchase_state.new_item)
 
 		# Need to duplicate as the reference above is owned by the UI element and will be freed when this node exits
-		player_state.weapons.push_back(purchase_state.new_item.duplicate())
+		# We could both be buying and adding ammo
+		var new_weapon:Weapon = purchase_state.new_item.duplicate()
+		new_weapon.current_ammo += purchase_state.refill_amount
+		
+		player_state.weapons.push_back(new_weapon)
 		
 		print_debug("%s: Purchased new weapon - %s" % [name, purchase_state.new_item.display_name])
 
