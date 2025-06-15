@@ -16,7 +16,7 @@ var enabled:bool:
 			return
 		else:
 			buy_button.disabled = not value
-
+				
 func reset() -> void:
 	enabled = true
 	buy_button.set_pressed_no_signal(false)

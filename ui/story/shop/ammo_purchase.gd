@@ -50,7 +50,10 @@ var purchase_enabled:bool:
 			return
 		increment_button.disabled = not value
 		
-func reset() -> void:
+func reset(emit_signals:bool = false) -> void:
+	if emit_signals:
+		_update(-ammo)
+		
 	# Toggle so all state reset
 	enabled = false
 	enabled = true

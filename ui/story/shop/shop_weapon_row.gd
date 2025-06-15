@@ -82,6 +82,9 @@ func _connect_signals() -> void:
 	if weapon_buy_control.enabled:
 		weapon_buy_control.buy_button.toggled.connect(func(toggled_on:bool)->void:
 			on_buy_state_changed.emit(_weapon, toggled_on)
+			# if toggle buy to false then reset any ammo purchased and be sure to fire signals so that resources updated appropriately
+			if not toggled_on and ammo_purchase_control.display:
+				ammo_purchase_control.reset(true)
 		)
 	
 	if ammo_purchase_control.enabled:
