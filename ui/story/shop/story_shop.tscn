@@ -1,9 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://o55c1iigswjc"]
+[gd_scene load_steps=8 format=3 uid="uid://o55c1iigswjc"]
 
+[ext_resource type="Theme" uid="uid://bf5nv0nins5p6" path="res://ui/themes/shop.tres" id="1_abhue"]
 [ext_resource type="Script" uid="uid://blcakxdcf5gn4" path="res://ui/story/shop/story_shop.gd" id="1_po24w"]
 [ext_resource type="PackedScene" uid="uid://dpxoc5ysgsvep" path="res://ui/story/shop/resource_shop_row.tscn" id="2_gms1v"]
 [ext_resource type="Resource" uid="uid://kpcvdmtfoeh3" path="res://progression/shop/shop_items.tres" id="2_xg2qo"]
 [ext_resource type="Script" uid="uid://b8idjgo18fqvv" path="res://ui/story/shop/growing_scroll_container.gd" id="4_xg2qo"]
+[ext_resource type="FontFile" uid="uid://cr7d38d0438qq" path="res://ui/fonts/FreeSerifBold-rdMp.otf" id="6_wkf8e"]
+
+[sub_resource type="Theme" id="Theme_mpdqb"]
+default_font = ExtResource("6_wkf8e")
+default_font_size = 18
 
 [node name="StoryShop" type="Control"]
 layout_mode = 3
@@ -14,6 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("1_abhue")
 script = ExtResource("1_po24w")
 item_resources = ExtResource("2_xg2qo")
 
@@ -36,9 +43,11 @@ theme_override_constants/margin_bottom = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 15
 
 [node name="Label" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 24
 text = "Item Shop"
 horizontal_alignment = 1
 
@@ -61,6 +70,7 @@ horizontal_scroll_mode = 0
 vertical_scroll_mode = 4
 script = ExtResource("4_xg2qo")
 max_size_y = 575.0
+extra_margin = 10.0
 target_container = NodePath("ItemsPanel/ItemsContainer")
 
 [node name="ItemsPanel" type="PanelContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer"]
@@ -73,6 +83,29 @@ size_flags_vertical = 3
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
+
+[node name="Header" type="HBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer"]
+layout_mode = 2
+theme = SubResource("Theme_mpdqb")
+
+[node name="Spacer" type="Control" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer/Header"]
+custom_minimum_size = Vector2(15, 30)
+layout_mode = 2
+
+[node name="Item" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer/Header"]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+text = "Item"
+
+[node name="Buy" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer/Header"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="Ammo" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer/Header"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Purchase Ammo"
+metadata/_edit_lock_ = true
 
 [node name="ButtonsContainer" type="HBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2

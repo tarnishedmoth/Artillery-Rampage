@@ -38,4 +38,5 @@ func update() -> void:
 	if weapon.use_ammo:
 		current_ammo.text = "%d" % owned_weapon.current_ammo if already_owned else "%d" % weapon.current_ammo
 	else:
-		current_ammo.text = "N/A"
+		# Infinity Unicode symbol
+		current_ammo.text = char(8734)
