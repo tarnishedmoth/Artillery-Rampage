@@ -12,9 +12,19 @@ const weapon_row_scene:PackedScene = preload("res://ui/story/shop/shop_weapon_ro
 
 class ItemPurchaseState:
 	var item:ShopItemResource
-	var existing_item: Node
+	var existing_item: Node:
+		get: return existing_item
+		set(value):
+			existing_item = value
+			_on_item_set(existing_item)
+			
 	var already_in_inventory:bool
-	var new_item:Node
+	var new_item:Node:
+		get: return new_item
+		set(value):
+			new_item = value
+			_on_item_set(new_item)
+
 	var ui_control:Control
 	var buy:bool
 	var refill_amount:int
@@ -26,6 +36,19 @@ class ItemPurchaseState:
 		refill_amount = 0
 		ui_control.reset()
 	
+	func _on_item_set(backing_item:Node) -> void:
+		if not backing_item:
+			return
+		var weapon:Weapon = backing_item as Weapon
+		if not weapon:
+			return
+
+		# Apply a discount if weapon is retained when empty so that this has some kind of advantage in the game
+		# We make a duplicate of the resource so okay to modify it. Ordinarily resources are global resources
+		# We do not need to re-purchase previously unlocked weapons
+		item.apply_refill_discount = weapon.retain_when_empty
+		print_debug("%s: apply_refill_discount=%s" % [item.item_scene.resource_path, str(item.apply_refill_discount)])
+
 ## Keyed by the scene file path of the instantiated item
 var _purchase_item_state_dictionary:Dictionary[String, ItemPurchaseState] = {}
 
@@ -41,10 +64,12 @@ func _ready() -> void:
 	
 	_update_resources_control_state()
 	
-	var sorted_items: Array[ShopItemResource] = item_resources.items.duplicate()
+	# Cannot do a deep copy of array to duplicate the resources as this type is not duplicated in a deep copy
+	# We need to duplicate as will be modifying the resource and map returns an Array not a generic array i.e. Array[ShopItemResource]
+	var sorted_items: Array = item_resources.items.map(func(r): return r.duplicate())
 	sorted_items.sort_custom((func(a,b)->bool: return a.unlock_cost < b.unlock_cost))
 	
-	for item in sorted_items:
+	for item:ShopItemResource in sorted_items:
 		# Display a row if we have the item already or can afford to buy it
 		if not item.item_scene:
 			continue
@@ -101,10 +126,8 @@ func can_afford_to_refill_any(item: ShopItemResource) -> bool:
 		avail_spend = PlayerAttributes.scrap - pending_scrap_spend - min_remaining_scrap
 	else:
 		avail_spend = PlayerAttributes.personnel - pending_personnel_spend - min_remaining_personnel
-	
-	if avail_spend <= 0:
-		return false
 
+	# In case the refill cost is 0 don't check the avail spend first
 	return avail_spend - item.get_refill_cost(1) >= 0
 				
 func _on_done_pressed() -> void:
