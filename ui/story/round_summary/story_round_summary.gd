@@ -86,6 +86,10 @@ func _update_attributes() -> void:
 	if stats.won:
 		# Nerfing personnel gained by diving by 3 instead of 2
 		personnel_change = ceil(_grade / 3.0)
+		# If win get a bonus multiplier for scrap_change based on grade
+		var bonus_scrap_multiplier:float = _calculate_scrap_bonus_multiplier()
+		print_debug("%s: Bonus scrap multiplier of %.2fx on win starting from %d scrap" % [name, bonus_scrap_multiplier, scrap_change])
+		scrap_change = ceili(scrap_change * bonus_scrap_multiplier)
 	else:
 		personnel_change =  -floori((grade_to_letter.size() - _grade) / 4.0)
 
@@ -100,6 +104,18 @@ func _update_attributes() -> void:
 	SaveStateManager.save_tree_state(&"StoryLevelFinished")
 
 	_is_game_over = PlayerAttributes.personnel <= 0
+
+func _calculate_scrap_bonus_multiplier() -> float:
+	match _get_letter_grade(_grade):
+		"A+": return 2.0
+		"A": return 1.8
+		"A-": return 1.6
+		"B+": return 1.5
+		"B": return 1.4
+		"B-": return 1.3
+		"C+": return 1.2
+		"C" : return 1.1
+		_: return 1.0
 
 func _calculate_scrap_earned() -> int:
 	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
@@ -190,8 +206,11 @@ func _calculate_outcome(grade: int) -> AutoNarrative.Outcomes:
 
 		
 func _fmt_grade(grade: int) -> String:
+	return _get_letter_grade(grade)
+
+func _get_letter_grade(grade: int) -> String:
 	return grade_to_letter.get(grade, "A+")
-		
+
 func _fmt_attr(value: int, delta:int) -> String:
 	if delta > 0:
 		return "%d (+%d)" % [value, delta]
