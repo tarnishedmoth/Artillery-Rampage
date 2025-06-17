@@ -546,4 +546,14 @@ func _get_current_time_seconds() -> float:
 func _get_playable_x_extent() -> float:
 	return get_viewport().get_visible_rect().size.x
 
+func compute_damage_score(weapon:Weapon, projectile: WeaponProjectile) -> float:
+	var count_multiplier:float = weapon.number_of_scenes_to_spawn
+	if weapon.always_shoot_for_duration > 0:
+		count_multiplier *= weapon.always_shoot_for_duration * weapon.fire_rate
+	else:
+		count_multiplier *= weapon.ammo_used_per_shot
+	var score : float = projectile.max_damage * projectile.max_damage * projectile.min_falloff_distance * projectile.max_falloff_distance * count_multiplier
+
+	return score
+
 #endregion

@@ -396,7 +396,7 @@ func _select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavi
 		var projectile : WeaponProjectile = weapon_info.projectile_prototype
 		
 		if projectile and target_distance > projectile.max_falloff_distance:
-			var score : float = projectile.max_damage * projectile.max_damage * projectile.min_falloff_distance * projectile.max_falloff_distance * weapon.ammo_used_per_shot
+			var score : float = compute_damage_score(weapon, projectile)
 			print_debug("Lobber AI(%s): weapon(%d)=%s; score=%f" % [tank.owner.name, i, weapon.name, score])
 			if int(signf(score - best_score)) == comparison_result:
 				best_score = score

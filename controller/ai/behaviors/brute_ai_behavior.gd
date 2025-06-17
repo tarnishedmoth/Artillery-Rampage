@@ -216,7 +216,6 @@ func _select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavi
 	else:
 		target_distance = tank.global_position.distance_to(opponent_data.adjusted_position)
 
-
 	# Select most powerful available weapon that won't cause self-damage
 	var player_has_not_fired:bool = _target_is_player_and_has_not_fired(opponent_data.opponent)
 	var best_weapon:int = -1
@@ -238,7 +237,7 @@ func _select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavi
 		var projectile : WeaponProjectile = weapon_info.projectile_prototype
 		
 		if projectile and target_distance > projectile.max_falloff_distance:
-			var score : float = projectile.max_damage * projectile.max_damage * projectile.min_falloff_distance * projectile.max_falloff_distance * weapon.ammo_used_per_shot
+			var score : float = compute_damage_score(weapon, projectile)
 			print_debug("BruteAI(%s): weapon(%d)=%s; score=%f" % [tank.name, i, weapon.name, score])
 			if int(signf(score - best_score)) == comparison_result:
 				best_score = score
