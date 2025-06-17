@@ -15,8 +15,12 @@ class TerrainTexture:
 
 var terrain: Terrain
 
-# a grass or rock "crust" using a textured Line2D to outline chunk
-var outlineMeshEnabled: bool = true
+## a grass or rock "crust" using a textured Line2D to outline chunk
+@export var outlineMeshEnabled: bool = true
+## Minimum fraction of outline width for two adjacent point to include the output
+## Set to 0 to disable this behavior
+@export_range(0.0, 1.0, 0.01) var outline_mesh_dist_threshold:float = 0
+
 var outlineMesh: Line2D
 
 @export_range(0, 10.0) var gravity_scale:float = 1.0
@@ -152,8 +156,40 @@ func regenerate_outline_mesh() -> void:
 	# outlineMesh.points = terrainMesh.polygon.duplicate()
 	
 	# the very fast but DANGEROUS way
-	outlineMesh.points = terrainMesh.polygon
-	
+	if is_zero_approx(outline_mesh_dist_threshold):
+		outlineMesh.points = terrainMesh.polygon
+	else:
+		# Only include if not too close together
+		var source_pts:PackedVector2Array = terrainMesh.polygon
+		var outline_pts:PackedVector2Array = []
+		var outline_count:int = 0
+		# Pre-allocate expected array size
+		outline_pts.resize(source_pts.size())
+		
+		# Using the outlineMesh width causes too many artifacts of its own
+		var min_dist:float = outlineMesh.width * outline_mesh_dist_threshold
+		var min_dist_sq:float = min_dist * min_dist
+		var min_interpolated_dist_sq:float = min_dist_sq * 4 #outlineMesh.width * outlineMesh.width
+		for i in source_pts.size():
+			var vertex:Vector2 = source_pts[i]
+			# We need more than surface points as it needs to make a closed loop
+			#if is_surface_point(vertex)
+			var include_vertex:bool = false
+			if (outline_count == 0 or outline_pts[outline_count - 1].distance_squared_to(vertex) >= min_dist_sq):
+				include_vertex = true
+			elif i < source_pts.size() - 1:
+				# See distance to point after
+				var next_vertex:Vector2 = source_pts[i + 1]
+				if outline_pts[outline_count - 1].distance_squared_to(next_vertex) >= min_interpolated_dist_sq:
+					vertex =  outline_pts[outline_count - 1].lerp(next_vertex, 0.5)
+					include_vertex = true
+			if include_vertex:
+				outline_pts[outline_count] = vertex
+				outline_count += 1
+				
+		# Shrink to actual points added
+		outline_pts.resize(outline_count)
+		outlineMesh.points = outline_pts
 	
 func _physics_process(delta: float) -> void:
 	if !falling: return

@@ -42,6 +42,7 @@ fractal_gain = 0.605
 [node name="GameLevel" parent="." instance=ExtResource("1_trgql")]
 
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
+outline_mesh_dist_threshold = 0.4
 texture_resources = Array[ExtResource("2_2spyf")]([SubResource("Resource_msmqt")])
 
 [node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk" index="0"]
