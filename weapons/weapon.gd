@@ -250,7 +250,7 @@ func connect_to_tank(tank: Tank) -> void:
 			magazines_changed.connect(parent_tank._on_weapon_magazines_changed)
 	barrels.append(parent_tank.get_weapon_fire_locations())
 	configure_barrels()
-	reload()
+	reload(true) #Reload immediately during configuration
 
 ## Should be called by a [Tank] when exiting tree to disconnect this [Weapon].
 ## [br][br]
@@ -293,7 +293,7 @@ func shoot(power:float = fire_velocity) -> void:
 	if is_shooting: return
 	if not is_configured:
 		configure_barrels()
-		reload()
+		await reload()
 
 	if always_shoot_for_duration > 0.0:
 		shoot_for_duration(always_shoot_for_duration, power)

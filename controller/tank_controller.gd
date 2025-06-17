@@ -62,6 +62,7 @@ func begin_round() -> void:
 		pending_state = null
 
 func begin_turn() -> void:
+	print_debug("%s: Begin Turn" % [name])
 	_active_turn = true
 	
 	tank.push_weapon_update_to_hud() # TODO: fix for simultaneous fire game
@@ -78,6 +79,8 @@ func end_turn() -> void:
 	if not _active_turn:
 		print_debug("TankController(%s) - end_turn: Not active turn" % [name])
 		return
+
+	print_debug("%s: End Turn" % [name])
 
 	_active_turn = false
 	clear_all_popups()

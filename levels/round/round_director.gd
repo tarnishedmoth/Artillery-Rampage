@@ -272,7 +272,7 @@ func execute_all_actions() -> void:
 	for i in actions.size():
 		current_gamestate.run_next_action()
 		actions_taken += 1
-	print_debug("Executed",actions_taken,"actions.")
+	print_debug("Executed ",actions_taken," actions.")
 
 func _async_check_and_await_falling() -> void:
 	 # Wait for physics to settle prior to allowing next player to start
