@@ -250,8 +250,9 @@ func connect_to_tank(tank: Tank) -> void:
 			magazines_changed.connect(parent_tank._on_weapon_magazines_changed)
 	barrels.append(parent_tank.get_weapon_fire_locations())
 	configure_barrels()
-	reload(true) #Reload immediately during configuration
-
+	#Reload immediately during configuration but we must wait until tank parent ready runs so wait a tick
+	await get_tree().process_frame
+	reload(true) 
 ## Should be called by a [Tank] when exiting tree to disconnect this [Weapon].
 ## [br][br]
 func disconnect_from_tank(tank: Tank) -> void:
