@@ -1,5 +1,29 @@
 extends Node
 
+## Keep track of enemy damage to award scrap with different amounts when level complete
+class EnemyData:
+	var name:String
+	# Player caused some damage to the opponent
+	var damaged_by_player:bool
+	# Another opponent other than the AI itself caused the damage
+	var damaged_by_nonplayer:bool
+	# Player was instigator for the kill
+	var killed_by_player:bool
+	var last_damager:int
+
+	func set_name(tank: Tank) -> void:
+		name = tank.get_parent().to_string() if tank.get_parent() else tank.name
+		
+	func is_full_kill() -> bool:
+		return killed_by_player and not damaged_by_nonplayer
+	
+	func is_partial_kill() -> bool:
+		return killed_by_player and damaged_by_nonplayer
+	
+	func is_damaged() -> bool:
+		return damaged_by_player
+
+
 class RoundData:
 	var start_health:float
 	var final_health:float
@@ -14,6 +38,8 @@ class RoundData:
 	var died:bool
 	var won:bool
 	var level_name:String
+
+	var enemies_damaged:Dictionary[int, EnemyData]
 	
 var round_data:RoundData 
 var _player:Player
@@ -68,18 +94,37 @@ func _on_player_added(player:TankController) -> void:
 		player.tank.tank_killed.connect(_on_tank_killed)
 
 func _on_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2D) -> void:
-	if instigatorController != _player:
-		print_debug("%s: Ignore %s killed %s" % [name, instigatorController.name, tank.get_parent().name])	
+	var enemy_data:EnemyData = get_or_add_enemy_data(tank)
+	enemy_data.set_name(tank)
+	
+	# Additionally credit player with kill if they did some damage to opponent but opponent credited with killing themselves
+	var instigator_was_player:bool = instigatorController == _player or \
+	 (instigatorController and instigatorController == tank.get_parent() and enemy_data.last_damager == instigatorController.get_instance_id())
+	enemy_data.killed_by_player = instigator_was_player
+
+	if not instigator_was_player:
+		print_debug("%s: Ignore %s killed %s" % [name, instigatorController.name, tank.get_parent()])	
 		return
 		
 	round_data.kills += 1
-	print_debug("%s: Player killed %s (kills=%d)" % [name, tank.get_parent().name, round_data.kills])	
+	print_debug("%s: Player killed %s (kills=%d)" % [name, tank.get_parent(), round_data.kills])	
 	
 func _on_player_took_damage(_tank: Tank, instigatorController: Node2D, _instigator: Node2D, amount: float) -> void:
 	round_data.health_lost += amount
 	print_debug("%s: Player took damage: %f (health_lost=%f)" % [name, amount, round_data.health_lost])
 
-func _on_enemy_took_damage(_tank: Tank, instigatorController: Node2D, _instigator: Node2D, amount: float) -> void:
+func _on_enemy_took_damage(tank: Tank, instigatorController: Node2D, _instigator: Node2D, amount: float) -> void:
+	var enemy_data:EnemyData = get_or_add_enemy_data(tank)
+	enemy_data.set_name(tank)
+	if instigatorController == _player:
+		enemy_data.damaged_by_player = true
+		enemy_data.last_damager = instigatorController.get_instance_id()
+	elif instigatorController and instigatorController != tank.get_parent():
+		# Damaged by another AI - don't count self damage against player for points calculation
+		enemy_data.damaged_by_nonplayer = true
+		enemy_data.last_damager = instigatorController.get_instance_id()
+		print_debug("%s: Enemy %s took damage by %s" % [name, tank.get_parent(), instigatorController.name])
+
 	# Make sure player was instigator
 	if instigatorController != _player:
 		var _name:String
@@ -90,12 +135,20 @@ func _on_enemy_took_damage(_tank: Tank, instigatorController: Node2D, _instigato
 				_name = instigatorController.to_string()
 		else:
 			_name = "Nil"
-		print_debug("%s: Ignore enemy took damage as wasn't by player - instigator=%s" % [name, _name])
+		print_debug("%s: Ignore enemy %s took damage amount as wasn't by player - instigator=%s" % [name, tank.get_parent(), _name])
 		return
 		
 	round_data.damage_done += amount
-	print_debug("%s: Enemy took damage by player - enemy=%s; amount=%f (damage_done=%f)" % [name, _tank.get_parent().name, amount, round_data.damage_done])	
+	print_debug("%s: Enemy %s took damage by player - amount=%f (damage_done=%f)" % [name, tank.get_parent(), amount, round_data.damage_done])	
 
+func get_or_add_enemy_data(tank: Tank) -> EnemyData:
+	var key:int = tank.get_instance_id()
+	var enemy_data:EnemyData = round_data.enemies_damaged.get(key)
+	if not enemy_data:
+		enemy_data = EnemyData.new()
+		round_data.enemies_damaged.set(key, enemy_data)
+	return enemy_data
+	
 func _on_turn_started(player: TankController) -> void:
 	if player != _player:
 		print_debug("%s: Ignore non-player start - player=%s" % [name, player.name])	

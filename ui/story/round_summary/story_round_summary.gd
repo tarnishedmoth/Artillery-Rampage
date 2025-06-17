@@ -79,14 +79,15 @@ func _update_attributes() -> void:
 		
 	# TODO: Make this more dynamic - use curves
 	var personnel_change:int = 0
-	var scrap_change:int = 0
+
+	# Player gets scrap even when lose based on collected data
+	var scrap_change:int = _calculate_scrap_earned()
 
 	if stats.won:
-		personnel_change = ceil(_grade / 2.0)
-		# TODO: Track total units damaged even if not killed
-		scrap_change = stats.kills * 3
+		# Nerfing personnel gained by diving by 3 instead of 2
+		personnel_change = ceil(_grade / 3.0)
 	else:
-		personnel_change =  -floori((grade_to_letter.size() - _grade) / 3.0)
+		personnel_change =  -floori((grade_to_letter.size() - _grade) / 4.0)
 
 	PlayerAttributes.personnel = maxi(PlayerAttributes.personnel + personnel_change, 0)
 	PlayerAttributes.scrap = maxi(PlayerAttributes.scrap + scrap_change, 0)
@@ -99,6 +100,29 @@ func _update_attributes() -> void:
 	SaveStateManager.save_tree_state(&"StoryLevelFinished")
 
 	_is_game_over = PlayerAttributes.personnel <= 0
+
+func _calculate_scrap_earned() -> int:
+	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
+	assert(stats, "_calculate_scrap_earned called without round data!")
+
+	# Earn 3 scrap for a full kill (player killed opponent and caused all the damage except for tank self damage)
+	# Earn 2 scrap for a partial kill (player killed opponent but some other opponent caused some damage)
+	# Earn 1 scrap for any damage to opponent
+
+	var earned_scrap:int = 0
+	for key in stats.enemies_damaged:
+		var enemy_data:RoundStatTracker.EnemyData = stats.enemies_damaged[key]
+		if enemy_data.is_full_kill():
+			earned_scrap += 3
+			print_debug("%s: Awarding 3 scrap for full kill against %s" % [name, enemy_data.name])
+		elif enemy_data.is_partial_kill():
+			earned_scrap += 2
+			print_debug("%s: Awarding 2 scrap for partial kill against %s" % [name, enemy_data.name])
+		elif enemy_data.is_damaged():
+			earned_scrap += 1
+
+			print_debug("%s: Awarding 1 scrap for some damage against %s" % [name, enemy_data.name])
+	return earned_scrap
 
 func _on_next_pressed() -> void:
 	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
