@@ -92,6 +92,7 @@ func _ready() -> void:
 			_purchase_item_state_dictionary[item_scene_path] = purchase_state
 			
 			weapon_row.shop_item = item
+			weapon_row.weapon = existing_weapon
 			items_container.add_child(weapon_row)
 			
 			weapon_row.on_buy_state_changed.connect(_on_weapon_buy_state_changed)
