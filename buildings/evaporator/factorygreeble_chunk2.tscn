@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://bb350kd362moq"]
+
+[ext_resource type="Script" uid="uid://bmi1wdvbuh06w" path="res://destructible/destructible_object_chunk.gd" id="1_hcigi"]
+[ext_resource type="Script" uid="uid://dncglgy7n0c4f" path="res://destructible/destructible_poly_operations.gd" id="3_jdwuw"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_huuly"]
+load_path = "res://.godot/imported/factory_greebles.png-7c88c83b72cb1b298ecb359c885f7181.ctex"
+
+[node name="DestructibleObjectChunk" type="RigidBody2D" groups=["Destructible"]]
+collision_layer = 16
+collision_mask = 315
+mass = 12000.0
+center_of_mass_mode = 1
+center_of_mass = Vector2(0, -100)
+max_contacts_reported = 1
+script = ExtResource("1_hcigi")
+smooth_influence_scale = 0.25
+min_mass = 1600.0
+destroy_below_min_mass = true
+
+[node name="Mesh" type="Polygon2D" parent="."]
+texture = SubResource("CompressedTexture2D_huuly")
+texture_offset = Vector2(190, 256)
+polygon = PackedVector2Array(-64, -168, -48, -168, -16, -136, 24, -136, 24, -48, 48, -48, 48, 0, -176, 0, -176, -32, -64, -32, -64, -48, -56, -48, -56, -96, -64, -96, -64, -128)
+
+[node name="Collision" type="CollisionPolygon2D" parent="."]
+position = Vector2(0, 0.649994)
+polygon = PackedVector2Array(-64, -168, -48, -168, -16, -136, 24, -136, 24, -48, 48, -48, 48, 0, -176, 0, -176, -32, -64, -32, -64, -48, -56, -48, -56, -96, -64, -96, -64, -128)
+
+[node name="DestructiblePolyOperations" type="Node" parent="."]
+script = ExtResource("3_jdwuw")

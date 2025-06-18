@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://d2kx5hvsxsu7h"]
+[gd_scene load_steps=11 format=3 uid="uid://d2kx5hvsxsu7h"]
 
 [ext_resource type="Script" uid="uid://e1gq6cjfgr7d" path="res://progression/upgrade_select.gd" id="1_dt2xf"]
+[ext_resource type="Theme" uid="uid://bf5nv0nins5p6" path="res://ui/themes/shop.tres" id="1_iqa7v"]
 [ext_resource type="Script" uid="uid://q2j3yg41rkbk" path="res://progression/button_upgrade_selection.gd" id="2_qujwc"]
 [ext_resource type="Script" uid="uid://cevnfqipg6slo" path="res://items/weapon_projectiles/mod_projectile.gd" id="3_83rhi"]
 [ext_resource type="Script" uid="uid://ctrs8xq1khhs2" path="res://weapons/mod_weapon.gd" id="4_1lrpj"]
@@ -35,6 +36,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_iqa7v")
 script = ExtResource("1_dt2xf")
 upgrade_buttons_container = NodePath("MarginContainer/HBoxContainer")
 

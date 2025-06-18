@@ -9,7 +9,7 @@ var _load_strategy: Callable
 
 func _ready() -> void:
 
-	# TODO: If save performance becomes an issue can switch to binary for release builds, but 
+	# TODO: If save performance becomes an issue can switch to binary for release builds, but
 	# it will be easier to debug issues and less frustrating to end users if we just use text always
 	if true: #OS.is_debug_build():
 		_save_ext = &"json"
@@ -56,7 +56,7 @@ func consume_state_flag(flag:StringName, consumer_key:StringName) -> bool:
 			flag_consumers[consumer_key] = true
 			return true
 	return false
-	
+
 func reset_save() -> void:
 	save_state = SaveState.new()
 	_save()
@@ -67,7 +67,7 @@ func restore_node_state(node:Node, context_trigger:StringName = "", force_file_r
 	if not node or not node.is_in_group(Groups.Savable):
 		push_error("%s: node=%s is not Savable" % [name, node])
 		return
-	
+
 	_restore_state(func() -> Array[Node]:
 		return [node],
 	 SaveState.SaveContext.Node,
@@ -95,12 +95,12 @@ func _restore_state(nodes_getter:Callable, context:SaveState.SaveContext, contex
 		node.restore_from_save_state(save_state)
 
 	GameEvents.save_state_restored.emit(context, context_trigger)
-	
+
 func save_node_state(node:Node, context_trigger:StringName = "") -> void:
 	if not node or not node.is_in_group(Groups.Savable):
 		push_error("%s: node=%s is not Savable" % [name, node])
 		return
-	
+
 	_save_state(func() -> Array[Node]: return [node], SaveState.SaveContext.Node, context_trigger)
 
 func save_tree_state(context_trigger:StringName = "") -> void:
@@ -118,8 +118,8 @@ func _save_state(nodes_getter:Callable, context:SaveState.SaveContext, context_t
 	save_state.context_trigger = context_trigger
 
 	for node in nodes:
-		node.update_save_state(save_state)
-		
+		node.update_save_state(save_state) ## CRITICAL This is where all the nodes down the tree get passed this data.
+
 	_save()
 
 	GameEvents.save_state_persisted.emit(context, context_trigger)
@@ -128,7 +128,7 @@ func clear_save_state_by_key(key:StringName) -> void:
 	if not save_state or not save_state.state:
 		print_debug("No save state is available")
 		return
-	
+
 	if save_state.state.has(key):
 		save_state.state.erase(key)
 	_save()
@@ -185,7 +185,7 @@ func _load_as_text() -> SaveState:
 	if not FileAccess.file_exists(save_path):
 		print_debug("%s: Save file %s does not exist" % [name, save_path])
 		return null
-		
+
 	var file = FileAccess.open(save_path, FileAccess.READ)
 	if file:
 		var save_state_str:String = file.get_as_text()
@@ -195,9 +195,9 @@ func _load_as_text() -> SaveState:
 		if not raw_json:
 			push_error("%s: Failed to parse JSON from file %s" % [name, save_path])
 			return null
-		
+
 		var data:Dictionary[StringName, Dictionary] = JSON.to_native(raw_json, false)
-		
+
 		return _to_save_state(data)
 	else:
 		push_error("%s: Failed to open file %s for reading" % [name, save_path])

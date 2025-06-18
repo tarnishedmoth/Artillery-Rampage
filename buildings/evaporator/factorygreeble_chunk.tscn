@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://c2imoahrkuj2r"]
+[gd_scene load_steps=4 format=3 uid="uid://c2imoahrkuj2r"]
 
 [ext_resource type="Script" uid="uid://bmi1wdvbuh06w" path="res://destructible/destructible_object_chunk.gd" id="1_ipi37"]
+[ext_resource type="Texture2D" uid="uid://32r1u2b1v6jo" path="res://buildings/evaporator/factory_greebles.png" id="2_3plii"]
 [ext_resource type="Script" uid="uid://dncglgy7n0c4f" path="res://destructible/destructible_poly_operations.gd" id="2_4nqxq"]
 
 [node name="DestructibleObjectChunk" type="RigidBody2D" groups=["Destructible"]]
@@ -16,11 +17,13 @@ min_mass = 1600.0
 destroy_below_min_mass = true
 
 [node name="Mesh" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-16, -16, -16, -48, -40, -72, -40, -144, -16, -144, -8, -152, 8, -152, 16, -144, 40, -144, 40, -72, 16, -48, 16, -16, 32, 0, -32, 0)
+texture = ExtResource("2_3plii")
+texture_offset = Vector2(152, 194)
+polygon = PackedVector2Array(-40, -128, -16, -128, -16, -144, -8, -152, 8, -152, 16, -144, 64, -144, 64, -72, 48, -48, 16, -48, 16, -16, 40, 0, -64, 0, -64, -40, -48, -40, -48, -64, -40, -72, -40, -80, -48, -88, -48, -120)
 
 [node name="Collision" type="CollisionPolygon2D" parent="."]
 position = Vector2(0, 0.649994)
-polygon = PackedVector2Array(-16, -16, -16, -48, -40, -72, -40, -144, -16, -144, -8, -152, 8, -152, 16, -144, 40, -144, 40, -72, 16, -48, 16, -16, 32, 0, -32, 0)
+polygon = PackedVector2Array(-40, -128, -16, -128, -16, -144, -8, -152, 8, -152, 16, -144, 64, -144, 64, -72, 48, -48, 16, -48, 16, -16, 40, 0, -64, 0, -64, -40, -48, -40, -48, -64, -40, -72, -40, -80, -48, -88, -48, -120)
 
 [node name="DestructiblePolyOperations" type="Node" parent="."]
 script = ExtResource("2_4nqxq")

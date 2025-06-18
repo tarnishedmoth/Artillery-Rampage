@@ -33,18 +33,18 @@ func _ready() -> void:
 	if pulses:
 		if actual_pulses.is_empty():
 			actual_pulses.append_array(pulses)
-	
+
 	modulate = Color.TRANSPARENT
-	
+
 	label.text = message
-	
+
 	if lifetime > 0.0:
 		_destroy_after_lifetime()
 	animate()
-	
+
 func animate() -> void:
 	var tween = create_tween()
-	
+
 	var index = 0
 	for pulse in actual_pulses:
 		tween.tween_property(self, "modulate", color, actual_pulses[pulse]/2)
@@ -54,18 +54,18 @@ func animate() -> void:
 
 func fade_out(duration:float = Juice.PATIENT) -> void:
 	Juice.fade_out(self, duration).tween_callback(destroy)
-	
+
 func destroy() -> void:
 	#print_debug("Cleared popup")
 	completed_lifetime.emit(self)
 	queue_free()
-	
+
 func _destroy_after_lifetime() -> void:
 	var timer = Timer.new()
 	add_child(timer)
 	timer.timeout.connect(_on_lifetime_timer_timeout)
 	timer.start(lifetime)
-	
+
 func _on_lifetime_timer_timeout() -> void:
 	fade_out()
 

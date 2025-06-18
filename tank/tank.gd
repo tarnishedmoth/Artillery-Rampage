@@ -104,7 +104,7 @@ var debuff_emp_charge:float = 0.0:
 		_on_update_color()
 	get:
 		return color
-		
+
 #@onready var controller:TankController = get_parent()
 @onready var controller = get_parent()
 @onready var damaged_smoke_particles: CPUParticles2D = %DamagedSmokeParticles
@@ -122,42 +122,42 @@ func _ready() -> void:
 	# As not using "instance uniform" as this isn't available in compatibility rendering needed for web
 	if damage_material:
 		damage_material = damage_material.duplicate()
-	
+
 	_on_update_color()
 	scan_available_weapons()
-	
+
 	health = max_health
-	
+
 	damaged_smoke_particles.emitting = false
 
 	# Setters not called in _ready so need to call this manually
 	_update_attributes()
 
 	power = max_power
-	
+
 	# Make sure to do snap_to_ground from the physics task
 	tankBody.connect("on_reset_orientation", _on_reset_orientation)
-	
+
 	# TODO: Using this in conjunction with falling detection
 	tankBody.contact_monitor = true
 	tankBody.max_contacts_reported = 1
 
 func _exit_tree() -> void:
 	disconnect_from_weapons()
-	
+
 func _to_string() -> String:
 	return name
-	
+
 ## Returns the bounds of the tank in local coordinates
 func get_rect() -> Rect2:
 	var width:float = right_reference_point.position.x - left_reference_point.position.x
 	var height: float = bottom_reference_point.position.y - top_reference_point.position.y
-	
+
 	var center = position
 	var top_left = center - Vector2(width * 0.5, height * 0.5)
-	
+
 	return Rect2(top_left, Vector2(width, height))
-	
+
 func apply_pending_state(state: PlayerState) -> void:
 	# TODO: This feels hacky but _ready has already run for children when this is called
 	scan_available_weapons()
@@ -176,20 +176,20 @@ func _physics_process(delta: float) -> void:
 		return
 	if tankBody.freeze:
 		return
-	
+
 	global_position = tankBody.global_position
 	tankBody.position = Vector2.ZERO
-	
+
 	# Check for falling
 	var falling := is_falling()
 	if falling:
 		started_falling()
 	else:
 		stopped_falling()
-	
+
 func toggle_gravity(enabled: bool) -> void:
 	tankBody.toggle_gravity(enabled)
-	
+
 func is_falling() -> bool:
 	# TODO: contact monitoring replaces need for doing trace tests and is more accurate so can clean this up
 	# If still want "snap_to_ground" the falling trace test may still be useful
@@ -197,19 +197,19 @@ func is_falling() -> bool:
 	#var result := tankBody.get_contact_count() == 0
 	var result := tankBody.get_contact_count() == 0 or tankBody.is_falling()
 	return result
-	
+
 func reset_orientation() -> void:
 	tankBody.reset_orientation()
-		
+
 #region Aim and Power
 # TODO: Account for new curve errors
 func aim_at(angle_rads: float) -> void:
 	turret.rotation = clampf(angle_rads, deg_to_rad(min_angle), deg_to_rad(max_angle))
 	GameEvents.aim_updated.emit(owner)
-	
+
 func aim_delta(angle_rads_delta: float) -> void:
 	aim_at(turret.rotation + angle_rads_delta)
-	
+
 ## [0-100]
 func set_power_percent(power_pct: float) -> void:
 	power = clampf(power_pct * max_power / 100.0, 0.0, max_power)
@@ -220,14 +220,14 @@ func set_power_percent(power_pct: float) -> void:
 func set_power_delta(power_pct_delta: float) -> void:
 	#print_debug("set_power_delta=" + str(power_pct_delta))
 	set_power_percent(power / max_power * 100 + power_pct_delta)
-	
+
 func get_turret_rotation() -> float:
 	return turret.rotation
-	
+
 func _update_attributes():
 	#max_power = health * weapon_max_power_health_mult
 	var health_delta = clampf(health / max_health, 0.01, 1.0)
-	
+
 	if enable_new_error_damage:
 		max_power = weapon_max_power_range.y * max_power_v_health.sample(health_delta)
 		# Once an angle inaccuracy set use the same one for subsequent damage to avoid too much guesswork for the player
@@ -240,12 +240,12 @@ func _update_attributes():
 		max_power = weapon_max_power_range.y
 	else:
 		max_power = lerpf(weapon_max_power_range.x, weapon_max_power_range.y, health_delta)
-	
+
 	power = minf(power, max_power)
 
 	print_debug("tank(%s): _update_attributes - health_delta=%f; power=%f; max_power=%f; angle_deviation=%f" % [get_parent().name, health_delta, power, max_power, angle_deviation])
 #endregion
-	
+
 ## If the weapon can be fired, return true, else false.
 func shoot() -> bool:
 	var weapon: Weapon = get_equipped_weapon()
@@ -262,27 +262,27 @@ func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float
 	# Calls setter and automatically clamps
 	health = health - amount
 	var actual_damage = orig_health - health
-	
+
 	if is_zero_approx(actual_damage):
 		print_debug("Tank %s didn't take any actual damage" % [get_parent().name])
 		return
-		
+
 	if health > 0 and actual_damage > 0:
 		_update_visuals_after_damage()
-	
+
 	print_debug("Tank %s took %f damage; health=%f" % [ get_parent().name, actual_damage, health])
 	tank_took_damage.emit(self, instigatorController, instigator, actual_damage)
-	
+
 	if health <= 0:
 		tank_killed.emit(self, instigatorController, instigator)
-		
+
 func take_emp(instigatorController: Node2D, instigator: Node2D, charge:float) -> void:
 	var actual_charge = charge * debuff_emp_conductivity_multiplier
 	debuff_emp_charge += actual_charge
-	
+
 	print_debug("Tank %s took %f EMP charge; total=%f" % [ get_parent().name, actual_charge, debuff_emp_charge])
 	tank_took_emp.emit(self, instigatorController, instigator, actual_charge)
-		
+
 func kill():
 	print_debug("Tank: %s Killed" % [get_parent().name])
 	_separate_particles_to_despawn(damaged_smoke_particles)
@@ -296,7 +296,7 @@ func spawn_death_drop() -> void:
 	spawn.global_position = global_position
 	var container = _get_scene_container()
 	container.add_child.call_deferred(spawn)
-	
+
 func _separate_particles_to_despawn(particles:CPUParticles2D) -> void:
 	particles.reparent(_get_scene_container())
 	particles.emitting = false
@@ -309,7 +309,7 @@ func _get_scene_container() -> Node2D:
 	if container.has_method("get_container"):
 		container = container.get_container()
 	return container
-	
+
 func _update_visuals_after_damage(damage_shader:bool = true):
 	var threshold = 0.75
 	if (health/max_health) <= threshold: # Percentage
@@ -317,10 +317,10 @@ func _update_visuals_after_damage(damage_shader:bool = true):
 			damaged_smoke_particles.emitting = true
 		#damaged_smoke_particles.amount = lerp(int(5), int(14), 1.0-(health/(max_health*threshold)))
 		damaged_smoke_particles.lifetime = lerpf(1.0, 5.0, 1.0-(health/(max_health*threshold)))
-	
+
 	var health_pct:float = health / max_health
 	var dark_pct:float = 1 - health_pct
-	
+
 	modulate = modulate.darkened(dark_pct)
 	turret.modulate = turret.modulate.darkened(dark_pct)
 
@@ -334,7 +334,7 @@ func _activate_damage_shader() -> void:
 	if not damage_material:
 		#print_debug("Tank: %s - no damage material" % get_parent().name)
 		return
-	
+
 	var game_time_seconds: float = SceneManager.get_current_level_root().game_timer.time_seconds if SceneManager.get_current_level_root() else 0.0
 	damage_material.set_shader_parameter("start_time", game_time_seconds)
 
@@ -359,44 +359,44 @@ func _activate_damage_shader() -> void:
 func snap_to_ground():
 	# Setting the position here will put the center of the tank at the position. Need to offset by the bottom offset
 	var ground_position = get_ground_snap_position()
-		
+
 	print_debug("tank.snap_to_ground(%s): adjusting from %s to %s"
 		% [get_parent().name, tankBody.global_position, ground_position])
-	
+
 	_check_and_emit_fall_damage(tankBody.global_position, ground_position)
-	
+
 	tankBody.global_position = ground_position
-	
+
 func get_ground_snap_position() -> Vector2:
 	# Setting the position here will put the center of the tank at the position. Need to offset by the bottom offset
 	var ground_position := _ground_trace(ground_trace_distance)
 	var adjusted_ground_position = ground_position - bottom_reference_point.position
-	
+
 	return adjusted_ground_position
-	
+
 func _ground_trace(trace_distance: float) -> Vector2:
 	# If already overlapping something then just return the current position
 	if tankBody.get_contact_count() > 0:
 		print_debug("tank._ground_trace(%s): already colliding with body %s" % [get_parent().name, tankBody.get_colliding_bodies()[0].name])
-		return bottom_reference_point.global_position 
-		
+		return bottom_reference_point.global_position
+
 	var space_state := get_world_2d().direct_space_state
-	
+
 	# in 2D positive y goes down
 	var query_params := PhysicsRayQueryParameters2D.create(
 		top_reference_point.global_position, top_reference_point.global_position + Vector2(0, trace_distance),
 		 Collisions.CompositeMasks.tank_snap)
-		
+
 	query_params.exclude = [self]
-	
+
 	var result = space_state.intersect_ray(query_params)
 	if !result:
 		print_debug("tank._ground_trace(%s): cannot find ground" % [get_parent().name])
 		return tankBody.global_position + Vector2(0, trace_distance)
-		
+
 	# Setting the position here will put the center of the tank at the position. Need to offset by the bottom offset
 	var ground_position = result["position"]
-	
+
 	#print("Tank(%s): _ground_trace - collider=%s; position=%s" % [get_parent().name, result["collider"].get_parent().name, str(ground_position)])
 	return ground_position
 
@@ -404,10 +404,10 @@ func _is_falling_trace_test() -> bool:
 	var trace_distance: float = 1000 # (top_reference_point.position - bottom_reference_point.position).length() + 1
 	var ground_position: Vector2 = _ground_trace(trace_distance)
 	var tank_bottom: Vector2 = bottom_reference_point.global_position
-	
+
 	# Delta check for position
 	var delta_dist: float = absf(ground_position.y - tank_bottom.y)
-	
+
 	#draw_rect(Rect2(tank_bottom.x - 25, tank_bottom.y, 50, delta_dist), Color.RED)
 
 	#print("tank(%s): _is_falling_trace_test - ground_pos=%s; tank_bottom=%s; global_pos=%s; delta_dist=%f" % [get_parent().name, str(ground_position), str(tank_bottom), str(global_position), delta_dist])
@@ -426,16 +426,16 @@ func _check_and_emit_fall_damage(start_position: Vector2, end_position: Vector2)
 	if fall_damage > 0:
 		var instigator_controller:TankController = fall_damage_causer.instigator_controller if fall_damage_causer.instigator_controller else owner
 		self.take_damage(instigator_controller, self, fall_damage)
-		
+
 func _calculate_fall_damage(start_position: Vector2, end_position: Vector2) -> float:
 	var dist = (end_position - start_position).length()
 	if dist < min_damage_distance:
 		print_debug("tank(%s): _calculate_fall_damage - %f < %f -> 0" % [get_parent().name, dist, min_damage_distance])
 		return 0.0
-	
+
 	var damage := pow(dist * damage_distance_multiplier, damage_exponent)
 	print_debug("tank(%s): _calculate_fall_damage: %f -> %f" % [get_parent().name, dist, damage])
-	
+
 	return damage
 
 func started_falling() -> void:
@@ -453,12 +453,12 @@ func stopped_falling() -> void:
 		parachute.hide()
 	if !mark_falling:
 		return
-	
+
 	print_debug("tank(%s) stopped falling at position=%s" % [get_parent().name, str(tankBody.global_position)])
 	_check_and_emit_fall_damage(fall_start_position, tankBody.global_position)
 	mark_falling = false
 	tank_stopped_falling.emit(self)
-	
+
 #endregion
 
 #region Weapon Use
@@ -473,11 +473,11 @@ func get_fired_weapon_container() -> Node: return _get_scene_container()
 	#if root.has_method("get_container"):
 		#return root.get_container()
 	#else: return self
-	
+
 func set_equipped_weapon(index:int) -> void:
 	if current_equipped_weapon in weapons:
 		current_equipped_weapon.unequip()
-		
+
 	current_equipped_weapon_index = index
 	current_equipped_weapon = weapons[index]
 	current_equipped_weapon.equip()
@@ -486,14 +486,14 @@ func set_equipped_weapon(index:int) -> void:
 func get_equipped_weapon() -> Weapon:
 	if current_equipped_weapon in weapons:
 		return current_equipped_weapon
-	
+
 	# Our last weapon was lost/destroyed
 	equip_next_weapon()
 	if not current_equipped_weapon in weapons:
 		return null
 	else:
 		return current_equipped_weapon # Ugly but rather this than recursion
-		
+
 ## Returns false if weapon can't shoot, or true if it can.
 func check_can_shoot_weapon(weapon: Weapon) -> bool:
 	if weapon == null:
@@ -505,15 +505,15 @@ func check_can_shoot_weapon(weapon: Weapon) -> bool:
 		else:
 			# Out of ammo.
 			return false
-	
+
 func scan_available_weapons() -> void:
 	weapons.clear()
-	
+
 	if shooting_trajectory_indicator:
 		shooting_trajectory_indicator.connect_to_tank(self)
 	if beam_trajectory_indicator:
 		beam_trajectory_indicator.connect_to_tank(self)
-	
+
 	var parent = get_parent()
 	if parent is TankController:
 		weapons = parent.get_weapons()
@@ -546,14 +546,14 @@ func equip_weapon_at_index(index: int) -> void:
 func next_weapon_mode() -> void:
 	var weapon = get_equipped_weapon()
 	weapon.next_mode()
-	
+
 func push_weapon_update_to_hud(weapon: Weapon = get_equipped_weapon()) -> void:
 	GameEvents.weapon_updated.emit(weapon)
-	
+
 ## This method is not used by this class, instead it's used by [Player].
 func visualize_trajectory() -> void:
 	# Maybe this needs to be refactored too
-	if beam_trajectory_indicator and current_equipped_weapon.trajectory_indicator_type == "Beam": 
+	if beam_trajectory_indicator and current_equipped_weapon.trajectory_indicator_type == "Beam":
 		beam_trajectory_indicator.shoot(power)
 	elif shooting_trajectory_indicator:
 		# Lets be real I was definitely better off rigging Weapon to show its trajectory innately
@@ -564,13 +564,13 @@ func visualize_trajectory() -> void:
 			shooting_trajectory_indicator.enforce_projectile_property("mass", projectile_data.mass)
 		if "is_affected_by_wind" in projectile_data:
 			shooting_trajectory_indicator.enforce_projectile_property("is_affected_by_wind", projectile_data.is_affected_by_wind)
-			
+
 		shooting_trajectory_indicator.shoot(power)
-		
+
 
 func _on_weapon_destroyed(weapon: Weapon) -> void:
 	weapons.erase(weapon)
-	
+
 	# Guard against errors similar to the following:
 	# Tank.gd:304 @ get_equipped_weapon(): Attempted to find an invalid (previously freed?) object instance into a 'TypedArray.
 	# Could check is_instance_valid but simpler and more idomatic to just set to null after free
@@ -582,7 +582,7 @@ func _on_weapon_ammo_changed(_new_ammo:int) -> void:
 
 func _on_weapon_magazines_changed(_new_mags:int) -> void:
 	push_weapon_update_to_hud()
-	
+
 func _on_weapon_changed(new_weapon: Weapon) -> void:
 	push_weapon_update_to_hud(new_weapon)
 
@@ -591,7 +591,7 @@ func _on_weapon_actions_completed(_weapon: Weapon) -> void:
 	# ---TURN CHANGEOVER HAPPENS HERE---
 	# More than one action / phase could be supported
 	actions_completed.emit(self)
-	
+
 func _on_turn_ended(player: TankController) -> void:
 	if player == controller: # Our tank
 		if debuff_emp_charge > 0.0:

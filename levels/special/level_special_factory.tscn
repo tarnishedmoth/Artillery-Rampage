@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://bpq3kfwju28e8"]
+[gd_scene load_steps=36 format=3 uid="uid://bpq3kfwju28e8"]
 
 [ext_resource type="Script" uid="uid://bfl71q3d57n8s" path="res://levels/game_level.gd" id="1_8ylxn"]
 [ext_resource type="Script" uid="uid://ehj364xag1df" path="res://utils/game_timer.gd" id="2_iwr3d"]
@@ -29,7 +29,9 @@
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="21_k8tcd"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="22_4t21x"]
 [ext_resource type="Script" uid="uid://dlosg08ehpwdc" path="res://levels/special/factory.gd" id="22_ja3hk"]
-[ext_resource type="PackedScene" uid="uid://xnyh8uolctrv" path="res://buildings/evaporator/evaporator.tscn" id="30_5dbbs"]
+[ext_resource type="PackedScene" uid="uid://xnyh8uolctrv" path="res://buildings/evaporator/factorygreeble.tscn" id="30_5dbbs"]
+[ext_resource type="PackedScene" uid="uid://dkju13ltbvatr" path="res://buildings/evaporator/factorygreeble2.tscn" id="31_2i235"]
+[ext_resource type="Texture2D" uid="uid://32r1u2b1v6jo" path="res://buildings/evaporator/factory_greebles.png" id="32_h1k02"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_chthv"]
 shader = ExtResource("6_xu7nj")
@@ -39,7 +41,7 @@ shader_parameter/speed = 0.0
 size = Vector2(1248, 688)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iwr3d"]
-size = Vector2(324.5, 20)
+size = Vector2(192, 20)
 
 [node name="LevelSpecialFactory" type="Node2D"]
 
@@ -169,20 +171,18 @@ schedule = Dictionary[int, int]({
 damageable_components = [NodePath("Evaporator"), NodePath("Evaporator2")]
 
 [node name="Evaporator" parent="GameLevel/Factory" instance=ExtResource("30_5dbbs")]
-position = Vector2(-276, 0)
+position = Vector2(-246, 0)
 
-[node name="Evaporator2" parent="GameLevel/Factory" instance=ExtResource("30_5dbbs")]
-position = Vector2(-191, 0)
-
-[node name="Polygon2D" type="Polygon2D" parent="GameLevel/Factory"]
-color = Color(0, 0, 0, 0.552941)
-polygon = PackedVector2Array(4, 0, 4, -80, 308, -80, 308, 0)
-uv = PackedVector2Array(-364, 40, -364, -40, -60, -40, -60, 40)
+[node name="Evaporator2" parent="GameLevel/Factory" instance=ExtResource("31_2i235")]
+position = Vector2(314, 0)
 
 [node name="Conveyor" type="AnimatableBody2D" parent="GameLevel/Factory"]
+position = Vector2(-54, 0)
+collision_layer = 3
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GameLevel/Factory/Conveyor"]
-position = Vector2(146.25, -25)
+position = Vector2(80, -25)
 shape = SubResource("RectangleShape2D_iwr3d")
 
 [node name="Polygon2D" type="Polygon2D" parent="GameLevel/Factory/Conveyor"]
@@ -193,6 +193,13 @@ uv = PackedVector2Array(-20, -16, -20, -32, 140, -32, 140, -16)
 [node name="Spawnpoint" type="Marker2D" parent="GameLevel/Factory/Conveyor"]
 unique_name_in_owner = true
 position = Vector2(126, -41)
+
+[node name="Polygon2D" type="Polygon2D" parent="GameLevel/Factory"]
+position = Vector2(-78, 0)
+color = Color(0.372251, 0.372251, 0.372251, 1)
+texture = ExtResource("32_h1k02")
+polygon = PackedVector2Array(4, 0, 4, -44, 308, -44, 308, 0)
+uv = PackedVector2Array(-28, 256, -28, 176, 276, 176, 276, 256)
 
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]

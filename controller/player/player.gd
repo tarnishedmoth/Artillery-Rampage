@@ -21,34 +21,34 @@ func _ready() -> void:
 
 func on_tank_added() -> void:
 	super.on_tank_added()
-	
+
 	tank.tank_killed.connect(_on_tank_tank_killed)
-	
+
 func begin_round() -> void:
 	super.begin_round()
-	
+
 	# Make sure weapon states are up to date before applying upgrades
 	# Weapon applies any mods on it when it is added to the tree but we are adding the mods and applying after
 	# so there is no "double application" of weapon mods
 	load_and_apply_upgrades()
-	
+
 # Called at the start of a turn
 # This will be a method available on all "tank controller" classes
 # like the player or the AI
 func begin_turn():
 	super.begin_turn()
-	
+
 	popup_message("Your Turn", PopupNotification.PulsePresets.Three, 4.5)
-	
+
 	can_shoot = true
 	can_aim = true
 
 func _get_tank():
 	return _tank
-	
+
 func _do_replace_tank(new_tank:Tank) -> void:
 	_tank = new_tank
-	
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("shoot"):
 		shoot()
@@ -78,19 +78,19 @@ func _process(delta: float) -> void:
 		#if can_shoot: tank.equip_next_weapon()
 	#if Input.is_action_just_pressed("cycle_weapon_mode"):
 		#if can_shoot: tank.next_weapon_mode()
-		
+
 func aim(delta: float) -> void:
 	if !can_aim : return
-	
+
 	tank.aim_delta(deg_to_rad(delta * aim_speed_degs_per_sec))
-	
+
 func set_power(delta: float) -> void:
 	if !can_aim: return
 	tank.set_power_delta(delta)
-	
+
 func shoot() -> void:
 	if !can_shoot: return
-	
+
 	var did_shoot = tank.shoot()
 	if did_shoot and not debug_controls:
 		can_shoot = false
@@ -100,10 +100,10 @@ func shoot() -> void:
 		# Should be safe to assume you're out of ammo.
 		popup_message("Out of ammo!", PopupNotification.PulsePresets.Two, 1.75)
 		pass
-	
+
 func load_and_apply_upgrades() -> void:
 	PlayerUpgrades.apply_all_upgrades(get_weapons())
-		
+
 func load_new_upgrade(upgrade:ModBundle) -> void:
 	upgrade.apply_all_mods(get_weapons())
 

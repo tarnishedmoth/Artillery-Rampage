@@ -27,17 +27,17 @@ func _ready() -> void:
 
 func take_damage(instigatorController: Node2D, instigator: Node2D, damage_amount: float) -> void:
 	var orig_health = health
-	
+
 	if is_zero_approx(damage_amount):
 		print_debug("%s didn't take any actual damage" % [display_name])
 		return
-		
+
 	health = maxf(health - damage_amount, 0.0)
 	var actual_damage = orig_health - health
-	
+
 	print_debug("%s took %f damage; health=%f"
 		% [display_name, damage_amount, health])
-	
+
 	took_damage.emit(self, instigatorController, instigator, actual_damage)
 	#health_changed.emit(health, actual_damage) # moved to setter
 
@@ -48,11 +48,10 @@ func take_emp(instigatorController: Node2D, instigator: Node2D, charge:float) ->
 	if not can_be_emp_charged: return
 	var actual_charge = charge * emp_conductivity_multiplier
 	emp_charge += actual_charge
-	
+
 	print_debug("%s took %f EMP charge; total=%f" % [ self.name, actual_charge, emp_charge])
 	emp_charge_changed.emit(emp_charge)
 
 func _on_turn_ended(_tank_controller:TankController) -> void:
 	if emp_charge > 0.0:
 		emp_charge = maxf(emp_charge - emp_discharge_per_turn, 0.0)
-		

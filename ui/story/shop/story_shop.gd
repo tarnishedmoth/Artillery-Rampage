@@ -17,7 +17,7 @@ class ItemPurchaseState:
 		set(value):
 			existing_item = value
 			_on_item_set(existing_item)
-			
+
 	var already_in_inventory:bool
 	var new_item:Node:
 		get: return new_item
@@ -29,13 +29,13 @@ class ItemPurchaseState:
 	var buy:bool
 	var refill_amount:int
 	var refill_cost:int
-	
+
 	func reset() -> void:
 		buy = false
 		refill_cost = 0
 		refill_amount = 0
 		ui_control.reset()
-	
+
 	func _on_item_set(backing_item:Node) -> void:
 		if not backing_item:
 			return
@@ -54,26 +54,26 @@ var _purchase_item_state_dictionary:Dictionary[String, ItemPurchaseState] = {}
 
 var pending_scrap_spend:int
 var pending_personnel_spend:int
-	
+
 func _ready() -> void:
 	var player_state:PlayerState =_initialize_player_state()
 
 	var existing_weapons:Dictionary[String, Weapon] = {}
 	for weapon in player_state.weapons:
 		existing_weapons[weapon.scene_file_path] = weapon
-	
+
 	_update_resources_control_state()
-	
+
 	# Cannot do a deep copy of array to duplicate the resources as this type is not duplicated in a deep copy
 	# We need to duplicate as will be modifying the resource and map returns an Array not a generic array i.e. Array[ShopItemResource]
 	var sorted_items: Array = item_resources.items.map(func(r): return r.duplicate())
 	sorted_items.sort_custom((func(a,b)->bool: return a.unlock_cost < b.unlock_cost))
-	
+
 	for item:ShopItemResource in sorted_items:
 		# Display a row if we have the item already or can afford to buy it
 		if not item.item_scene:
 			continue
-		
+
 		# Here we could choose which UI scene to instantitate by item type
 		var item_scene_path:String = item.item_scene.resource_path
 		var existing_weapon:Weapon = existing_weapons.get(item_scene_path)
@@ -90,22 +90,22 @@ func _ready() -> void:
 			purchase_state.already_in_inventory = in_inventory
 			purchase_state.ui_control = weapon_row
 			_purchase_item_state_dictionary[item_scene_path] = purchase_state
-			
+
 			weapon_row.shop_item = item
 			weapon_row.weapon = existing_weapon
 			items_container.add_child(weapon_row)
-			
+
 			weapon_row.on_buy_state_changed.connect(_on_weapon_buy_state_changed)
 			weapon_row.on_ammo_state_changed.connect(_on_weapon_ammo_state_changed)
 
 	_update_row_states()
-	
+
 func _initialize_player_state() -> PlayerState:
 	var player_state:PlayerState = PlayerStateManager.player_state
 	if not player_state:
 		push_warning("PlayerStateManager.player_state is null, no existing weapon info")
 		return PlayerState.new()
-	
+
 	# PlayerState here is already a copy from the serialized state and the shop is shown after the round
 	# Upgrades are not applied by default to weapons in player state that was deserialized
 	# During gameplay that is ordinary done in the Player ready function
@@ -130,7 +130,7 @@ func can_afford_to_refill_any(item: ShopItemResource) -> bool:
 
 	# In case the refill cost is 0 don't check the avail spend first
 	return avail_spend - item.get_refill_cost(1) >= 0
-				
+
 func _on_done_pressed() -> void:
 	_apply_changes()
 
@@ -149,11 +149,11 @@ func _apply_changes() -> void:
 				_apply_weapon(player_state, purchase_state)
 			_:
 				push_warning("%s: Unsupported item type %s found for purchase_state item=%s" % [name, str(purchase_state.item.item_type), purchase_state.item.resource_path])
-	
+
 	# Apply resource costs
 	PlayerAttributes.scrap = PlayerAttributes.scrap - pending_scrap_spend
 	PlayerAttributes.personnel = PlayerAttributes.personnel - pending_personnel_spend
-	
+
 func _apply_weapon(player_state: PlayerState, purchase_state: ItemPurchaseState)  -> void:
 	var store_existing_weapon:Weapon = purchase_state.existing_item as Weapon
 	if store_existing_weapon:
@@ -181,24 +181,24 @@ func _apply_weapon(player_state: PlayerState, purchase_state: ItemPurchaseState)
 		# We could both be buying and adding ammo
 		var new_weapon:Weapon = purchase_state.new_item.duplicate()
 		new_weapon.current_ammo += purchase_state.refill_amount
-		
+
 		player_state.weapons.push_back(new_weapon)
-		
+
 		print_debug("%s: Purchased new weapon - %s" % [name, purchase_state.new_item.display_name])
 
 func _on_weapon_buy_state_changed(weapon: Weapon, buy:bool) -> void:
 	print_debug("%s - Buy State changed for %s - buy=%s" % [name, weapon.display_name, str(buy)])
-	
+
 	var state: ItemPurchaseState = _purchase_item_state_dictionary[weapon.scene_file_path]
 	state.buy = buy
 	state.new_item = weapon
-		
+
 	var delta:int = state.item.unlock_cost if buy else -state.item.unlock_cost
 	if state.item.unlock_cost_type == ShopItemResource.CostType.Scrap:
 		pending_scrap_spend = maxi(0, pending_scrap_spend + delta)
 	else:
 		pending_personnel_spend = maxi(0, pending_personnel_spend + delta)
-		
+
 	_update_resources_control_state()
 	_update_row_states()
 
@@ -210,7 +210,7 @@ func _update_resources_control_state() -> void:
 
 func _on_weapon_ammo_state_changed(weapon: Weapon, new_ammo:int, old_ammo:int, cost:int) -> void:
 	print_debug("%s - Weapon Ammo State changed for %s - new_ammo=%d; old_ammo=%d; cost=%d" % [name, weapon.display_name, new_ammo, old_ammo, cost])
-	
+
 	var state: ItemPurchaseState = _purchase_item_state_dictionary[weapon.scene_file_path]
 	_update_state_refill_cost(state, new_ammo, cost)
 
@@ -219,7 +219,7 @@ func _on_weapon_ammo_state_changed(weapon: Weapon, new_ammo:int, old_ammo:int, c
 
 func _update_state_refill_cost(state: ItemPurchaseState, refill_amount: int, cost:int) -> void:
 	state.refill_amount = refill_amount
-	
+
 	var cost_delta:int = cost - state.refill_cost
 	if state.item.refill_cost_type == ShopItemResource.CostType.Scrap:
 		pending_scrap_spend += cost_delta
@@ -227,7 +227,7 @@ func _update_state_refill_cost(state: ItemPurchaseState, refill_amount: int, cos
 		pending_personnel_spend += cost_delta
 
 	state.refill_cost = cost
-	
+
 func _update_row_states() -> void:
 	for purchase_state_key in _purchase_item_state_dictionary:
 		var purchase_state:ItemPurchaseState = _purchase_item_state_dictionary[purchase_state_key]
@@ -245,11 +245,11 @@ func _update_row_states() -> void:
 func _on_reset_pressed() -> void:
 	pending_personnel_spend = 0
 	pending_scrap_spend = 0
-	
+
 	_update_resources_control_state()
-	
+
 	# Reset the purchase state and then reset the enabled status
 	for purchase_state in _purchase_item_state_dictionary.values():
 		purchase_state.reset()
-		
+
 	_update_row_states()

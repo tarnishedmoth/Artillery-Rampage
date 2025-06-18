@@ -14,25 +14,25 @@ func _ready() -> void:
 	visibility_changed.connect(_on_visibility_changed)
 	if not sequence.is_empty():
 		start_sequence(sequence)
-	
+
 func start_sequence(array:Array) -> void:
 	current_sequence = array
 	for control in array:
 		control.hide()
-		
+
 	currently_visible_control = current_sequence.front()
 	currently_visible_control.show()
 	_current_sequence_index = 0
-	
+
 	if _timer:
 		_timer.queue_free()
 		await _timer.tree_exited
-	
+
 	_timer = Timer.new()
 	add_child(_timer)
 	_timer.timeout.connect(_on_cycle_timeout)
 	_timer.start(cycle_time)
-	
+
 func advance_sequence() -> void:
 	# Linear forward
 	if _current_sequence_index + 1 < current_sequence.size():
@@ -45,13 +45,13 @@ func advance_sequence() -> void:
 
 func stop() -> void:
 	_timer.queue_free()
-	
+
 func pause() -> void:
 	_timer.stop()
-	
+
 func resume() -> void:
 	_timer.start(cycle_time)
-	
+
 func _on_cycle_timeout() -> void:
 	advance_sequence()
 

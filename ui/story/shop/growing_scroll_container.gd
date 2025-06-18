@@ -12,19 +12,19 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	resize_to_fit()
-	
+
 func _on_child_order_changed() -> void:
 	resize_to_fit()
 
 func resize_to_fit() -> void:
 	var summed_heights:float = get_summed_height_of_children(target_container)
 	var req_height:float
-	
+
 	if summed_heights < target_container.size.y:
 		req_height = target_container.size.y
 	else:
 		req_height = summed_heights
-			
+
 	custom_minimum_size.y = minf(req_height, max_size_y)
 
 func get_summed_height_of_children(node:Node) -> float:
@@ -32,7 +32,7 @@ func get_summed_height_of_children(node:Node) -> float:
 	for child in target_container.get_children():
 		if child is Control:
 			children.append(child)
-			
+
 	var summed_heights:float = 0.0
 	if not children.is_empty():
 		for child:Control in children:

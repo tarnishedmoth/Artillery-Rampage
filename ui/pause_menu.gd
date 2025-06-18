@@ -40,10 +40,10 @@ func _ready():
 	input_buffer_clearing_timer.one_shot = true # We start this timer every time we capture an input.
 	add_child(input_buffer_clearing_timer)
 	input_buffer_clearing_timer.timeout.connect(_on_input_buffer_clearing_timer_timeout)
-	
+
 	if OS.get_name() == "Web":
 		exit_to_desktop_button.hide()
-		
+
 	if not SceneManager.play_mode == SceneManager.PlayMode.PLAY_NOW:
 		%PauseMenu.get_node("%NewGame").hide()
 	hide()
@@ -53,7 +53,7 @@ func _ready():
 func _unhandled_input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("pause"):
 		toggle_visibility()
-		
+
 func _input(event: InputEvent) -> void:
 	if paused && input_buffer_listening:
 		var buffer_action:Keys
@@ -75,19 +75,19 @@ func _input(event: InputEvent) -> void:
 
 func toggle_visibility():
 	paused = !paused
-	
+
 	if paused:
 		self.show()
 		get_tree().paused = true
-		
+
 		input_buffer_listening = true
 	else:
 		self.hide()
 		get_tree().paused = false
-		
+
 		input_buffer_listening = false
 	input_buffer.clear()
-	
+
 
 func _on_resume_pressed():
 	toggle_visibility()
@@ -110,10 +110,10 @@ func _on_options_menu_closed() -> void:
 
 func _on_new_game_pressed() -> void:
 	# Start a new quick match
-	
+
 	#PlayerStateManager.enable = false
 	#SceneManager.play_mode = SceneManager.PlayMode.PLAY_NOW
-	
+
 	var level: StoryLevel = SceneManager.levels_always_selectable.levels.pick_random()
 	if level:
 		SceneManager.switch_scene_file(level.scene_res_path)
@@ -122,58 +122,58 @@ func _on_new_game_pressed() -> void:
 func _check_cheat_code_entered(code:Array[Keys]) -> void:
 	if code in CheatCodes:
 		var cheat_name:String
-		
+
 		match CheatCodes[input_buffer]:
 			Cheats.FULL_HEALTH:
 				cheat_name = "FULL HEALTH"
 				# Give the player's Tank max health
 				var tank = _get_player_controller().tank
 				tank.health = tank.max_health
-				
+
 			Cheats.FULL_AMMO:
 				cheat_name = "FULL AMMO"
 				var current_weapon = _get_player_controller().tank.get_equipped_weapon()
 				current_weapon.restock_ammo(99)
-				
+
 			Cheats.INSTAKILL:
 				cheat_name = "INSTAKILL"
 				var current_weapon = _get_player_controller().tank.get_equipped_weapon()
 				current_weapon.enforce_projectile_property("damage_multiplier", 9999.9)
-				
+
 			Cheats.RELOCATE:
 				cheat_name = "RELOCATE - TODO nonfunctional"
 				# TODO ;)
-				
+
 			Cheats.LIGHTNING:
 				cheat_name = "LIGHTNING"
 				var level_root = SceneManager.get_current_level_root()
 				if level_root is GameLevel:
 					level_root.round_director.trigger_lightning()
-					
+
 			Cheats.GROW:
 				cheat_name = "GROW"
 				var tank = _get_player_controller().tank
 				tank.apply_scale(Vector2(1.5,1.5))
-				
+
 			Cheats.SHRINK:
 				cheat_name = "SHRINK"
 				var tank = _get_player_controller().tank
 				tank.apply_scale(Vector2(0.75,0.75))
-				
+
 			Cheats.NO_WIND:
 				cheat_name = "WINDLESS"
 				var level_root = SceneManager.get_current_level_root()
 				if level_root is GameLevel:
 					level_root.wind.wind = Vector2.ZERO
-			
+
 			Cheats.MAX_WIND:
 				cheat_name = "SUPERBREEZE"
 				var level_root = SceneManager.get_current_level_root()
 				if level_root is GameLevel:
 					var sign:float = 1.0 if level_root.wind.wind.x >= 0.0 else -1.0
 					level_root.wind.wind = Vector2(level_root.wind.wind_max * sign, 0.0)
-				
-				
+
+
 		print_debug("-- CHEAT: ", cheat_name) # TODO log in pause menu events log
 		events_log.record("CHEAT ENTERED: "+ cheat_name)
 

@@ -20,7 +20,7 @@ func _ready() -> void:
 	else:
 		connect_signal(node_with_health)
 	hide()
-	
+
 func connect_signal(node:Node) -> void:
 	#if node is DamageableDestructibleObject:
 	node.health_changed.connect(_on_health_changed)
@@ -31,7 +31,7 @@ func _on_health_changed(new_health:int) -> void:
 			tween.kill()
 	tween = create_tween()
 	tween.tween_property(progress_bar, "value", new_health, progress_bar_tween_speed)
-	
+
 	if not visible && new_health < 100.0:
 		show()
 	elif visible && new_health == 100.0:

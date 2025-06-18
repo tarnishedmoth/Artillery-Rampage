@@ -32,7 +32,7 @@ func _on_play_mode_changed(old_mode:SceneManager.PlayMode, new_mode: SceneManage
 		print_debug("%s: Reset upgrades after leaving story mode %s -> %s" \
 			% [name, EnumUtils.enum_to_string(SceneManager.PlayMode, old_mode), EnumUtils.enum_to_string(SceneManager.PlayMode, new_mode)])
 		clear()
-	
+
 func clear() -> void:
 	current_upgrades.clear()
 	_dirty = false
@@ -52,7 +52,7 @@ func restore_from_save_state(save: SaveState) -> void:
 		print_debug("PlayerUpgrades: New Story - clearing upgrades")
 		_dirty = true
 		return
-	
+
 	var upgrade_state:Dictionary = story_save[SAVE_STATE_KEY]
 	var current_upgrade_data:Array[Dictionary] = upgrade_state.get("upgrades", [])
 

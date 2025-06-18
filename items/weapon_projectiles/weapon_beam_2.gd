@@ -15,7 +15,7 @@ func _calculate_damage(target: Node2D) -> float:
 	return 50
 
 func _physics_process(_delta: float) -> void:
-	super._physics_process(_delta)	
+	super._physics_process(_delta)
 	if can_travel:
 		$BeamSprite.position.x += speed / 2
 		$BeamSprite.scale.y += speed

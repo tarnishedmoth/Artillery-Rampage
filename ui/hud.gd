@@ -27,7 +27,7 @@ func init_signals():
 	GameEvents.weapon_updated.connect(_on_weapon_updated)
 	GameEvents.level_loaded.connect(_on_level_changed)
 	GameEvents.user_options_changed.connect(_on_user_options_changed)
-	
+
 	if OS.is_debug_build():
 		debug_level_name.show()
 
@@ -35,9 +35,9 @@ func _on_turn_started(player: TankController) -> void:
 	_active_player = player
 	# Update health dynamically as player takes damage during turn
 	player.tank.tank_took_damage.connect(_on_took_damage)
-	
+
 	active_player_text.text = player.name
-	
+
 	_update_health(player)
 	_on_aim_updated(player)
 	_on_power_updated(player)
@@ -46,7 +46,7 @@ func _on_turn_started(player: TankController) -> void:
 func _on_took_damage(tank: Tank, _instigatorController: Node2D, _instigator: Node2D, _amount: float):
 	if tank.owner == _active_player:
 		_update_health(_active_player)
-		
+
 func _update_health(player: TankController) -> void:
 	var tank:Tank = player.tank
 	health_text.set_value(UIUtils.get_health_pct_display(tank.health, tank.max_health))
@@ -55,11 +55,11 @@ func _on_turn_ended(player: TankController) -> void:
 	# Disconnect when no longer the active player
 	if player.tank.tank_took_damage.is_connected(_on_took_damage):
 		player.tank.tank_took_damage.disconnect(_on_took_damage)
-	
+
 func _on_aim_updated(player: TankController) -> void:
 	var angleRads = player.tank.get_turret_rotation()
-	
-	angle_text.set_value(str(int(abs(rad_to_deg(angleRads))))+"°") 
+
+	angle_text.set_value(str(int(abs(rad_to_deg(angleRads))))+"°")
 
 func _on_power_updated(player: TankController) -> void:
 	power_text.set_value(int(player.tank.power))
@@ -67,7 +67,7 @@ func _on_power_updated(player: TankController) -> void:
 func _on_wind_updated(wind: Wind) -> void:
 	var vector := wind.wind
 	var value := vector.length()
-	
+
 	var direction := vector.x
 	wind_text.set_value("%d %s" % [_fmt_wind_value(value), _get_direction_string(direction)])
 
@@ -76,7 +76,7 @@ func _fmt_wind_value(value: float) -> int:
 
 func _get_direction_string(value: float) -> String:
 	return "▶" if value >= 0 else "◀"
-	
+
 func _on_weapon_updated(weapon: Weapon) -> void:
 	if weapon.parent_tank.controller != _active_player:
 		return
