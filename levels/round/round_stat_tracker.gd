@@ -98,8 +98,8 @@ func _on_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2
 	enemy_data.set_name(tank)
 	
 	# Additionally credit player with kill if they did some damage to opponent but opponent credited with killing themselves
-	var instigator_was_player:bool = instigatorController == _player or \
-	 (instigatorController and _player and instigatorController == tank.get_parent() and enemy_data.last_damager == _player.get_instance_id())
+	var instigator_was_player:bool = instigatorController and _player and (instigatorController == _player or \
+	 (instigatorController == tank.get_parent() and enemy_data.last_damager == _player.get_instance_id()))
 	enemy_data.killed_by_player = instigator_was_player
 
 	if not instigator_was_player:
@@ -116,7 +116,7 @@ func _on_player_took_damage(_tank: Tank, instigatorController: Node2D, _instigat
 func _on_enemy_took_damage(tank: Tank, instigatorController: Node2D, _instigator: Node2D, amount: float) -> void:
 	var enemy_data:EnemyData = get_or_add_enemy_data(tank)
 	enemy_data.set_name(tank)
-	if instigatorController == _player:
+	if instigatorController and instigatorController == _player:
 		enemy_data.damaged_by_player = true
 		enemy_data.last_damager = instigatorController.get_instance_id()
 	elif instigatorController and instigatorController != tank.get_parent():
