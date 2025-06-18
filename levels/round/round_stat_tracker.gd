@@ -99,7 +99,7 @@ func _on_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2
 	
 	# Additionally credit player with kill if they did some damage to opponent but opponent credited with killing themselves
 	var instigator_was_player:bool = instigatorController == _player or \
-	 (instigatorController and instigatorController == tank.get_parent() and enemy_data.last_damager == instigatorController.get_instance_id())
+	 (instigatorController and _player and instigatorController == tank.get_parent() and enemy_data.last_damager == _player.get_instance_id())
 	enemy_data.killed_by_player = instigator_was_player
 
 	if not instigator_was_player:
