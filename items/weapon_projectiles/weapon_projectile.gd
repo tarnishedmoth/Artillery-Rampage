@@ -89,7 +89,7 @@ func _ready() -> void:
 		destructible_component = get_node('Destructible')
 		
 	if kill_after_turns_elapsed > 0:
-		GameEvents.turn_ended.connect(_on_turn_ended)
+		GameEvents.turn_ended.connect(_on_turn_ended.unbind(1))
 		_emit_completed_lifespan_without_destroying(max_lifetime) # Relinquish turn control
 	elif max_lifetime > 0.0: destroy_after_lifetime()
 	
