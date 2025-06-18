@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://b0a0gcxknjivp"]
+
+[ext_resource type="PackedScene" uid="uid://b00kdwwjo4hg8" path="res://destructible/destructible_object.tscn" id="1_ba335"]
+[ext_resource type="PackedScene" uid="uid://bh2cbxv8syk18" path="res://buildings/city/city_building_large_chunk.tscn" id="2_rc2mt"]
+[ext_resource type="PackedScene" uid="uid://d0fthn43xgog3" path="res://destructible/rubble/rubble_chunks_spawner.tscn" id="3_32i04"]
+
+[node name="CityBuilding" instance=ExtResource("1_ba335")]
+display_name = "City Building"
+chunk_scene = ExtResource("2_rc2mt")
+crumbling = true
+create_new_chunks = true
+
+[node name="CityBuildingChunk" parent="." index="0" instance=ExtResource("2_rc2mt")]
+
+[node name="RubbleChunksSpawner" parent="." index="2" instance=ExtResource("3_32i04")]
