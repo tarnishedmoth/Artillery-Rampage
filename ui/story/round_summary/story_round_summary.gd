@@ -77,21 +77,16 @@ func _update_attributes() -> void:
 	if not stats:
 		return
 		
-	# TODO: Make this more dynamic - use curves
-	var personnel_change:int = 0
+	var personnel_change:int = _calculate_personnel_change()
 
 	# Player gets scrap even when lose based on collected data
 	var scrap_change:int = _calculate_scrap_earned()
 
 	if stats.won:
-		# Nerfing personnel gained by diving by 3 instead of 2
-		personnel_change = ceil(_grade / 3.0)
 		# If win get a bonus multiplier for scrap_change based on grade
 		var bonus_scrap_multiplier:float = _calculate_scrap_bonus_multiplier()
 		print_debug("%s: Bonus scrap multiplier of %.2fx on win starting from %d scrap" % [name, bonus_scrap_multiplier, scrap_change])
 		scrap_change = ceili(scrap_change * bonus_scrap_multiplier)
-	else:
-		personnel_change =  -floori((grade_to_letter.size() - _grade) / 4.0)
 
 	PlayerAttributes.personnel = maxi(PlayerAttributes.personnel + personnel_change, 0)
 	PlayerAttributes.scrap = maxi(PlayerAttributes.scrap + scrap_change, 0)
@@ -116,6 +111,22 @@ func _calculate_scrap_bonus_multiplier() -> float:
 		"C+": return 1.2
 		"C" : return 1.1
 		_: return 1.0
+
+func _calculate_personnel_change() -> int:
+	var letter_grade:String = _get_letter_grade(_grade)
+
+	match letter_grade:
+		"A+": return 4
+		"A": return 3
+		"A-": return 3
+		"B+", "B", "B-": return 2
+		"C+", "C", "C-": return 1 #C- is lowest win, anything lower is a loss
+		"D+": return -1
+		"D","D-": return -2
+		"F" : return -3
+
+	push_error("%s: Unexpected letter grade %s - returning 0" % [name, letter_grade])
+	return 0
 
 func _calculate_scrap_earned() -> int:
 	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
@@ -203,7 +214,6 @@ func _calculate_outcome(grade: int) -> AutoNarrative.Outcomes:
 #endregion
 
 #region Scoring
-
 		
 func _fmt_grade(grade: int) -> String:
 	return _get_letter_grade(grade)
@@ -228,48 +238,95 @@ func _calculate_grade() -> int:
 	# Damage to health lost ratio
 	var damage_to_health:float = stats.damage_done / maxf(stats.start_health - stats.final_health, 1.0)
 	var kills_to_turns: float = stats.kills / maxf(stats.turns, 1.0)
-	
+	var full_kills:int = 0
+	for key in stats.enemies_damaged:
+		var data:RoundStatTracker.EnemyData = stats.enemies_damaged[key]
+		if data.is_full_kill():
+			full_kills += 1
+
+	var damaged_frac:float = float(stats.enemies_damaged.size()) / stats.total_enemies
+	var kills_frac: float = float(stats.kills) / stats.total_enemies
+	var full_kills_frac: float = float(full_kills) / stats.total_enemies
+
 	var grade:int = 0
+
+	# impact to overall battlefield normalized [0-1]
+	var battlefield_impact_grade_delta: Callable = func() -> int:
+		if stats.total_enemies >= 3:
+			var impact: float = (full_kills_frac + pow(kills_frac, 1.5) + pow(damaged_frac, 0.5)) / 3.0
+			if impact >= 0.9:
+				return 3
+			elif impact >= 0.75:
+				return 2
+			elif impact >= 0.5:
+				return 1
+			elif impact >= 0.333:
+				return 0
+			elif impact >= 0.25:
+				return -1
+			elif impact >= 0.15:
+				return -2
+			else:
+				return -3
+		return 0
 
 	# Lowest win is C-	
 	if stats.won:
 		# Miracles are actually decisive victories not crazy come from behind victories
+
+		#Damage Dealt to Received
 		if is_zero_approx(stats.health_lost):
-			if stats.kills >= 3:
+			if full_kills >= 3:
 				grade = letter_to_grade["A+"]
-			if stats.kills >= 1:
+			if full_kills >= 2:
 				grade = letter_to_grade["A"]
+			elif full_kills >= 1:
+				grade = letter_to_grade["A-"]
 			else:
 				grade = letter_to_grade["B+"]
-		elif damage_to_health >= 10.0 and stats.kills >= 2:
+		elif damage_to_health >= 10.0 and full_kills >= 2:
 			grade = letter_to_grade["A"]
-		elif damage_to_health >= 5.0 and stats.kills >= 1:
+		elif damage_to_health >= 5.0 and full_kills >= 1:
 			grade = letter_to_grade["A-"]
-		elif damage_to_health > 1.0:
+		elif damage_to_health >= 2.0:
 			grade = letter_to_grade["B+"]
-		elif damage_to_health >= 0.75:
+		elif damage_to_health > 1:
 			grade = letter_to_grade["B"]
-		elif damage_to_health > 0.5:
+		elif damage_to_health >= 0.75:
 			grade = letter_to_grade["B-"]
+		elif damage_to_health > 0.5:
+			grade = letter_to_grade["C+"]
 		else:
 			grade = letter_to_grade["C"]
-			
-		if kills_to_turns > 1:
+
+		# Speed Score
+		if kills_to_turns >= 2:
 			grade += 3
-		elif is_equal_approx(kills_to_turns, 1.0):
+		elif kills_to_turns > 1.0:
 			grade += 2
-		elif kills_to_turns >= 0.5:
+		elif is_equal_approx(kills_to_turns, 1.0):
 			grade += 1
-		elif kills_to_turns > 0 and kills_to_turns < 0.25:
+		elif kills_to_turns >= 0.5:
+			pass
+		elif kills_to_turns >= 0.33:
 			grade -= 1
-		else:
+		elif kills_to_turns >= 0.25:
 			grade -= 2
-			
+		elif kills_to_turns >= 0.2:
+			grade -= 3
+		elif kills_to_turns >= 0.16:
+			grade -= 4
+		elif kills_to_turns > 0:
+			grade -= 5
+		else:
+			grade -= 6
+		
+		grade += battlefield_impact_grade_delta.call()
+
 		# Need at least a neutral for winning
 		return maxi(grade, letter_to_grade["C-"])
 		
 	#Lost
-	
 	if stats.kills >= 3:
 		grade = letter_to_grade["C+"]
 	elif stats.kills >= 2:
@@ -301,6 +358,9 @@ func _calculate_grade() -> int:
 	else:
 		grade -= 6
 		
+	grade += battlefield_impact_grade_delta.call()
+
 	# If you lose you cannot get higher than a D+
 	return clampi(grade, 0, letter_to_grade["D+"])
+	
 #endregion

@@ -12,7 +12,7 @@ class EnemyData:
 	var last_damager:int
 
 	func set_name(tank: Tank) -> void:
-		name = tank.get_parent().to_string() if tank.get_parent() else tank.name
+		name = tank.get_parent().to_string() if tank.get_parent() else str(tank.name)
 		
 	func is_full_kill() -> bool:
 		return killed_by_player and not damaged_by_nonplayer
@@ -40,6 +40,7 @@ class RoundData:
 	var level_name:String
 
 	var enemies_damaged:Dictionary[int, EnemyData]
+	var total_enemies:int
 	
 var round_data:RoundData 
 var _player:Player
@@ -58,11 +59,11 @@ func _ready() -> void:
 @warning_ignore_start("unused_parameter")
 func _on_level_loaded(level: GameLevel) -> void:
 	_current_level = level
+	round_data = RoundData.new()
 	print_debug("%s: Level loaded - (name=%s)" % [name, _current_level.level_name])	
 
 func _on_round_started() -> void:
 	# This is called AFTER all players added
-	round_data = RoundData.new()
 	if is_instance_valid(_player):
 		round_data.max_health = _player.tank.max_health
 		round_data.start_health = _player.tank.health
@@ -90,6 +91,7 @@ func _on_player_added(player:TankController) -> void:
 		_player = player
 		player.tank.tank_took_damage.connect(_on_player_took_damage)
 	else:
+		round_data.total_enemies += 1
 		player.tank.tank_took_damage.connect(_on_enemy_took_damage)
 		player.tank.tank_killed.connect(_on_tank_killed)
 
