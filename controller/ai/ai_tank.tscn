@@ -14,6 +14,7 @@ wobble_error_pct_v_deg_sec = ExtResource("2_y282y")
 weapons_container = NodePath("Weapons")
 
 [node name="Tank" parent="." groups=["Bot"] instance=ExtResource("2_1btk6")]
+metadata/_edit_lock_ = true
 
 [node name="AimDamageWobble" parent="Tank" instance=ExtResource("4_jsnjk")]
 

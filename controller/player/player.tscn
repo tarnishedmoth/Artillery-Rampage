@@ -26,6 +26,7 @@ weapons_container = NodePath("Weapons")
 
 [node name="Tank" parent="." groups=["Player"] instance=ExtResource("2_3s1jp")]
 color = Color(0.145098, 0.227451, 0.00392157, 1)
+metadata/_edit_lock_ = true
 
 [node name="SetInitialAim" type="Node" parent="Tank"]
 script = ExtResource("1_5t8u5")
