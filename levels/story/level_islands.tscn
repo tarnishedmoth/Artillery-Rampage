@@ -1,0 +1,90 @@
+[gd_scene load_steps=20 format=3 uid="uid://bw47p6vpbsrkn"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_b3eo7"]
+[ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_8e6i4"]
+[ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_uojvy"]
+[ext_resource type="Texture2D" uid="uid://my1pco86ryy2" path="res://terrain/terrain-grass-and-dirt.png" id="4_jxaaa"]
+[ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_v266i"]
+[ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="6_ekbu6"]
+[ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="7_c083e"]
+[ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="8_b3x1v"]
+[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="9_rtqmd"]
+[ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="10_kiicv"]
+[ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="11_neocr"]
+[ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="12_y6s4d"]
+[ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="13_wgxfo"]
+[ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="14_k2vcv"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="15_x84ix"]
+[ext_resource type="PackedScene" uid="uid://dyoeqogv8xoye" path="res://environment/procedural_object_seaside_spawner.tscn" id="16_nntc6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0f8xw"]
+shader = ExtResource("3_uojvy")
+shader_parameter/amount = Vector3(2.835, 1.635, 0.975)
+shader_parameter/multiply = 1.5
+shader_parameter/minimum = -1.0
+shader_parameter/maximum = 1.5
+
+[sub_resource type="Resource" id="Resource_msmqt"]
+script = ExtResource("2_8e6i4")
+texture = ExtResource("4_jxaaa")
+material = SubResource("ShaderMaterial_0f8xw")
+repeat = 3
+offset = Vector2(0, 0)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_iuf40"]
+frequency = 0.0021
+fractal_octaves = 3
+fractal_lacunarity = 2.52
+fractal_gain = 0.605
+
+[node name="TestLevelProcGen" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_b3eo7")]
+
+[node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
+outline_mesh_dist_threshold = 0.4
+texture_resources = Array[ExtResource("2_8e6i4")]([SubResource("Resource_msmqt")])
+
+[node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk" index="0"]
+visible = true
+polygon = PackedVector2Array()
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+polygon = PackedVector2Array(-101.563, 166.176, -57.8125, 107.353, 21.0938, 138.235, 60.9375, 326.471, 114.844, 145.588, 132.813, 116.176, 233.594, 85.2941, 271.875, 141.176, 327.344, 355.882, 379.688, 139.706, 408.594, 102.941, 549.219, 100, 571.875, 139.706, 630.469, 367.647, 698.438, 142.647, 810.156, 61.7647, 848.438, 61.7647, 946.875, 175, 945, 445, -103, 448)
+
+[node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("5_v266i")]
+noise_template = SubResource("FastNoiseLite_iuf40")
+additional_vertices = 64
+height_win_size_min_variation = -0.05
+height_win_size_max_variation = 0.05
+max_height_clearance = 60.0
+
+[node name="Walls" parent="GameLevel" index="4"]
+wall_randomization_weights = Dictionary[int, float]({
+0: 1.0,
+4: 1.0
+})
+
+[node name="Floor" parent="GameLevel" index="5"]
+visible = false
+
+[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+artillery_ai_types = Array[PackedScene]([ExtResource("6_ekbu6"), ExtResource("7_c083e"), ExtResource("8_b3x1v"), ExtResource("9_rtqmd"), ExtResource("10_kiicv"), ExtResource("11_neocr"), ExtResource("12_y6s4d"), ExtResource("13_wgxfo")])
+default_ai_players = Vector2i(1, 2)
+ideal_min_spawn_separation = 250.0
+min_boundary_x_distance = 20.0
+
+[node name="WaterHazard" parent="GameLevel" instance=ExtResource("14_k2vcv")]
+position = Vector2(701, 720)
+scale = Vector2(7.02656, 4.6518)
+
+[node name="Player" parent="GameLevel" instance=ExtResource("15_x84ix")]
+position = Vector2(374, 479)
+
+[node name="ProceduralObjectTropicalSpawner" parent="GameLevel" instance=ExtResource("16_nntc6")]
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/ArtillerySpawner"]

@@ -1,0 +1,71 @@
+[gd_scene load_steps=11 format=3 uid="uid://dnjj6ctq55yvc"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_qnumu"]
+[ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_qmg41"]
+[ext_resource type="Texture2D" uid="uid://ba7dq172ainja" path="res://terrain/terrain-strata-beach.png" id="3_c5en4"]
+[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="4_dvhh2"]
+[ext_resource type="PackedScene" uid="uid://6b6y8xulf247" path="res://controller/ai/behaviors/rando_ai_behavior.tscn" id="5_oc7lu"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="6_jwug6"]
+[ext_resource type="PackedScene" uid="uid://sa0oyrt453vy" path="res://buildings/lighthouse/light_house.tscn" id="7_yscme"]
+[ext_resource type="PackedScene" uid="uid://3v701qdrjblk" path="res://environment/rocks/precomputed/precomputed_shatterable_rock01.tscn" id="8_6eq0i"]
+[ext_resource type="PackedScene" uid="uid://dopwqpmocmicx" path="res://environment/rocks/shatterable_rock02.tscn" id="9_21x2i"]
+
+[sub_resource type="Resource" id="Resource_fi6ty"]
+script = ExtResource("2_qmg41")
+texture = ExtResource("3_c5en4")
+repeat = 3
+offset = Vector2(0, 360)
+metadata/_custom_type_script = "uid://43ab121okvpb"
+
+[node name="TestLevelLighthouse" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_qnumu")]
+
+[node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
+outlineMeshEnabled = false
+texture_resources = Array[ExtResource("2_qmg41")]([SubResource("Resource_fi6ty")])
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+polygon = PackedVector2Array(-104, -8, 66, -4, 170.313, 47.0588, 288.281, 41.1765, 609, -8, 937, -3, 945, 445, -103, 448)
+
+[node name="Walls" parent="GameLevel" index="4"]
+wall_mode = 4
+
+[node name="Wind" parent="GameLevel" index="6"]
+wind_max = 0
+max_per_orbit_variance = 0
+
+[node name="RoundDirector" parent="GameLevel" index="7"]
+lightning_time = 100
+lightning_strength = 0.0
+player_goes_first = true
+shuffle_order = false
+
+[node name="Enemy" parent="GameLevel" instance=ExtResource("4_dvhh2")]
+position = Vector2(653, 442)
+
+[node name="Tank" parent="GameLevel/Enemy" index="0"]
+color = Color(0.137255, 0.180392, 0.701961, 1)
+
+[node name="AimDamageWobble" parent="GameLevel/Enemy/Tank" index="7"]
+position = Vector2(5, 20)
+
+[node name="RandoAiBehavior" parent="GameLevel/Enemy/StateMachine" index="0" instance=ExtResource("5_oc7lu")]
+
+[node name="Player" parent="GameLevel" instance=ExtResource("6_jwug6")]
+position = Vector2(120, 427)
+
+[node name="Lighthouse" parent="GameLevel" instance=ExtResource("7_yscme")]
+position = Vector2(48, 442)
+
+[node name="ShatterableRock" parent="GameLevel" instance=ExtResource("8_6eq0i")]
+position = Vector2(793, 446)
+
+[node name="ShatterableRock2" parent="." instance=ExtResource("9_21x2i")]
+position = Vector2(969, 436)
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/Enemy"]
