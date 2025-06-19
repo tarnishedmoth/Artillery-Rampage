@@ -128,12 +128,16 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 	var first_non_surface_index:int = _get_first_non_surface_index(chunk, terrain_vertices)
 
 	# First modify any existing points
+	var vertices_in_bounds:int = 0
+	
 	for i in first_non_surface_index:
 		var vertex := terrain_vertices[i]
 
 		# Only modify exterior vertices
 		if not _vertex_in_bounds(vertex):
 			continue
+		
+		vertices_in_bounds += 1
 
 		var raw_height_fract := _sample_height_frac(vertex.x)
 
@@ -149,7 +153,8 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 		terrain_vertices[i].y = new_height
 
 	# Now add additional vertices requested
-	var new_terrain_vertices:PackedVector2Array
+	var new_terrain_vertices:PackedVector2Array = []
+	
 	if additional_vertices > 0:
 		var new_terrain:bool
 		
@@ -165,13 +170,10 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 		else:
 			new_terrain = false
 			
-		var total_vertices:int = terrain_vertices.size() + additional_vertices
+		var total_vertices:int = vertices_in_bounds + additional_vertices
 		var ideal_spacing:float = modification_bounds.size.x / total_vertices
 				
-		var vertices_remaining := additional_vertices
-				
-		new_terrain_vertices = []
-		
+		var vertices_remaining := additional_vertices		
 		var last_added_index:int = -1
 		
 		for i in first_non_surface_index:
@@ -253,10 +255,11 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 		# end for all terrain_vertices
 
 		# Add in the non surface points and any unprocessed original points
+		var should_smooth_end_points:bool = start_at and not stop_at
 		for i in range(mini(last_added_index + 1,first_non_surface_index), terrain_vertices.size()):
 			# Smooth out final section of unprocessed points to have same height as last processed one
-			# if i is 0 that means nothing was added and new_terrain_verticse would be empty and we skip that case too
-			if i < first_non_surface_index and i > 0 and start_at and not stop_at:
+			# if i is 0 that means nothing was added and new_terrain_vertices would be empty and we skip that case too
+			if should_smooth_end_points and i < first_non_surface_index and i > 0:
 				terrain_vertices[i].y = new_terrain_vertices[-1].y
 			new_terrain_vertices.push_back(terrain_vertices[i])
 	else:
