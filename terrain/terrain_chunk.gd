@@ -20,6 +20,7 @@ var terrain: Terrain
 ## Minimum fraction of outline width for two adjacent point to include the output
 ## Set to 0 to disable this behavior
 @export_range(0.0, 1.0, 0.01) var outline_mesh_dist_threshold:float = 0
+@export_range(1.0, 128.0, 1.0) var outline_mesh_width:float = 64.0
 
 var outlineMesh: Line2D
 
@@ -133,7 +134,7 @@ func init_outline_mesh() -> void:
 	# "obtuse angles" will stretch the texture badly
 	# to fix, we may need to add more points to the curve?
 	outlineMesh.joint_mode = Line2D.LINE_JOINT_SHARP # _BEVEL _SHARP _ROUND
-	outlineMesh.width = 64
+	outlineMesh.width = outline_mesh_width
 
 	# is there a second entry in resources set in the editor?
 	if texture_resources.size() > 1 :
