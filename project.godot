@@ -39,6 +39,11 @@ PlayerAttributes="*res://progression/player_attributes.tscn"
 StoryModeManager="*res://story/story_mode_manager.tscn"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 
+[debug]
+
+file_logging/enable_file_logging=true
+file_logging/max_log_files=100
+
 [display]
 
 window/size/viewport_width=1280
