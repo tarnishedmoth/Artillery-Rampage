@@ -32,3 +32,9 @@ func apply_to_mesh(mesh: Polygon2D) -> void:
 	mesh.set_texture(texture)
 	mesh.texture_repeat = repeat
 	mesh.texture_offset = offset
+
+func apply_to_outline(line: Line2D) -> void:
+	line.material = material
+	line.set_texture(texture)
+	line.texture_repeat = repeat
+	# Line2D doesn't support texture_offset

@@ -35,7 +35,6 @@ offset = Vector2(0, 0)
 [sub_resource type="Resource" id="Resource_lsksp"]
 script = ExtResource("3_kw5jy")
 texture = ExtResource("6_6rtiu")
-material = SubResource("ShaderMaterial_n0lpj")
 repeat = 2
 offset = Vector2(0, 0)
 metadata/_custom_type_script = "uid://43ab121okvpb"

@@ -138,7 +138,7 @@ func init_outline_mesh() -> void:
 
 	# is there a second entry in resources set in the editor?
 	if texture_resources.size() > 1 :
-		outlineMesh.set_texture(texture_resources[1].texture)
+		texture_resources[1].apply_to_outline(outlineMesh)
 	else: # load a default
 		outlineMesh.set_texture(load("res://terrain/terrain-outline-grass.png"))
 	# as a child of this chunk so it moves too:
