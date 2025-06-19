@@ -11,4 +11,3 @@
 
 [node name="ProceduralObjectUrbanSpawner" instance=ExtResource("1_k3otw")]
 objects = Array[ExtResource("2_0h1d6")]([ExtResource("3_crry7"), ExtResource("4_og8uv"), ExtResource("5_71y5g"), ExtResource("6_3dx6f"), ExtResource("7_vieue"), ExtResource("8_b5lr5")])
-randomize_object_priorities = true
