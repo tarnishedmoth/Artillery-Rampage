@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bsn1aw61qtr54"]
+[gd_scene load_steps=25 format=3 uid="uid://bsn1aw61qtr54"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_1jr6l"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_0xmgj"]
@@ -14,11 +14,9 @@
 [ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="11_clyr0"]
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="12_xmwrm"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="13_y4s5a"]
-[ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="14_mf0ni"]
 [ext_resource type="PackedScene" uid="uid://0y11k01gaq4w" path="res://buildings/city/city_building_short.tscn" id="15_0xmgj"]
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house/house.tscn" id="15_lmepw"]
 [ext_resource type="PackedScene" uid="uid://cdu7jxpquqjer" path="res://environment/trees/shatterable_tree.tscn" id="16_5w4s6"]
-[ext_resource type="PackedScene" uid="uid://dvkouaun7cdld" path="res://environment/procedural_object_plains_spawner.tscn" id="17_xjyps"]
 [ext_resource type="PackedScene" uid="uid://bnbg2dyh3v3wi" path="res://buildings/city/city_building_med.tscn" id="19_cq167"]
 [ext_resource type="PackedScene" uid="uid://b0a0gcxknjivp" path="res://buildings/city/city_building_large.tscn" id="19_y721a"]
 
@@ -65,7 +63,7 @@ fractal_gain = 0.605
 texture_resources = Array[ExtResource("2_0xmgj")]([SubResource("Resource_msmqt"), SubResource("Resource_ro8ig")])
 
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
-polygon = PackedVector2Array(-104, -8, 101.563, -1.47058, 283.594, 1.47058, 385.156, 25, 460.156, 95.5883, 547.656, 29.4117, 639.844, 7.35297, 753.125, 1.47058, 950, -2.94116, 945, 445, -103, 448)
+polygon = PackedVector2Array(-104, -8, 101.563, -1.47058, 283.594, 1.47058, 385.938, 17.647, 460.938, 19.1177, 545.313, 19.1177, 639.844, 7.35297, 753.125, 1.47058, 950, -2.94116, 945, 445, -103, 448)
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("5_pv8ko")]
 noise_template = SubResource("FastNoiseLite_iuf40")
@@ -85,15 +83,14 @@ num_ai_teams = 2
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
 
-[node name="WaterHazard" parent="GameLevel" instance=ExtResource("14_mf0ni")]
-position = Vector2(701, 674)
-scale = Vector2(7.02656, 4.6518)
-
 [node name="CityBuilding" parent="GameLevel" instance=ExtResource("15_0xmgj")]
-position = Vector2(292, 445)
+position = Vector2(364, 446)
 
 [node name="House3" parent="GameLevel" instance=ExtResource("15_lmepw")]
-position = Vector2(411, 443)
+position = Vector2(847, 452)
+
+[node name="House4" parent="GameLevel" instance=ExtResource("15_lmepw")]
+position = Vector2(1070, 445)
 
 [node name="ShatterableTree" parent="GameLevel" instance=ExtResource("16_5w4s6")]
 position = Vector2(1185, 445)
@@ -101,13 +98,14 @@ position = Vector2(1185, 445)
 [node name="ShatterableTree2" parent="GameLevel" instance=ExtResource("16_5w4s6")]
 position = Vector2(943, 456)
 
-[node name="ProceduralObjectPlainsSpawner" parent="GameLevel" instance=ExtResource("17_xjyps")]
+[node name="CityBuilding3" parent="GameLevel" instance=ExtResource("19_cq167")]
+position = Vector2(553, 455)
+
+[node name="CityBuilding4" parent="GameLevel" instance=ExtResource("19_cq167")]
+position = Vector2(75, 440)
 
 [node name="CityBuilding2" parent="GameLevel" instance=ExtResource("19_y721a")]
-position = Vector2(67, 441)
-
-[node name="CityBuilding" parent="." instance=ExtResource("19_cq167")]
-position = Vector2(177, 442)
+position = Vector2(693, 457)
 
 [editable path="GameLevel"]
 [editable path="GameLevel/Terrain"]
