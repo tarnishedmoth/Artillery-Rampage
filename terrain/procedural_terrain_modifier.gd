@@ -256,6 +256,14 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 
 		# Add in the non surface points and any unprocessed original points
 		var should_smooth_end_points:bool = start_at and not stop_at
+		var should_smooth_last_added_point:bool = should_smooth_end_points or (not start_at and not stop_at)
+		
+		# Extra smoothing on right edge - the last point tends to slope down to the default value (terrain_vertices[first_non_surface_index - 1])
+		# This reduces chance of a big falloff on right side of map
+		if should_smooth_last_added_point and new_terrain_vertices.size() > 1:
+			new_terrain_vertices[-1].y = new_terrain_vertices[-2].y
+			terrain_vertices[first_non_surface_index - 1].y = new_terrain_vertices[-1].y
+		
 		for i in range(mini(last_added_index + 1,first_non_surface_index), terrain_vertices.size()):
 			# Smooth out final section of unprocessed points to have same height as last processed one
 			# if i is 0 that means nothing was added and new_terrain_vertices would be empty and we skip that case too
