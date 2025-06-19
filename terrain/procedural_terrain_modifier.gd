@@ -74,7 +74,7 @@ func _get_modification_bounds_global(full_bounds:Rect2) -> Rect2:
 	if stop_at:
 		bounds.size.x = stop_at.global_position.x - bounds.position.x
 	elif start_at: # Extend to the viewport
-		bounds.size.x = full_bounds.size.x - (bounds.position.x - full_bounds.position.x)
+		bounds.size.x = full_bounds.size.x - (start_at.global_position.x - full_bounds.position.x)
 	# Y position and size is same as full_bounds
 
 	return bounds
