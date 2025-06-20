@@ -2,8 +2,8 @@ class_name TerrainChunkTextureOutlineResource extends TerrainChunkTextureResourc
 
 # TODO: Could add an alternative outline for damaged section and use the inverse of the mask to mix that texture in the shader
 ## Minimum distance from damaged section to not apply the primary outline. Set to < 0 to disable the behavior
-@export var outline_distance_threshold_x: float = 5.0
-@export var outline_distance_threshold_y: float = 20.0
+@export var outline_distance_threshold: float = 10.0
+@export_range(0.1, 1.0, 0.01) var outline_mesh_outline_shader_fraction: float = 0.67
 
 func _init(
 	p_texture:Texture2D = null,
@@ -24,26 +24,24 @@ func apply_to(object: Node2D, args: Array = []) -> bool:
 func apply_to_outline(line: Line2D, impact_vertices: PackedVector2Array) -> void:
 	var shader_material = material as ShaderMaterial
 	if shader_material:
-		var discarded_outline_indices:PackedByteArray = _compute_discarded_indices(line, impact_vertices)
-		var packed_discard_flags:PackedInt32Array = _pack_discard_flags(discarded_outline_indices)
-		shader_material.set_shader_parameter("discarded_vertex_flags", packed_discard_flags)
+		var discarded_points:PackedVector2Array = _compute_discarded_vertices(line, impact_vertices)
+		
+		shader_material.set_shader_parameter("discarded_vertices", discarded_points)
+		shader_material.set_shader_parameter("discarded_count", discarded_points.size())
+		shader_material.set_shader_parameter("discard_match_distance", line.width * outline_mesh_outline_shader_fraction)
+		
 	line.material = material
 	line.set_texture(texture)
 	line.texture_repeat = repeat
 	# Line2D doesn't support texture_offset
 
 
-func _compute_discarded_indices(line: Line2D, impact_vertices: PackedVector2Array)  -> PackedByteArray:
-	var index_flags:PackedByteArray = []
+func _compute_discarded_vertices(line: Line2D, impact_vertices: PackedVector2Array)  -> PackedVector2Array:
+	var discarded_points:PackedVector2Array = []
 	var line_points:PackedVector2Array = line.points
 
-	# Need to multiply by 2 because it turns the line into a polygon and half the vertices will be the top and half the bottom so everything has to be roughly doubled
-	# Will zero init which discards nothing by default, which is what we want since "1" discards and "0" draws
-	index_flags.resize(line_points.size() * 2)
-
-	#if impact_vertices.is_empty() or outline_distance_threshold < 0:
-	if impact_vertices.is_empty() or outline_distance_threshold_x < 0 or outline_distance_threshold_y < 0:
-		return index_flags
+	if impact_vertices.is_empty() or outline_distance_threshold < 0:
+		return discarded_points
 
 	impact_vertices.sort()
 
@@ -63,7 +61,7 @@ func _compute_discarded_indices(line: Line2D, impact_vertices: PackedVector2Arra
 		elif line_start_index > 0 and line_end_index != line_points.size():
 			break
 
-	#var threshold_dist:float = outline_distance_threshold * outline_distance_threshold
+	var threshold_dist:float = outline_distance_threshold * outline_distance_threshold
 
 	for i in range(line_start_index, line_end_index):
 		var point:Vector2 = line_points[i]
@@ -71,38 +69,15 @@ func _compute_discarded_indices(line: Line2D, impact_vertices: PackedVector2Arra
 		var damaged_start_index:int = impact_vertices.bsearch(point, true)
 		if damaged_start_index == impact_vertices.size():
 			break
-		var damaged_end_index:int = impact_vertices.bsearch(point + Vector2(outline_distance_threshold_x,0.0), false)
+		var damaged_end_index:int = impact_vertices.bsearch(point + Vector2(outline_distance_threshold,0.0), false)
 		if damaged_end_index == impact_vertices.size():
 			damaged_end_index -= 1
 		for j in range(damaged_start_index, damaged_end_index + 1):
 			var damage_point:Vector2 = impact_vertices[j]
-			#if point.distance_squared_to(damage_point) <= threshold_dist:
-			if absf(damage_point.x - point.x) <= outline_distance_threshold_x and absf(damage_point.y - point.y) <= outline_distance_threshold_y:
-				var index_start = 2 * i #Have to add the points twice and they are ordered in segment pairs
-				index_flags[index_start] = 1
-				index_flags[index_start + 1] = 1
+			if point.distance_squared_to(damage_point) <= threshold_dist:
+				discarded_points.push_back(point)
 				break
 	
-	return index_flags
-
-## Packs the bool array of discard flags corresponding to vertex indices into an int32 flag array to compress it by a factor of 32 for the shader parameter
-## Shader parameters don't support bool[] or byte[] and only int[]
-static func _pack_discard_flags(flags: PackedByteArray) -> PackedInt32Array:
-	var packed: PackedInt32Array = []
-	# Preallocate the buffer
-	packed.resize(ceili(flags.size() / 32.0))
-	
-	var current:int = 0
-	var count:int = 0
-	
-	for i in flags.size():
-		var bit:int = flags[i] & 1
-		current |= bit << (i % 32)
-		if i % 32 == 31:
-			packed[count] = current
-			current = 0
-			count += 1
-	# Set last bit information
-	if current != 0:
-		packed[count] = current
-	return packed
+	# Only needed if we do binary search in the shader
+	#discarded_points.sort()
+	return discarded_points

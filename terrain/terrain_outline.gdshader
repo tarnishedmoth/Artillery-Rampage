@@ -1,26 +1,33 @@
 shader_type canvas_item;
 
-const int discard_array_size = 8192 / 32;
+const int discard_array_size = 1024;
 // Packed index flags - 1 bit per vertex - if 1 then vertex is discarded and 0 otherwise
-uniform int discarded_vertex_flags[discard_array_size]; // 256 * 32 vertices = 8192
+uniform vec2 discarded_vertices[discard_array_size];
 
 varying float should_discard;
 
-uniform float discard_threshold = 0.5;
+uniform int discarded_count;
 
-bool is_discarded(int id) {
-    int word = min(id / 32, discard_array_size - 1);
-    int bit = id % 32;
-    return (discarded_vertex_flags[word] & (1 << bit)) != 0;
+uniform float discard_threshold = 0.5;
+uniform float discard_match_distance = 32;
+
+bool is_discarded(vec2 vertex) {
+	// TODO: This implementation is not great but binary search would be more complex and with hundreds of points or less it is not worth it
+	float match_distance_squared = discard_match_distance * discard_match_distance;
+	for(int i = 0, len = min(discarded_count, discard_array_size); i < len; i++) {
+		vec2 discarded_vertex = discarded_vertices[i];
+		float dx = discarded_vertex.x - vertex.x;
+		float dy = discarded_vertex.y - vertex.y;
+		float distance_squared = dx * dx + dy * dy;
+		if(distance_squared <= match_distance_squared) {
+			return true;
+		}
+	}
+	return false;
 }
 
 void vertex() {
-	// Doesn't work
-	//if(is_discarded(VERTEX_ID)) {
-		//// move out of clip space so it isn't rendered
-		//VERTEX = vec2(1e12);
-	//}
-	should_discard = is_discarded(VERTEX_ID) ? 1.0 : 0.0;
+	should_discard = is_discarded(VERTEX) ? 1.0 : 0.0;
 }
 
 void fragment() {
