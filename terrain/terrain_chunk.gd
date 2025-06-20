@@ -37,7 +37,8 @@ const surface_delta_y: float = 1.0
 
 var _can_be_updated:bool = true
 var _deferred_update:DeferredPolygonUpdateApplier
-var _discarded_outline_vertex_ranges_local:PackedVector2Array = []
+var _impact_vertices:PackedVector2Array = []
+var _using_outline_mask:bool
 
 var falling:bool = false:
 	set(value):
@@ -197,8 +198,8 @@ func regenerate_outline_mesh() -> void:
 	_apply_outline_mesh_material()
 	
 func _apply_outline_mesh_material() -> void:
-	if texture_resources.size() > 1 :
-			texture_resources[1].apply_to(outlineMesh, [_discarded_outline_vertex_ranges_local])
+	if(texture_resources.size() > 1 and texture_resources[1].apply_to(outlineMesh, [_impact_vertices])):
+		_using_outline_mask = texture_resources[1] is TerrainChunkTextureOutlineResource
 			
 func _physics_process(delta: float) -> void:
 	if !falling: return
@@ -293,6 +294,10 @@ func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global
 			replacement_poly_local = final_polys[0]
 			additional_chunk_polys = final_polys.slice(1)
 		
+		if _using_outline_mask:
+			# Do against the current terrain before we modify it
+			_impact_vertices.append_array(destructiblePolyOperations.get_impact_vertices(influence_poly_local, get_terrain_local()))
+			
 	_replace_contents_local(replacement_poly_local, update_flags & UpdateFlags.Immediate)
 	
 	# Convert additional chunks to global

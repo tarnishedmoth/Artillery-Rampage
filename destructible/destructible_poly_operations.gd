@@ -267,18 +267,9 @@ func get_destroyed_polys(destructible_shape:PackedVector2Array, poly:PackedVecto
 
 	return intersect_result.front() if not intersect_result.is_empty() else []
 
-## Returns the min and max x value of the intersection in a Vector2 (x = min, y = max)
-func get_destroyed_range(destructible_shape:PackedVector2Array, poly:PackedVector2Array) -> Vector2:
+## Returns the vertices involved in the impact of poly with destructible shape
+func get_impact_vertices(destructible_shape:PackedVector2Array, poly:PackedVector2Array) -> PackedVector2Array:
+	# TODO: Determine just the final segment
 	var result:PackedVector2Array = get_destroyed_polys(destructible_shape, poly)
 
-	if result.is_empty():
-		return Vector2.ZERO
-	
-	var min_x:float = 1e12
-	var max_x:float = -1e12
-
-	for vertex in result:
-		min_x = minf(vertex.x, min_x)
-		max_x = maxf(vertex.x, max_x)
-	
-	return Vector2(min_x, max_x)
+	return result

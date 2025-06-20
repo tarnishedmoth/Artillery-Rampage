@@ -1,0 +1,72 @@
+[gd_scene load_steps=14 format=3 uid="uid://p3r17lr6yfkb"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_imsto"]
+[ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_h2ark"]
+[ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_y0ajr"]
+[ext_resource type="Texture2D" uid="uid://c6drjfyj22hs4" path="res://terrain/terrain-grass-to-dirt.png" id="4_omdd6"]
+[ext_resource type="Shader" uid="uid://dtdwuqr2f5v8" path="res://terrain/terrain_outline.gdshader" id="5_a6i2i"]
+[ext_resource type="Script" uid="uid://gtr732oltg7j" path="res://terrain/terrain_chunk_texture_outline.gd" id="6_rmst2"]
+[ext_resource type="Texture2D" uid="uid://oewy8rcnrw8t" path="res://terrain/terrain-outline-road.png" id="7_2janr"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="8_u60m2"]
+[ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="9_2c70b"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cr1wu"]
+shader = ExtResource("3_y0ajr")
+shader_parameter/amount = Vector3(1, 1, 1.29)
+shader_parameter/multiply = 1.0
+shader_parameter/minimum = 0.0
+shader_parameter/maximum = 1.5
+
+[sub_resource type="Resource" id="Resource_msmqt"]
+script = ExtResource("2_h2ark")
+texture = ExtResource("4_omdd6")
+material = SubResource("ShaderMaterial_cr1wu")
+repeat = 3
+offset = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rtx7x"]
+shader = ExtResource("5_a6i2i")
+shader_parameter/discarded_vertex_flags = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/discard_threshold = 0.5
+
+[sub_resource type="Resource" id="Resource_5va50"]
+script = ExtResource("6_rmst2")
+outline_distance_threshold = 5.0
+texture = ExtResource("7_2janr")
+material = SubResource("ShaderMaterial_rtx7x")
+repeat = 3
+offset = Vector2(0, 0)
+metadata/_custom_type_script = "uid://gtr732oltg7j"
+
+[node name="TestLevelProcGen" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_imsto")]
+
+[node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
+texture_resources = Array[ExtResource("2_h2ark")]([SubResource("Resource_msmqt"), SubResource("Resource_5va50")])
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+polygon = PackedVector2Array(-104, -8, 101.563, -1.47058, 283.594, 1.47058, 385.938, 17.647, 460.938, 19.1177, 545.313, 19.1177, 639.844, 7.35297, 753.125, 1.47058, 950, -2.94116, 945, 445, -103, 448)
+
+[node name="Floor" parent="GameLevel" index="5"]
+visible = false
+
+[node name="Wind" parent="GameLevel" index="6"]
+wind_max = 0
+max_per_orbit_variance = 0
+
+[node name="RoundDirector" parent="GameLevel" index="7"]
+player_goes_first = true
+shuffle_order = false
+
+[node name="AITank" parent="GameLevel" instance=ExtResource("9_2c70b")]
+position = Vector2(1189, 428)
+
+[node name="Player" parent="GameLevel" instance=ExtResource("8_u60m2")]
+position = Vector2(40, 424)
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/ArtillerySpawner"]
