@@ -21,20 +21,39 @@ func _init(
 	offset = p_offset
 	 
 # TODO: We can add more complex logic to see if this resource meets the criteria of the chunk
-func matches(_chunk: Node2D) -> bool:
+func matches(_obj: Node2D) -> bool:
 	return true
 	
-func apply_to(chunk: TerrainChunk) -> void:
-	apply_to_mesh(chunk.terrainMesh)
+func apply_to(object: Node2D, _args: Array = []) -> bool:
+	if object is TerrainChunk:
+		apply_to_mesh(object.terrainMesh)
+		return true
+	return _apply_to(object)
 
 func apply_to_mesh(mesh: Polygon2D) -> void:
 	mesh.material = material
 	mesh.set_texture(texture)
 	mesh.texture_repeat = repeat
 	mesh.texture_offset = offset
-
-func apply_to_outline(line: Line2D) -> void:
-	line.material = material
-	line.set_texture(texture)
-	line.texture_repeat = repeat
-	# Line2D doesn't support texture_offset
+	
+## generic fallback version that sets the main properties on the node if it has the corresponding properties or methods
+## If one or more of the key properties - material or set_texture don't exist then false is returned; otherwise, returns true
+func _apply_to(node: Node2D) -> bool:
+	var result:bool = true
+	
+	if "material" in node:
+		node.material = material
+	else:
+		result = false
+		
+	if node.has_method("set_texture"):
+		node.set_texture(texture)
+	else:
+		result = false
+		
+	if "texture_repeat" in node:
+		node.texture_repeat = repeat
+	if "texture_offset" in node:
+		node.texture_offset = offset
+		
+	return result

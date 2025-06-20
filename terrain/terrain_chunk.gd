@@ -37,6 +37,7 @@ const surface_delta_y: float = 1.0
 
 var _can_be_updated:bool = true
 var _deferred_update:DeferredPolygonUpdateApplier
+var _discarded_outline_vertex_ranges_local:PackedVector2Array = []
 
 var falling:bool = false:
 	set(value):
@@ -138,7 +139,7 @@ func init_outline_mesh() -> void:
 
 	# is there a second entry in resources set in the editor?
 	if texture_resources.size() > 1 :
-		texture_resources[1].apply_to_outline(outlineMesh)
+		_apply_outline_mesh_material()
 	else: # load a default
 		outlineMesh.set_texture(load("res://terrain/terrain-outline-grass.png"))
 	# as a child of this chunk so it moves too:
@@ -191,7 +192,14 @@ func regenerate_outline_mesh() -> void:
 		# Shrink to actual points added
 		outline_pts.resize(outline_count)
 		outlineMesh.points = outline_pts
+		
+	## Need to reapply the outline mask
+	_apply_outline_mesh_material()
 	
+func _apply_outline_mesh_material() -> void:
+	if texture_resources.size() > 1 :
+			texture_resources[1].apply_to(outlineMesh, [_discarded_outline_vertex_ranges_local])
+			
 func _physics_process(delta: float) -> void:
 	if !falling: return
 	
