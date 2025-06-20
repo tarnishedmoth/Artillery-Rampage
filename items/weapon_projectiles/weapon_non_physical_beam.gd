@@ -32,6 +32,7 @@ var speed: float = 800.0
 ## The angle of the barrel firing the beam. This will be used to determine the trajectory of the beam.
 var aim_angle: float
 
+var travel_distance = 0
 var can_travel = true
 var time_since_last_hit = 0
 var time_to_wait_between_hits = 0.0075
@@ -40,6 +41,8 @@ func _ready() -> void:
 	if has_node('Destructible'):
 		destructible_component = get_node('Destructible')
 	if max_lifetime > 0.0: destroy_after_lifetime()
+	
+	GameEvents.beam_fired.emit(self)
 
 func set_sources(tank:Tank, weapon:Weapon) -> void:
 	owner_tank = tank
@@ -63,8 +66,8 @@ func _process(delta):
 	#var laser_start_velocity = laser_end_velocity / 100
 	#laser_start.position += laser_start_velocity.rotated(aim_angle)
 	if can_travel:
-		var laser_end_velocity = Vector2(speed * delta, 0.0)
-		laser_end.position += laser_end_velocity.rotated(aim_angle)
+		travel_distance += speed * delta
+		laser_end.position = laser_start.position + Vector2(travel_distance, 0.0).rotated(aim_angle)
 		see_if_beam_collides_with_anything()
 		$BeamSprite.global_rotation = aim_angle + deg_to_rad(90)
 		$BeamSprite.position =  (laser_end.position + laser_start.position) / 2

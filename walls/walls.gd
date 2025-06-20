@@ -41,6 +41,7 @@ var min_extent: Vector2
 var max_extent: Vector2
 
 var tracked_projectiles: Array[WeaponProjectile]
+var tracked_beams: Array[WeaponNonPhysicalBeam]
 
 func _ready() -> void:
 	wall_mode = _select_wall_type()
@@ -49,6 +50,7 @@ func _ready() -> void:
 	
 	# Opting for continuous checking once fired due to edge cases crossing boundary like the turret going through boundary
 	GameEvents.projectile_fired.connect(_on_projectile_fired)
+	GameEvents.beam_fired.connect(_on_beam_fired)
 
 	bounds = shape.shape.get_rect()
 	bounds = Rect2(shape.to_global(bounds.position), bounds.size)
@@ -61,6 +63,8 @@ func _physics_process(_delta: float) -> void:
 		return
 	for projectile in tracked_projectiles:
 		check_projectile_wall_interaction(projectile)
+	for beam in tracked_beams:
+		check_beam_wall_interaction(beam)
 
 func _select_wall_type() -> WallType:
 	if wall_randomization_weights.is_empty():
@@ -200,3 +204,34 @@ func _on_projectile_destroyed(projectile: WeaponProjectile) -> void:
 	#print_debug("%s: Projectile Destroyed=%s" % [name, projectile.name])
 
 	tracked_projectiles.erase(projectile)
+	
+func _on_beam_fired(beam: WeaponNonPhysicalBeam) -> void:
+	tracked_beams.append(beam)
+
+	# Need to bind the extra projectile argument to connect
+	beam.completed_lifespan.connect(_on_beam_destroyed.bind(beam))
+
+# Bind arguments are passed as an array
+func _on_beam_destroyed(beam: WeaponNonPhysicalBeam) -> void:
+	tracked_beams.erase(beam)
+
+func check_beam_wall_interaction(beam: WeaponNonPhysicalBeam):
+	match wall_mode:
+		WallType.WARP:
+			beam_warp(beam)
+		WallType.ELASTIC, WallType.ACCELERATE, WallType.STICKY:
+			beam_elastic(beam)
+		WallType.NONE:
+			beam_none(beam)
+
+func beam_elastic(beam: WeaponNonPhysicalBeam):
+	# TODO: implement
+	return
+
+func beam_warp(beam: WeaponNonPhysicalBeam):
+	# TODO: implement
+	return
+
+func beam_none(beam: WeaponNonPhysicalBeam):
+	# TODO: implement
+	return

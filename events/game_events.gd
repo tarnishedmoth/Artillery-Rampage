@@ -44,6 +44,7 @@ signal aim_updated(player: TankController)
 signal power_updated(player: TankController)
 signal weapon_updated(weapon: Weapon)
 signal projectile_fired(projectile : WeaponProjectile)
+signal beam_fired(beam: WeaponNonPhysicalBeam)
 signal weapon_fired(weapon : Weapon)
 
 signal collectible_collected(collected: CollectibleItem)
