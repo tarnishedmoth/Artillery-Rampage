@@ -59,8 +59,6 @@ func _ready() -> void:
 	max_extent = Vector2(bounds.position.x + bounds.size.x, bounds.size.y)
 
 func _physics_process(_delta: float) -> void:
-	if !tracked_projectiles:
-		return
 	for projectile in tracked_projectiles:
 		check_projectile_wall_interaction(projectile)
 	for beam in tracked_beams:
@@ -233,5 +231,21 @@ func beam_warp(beam: WeaponNonPhysicalBeam):
 	return
 
 func beam_none(beam: WeaponNonPhysicalBeam):
-	# TODO: implement
-	return
+	var pos: Vector2 = beam.laser_end.global_position
+	print_debug("beam position? %f %f" % [pos.x, pos.y])
+
+	if (pos.x <= bounds.position.x):
+		print_debug("Hit left side %s at %s" % [beam.name, beam.global_position])
+		# TODO: implement beam announcer events
+		#GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Left)
+		beam.explode_and_force_destroy()
+	elif pos.x >= bounds.position.x + bounds.size.x:
+		print_debug("Hit right side %s at %s" % [beam.name, beam.global_position])
+		# TODO: implement beam announcer events
+		#GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Right)
+		beam.explode_and_force_destroy()
+	elif pos.y >= bounds.position.y + bounds.size.y:
+		print_debug("Hit bottom %s at %s" % [beam.name, beam.global_position])
+		# TODO: implement beam announcer events
+		#GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Bottom)
+		beam.explode_and_force_destroy()

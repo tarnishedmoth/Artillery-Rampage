@@ -51,6 +51,11 @@ func set_sources(tank:Tank, weapon:Weapon) -> void:
 func _calculate_damage(target: Node2D) -> float:
 	return 50
 
+## Explodes if supported and then ensures that the beam is destroyed
+func explode_and_force_destroy(body:PhysicsBody2D = null, force:bool = false):
+	explode(body, force)
+	destroy()
+
 func destroy():
 	completed_lifespan.emit()
 	queue_free()
