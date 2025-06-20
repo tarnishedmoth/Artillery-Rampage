@@ -2,7 +2,8 @@ class_name TerrainChunkTextureOutlineResource extends TerrainChunkTextureResourc
 
 # TODO: Could add an alternative outline for damaged section and use the inverse of the mask to mix that texture in the shader
 ## Minimum distance from damaged section to not apply the primary outline. Set to < 0 to disable the behavior
-@export var outline_distance_threshold: float = 5.0
+@export var outline_distance_threshold_x: float = 5.0
+@export var outline_distance_threshold_y: float = 20.0
 
 func _init(
 	p_texture:Texture2D = null,
@@ -33,8 +34,6 @@ func apply_to_outline(line: Line2D, impact_vertices: PackedVector2Array) -> void
 
 
 func _compute_discarded_indices(line: Line2D, impact_vertices: PackedVector2Array)  -> PackedByteArray:
-	# TODO: Need to match the line points against the input ranges
-	# TODO: The ranges also need to be compute in replace_contents and utilize the new get_destroyed_range function
 	var index_flags:PackedByteArray = []
 	var line_points:PackedVector2Array = line.points
 
@@ -42,7 +41,8 @@ func _compute_discarded_indices(line: Line2D, impact_vertices: PackedVector2Arra
 	# Will zero init which discards nothing by default, which is what we want since "1" discards and "0" draws
 	index_flags.resize(line_points.size() * 2)
 
-	if impact_vertices.is_empty() or outline_distance_threshold < 0:
+	#if impact_vertices.is_empty() or outline_distance_threshold < 0:
+	if impact_vertices.is_empty() or outline_distance_threshold_x < 0 or outline_distance_threshold_y < 0:
 		return index_flags
 
 	impact_vertices.sort()
@@ -58,12 +58,12 @@ func _compute_discarded_indices(line: Line2D, impact_vertices: PackedVector2Arra
 		var point:Vector2 = line_points[i]
 		if line_start_index == 0 and point.x >= min_x:
 			line_start_index = i
-		elif line_end_index == line_points.size() and point.x > max_x:
-			line_end_index = i
+		elif point.x > max_x:
+			line_end_index = mini(line_end_index,i)
 		elif line_start_index > 0 and line_end_index != line_points.size():
 			break
 
-	var threshold_dist:float = outline_distance_threshold * outline_distance_threshold
+	#var threshold_dist:float = outline_distance_threshold * outline_distance_threshold
 
 	for i in range(line_start_index, line_end_index):
 		var point:Vector2 = line_points[i]
@@ -71,12 +71,13 @@ func _compute_discarded_indices(line: Line2D, impact_vertices: PackedVector2Arra
 		var damaged_start_index:int = impact_vertices.bsearch(point, true)
 		if damaged_start_index == impact_vertices.size():
 			break
-		var damaged_end_index:int = impact_vertices.bsearch(point + Vector2(outline_distance_threshold,0.0), false)
+		var damaged_end_index:int = impact_vertices.bsearch(point + Vector2(outline_distance_threshold_x,0.0), false)
 		if damaged_end_index == impact_vertices.size():
 			damaged_end_index -= 1
 		for j in range(damaged_start_index, damaged_end_index + 1):
 			var damage_point:Vector2 = impact_vertices[j]
-			if point.distance_squared_to(damage_point) <= threshold_dist:
+			#if point.distance_squared_to(damage_point) <= threshold_dist:
+			if absf(damage_point.x - point.x) <= outline_distance_threshold_x and absf(damage_point.y - point.y) <= outline_distance_threshold_y:
 				var index_start = 2 * i #Have to add the points twice and they are ordered in segment pairs
 				index_flags[index_start] = 1
 				index_flags[index_start + 1] = 1

@@ -43,7 +43,8 @@ shader_parameter/discard_threshold = 0.5
 
 [sub_resource type="Resource" id="Resource_5va50"]
 script = ExtResource("6_pv8ko")
-outline_distance_threshold = 5.0
+outline_distance_threshold_x = 5.0
+outline_distance_threshold_y = 20.0
 texture = ExtResource("5_rtx7x")
 material = SubResource("ShaderMaterial_rtx7x")
 repeat = 3
