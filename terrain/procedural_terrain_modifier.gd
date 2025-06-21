@@ -125,11 +125,20 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 		max_variation
 	])
 	
+	var new_terrain:bool = false
+	
+	if terrain_vertices.is_empty():
+		new_terrain = true
+		_seed_terrain(terrain_vertices, terrain_bounds, 4)
+		assert(not terrain_vertices.is_empty(), "Seed Terrain did not add any vertices")
+		chunk.replace_contents(terrain_vertices, [], TerrainChunk.UpdateFlags.Immediate)
+		
 	var first_non_surface_index:int = _get_first_non_surface_index(chunk, terrain_vertices)
-
-	# First modify any existing points
+			
+	# First modify any existing points or the original terrain points if new terrain
 	var vertices_in_bounds:int = 0
 	
+	#region existing terrain
 	for i in first_non_surface_index:
 		var vertex := terrain_vertices[i]
 
@@ -151,25 +160,12 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 				max_height
 			)
 		terrain_vertices[i].y = new_height
-
+#endregion
+#region new terrain
 	# Now add additional vertices requested
 	var new_terrain_vertices:PackedVector2Array = []
 	
 	if additional_vertices > 0:
-		var new_terrain:bool
-		
-		if terrain_vertices.is_empty():
-			new_terrain = true
-			_seed_terrain(terrain_vertices, terrain_bounds, 4)
-			assert(not terrain_vertices.is_empty(), "Seed Terrain did not add any vertices")
-			# HACK:
-			chunk.replace_contents(terrain_vertices, [], TerrainChunk.UpdateFlags.Immediate)
-
-			# Need to recompute first non surface index
-			first_non_surface_index = _get_first_non_surface_index(chunk, terrain_vertices)
-		else:
-			new_terrain = false
-			
 		var total_vertices:int = vertices_in_bounds + additional_vertices
 		var ideal_spacing:float = modification_bounds.size.x / total_vertices
 				
@@ -270,6 +266,7 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 			if should_smooth_end_points and i < first_non_surface_index and i > 0:
 				terrain_vertices[i].y = new_terrain_vertices[-1].y
 			new_terrain_vertices.push_back(terrain_vertices[i])
+#endregion
 	else:
 		new_terrain_vertices = terrain_vertices
 	
