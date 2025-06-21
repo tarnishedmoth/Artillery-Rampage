@@ -1,6 +1,9 @@
 extends Node
 
-@export var levels_always_selectable: StoryLevelsResource ## These levels are immediately & always available to select.
+@export var level_resources_always_selectable: Array[StoryLevelsResource] ## These levels are immediately & always available to select.
+
+var levels_always_selectable: Array[StoryLevel] = []
+
 var is_switching_scene: bool
 var is_precompiler_running:bool = false
 
@@ -85,10 +88,26 @@ func _ready()->void:
 	loading_bg.hide()
 	var root = get_tree().root
 	current_scene = root.get_child(root.get_child_count() - 1)
+
+	_init_selectable_levels()
 	
 func _init() -> void:
 	GameEvents.level_loaded.connect(_on_GameLevel_loaded)
 	
+func _init_selectable_levels() -> void:
+	levels_always_selectable.clear()
+	var unique_levels:Dictionary[String,bool] = {}
+
+	for resource in level_resources_always_selectable:
+		if not resource:
+			continue
+		for level in resource.levels:
+			if level and level.scene_res_path and level.name and level.name not in unique_levels:
+				unique_levels[level.name] = true
+				levels_always_selectable.push_back(level)
+	
+	levels_always_selectable.sort_custom(func(a,b)->bool: return a.name < b.name)
+
 func get_current_level_root() -> GameLevel:
 	#assert(is_instance_valid(_current_level_root_node), "Trying to access root outside of game level.")
 	

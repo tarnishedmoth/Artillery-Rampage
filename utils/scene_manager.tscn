@@ -1,12 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://diy1qhcffvn7e"]
+[gd_scene load_steps=6 format=3 uid="uid://diy1qhcffvn7e"]
 
 [ext_resource type="Script" uid="uid://cen6rpbslhy48" path="res://utils/scene_manager.gd" id="1_olrhd"]
 [ext_resource type="Resource" uid="uid://b20xhiq7ab52i" path="res://levels/conf/story_levels_resource.tres" id="2_f8pd1"]
+[ext_resource type="Script" uid="uid://byp83fig7pnv8" path="res://levels/conf/story_levels_resource.gd" id="2_x2qkq"]
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="3_7vcms"]
+[ext_resource type="Resource" uid="uid://cuxdymscdwdxt" path="res://levels/conf/story_new_levels_resource.tres" id="4_2wfhs"]
 
 [node name="SceneManager" type="Node"]
 script = ExtResource("1_olrhd")
-levels_always_selectable = ExtResource("2_f8pd1")
+level_resources_always_selectable = Array[ExtResource("2_x2qkq")]([ExtResource("4_2wfhs"), ExtResource("2_f8pd1")])
 story_levels = ExtResource("2_f8pd1")
 
 [node name="LoadingBG" type="ColorRect" parent="."]

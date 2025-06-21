@@ -1,7 +1,7 @@
 class_name LevelSelect extends PanelContainer
 
 @export_dir var levels_folders_paths: Array[String] ## This functionality is only available in debug builds.
-@onready var levels_always_selectable: StoryLevelsResource = SceneManager.levels_always_selectable ## These levels are immediately & always available to select.
+@onready var levels_always_selectable: Array[StoryLevel] = SceneManager.levels_always_selectable ## These levels are immediately & always available to select.
 @onready var menu_levels_list: VBoxContainer = %Buttons
 @onready var main_menu: VBoxContainer = %MainMenu
 
@@ -49,9 +49,9 @@ func refresh_list(path_strings:Array[String]) -> void:
 	for control in menu_levels_list.get_children(): control.queue_free()
 	
 	# Add always available levels
-	if levels_always_selectable and not levels_always_selectable.levels.is_empty():
+	if levels_always_selectable:
 		if scan_all_levels: add_menu_item("Always Selectable", _on_level_selected)
-		for level in levels_always_selectable.levels:
+		for level in levels_always_selectable:
 			add_menu_item(level, _on_level_selected)
 	
 	if not path_strings.is_empty():

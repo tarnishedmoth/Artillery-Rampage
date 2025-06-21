@@ -114,7 +114,7 @@ func _on_new_game_pressed() -> void:
 	#PlayerStateManager.enable = false
 	#SceneManager.play_mode = SceneManager.PlayMode.PLAY_NOW
 
-	var level: StoryLevel = SceneManager.levels_always_selectable.levels.pick_random()
+	var level: StoryLevel = SceneManager.levels_always_selectable.pick_random()
 	if level:
 		SceneManager.switch_scene_file(level.scene_res_path)
 
