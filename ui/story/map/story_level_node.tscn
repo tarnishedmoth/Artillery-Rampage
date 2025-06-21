@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://bch6pb81vhwb"]
+[gd_scene load_steps=4 format=3 uid="uid://bch6pb81vhwb"]
 
 [ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="1_7cq0h"]
 [ext_resource type="Script" uid="uid://cdh41csbpfnvy" path="res://ui/story/map/story_level_node.gd" id="1_wccu6"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_uj7u8"]
+font_size = 14
 
 [node name="StoryLevelNode" type="Control"]
 layout_mode = 3
@@ -9,21 +12,25 @@ anchors_preset = 0
 offset_right = 54.0
 offset_bottom = 23.0
 script = ExtResource("1_wccu6")
+min_edge_angle = -90.0
+max_edge_angle = 90.0
 
 [node name="Icon" type="Sprite2D" parent="."]
-scale = Vector2(0.492188, 0.515625)
+scale = Vector2(0.333, 0.333)
 texture = ExtResource("1_7cq0h")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
-offset_left = -28.0
-offset_top = 33.0
-offset_right = 26.0
-offset_bottom = 56.0
+offset_left = -25.0
+offset_top = 22.0
+offset_right = 29.0
+offset_bottom = 45.0
 text = "Level 1"
+label_settings = SubResource("LabelSettings_uj7u8")
+horizontal_alignment = 1
 
 [node name="LeftEdge" type="Marker2D" parent="."]
-position = Vector2(-30, 0)
+position = Vector2(-21, 0)
 
 [node name="RightEdge" type="Marker2D" parent="."]
-position = Vector2(30, 0)
+position = Vector2(21, 0)

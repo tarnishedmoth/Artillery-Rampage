@@ -25,6 +25,10 @@ edge_node_prototype = ExtResource("3_4e1f5")
 default_node_prototype = ExtResource("2_udjio")
 unknown_node_prototype = ExtResource("4_cestf")
 incomplete_level_material = ExtResource("5_8dcih")
+margins = Vector2(20, 150)
+min_edge_length = 15.0
+max_edge_length = 30.0
+edge_dir_max_count = Vector2i(3, 7)
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1

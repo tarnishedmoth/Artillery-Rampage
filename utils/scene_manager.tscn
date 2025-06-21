@@ -9,7 +9,7 @@
 [node name="SceneManager" type="Node"]
 script = ExtResource("1_olrhd")
 level_resources_always_selectable = Array[ExtResource("2_x2qkq")]([ExtResource("4_2wfhs"), ExtResource("2_f8pd1")])
-story_levels = ExtResource("2_f8pd1")
+story_levels = ExtResource("4_2wfhs")
 
 [node name="LoadingBG" type="ColorRect" parent="."]
 modulate = Color(0, 0, 0, 1)

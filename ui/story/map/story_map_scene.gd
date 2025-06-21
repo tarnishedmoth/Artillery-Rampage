@@ -11,6 +11,7 @@ class_name StoryMapScene extends Control
 @export var margins:Vector2 = Vector2(20.0,20.0)
 @export var min_edge_length:float = 25.0
 @export var max_edge_length:float = 150.0
+@export var edge_dir_max_count:Vector2i = Vector2i(3, 5)
 
 @export_group("")
 
@@ -144,6 +145,7 @@ func _calculate_bounds() -> Rect2:
 	var bounds:Rect2 = get_viewport().get_visible_rect()
 	bounds.size -= 2 * margins
 	bounds.position.x += margins.x
+	bounds.position.y += margins.y
 
 	return bounds
 
@@ -163,7 +165,7 @@ func _generate_nodes() -> Array[StoryLevelNode]:
 	var bounds:Rect2 = _calculate_bounds()
 
 	# Start in the middle in y
-	var pos:Vector2 = Vector2(bounds.position.x, bounds.size.y / 2.0)
+	var pos:Vector2 = Vector2(bounds.position.x, (bounds.position.y + bounds.size.y) / 2.0)
 	var nodes:Array[StoryLevelNode] = []
 	nodes.resize(_story_levels_resource.levels.size())
 
@@ -178,6 +180,10 @@ func _generate_nodes() -> Array[StoryLevelNode]:
 
 	var edge_length_diff:float = 0.0
 
+	var edge_dir_bias:int
+	var edge_dir_bias_max_count:int = 0
+	var edge_dir_bias_count:int = 0
+	
 	for i in range(levels.size()):
 		var level:StoryLevel = levels[i]
 		var node:StoryLevelNode = _create_story_level_node(i, level)
@@ -198,7 +204,13 @@ func _generate_nodes() -> Array[StoryLevelNode]:
 		if edge_length_diff < 0 and -edge_length_diff > ideal_edge_length * (levels.size() - i) / float(levels.size()):
 			print_debug("%s: Edges are too long - reducing current edge(%d) length from %f by %f" % [name, i, edge_length, -edge_length_diff])
 			edge_length = maxf(ideal_edge_length + edge_length_diff, edge_range.x)
-		var edge:Vector2 = Vector2(1.0,0.0).rotated(deg_to_rad(randf_range(node.min_edge_angle, node.max_edge_angle))).normalized() * edge_length
+			
+		if edge_dir_bias_count == edge_dir_bias_max_count:
+			edge_dir_bias_count = 0
+			edge_dir_bias_max_count = randi_range(edge_dir_max_count.x, edge_dir_max_count.y)
+			edge_dir_bias = randi_range(-1, 1)
+			
+		var edge:Vector2 = get_edge_dir(node, edge_dir_bias) * edge_length
 
 		if(pos.y + edge.y > bounds.position.y + bounds.size.y or
 			pos.y + edge.y < bounds.position.y):
@@ -208,11 +220,21 @@ func _generate_nodes() -> Array[StoryLevelNode]:
 		pos += edge
 
 		nodes[i] = node
-
+		edge_dir_bias_count += 1
+		
 	#endregion
 
 	return nodes
 
+func get_edge_dir(node: StoryLevelNode, sign_bias:int) -> Vector2:
+	var deg_angle_range:Vector2 = Vector2(node.min_edge_angle, node.max_edge_angle)
+	if sign_bias == 1:
+		deg_angle_range.x = node.max_edge_angle * 0.67
+	elif sign_bias == -1:
+		deg_angle_range.y = node.min_edge_angle * 0.67
+		
+	return Vector2(1.0,0.0).rotated(deg_to_rad(randf_range(deg_angle_range.x, deg_angle_range.y))).normalized()
+	
 func _get_node_width(node: StoryLevelNode) -> float:
 	return node.right_edge.position.x - node.left_edge.position.x
 
@@ -332,10 +354,10 @@ func _create_scrolling_narrative(level:StoryLevel, active_node: StoryLevelNode) 
 
 	var bounds:Rect2 = _calculate_bounds()
 	if active_node_pos.y > (bounds.position.y + bounds.size.y) * 0.5:
-		narrative_pos.y -= 200
+		narrative_pos.y -= 300
 		pass
 	else:
-		narrative_pos.y += 200
+		narrative_pos.y += 300
 		pass
 
 	if active_node_pos.x > (bounds.position.x + bounds.size.x) * 0.5:
