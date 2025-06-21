@@ -42,10 +42,11 @@ fractal_gain = 0.605
 [node name="GameLevel" parent="." instance=ExtResource("1_ls7ny")]
 
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
+outlineMeshEnabled = false
 texture_resources = Array[ExtResource("2_k7l5h")]([SubResource("Resource_msmqt")])
 
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
-polygon = PackedVector2Array(-103.906, 91.1765, 27.3438, 97.0588, 180.469, 58.8235, 408.594, 105.882, 586.719, 104.412, 939.844, 82.353, 945, 445, -103, 448)
+polygon = PackedVector2Array(-103.906, 91.1765, 27.3438, 97.0588, 180.469, 58.8235, 285.156, 1.47058, 408.594, 105.882, 586.719, 176.471, 746.094, 182.353, 806.25, 129.412, 856.25, 129.412, 883.594, 73.5294, 939.844, 82.353, 945, 445, -103, 448)
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("5_g3v77")]
 noise_template = SubResource("FastNoiseLite_iuf40")
@@ -80,7 +81,7 @@ texture = ExtResource("14_rbkm7")
 centered = false
 
 [node name="WaterHazard" parent="GameLevel" instance=ExtResource("15_6s7rf")]
-position = Vector2(701, 674)
+position = Vector2(688, 732)
 scale = Vector2(7.02656, 4.6518)
 
 [node name="ProceduralObjectPlainsSpawner" parent="GameLevel" instance=ExtResource("16_kdse1")]

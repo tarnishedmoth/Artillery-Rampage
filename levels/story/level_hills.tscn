@@ -1,0 +1,110 @@
+[gd_scene load_steps=15 format=3 uid="uid://cwknfpytuiul1"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_1hylc"]
+[ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="2_l3r7e"]
+[ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="3_iqtpf"]
+[ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="4_y45k5"]
+[ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="5_tislf"]
+[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="6_dpkxb"]
+[ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="7_onhht"]
+[ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="8_scdsq"]
+[ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="9_qfat7"]
+[ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="10_36d0b"]
+[ext_resource type="PackedScene" uid="uid://dvkouaun7cdld" path="res://environment/procedural_object_plains_spawner.tscn" id="11_rrpa8"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_e1yfj"]
+frequency = 0.002
+offset = Vector3(-761.47, 1000, 3.25)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_rrpa8"]
+frequency = 0.005
+offset = Vector3(30.55, 126.9, 0)
+fractal_lacunarity = 2.685
+fractal_gain = 0.77
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_8jgmu"]
+frequency = 0.008
+
+[node name="TestLevelProcGen" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_1hylc")]
+metadata/_edit_lock_ = true
+
+[node name="Background" parent="GameLevel" index="2"]
+metadata/_edit_lock_ = true
+
+[node name="Terrain" parent="GameLevel" index="3"]
+metadata/_edit_lock_ = true
+
+[node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
+metadata/_edit_lock_ = true
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+polygon = PackedVector2Array()
+
+[node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" node_paths=PackedStringArray("stop_at") instance=ExtResource("2_l3r7e")]
+noise_template = SubResource("FastNoiseLite_e1yfj")
+stop_at = NodePath("End")
+additional_vertices = 32
+replace_existing_heights = true
+height_win_size_min_variation = -0.25
+height_win_size_max_variation = 0.025
+min_height_value = 75.0
+max_height_clearance = 450.0
+
+[node name="End" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier"]
+position = Vector2(182.031, 76.4706)
+
+[node name="ProceduralTerrainModifier2" parent="GameLevel/Terrain" index="2" node_paths=PackedStringArray("start_at", "stop_at") instance=ExtResource("2_l3r7e")]
+noise_template = SubResource("FastNoiseLite_rrpa8")
+start_at = NodePath("Start")
+stop_at = NodePath("End")
+additional_vertices = 100
+replace_existing_heights = true
+height_win_size_min_variation = -0.2
+height_win_size_max_variation = 0.2
+min_height_value = 100.0
+max_height_clearance = 350.0
+consistency = 0.25
+
+[node name="Start" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier2"]
+position = Vector2(179.688, 8.82355)
+
+[node name="End" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier2"]
+position = Vector2(590.625, 61.7647)
+
+[node name="ProceduralTerrainModifier3" parent="GameLevel/Terrain" index="3" node_paths=PackedStringArray("start_at") instance=ExtResource("2_l3r7e")]
+noise_template = SubResource("FastNoiseLite_8jgmu")
+start_at = NodePath("Start")
+additional_vertices = 50
+replace_existing_heights = true
+height_win_size_min_variation = -0.35
+height_win_size_max_variation = 0.35
+min_height_value = 100.0
+max_height_clearance = 200.0
+consistency = 0.8
+
+[node name="Start" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier3"]
+position = Vector2(546.875, 13.2353)
+
+[node name="Walls" parent="GameLevel" index="4"]
+visible = false
+metadata/_edit_lock_ = true
+
+[node name="Floor" parent="GameLevel" index="5"]
+visible = false
+metadata/_edit_lock_ = true
+
+[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+artillery_ai_types = Array[PackedScene]([ExtResource("3_iqtpf"), ExtResource("4_y45k5"), ExtResource("5_tislf"), ExtResource("6_dpkxb"), ExtResource("7_onhht"), ExtResource("8_scdsq"), ExtResource("9_qfat7"), ExtResource("10_36d0b")])
+default_ai_players = Vector2i(1, 4)
+default_human_players = Vector2i(1, 1)
+ideal_min_spawn_separation = 250.0
+
+[node name="ProceduralObjectPlainsSpawner" parent="GameLevel" instance=ExtResource("11_rrpa8")]
+
+[editable path="GameLevel"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/ArtillerySpawner"]

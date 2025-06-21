@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_kcbsf"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_ynuue"]
 [ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_6bsfy"]
-[ext_resource type="Texture2D" uid="uid://c6drjfyj22hs4" path="res://terrain/terrain-grass-to-dirt.png" id="4_nlxxo"]
+[ext_resource type="Texture2D" uid="uid://my1pco86ryy2" path="res://terrain/terrain-grass-and-dirt.png" id="4_jjso8"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_0vktn"]
 [ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="6_1f83f"]
 [ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="7_8hslh"]
@@ -27,7 +27,7 @@ shader_parameter/maximum = 1.5
 
 [sub_resource type="Resource" id="Resource_msmqt"]
 script = ExtResource("2_ynuue")
-texture = ExtResource("4_nlxxo")
+texture = ExtResource("4_jjso8")
 material = SubResource("ShaderMaterial_cr1wu")
 repeat = 3
 offset = Vector2(0, 0)
