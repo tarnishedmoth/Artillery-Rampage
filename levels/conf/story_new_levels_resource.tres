@@ -1,0 +1,485 @@
+[gd_resource type="Resource" script_class="StoryLevelsResource" load_steps=68 format=3 uid="uid://cuxdymscdwdxt"]
+
+[ext_resource type="Script" uid="uid://bbu2pp1ggq3ya" path="res://levels/conf/story_level_resource.gd" id="1_eqg84"]
+[ext_resource type="Script" uid="uid://dwd2f2a37y3g0" path="res://story/ai_story_config.gd" id="2_rsbj2"]
+[ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="3_kbv8t"]
+[ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="4_hln00"]
+[ext_resource type="PackedScene" uid="uid://bch6pb81vhwb" path="res://ui/story/map/story_level_node.tscn" id="5_vf55u"]
+[ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="6_suwir"]
+[ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="7_j4w3p"]
+[ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="8_kv205"]
+[ext_resource type="PackedScene" uid="uid://do2r411gtohhx" path="res://weapons/weapon_missile_homing.tscn" id="9_npjl4"]
+[ext_resource type="PackedScene" uid="uid://hlpewhe5vg2k" path="res://weapons/weapon_leadball_shotgun.tscn" id="10_hocf4"]
+[ext_resource type="PackedScene" uid="uid://ccl2oyo13754i" path="res://weapons/weapon_MiniMIRV.tscn" id="11_ttk3y"]
+[ext_resource type="PackedScene" uid="uid://bx3va4wmvmw4o" path="res://weapons/weapon_MIRV.tscn" id="12_arfak"]
+[ext_resource type="PackedScene" uid="uid://dychmx0p2ex84" path="res://weapons/weapon_bouncing_ball.tscn" id="13_j3cp3"]
+[ext_resource type="PackedScene" uid="uid://dnc0x4uvh6tq8" path="res://weapons/weapon_meganuke.tscn" id="14_6ox8j"]
+[ext_resource type="Script" uid="uid://byp83fig7pnv8" path="res://levels/conf/story_levels_resource.gd" id="15_ybvsb"]
+
+[sub_resource type="Resource" id="Resource_eaw1u"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00")])
+weapon_count = Vector2i(1, 1)
+artillery_ai_types = Array[PackedScene]([ExtResource("3_kbv8t")])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_ccn48"]
+script = ExtResource("1_eqg84")
+scene_res_path = &"res://levels/story/level_new_beginnings.tscn"
+name = &"Foothold"
+ui_map_node = ExtResource("5_vf55u")
+narratives = Array[String](["We must push back these AI artillery and gain a foothold on the coast!"])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
+0: SubResource("Resource_eaw1u")
+})
+force_player_goes_first = true
+
+[sub_resource type="Resource" id="Resource_di2g2"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00")])
+weapon_count = Vector2i(1, 1)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_1y2yw"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir")])
+weapon_count = Vector2i(1, 1)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_ls1ig"]
+script = ExtResource("1_eqg84")
+scene_res_path = &"res://levels/story/level_islands.tscn"
+name = &"Islander"
+ui_map_node = ExtResource("5_vf55u")
+narratives = Array[String](["We are moving inland now!", "This land has taken heavy damage from the enemy."])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
+0: SubResource("Resource_di2g2"),
+2: SubResource("Resource_1y2yw")
+})
+force_player_goes_first = false
+
+[sub_resource type="Resource" id="Resource_njefd"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir")])
+weapon_count = Vector2i(1, 1)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_1jm8t"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p")])
+weapon_count = Vector2i(2, 2)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_8g4lb"]
+script = ExtResource("1_eqg84")
+scene_res_path = &"res://levels/story/level_simultaneous_fire_intro.tscn"
+name = &"Fire at Will"
+ui_map_node = ExtResource("5_vf55u")
+narratives = Array[String](["Just when we got the hang of things...", "The rules of engagement change!"])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
+0: SubResource("Resource_njefd"),
+2: SubResource("Resource_1jm8t")
+})
+force_player_goes_first = false
+
+[sub_resource type="Resource" id="Resource_wt4ba"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir")])
+weapon_count = Vector2i(1, 1)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_2kbrt"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205")])
+weapon_count = Vector2i(2, 2)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_walwf"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205")])
+weapon_count = Vector2i(2, 4)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_w4otv"]
+script = ExtResource("1_eqg84")
+scene_res_path = &"res://levels/story/level_residential.tscn"
+name = &"Surburban Skirmish"
+ui_map_node = ExtResource("5_vf55u")
+narratives = Array[String](["Even the surburbs weren't spared.", "Hope these houses have good insurance!"])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
+0: SubResource("Resource_wt4ba"),
+1: SubResource("Resource_2kbrt"),
+2: SubResource("Resource_walwf")
+})
+force_player_goes_first = false
+
+[sub_resource type="Resource" id="Resource_6s3ft"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p")])
+weapon_count = Vector2i(1, 2)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_numv4"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205")])
+weapon_count = Vector2i(2, 3)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_8ak2e"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("9_npjl4"), ExtResource("10_hocf4")])
+weapon_count = Vector2i(2, 4)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_yxy2j"]
+script = ExtResource("1_eqg84")
+scene_res_path = &"res://levels/story/level_urban.tscn"
+name = &"Urban Onslaught"
+ui_map_node = ExtResource("5_vf55u")
+narratives = Array[String](["The city lights grow dim.", "Look out for enemies on the skyscrapers!"])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
+0: SubResource("Resource_6s3ft"),
+1: SubResource("Resource_numv4"),
+2: SubResource("Resource_8ak2e")
+})
+force_player_goes_first = false
+
+[sub_resource type="Resource" id="Resource_aru85"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205")])
+weapon_count = Vector2i(1, 3)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_2p4tj"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("11_ttk3y"), ExtResource("10_hocf4")])
+weapon_count = Vector2i(3, 4)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_j6akc"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("9_npjl4"), ExtResource("12_arfak"), ExtResource("11_ttk3y"), ExtResource("10_hocf4")])
+weapon_count = Vector2i(3, 5)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_tj162"]
+script = ExtResource("1_eqg84")
+scene_res_path = &"res://levels/story/level_hills.tscn"
+name = &"Rolling Meadows"
+ui_map_node = ExtResource("5_vf55u")
+narratives = Array[String](["Back to the open land.", "We have made great progress."])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
+0: SubResource("Resource_aru85"),
+1: SubResource("Resource_2p4tj"),
+2: SubResource("Resource_j6akc")
+})
+force_player_goes_first = false
+
+[sub_resource type="Resource" id="Resource_a1i58"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205")])
+weapon_count = Vector2i(1, 3)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_lppl1"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("11_ttk3y"), ExtResource("10_hocf4"), ExtResource("13_j3cp3")])
+weapon_count = Vector2i(3, 4)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_y2f26"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("9_npjl4"), ExtResource("12_arfak"), ExtResource("11_ttk3y"), ExtResource("13_j3cp3"), ExtResource("10_hocf4")])
+weapon_count = Vector2i(3, 5)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_xxtnw"]
+script = ExtResource("1_eqg84")
+scene_res_path = &"res://levels/story/level_scorchedplains.tscn"
+name = &"Scorched Plains"
+ui_map_node = ExtResource("5_vf55u")
+narratives = Array[String](["This land has taken heavy damage from the enemy."])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
+0: SubResource("Resource_a1i58"),
+1: SubResource("Resource_lppl1"),
+2: SubResource("Resource_y2f26")
+})
+force_player_goes_first = false
+
+[sub_resource type="Resource" id="Resource_uyxng"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("10_hocf4"), ExtResource("11_ttk3y"), ExtResource("12_arfak")])
+weapon_count = Vector2i(2, 4)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_mu23i"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("11_ttk3y"), ExtResource("10_hocf4"), ExtResource("13_j3cp3")])
+weapon_count = Vector2i(3, 5)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_fw35h"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("9_npjl4"), ExtResource("12_arfak"), ExtResource("11_ttk3y"), ExtResource("13_j3cp3"), ExtResource("10_hocf4")])
+weapon_count = Vector2i(4, 6)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_ssq1b"]
+script = ExtResource("1_eqg84")
+scene_res_path = &"res://levels/story/level_plains.tscn"
+name = &"Home on the Range"
+ui_map_node = ExtResource("5_vf55u")
+narratives = Array[String](["Ah, the land of milk and honey.", "It's not like it once was..."])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
+0: SubResource("Resource_uyxng"),
+1: SubResource("Resource_mu23i"),
+2: SubResource("Resource_fw35h")
+})
+force_player_goes_first = false
+
+[sub_resource type="Resource" id="Resource_eqg84"]
+script = ExtResource("1_eqg84")
+scene_res_path = &"res://levels/story/level_mesa.tscn"
+name = &"Molten Mesa"
+ui_map_node = ExtResource("5_vf55u")
+narratives = Array[String](["This terrain will prove difficult.", "We must apply new tactics."])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
+0: SubResource("Resource_uyxng"),
+1: SubResource("Resource_mu23i"),
+2: SubResource("Resource_fw35h")
+})
+force_player_goes_first = false
+metadata/_custom_type_script = "uid://bbu2pp1ggq3ya"
+
+[sub_resource type="Resource" id="Resource_rsbj2"]
+script = ExtResource("1_eqg84")
+scene_res_path = &"res://levels/special/level_special_factory.tscn"
+name = &"Special Factory"
+ui_map_node = ExtResource("5_vf55u")
+narratives = Array[String](["We must destroy this factory's power sources.", "Doing so will be a great victory for us!"])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
+0: SubResource("Resource_uyxng"),
+1: SubResource("Resource_mu23i"),
+2: SubResource("Resource_fw35h")
+})
+force_player_goes_first = false
+metadata/_custom_type_script = "uid://bbu2pp1ggq3ya"
+
+[sub_resource type="Resource" id="Resource_kbv8t"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("9_npjl4"), ExtResource("12_arfak"), ExtResource("11_ttk3y"), ExtResource("13_j3cp3"), ExtResource("10_hocf4"), ExtResource("14_6ox8j")])
+weapon_count = Vector2i(5, 7)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_w0ge4"]
+script = ExtResource("1_eqg84")
+scene_res_path = &"res://levels/story/level_divide.tscn"
+name = &"The Great Divide"
+ui_map_node = ExtResource("5_vf55u")
+narratives = Array[String](["There is a large gap between us and the enemy.", "Perhaps it will confuse the enemy."])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
+0: SubResource("Resource_uyxng"),
+1: SubResource("Resource_mu23i"),
+2: SubResource("Resource_kbv8t")
+})
+force_player_goes_first = false
+metadata/_custom_type_script = "uid://bbu2pp1ggq3ya"
+
+[sub_resource type="Resource" id="Resource_npjl4"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("10_hocf4"), ExtResource("11_ttk3y"), ExtResource("12_arfak")])
+weapon_count = Vector2i(3, 5)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_hocf4"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("11_ttk3y"), ExtResource("10_hocf4"), ExtResource("13_j3cp3"), ExtResource("9_npjl4")])
+weapon_count = Vector2i(4, 6)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_ttk3y"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("9_npjl4"), ExtResource("12_arfak"), ExtResource("11_ttk3y"), ExtResource("13_j3cp3"), ExtResource("10_hocf4"), ExtResource("14_6ox8j")])
+weapon_count = Vector2i(6, 8)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_hln00"]
+script = ExtResource("1_eqg84")
+scene_res_path = &"res://levels/story/level_plateau.tscn"
+name = &"Plateau"
+ui_map_node = ExtResource("5_vf55u")
+narratives = Array[String](["We can get a good footing on this flatter land!"])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
+0: SubResource("Resource_npjl4"),
+1: SubResource("Resource_hocf4"),
+2: SubResource("Resource_ttk3y")
+})
+force_player_goes_first = false
+metadata/_custom_type_script = "uid://bbu2pp1ggq3ya"
+
+[sub_resource type="Resource" id="Resource_arfak"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("10_hocf4"), ExtResource("11_ttk3y"), ExtResource("12_arfak")])
+weapon_count = Vector2i(4, 6)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_j3cp3"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("11_ttk3y"), ExtResource("10_hocf4"), ExtResource("13_j3cp3"), ExtResource("9_npjl4"), ExtResource("14_6ox8j")])
+weapon_count = Vector2i(5, 7)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_6ox8j"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("9_npjl4"), ExtResource("12_arfak"), ExtResource("11_ttk3y"), ExtResource("13_j3cp3"), ExtResource("10_hocf4"), ExtResource("14_6ox8j")])
+weapon_count = Vector2i(6, 8)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_vf55u"]
+script = ExtResource("1_eqg84")
+scene_res_path = &"res://levels/story/level_low_mountains.tscn"
+name = &"Mountain Madness"
+ui_map_node = ExtResource("5_vf55u")
+narratives = Array[String](["I think I can see my house from up here!", "We must use the high ground!"])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
+0: SubResource("Resource_arfak"),
+1: SubResource("Resource_j3cp3"),
+2: SubResource("Resource_6ox8j")
+})
+force_player_goes_first = false
+metadata/_custom_type_script = "uid://bbu2pp1ggq3ya"
+
+[sub_resource type="Resource" id="Resource_ybvsb"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("10_hocf4"), ExtResource("11_ttk3y"), ExtResource("12_arfak")])
+weapon_count = Vector2i(4, 6)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_dtegg"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("11_ttk3y"), ExtResource("10_hocf4"), ExtResource("13_j3cp3"), ExtResource("9_npjl4"), ExtResource("14_6ox8j")])
+weapon_count = Vector2i(5, 7)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_w47ue"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("9_npjl4"), ExtResource("12_arfak"), ExtResource("11_ttk3y"), ExtResource("13_j3cp3"), ExtResource("10_hocf4"), ExtResource("14_6ox8j")])
+weapon_count = Vector2i(6, 8)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_suwir"]
+script = ExtResource("1_eqg84")
+scene_res_path = &"res://levels/story/level_whitecaps.tscn"
+name = &"Snowy Caps"
+ui_map_node = ExtResource("5_vf55u")
+narratives = Array[String](["I can't feel my toes!", "We must dispatch the enemy quickly and get to warmer lands."])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
+0: SubResource("Resource_ybvsb"),
+1: SubResource("Resource_dtegg"),
+2: SubResource("Resource_w47ue")
+})
+force_player_goes_first = false
+metadata/_custom_type_script = "uid://bbu2pp1ggq3ya"
+
+[sub_resource type="Resource" id="Resource_sdniq"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("10_hocf4"), ExtResource("11_ttk3y"), ExtResource("12_arfak"), ExtResource("9_npjl4")])
+weapon_count = Vector2i(5, 7)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_lqteq"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("11_ttk3y"), ExtResource("10_hocf4"), ExtResource("13_j3cp3"), ExtResource("9_npjl4"), ExtResource("14_6ox8j")])
+weapon_count = Vector2i(6, 8)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_12fmr"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("9_npjl4"), ExtResource("12_arfak"), ExtResource("11_ttk3y"), ExtResource("13_j3cp3"), ExtResource("10_hocf4"), ExtResource("14_6ox8j")])
+weapon_count = Vector2i(8, 8)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_j4w3p"]
+script = ExtResource("1_eqg84")
+scene_res_path = &"res://levels/story/level_desert.tscn"
+name = &"Desert Winds"
+ui_map_node = ExtResource("5_vf55u")
+narratives = Array[String](["My mouth is so dry now!", "This heat is unbearable!"])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
+0: SubResource("Resource_sdniq"),
+1: SubResource("Resource_lqteq"),
+2: SubResource("Resource_12fmr")
+})
+force_player_goes_first = false
+metadata/_custom_type_script = "uid://bbu2pp1ggq3ya"
+
+[sub_resource type="Resource" id="Resource_tvkn6"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("10_hocf4"), ExtResource("11_ttk3y"), ExtResource("12_arfak"), ExtResource("9_npjl4"), ExtResource("13_j3cp3"), ExtResource("14_6ox8j")])
+weapon_count = Vector2i(5, 7)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_h7pgx"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir"), ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("10_hocf4"), ExtResource("11_ttk3y"), ExtResource("12_arfak"), ExtResource("9_npjl4"), ExtResource("13_j3cp3"), ExtResource("14_6ox8j")])
+weapon_count = Vector2i(7, 9)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_kt880"]
+script = ExtResource("2_rsbj2")
+weapons = Array[PackedScene]([ExtResource("7_j4w3p"), ExtResource("8_kv205"), ExtResource("9_npjl4"), ExtResource("12_arfak"), ExtResource("10_hocf4"), ExtResource("14_6ox8j")])
+weapon_count = Vector2i(6, 6)
+artillery_ai_types = Array[PackedScene]([])
+metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
+
+[sub_resource type="Resource" id="Resource_kv205"]
+script = ExtResource("1_eqg84")
+scene_res_path = &"res://levels/story/level_final_seaside.tscn"
+name = &"Seaside Stand"
+ui_map_node = ExtResource("5_vf55u")
+narratives = Array[String](["It's all come down to this...", "The enemy has made a final stand."])
+ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
+0: SubResource("Resource_tvkn6"),
+1: SubResource("Resource_h7pgx"),
+2: SubResource("Resource_kt880")
+})
+force_player_goes_first = false
+metadata/_custom_type_script = "uid://bbu2pp1ggq3ya"
+
+[resource]
+script = ExtResource("15_ybvsb")
+levels = Array[ExtResource("1_eqg84")]([SubResource("Resource_ccn48"), SubResource("Resource_ls1ig"), SubResource("Resource_8g4lb"), SubResource("Resource_w4otv"), SubResource("Resource_yxy2j"), SubResource("Resource_tj162"), SubResource("Resource_xxtnw"), SubResource("Resource_ssq1b"), SubResource("Resource_eqg84"), SubResource("Resource_rsbj2"), SubResource("Resource_w0ge4"), SubResource("Resource_hln00"), SubResource("Resource_vf55u"), SubResource("Resource_suwir"), SubResource("Resource_j4w3p"), SubResource("Resource_kv205")])
