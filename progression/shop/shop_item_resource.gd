@@ -32,6 +32,9 @@ enum ItemType
 
 @export var refill_cost_type:CostType = CostType.Scrap
 
+## Set to true to disable this shop item from appearing
+@export var disable:bool = false
+
 var apply_refill_discount:bool = false
 
 func get_refill_cost(count: float) -> int:
