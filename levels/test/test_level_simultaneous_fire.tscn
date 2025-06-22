@@ -10,7 +10,7 @@
 
 [node name="GameLevel" parent="." instance=ExtResource("1_vqxbj")]
 
-[node name="RoundDirector" parent="GameLevel" index="7"]
+[node name="RoundDirector" parent="GameLevel" index="1"]
 is_simultaneous_fire = true
 
 [node name="Enemy1" parent="GameLevel" instance=ExtResource("2_fxd5w")]

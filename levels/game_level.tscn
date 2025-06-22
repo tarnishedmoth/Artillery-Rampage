@@ -37,6 +37,10 @@ unique_name_in_owner = true
 process_mode = 1
 script = ExtResource("1_x4c1e")
 
+[node name="RoundDirector" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("6_fyk6u")
+
 [node name="UI" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 layer = 100
@@ -86,10 +90,6 @@ position = Vector2(-2, 731)
 
 [node name="Wind" parent="." instance=ExtResource("5_5ytpt")]
 unique_name_in_owner = true
-
-[node name="RoundDirector" type="Node" parent="."]
-unique_name_in_owner = true
-script = ExtResource("6_fyk6u")
 
 [node name="ArtillerySpawner" parent="." instance=ExtResource("7_f5i3m")]
 unique_name_in_owner = true

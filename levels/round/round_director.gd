@@ -27,7 +27,7 @@ var current_gamestate: GameState
 @export var is_simultaneous_fire: bool = false
 var awaiting_intentions:int = 0
 
-## Set whether player always goes first in round 
+## Set whether player always goes first in round - only applies to non-simultaneous fire
 @export var player_goes_first:bool = false
 
 ## Determine whether we shuffle the turn order or use the child order
@@ -36,6 +36,7 @@ var awaiting_intentions:int = 0
 
 var directed_by_external_script:bool = false ## If true, the round does not end if only the Player is alive.
 var _directed_by_external_script_condition:bool = false ## See [method end_round].
+var _round_ended:bool
 
 var player: Player:
 	get:
@@ -154,7 +155,12 @@ func set_turn_order() -> void:
 	if shuffle_order:
 		print_debug("Shuffling turn order")
 		tank_controllers.shuffle()
-	if player_goes_first:
+
+	if is_simultaneous_fire:
+		# Player "goes last" so HUD updates correctly 
+		print_debug("Setting player to go last in simultaneous fire mode")
+		_swap_players(tank_controllers.size() - 1, _get_player_index())
+	elif player_goes_first:
 		print_debug("Setting player to go first")
 		_swap_players(0, _get_player_index())
 		
@@ -225,8 +231,9 @@ func next_turn() -> bool:
 
 func next_player() -> void:
 	await get_tree().process_frame
-	if turns_since_damage > lightning_time:
-		trigger_lightning()
+
+	_check_trigger_lightening()
+
 	active_player_index = (active_player_index + 1) % tank_controllers.size()
 	var active_player = tank_controllers[active_player_index]
 	if not is_instance_valid(active_player):
@@ -239,32 +246,44 @@ func next_player() -> void:
 	active_player.begin_turn()
 	GameEvents.turn_started.emit(active_player)
 	
+func _check_trigger_lightening() -> void:
+	if turns_since_damage > lightning_time:
+		trigger_lightning()
+
 func _on_turn_ended(controller: TankController) -> void:
 	print("Turn ended for " + controller.name)
 	turns_since_damage += 1
 	print("Turns since damage: " + str(turns_since_damage))
-	if awaiting_intentions > 0:
-		print_debug("Turn ended but awaiting %s intentions from player" % [controller.name])
+	if awaiting_intentions > 0 and not current_gamestate.get_actions().is_empty():
+		print_debug("Turn ended for %s but awaiting %d intentions from player" % [controller.name, awaiting_intentions])
 		return
 	
 	await _async_check_and_await_falling()
 	
 	var round_over:bool = not await next_turn()
-
+	if round_over and _round_ended:
+		print_debug("%s: Skip duplicate round over condition" % name)
+		return
+		
 	# See if orbit completed
 	if active_player_index <= 0:
-		print_debug("Orbit completed")
+		print_debug("%s: Orbit completed" % name)
 		GameEvents.turn_orbit_cycled.emit()
 
 	if round_over:
+		_round_ended = true
 		GameEvents.round_ended.emit()
 #endregion
 
 func all_players() -> void:
+	awaiting_intentions = 0
+	_check_trigger_lightening()
+	
 	for instance:TankController in tank_controllers:
-		print_debug("Turn beginning for %s" % [instance.name])
+		print_debug("Turn beginning for %s - awaiting intentions=%d" % [instance.name, awaiting_intentions + 1])
 		awaiting_intentions += 1
 		instance.begin_turn()
+		GameEvents.turn_started.emit(instance)
 		
 func execute_all_actions() -> void:
 	var actions = current_gamestate.get_actions()
@@ -307,6 +326,7 @@ func _on_tank_killed(tank: Tank, _instigatorController: Node2D, _instigator: Nod
 		push_warning("TankController=" + tank_controller_to_remove.name + " is not in round")
 		return
 	
+	current_gamestate.erase_actions_by_owner(tank_controller_to_remove)
 	tank_controllers.remove_at(index_to_remove)
 	
 	# See if we need to shift the active player index
@@ -316,7 +336,7 @@ func _on_tank_killed(tank: Tank, _instigatorController: Node2D, _instigator: Nod
 			active_player_index = tank_controllers.size() - 1
 
 func _on_player_intent_to_act(action: Callable, apply_to: Object) -> void:
-	print_debug("Received action: ",action,apply_to.name)
+	print_debug("Received action: ",action,apply_to.name, " - awaiting intentions: ", awaiting_intentions - 1)
 	current_gamestate.queue_action(action, apply_to)
 	awaiting_intentions -= 1
 	if awaiting_intentions < 1:

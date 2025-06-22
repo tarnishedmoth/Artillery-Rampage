@@ -216,7 +216,7 @@ func _on_tank_actions_completed(_tank: Tank) -> void:
 
 func submit_intended_action(action: Callable, player: TankController) -> void:
 	if can_take_action:
-		print_debug("Submitted action")
+		print_debug("%s: Submitted action" % name)
 		intent_to_act.emit(action, player)
 	else:
 		skip_action(player)

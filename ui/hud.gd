@@ -34,7 +34,8 @@ func init_signals():
 func _on_turn_started(player: TankController) -> void:
 	_active_player = player
 	# Update health dynamically as player takes damage during turn
-	player.tank.tank_took_damage.connect(_on_took_damage)
+	if not player.tank.tank_took_damage.is_connected(_on_took_damage):
+		player.tank.tank_took_damage.connect(_on_took_damage)
 
 	active_player_text.text = player.name
 
@@ -57,11 +58,15 @@ func _on_turn_ended(player: TankController) -> void:
 		player.tank.tank_took_damage.disconnect(_on_took_damage)
 
 func _on_aim_updated(player: TankController) -> void:
+	if player != _active_player:
+		return
 	var angleRads = player.tank.get_turret_rotation()
 
 	angle_text.set_value(str(int(abs(rad_to_deg(angleRads))))+"°")
 
 func _on_power_updated(player: TankController) -> void:
+	if player != _active_player:
+		return
 	power_text.set_value(int(player.tank.power))
 
 func _on_wind_updated(wind: Wind) -> void:

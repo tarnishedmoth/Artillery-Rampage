@@ -553,7 +553,7 @@ func push_weapon_update_to_hud(weapon: Weapon = get_equipped_weapon()) -> void:
 ## This method is not used by this class, instead it's used by [Player].
 func visualize_trajectory() -> void:
 	# Maybe this needs to be refactored too
-	if beam_trajectory_indicator and current_equipped_weapon.trajectory_indicator_type == "Beam":
+	if beam_trajectory_indicator and current_equipped_weapon and current_equipped_weapon.trajectory_indicator_type == "Beam":
 		beam_trajectory_indicator.shoot(power)
 	elif shooting_trajectory_indicator:
 		# Lets be real I was definitely better off rigging Weapon to show its trajectory innately

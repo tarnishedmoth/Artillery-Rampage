@@ -71,6 +71,9 @@ func _on_round_started() -> void:
 	print_debug("%s: Round Started - (level=%s)" % [name, round_data.level_name])	
 
 func _on_round_ended() -> void:
+	if not _player:
+		return
+		
 	if not round_data.died:
 		round_data.won = true
 		round_data.final_health = _player.tank.health
