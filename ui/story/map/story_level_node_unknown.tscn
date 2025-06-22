@@ -6,19 +6,14 @@
 [node name="StoryLevelNode" instance=ExtResource("1_n0v7d")]
 
 [node name="Icon" parent="." index="0"]
-scale = Vector2(0.333, 0.333)
 texture = ExtResource("2_obhak")
 
 [node name="Label" parent="." index="1"]
-offset_left = -27.0
-offset_top = 24.0
-offset_right = 27.0
-offset_bottom = 47.0
+offset_left = -26.0
+offset_top = 40.0
+offset_right = 28.0
+offset_bottom = 63.0
 text = "???"
-horizontal_alignment = 1
-
-[node name="LeftEdge" parent="." index="2"]
-position = Vector2(-21, 0)
 
 [node name="RightEdge" parent="." index="3"]
 position = Vector2(22, 0)

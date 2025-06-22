@@ -20,11 +20,12 @@ scale = Vector2(0.333, 0.333)
 texture = ExtResource("1_7cq0h")
 
 [node name="Label" type="Label" parent="."]
+z_index = 100
 layout_mode = 2
-offset_left = -25.0
-offset_top = 22.0
-offset_right = 29.0
-offset_bottom = 45.0
+offset_left = -27.0
+offset_top = 40.0
+offset_right = 27.0
+offset_bottom = 63.0
 text = "Level 1"
 label_settings = SubResource("LabelSettings_uj7u8")
 horizontal_alignment = 1
