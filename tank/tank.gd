@@ -11,9 +11,9 @@ signal tank_started_falling(tank: Tank)
 signal tank_stopped_falling(tank: Tank)
 
 @export var drop_on_death:PackedScene ## Scene is spawned at tank's global position when it dies.
-## Trajectory Indicator for for projectile-based weapons
+## Trajectory Indicator for projectile-based weapons
 @export var shooting_trajectory_indicator:Weapon
-## Trajectory Indicator for for based-based weapons
+## Trajectory Indicator for beam-based weapons
 @export var beam_trajectory_indicator:Weapon
 
 @export var min_angle:float = -90.0

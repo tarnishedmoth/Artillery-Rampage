@@ -21,6 +21,12 @@ metadata/_custom_type_script = "uid://43ab121okvpb"
 
 [node name="GameLevel" parent="." instance=ExtResource("1_qnumu")]
 
+[node name="RoundDirector" parent="GameLevel" index="1"]
+lightning_time = 100
+lightning_strength = 0.0
+player_goes_first = true
+shuffle_order = false
+
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
 outlineMeshEnabled = false
 texture_resources = Array[ExtResource("2_qmg41")]([SubResource("Resource_fi6ty")])
@@ -28,18 +34,12 @@ texture_resources = Array[ExtResource("2_qmg41")]([SubResource("Resource_fi6ty")
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
 polygon = PackedVector2Array(-104, -8, 66, -4, 170.313, 47.0588, 288.281, 41.1765, 609, -8, 937, -3, 945, 445, -103, 448)
 
-[node name="Walls" parent="GameLevel" index="4"]
+[node name="Walls" parent="GameLevel" index="5"]
 wall_mode = 4
 
-[node name="Wind" parent="GameLevel" index="6"]
+[node name="Wind" parent="GameLevel" index="7"]
 wind_max = 0
 max_per_orbit_variance = 0
-
-[node name="RoundDirector" parent="GameLevel" index="7"]
-lightning_time = 100
-lightning_strength = 0.0
-player_goes_first = true
-shuffle_order = false
 
 [node name="Enemy" parent="GameLevel" instance=ExtResource("4_dvhh2")]
 position = Vector2(653, 442)
@@ -61,7 +61,7 @@ position = Vector2(48, 442)
 [node name="ShatterableRock" parent="GameLevel" instance=ExtResource("8_6eq0i")]
 position = Vector2(793, 446)
 
-[node name="ShatterableRock2" parent="." instance=ExtResource("9_21x2i")]
+[node name="ShatterableRock2" parent="GameLevel" instance=ExtResource("9_21x2i")]
 position = Vector2(969, 436)
 
 [editable path="GameLevel"]

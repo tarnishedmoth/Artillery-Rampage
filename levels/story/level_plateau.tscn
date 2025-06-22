@@ -1,10 +1,11 @@
-[gd_scene load_steps=18 format=3 uid="uid://cvfl051e8sedk"]
+[gd_scene load_steps=19 format=3 uid="uid://cvfl051e8sedk"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_3ae2s"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_kvwiq"]
 [ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_xuqdn"]
 [ext_resource type="Texture2D" uid="uid://byy76mvisn1j0" path="res://terrain/terrain-strata.png" id="4_53de2"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_8hr62"]
+[ext_resource type="Resource" uid="uid://dgrisjpfie3hx" path="res://terrain/terrain_outline_grass.tres" id="5_bxbil"]
 [ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="6_num7w"]
 [ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="7_l1cic"]
 [ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="8_8vwy3"]
@@ -41,7 +42,7 @@ fractal_gain = 0.605
 
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
 outline_mesh_dist_threshold = 0.3
-texture_resources = Array[ExtResource("2_kvwiq")]([SubResource("Resource_msmqt")])
+texture_resources = Array[ExtResource("2_kvwiq")]([SubResource("Resource_msmqt"), ExtResource("5_bxbil")])
 
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
 polygon = PackedVector2Array(-96.0938, -313.235, 311.719, -316.176, 376.563, -117.647, 417.188, -64.7059, 453.906, 186.765, 477.344, 219.118, 503.906, 195.588, 635.938, 191.176, 692.188, 175, 942.969, 189.706, 945, 445, -103, 448)
@@ -50,10 +51,10 @@ polygon = PackedVector2Array(-96.0938, -313.235, 311.719, -316.176, 376.563, -11
 noise_template = SubResource("FastNoiseLite_iuf40")
 additional_vertices = 64
 
-[node name="Walls" parent="GameLevel" index="4"]
+[node name="Walls" parent="GameLevel" index="5"]
 wall_mode = 1
 
-[node name="Floor" parent="GameLevel" index="5"]
+[node name="Floor" parent="GameLevel" index="6"]
 visible = false
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]

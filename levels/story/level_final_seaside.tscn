@@ -38,9 +38,6 @@ fractal_gain = 0.605
 
 [node name="GameLevel" parent="." instance=ExtResource("1_nycs2")]
 
-[node name="RoundDirector" parent="GameLevel" index="1"]
-is_simultaneous_fire = true
-
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
 outlineMeshEnabled = false
 outline_mesh_dist_threshold = 0.4

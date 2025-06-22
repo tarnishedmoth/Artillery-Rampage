@@ -20,10 +20,10 @@ frequency = 0.1
 [node name="GameLevel" parent="." instance=ExtResource("1_gfn4v")]
 metadata/_edit_lock_ = true
 
-[node name="Background" parent="GameLevel" index="2"]
+[node name="Background" parent="GameLevel" index="3"]
 metadata/_edit_lock_ = true
 
-[node name="Terrain" parent="GameLevel" index="3"]
+[node name="Terrain" parent="GameLevel" index="4"]
 metadata/_edit_lock_ = true
 
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
@@ -57,13 +57,13 @@ position = Vector2(597.656, -25)
 [node name="End" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier2"]
 position = Vector2(472.656, -2.94117)
 
-[node name="Walls" parent="GameLevel" index="4"]
+[node name="Walls" parent="GameLevel" index="5"]
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" parent="GameLevel/Walls/PlayableArea" index="0"]
 visible = false
 
-[node name="Floor" parent="GameLevel" index="5"]
+[node name="Floor" parent="GameLevel" index="6"]
 visible = false
 metadata/_edit_lock_ = true
 

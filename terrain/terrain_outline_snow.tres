@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TerrainChunkTextureOutlineResource" load_steps=3 format=3 uid="uid://cwgml1xwlybuk"]
+
+[ext_resource type="Script" uid="uid://gtr732oltg7j" path="res://terrain/terrain_chunk_texture_outline.gd" id="1_pdqfv"]
+[ext_resource type="Texture2D" uid="uid://dq7l7ptl8nlqj" path="res://terrain/terrain-outline-snow.png" id="2_on8su"]
+
+[resource]
+script = ExtResource("1_pdqfv")
+outline_distance_threshold = 10.0
+outline_mesh_outline_shader_fraction = 0.67
+texture = ExtResource("2_on8su")
+repeat = 3
+offset = Vector2(0, 0)
+metadata/_custom_type_script = "uid://gtr732oltg7j"

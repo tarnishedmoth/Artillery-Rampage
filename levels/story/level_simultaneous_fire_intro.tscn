@@ -1,9 +1,10 @@
-[gd_scene load_steps=22 format=3 uid="uid://d0ckjsiikvkkt"]
+[gd_scene load_steps=23 format=3 uid="uid://d0ckjsiikvkkt"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_fp4gr"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_vjbc6"]
 [ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_6xt0d"]
 [ext_resource type="Texture2D" uid="uid://c6drjfyj22hs4" path="res://terrain/terrain-grass-to-dirt.png" id="4_uocfp"]
+[ext_resource type="Resource" uid="uid://dgrisjpfie3hx" path="res://terrain/terrain_outline_grass.tres" id="5_6xt0d"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_7gt6j"]
 [ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="6_di83b"]
 [ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="7_ja6lr"]
@@ -47,7 +48,7 @@ fractal_gain = 0.605
 is_simultaneous_fire = true
 
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
-texture_resources = Array[ExtResource("2_vjbc6")]([SubResource("Resource_msmqt")])
+texture_resources = Array[ExtResource("2_vjbc6")]([SubResource("Resource_msmqt"), ExtResource("5_6xt0d")])
 
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
 polygon = PackedVector2Array(-104, -8, 101.563, -1.47058, 283.594, 1.47058, 385.156, 25, 460.156, 95.5883, 547.656, 29.4117, 639.844, 7.35297, 753.125, 1.47058, 950, -2.94116, 945, 445, -103, 448)
