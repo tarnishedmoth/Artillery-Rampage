@@ -16,8 +16,8 @@
 [ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="14_52xqd"]
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house/house.tscn" id="15_i2cnw"]
 [ext_resource type="PackedScene" uid="uid://cdu7jxpquqjer" path="res://environment/trees/shatterable_tree.tscn" id="16_mafpu"]
-[ext_resource type="PackedScene" uid="uid://x7v5e0hqqjdp" path="res://environment/rocks/precomputed/precomputed_shatterable_rock_body01.tscn" id="17_vjbc6"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="18_6xt0d"]
+[ext_resource type="PackedScene" uid="uid://3v701qdrjblk" path="res://environment/rocks/precomputed/precomputed_shatterable_rock01.tscn" id="18_vjbc6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cr1wu"]
 shader = ExtResource("3_6xt0d")
@@ -43,6 +43,9 @@ fractal_gain = 0.605
 
 [node name="GameLevel" parent="." instance=ExtResource("1_fp4gr")]
 
+[node name="RoundDirector" parent="GameLevel" index="1"]
+is_simultaneous_fire = true
+
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
 texture_resources = Array[ExtResource("2_vjbc6")]([SubResource("Resource_msmqt")])
 
@@ -57,11 +60,8 @@ height_win_size_max_variation = 0.02
 max_height_clearance = 50.0
 consistency = 0.9
 
-[node name="Floor" parent="GameLevel" index="5"]
+[node name="Floor" parent="GameLevel" index="6"]
 visible = false
-
-[node name="RoundDirector" parent="GameLevel" index="7"]
-is_simultaneous_fire = true
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
 artillery_ai_types = Array[PackedScene]([ExtResource("6_di83b"), ExtResource("7_ja6lr"), ExtResource("8_eshwo"), ExtResource("9_q02cm"), ExtResource("10_bkcnl"), ExtResource("11_vh0ut"), ExtResource("12_3fuhn"), ExtResource("13_l8ici")])
@@ -83,17 +83,17 @@ position = Vector2(156, 436)
 [node name="ShatterableTree2" parent="GameLevel" instance=ExtResource("16_mafpu")]
 position = Vector2(1197, 442)
 
-[node name="PrecomputedShatterableRockBody" parent="." instance=ExtResource("17_vjbc6")]
-position = Vector2(61, 435)
-
-[node name="PrecomputedShatterableRockBody2" parent="." instance=ExtResource("17_vjbc6")]
-position = Vector2(707, 497)
-
-[node name="Player" parent="." instance=ExtResource("18_6xt0d")]
+[node name="Player" parent="GameLevel" instance=ExtResource("18_6xt0d")]
 position = Vector2(378, 430)
 
-[node name="AITank" parent="." instance=ExtResource("6_di83b")]
+[node name="AITank" parent="GameLevel" instance=ExtResource("6_di83b")]
 position = Vector2(949, 432)
+
+[node name="ShatterableRock" parent="GameLevel" instance=ExtResource("18_vjbc6")]
+position = Vector2(61, 435)
+
+[node name="ShatterableRock2" parent="GameLevel" instance=ExtResource("18_vjbc6")]
+position = Vector2(707, 497)
 
 [editable path="GameLevel"]
 [editable path="GameLevel/Terrain"]
