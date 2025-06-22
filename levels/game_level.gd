@@ -89,10 +89,9 @@ func connect_events(controller: TankController) -> void:
 		
 func make_container_node() -> Node2D:
 	var container = Node2D.new()
-	if has_node("%Walls"):
-		%Walls.add_child(container)
-	else:
-		add_child(container)
+	container.name = "SpawnablesContainer"
+	add_child(container)
+	
 	return container
 
 func get_container() -> Node2D:
