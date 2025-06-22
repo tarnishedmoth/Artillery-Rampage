@@ -64,6 +64,7 @@ script = ExtResource("2_qujwc")
 randomize_mod = true
 
 [node name="ButtonUpgradeA" type="Button" parent="MarginContainer/HBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Receive upgrade"
