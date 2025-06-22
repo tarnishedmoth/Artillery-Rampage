@@ -54,10 +54,10 @@ height_win_size_min_variation = -0.125
 height_win_size_max_variation = 0.125
 min_height_value = 10.0
 
-[node name="Walls" parent="GameLevel" index="4"]
+[node name="Walls" parent="GameLevel" index="5"]
 wall_mode = 1
 
-[node name="Floor" parent="GameLevel" index="5"]
+[node name="Floor" parent="GameLevel" index="6"]
 visible = false
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]

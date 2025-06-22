@@ -363,7 +363,7 @@ metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
 [sub_resource type="Resource" id="Resource_vf55u"]
 script = ExtResource("1_eqg84")
-scene_res_path = &"res://levels/story/level_low_mountains.tscn"
+scene_res_path = &"res://levels/story/level_mountains.tscn"
 name = &"Mountain Madness"
 ui_map_node = ExtResource("5_vf55u")
 narratives = Array[String](["I think I can see my house from up here!", "We must use the high ground!"])

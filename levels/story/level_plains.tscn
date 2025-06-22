@@ -56,7 +56,7 @@ height_win_size_max_variation = 0.02
 max_height_clearance = 50.0
 consistency = 0.9
 
-[node name="Floor" parent="GameLevel" index="5"]
+[node name="Floor" parent="GameLevel" index="6"]
 visible = false
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
