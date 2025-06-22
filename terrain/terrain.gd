@@ -218,6 +218,9 @@ func _create_default_chunk(prototype_chunk: TerrainChunk, chunk_name: String, ne
 	new_chunk.falling = true
 	new_chunk.texture_resources = prototype_chunk.texture_resources
 
+	# Disable outline mesh on broken off chunks
+	new_chunk.outlineMeshEnabled = false
+
 	_configure_new_chunk(new_chunk, chunk_name)
 	
 	_update_chunk_from_prototype(prototype_chunk, new_chunk)
