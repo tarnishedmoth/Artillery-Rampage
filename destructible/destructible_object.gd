@@ -112,7 +112,9 @@ func crumble(chunk: DestructibleObjectChunk, influence_poly_global: PackedVector
 func delete_chunk(chunk: DestructibleObjectChunk) -> void:
 	chunk_destroyed.emit(chunk)
 	chunk.delete()
-	await get_tree().process_frame
+
+	# Wait until chunk is destroyed
+	await ObjectUtils.wait_free_free(chunk)
 
 	if get_chunk_count() == 0:
 		delete()

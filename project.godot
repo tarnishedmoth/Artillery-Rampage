@@ -23,6 +23,7 @@ driver/output_latency.web=90
 
 [autoload]
 
+ObjectUtils="*res://utils/object_utils.gd"
 GameEvents="*res://events/game_events.gd"
 Collisions="*res://utils/collisions.gd"
 Groups="*res://utils/groups.gd"
