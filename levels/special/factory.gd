@@ -8,8 +8,8 @@ extends Node2D
 ## If there is already an artillery at the end, artillery can queue behind it
 ## and will immediately deploy when the end artillery dies, effectively replacing it.
 
-signal conveyor_advanced
-signal artillery_spawned
+signal conveyor_advanced ## This signal is used internally
+signal artillery_spawned ## This signal is unused, remove this comment if used
 
 @export var schedule:Dictionary[int,int] ## Turn Count, Number to Spawn
 @export var damageable_components:Array[DamageableDestructibleObject] # Maybe?

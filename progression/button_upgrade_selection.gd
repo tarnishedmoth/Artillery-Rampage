@@ -13,8 +13,9 @@ func _init() -> void:
 
 func get_mod_bundle() -> ModBundle:
 	if randomize_mod:
-		return PlayerUpgrades.generate_random_upgrade(random_mod_types)
+		return PlayerUpgradesClass.generate_random_upgrade(random_mod_types)
 	return mod_bundle
 
 func _on_pressed() -> void:
 	selected.emit(self)
+	disabled = true

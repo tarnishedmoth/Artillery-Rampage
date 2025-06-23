@@ -1,4 +1,4 @@
-extends Node # Autoload
+class_name PlayerUpgradesClass extends Node # Autoload
 
 ## Emitted for each upgrade whenever the player acquires a new upgrade.
 ## Primarily used to get a display name for UI (mod_bundle.name).
@@ -6,6 +6,8 @@ signal acquired_upgrade(mod:ModBundle)
 
 var current_upgrades:Array[ModBundle]
 var _dirty:bool
+
+@onready var acquired_upgrade_sound: AudioStreamPlayer = %AcquiredUpgradeSound
 
 func _ready() -> void:
 	GameEvents.play_mode_changed.connect(_on_play_mode_changed)
@@ -18,6 +20,7 @@ func apply_all_upgrades(weapons: Array[Weapon]) -> void:
 		bundle.apply_all_mods(weapons)
 
 func acquire_upgrade(mod_bundle:ModBundle) -> void:
+	acquired_upgrade_sound.play()
 	_on_acquired_upgrade(mod_bundle)
 
 func _on_acquired_upgrade(mod_bundle:ModBundle) -> void:
