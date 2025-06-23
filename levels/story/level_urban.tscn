@@ -58,13 +58,20 @@ height_win_size_max_variation = 0.02
 max_height_clearance = 50.0
 consistency = 0.9
 
+[node name="Walls" parent="GameLevel" index="5"]
+wall_randomization_weights = Dictionary[int, float]({
+0: 1.0,
+1: 1.0,
+2: 1.0,
+3: 1.0
+})
+
 [node name="Floor" parent="GameLevel" index="6"]
 visible = false
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
 artillery_ai_types = Array[PackedScene]([ExtResource("6_rtx7x"), ExtResource("7_5va50"), ExtResource("8_ro8ig"), ExtResource("9_o6of5"), ExtResource("10_3dlo6"), ExtResource("11_clyr0"), ExtResource("12_xmwrm"), ExtResource("13_y4s5a")])
 default_ai_players = Vector2i(2, 4)
-num_ai_teams = 2
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
 

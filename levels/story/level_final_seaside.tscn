@@ -38,6 +38,9 @@ fractal_gain = 0.605
 
 [node name="GameLevel" parent="." instance=ExtResource("1_nycs2")]
 
+[node name="RoundDirector" parent="GameLevel" index="1"]
+player_goes_first = true
+
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
 outlineMeshEnabled = false
 outline_mesh_dist_threshold = 0.4
@@ -60,7 +63,8 @@ max_height_clearance = 60.0
 [node name="Walls" parent="GameLevel" index="5"]
 wall_randomization_weights = Dictionary[int, float]({
 0: 1.0,
-4: 1.0
+1: 1.0,
+2: 1.0
 })
 
 [node name="Floor" parent="GameLevel" index="6"]
@@ -69,6 +73,7 @@ visible = false
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
 artillery_ai_types = Array[PackedScene]([ExtResource("7_hpsnb"), ExtResource("9_142us"), ExtResource("10_ev1wd"), ExtResource("11_s2ybm"), ExtResource("12_rajqm"), ExtResource("13_ykatp")])
 default_ai_players = Vector2i(6, 8)
+num_ai_teams = 1
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
 min_boundary_x_distance = 20.0

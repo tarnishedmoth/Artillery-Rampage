@@ -53,6 +53,11 @@ additional_vertices = 64
 
 [node name="Walls" parent="GameLevel" index="5"]
 wall_mode = 1
+wall_randomization_weights = Dictionary[int, float]({
+0: 1.0,
+1: 1.0,
+2: 0.5
+})
 
 [node name="Floor" parent="GameLevel" index="6"]
 visible = false

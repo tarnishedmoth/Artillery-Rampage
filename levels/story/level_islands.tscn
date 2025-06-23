@@ -62,7 +62,8 @@ max_height_clearance = 60.0
 [node name="Walls" parent="GameLevel" index="5"]
 wall_randomization_weights = Dictionary[int, float]({
 0: 1.0,
-4: 1.0
+1: 1.0,
+4: 0.5
 })
 
 [node name="Floor" parent="GameLevel" index="6"]

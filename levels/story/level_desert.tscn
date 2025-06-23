@@ -45,6 +45,9 @@ frequency = 0.03
 [node name="GameLevel" parent="." instance=ExtResource("1_1hylc")]
 metadata/_edit_lock_ = true
 
+[node name="RoundDirector" parent="GameLevel" index="1"]
+is_simultaneous_fire = true
+
 [node name="Background" parent="GameLevel" index="3"]
 metadata/_edit_lock_ = true
 
@@ -102,6 +105,13 @@ max_height_clearance = 350.0
 position = Vector2(546.875, 13.2353)
 
 [node name="Walls" parent="GameLevel" index="5"]
+wall_randomization_weights = Dictionary[int, float]({
+0: 2.0,
+1: 2.0,
+2: 1.0,
+3: 0.5,
+4: 0.5
+})
 metadata/_edit_lock_ = true
 
 [node name="Floor" parent="GameLevel" index="6"]
@@ -111,6 +121,7 @@ metadata/_edit_lock_ = true
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
 artillery_ai_types = Array[PackedScene]([ExtResource("3_iqtpf"), ExtResource("4_y45k5"), ExtResource("5_tislf"), ExtResource("6_dpkxb"), ExtResource("7_onhht"), ExtResource("8_scdsq"), ExtResource("9_qfat7"), ExtResource("10_36d0b")])
 default_ai_players = Vector2i(1, 4)
+num_ai_teams = 1
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
 

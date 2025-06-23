@@ -110,6 +110,12 @@ consistency = 0.8
 position = Vector2(546.875, 13.2353)
 
 [node name="Walls" parent="GameLevel" index="5"]
+wall_randomization_weights = Dictionary[int, float]({
+0: 0.0,
+1: 1.0,
+2: 0.5,
+3: 0.5
+})
 metadata/_edit_lock_ = true
 
 [node name="Floor" parent="GameLevel" index="6"]

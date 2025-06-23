@@ -68,6 +68,7 @@ wind_sign_bias = 0.2
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
 artillery_ai_types = Array[PackedScene]([ExtResource("6_nl0cw"), ExtResource("7_4vmqs"), ExtResource("8_to644"), ExtResource("9_4dq8s"), ExtResource("10_jcitn"), ExtResource("11_c3ds7"), ExtResource("12_ucist"), ExtResource("13_5aif5")])
 default_ai_players = Vector2i(1, 3)
+num_ai_teams = 1
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
 
