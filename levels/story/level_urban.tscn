@@ -48,7 +48,7 @@ fractal_gain = 0.605
 texture_resources = Array[ExtResource("2_0xmgj")]([SubResource("Resource_msmqt"), ExtResource("5_cq167")])
 
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
-polygon = PackedVector2Array(-104, -8, 101.563, -1.47058, 283.594, 1.47058, 385.938, 17.647, 460.938, 19.1177, 545.313, 19.1177, 639.844, 7.35297, 753.125, 1.47058, 950, -2.94116, 945, 445, -103, 448)
+polygon = PackedVector2Array(-104, -8, 101.563, -1.47058, 283.594, 1.47058, 300.781, 8.82355, 378.125, 8.82355, 409.375, 22.0588, 450, 23.5294, 486.719, 23.5294, 545.313, 19.1177, 639.844, 7.35297, 753.125, 1.47058, 950, -2.94116, 945, 445, -103, 448)
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("5_pv8ko")]
 noise_template = SubResource("FastNoiseLite_iuf40")
@@ -76,10 +76,10 @@ default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
 
 [node name="CityBuilding" parent="GameLevel" instance=ExtResource("15_0xmgj")]
-position = Vector2(364, 446)
+position = Vector2(363, 444)
 
 [node name="House3" parent="GameLevel" instance=ExtResource("15_lmepw")]
-position = Vector2(847, 452)
+position = Vector2(844, 456)
 
 [node name="House4" parent="GameLevel" instance=ExtResource("15_lmepw")]
 position = Vector2(1070, 445)
@@ -91,13 +91,13 @@ position = Vector2(1185, 445)
 position = Vector2(943, 456)
 
 [node name="CityBuilding3" parent="GameLevel" instance=ExtResource("19_cq167")]
-position = Vector2(553, 455)
+position = Vector2(552, 450)
 
 [node name="CityBuilding4" parent="GameLevel" instance=ExtResource("19_cq167")]
-position = Vector2(75, 440)
+position = Vector2(75, 439)
 
 [node name="CityBuilding2" parent="GameLevel" instance=ExtResource("19_y721a")]
-position = Vector2(693, 457)
+position = Vector2(693, 460)
 
 [editable path="GameLevel"]
 [editable path="GameLevel/Terrain"]

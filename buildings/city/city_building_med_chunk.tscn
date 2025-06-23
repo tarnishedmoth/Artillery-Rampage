@@ -9,10 +9,10 @@ min_mass = 100.0
 destroy_below_min_mass = true
 
 [node name="Mesh" parent="." index="0"]
-position = Vector2(-5, -11)
+position = Vector2(-6, -10)
 texture = ExtResource("2_1psbo")
 texture_offset = Vector2(122.615, 246.56)
-polygon = PackedVector2Array(-42, 10, 52, 10.253, 51, -142, -41, -142)
+polygon = PackedVector2Array(-41, 10, 52, 10.253, 51, -142, -41, -142)
 
 [node name="DestructiblePolyOperations" parent="." index="2"]
 crumble_x_min_dist = 25.0
