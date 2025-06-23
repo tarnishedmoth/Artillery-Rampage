@@ -10,7 +10,7 @@ signal health_changed(current_health:float)
 signal emp_charge_changed(current_total_charge:float)
 
 @export var starting_health:float = 100.0
-var health: float = starting_health:
+@onready var health: float = starting_health: # Must be onready to read export value at runtime
 	set(value):
 		health = maxf(value, 0.0)
 		health_changed.emit(health)

@@ -7,13 +7,15 @@
 
 [node name="Evaporator" type="Node2D" groups=["Damageable", "DamageableRoot"]]
 script = ExtResource("1_f3koo")
-starting_health = 200.0
-display_name = "a factory evaporator"
+starting_health = 300.0
+display_name = "a factory tower"
 chunk_scene = ExtResource("2_f3koo")
 crumbling = true
+smoothing = false
 
-[node name="UiComponentHealthbar" parent="." instance=ExtResource("3_ydiim")]
+[node name="UiComponentHealthbar" parent="." node_paths=PackedStringArray("node_with_health") instance=ExtResource("3_ydiim")]
 position = Vector2(0, 16)
+node_with_health = NodePath("..")
 
 [node name="DestructibleObjectChunk" parent="." instance=ExtResource("2_f3koo")]
 

@@ -5,6 +5,7 @@ class_name UIComponentHealthbar extends Node2D
 @export_range(0.1, 4.0) var progress_bar_tween_speed:float = Juice.SNAPPY
 
 var tween:Tween
+var starting_health:float
 
 func _ready() -> void:
 	if not node_with_health:
@@ -21,8 +22,13 @@ func _ready() -> void:
 	hide()
 
 func connect_signal(node:Node) -> void:
-	#if node is DamageableDestructibleObject:
+	if not node.is_node_ready():
+		await node.ready
 	node.health_changed.connect(_on_health_changed)
+
+	starting_health = node.health
+	progress_bar.max_value = starting_health
+	progress_bar.value = starting_health
 
 func _on_health_changed(new_health:int) -> void:
 	if tween:
@@ -31,7 +37,7 @@ func _on_health_changed(new_health:int) -> void:
 	tween = create_tween()
 	tween.tween_property(progress_bar, "value", new_health, progress_bar_tween_speed)
 
-	if not visible && new_health < 100.0:
+	if not visible && new_health < starting_health:
 		show()
-	elif visible && new_health == 100.0:
+	elif visible && new_health == starting_health:
 		tween.tween_callback(hide)
