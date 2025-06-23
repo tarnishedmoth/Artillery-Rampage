@@ -1,16 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://dkju13ltbvatr"]
+[gd_scene load_steps=7 format=3 uid="uid://dkju13ltbvatr"]
 
 [ext_resource type="Script" uid="uid://bacs4oxxgmiqp" path="res://destructible/damageable_destructible_object.gd" id="1_ieeyv"]
 [ext_resource type="PackedScene" uid="uid://bb350kd362moq" path="res://buildings/evaporator/factorygreeble_chunk2.tscn" id="3_ieeyv"]
 [ext_resource type="PackedScene" uid="uid://o3v5fd18tutn" path="res://ui/ui_component_healthbar.tscn" id="3_vw6kc"]
 [ext_resource type="Script" uid="uid://cj4ks2od2ywxd" path="res://destructible/destructible_shape_calculator.gd" id="4_jc07n"]
+[ext_resource type="Script" uid="uid://bybxweqiag1x8" path="res://items/weapon_projectiles/explosions/emp_discharger.gd" id="5_vw6kc"]
+[ext_resource type="PackedScene" uid="uid://xbbrj3p1ed11" path="res://items/weapon_projectiles/explosions/explosion_emp.tscn" id="6_jc07n"]
 
 [node name="Evaporator" type="Node2D" groups=["Damageable", "DamageableRoot"]]
 script = ExtResource("1_ieeyv")
-starting_health = 300.0
+can_be_emp_charged = true
 display_name = "a factory tower"
 chunk_scene = ExtResource("3_ieeyv")
-crumbling = true
 smoothing = false
 
 [node name="UiComponentHealthbar" parent="." node_paths=PackedStringArray("node_with_health") instance=ExtResource("3_vw6kc")]
@@ -21,3 +22,9 @@ node_with_health = NodePath("..")
 
 [node name="DestructibleShapeCalculator" type="Node" parent="."]
 script = ExtResource("4_jc07n")
+
+[node name="EMPDischarger" type="Node" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("5_vw6kc")
+target = NodePath("..")
+activation_turn_cycle = 2
+scene_to_spawn = ExtResource("6_jc07n")

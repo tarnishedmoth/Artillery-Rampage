@@ -14,7 +14,7 @@ func _ready() -> void:
 	if not target or not "emp_charge" in target:
 		push_error("Invalid configuration of EMP Discharger")
 		queue_free()
-	
+
 	GameEvents.turn_started.connect(_on_turn_started)
 
 func trigger() -> void:
@@ -27,9 +27,9 @@ func trigger() -> void:
 				container = container.get_container()
 			else:
 				container = self
-				
+
 			container.add_child(instance)
-			
+
 			if instance is WeaponProjectile:
 				instance.explode(null, true)
 
@@ -37,11 +37,11 @@ func _on_turn_started(player: TankController) -> void:
 	turn_counter += 1
 	if turn_counter % activation_turn_cycle != 0:
 		return
-		
+
 	if target is Tank:
 		if not target.controller == player:
 			return
-	
+
 	if target.emp_charge > activation_threshold:
 		trigger()
 		if consume_charge != 0.0:

@@ -46,7 +46,7 @@ func animate() -> void:
 	var tween = create_tween()
 
 	var index = 0
-	for pulse in actual_pulses:
+	for pulse in actual_pulses.size():
 		tween.tween_property(self, "modulate", color, actual_pulses[pulse]/2)
 		if index + 1 < actual_pulses.size():
 			tween.tween_property(self, "modulate", Color.TRANSPARENT, actual_pulses[pulse]/2)

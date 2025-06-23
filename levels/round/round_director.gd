@@ -11,7 +11,7 @@ var lightning_time: int = 3
 @export
 var lightning_strength: float = 25.0
 
-@export 
+@export
 var physics_check_time: float = 0.25
 
 @export
@@ -57,16 +57,16 @@ var player: Player:
 		if value == existing:
 			print_debug("%s - player=%s is already in the round" % [name, existing.name])
 			return
-		
+
 		print_debug("%s - Changing player from %s to %s" % [name, existing.name, value.name])
 
 		# retain transform
 		var transform: Transform2D = existing.global_transform
 		var previous_parent:Node = existing.get_parent()
-				
-		tank_controllers[index] = value		
+
+		tank_controllers[index] = value
 		value.global_transform = transform
-		
+
 		if is_instance_valid(previous_parent):
 			previous_parent.remove_child(existing)
 			previous_parent.add_child(value)
@@ -74,77 +74,77 @@ var player: Player:
 			push_warning("%s - player did not have previous parent - using this node" % [name, value.name])
 			add_child(value)
 		existing.queue_free()
-		
+
 func _ready():
 	GameEvents.player_added.connect(_on_player_added)
-	
+
 	current_gamestate = create_new_gamestate() # TODO: loading saved gamestate
-	
+
 	fall_check_timer = Timer.new()
 	fall_check_timer.set_wait_time(0.5)
 	fall_check_timer.set_one_shot(false)
 	fall_check_timer.connect("timeout", _on_fall_check_timeout)
 	fall_check_timer.autostart = false
-	
+
 	add_child(fall_check_timer)
-	
+
 func _enter_tree() -> void:
 	GameEvents.tank_changed.connect(_on_tank_changed)
 
 func add_controller(tank_controller: TankController) -> void:
 	if not tank_controller in tank_controllers:
 		tank_controllers.append(tank_controller)
-	
+
 	for controller:TankController in tank_controllers:
 		connect_controller(controller)
-	
+
 	GameEvents.player_added.emit(tank_controller)
-	
+
 func connect_controller(controller: TankController) -> void:
 	if not controller.signals_connected:
 		controller.tank.tank_killed.connect(_on_tank_killed)
 		controller.intent_to_act.connect(_on_player_intent_to_act)
 		controller.tank.tank_took_damage.connect(_on_tank_damage.unbind(4))
 		controller.signals_connected = true
-	
+
 func _on_tank_changed(controller: TankController, _old_tank: Tank, new_tank: Tank) -> void:
 	if controller in tank_controllers and controller.signals_connected:
 		new_tank.tank_killed.connect(_on_tank_killed)
-	
+
 func _on_player_added(_controller:TankController) -> void:
 	pass
-	
+
 func _on_fall_check_timeout():
 	_fall_check_elapsed_time += fall_check_timer.wait_time
-	
+
 	if !is_any_tank_falling():
 		print("_on_fall_check_timeout: Stopping fall_check_timer")
 		_stop_fall_check_timer()
 	elif _fall_check_elapsed_time >= max_fall_check_time:
 		push_warning("_on_fall_check_timeout: Fall check timer exceeded max time of %fs - Force stopping the timer")
 		_stop_fall_check_timer()
-		
+
 func _stop_fall_check_timer() -> void:
 	fall_check_timer.stop()
 	tanks_stopped_falling.emit()
 	_fall_check_elapsed_time = 0.0
-	
+
 func begin_round() -> bool:
 	GameEvents.turn_ended.connect(_on_turn_ended)
-	
+
 	for controller: TankController in tank_controllers:
 		connect_controller(controller)
-		
+
 		controller.begin_round()
-		
+
 	set_turn_order()
-	
+
 	# Await at start in case tanks are falling at start
 	# TODO: Maybe remove this before release
 	await _async_check_and_await_falling()
-	
+
 	GameEvents.round_started.emit()
-	
+
 	#return next_player()
 
 	# Await as next_turn is async
@@ -157,23 +157,23 @@ func set_turn_order() -> void:
 		tank_controllers.shuffle()
 
 	if is_simultaneous_fire:
-		# Player "goes last" so HUD updates correctly 
+		# Player "goes last" so HUD updates correctly
 		print_debug("Setting player to go last in simultaneous fire mode")
 		_swap_players(tank_controllers.size() - 1, _get_player_index())
 	elif player_goes_first:
 		print_debug("Setting player to go first")
 		_swap_players(0, _get_player_index())
-		
+
 func _get_player_index() -> int:
 	for i in range(tank_controllers.size()):
 		if tank_controllers[i] is Player:
 			return i
 	return -1
-	
+
 func _swap_players(first_index: int, second_index: int) -> void:
 	if first_index < 0 or first_index >= tank_controllers.size() or second_index < 0 or second_index >= tank_controllers.size():
 		return
-	
+
 	var temp: TankController = tank_controllers[first_index]
 	tank_controllers[first_index] = tank_controllers[second_index]
 	tank_controllers[second_index] = temp
@@ -205,18 +205,18 @@ func check_players() -> bool:
 	# team < 0 means no team so at least one valid target for the other player
 	if team < 0:
 		return true
-	
+
 	for i in range(1, tank_controllers.size()):
 		if team != tank_controllers[i].team:
 			return true
 	# All players are on the same team
 	return false
-	
+
 ## This method is used by special levels with scripted behavior to allow for different gameplay.
 ## See Factory (level_special_factory.tscn).
 func end_round() -> void:
 	_directed_by_external_script_condition = true
-		
+
 #region Turn Based
 func next_turn() -> bool:
 	if not check_players(): return false
@@ -226,7 +226,7 @@ func next_turn() -> bool:
 	else:
 		# Simultaneous fire
 		all_players()
-		
+
 	return true
 
 func next_player() -> void:
@@ -239,13 +239,13 @@ func next_player() -> void:
 	if not is_instance_valid(active_player):
 		active_player = tank_controllers.front()
 		print_debug("Invalid active player, resetting to front of array.")
-	
+
 	print_debug("Turn beginning for %s" % [active_player.name])
-	
+
 	awaiting_intentions += active_player.actions_per_turn
 	active_player.begin_turn()
 	GameEvents.turn_started.emit(active_player)
-	
+
 func _check_trigger_lightening() -> void:
 	if turns_since_damage > lightning_time:
 		trigger_lightning()
@@ -257,14 +257,14 @@ func _on_turn_ended(controller: TankController) -> void:
 	if awaiting_intentions > 0 and not current_gamestate.get_actions().is_empty():
 		print_debug("Turn ended for %s but awaiting %d intentions from player" % [controller.name, awaiting_intentions])
 		return
-	
+
 	await _async_check_and_await_falling()
-	
+
 	var round_over:bool = not await next_turn()
 	if round_over and _round_ended:
 		print_debug("%s: Skip duplicate round over condition" % name)
 		return
-		
+
 	# See if orbit completed
 	if active_player_index <= 0:
 		print_debug("%s: Orbit completed" % name)
@@ -278,13 +278,13 @@ func _on_turn_ended(controller: TankController) -> void:
 func all_players() -> void:
 	awaiting_intentions = 0
 	_check_trigger_lightening()
-	
+
 	for instance:TankController in tank_controllers:
 		print_debug("Turn beginning for %s - awaiting intentions=%d" % [instance.name, awaiting_intentions + 1])
 		awaiting_intentions += 1
 		instance.begin_turn()
 		GameEvents.turn_started.emit(instance)
-		
+
 func execute_all_actions() -> void:
 	var actions = current_gamestate.get_actions()
 	var actions_taken: int = 0
@@ -300,21 +300,21 @@ func _async_check_and_await_falling() -> void:
 
 	# Wait a smidge and then check if any tank is falling and give time for physics to settle
 	await scene_tree.create_timer(physics_check_time).timeout
-	
+
 	if is_any_tank_falling():
 		print("_on_turn_ended: At least one tank falling - Starting fall_check_timer")
 		fall_check_timer.start()
 		await tanks_stopped_falling
-		
+
 func is_any_tank_falling() -> bool:
 	for controller in tank_controllers:
 		if is_instance_valid(controller) && controller.tank.is_falling():
 			return true
 	return false
-	
+
 func _on_tank_damage():
 	turns_since_damage = 0
-	
+
 func _on_tank_killed(tank: Tank, _instigatorController: Node2D, _instigator: Node2D):
 	# Need to reset the active player index when removing the controller
 	var tank_controller_to_remove: TankController = tank.owner
@@ -325,10 +325,10 @@ func _on_tank_killed(tank: Tank, _instigatorController: Node2D, _instigator: Nod
 	if(index_to_remove < 0):
 		push_warning("TankController=" + tank_controller_to_remove.name + " is not in round")
 		return
-	
+
 	current_gamestate.erase_actions_by_owner(tank_controller_to_remove)
 	tank_controllers.remove_at(index_to_remove)
-	
+
 	# See if we need to shift the active player index
 	if index_to_remove <= active_player_index:
 		active_player_index -= 1
@@ -341,7 +341,7 @@ func _on_player_intent_to_act(action: Callable, apply_to: Object) -> void:
 	awaiting_intentions -= 1
 	if awaiting_intentions < 1:
 		execute_all_actions()
-		
+
 func trigger_lightning():
 	turns_since_damage = 0
 	var random_target = tank_controllers.pick_random()
@@ -356,41 +356,41 @@ class GameState extends Resource: # Resource supports save/load
 		var action: Callable
 		var caller: TankController
 		# I just realized I recreated the Callable class but maybe we'll extend it
-		
+
 	var _action_queue:Array[Action]
 	var actions_taken_count:int
-	
+
 	func run_action(action: Action) -> void:
 		action.action.call()
 		actions_taken_count += 1
-		
+
 	func run_next_action() -> void:
 		pop_next_action().action.call_deferred()
 		actions_taken_count += 1
-	
+
 	func queue_action(action: Callable, caller: TankController) -> void:
 		var new_action = Action.new()
 		new_action.action = action
 		new_action.caller = caller
 		_action_queue.append(new_action)
-		
+
 	func get_actions() -> Array[Action]:
 		return _action_queue
-	
+
 	func get_next_action() -> Action:
 		return _action_queue.front()
-		
+
 	func get_actions_by_owner(action_owner: TankController) -> Array[Action]:
 		return _action_queue.filter(_check_action_owner.bind(action_owner))
-	
+
 	func erase_actions_by_owner(action_owner: TankController) -> void:
 		_action_queue = _action_queue.filter(_check_action_owner.bind(action_owner, true))
-		
+
 	func pop_next_action() -> Action:
 		return _action_queue.pop_front()
-	
+
 	func _check_action_owner(action: Action, check: TankController, invert:bool = false) -> bool:
 		if action.caller == check: return true if not invert else false
 		else: return false if not invert else true
-	
+
 #endregion
