@@ -1,27 +1,49 @@
-[gd_scene load_steps=5 format=3 uid="uid://o3v5fd18tutn"]
+[gd_scene load_steps=6 format=3 uid="uid://o3v5fd18tutn"]
 
 [ext_resource type="Script" uid="uid://dgt14ile3fy2f" path="res://ui/ui_component_healthbar.gd" id="1_lui74"]
 [ext_resource type="Theme" uid="uid://somhyiu2b38w" path="res://ui/themes/control_theme_tooltips.tres" id="2_fogv2"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fogv2"]
+draw_center = false
+border_width_left = 3
+border_width_top = 2
+border_width_right = 3
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+border_blend = true
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+corner_detail = 6
+expand_margin_left = 2.0
+expand_margin_top = 1.0
+expand_margin_right = 2.0
+expand_margin_bottom = 1.0
+anti_aliasing = false
+
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_fogv2"]
 color = Color(1, 0, 0, 1)
-thickness = 4
+thickness = 8
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_6k88a"]
 color = Color(0, 0.333333, 1, 1)
-thickness = 4
+thickness = 8
 
-[node name="UiComponentHealthbar" type="Node2D"]
+[node name="UiComponentHealthbar" type="Node2D" node_paths=PackedStringArray("progress_bar")]
 script = ExtResource("1_lui74")
+progress_bar = NodePath("PanelContainer/ProgressBar")
 
-[node name="ProgressBar" type="ProgressBar" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="."]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -32.0
-offset_right = 32.0
-offset_bottom = 4.0
 grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fogv2")
+
+[node name="ProgressBar" type="ProgressBar" parent="PanelContainer"]
+custom_minimum_size = Vector2(64, 8)
+layout_mode = 2
 theme = ExtResource("2_fogv2")
 theme_override_font_sizes/font_size = 8
 theme_override_styles/background = SubResource("StyleBoxLine_fogv2")

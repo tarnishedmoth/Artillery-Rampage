@@ -7,6 +7,7 @@
 
 [node name="Evaporator" type="Node2D" groups=["Damageable", "DamageableRoot"]]
 script = ExtResource("1_f3koo")
+starting_health = 200.0
 display_name = "a factory evaporator"
 chunk_scene = ExtResource("2_f3koo")
 crumbling = true

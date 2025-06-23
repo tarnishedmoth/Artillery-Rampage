@@ -24,11 +24,11 @@ func _ready() -> void:
 	GameEvents.wind_updated.connect(_on_wind_updated)
 	GameEvents.weapon_fired.connect(_on_weapon_fired)
 	GameEvents.took_damage.connect(_on_took_damage)
-	
+
 ## Takes an input and formats it with the time, and multiplier counter if identical to previous, then adds it to the UI.
 func record(text:String) -> void:
 	var entry:String # This will hold our output.
-	
+
 	if text == _last_record_input: # Needs a multiplier:
 		if rich.text.ends_with("]."): # More than 2x:
 			var parts:PackedStringArray = rich.text.rsplit("[", false, 1) # Delimiter split into exactly two pieces.
@@ -39,10 +39,10 @@ func record(text:String) -> void:
 	else:
 		entry = bold(brac(Time.get_time_string_from_system())) # Get HH:MM:SS
 		entry = entry + ": " + text # Formatting
-		
+
 		rich.text = rich.text + "\n" + entry # New line and append
 	_last_record_input = text # Cache
-	
+
 func ital(v) -> String: return "[i]" + str(v) + "[/i]"
 func bold(v) -> String: return "[b]" + str(v) + "[/b]"
 func underl(v) -> String: return "[u]" + str(v) + "[/u]"
@@ -51,7 +51,7 @@ func brac(v) -> String: return "[" + str(v) + "]"
 # Signal reacts
 #region
 func _on_user_options_changed(): record("Player changed their options.")
-	
+
 func _on_all_players_added(level: GameLevel): record("All players are ready to play.")
 
 func _on_round_started(): record("Round started.")
@@ -100,7 +100,7 @@ func _on_took_damage(object: Node, instigatorController: Node2D, instigator: Nod
 		player_name = "Natural phenomena"
 	else:
 		player_name = instigatorController.name
-	
+
 	var taker_name:String = ""
 	if object is Tank:
 		taker_name = object.controller.name as String
@@ -111,13 +111,13 @@ func _on_took_damage(object: Node, instigatorController: Node2D, instigator: Nod
 		# Terrain.
 		return
 	if taker_name.is_empty(): taker_name = "something"
-	
+
 	if "health" in object:
 		if object.health <= 0.0:
 			# TODO random words that mean "destroyed" for funsies
 			record(underl(player_name) + " destroyed " + underl(taker_name) + ".")
 			return
-	
+
 	if player_name != _damage_last_player: _damage_recipients.clear() # Empty the damaged cache
 	# Check if this thing has been damaged this turn.
 	if taker_name in _damage_recipients:
@@ -125,7 +125,7 @@ func _on_took_damage(object: Node, instigatorController: Node2D, instigator: Nod
 	else:
 		_damage_recipients[taker_name] = damage # First instance
 	_damage_last_player = player_name
-		
+
 func _accumulate_and_record_tank_damage(_player: TankController) -> void:
 	# TODO per player to support simultaneous mode
 	for damaged in _damage_recipients:

@@ -1,9 +1,8 @@
 class_name UIComponentHealthbar extends Node2D
 
 @export var node_with_health:Node ## Must have a [b]health_changed[/b] signal to connect to.
+@export var progress_bar: ProgressBar
 @export_range(0.1, 4.0) var progress_bar_tween_speed:float = Juice.SNAPPY
-
-@onready var progress_bar: ProgressBar = $ProgressBar
 
 var tween:Tween
 
