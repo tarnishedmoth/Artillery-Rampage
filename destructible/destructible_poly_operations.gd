@@ -280,7 +280,9 @@ func _bias_separation(
 	for i in separation_list.size():
 		separation_list[i] += bias
 
-func calculate_collision_adjusted_bias(points_list:PackedVector2Array, separation_distance: float) -> Vector2:
+## Biases the points up to separation_distance in the XY directions based on collisions with configured mask
+## points_list must be in global space
+func calculate_collision_adjusted_bias(points_list:PackedVector2Array, separation_distance: float = max_chunk_separation) -> Vector2:
 	# Calculate bounding circle for these points
 	var bounds := Circle.create_from_points(points_list)
 

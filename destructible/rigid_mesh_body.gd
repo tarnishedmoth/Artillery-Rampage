@@ -17,6 +17,15 @@ var area: float = 0.0
 var _init_poly:PackedVector2Array = []
 var _init_owner: Node
 
+## Centroid of the polygon in local space
+var centroid_local:Vector2:
+	# Centroid is recalculated and place mesh position at this
+	get: return mesh.position
+
+## Centroid of the polygon in global space
+var centroid_global:Vector2:
+	get: return mesh.global_position
+
 @export 
 var invoke_ready: bool = true
 
