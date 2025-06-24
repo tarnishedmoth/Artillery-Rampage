@@ -32,7 +32,7 @@ func _create_shatter_nodes(impact_velocity: Vector2) -> Array[Node2D]:
 		# detach from current parent
 		node.get_parent().remove_child(node)
 
-		_init_node(node)
+		_init_node(node, Vector2.ZERO)
 		_apply_impulse_to_new_body(node, node.mesh.polygon, impact_velocity_dir)
 		_adjust_new_body_collision(node)
 	
