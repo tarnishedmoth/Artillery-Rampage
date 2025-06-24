@@ -54,13 +54,13 @@ height_win_size_min_variation = -0.02
 height_win_size_max_variation = 0.02
 max_height_clearance = 60.0
 
-[node name="Walls" parent="GameLevel" index="4"]
+[node name="Walls" parent="GameLevel" index="5"]
 wall_mode = 4
 
-[node name="Floor" parent="GameLevel" index="5"]
+[node name="Floor" parent="GameLevel" index="6"]
 visible = false
 
-[node name="Wind" parent="GameLevel" index="6"]
+[node name="Wind" parent="GameLevel" index="7"]
 wind_scale = 650.0
 wind_sign_bias = 0.2
 

@@ -11,7 +11,7 @@
 
 [node name="GameLevel" parent="." instance=ExtResource("1_r2jtd")]
 
-[node name="RoundDirector" parent="GameLevel" index="7"]
+[node name="RoundDirector" parent="GameLevel" index="1"]
 player_goes_first = true
 shuffle_order = false
 

@@ -50,10 +50,10 @@ polygon = PackedVector2Array(-96.0938, -313.235, 311.719, -316.176, 376.563, -11
 noise_template = SubResource("FastNoiseLite_iuf40")
 additional_vertices = 64
 
-[node name="Walls" parent="GameLevel" index="4"]
+[node name="Walls" parent="GameLevel" index="5"]
 wall_mode = 1
 
-[node name="Floor" parent="GameLevel" index="5"]
+[node name="Floor" parent="GameLevel" index="6"]
 visible = false
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
