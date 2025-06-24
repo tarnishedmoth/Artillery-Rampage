@@ -47,12 +47,39 @@ func damage(body: ShatterableObjectBody, projectile: WeaponPhysicsContainer, con
 	
 	var additional_pieces: Array[Node2D] = await body.shatter(projectile, projectile_poly_global)
 
+	await _handle_shattered_pieces_deferred(additional_pieces)
+
+func shatter(body: ShatterableObjectBody, impact_velocity: Vector2, contact_point: Vector2) -> void:
+	print_debug("%s - body=%s shatter with impact_velocity=%s contact_point=%s" % [name, body.name, impact_velocity, contact_point])
+	
+	if _shatter_in_progress:
+		print_debug("%s: shatter - shatter already in progress - ignoring new shatter event" % name)
+		return
+	if is_queued_for_deletion():
+		print_debug("%s: shatter - ignoring as object already queued for deletion" % name)
+		return
+	
+	# Avoid multi-shot projectiles from triggering a fury of shatter events in a single frame and undefined behavior
+	_shatter_in_progress = true
+	
+	# We are free to change the node position beforehand or just call queue_free before adding
+	var additional_pieces: Array[Node2D] = await body.shatter_with_velocity(impact_velocity)
+
+	await _handle_shattered_pieces_deferred(additional_pieces)
+	
+func _handle_shattered_pieces_deferred(additional_pieces: Array[Node2D]) -> void:
+	await _add_pieces_deferred(additional_pieces)
+
+	_delay_shatter_complete()
+
+func _add_pieces_deferred(additional_pieces: Array[Node2D]) -> void:
 	for i in additional_pieces.size():
 		var new_body: Node2D = additional_pieces[i]
 		if max_new_bodies_per_frame > 0:
 			var new_rigid_body: RigidBody2D = new_body as RigidBody2D
 			if new_rigid_body:
 				new_rigid_body.freeze = true
+				
 		_body_container.call_deferred("add_child", new_body)
 		# Add shatter across multiple frames to avoid lag spikes
 		if max_new_bodies_per_frame > 0 and i % max_new_bodies_per_frame == 0:
@@ -69,27 +96,6 @@ func damage(body: ShatterableObjectBody, projectile: WeaponPhysicsContainer, con
 					new_rigid_body.freeze = false
 		).call_deferred()
 
-	_delay_shatter_complete()
-
-func shatter(body: ShatterableObjectBody, impact_velocity: Vector2, contact_point: Vector2) -> void:
-	print_debug("%s - body=%s shatter with impact_velocity=%s contact_point=%s" % [name, body.name, impact_velocity, contact_point])
-	
-	if _shatter_in_progress:
-		print_debug("%s: shatter - shatter already in progress - ignoring new shatter event" % name)
-		return
-	if is_queued_for_deletion():
-		print_debug("%s: shatter - ignoring as object already queued for deletion" % name)
-		return
-	
-	# Avoid multi-shot projectiles from triggering a fury of shatter events in a single frame and undefined behavior
-	_shatter_in_progress = true
-	
-	var additional_pieces: Array[Node2D] = await body.shatter_with_velocity(impact_velocity)
-	for new_body in additional_pieces:
-		_body_container.call_deferred("add_child", new_body)
-	
-	_delay_shatter_complete()
-	
 func _delay_shatter_complete() -> void:
 	# wait a couple frames - we don't necessarily want to delay a long time as want to destroy the small pieces faster if hit
 	# it with a multi-shot weapon

@@ -37,6 +37,9 @@ class_name DestructiblePolyOperations extends Node
 @export_category("Shatter")
 @export_range(0, 1, 0.01) var chunk_separation_bounds_radius_fraction: float = 0.5
 
+@export_category("Shatter")
+@export var chunk_collision_mask:int = Collisions.CompositeMasks.obstacle
+
 var _shatter_strategy:ShatterStrategy
 
 func _get_or_init_shatter_strategy() -> ShatterStrategy:
@@ -227,10 +230,10 @@ func _create_break_polyline(poly: PackedVector2Array, first_index: int) -> Packe
 func shatter(poly: PackedVector2Array, min_area: float, max_area: float) -> Array[PackedVector2Array]:
 	return _get_or_init_shatter_strategy().shatter(poly, min_area, max_area)
 
-func calculate_shatter_poly_separation(poly_points_list: Array[PackedVector2Array]) -> PackedVector2Array:
-	return _calculate_poly_separation(poly_points_list, chunk_separation_bounds_radius_fraction, max_chunk_separation)
+func calculate_shatter_poly_separation(poly_points_list: Array[PackedVector2Array], global_transform:Transform2D = Transform2D.IDENTITY) -> PackedVector2Array:
+	return _calculate_poly_separation(poly_points_list, chunk_separation_bounds_radius_fraction, max_chunk_separation, global_transform)
 
-func _calculate_poly_separation(poly_points_list: Array[PackedVector2Array], max_radius_fraction: float, max_distance: float) -> PackedVector2Array:
+func _calculate_poly_separation(poly_points_list: Array[PackedVector2Array], max_radius_fraction: float, max_distance: float, global_transform:Transform2D) -> PackedVector2Array:
 	var all_points: PackedVector2Array = []
 	for poly in poly_points_list:
 		all_points.append_array(poly)
@@ -241,10 +244,15 @@ func _calculate_poly_separation(poly_points_list: Array[PackedVector2Array], max
 	var separation: PackedVector2Array = []
 	separation.resize(all_points.size())
 
+	var poly_centroids:PackedVector2Array = []
+	poly_centroids.resize(all_points.size())
+
 	# offset polygon by distance from center of the bounds scaled by max_distance
 	for i in poly_points_list.size():
 		var poly: PackedVector2Array = poly_points_list[i]
 		var centroid: Vector2 = TerrainUtils.polygon_centroid(poly)
+		poly_centroids[i] = centroid
+
 		var offset: Vector2 = centroid - bounds.center
 
 		var offset_length: float = offset.length()
@@ -253,7 +261,59 @@ func _calculate_poly_separation(poly_points_list: Array[PackedVector2Array], max
 		var translation: Vector2 = offset_dir * separation_distance * (offset_length / bounds.radius)
 		separation[i] = translation
 
+	
+	_bias_separation(poly_centroids, separation, separation_distance, global_transform)
+
 	return separation
+
+func _bias_separation(
+	centroid_points_list:PackedVector2Array, separation_list:PackedVector2Array, separation_distance: float, global_transform:Transform2D) -> void:
+	var adjusted_points:PackedVector2Array = []
+	adjusted_points.resize(centroid_points_list.size())
+
+	for i in adjusted_points.size():
+		adjusted_points[i] = global_transform * (centroid_points_list[i] + separation_list[i])
+
+	var bias:Vector2 = calculate_collision_adjusted_bias(adjusted_points, separation_distance)
+
+	# Apply the bias to all points
+	for i in separation_list.size():
+		separation_list[i] += bias
+
+func calculate_collision_adjusted_bias(points_list:PackedVector2Array, separation_distance: float) -> Vector2:
+	# Calculate bounding circle for these points
+	var bounds := Circle.create_from_points(points_list)
+
+	var test_directions:PackedVector2Array = []
+	test_directions.resize(4)
+
+	test_directions[0] = -Vector2(0.0, bounds.radius)
+	test_directions[1] = Vector2(0.0, bounds.radius)
+	test_directions[2] = -Vector2(bounds.radius, 0.0)
+	test_directions[3] = Vector2(bounds.radius, 0.0)
+
+	var parent:Node2D = get_parent() as Node2D
+	assert(parent, "Parent is not a Node 2D!")
+
+	var space_state := parent.get_world_2d().direct_space_state
+
+	var query_params := PhysicsPointQueryParameters2D.new()
+	query_params.collide_with_areas = false
+	query_params.collide_with_bodies = true
+	query_params.collision_mask = chunk_collision_mask
+
+	if parent is CollisionObject2D:
+		query_params.exclude = [parent.get_rid()]
+
+	var bias:Vector2 = Vector2()
+
+	for test_direction in test_directions:
+		query_params.position = bounds.center + test_direction
+		if space_state.intersect_point(query_params):
+			# Normalize by dividing by bounds radius and then push by separation distance
+			bias += test_direction / bounds.radius * separation_distance
+
+	return bias
 
 func get_destroyed_polys(destructible_shape:PackedVector2Array, poly:PackedVector2Array) -> PackedVector2Array:
 	var intersect_result: Array[PackedVector2Array] = Geometry2D.intersect_polygons(destructible_shape, poly)

@@ -35,6 +35,9 @@ var area: float = 0.0
 # Note that should apply the offset position to the root position rather than the mesh position otherwise
 # will get rotation about the body center and this will cause a "hinge" rotation that is probably not desired
 
+# TODO: Detect if get stuck inside something as a failsafe in the _physics_process
+# This will be a separate sub-component added to this object and any other rigid bodies we want to anihilate if spawn stuck
+
 func _ready() -> void:
 	if SceneManager.is_precompiler_running:
 		return
@@ -114,7 +117,7 @@ func _create_shatter_nodes(impact_velocity: Vector2) -> Array[Node2D]:
 	var new_bodies: Array[Node2D] = []
 	
 	var new_polys: Array[PackedVector2Array] = _create_shatter_polys()
-	var poly_separation: PackedVector2Array = _poly_ops.calculate_shatter_poly_separation(new_polys)
+	var poly_separation: PackedVector2Array = _poly_ops.calculate_shatter_poly_separation(new_polys, _mesh.global_transform)
 	
 	new_bodies.resize(new_polys.size())
 

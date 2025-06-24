@@ -25,6 +25,9 @@ func _create_shatter_nodes(impact_velocity: Vector2) -> Array[Node2D]:
 	# Need to add scene in order for the child nodes to be accessible
 	add_child(fracture_mesh_set)
 
+	# TODO: Need to get the polygon centroid of each mesh set in global space and then pass to 
+	#_poly_ops.calculate_collision_adjusted_bias
+
 	for node in fracture_mesh_set.pieces:
 		# detach from current parent
 		node.get_parent().remove_child(node)
@@ -41,11 +44,11 @@ func _create_shatter_nodes(impact_velocity: Vector2) -> Array[Node2D]:
 	
 	return nodes
 
-func _init_node(new_instance:RigidMeshBody) -> void:
+func _init_node(new_instance:RigidMeshBody, delta_position:Vector2) -> void:
 	new_instance._init_owner = owner
 		
 	new_instance.density = density
-	new_instance.position = position
+	new_instance.position = position + delta_position
 	new_instance.rotation = rotation
 
 	# Skipped ready first time since needed to add to the tree in order to access the rigid body mesh instances

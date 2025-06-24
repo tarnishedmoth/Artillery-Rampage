@@ -10,15 +10,15 @@
 
 [node name="GameLevel" parent="." instance=ExtResource("1_886ax")]
 
-[node name="Terrain" parent="GameLevel" index="3"]
-shatterable_area_threshold_range = Vector2(0, 4000)
-
-[node name="Walls" parent="GameLevel" index="4"]
-wall_mode = 1
-
-[node name="RoundDirector" parent="GameLevel" index="7"]
+[node name="RoundDirector" parent="GameLevel" index="1"]
 player_goes_first = true
 shuffle_order = false
+
+[node name="Terrain" parent="GameLevel" index="4"]
+shatterable_area_threshold_range = Vector2(0, 4000)
+
+[node name="Walls" parent="GameLevel" index="5"]
+wall_mode = 1
 
 [node name="Enemy2" parent="GameLevel" instance=ExtResource("2_wmygx")]
 position = Vector2(1100, 426)
