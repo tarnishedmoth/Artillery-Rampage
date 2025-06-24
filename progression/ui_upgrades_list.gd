@@ -30,6 +30,7 @@ func update() -> void:
 	for mod in upgrades:
 		var display:ModDisplayPanel = create_mod_display_panel(mod)
 		add_child(display)
+		display.configure_from_mods()
 		Juice.fade_in(display)
 	
 func _on_upgrades_changed() -> void:

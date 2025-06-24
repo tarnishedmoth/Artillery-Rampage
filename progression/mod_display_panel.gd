@@ -38,19 +38,33 @@ func _ready() -> void:
 	if not mods.is_empty():
 		configure_from_mods()
 	else:
-		push_warning("ModDisplayPanel: Mods not configured before ready.")
+		push_warning("ModDisplayPanel: Mods not configured before ready. Be sure to call the method manually.")
 	
 func configure_from_mods() -> void:
+	var _mods:Array
 	for mod in mods:
+		if mod is ModBundle:
+			_mods.append_array(mod.components_weapon_mods)
+			_mods.append_array(mod.components_projectile_mods)
+		else:
+			_mods.append(mod)
+			
+	## NOTE
+	## This logic makes no sense yet because it'll just show the first mod in the array's data (see the return at the end).
+	## Not sure how to sort this yet but I think in all cases right now, it will only be one mod.
+	## This will definitely change once layers are used in the bundle.
+	## It will probably be worth doing aggregation in the upgrade list script instead of the display panel.
+	for mod in _mods:
 		if mod is ModWeapon:
 			header_label.text = mod.target_weapon_name
 			#header_sublabel.text =
 			display_property.text = mod.property_to_display_string()
-			display_operation = mod.operation_to_display_string()
-			display_value = mod.get_property_value_to_string()
+			display_operation.text = mod.operation_to_display_string()
+			display_value.text = mod.get_property_value_to_string()
 		if mod is ModProjectile:
 			# Find the appropriate weapon and display it
 			pass
+		return
 	
 func exchange_mod_for_scrap() -> void:
 	print("Foo!")
