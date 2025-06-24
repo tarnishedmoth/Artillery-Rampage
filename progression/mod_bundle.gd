@@ -86,9 +86,15 @@ func randomize(selectable_types:Array[ModBundle.Types], number_of_mods:int = 1, 
 			Types.WEAPON:
 				mod = _new_rand_mod_weapon(chance_bias)
 				components_weapon_mods.append(mod)
+				
 			Types.PROJECTILE:
-				mod = _new_rand_mod_projectile(chance_bias)
-				components_projectile_mods.append(mod)
+				# TODO Not implemented!
+				#mod = _new_rand_mod_projectile(chance_bias)
+				#components_projectile_mods.append(mod)
+				
+				mod = _new_rand_mod_weapon(chance_bias)
+				components_weapon_mods.append(mod)
+				
 			#Types.TANK:
 				#pass
 			#Types.PLAYER:
@@ -96,8 +102,8 @@ func randomize(selectable_types:Array[ModBundle.Types], number_of_mods:int = 1, 
 			#Types.WORLD:
 				#pass
 			_:
-				mod = null
-	pass
+				mod = _new_rand_mod_weapon(chance_bias)
+				components_weapon_mods.append(mod)
 	
 func clear_all() -> void:
 	components_weapon_mods.clear()

@@ -89,8 +89,59 @@ func get_property_key(modifiable: Modifiables = property) -> String:
 	return text_representation.to_lower()
 
 func get_property_value_to_string() -> String:
-	return str(value) if operation != Operations.SET_TRUE and operation != Operations.SET_FALSE else ""
+	if operation != Operations.SET_TRUE and operation != Operations.SET_FALSE:
+		return str(value)
+	elif operation == Operations.SET_TRUE: return "YES"
+	elif operation == Operations.SET_FALSE: return "NO"
+	else:
+		push_warning("How did you manage to do this?")
+		return ""
 		
+func property_to_display_string() -> String: ## For UI
+	match property:
+		Modifiables.ACCURACY_ANGLE_SPREAD:
+			return "Accuracy Spread"
+		Modifiables.ALWAYS_SHOOT_FOR_COUNT:
+			return "Shots Fired per Turn"
+		Modifiables.ALWAYS_SHOOT_FOR_DURATION:
+			return "Shoot for Duration"
+		Modifiables.AMMO_USED_PER_SHOT:
+			return "Ammo used per Shot"
+		Modifiables.CURRENT_AMMO:
+			return "Ammo"
+		Modifiables.FIRE_RATE:
+			return "Rate of Fire"
+		#Modifiables.FIRE_VELOCITY:
+			## pretty sure this isn't implemented?
+			#return "Call a Dev!"
+		Modifiables.MAGAZINES:
+			return "Magazines"
+		Modifiables.MAGAZINE_CAPACITY:
+			return "Ammo per Magazine"
+		Modifiables.NUMBER_OF_SCENES_TO_SPAWN:
+			return "Projectiles Fired per Shot"
+		Modifiables.POWER_LAUNCH_SPEED_MULT:
+			return "Shot Power"
+		Modifiables.RETAIN_WHEN_EMPTY:
+			return "Keep when Empty"
+		Modifiables.USE_AMMO:
+			return "Needs Ammo to Shoot"
+		#Modifiables.USE_FIRE_RATE:
+			#return ""
+		#Modifiables.USE_MAGAZINES:
+			#return ""
+		_:
+			return "Call a Dev!"
+			
+func operation_to_display_string() -> String:
+	match operation:
+		Operations.MULTIPLY: return "x"
+		Operations.ADD : return "+"
+		Operations.SUBTRACT: return "-"
+		Operations.SET : return "="
+		Operations.SET_TRUE: return "="
+		Operations.SET_FALSE: return "="
+		_: return "%s" % operation
 
 func operation_to_string() -> String:
 	match operation:

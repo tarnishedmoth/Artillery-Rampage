@@ -3,6 +3,7 @@ class_name PlayerUpgradesClass extends Node # Autoload
 ## Emitted for each upgrade whenever the player acquires a new upgrade.
 ## Primarily used to get a display name for UI (mod_bundle.name).
 signal acquired_upgrade(mod:ModBundle)
+signal upgrades_changed() ## Futureproof for deleting/changing upgrades
 
 var current_upgrades:Array[ModBundle]
 var _dirty:bool
@@ -28,7 +29,9 @@ func _on_acquired_upgrade(mod_bundle:ModBundle) -> void:
 	_dirty = true
 
 	current_upgrades.append(mod_bundle)
+	
 	acquired_upgrade.emit(mod_bundle)
+	upgrades_changed.emit()
 
 func _on_play_mode_changed(old_mode:SceneManager.PlayMode, new_mode: SceneManager.PlayMode) -> void:
 	if old_mode == SceneManager.PlayMode.STORY:
@@ -39,6 +42,7 @@ func _on_play_mode_changed(old_mode:SceneManager.PlayMode, new_mode: SceneManage
 func clear() -> void:
 	current_upgrades.clear()
 	_dirty = false
+	upgrades_changed.emit()
 
 #region Savable
 

@@ -174,7 +174,7 @@ func _check_cheat_code_entered(code:Array[Keys]) -> void:
 					level_root.wind.wind = Vector2(level_root.wind.wind_max * sign, 0.0)
 
 
-		print_debug("-- CHEAT: ", cheat_name) # TODO log in pause menu events log
+		print_debug("-- CHEAT: ", cheat_name)
 		events_log.record("CHEAT ENTERED: "+ cheat_name)
 
 func _get_player_controller() -> Player:

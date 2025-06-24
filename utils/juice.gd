@@ -49,3 +49,19 @@ static func advanced_fade(
 	tween.tween_property(node, "modulate", to, speed)
 
 	return tween
+
+## Short hand for tween modulate
+static func mod(node:Control, color:Color, speed:float = SNAP, from = null) -> Tween:
+	var tween = node.create_tween()
+	if from:
+		tween.tween_property(node, ^"modulate", color, speed).from(from)
+	else:
+		tween.tween_property(node, ^"modulate", color, speed).from_current()
+	return tween
+	
+## Kills a tweener then starts a new one
+static func ks(tween:Tween, callable:Callable) -> Tween:
+	if tween.is_running():
+		tween.kill()
+	tween = callable.call()
+	return tween

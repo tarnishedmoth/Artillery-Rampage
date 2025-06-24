@@ -1,0 +1,79 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://dhdbc8ledcupg"]
+
+[ext_resource type="FontFile" uid="uid://cr7d38d0438qq" path="res://ui/fonts/FreeSerifBold-rdMp.otf" id="1_a7y24"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_a7y24"]
+color = Color(1, 1, 1, 1)
+grow_begin = -3.0
+grow_end = -3.0
+thickness = 3
+vertical = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_20akp"]
+content_margin_left = 6.0
+content_margin_top = 2.0
+content_margin_right = 6.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 0.360784)
+border_width_left = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.954845, 0.857749, 0.700455, 1)
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_efsqf"]
+content_margin_left = 6.0
+content_margin_top = 2.0
+content_margin_right = 6.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 0.360784)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color(0.954845, 0.857749, 0.700455, 1)
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_top = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a7y24"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+bg_color = Color(0.788235, 0.623529, 0.337255, 1)
+draw_center = false
+border_width_left = 1
+border_width_top = 2
+border_width_right = 1
+border_width_bottom = 4
+border_color = Color(0.788235, 0.623529, 0.337255, 1)
+border_blend = true
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+shadow_color = Color(0.07, 0.07, 0.07, 0.317647)
+shadow_size = 8
+
+[resource]
+default_font = ExtResource("1_a7y24")
+default_font_size = 18
+BoxContainer/constants/separation = 2
+Button/colors/font_color = Color(0.953771, 0.953771, 0.953771, 1)
+Button/colors/font_focus_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_color = Color(0.954845, 0.857749, 0.700455, 1)
+Button/font_sizes/font_size = 12
+Button/styles/focus = SubResource("StyleBoxLine_a7y24")
+Button/styles/hover = SubResource("StyleBoxFlat_20akp")
+Button/styles/normal = SubResource("StyleBoxFlat_efsqf")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_a7y24")

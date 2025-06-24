@@ -1,0 +1,168 @@
+[gd_scene load_steps=6 format=3 uid="uid://ci2sausuoqug6"]
+
+[ext_resource type="Script" path="res://progression/mod_display_panel.gd" id="1_kt7ub"]
+[ext_resource type="Theme" uid="uid://dhdbc8ledcupg" path="res://ui/themes/control_theme_upgrade_mod_displays.tres" id="1_o625h"]
+[ext_resource type="FontFile" uid="uid://cewx0pasv03gk" path="res://ui/fonts/Symbola-AjYx.ttf" id="3_h6i1s"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_tjeeo"]
+font = ExtResource("3_h6i1s")
+font_size = 11
+font_color = Color(0.756087, 0.756087, 0.756087, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_h6i1s"]
+font_size = 12
+font_color = Color(0.95, 0.95, 0.95, 1)
+
+[node name="ModDisplayPanel" type="Control"]
+custom_minimum_size = Vector2(160, 220)
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_kt7ub")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -70.5
+offset_top = -102.0
+offset_right = 70.5
+offset_bottom = 102.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme = ExtResource("1_o625h")
+
+[node name="Everything" type="VBoxContainer" parent="PanelContainer"]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(140, 200)
+layout_mode = 2
+
+[node name="Header" type="VBoxContainer" parent="PanelContainer/Everything"]
+layout_mode = 2
+
+[node name="HeaderLabel" type="Label" parent="PanelContainer/Everything/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Weapon"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="HeaderSublabel" type="Label" parent="PanelContainer/Everything/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Upgrade"
+label_settings = SubResource("LabelSettings_tjeeo")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Divider" type="ColorRect" parent="PanelContainer/Everything/Header"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+color = Color(0.788235, 0.623529, 0.337255, 1)
+
+[node name="ModDisplay" type="VBoxContainer" parent="PanelContainer/Everything"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Property" type="Label" parent="PanelContainer/Everything/ModDisplay"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 10
+text = "Accuracy Angle Spread"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/Everything/ModDisplay"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Operation" type="Label" parent="PanelContainer/Everything/ModDisplay/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "x"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="PanelContainer/Everything/ModDisplay/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+text = "105%"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Buttons" type="VBoxContainer" parent="PanelContainer/Everything"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+alignment = 1
+
+[node name="HideTimer" type="Timer" parent="PanelContainer/Everything/Buttons"]
+unique_name_in_owner = true
+wait_time = 0.25
+one_shot = true
+ignore_time_scale = true
+
+[node name="ConfirmLabel" type="Label" parent="PanelContainer/Everything/Buttons"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Exchange for scrap?"
+label_settings = SubResource("LabelSettings_h6i1s")
+horizontal_alignment = 1
+clip_text = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/Everything/Buttons"]
+layout_mode = 2
+
+[node name="Delete" type="Button" parent="PanelContainer/Everything/Buttons/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 6
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.73, 0.73, 0.73, 1)
+text = "SCRAP"
+flat = true
+
+[node name="Cancel" type="Button" parent="PanelContainer/Everything/Buttons/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "CANCEL"
+
+[node name="Confirm" type="Button" parent="PanelContainer/Everything/Buttons/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 1
+text = "CONFIRM"
+
+[connection signal="timeout" from="PanelContainer/Everything/Buttons/HideTimer" to="." method="_on_hide_timer_timeout"]
+[connection signal="pressed" from="PanelContainer/Everything/Buttons/HBoxContainer/Delete" to="." method="_on_delete_pressed"]
+[connection signal="pressed" from="PanelContainer/Everything/Buttons/HBoxContainer/Cancel" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="PanelContainer/Everything/Buttons/HBoxContainer/Confirm" to="." method="_on_confirm_pressed"]
