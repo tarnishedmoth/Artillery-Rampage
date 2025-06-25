@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bekgd5xyqpiwk"]
+[gd_scene load_steps=4 format=3 uid="uid://bekgd5xyqpiwk"]
 
 [ext_resource type="Script" uid="uid://bya7x8gifm32p" path="res://destructible/shatter/shatterable_object_body.gd" id="1_220fe"]
 [ext_resource type="Script" uid="uid://dncglgy7n0c4f" path="res://destructible/destructible_poly_operations.gd" id="2_f7g2f"]
+[ext_resource type="PackedScene" uid="uid://dx8bi0mfmxhe3" path="res://utils/stuck_detector.tscn" id="3_vlxkf"]
 
 [node name="ShatterableObjectBody" type="RigidBody2D" groups=["Destructible"]]
 collision_layer = 16
@@ -10,6 +11,7 @@ script = ExtResource("1_220fe")
 min_body_impulse = 250.0
 max_body_impulse = 500.0
 max_velocity_angle_dev = 120.0
+stuck_detector_scene = ExtResource("3_vlxkf")
 
 [node name="Mesh" type="Polygon2D" parent="."]
 

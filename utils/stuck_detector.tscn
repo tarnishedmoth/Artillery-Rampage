@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dx8bi0mfmxhe3"]
+
+[ext_resource type="Script" uid="uid://btc1254c8ynxv" path="res://utils/stuck_detector.gd" id="1_fh1gm"]
+
+[node name="StuckDetector" type="Node"]
+script = ExtResource("1_fh1gm")
+enable_on_ready = true
+metadata/_custom_type_script = "uid://btc1254c8ynxv"

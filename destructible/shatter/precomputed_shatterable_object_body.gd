@@ -59,6 +59,12 @@ func _init_node(new_instance:RigidMeshBody, delta_position:Vector2) -> void:
 	new_instance.position = position + delta_position
 	new_instance.rotation = rotation
 
+	var stuck_detector: StuckDetector = _create_stuck_detector()
+	if stuck_detector:
+		stuck_detector.body = new_instance
+		stuck_detector.mesh = new_instance.mesh
+		_add_stuck_detector(new_instance, stuck_detector)
+
 	# Skipped ready first time since needed to add to the tree in order to access the rigid body mesh instances
 	# Now need to opt-into it now that all init values are set and request ready to run again once node is added back in 
 	# tree in parent ShatterableObject

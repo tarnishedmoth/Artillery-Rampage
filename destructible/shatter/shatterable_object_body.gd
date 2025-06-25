@@ -23,6 +23,8 @@ class_name ShatterableObjectBody extends RigidBody2D
 
 @export var shattered_pieces_should_collide_with_tank: bool = false
 
+@export var stuck_detector_scene: PackedScene
+
 var shatter_iteration: int = 0
 
 var _init_poly:PackedVector2Array = []
@@ -31,6 +33,8 @@ var _init_owner: Node
 @export
 var density: float = 0.0
 var area: float = 0.0
+
+signal ready_finished(body: ShatterableObjectBody)
 
 # Note that should apply the offset position to the root position rather than the mesh position otherwise
 # will get rotation about the body center and this will cause a "hinge" rotation that is probably not desired
@@ -71,6 +75,8 @@ func _ready() -> void:
 		timer.wait_time = max_lifetime
 		timer.timeout.connect(delete)
 		add_child(timer)
+	
+	ready_finished.emit(self)
 
 func get_area() -> float:
 	return area
@@ -168,9 +174,42 @@ func _new_node_from_poly(poly: PackedVector2Array, position_offset: Vector2) -> 
 	
 	new_instance.position = position + position_offset
 	new_instance.rotation = rotation
+
+	var stuck_detector := _create_stuck_detector()
+	if stuck_detector:
+		# Child nodes are null until the node is added to the tree 
+		# so wait for ready
+		new_instance.ready_finished.connect(func(_i):
+			stuck_detector.body = new_instance
+			stuck_detector.mesh = new_instance._mesh
+			_add_stuck_detector(new_instance, stuck_detector)
+		)
 	
 	return new_instance
 	
+func _add_stuck_detector(new_instance:Node2D, stuck_detector: StuckDetector) -> void:
+	print_debug("ShatterableObjectBody(%s) - adding stuck detector to %s" % [name, new_instance.name])
+	stuck_detector.body_stuck.connect(_on_stuck)
+	new_instance.add_child(stuck_detector)
+
+func _on_stuck(detector: StuckDetector) -> void:
+	var parent:Node2D = detector.get_parent()
+
+	print_debug("ShatterableObjectBody(%s) - body %s is stuck, deleting" % [name, parent.name])
+	if parent.has_method("delete"):
+		parent.delete()
+	else:
+		parent.queue_free()
+
+func _create_stuck_detector() -> StuckDetector:
+	if not stuck_detector_scene:
+		return null
+	var stuck_detector:StuckDetector = stuck_detector_scene.instantiate() as StuckDetector
+	if not stuck_detector:
+		push_error("ShatterableObjectBody(%s) - unable to instantiate stuck detector from %s" % [name, stuck_detector_scene.resource_path])
+		return null
+	return stuck_detector
+
 func _apply_impulse_to_new_body(new_instance:RigidBody2D, poly: PackedVector2Array, impact_velocity_dir: Vector2) -> void:
 	var impulse:Vector2 = _randomize_impact_velocity_dir(impact_velocity_dir) * randf_range(min_body_impulse, max_body_impulse)
 	var location: Vector2 = _get_random_point_in_or_near_poly(poly)
