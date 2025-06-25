@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://d0ckjsiikvkkt"]
+[gd_scene load_steps=22 format=3 uid="uid://d0ckjsiikvkkt"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_fp4gr"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_vjbc6"]
@@ -14,7 +14,6 @@
 [ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="11_vh0ut"]
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="12_3fuhn"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="13_l8ici"]
-[ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="14_52xqd"]
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house/house.tscn" id="15_i2cnw"]
 [ext_resource type="PackedScene" uid="uid://cdu7jxpquqjer" path="res://environment/trees/shatterable_tree.tscn" id="16_mafpu"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="18_6xt0d"]
@@ -67,10 +66,6 @@ visible = false
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
 artillery_ai_types = Array[PackedScene]([ExtResource("6_di83b"), ExtResource("7_ja6lr"), ExtResource("8_eshwo"), ExtResource("9_q02cm"), ExtResource("10_bkcnl"), ExtResource("11_vh0ut"), ExtResource("12_3fuhn"), ExtResource("13_l8ici")])
 ideal_min_spawn_separation = 250.0
-
-[node name="WaterHazard" parent="GameLevel" instance=ExtResource("14_52xqd")]
-position = Vector2(701, 674)
-scale = Vector2(7.02656, 4.6518)
 
 [node name="House2" parent="GameLevel" instance=ExtResource("15_i2cnw")]
 position = Vector2(1097, 440)
