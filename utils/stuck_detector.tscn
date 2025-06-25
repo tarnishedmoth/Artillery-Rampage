@@ -4,5 +4,6 @@
 
 [node name="StuckDetector" type="Node"]
 script = ExtResource("1_fh1gm")
+check_collision = false
 enable_on_ready = true
 metadata/_custom_type_script = "uid://btc1254c8ynxv"

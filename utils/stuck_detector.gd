@@ -10,16 +10,16 @@ class_name StuckDetector extends Node
 
 ## Threshold of position change for stillness detection.
 ## If the body has moved less than this value, it is considered still.
-@export var stillness_threshold: float = 1.0
+@export var stillness_threshold: float = 10.0
 
 ## Number of frames to consider for jitter detection.
-@export_range(1, 300) var jitter_frame_limit: int = 30
+@export_range(1, 300) var jitter_frame_limit: int = 60
 
 ### If set to a positive value, the detector will stop after this many seconds.
 @export var detection_max_lifetime:float = 5
 
-@export var check_centroid_collision:bool = true
-@export var centroid_collision_mask:int = Collisions.CompositeMasks.obstacle
+@export var check_collision:bool = true
+@export var collision_mask:int = Collisions.CompositeMasks.obstacle
 
 @export var enable_on_ready:bool = false
 
@@ -65,7 +65,7 @@ func _enable() -> void:
 		push_error("%s: No body assigned to StuckDetector." % name)
 		return
 
-	if check_centroid_collision:
+	if check_collision:
 		if not mesh:
 			push_error("%s: No mesh assigned to StuckDetector." % name)
 			return
@@ -114,10 +114,14 @@ func _physics_process(_delta):
 
 	if pos_change < stillness_threshold and speed > jitter_threshold and _is_body_center_in_collision():
 		_jitter_count += 1
+		if OS.is_debug_build():
+			print("%s: node %s is stuck(%d/%d)" % [name, get_parent().name, _jitter_count, jitter_frame_limit])
 	else:
 		_jitter_count = 0
 
 	if _jitter_count >= jitter_frame_limit:
+		if OS.is_debug_build():
+			print("%s: node %s is stuck for %d frames" % [name, get_parent().name, _jitter_count])
 		body_stuck.emit(self)
 		_jitter_count = 0
 
@@ -142,28 +146,25 @@ func _get_average_speed() -> float:
 
 func _is_body_center_in_collision() -> bool:
 	# Return true here if feature not enabled as it is a filter on jitter
-	if not check_centroid_collision:
+	if not check_collision:
 		return true
+	assert(body and mesh, "%s on %s - mesh=%s;body=%s" % [name, str(get_parent().name) if get_parent() else "NULL", mesh, body])
 
-	var parent:Node2D = body.get_parent() as Node2D
-	if not parent:
-		return true
+	var space_state := body.get_world_2d().direct_space_state
 
-	var space_state := parent.get_world_2d().direct_space_state
-
-	var global_transform:Transform2D = mesh.global_transform
-	var position:Vector2 = global_transform * centroid
+	# Need to offset by -centroid to get the positioning right
+	var position:Vector2 = mesh.global_position - centroid
 	
 	var query_params := PhysicsPointQueryParameters2D.new()
 	query_params.collide_with_areas = false
 	query_params.collide_with_bodies = true
-	query_params.collision_mask = centroid_collision_mask
-	query_params.position = global_transform * centroid
+	query_params.collision_mask = collision_mask
+	query_params.position = position
 
 	var result:Array[Dictionary] = space_state.intersect_point(query_params)
 	var in_collision:bool = not result.is_empty()
 	
 	if OS.is_stdout_verbose():
-		print_verbose("%s: parent %s at %s with body=%s in collision=%s" % [name, parent.name, str(position), body.name, str(in_collision)])
+		print_verbose("%s: parent %s at %s with body=%s in collision=%s" % [name, get_parent().name, str(position), body.name, str(in_collision)])
 
 	return in_collision

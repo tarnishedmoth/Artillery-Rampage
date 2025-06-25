@@ -202,10 +202,10 @@ func _add_stuck_detector(new_instance:Node2D, stuck_detector: StuckDetector) -> 
 	stuck_detector.body_stuck.connect(_on_stuck)
 	new_instance.add_child(stuck_detector)
 
-func _on_stuck(detector: StuckDetector) -> void:
+static func _on_stuck(detector: StuckDetector) -> void:
 	var parent:Node2D = detector.get_parent()
 
-	print_debug("ShatterableObjectBody(%s) - body %s is stuck, deleting" % [name, parent.name])
+	print_debug("Body %s is stuck, deleting" % [parent.name])
 	if parent.has_method("delete"):
 		parent.delete()
 	else:
