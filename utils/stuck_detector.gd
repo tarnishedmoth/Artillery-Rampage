@@ -152,7 +152,8 @@ func _is_body_center_in_collision() -> bool:
 	var space_state := parent.get_world_2d().direct_space_state
 
 	var global_transform:Transform2D = mesh.global_transform
-
+	var position:Vector2 = global_transform * centroid
+	
 	var query_params := PhysicsPointQueryParameters2D.new()
 	query_params.collide_with_areas = false
 	query_params.collide_with_bodies = true
@@ -160,4 +161,9 @@ func _is_body_center_in_collision() -> bool:
 	query_params.position = global_transform * centroid
 
 	var result:Array[Dictionary] = space_state.intersect_point(query_params)
-	return not result.is_empty()
+	var in_collision:bool = not result.is_empty()
+	
+	if OS.is_stdout_verbose():
+		print_verbose("%s: parent %s at %s with body=%s in collision=%s" % [name, parent.name, str(position), body.name, str(in_collision)])
+
+	return in_collision

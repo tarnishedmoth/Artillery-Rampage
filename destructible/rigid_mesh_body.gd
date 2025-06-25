@@ -37,7 +37,8 @@ func _ready() -> void:
 		return
 	
 	if not _init_poly.is_empty():
-		print_debug("%s - initializing from specified poly of size=%d" % [name, _init_poly.size()])
+		if OS.is_debug_build():
+			print_debug("%s - initializing from specified poly of size=%d" % [name, _init_poly.size()])
 		mesh.polygon = _init_poly
 		recenter_polygon = true
 	if _init_owner:
@@ -72,7 +73,8 @@ func _ready() -> void:
 		).call_deferred()
 		
 	if max_lifetime > 0:
-		print_debug("%s - Setting lifetime to %f" % [name, max_lifetime])
+		if OS.is_debug_build():
+			print_debug("%s - Setting lifetime to %f" % [name, max_lifetime])
 		var timer: Timer = Timer.new()
 		timer.one_shot = true
 		timer.autostart = true
@@ -98,7 +100,8 @@ func _recenter_polygon() -> void:
 	center_of_mass = Vector2.ZERO
 
 func delete() -> void:
-	print_debug("RigidMeshBody(%s) - fade out + delete" % [name])
+	if OS.is_debug_build():
+		print_debug("RigidMeshBody(%s) - fade out + delete" % [name])
 	var tweener = Juice.fade_out(self)
 	if is_instance_valid(owner) and owner.has_signal("body_deleted"):
 		owner.body_deleted.emit(self)

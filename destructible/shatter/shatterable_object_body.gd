@@ -137,7 +137,8 @@ func _create_shatter_nodes(impact_velocity: Vector2) -> Array[Node2D]:
 func _on_lifetime_ended() -> void:
 	# We only fade out on the lifetime ended delete case 
 	# as when pieces shatter into sub-pieces we want to delete immediately
-	print_debug("ShatterableObjectBody(%s) - fade out + delete" % [name])
+	if OS.is_debug_build():
+		print_debug("ShatterableObjectBody(%s) - fade out + delete" % [name])
 	var tweener = Juice.fade_out(self)
 	await tweener.finished
 	delete()
@@ -196,7 +197,8 @@ func _new_node_from_poly(poly: PackedVector2Array, position_offset: Vector2) -> 
 	return new_instance
 	
 func _add_stuck_detector(new_instance:Node2D, stuck_detector: StuckDetector) -> void:
-	print_debug("ShatterableObjectBody(%s) - adding stuck detector to %s" % [name, new_instance.name])
+	if OS.is_debug_build():
+		print_debug("ShatterableObjectBody(%s) - adding stuck detector to %s" % [name, new_instance.name])
 	stuck_detector.body_stuck.connect(_on_stuck)
 	new_instance.add_child(stuck_detector)
 

@@ -106,13 +106,13 @@ func smooth(poly: PackedVector2Array, bounds: Circle) -> PackedVector2Array:
 	out_poly[j - 1] = poly[poly.size() - 1]
 	
 	if smooth_updates:
-		print_debug("Chunk(%s) - smooth: Changed %d vertices" % [get_parent().name, smooth_updates])
+		print_debug("%s - smooth: Changed %d vertices" % [get_parent().name, smooth_updates])
 
 	# out_poly could be self-intersecting so check this
 	if TerrainUtils.is_visible_polygon(out_poly):
 		return out_poly
 
-	push_warning("Chunk(%s) - smooth: Polygon is self-intersecting - returning original" % [get_parent().name])
+	push_warning("%s - smooth: Polygon is self-intersecting - returning original" % [get_parent().name])
 	TerrainUtils.print_poly("DestructiblePolyOperations(%s) - smooth(INVALID):" % [get_parent().name], poly)
 
 	return poly
@@ -166,7 +166,7 @@ func crumble(poly: PackedVector2Array, bounds: Circle) -> Array[PackedVector2Arr
 
 func _calculate_crumble(poly: PackedVector2Array, first_index: int, count: int) -> Array[PackedVector2Array]:
 
-	print_debug("Chunk(%s) - poly=%d; first_index=%d; count=%d" % [get_parent().name, poly.size(), first_index, count])
+	print_debug("%s - poly=%d; first_index=%d; count=%d" % [get_parent().name, poly.size(), first_index, count])
 
 	# See https://forum.godotengine.org/t/cut-a-polygon-with-a-polyline-not-the-contrary/17710/3
 	# See https://github.com/goostengine/goost/discussions/132
@@ -181,12 +181,12 @@ func _calculate_crumble(poly: PackedVector2Array, first_index: int, count: int) 
 	var crack_delta: float = randf_range(crack_delta_min, crack_delta_max)
 	var polygon_cut := Geometry2D.offset_polyline(polyline, crack_delta, Geometry2D.JOIN_SQUARE)
 	if polygon_cut.is_empty():
-		print_debug("Chunk(%s) - Could not crumble as polyline was invalid" % [get_parent().name])
+		print_debug("%s - Could not crumble as polyline was invalid" % [get_parent().name])
 		return []
 	
 	var clip_results := Geometry2D.clip_polygons(poly, polygon_cut[0])
 	 
-	print_debug("Chunk(%s) - raw clip result - %d:[%s]" % 
+	print_debug("%s - raw clip result - %d:[%s]" % 
 		[get_parent().name, clip_results.size(), ",".join(clip_results.map(func(c : PackedVector2Array): return c.size()))])
 
 	clip_results = clip_results.filter(
@@ -195,7 +195,7 @@ func _calculate_crumble(poly: PackedVector2Array, first_index: int, count: int) 
 	)
 	clip_results.sort_custom(TerrainUtils.largest_poly_first)
 	
-	print_debug("Chunk(%s) - final clip result - %d:[%s]" % 
+	print_debug("%s - final clip result - %d:[%s]" % 
 	[get_parent().name, clip_results.size(), ",".join(clip_results.map(func(c : PackedVector2Array): return c.size()))])
 
 	return clip_results
@@ -289,10 +289,10 @@ func calculate_collision_adjusted_bias(points_list:PackedVector2Array, separatio
 	var test_directions:PackedVector2Array = []
 	test_directions.resize(4)
 
-	test_directions[0] = -Vector2(0.0, bounds.radius)
-	test_directions[1] = Vector2(0.0, bounds.radius)
-	test_directions[2] = -Vector2(bounds.radius, 0.0)
-	test_directions[3] = Vector2(bounds.radius, 0.0)
+	test_directions[0] = Vector2.DOWN
+	test_directions[1] = Vector2.UP
+	test_directions[2] = Vector2.LEFT
+	test_directions[3] = Vector2.RIGHT
 
 	var parent:Node2D = get_parent() as Node2D
 	assert(parent, "Parent is not a Node 2D!")
@@ -310,10 +310,16 @@ func calculate_collision_adjusted_bias(points_list:PackedVector2Array, separatio
 	var bias:Vector2 = Vector2()
 
 	for test_direction in test_directions:
-		query_params.position = bounds.center + test_direction
+		query_params.position = bounds.center + test_direction * bounds.radius
 		if space_state.intersect_point(query_params):
-			# Normalize by dividing by bounds radius and then push by separation distance
-			bias += test_direction / bounds.radius * separation_distance
+			bias -= test_direction * separation_distance
+			
+			if OS.is_stdout_verbose():
+				print_verbose("%s: Detected collision in direction %s at position %s - bias now is %s" % 
+					[get_parent().name, str(test_direction), str(query_params.position), str(bias) ])
+		elif OS.is_stdout_verbose():
+			print_verbose("%s: No collision in direction %s at position %s" % 
+					[get_parent().name, str(test_direction), str(query_params.position)])
 
 	return bias
 

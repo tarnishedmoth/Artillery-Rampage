@@ -230,7 +230,8 @@ func _find_interaction_overlaps() -> Array[Node2D]:
 			push_warning("WeaponProjectile(" + name + " damage overlapped with non-Node2D" +  result["collider"].name)
 			continue
 		if not collider in collision_results:
-			print("WeaponProjectile(" + name + " damage overlapped with " + collider.name)
+			if OS.is_debug_build():
+				print("WeaponProjectile(" + name + " damage overlapped with " + collider.name)
 			collision_results.append(collider)
 
 	# Release the shape when done with physics queries.
