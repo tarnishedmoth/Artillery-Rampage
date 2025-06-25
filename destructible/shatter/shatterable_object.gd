@@ -116,9 +116,8 @@ func delete() -> void:
 
 	queue_free.call_deferred()
 	
-func _on_body_deleted(_body: Node2D) -> void:
-	await get_tree().process_frame
-	await get_tree().create_timer(0.1).timeout
+func _on_body_deleted(body: Node2D) -> void:
+	await ObjectUtils.wait_free_free(body)
 	
 	if _body_container.get_child_count() == 0:
 		delete()
