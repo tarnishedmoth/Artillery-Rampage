@@ -7,8 +7,8 @@ enum DifficultyLevel
 	HARD
 }
 
-@export var story_difficulty:DifficultyLevel = DifficultyLevel.HARD
-@export var default_play_difficulty:DifficultyLevel = DifficultyLevel.HARD
+@export var story_difficulty:DifficultyLevel = DifficultyLevel.NORMAL
+@export var default_play_difficulty:DifficultyLevel = DifficultyLevel.NORMAL
 
 ## The current difficulty depending on the play mode
 var current_difficulty:DifficultyLevel:
