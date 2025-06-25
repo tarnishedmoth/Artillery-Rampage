@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://d2kx5hvsxsu7h"]
+[gd_scene load_steps=21 format=3 uid="uid://d2kx5hvsxsu7h"]
 
 [ext_resource type="Script" uid="uid://e1gq6cjfgr7d" path="res://progression/upgrade_select.gd" id="1_dt2xf"]
 [ext_resource type="Theme" uid="uid://bf5nv0nins5p6" path="res://ui/themes/shop.tres" id="1_iqa7v"]
@@ -12,13 +12,35 @@
 
 [sub_resource type="Gradient" id="Gradient_vi8hs"]
 interpolation_mode = 2
-offsets = PackedFloat32Array(0.221289, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0.214786, 0.18898, 0.147476, 1)
+colors = PackedColorArray(0.0453124, 0.0453124, 0.0453124, 1, 0.214786, 0.18898, 0.147476, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_jh0yo"]
 gradient = SubResource("Gradient_vi8hs")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_s6y8q"]
+blend_mode = 2
+
+[sub_resource type="Gradient" id="Gradient_x3sb8"]
+interpolation_mode = 2
+colors = PackedColorArray(0.0088, 0.0112267, 0.02, 1, 0.15, 0.14725, 0.1425, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_c065u"]
+noise_type = 3
+seed = 4510
+frequency = 0.0047
+fractal_lacunarity = 1.9
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qudwk"]
+width = 1024
+height = 1024
+seamless = true
+seamless_blend_skirt = 0.4
+color_ramp = SubResource("Gradient_x3sb8")
+noise = SubResource("FastNoiseLite_c065u")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s6y8q"]
 
 [sub_resource type="Curve" id="Curve_jh0yo"]
 _data = [Vector2(0, 0), 0.0, 4.05794, 0, 0, Vector2(0.319261, 0.940061), 0.870367, 0.870367, 0, 0, Vector2(1, 0.420594), -0.238121, 0.0, 0, 0]
@@ -57,6 +79,21 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_jh0yo")
 
+[node name="Clouds" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0.658824)
+texture_filter = 1
+material = SubResource("CanvasItemMaterial_s6y8q")
+custom_minimum_size = Vector2(2560, 1440)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("NoiseTexture2D_qudwk")
+expand_mode = 1
+stretch_mode = 1
+
 [node name="Everything" type="MarginContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
@@ -81,7 +118,8 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 theme_override_colors/font_color = Color(0.82, 0.64862, 0.3526, 1)
 theme_override_fonts/font = ExtResource("3_jh0yo")
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_s6y8q")
 text = "UNLOCK"
 flat = true
 script = ExtResource("2_qujwc")
@@ -89,13 +127,15 @@ randomize_mod = true
 
 [node name="ParticlesContainer" type="Control" parent="Everything/VBoxContainer/ReceiveUpgradeButton"]
 unique_name_in_owner = true
+layout_mode = 2
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 128.0
+offset_top = 128.0
+offset_right = 128.0
+offset_bottom = 128.0
 
 [node name="SmallQuestionMarks" type="CPUParticles2D" parent="Everything/VBoxContainer/ReceiveUpgradeButton/ParticlesContainer"]
 unique_name_in_owner = true
-position = Vector2(133, 120)
 amount = 7
 texture = ExtResource("3_vi8hs")
 lifetime = 3.0
@@ -121,7 +161,6 @@ color_initial_ramp = SubResource("Gradient_iqa7v")
 [node name="BigQuestionMarks" type="CPUParticles2D" parent="Everything/VBoxContainer/ReceiveUpgradeButton/ParticlesContainer"]
 unique_name_in_owner = true
 texture_filter = 4
-position = Vector2(133, 120)
 amount = 24
 texture = ExtResource("6_iqa7v")
 lifetime = 5.0

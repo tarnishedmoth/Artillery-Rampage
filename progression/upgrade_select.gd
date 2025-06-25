@@ -8,6 +8,7 @@ extends Control
 @onready var small_question_marks: CPUParticles2D = %SmallQuestionMarks
 @onready var big_question_marks: CPUParticles2D = %BigQuestionMarks
 
+
 func _ready() -> void:
 	modulate = Color.BLACK
 	#current_upgrades_panel.modulate = Color.TRANSPARENT
