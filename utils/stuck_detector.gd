@@ -27,8 +27,9 @@ signal body_stuck(detector: StuckDetector)
 
 var _jitter_count := 0
 
-var position_buffer: PackedVector2Array
-var speed_buffer: PackedFloat32Array
+var _position_buffer: PackedVector2Array
+var _speed_buffer: PackedFloat32Array
+var _num_samples:int
 
 var _pos_index:int = 0
 var _cycled:bool = false
@@ -77,8 +78,9 @@ func _enable() -> void:
 		push_error("%s: StuckDetector must be a child of a Node2D to check centroid collision." % name)
 		return
 
-	position_buffer.resize(jitter_frame_limit)
-	speed_buffer.resize(jitter_frame_limit)
+	_num_samples = jitter_frame_limit + 1
+	_position_buffer.resize(_num_samples)
+	_speed_buffer.resize(_num_samples)
 
 	if detection_max_lifetime > 0:
 		if not _timer:
@@ -121,27 +123,22 @@ func _physics_process(_delta):
 
 func _add_data_points() -> void:
 	var current_index:int = _pos_index
-	position_buffer[current_index] = body.position
-	speed_buffer[current_index] = body.linear_velocity.length()
+	_position_buffer[current_index] = body.position
+	_speed_buffer[current_index] = body.linear_velocity.length()
 
-	_pos_index = (_pos_index + 1) % jitter_frame_limit
+	_pos_index = (_pos_index + 1) % _num_samples
 	if _pos_index == 0:
 		_cycled = true
 
 func _get_total_position_delta() -> float:
-	var total_delta:Vector2 = Vector2.ZERO
-	for i in position_buffer.size() - 1:
-		var curr: Vector2 = position_buffer[i]
-		var next: Vector2 = position_buffer[i + 1]
-		var delta:Vector2 = next - curr
-		total_delta += delta
+	var total_delta:Vector2 = _position_buffer[-1] - _position_buffer[0]
 	return total_delta.length()
 
 func _get_average_speed() -> float:
 	var total_speed:float = 0.0
-	for speed in speed_buffer:
+	for speed in _speed_buffer:
 		total_speed += speed
-	return total_speed / speed_buffer.size()
+	return total_speed / _speed_buffer.size()
 
 func _is_body_center_in_collision() -> bool:
 	# Return true here if feature not enabled as it is a filter on jitter
