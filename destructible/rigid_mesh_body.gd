@@ -98,7 +98,7 @@ func _recenter_polygon() -> void:
 	center_of_mass = Vector2.ZERO
 
 func delete() -> void:
-	print_debug("ShatterableObjectBody(%s) - fade out + delete" % [name])
+	print_debug("RigidMeshBody(%s) - fade out + delete" % [name])
 	var tweener = Juice.fade_out(self)
 	if is_instance_valid(owner) and owner.has_signal("body_deleted"):
 		owner.body_deleted.emit(self)

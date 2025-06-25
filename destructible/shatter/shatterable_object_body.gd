@@ -73,7 +73,7 @@ func _ready() -> void:
 		timer.one_shot = true
 		timer.autostart = true
 		timer.wait_time = max_lifetime
-		timer.timeout.connect(delete)
+		timer.timeout.connect(_on_lifetime_ended)
 		add_child(timer)
 	
 	ready_finished.emit(self)
@@ -133,6 +133,14 @@ func _create_shatter_nodes(impact_velocity: Vector2) -> Array[Node2D]:
 		var new_poly: PackedVector2Array = new_polys[i]
 		new_bodies[i] = _create_body_from_poly(new_poly, impact_velocity_dir, poly_separation[i])
 	return new_bodies
+
+func _on_lifetime_ended() -> void:
+	# We only fade out on the lifetime ended delete case 
+	# as when pieces shatter into sub-pieces we want to delete immediately
+	print_debug("ShatterableObjectBody(%s) - fade out + delete" % [name])
+	var tweener = Juice.fade_out(self)
+	await tweener.finished
+	delete()
 
 func delete() -> void:
 	print_debug("ShatterableObjectBody(%s) - delete" % [name])
