@@ -12,6 +12,7 @@ shader_parameter/discarded_count = 0
 shader_parameter/discard_threshold = 0.5
 shader_parameter/discard_match_distance = 32.0
 shader_parameter/enable_damage_texture = true
+shader_parameter/blend_damage_texture = false
 shader_parameter/damage_texture = ExtResource("2_7673m")
 
 [resource]

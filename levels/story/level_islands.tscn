@@ -1,10 +1,11 @@
-[gd_scene load_steps=20 format=3 uid="uid://bw47p6vpbsrkn"]
+[gd_scene load_steps=21 format=3 uid="uid://bw47p6vpbsrkn"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_b3eo7"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_8e6i4"]
 [ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_uojvy"]
 [ext_resource type="Texture2D" uid="uid://my1pco86ryy2" path="res://terrain/terrain-grass-and-dirt.png" id="4_jxaaa"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_v266i"]
+[ext_resource type="Resource" uid="uid://dgrisjpfie3hx" path="res://terrain/terrain_outline_grass.tres" id="5_wf0wo"]
 [ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="6_ekbu6"]
 [ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="7_c083e"]
 [ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="8_b3x1v"]
@@ -43,7 +44,7 @@ fractal_gain = 0.605
 
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
 outline_mesh_dist_threshold = 0.4
-texture_resources = Array[ExtResource("2_8e6i4")]([SubResource("Resource_msmqt")])
+texture_resources = Array[ExtResource("2_8e6i4")]([SubResource("Resource_msmqt"), ExtResource("5_wf0wo")])
 
 [node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk" index="0"]
 visible = true
