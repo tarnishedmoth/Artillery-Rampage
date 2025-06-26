@@ -85,6 +85,9 @@ position = Vector2(378, 430)
 [node name="AITank" parent="GameLevel" instance=ExtResource("6_di83b")]
 position = Vector2(949, 432)
 
+[node name="Tank" parent="GameLevel/AITank" index="0"]
+color = Color(1, 0.445, 0.1, 1)
+
 [node name="ShatterableRock" parent="GameLevel" instance=ExtResource("18_vjbc6")]
 position = Vector2(61, 435)
 
@@ -96,3 +99,4 @@ position = Vector2(707, 497)
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]
 [editable path="GameLevel/ArtillerySpawner"]
+[editable path="GameLevel/AITank"]

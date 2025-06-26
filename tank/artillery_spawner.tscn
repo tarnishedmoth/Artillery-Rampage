@@ -7,3 +7,4 @@
 script = ExtResource("1_2ysy7")
 artillery_ai_types = Array[PackedScene]([ExtResource("2_33h1m")])
 min_boundary_x_distance = 80.0
+ai_colors = Array[Color]([Color(1, 0.1, 0.1, 1), Color(1, 0.34, 0.1, 1), Color(1, 0.73, 0.1, 1), Color(0.985, 1, 0.1, 1), Color(0.1, 1, 0.685, 1), Color(0.1, 0.775, 1, 1), Color(0.1, 0.28, 1, 1), Color(0.52, 0.1, 1, 1), Color(0.88, 0.1, 1, 1), Color(1, 0.1, 0.7, 1)])

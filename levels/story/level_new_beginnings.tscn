@@ -45,7 +45,7 @@ max_per_orbit_variance = 0
 position = Vector2(653, 442)
 
 [node name="Tank" parent="GameLevel/Enemy" index="0"]
-color = Color(0.137255, 0.180392, 0.701961, 1)
+color = Color(0.1, 0.175, 1, 1)
 
 [node name="AimDamageWobble" parent="GameLevel/Enemy/Tank" index="7"]
 position = Vector2(5, 20)

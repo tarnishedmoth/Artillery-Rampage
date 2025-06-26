@@ -20,6 +20,13 @@ class_name ArtillerySpawner extends Node
 @export_range(0, 1e9, 1, "or_greater")
 var min_boundary_x_distance: float = 40
 
+## Saturation and value for the AI color.
+@export var ai_color_sv: Color = Color.from_hsv(0.0, 0.9, 1.0)
+
+## Ranges to draw from for the AI color hue.
+## Goal is to avoid random colors from being too similar
+@export var ai_colors:Array[Color]
+
 const player_type : PackedScene = preload("res://controller/player/player.tscn")
 
 const SENTINEL_VECTOR: Vector2 = Vector2(-1e10, -1e10)
@@ -34,6 +41,7 @@ var _all_positions: Array[Vector2] = []
 var _used_positions: Array[Vector2] = []
 var _placed_positions: Array[Vector2] = []
 var _spawn_test_size: float = default_spawn_test_size
+var _ai_hue_index:int
 
 var enemy_names: Array[String] = [
 	"Blasty", "Leadhead", "Loose Cannon", "Bombs-a-lot", "Stand Still", "The Arcster",
@@ -81,7 +89,10 @@ func populate_random_on_terrain(terrain: Terrain, ai_players: Vector2i = Vector2
 	_used_positions.clear()
 	_all_positions.clear()
 	_placed_positions.clear()
-	
+
+	_ai_hue_index = 0
+	ai_colors.shuffle()
+
 	if ai_players.x <= 0:
 		ai_players = default_ai_players
 	if human_players.x <= 0:
@@ -124,8 +135,17 @@ func _instantiate_controller_scene_at(_scene: PackedScene, _position: Vector2) -
 
 func init_controller_props(controller: TankController) -> void:
 	if controller is AITank:
-		controller.set_color(Color(randf(), randf(), randf()))
+		controller.set_color(_get_rand_ai_color())
 		
+func _get_rand_ai_color() -> Color:
+	if _ai_hue_index >= ai_colors.size():
+		print_debug("%s: Exceeded available colors - selecting one at random" % name)
+		return Color.from_hsv(randf(), ai_color_sv.s, ai_color_sv.v)
+	
+	var ai_color:Color = ai_colors[_ai_hue_index]
+	_ai_hue_index += 1
+	return Color.from_hsv(ai_color.h, ai_color_sv.s, ai_color_sv.v)
+
 func _calculate_spawn_positions(terrain: Terrain, count: int) -> bool:
 	var success:bool = true
 	for marker in _specified_positions:
