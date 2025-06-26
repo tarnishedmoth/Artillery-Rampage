@@ -11,6 +11,10 @@ uniform int discarded_count;
 uniform float discard_threshold = 0.5;
 uniform float discard_match_distance = 32;
 
+uniform bool enable_damage_texture = false;
+uniform sampler2D damage_texture: repeat_enable;
+
+
 bool is_discarded(vec2 vertex) {
 	// TODO: This implementation is not great but binary search would be more complex and with hundreds of points or less it is not worth it
 	float match_distance_squared = discard_match_distance * discard_match_distance;
@@ -32,6 +36,11 @@ void vertex() {
 
 void fragment() {
 	if(should_discard >= discard_threshold) {
-		discard;
+		if(enable_damage_texture) {
+			COLOR = texture(damage_texture, UV);
+		}
+		else {
+			discard;
+		}
 	}
 }
