@@ -115,7 +115,7 @@ func _physics_process(_delta):
 	if pos_change < stillness_threshold and speed > jitter_threshold and _is_body_center_in_collision():
 		_jitter_count += 1
 		if OS.is_debug_build():
-			print("%s: node %s is stuck(%d/%d)" % [name, get_parent().name, _jitter_count, jitter_frame_limit])
+			print("%s: node %s is stuck(%d/%d): pos_change=%f; speed=%f" % [name, get_parent().name, _jitter_count, jitter_frame_limit, pos_change, speed])
 	else:
 		_jitter_count = 0
 
