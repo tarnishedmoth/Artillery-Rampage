@@ -90,7 +90,7 @@ func get_property_key(modifiable: Modifiables = property) -> String:
 
 func get_property_value_to_string() -> String:
 	if operation != Operations.SET_TRUE and operation != Operations.SET_FALSE:
-		return str(value)
+		return str(snapped(value, 0.01))
 	elif operation == Operations.SET_TRUE: return "YES"
 	elif operation == Operations.SET_FALSE: return "NO"
 	else:

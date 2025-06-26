@@ -54,7 +54,7 @@ func configure_from_mods() -> void:
 			_mods.append(mod)
 			
 	## NOTE
-	## This logic makes no sense yet because it'll just show the first mod in the array's data (see the return at the end).
+	## This logic makes no sense yet because it'll just show the first mod in the ModBundle array's data (see the return at the end).
 	## Not sure how to sort this yet but I think in all cases right now, it will only be one mod.
 	## This will definitely change once layers are used in the bundle.
 	## It will probably be worth doing aggregation in the upgrade list script instead of the display panel.
