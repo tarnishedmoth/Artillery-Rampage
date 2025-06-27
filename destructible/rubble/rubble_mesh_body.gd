@@ -1,4 +1,4 @@
-extends RigidMeshBody
+extends DestructibleRigidMeshBody
 
 @onready var _smoke_particles:CPUParticles2D = $SmokeParticles
 @onready var cooldown_timer:Timer = $CappedEmissionCooldownTimer
@@ -32,9 +32,6 @@ func _ready() -> void:
 	cooldown_timer.timeout.connect(_on_cooldown_timeout)
 	
 	_emit_particles()
-
-func damage(projectile: WeaponPhysicsContainer, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
-	delete(false)
 	
 func _on_cooldown_timeout() -> void:
 	if OS.is_stdout_verbose():
