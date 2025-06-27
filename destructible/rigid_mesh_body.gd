@@ -99,12 +99,13 @@ func _recenter_polygon() -> void:
 	center_of_mass_mode = CENTER_OF_MASS_MODE_CUSTOM
 	center_of_mass = Vector2.ZERO
 
-func delete() -> void:
+func delete(with_fade_out:bool = true) -> void:
 	if OS.is_debug_build():
-		print_debug("RigidMeshBody(%s) - fade out + delete" % [name])
-	var tweener = Juice.fade_out(self)
+		print_debug("RigidMeshBody(%s) - %sdelete" % [name, "fade out + " if with_fade_out else ""])
 	if is_instance_valid(owner) and owner.has_signal("body_deleted"):
 		owner.body_deleted.emit(self)
-	
-	await tweener.finished
+		
+	if with_fade_out:
+		var tweener = Juice.fade_out(self)
+		await tweener.finished
 	queue_free.call_deferred()

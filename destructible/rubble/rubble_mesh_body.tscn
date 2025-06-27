@@ -14,7 +14,7 @@ fill = 1
 [sub_resource type="Gradient" id="Gradient_clfbe"]
 colors = PackedColorArray(0.27, 0.207225, 0.1485, 0.705882, 1, 0.834667, 0.68, 0)
 
-[node name="RigidMeshBody" instance=ExtResource("1_iuc4f")]
+[node name="RigidMeshBody" groups=["Destructible"] instance=ExtResource("1_iuc4f")]
 collision_mask = 314
 mass = 50.0
 center_of_mass_mode = 0

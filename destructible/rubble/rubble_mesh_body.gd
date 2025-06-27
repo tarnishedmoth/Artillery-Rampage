@@ -33,6 +33,9 @@ func _ready() -> void:
 	
 	_emit_particles()
 
+func damage(projectile: WeaponPhysicsContainer, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
+	delete(false)
+	
 func _on_cooldown_timeout() -> void:
 	if OS.is_stdout_verbose():
 		print_debug("%s: Smoke particle emission cooldown completed" % name)
