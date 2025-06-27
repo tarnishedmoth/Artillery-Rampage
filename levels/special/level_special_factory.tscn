@@ -117,6 +117,9 @@ wind_scale = 200.0
 [node name="RoundDirector" type="Node" parent="GameLevel"]
 unique_name_in_owner = true
 script = ExtResource("14_h1k02")
+physics_check_time = 0.25
+fall_check_timeout = 0.5
+request_sleep_on_fall_detection = false
 player_goes_first = true
 shuffle_order = false
 

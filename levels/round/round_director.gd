@@ -12,10 +12,16 @@ var lightning_time: int = 3
 var lightning_strength: float = 25.0
 
 @export
-var physics_check_time: float = 0.25
+var physics_check_time: float = 0.5
+
+@export
+var fall_check_timeout: float = 0.1
 
 @export
 var max_fall_check_time:float = 20.0
+
+@export
+var request_sleep_on_fall_detection: bool = true
 
 var fall_check_timer: Timer
 
@@ -81,7 +87,7 @@ func _ready():
 	current_gamestate = create_new_gamestate() # TODO: loading saved gamestate
 
 	fall_check_timer = Timer.new()
-	fall_check_timer.set_wait_time(0.5)
+	fall_check_timer.set_wait_time(0.1)
 	fall_check_timer.set_one_shot(false)
 	fall_check_timer.connect("timeout", _on_fall_check_timeout)
 	fall_check_timer.autostart = false
@@ -117,7 +123,7 @@ func _on_player_added(_controller:TankController) -> void:
 func _on_fall_check_timeout():
 	_fall_check_elapsed_time += fall_check_timer.wait_time
 
-	if !is_any_tank_falling():
+	if !_request_falling_tanks_to_sleep():
 		print("_on_fall_check_timeout: Stopping fall_check_timer")
 		_stop_fall_check_timer()
 	elif _fall_check_elapsed_time >= max_fall_check_time:
@@ -294,6 +300,8 @@ func execute_all_actions() -> void:
 	print_debug("Executed ",actions_taken," actions.")
 
 func _async_check_and_await_falling() -> void:
+	if OS.is_debug_build():
+		print("%s: Check Falling - Begin" % name)
 	 # Wait for physics to settle prior to allowing next player to start
 	# or just make this class a Node and add to tree from Game
 	var scene_tree := get_tree()
@@ -306,12 +314,26 @@ func _async_check_and_await_falling() -> void:
 		fall_check_timer.start()
 		await tanks_stopped_falling
 
+	if OS.is_debug_build():
+		print("%s: Check Falling - End" % name)
+
 func is_any_tank_falling() -> bool:
 	for controller in tank_controllers:
 		if is_instance_valid(controller) && controller.tank.is_falling():
 			return true
 	return false
 
+func _request_falling_tanks_to_sleep() -> bool:
+	var any_falling:bool = false
+	for controller in tank_controllers:
+		if is_instance_valid(controller) && controller.tank.is_falling():
+			if request_sleep_on_fall_detection:
+				controller.tank.request_sleep()
+			else:
+				return true
+			any_falling = true
+	return any_falling
+	
 func _on_tank_damage():
 	turns_since_damage = 0
 

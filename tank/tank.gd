@@ -172,13 +172,14 @@ func populate_player_state(state: PlayerState) -> void:
 
 @warning_ignore("unused_parameter")
 func _physics_process(delta: float) -> void:
-	if !tankBody.is_gravity_enabled():
-		return
-	if tankBody.freeze:
-		return
-
 	global_position = tankBody.global_position
 	tankBody.position = Vector2.ZERO
+	
+	if not tankBody.is_gravity_enabled() or tankBody.freeze:
+		# Make sure we emit a stop falling if started falling
+		if mark_falling:
+			stopped_falling()
+		return
 
 	# Check for falling
 	var falling := is_falling()
@@ -190,6 +191,9 @@ func _physics_process(delta: float) -> void:
 func toggle_gravity(enabled: bool) -> void:
 	tankBody.toggle_gravity(enabled)
 
+func request_sleep() -> void:
+	tankBody.request_sleep()
+	
 func is_falling() -> bool:
 	# TODO: contact monitoring replaces need for doing trace tests and is more accurate so can clean this up
 	# If still want "snap_to_ground" the falling trace test may still be useful

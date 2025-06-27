@@ -45,6 +45,8 @@ center_of_mass = Vector2(0, -300)
 lock_rotation = true
 freeze_mode = 1
 script = ExtResource("2_o5qn2")
+sleep_linear_velocity_threshold = 0.1
+sleep_angular_threshold = 0.0174533
 
 [node name="TankBodySprite" type="Sprite2D" parent="TankBody"]
 use_parent_material = true
