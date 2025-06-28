@@ -137,7 +137,7 @@ func _on_continue_story_pressed() -> void:
 	_disable_buttons()
 
 func _disable_buttons() -> void:
-	UIUtils.disable_all_buttons(buttons_container)
+	UIUtils.disable_all_buttons(buttons_container, 20.0)
 			
 static func _continue_story_completed() -> void:
 	print_debug("MainMenu: Remove continue story state flag")
