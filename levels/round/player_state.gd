@@ -110,6 +110,8 @@ static func deserialize_from_save_state(root_state: Dictionary) -> PlayerState:
 			var weapon:Weapon = SaveState.safe_load_scene(w.res) as Weapon
 			if weapon:
 				weapon.current_ammo = w.ammo
+				if w.has("magazines"):
+					weapon.magazines = w.magazines
 				_weapons_array.push_back(weapon)
 			else:
 				push_warning("PlayerState: weapon is not valid - skipping")
@@ -152,6 +154,10 @@ func _create_weapon_state(weapon: Weapon) -> Dictionary:
 
 	weapon_state.res = weapon.scene_file_path
 	weapon_state.ammo = weapon.current_ammo
+	if weapon.use_magazines:
+		# Save the current magazine as we always reload on start and reduce it by 1, 
+		# so unless ammo is empty here need to compensate for the partial magazine
+		weapon_state.magazines = weapon.magazines + 1 if weapon.current_ammo > 0 and weapon.use_ammo else weapon.magazines
 
 	return weapon_state
 

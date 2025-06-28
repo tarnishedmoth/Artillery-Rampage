@@ -31,6 +31,9 @@ class ItemPurchaseState:
 	var refill_amount:int
 	var refill_cost:int
 
+	var inventory_item:Node:
+		get: return existing_item if existing_item else new_item
+
 	func reset() -> void:
 		buy = false
 		refill_cost = 0
@@ -49,6 +52,9 @@ class ItemPurchaseState:
 		# We do not need to re-purchase previously unlocked weapons
 		item.apply_refill_discount = weapon.retain_when_empty
 		print_debug("%s: apply_refill_discount=%s" % [item.item_scene.resource_path, str(item.apply_refill_discount)])
+
+		item.uses_magazines = weapon.use_magazines
+		item.ammo_purchase_increment = weapon.magazine_capacity if weapon.use_magazines else 1
 
 ## Keyed by the scene file path of the instantiated item
 var _purchase_item_state_dictionary:Dictionary[String, ItemPurchaseState] = {}
@@ -161,17 +167,15 @@ func _apply_changes() -> void:
 func _apply_weapon(player_state: PlayerState, purchase_state: ItemPurchaseState)  -> void:
 	var store_existing_weapon:Weapon = purchase_state.existing_item as Weapon
 	if store_existing_weapon:
-		# TODO: Take into account magazines
 		# Object reference may have been swapped out in PlayerState due to how save system works
 		# So make sure affect the actual array instance
-		store_existing_weapon.current_ammo += purchase_state.refill_amount
+		_apply_ammo_and_magazines(purchase_state, store_existing_weapon)
 		if purchase_state.refill_amount > 0:
 			if purchase_state.already_in_inventory:
 				# Set back on original weapon
 				var existing_weapon_index:int = player_state.weapons.find_custom(func(w)->bool: return w.scene_file_path == store_existing_weapon.scene_file_path)
 				if existing_weapon_index != -1:
-					print_debug("%s: Purchased %d ammo for weapon %s" % [name, purchase_state.refill_amount, store_existing_weapon.display_name])
-					player_state.weapons[existing_weapon_index].current_ammo = store_existing_weapon.current_ammo
+					_copy_weapon_ammo_and_magazines_from_to(store_existing_weapon, player_state.weapons[existing_weapon_index])
 				else:
 					push_error("%s: Store weapon copy for %s could not be found in player state weapons!" % [name, store_existing_weapon.display_name])
 					# Best we can do at this point is refund the cost
@@ -184,11 +188,25 @@ func _apply_weapon(player_state: PlayerState, purchase_state: ItemPurchaseState)
 		# Need to duplicate as the reference above is owned by the UI element and will be freed when this node exits
 		# We could both be buying and adding ammo
 		var new_weapon:Weapon = purchase_state.new_item.duplicate()
-		new_weapon.current_ammo += purchase_state.refill_amount
+		print_debug("%s: Purchased new weapon - %s" % [name, purchase_state.new_item.display_name])
 
+		_apply_ammo_and_magazines(purchase_state, new_weapon)
 		player_state.weapons.push_back(new_weapon)
 
-		print_debug("%s: Purchased new weapon - %s" % [name, purchase_state.new_item.display_name])
+func _apply_ammo_and_magazines(purchase_state:ItemPurchaseState, weapon:Weapon) -> void:
+	if weapon.use_magazines:
+		var magazine_purchases:int = floori(float(purchase_state.refill_amount) / weapon.magazine_capacity)
+		weapon.magazines += magazine_purchases
+		print_debug("%s: Purchased %d magazines for weapon %s" % [name, magazine_purchases, weapon.display_name])
+	else:
+		weapon.current_ammo += purchase_state.refill_amount
+		print_debug("%s: Purchased %d ammo for weapon %s" % [name, purchase_state.refill_amount, weapon.display_name])
+
+func _copy_weapon_ammo_and_magazines_from_to(from:Weapon, to:Weapon) -> void:
+	if to.use_magazines:
+		to.magazines = from.magazines
+	else:
+		to.current_ammo = from.current_ammo
 
 func _on_weapon_buy_state_changed(weapon: Weapon, buy:bool) -> void:
 	print_debug("%s - Buy State changed for %s - buy=%s" % [name, weapon.display_name, str(buy)])

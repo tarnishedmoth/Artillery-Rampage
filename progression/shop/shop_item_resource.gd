@@ -37,6 +37,10 @@ enum ItemType
 
 var apply_refill_discount:bool = false
 
+## Set to value > 1 when using magazines
+var ammo_purchase_increment:int = 1
+var uses_magazines:bool = false
+
 func get_refill_cost(count: float) -> int:
 	return ceili(count * get_adjusted_refill_cost())
 
@@ -44,7 +48,9 @@ func get_refill_cost(count: float) -> int:
 ## If > 1 just return 1
 func get_increment_for_fractional_cost() -> int:
 	var cost:float = get_adjusted_refill_cost()
-	return floori(1.0 / cost) if cost < 1.0 and cost > 0.0 else 1
+	var increment:int = floori(1.0 / cost) if cost < 1.0 and cost > 0.0 else 1
+	return increment * ammo_purchase_increment
 	
 func get_adjusted_refill_cost() -> float:
-	return refill_cost * retain_empty_refill_discount if apply_refill_discount else refill_cost
+	var base_cost:float = refill_cost * ammo_purchase_increment
+	return base_cost * retain_empty_refill_discount if apply_refill_discount else base_cost

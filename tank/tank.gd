@@ -504,7 +504,7 @@ func check_can_shoot_weapon(weapon: Weapon) -> bool:
 		push_warning(str(self)+": Tried to shoot, but equipped weapon is null.")
 		return false
 	else:
-		if weapon.current_ammo > 0:
+		if not weapon.use_ammo or weapon.current_ammo > 0 or weapon.can_reload():
 			return true
 		else:
 			# Out of ammo.

@@ -295,6 +295,8 @@ func shoot(power:float = fire_velocity) -> void:
 	if not is_configured:
 		configure_barrels()
 		await reload()
+	elif use_ammo and current_ammo == 0 and can_reload():
+		await reload()
 
 	if always_shoot_for_duration > 0.0:
 		shoot_for_duration(always_shoot_for_duration, power)
@@ -342,25 +344,35 @@ func dry_fire() -> void:
 ## manipulate the ammunition/magazines.
 ## Also plays a sound effect if [member sfx_reload] is configured.
 func reload(immediate: bool = false) -> void:
-	if not is_equipped: return
+	if not is_equipped or not use_ammo: return
 	if is_reloading: return
 	if use_magazines && magazines < 1: return ## Out of magazines/ammo.
-	if use_ammo:
-		is_reloading = true
-		#if sfx_reload: sfx_reload.play() ## Trigger the SFX to play on start
-		if not immediate: ## Instant reloading
-			await get_tree().create_timer(reload_delay_time).timeout ## Reload Timer
-		if use_magazines:
-			current_ammo = magazine_capacity ## Reset ammo
-			magazines -= 1
-		else:
+	
+	is_reloading = true
+	#if sfx_reload: sfx_reload.play() ## Trigger the SFX to play on start
+	if not immediate: ## Instant reloading
+		await get_tree().create_timer(reload_delay_time).timeout ## Reload Timer
+	if use_magazines:
+		magazines -= 1
+		## Special case when starting with partial magazine from save
+		if immediate and _starting_ammo > 0:
 			current_ammo = _starting_ammo
+		else:
+			current_ammo = magazine_capacity ## Reset ammo
+			ammo_changed.emit(current_ammo)
+			magazines_changed.emit(magazines)
 	else:
-		pass
+		current_ammo = _starting_ammo
+		
 	is_reloading = false ## Finished reloading.
 	if sfx_reload: sfx_reload.play() ## Trigger the SFX to play on completion
 	# This could definitely be a start and stop pair of sounds.
 		
+## Checks if weapon can be reloading during gameplay.
+## This only applies to weapons with magazines as weapons without them just use all their available weapon and are only "reloaded" at round start.
+func can_reload() -> bool:
+	return is_equipped and use_ammo and (is_reloading or (use_magazines and magazines > 0))
+
 ## This function is called after every time the weapon shoots, to start the waiting timer
 ## if [member use_fire_rate], and to advance to the next member of [member barrels].
 func cycle() -> void:
@@ -376,7 +388,7 @@ func cycle() -> void:
 ## [member current_ammo] as well as [member magazines] with their initial values
 ## from when this scene was [signal ready].
 func restock() -> void:
-	restock_ammo(_starting_ammo)
+	restock_ammo(_starting_ammo if not use_magazines else magazine_capacity)
 	if use_magazines: restock_magazines(_starting_magazines)
 	print_debug(display_name," ammo restocked.")
 
