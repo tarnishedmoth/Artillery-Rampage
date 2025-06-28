@@ -129,18 +129,9 @@ func _on_continue_story_pressed() -> void:
 	SceneManager.play_mode = SceneManager.PlayMode.STORY
 
 	SaveStateManager.add_state_flag(SceneManager.continue_story_selected)
-	# MainMenu will be deleted after SceneManager.switch_scene_keyed completes so cannot await and do it after
-	GameEvents.scene_switched.connect(_continue_story_completed.unbind(1))
-	
 	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap, 0.0)
 	
 	_disable_buttons()
 
 func _disable_buttons() -> void:
 	UIUtils.disable_all_buttons(buttons_container, 20.0)
-			
-static func _continue_story_completed() -> void:
-	print_debug("MainMenu: Remove continue story state flag")
-	SaveStateManager.remove_state_flag(SceneManager.continue_story_selected)
-	# Remove listener
-	GameEvents.scene_switched.disconnect(_continue_story_completed)
