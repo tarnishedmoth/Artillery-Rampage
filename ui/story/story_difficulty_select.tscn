@@ -26,6 +26,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="DifficultySelectContainer" type="VBoxContainer" parent="CenterContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Label" type="Label" parent="CenterContainer/DifficultySelectContainer"]

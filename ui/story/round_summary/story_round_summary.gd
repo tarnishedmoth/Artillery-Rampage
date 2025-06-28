@@ -18,6 +18,7 @@ class_name StoryRoundSummary extends Control
 
 @onready var win_audio: AudioStreamPlayer = %RoundWinAudio
 @onready var lose_audio: AudioStreamPlayer = %RoundLoseAudio
+@onready var next_button:Button = %Next
 
 var _grade:int = 0
 var _is_game_over:bool = false
@@ -160,6 +161,8 @@ func _on_next_pressed() -> void:
 		_next_after_loss()
 	else:
 		SceneManager.switch_scene_keyed(SceneManager.SceneKeys.GameOver)
+		
+	next_button.disabled = true
 
 func _next_after_loss() -> void:
 	# If player state is defined make sure we restart with full health as already took the personnel hit

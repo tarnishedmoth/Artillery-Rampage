@@ -42,7 +42,9 @@ func _on_continue_button_pressed() -> void:
 	Juice.fade_out(everything)
 	if not SceneManager.deque_transition():
 		SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryShop)
-
+	
+	# Prevent multiple clicks which will cause the wrong scenes to transition
+	continue_button.disabled = true
 
 ## Cheats
 ## Super secret cheat codes (shh!)

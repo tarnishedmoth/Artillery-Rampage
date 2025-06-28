@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+@onready var retry_button:Button = %retry
+@onready var quit_button:Button = %quit
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -13,9 +15,15 @@ func _on_retry_pressed():
 	SceneManager.play_mode = SceneManager.PlayMode.STORY
 
 	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryStart)
-
+	
+	disable_buttons()
 
 func _on_quit_pressed():
-	# TODO: Maybe do this from round summary
 	StorySaveUtils.delete_story_save()
 	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.MainMenu)
+	
+	disable_buttons()
+
+func disable_buttons() -> void:
+	retry_button.disabled = true
+	quit_button.disabled = true

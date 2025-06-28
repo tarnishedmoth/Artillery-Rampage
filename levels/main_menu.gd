@@ -16,6 +16,7 @@ var credits_list_is_focused:bool = false
 
 @onready var soundtrack: AudioStreamPlayer2D = %Soundtrack
 @onready var btn_continue_story:Button = %ContinueStory
+@onready var buttons_container:Container = %MainMenuButtons
 
 #endregion
 
@@ -74,6 +75,7 @@ func _on_play_now_pressed() -> void:
 	var level: StoryLevel = SceneManager.levels_always_selectable.pick_random()
 	if level:
 		SceneManager.switch_scene_file(level.scene_res_path, 0.0)
+		_disable_buttons()
 
 func _on_story_pressed() -> void:
 	print_debug("Start button")
@@ -84,6 +86,8 @@ func _on_story_pressed() -> void:
 	SceneManager.play_mode = SceneManager.PlayMode.STORY
 
 	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryStart, 0.0)
+	
+	_disable_buttons()
 
 func _on_level_select_pressed() -> void:
 	print_debug("Level select button")
@@ -100,6 +104,7 @@ func _on_options_pressed() -> void:
 	main_menu.hide()
 
 func _on_quit_pressed() -> void:
+	_disable_buttons()
 	get_tree().quit()
 	
 func _on_options_menu_closed() -> void:
@@ -124,5 +129,18 @@ func _on_continue_story_pressed() -> void:
 	SceneManager.play_mode = SceneManager.PlayMode.STORY
 
 	SaveStateManager.add_state_flag(SceneManager.continue_story_selected)
-	await SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap, 0.0)
+	# MainMenu will be deleted after SceneManager.switch_scene_keyed completes so cannot await and do it after
+	GameEvents.scene_switched.connect(_continue_story_completed.unbind(1))
+	
+	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap, 0.0)
+	
+	_disable_buttons()
+
+func _disable_buttons() -> void:
+	UIUtils.disable_all_buttons(buttons_container)
+			
+static func _continue_story_completed() -> void:
+	print_debug("MainMenu: Remove continue story state flag")
 	SaveStateManager.remove_state_flag(SceneManager.continue_story_selected)
+	# Remove listener
+	GameEvents.scene_switched.disconnect(_continue_story_completed)

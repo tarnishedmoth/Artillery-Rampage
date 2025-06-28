@@ -129,43 +129,44 @@ layout_mode = 2
 theme_override_constants/margin_left = 48
 theme_override_constants/margin_right = 48
 
-[node name="Buttons" type="VBoxContainer" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer"]
+[node name="MainMenuButtons" type="VBoxContainer" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="PlayNow" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
+[node name="PlayNow" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons"]
 layout_mode = 2
 theme_type_variation = &"BigButton"
 text = "Play Now!"
 
-[node name="ContinueStory" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
+[node name="ContinueStory" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"BigButton"
 disabled = true
 text = "Continue Story"
 
-[node name="Story" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
+[node name="Story" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons"]
 layout_mode = 2
 theme_type_variation = &"BigButton"
 text = "New Story"
 
-[node name="LevelSelect" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
+[node name="LevelSelect" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons"]
 layout_mode = 2
 theme_type_variation = &"BigButton"
 text = "Select Level"
 
-[node name="Options" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
+[node name="Options" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons"]
 layout_mode = 2
 theme_type_variation = &"BigButton"
 text = "Options"
 
-[node name="Spacer" type="Control" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
+[node name="Spacer" type="Control" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons"]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 size_flags_stretch_ratio = 0.13
 
-[node name="Quit" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons"]
+[node name="Quit" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"BigButton"
@@ -360,12 +361,12 @@ size_flags_vertical = 3
 [node name="OptionsMenu" parent="Controls/Options" instance=ExtResource("6_snioo")]
 layout_mode = 2
 
-[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/PlayNow" to="." method="_on_play_now_pressed"]
-[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/ContinueStory" to="." method="_on_continue_story_pressed"]
-[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/Story" to="." method="_on_story_pressed"]
-[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/LevelSelect" to="." method="_on_level_select_pressed"]
-[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/Options" to="." method="_on_options_pressed"]
-[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/Buttons/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons/PlayNow" to="." method="_on_play_now_pressed"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons/ContinueStory" to="." method="_on_continue_story_pressed"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons/Story" to="." method="_on_story_pressed"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons/LevelSelect" to="." method="_on_level_select_pressed"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons/Quit" to="." method="_on_quit_pressed"]
 [connection signal="mouse_entered" from="Controls/MainMenu/Columns/RightColumn/CreditsList" to="." method="_on_credits_list_mouse_entered"]
 [connection signal="mouse_exited" from="Controls/MainMenu/Columns/RightColumn/CreditsList" to="." method="_on_credits_list_mouse_exited"]
 [connection signal="pressed" from="Controls/LevelSelect/VBoxContainer/HBoxContainer/VBoxContainer/ConfirmButtons/Start" to="Controls/LevelSelect" method="_on_apply_pressed"]

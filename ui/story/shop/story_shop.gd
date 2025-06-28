@@ -6,6 +6,7 @@ extends Control
 
 @onready var items_container:Container = %ItemsContainer
 @onready var resources_control:ShopResourceRowControl = %ResourceRow
+@onready var buttons_container:Container = %ButtonsContainer
 
 # Shop item row scenes by ItemType (Currently only weapon)
 const weapon_row_scene:PackedScene = preload("res://ui/story/shop/shop_weapon_row.tscn")
@@ -137,6 +138,8 @@ func _on_done_pressed() -> void:
 
 	if not SceneManager.deque_transition():
 		SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap)
+	
+	UIUtils.disable_all_buttons(buttons_container)
 
 func _apply_changes() -> void:
 	# Update the player state with the new weapon states

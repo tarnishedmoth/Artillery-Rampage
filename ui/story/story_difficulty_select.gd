@@ -1,5 +1,6 @@
 extends Control
 
+@onready var buttons_container:Container = %DifficultySelectContainer
 
 func _on_easy_pressed() -> void:
 	_start_story(Difficulty.DifficultyLevel.EASY)
@@ -12,4 +13,6 @@ func _on_hard_pressed() -> void:
 
 func _start_story(difficulty: Difficulty.DifficultyLevel) -> void:
 	UserOptions.difficulty = difficulty
-	await SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap)
+	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap)
+
+	UIUtils.disable_all_buttons(buttons_container)

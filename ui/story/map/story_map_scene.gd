@@ -24,6 +24,7 @@ class_name StoryMapScene extends Control
 @onready var personnel_hud:HUDElement = %PersonnelHUD
 @onready var scrap_hud:HUDElement = %ScrapHUD
 @onready var health_hud:HUDElement = %HealthHUD
+@onready var next_button = %NextButton
 
 var _story_levels_resource:StoryLevelsResource
 var _next_level_index:int
@@ -95,6 +96,7 @@ func _create_nodes_from_save_state(saved_state: StoryMapSaveState) -> Array[Stor
 
 func _on_next_button_pressed() -> void:
 	SceneManager.next_level()
+	next_button.disabled = true
 
 func _update() -> void:
 	_create_graph()
