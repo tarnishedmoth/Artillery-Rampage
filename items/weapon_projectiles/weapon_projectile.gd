@@ -119,7 +119,7 @@ func disarm():
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	# Store any collision results for later access
-	if state.get_contact_count() >= 1:
+	if state.get_contact_count() >= 1 and SceneManager.get_current_level_root():
 		# It says "local position" in function name but the docs say it is global position
 		# and this agrees with empirical results
 		var pos: Vector2 = state.get_contact_local_position(0)

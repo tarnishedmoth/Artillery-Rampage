@@ -25,7 +25,7 @@ class_name WeaponProjectileDeployable extends WeaponProjectile
 @export var understood:bool ## This has no effect.
 #@export var 
 # public
-var deployed_container:Node2D
+var deployed_container:Node
 var deployed:Array
 # _private
 var _current_projectile_index: int = 1 # Current place in deploy_number while iterating
