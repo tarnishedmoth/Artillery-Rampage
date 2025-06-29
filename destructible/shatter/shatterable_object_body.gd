@@ -99,9 +99,7 @@ func damage(projectile: WeaponPhysicsContainer, contact_point: Vector2, poly_sca
 	owner.damage(self, projectile, contact_point, poly_scale)
 	
 func shatter(projectile: WeaponPhysicsContainer, _destructible_poly_global: PackedVector2Array) -> Array[Node2D]:
-	if shatter_iteration < max_shatter_divisions:
-		return await shatter_with_velocity(projectile.last_recorded_linear_velocity)
-	return []
+	return await shatter_with_velocity(projectile.last_recorded_linear_velocity)
 
 func shatter_with_velocity(impact_velocity: Vector2) -> Array[Node2D]:
 	var new_bodies: Array[Node2D] = []
