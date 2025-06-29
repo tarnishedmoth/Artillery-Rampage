@@ -252,6 +252,10 @@ func connect_to_tank(tank: Tank) -> void:
 	configure_barrels()
 	#Reload immediately during configuration but we must wait until tank parent ready runs so wait a tick
 	await get_tree().process_frame
+	
+	if OS.is_debug_build():
+		print_debug("%s: connect to %s - use_ammo=%s; use_magazines=%s; ammo=%d; magazines=%d" % [display_name, tank.get_parent().name, str(use_ammo), str(use_magazines), current_ammo, magazines])
+	
 	reload(true) 
 ## Should be called by a [Tank] when exiting tree to disconnect this [Weapon].
 ## [br][br]

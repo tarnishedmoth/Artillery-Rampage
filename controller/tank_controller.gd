@@ -92,7 +92,8 @@ var tank: Tank:
 func _apply_pending_state(state: PlayerState) -> void:
 	remove_all_weapons(true)
 	# Make sure decouple the weapon object from the state
-	attach_weapons(state.get_weapons_copy())
+	# Don't scan the weapons as this will happen in tank.apply_pending_state
+	attach_weapons(state.get_weapons_copy(), false)
 
 	tank.apply_pending_state(state)
 
@@ -180,11 +181,13 @@ func get_weapons() -> Array[Weapon]:
 			weapons.append(w)
 	return weapons
 
-func attach_weapons(weapons: Array[Weapon]) -> void:
+func attach_weapons(weapons: Array[Weapon], scan:bool = true) -> void:
 	for w in weapons:
 		weapons_container.add_child(w)
 		w.global_position = tank.global_position # Probably not necessary but Weapon is a Node2D and should be simplified if so.
-	tank.scan_available_weapons()
+	
+	if scan:
+		tank.scan_available_weapons()
 
 func remove_all_weapons(detach_immediately: bool = false) -> void:
 	for w in weapons_container.get_children():

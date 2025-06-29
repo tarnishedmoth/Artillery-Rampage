@@ -67,7 +67,7 @@ func get_empty_weapon_if_unlocked(scene_file_path:String) -> Weapon:
 func get_weapons_copy() -> Array[Weapon]:
 	var copy: Array[Weapon] = []
 	copy.resize(weapons.size())
-	for i in range(copy.size()):
+	for i in copy.size():
 		copy[i] = _fix_up_magazines(weapons[i].duplicate())
 	return copy
 
