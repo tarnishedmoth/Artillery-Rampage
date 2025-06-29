@@ -69,6 +69,8 @@ func execute(_tank: Tank) -> AIState:
 	var weapon_infos := get_weapon_infos()
 	
 	var best_opponent_data: Dictionary = _select_best_opponent()
+	if not best_opponent_data:
+		return AIState.MaxPowerState.new(_tank, randi_range(0, weapon_infos.size() - 1))
 	
 	_modify_shot_based_on_history(best_opponent_data)
 	_add_opponent_target_entry(best_opponent_data)
@@ -282,6 +284,10 @@ class TargetActionState extends AIState:
 
 func _select_best_opponent() -> Dictionary:
 	var opponents: Array[TankController] = get_opponents()
+
+	if not opponents:
+		push_warning("Lobber AI(%s): No opponents found!" % [tank.name])
+		return {}
 
 	var closest_direct_opponent: TankController = null
 	var closest_direct_opponent_pos: Vector2 = Vector2.ZERO

@@ -3,7 +3,7 @@ class_name RandoAIBehavior extends AIBehavior
 @export_group("Config")
 @export_range(0.0, 1.0, 0.05) var min_power_pct: float = 0.25
 
-var active_state: AIState;
+var active_state: AIState
 
 func _ready() -> void:
 	super._ready()
