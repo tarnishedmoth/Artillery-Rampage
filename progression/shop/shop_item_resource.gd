@@ -41,7 +41,10 @@ var apply_refill_discount:bool = false
 var ammo_purchase_increment:int = 1
 var uses_magazines:bool = false
 
-func get_refill_cost(count: float) -> int:
+func get_refill_cost(count: int) -> int:
+	# HACK: for ammo_purchase since displaying the magazine total ammo
+	if count > 1 and ammo_purchase_increment > 1:
+		count = floori(float(count) / ammo_purchase_increment)
 	return ceili(count * get_adjusted_refill_cost())
 
 ## Gets the refill multiplier that will keep the cost <= 1
