@@ -1,20 +1,34 @@
-[gd_resource type="Resource" script_class="StoryLevelsResource" load_steps=68 format=3 uid="uid://cuxdymscdwdxt"]
+[gd_resource type="Resource" script_class="StoryLevelsResource" load_steps=82 format=3 uid="uid://cuxdymscdwdxt"]
 
 [ext_resource type="Script" uid="uid://bbu2pp1ggq3ya" path="res://levels/conf/story_level_resource.gd" id="1_eqg84"]
 [ext_resource type="Script" uid="uid://dwd2f2a37y3g0" path="res://story/ai_story_config.gd" id="2_rsbj2"]
 [ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="3_kbv8t"]
 [ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="4_hln00"]
 [ext_resource type="PackedScene" uid="uid://bch6pb81vhwb" path="res://ui/story/map/story_level_node.tscn" id="5_vf55u"]
+[ext_resource type="Texture2D" uid="uid://7owdk80xyta" path="res://ui/story/map/ui_map_nodes/foothold.png" id="6_rsbj2"]
 [ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="6_suwir"]
 [ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="7_j4w3p"]
+[ext_resource type="Texture2D" uid="uid://buy38s6dyybcu" path="res://ui/story/map/ui_map_nodes/islands.png" id="8_kbv8t"]
 [ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="8_kv205"]
 [ext_resource type="PackedScene" uid="uid://do2r411gtohhx" path="res://weapons/weapon_missile_homing.tscn" id="9_npjl4"]
+[ext_resource type="Texture2D" uid="uid://cb5c5iiadc8dy" path="res://ui/story/map/ui_map_nodes/generic_grassy.png" id="10_hln00"]
 [ext_resource type="PackedScene" uid="uid://hlpewhe5vg2k" path="res://weapons/weapon_leadball_shotgun.tscn" id="10_hocf4"]
 [ext_resource type="PackedScene" uid="uid://ccl2oyo13754i" path="res://weapons/weapon_MiniMIRV.tscn" id="11_ttk3y"]
 [ext_resource type="PackedScene" uid="uid://bx3va4wmvmw4o" path="res://weapons/weapon_MIRV.tscn" id="12_arfak"]
+[ext_resource type="Texture2D" uid="uid://8mp4dv4u1y8k" path="res://ui/story/map/ui_map_nodes/residential.png" id="12_vf55u"]
 [ext_resource type="PackedScene" uid="uid://dychmx0p2ex84" path="res://weapons/weapon_bouncing_ball.tscn" id="13_j3cp3"]
 [ext_resource type="PackedScene" uid="uid://dnc0x4uvh6tq8" path="res://weapons/weapon_meganuke.tscn" id="14_6ox8j"]
+[ext_resource type="Texture2D" uid="uid://ore7ohumfwwu" path="res://ui/story/map/ui_map_nodes/urban.png" id="15_suwir"]
 [ext_resource type="Script" uid="uid://byp83fig7pnv8" path="res://levels/conf/story_levels_resource.gd" id="15_ybvsb"]
+[ext_resource type="Texture2D" uid="uid://p84qilg8d6gc" path="res://ui/story/map/ui_map_nodes/hills.png" id="18_j4w3p"]
+[ext_resource type="Texture2D" uid="uid://d2oq2np7veuwh" path="res://ui/story/map/ui_map_nodes/scorchedplains.png" id="20_kv205"]
+[ext_resource type="Texture2D" uid="uid://p0mfbwfkqw1t" path="res://ui/story/map/ui_map_nodes/mesa.png" id="21_npjl4"]
+[ext_resource type="Texture2D" uid="uid://bgrkwfld7mp7e" path="res://ui/story/map/ui_map_nodes/factory.png" id="22_hocf4"]
+[ext_resource type="Texture2D" uid="uid://bl6o87aa3gckt" path="res://ui/story/map/ui_map_nodes/divide.png" id="24_ttk3y"]
+[ext_resource type="Texture2D" uid="uid://4ekt3udtr4xx" path="res://ui/story/map/ui_map_nodes/plateau.png" id="25_arfak"]
+[ext_resource type="Texture2D" uid="uid://b6ktltplr36cn" path="res://ui/story/map/ui_map_nodes/mountains.png" id="26_6ox8j"]
+[ext_resource type="Texture2D" uid="uid://d062gh2g7eq15" path="res://ui/story/map/ui_map_nodes/snowcaps.png" id="27_ybvsb"]
+[ext_resource type="Texture2D" uid="uid://b82dfkwf40oqb" path="res://ui/story/map/ui_map_nodes/desert.png" id="28_ybvsb"]
 
 [sub_resource type="Resource" id="Resource_eaw1u"]
 script = ExtResource("2_rsbj2")
@@ -28,6 +42,7 @@ script = ExtResource("1_eqg84")
 scene_res_path = &"res://levels/story/level_new_beginnings.tscn"
 name = &"Foothold"
 ui_map_node = ExtResource("5_vf55u")
+ui_map_node_texture = ExtResource("6_rsbj2")
 narratives = Array[String](["We must push back these AI artillery and gain a foothold on the coast!"])
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 0: SubResource("Resource_eaw1u")
@@ -53,6 +68,7 @@ script = ExtResource("1_eqg84")
 scene_res_path = &"res://levels/story/level_islands.tscn"
 name = &"Islander"
 ui_map_node = ExtResource("5_vf55u")
+ui_map_node_texture = ExtResource("8_kbv8t")
 narratives = Array[String](["Watch out for the water below!"])
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 0: SubResource("Resource_di2g2"),
@@ -79,6 +95,7 @@ script = ExtResource("1_eqg84")
 scene_res_path = &"res://levels/story/level_simultaneous_fire_intro.tscn"
 name = &"Fire at Will"
 ui_map_node = ExtResource("5_vf55u")
+ui_map_node_texture = ExtResource("10_hln00")
 narratives = Array[String](["Just when we got the hang of things...", "The rules of engagement change!"])
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 0: SubResource("Resource_njefd"),
@@ -112,6 +129,7 @@ script = ExtResource("1_eqg84")
 scene_res_path = &"res://levels/story/level_residential.tscn"
 name = &"Surburban Skirmish"
 ui_map_node = ExtResource("5_vf55u")
+ui_map_node_texture = ExtResource("12_vf55u")
 narratives = Array[String](["Even the surburbs weren't spared.", "Hope these houses have good insurance!"])
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 0: SubResource("Resource_wt4ba"),
@@ -146,6 +164,7 @@ script = ExtResource("1_eqg84")
 scene_res_path = &"res://levels/story/level_urban.tscn"
 name = &"Urban Onslaught"
 ui_map_node = ExtResource("5_vf55u")
+ui_map_node_texture = ExtResource("15_suwir")
 narratives = Array[String](["The city lights grow dim.", "Look out for enemies on the skyscrapers!"])
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 0: SubResource("Resource_6s3ft"),
@@ -180,6 +199,7 @@ script = ExtResource("1_eqg84")
 scene_res_path = &"res://levels/story/level_hills.tscn"
 name = &"Rolling Meadows"
 ui_map_node = ExtResource("5_vf55u")
+ui_map_node_texture = ExtResource("18_j4w3p")
 narratives = Array[String](["Back to the open land.", "We have made great progress."])
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 0: SubResource("Resource_aru85"),
@@ -214,6 +234,7 @@ script = ExtResource("1_eqg84")
 scene_res_path = &"res://levels/story/level_scorchedplains.tscn"
 name = &"Scorched Plains"
 ui_map_node = ExtResource("5_vf55u")
+ui_map_node_texture = ExtResource("20_kv205")
 narratives = Array[String](["This land has taken heavy damage from the enemy.", "The AI also appear to be teaming up..."])
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 0: SubResource("Resource_a1i58"),
@@ -248,6 +269,7 @@ script = ExtResource("1_eqg84")
 scene_res_path = &"res://levels/story/level_plains.tscn"
 name = &"Home on the Range"
 ui_map_node = ExtResource("5_vf55u")
+ui_map_node_texture = ExtResource("10_hln00")
 narratives = Array[String](["Ah, the land of milk and honey.", "It's not like it once was..."])
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 0: SubResource("Resource_uyxng"),
@@ -261,6 +283,7 @@ script = ExtResource("1_eqg84")
 scene_res_path = &"res://levels/story/level_mesa.tscn"
 name = &"Molten Mesa"
 ui_map_node = ExtResource("5_vf55u")
+ui_map_node_texture = ExtResource("21_npjl4")
 narratives = Array[String](["This terrain will prove difficult.", "We must apply new tactics."])
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 0: SubResource("Resource_uyxng"),
@@ -275,6 +298,7 @@ script = ExtResource("1_eqg84")
 scene_res_path = &"res://levels/special/level_special_factory.tscn"
 name = &"Special Factory"
 ui_map_node = ExtResource("5_vf55u")
+ui_map_node_texture = ExtResource("22_hocf4")
 narratives = Array[String](["We must destroy this factory's power sources.", "Doing so will be a great victory for us!"])
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 0: SubResource("Resource_uyxng"),
@@ -296,6 +320,7 @@ script = ExtResource("1_eqg84")
 scene_res_path = &"res://levels/story/level_divide.tscn"
 name = &"The Great Divide"
 ui_map_node = ExtResource("5_vf55u")
+ui_map_node_texture = ExtResource("24_ttk3y")
 narratives = Array[String](["There is a large gap between us and the enemy.", "Perhaps it will confuse the enemy."])
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 0: SubResource("Resource_uyxng"),
@@ -331,6 +356,7 @@ script = ExtResource("1_eqg84")
 scene_res_path = &"res://levels/story/level_plateau.tscn"
 name = &"Plateau"
 ui_map_node = ExtResource("5_vf55u")
+ui_map_node_texture = ExtResource("25_arfak")
 narratives = Array[String](["We can get a good footing on this flatter land!"])
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 0: SubResource("Resource_npjl4"),
@@ -366,6 +392,7 @@ script = ExtResource("1_eqg84")
 scene_res_path = &"res://levels/story/level_mountains.tscn"
 name = &"Mountain Madness"
 ui_map_node = ExtResource("5_vf55u")
+ui_map_node_texture = ExtResource("26_6ox8j")
 narratives = Array[String](["I think I can see my house from up here!", "We must use the high ground!"])
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 0: SubResource("Resource_arfak"),
@@ -401,6 +428,7 @@ script = ExtResource("1_eqg84")
 scene_res_path = &"res://levels/story/level_whitecaps.tscn"
 name = &"Snowy Caps"
 ui_map_node = ExtResource("5_vf55u")
+ui_map_node_texture = ExtResource("27_ybvsb")
 narratives = Array[String](["I can't feel my toes!", "We must dispatch the enemy quickly and get to warmer lands."])
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 0: SubResource("Resource_ybvsb"),
@@ -436,6 +464,7 @@ script = ExtResource("1_eqg84")
 scene_res_path = &"res://levels/story/level_desert.tscn"
 name = &"Desert Winds"
 ui_map_node = ExtResource("5_vf55u")
+ui_map_node_texture = ExtResource("28_ybvsb")
 narratives = Array[String](["My mouth is so dry now!", "This heat is unbearable!"])
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 0: SubResource("Resource_sdniq"),
@@ -471,6 +500,7 @@ script = ExtResource("1_eqg84")
 scene_res_path = &"res://levels/story/level_final_seaside.tscn"
 name = &"Seaside Stand"
 ui_map_node = ExtResource("5_vf55u")
+ui_map_node_texture = ExtResource("6_rsbj2")
 narratives = Array[String](["It's all come down to this...", "The enemy has made a final stand."])
 ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 0: SubResource("Resource_tvkn6"),

@@ -1,6 +1,6 @@
 class_name StoryLevelNode extends Control
 
-@onready var icon: Sprite2D = $Icon
+@onready var icon: TextureRect = %Icon
 @onready var label:Label = $Label
 
 @onready var left_edge:Marker2D = $LeftEdge

@@ -284,6 +284,8 @@ func _new_story_level_node_from_metadata(metadata: StoryLevel) -> StoryLevelNode
 		prototype = default_node_prototype
 
 	var node:StoryLevelNode = _new_story_level_node(prototype)
+	if metadata.ui_map_node_texture:
+		node.set_icon_texture(metadata.ui_map_node_texture)
 	node.set_label(metadata.name)
 
 	return node

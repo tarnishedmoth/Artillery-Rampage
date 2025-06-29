@@ -5,7 +5,7 @@
 
 [node name="StoryLevelNode" instance=ExtResource("1_n0v7d")]
 
-[node name="Icon" parent="." index="0"]
+[node name="Icon" parent="Border/Clip" index="0"]
 texture = ExtResource("2_obhak")
 
 [node name="Label" parent="." index="1"]

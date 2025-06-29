@@ -10,6 +10,10 @@ class_name StoryLevel extends Resource
 ## Scene file that is subclass of StoryLevelNode
 @export var ui_map_node:PackedScene
 
+## Used to replace the Icon inside the ui_map_node.
+## because why have another scene for every single level?
+@export var ui_map_node_texture:Texture2D
+
 ## Text to display on the map node when moving to next level
 @export_group("Narrative")
 @export_multiline var narratives:Array[String]

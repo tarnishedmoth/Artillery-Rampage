@@ -1,37 +1,104 @@
-[gd_scene load_steps=4 format=3 uid="uid://bch6pb81vhwb"]
+[gd_scene load_steps=5 format=3 uid="uid://bch6pb81vhwb"]
 
-[ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="1_7cq0h"]
 [ext_resource type="Script" uid="uid://cdh41csbpfnvy" path="res://ui/story/map/story_level_node.gd" id="1_wccu6"]
+[ext_resource type="Texture2D" uid="uid://bi4ii7lvjs0p5" path="res://ui/question_mark.png" id="2_uj7u8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uj7u8"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 6
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+anti_aliasing = false
 
 [sub_resource type="LabelSettings" id="LabelSettings_uj7u8"]
 font_size = 14
 
 [node name="StoryLevelNode" type="Control"]
+custom_minimum_size = Vector2(42, 42)
 layout_mode = 3
-anchors_preset = 0
-offset_right = 54.0
-offset_bottom = 23.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -21.0
+offset_right = 21.0
+offset_bottom = 42.0
+grow_horizontal = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
 script = ExtResource("1_wccu6")
 min_edge_angle = -90.0
 max_edge_angle = 90.0
 
-[node name="Icon" type="Sprite2D" parent="."]
-scale = Vector2(0.333, 0.333)
-texture = ExtResource("1_7cq0h")
+[node name="Border" type="Panel" parent="."]
+custom_minimum_size = Vector2(42, 42)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -21.0
+offset_top = -21.0
+offset_right = 21.0
+offset_bottom = 21.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_uj7u8")
+
+[node name="Clip" type="Control" parent="Border"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Icon" type="TextureRect" parent="Border/Clip"]
+unique_name_in_owner = true
+show_behind_parent = true
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_uj7u8")
+stretch_mode = 3
 
 [node name="Label" type="Label" parent="."]
 z_index = 100
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
 offset_left = -27.0
-offset_top = 40.0
+offset_top = 44.0
 offset_right = 27.0
-offset_bottom = 63.0
+offset_bottom = 67.0
+grow_horizontal = 2
 text = "Level 1"
 label_settings = SubResource("LabelSettings_uj7u8")
 horizontal_alignment = 1
 
 [node name="LeftEdge" type="Marker2D" parent="."]
-position = Vector2(-21, 0)
+position = Vector2(0, 21)
 
 [node name="RightEdge" type="Marker2D" parent="."]
-position = Vector2(21, 0)
+position = Vector2(42, 21)
