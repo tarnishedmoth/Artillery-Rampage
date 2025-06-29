@@ -86,8 +86,17 @@ func _on_weapon_updated(weapon: Weapon) -> void:
 	if weapon.parent_tank.controller != _active_player:
 		return
 	weapon_text.set_label(weapon.display_name)
-	weapon_text.set_value(str(weapon.current_ammo) if weapon.use_ammo else char(9854))
+	weapon_text.set_value(_get_ammo_text(weapon))
 
+func _get_ammo_text(weapon: Weapon) -> String:
+	if not weapon.use_ammo:
+		return char(9854)
+	var tokens:Array[String] = []
+	tokens.push_back(str(weapon.current_ammo))
+	if weapon.use_magazines:
+		tokens.push_back(" (%d x %d)" % [weapon.magazine_capacity, weapon.magazines])
+	
+	return "".join(tokens)
 func _on_level_changed(level: GameLevel) -> void:
 	if OS.is_debug_build():
 		var file_name = SceneManager.current_scene.scene_file_path
