@@ -108,7 +108,7 @@ func _on_tank_killed(tank: Tank, instigatorController: Node2D, instigator: Node2
 	enemy_data.killed_by_player = instigator_was_player
 
 	if not instigator_was_player:
-		print_debug("%s: Ignore %s killed %s" % [name, instigatorController.name, tank.get_parent()])	
+		print_debug("%s: Ignore %s killed %s" % [name, instigatorController.name if instigatorController else &"", tank.get_parent()])	
 		return
 		
 	round_data.kills += 1
