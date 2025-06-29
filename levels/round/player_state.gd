@@ -68,8 +68,14 @@ func get_weapons_copy() -> Array[Weapon]:
 	var copy: Array[Weapon] = []
 	copy.resize(weapons.size())
 	for i in range(copy.size()):
-		copy[i] = weapons[i].duplicate()
+		copy[i] = _fix_up_magazines(weapons[i].duplicate())
 	return copy
+
+func _fix_up_magazines(weapon:Weapon) -> Weapon:
+	#HACK: Hack for getting magazine count deserialized correctly for partially filled magazine
+	if weapon.use_magazines and weapon.current_ammo > 0 and weapon.current_ammo != weapon.magazine_capacity:
+		weapon.magazines += 1
+	return weapon
 
 func _notification(what: int) -> void:
 	# Cannot access property or self see - https://github.com/godotengine/godot/issues/80834
@@ -155,9 +161,7 @@ func _create_weapon_state(weapon: Weapon) -> Dictionary:
 	weapon_state.res = weapon.scene_file_path
 	weapon_state.ammo = weapon.current_ammo
 	if weapon.use_magazines:
-		# Save the current magazine as we always reload on start and reduce it by 1, 
-		# so unless ammo is empty here need to compensate for the partial magazine
-		weapon_state.magazines = weapon.magazines + 1 if weapon.current_ammo > 0 and weapon.use_ammo else weapon.magazines
+		weapon_state.magazines = weapon.magazines
 
 	return weapon_state
 
