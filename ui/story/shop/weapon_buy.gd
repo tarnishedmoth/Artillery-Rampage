@@ -34,9 +34,15 @@ func update() -> void:
 	
 	buy_button.disabled = already_owned
 
-	# TODO: Doesn't account for magazines - maybe need a total_ammo derived property on the weapon for this
 	if weapon.use_ammo:
-		current_ammo.text = "%d" % owned_weapon.current_ammo if already_owned else "%d" % weapon.current_ammo
+		current_ammo.text = str(_get_total_current_ammo(owned_weapon if already_owned else weapon))
 	else:
 		# Infinity Unicode symbol
 		current_ammo.text = char(8734)
+		
+func _get_total_current_ammo(in_weapon: Weapon) -> int:
+	var total_ammo:int = in_weapon.current_ammo
+	if in_weapon.use_magazines and in_weapon.magazines > 0:
+		var additional_magazine_count:int = in_weapon.magazines - 1 if in_weapon.current_ammo == in_weapon.magazine_capacity else in_weapon.magazines
+		total_ammo += additional_magazine_count * in_weapon.magazine_capacity
+	return total_ammo
