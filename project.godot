@@ -76,6 +76,7 @@ GameLevel="GameLevel node"
 Wind_CPUParticles2D="CPUParticles2D that should be blown around by wind"
 WobbleActivator="Activation node for the wobble damage mechanic"
 StoryLevelState="Contains info about run and completed levels"
+TrajectoryPreviewer="Weapon or Projectile, used to filter out in events etc"
 
 [input]
 

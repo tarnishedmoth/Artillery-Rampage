@@ -93,10 +93,10 @@ unique_name_in_owner = true
 
 [node name="FiredWeaponContainer" type="Node" parent="."]
 
-[node name="WeaponTrajectoryPreviewer" parent="." instance=ExtResource("7_hqpr6")]
+[node name="WeaponTrajectoryPreviewer" parent="." groups=["TrajectoryPreviewer"] instance=ExtResource("7_hqpr6")]
 emit_action_signals = false
 
-[node name="WeaponBeamTrajectoryPreviewer" parent="." instance=ExtResource("9_ucdxg")]
+[node name="WeaponBeamTrajectoryPreviewer" parent="." groups=["TrajectoryPreviewer"] instance=ExtResource("9_ucdxg")]
 emit_action_signals = false
 
 [node name="FallDamageCauser" type="Node" parent="."]

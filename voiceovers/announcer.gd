@@ -369,6 +369,7 @@ func _check_gravity_damage_announce(tank: Tank, _instigator_controller: Node2D, 
 
 #region Wall Interactions
 func _on_wall_interaction(_walls: Walls, projectile: WeaponProjectile, interaction_location: Walls.WallInteractionLocation) -> void:
+	if projectile.is_in_group(&"TrajectoryPreviewer"): return
 	if not is_instance_valid(projectile.owner_tank) or not is_instance_valid(projectile.owner_tank.owner):
 		return
 	var player:TankController = projectile.owner_tank.owner

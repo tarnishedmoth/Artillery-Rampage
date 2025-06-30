@@ -28,7 +28,7 @@ interpolation_mode = 2
 offsets = PackedFloat32Array(0, 0.059322, 1)
 colors = PackedColorArray(1, 1, 1, 0.176471, 1, 1, 1, 1, 1, 1, 1, 0.447059)
 
-[node name="WeaponProjectilePreviewer" type="RigidBody2D"]
+[node name="WeaponProjectilePreviewer" type="RigidBody2D" groups=["TrajectoryPreviewer"]]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_jyx67")
