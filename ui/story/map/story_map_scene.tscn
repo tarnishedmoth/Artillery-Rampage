@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bh3bmcratw025"]
+[gd_scene load_steps=19 format=3 uid="uid://bh3bmcratw025"]
 
 [ext_resource type="Script" uid="uid://d3mw66c4x3kum" path="res://ui/story/map/story_map_scene.gd" id="1_5v7n8"]
 [ext_resource type="Theme" uid="uid://ddklgnmfj25sv" path="res://ui/story/story_theme.tres" id="1_nmkcg"]
@@ -7,18 +7,53 @@
 [ext_resource type="PackedScene" uid="uid://ya2fn3ef1h2j" path="res://ui/story/map/story_level_node_unknown.tscn" id="4_cestf"]
 [ext_resource type="Material" uid="uid://bigbcyue3woos" path="res://ui/story/map/materials/grayscale_material.tres" id="5_8dcih"]
 [ext_resource type="Script" uid="uid://df7r7bwm230pa" path="res://ui/array_seq_view_hide.gd" id="6_8dcih"]
+[ext_resource type="Script" uid="uid://ceao0gocc6tih" path="res://utils/mouse_follower.gd" id="7_464bj"]
 [ext_resource type="PackedScene" uid="uid://8hat5mrejfwr" path="res://ui/story/round_summary/round_summary_hud_element.tscn" id="7_b87u6"]
 [ext_resource type="PackedScene" uid="uid://b4hy7hmnoewje" path="res://narrative/auto_narrative.tscn" id="7_mer82"]
+[ext_resource type="Texture2D" uid="uid://csaq0u25lccwx" path="res://ui/story/map/grid_tile.png" id="7_px7av"]
+[ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="10_eclf1"]
+[ext_resource type="AudioStream" uid="uid://cudd5extbrrsl" path="res://ui/sounds/chatty_signal_short_b.wav" id="13_2etp1"]
 
-[sub_resource type="Gradient" id="Gradient_mer82"]
-colors = PackedColorArray(0.0851705, 0.243201, 0.0842348, 1, 0.611278, 0.401298, 0, 1)
+[sub_resource type="Gradient" id="Gradient_px7av"]
+interpolation_mode = 2
+interpolation_color_space = 1
+colors = PackedColorArray(0.423381, 0.460071, 0.475623, 1, 0.841941, 0.86221, 0.873903, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_tggun"]
-gradient = SubResource("Gradient_mer82")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_464bj"]
+gradient = SubResource("Gradient_px7av")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.625, 0.125)
+repeat = 2
 
-[node name="StoryMapScene" type="Control" groups=["Savable"]]
+[sub_resource type="Gradient" id="Gradient_eclf1"]
+interpolation_color_space = 1
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2etp1"]
+gradient = SubResource("Gradient_eclf1")
+width = 512
+height = 512
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.85, 0.15)
+
+[sub_resource type="LabelSettings" id="LabelSettings_eclf1"]
+line_spacing = -3.0
+shadow_size = 20
+shadow_color = Color(0, 0, 0, 0.85098)
+
+[node name="StoryMapScene" type="Control" node_paths=PackedStringArray("parallax_layers") groups=["Savable"]]
+modulate = Color(0.789878, 0.789879, 0.789879, 1)
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("1_nmkcg")
 script = ExtResource("1_5v7n8")
 edge_node_prototype = ExtResource("3_4e1f5")
@@ -29,19 +64,43 @@ margins = Vector2(20, 150)
 min_edge_length = 45.0
 max_edge_length = 60.0
 edge_dir_max_count = Vector2i(3, 7)
+parallax_layers = [NodePath("Container/LevelNodesContainer"), NodePath("GridBG")]
+parallax_amount = -0.25
+parallax_layer_factor = -0.05
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 9.0
-offset_top = 2.0
-offset_right = 1306.0
-offset_bottom = 718.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("GradientTexture2D_tggun")
+texture = SubResource("GradientTexture2D_464bj")
+
+[node name="MouseHighlight" type="PointLight2D" parent="."]
+position = Vector2(1056, 512)
+energy = 1.25
+blend_mode = 2
+range_item_cull_mask = 3
+shadow_enabled = true
+shadow_filter = 2
+texture = SubResource("GradientTexture2D_2etp1")
+height = 256.0
+
+[node name="MouseFollower" type="Node2D" parent="MouseHighlight"]
+script = ExtResource("7_464bj")
+
+[node name="GridBG" type="TextureRect" parent="."]
+texture_repeat = 2
+layout_mode = 1
+anchors_preset = -1
+offset_left = -744.0
+offset_top = -504.0
+offset_right = 1760.0
+offset_bottom = 1208.0
+texture = ExtResource("7_px7av")
+expand_mode = 1
+stretch_mode = 1
 
 [node name="AttributeLabels" type="VBoxContainer" parent="."]
 layout_mode = 0
@@ -89,6 +148,7 @@ offset_right = 664.0
 offset_bottom = 466.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
+theme = ExtResource("10_eclf1")
 theme_override_constants/margin_left = 32
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 32
@@ -101,7 +161,10 @@ visible = false
 layout_mode = 2
 
 [node name="Glyph" type="Label" parent="StoryTooltips/Tooltip"]
+custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
+label_settings = SubResource("LabelSettings_eclf1")
+autowrap_mode = 3
 
 [node name="GSpacer" type="Control" parent="StoryTooltips/Tooltip"]
 custom_minimum_size = Vector2(16, 0)
@@ -127,22 +190,42 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Buttons" type="Control" parent="."]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="NextButton" type="Button" parent="Buttons"]
 unique_name_in_owner = true
-layout_mode = 2
-offset_left = 1105.0
-offset_top = 647.0
-offset_right = 1288.0
-offset_bottom = 707.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -216.0
+offset_top = -88.0
+offset_right = -33.0
+offset_bottom = -28.0
+grow_horizontal = 0
+grow_vertical = 0
 size_flags_vertical = 8
 text = "Next"
 
 [node name="AutoNarrative" parent="." instance=ExtResource("7_mer82")]
 unique_name_in_owner = true
+
+[node name="RadioStatic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_2etp1")
+volume_db = -3.0
+autoplay = true
+bus = &"UI"
 
 [connection signal="pressed" from="Buttons/NextButton" to="." method="_on_next_button_pressed"]
 

@@ -15,7 +15,7 @@ class_name StoryMapScene extends Control
 
 @export_group("")
 
-@onready var graph_container: Node = %LevelNodesContainer
+@onready var graph_container: Control = %LevelNodesContainer
 @onready var tooltipper:TextSequence = %StoryTooltips
 
 # TODO: This probably belongs more on the round summary but experimenting with it here
@@ -26,12 +26,30 @@ class_name StoryMapScene extends Control
 @onready var health_hud:HUDElement = %HealthHUD
 @onready var next_button = %NextButton
 
+@export_group("Parallax", "parallax_")
+@export var parallax_layers:Array[CanvasItem] ## node reference
+var _parallax_layers: Array[Vector2] ## starting global position. This could probably be a dict but I'm small brain
+@export var parallax_amount:float = 0.1
+@export var parallax_layer_factor:float = 1.0
+
 var _story_levels_resource:StoryLevelsResource
 var _next_level_index:int
 
 func _ready() -> void:
 	if graph_container.get_child_count() == 0:
 		_update()
+	for layer in parallax_layers:
+		_parallax_layers.append(layer.global_position)
+		
+	Juice.fade_in(next_button, Juice.LONG)
+		
+func _process(delta: float) -> void:
+	for layer_id in parallax_layers.size():
+		parallax_layers[layer_id].global_position = _parallax_layers[layer_id] + (
+			get_global_mouse_position() - (
+				get_viewport().get_visible_rect().size * 0.5
+				)
+			) * (parallax_amount + (layer_id * parallax_layer_factor)) / 4.0
 
 #region Savable
 
@@ -351,6 +369,7 @@ func _create_scrolling_narrative(level:StoryLevel, active_node: StoryLevelNode) 
 
 	# Set text on first instance
 	prototype.get_child(0).text = all_narratives[0]
+	TypewriterEffect.apply_to(prototype.get_child(0))
 
 	# Position above current node if <= bounds and below current node otherwise
 	var active_node_pos:Vector2 = active_node.position

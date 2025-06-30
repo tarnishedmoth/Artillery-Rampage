@@ -14,6 +14,3 @@ offset_top = 40.0
 offset_right = 28.0
 offset_bottom = 63.0
 text = "???"
-
-[node name="RightEdge" parent="." index="3"]
-position = Vector2(22, 0)
