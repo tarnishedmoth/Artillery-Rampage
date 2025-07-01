@@ -33,7 +33,9 @@ func begin_turn():
 	super.begin_turn()
 	
 	print_debug("%s - AI began turn" % [get_parent()])
-	var _popup = popup_message("Thinking...", PopupNotification.PulsePresets.Two, 2.5)
+	
+	if not is_simultaneous_fire_round():
+		var _popup = popup_message("Thinking...", PopupNotification.PulsePresets.Two, 2.5)
 	
 	before_state_selection()
 	
@@ -246,3 +248,11 @@ class AIShootingState extends AIActionState:
 	func _exit():
 		parent.tank.shoot()
 	
+
+func is_simultaneous_fire_round() -> bool:
+	var game_level:GameLevel = SceneManager.get_current_level_root()
+	if game_level != null:
+		return game_level.round_director.is_simultaneous_fire
+	else:
+		push_warning("Outside of a GameLevel")
+		return false

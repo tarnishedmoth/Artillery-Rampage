@@ -43,7 +43,7 @@ is_simultaneous_fire = true
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
 texture_resources = Array[ExtResource("2_vjbc6")]([SubResource("Resource_msmqt"), ExtResource("5_6xt0d")])
 
-[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array(-104, -8, 101.563, -1.47058, 283.594, 1.47058, 385.156, 25, 460.156, 95.5883, 547.656, 29.4117, 639.844, 7.35297, 753.125, 1.47058, 950, -2.94116, 945, 445, -103, 448)
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("5_7gt6j")]
@@ -60,6 +60,9 @@ visible = false
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
 artillery_ai_types = Array[PackedScene]([ExtResource("9_q02cm")])
 ideal_min_spawn_separation = 250.0
+
+[node name="DayWeather" parent="GameLevel" index="12"]
+enabled_tods = Array[int]([0, 1, 2])
 
 [node name="House2" parent="GameLevel" instance=ExtResource("15_i2cnw")]
 position = Vector2(1097, 440)

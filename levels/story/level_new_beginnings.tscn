@@ -31,7 +31,7 @@ shuffle_order = false
 outlineMeshEnabled = false
 texture_resources = Array[ExtResource("2_qmg41")]([SubResource("Resource_fi6ty")])
 
-[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array(-104, -8, 66, -4, 170.313, 47.0588, 288.281, 41.1765, 609, -8, 937, -3, 945, 445, -103, 448)
 
 [node name="Walls" parent="GameLevel" index="5"]
@@ -43,6 +43,9 @@ max_per_orbit_variance = 0
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
 artillery_ai_types = Array[PackedScene]([ExtResource("4_21x2i")])
+
+[node name="DayWeather" parent="GameLevel" index="12"]
+enabled_tods = Array[int]([0])
 
 [node name="Player" parent="GameLevel" instance=ExtResource("6_jwug6")]
 position = Vector2(120, 427)
