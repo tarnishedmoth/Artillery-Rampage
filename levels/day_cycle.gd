@@ -6,13 +6,13 @@ signal transitioned
 
 var duration:float = 240.0
 
-@export var morning:Vector2 = Vector2(-320.0, 120.0):
+@export var morning:Vector2 = Vector2(-400.0, 240.0):
 	get: return starting_position + morning
 
-@export var noon: Vector2 = Vector2(0.0, -120.0):
+@export var noon: Vector2 = Vector2(0.0, -140.0):
 	get: return starting_position + noon
 
-@export var sunset: Vector2 = Vector2(320.0, 120.0):
+@export var sunset: Vector2 = Vector2(400.0, 0.0):
 	get: return starting_position + sunset
 
 @onready var starting_position:Vector2 = get_parent().position
@@ -21,8 +21,12 @@ var duration:float = 240.0
 var tween:Tween
 
 func _ready() -> void:
-	get_parent().position = morning
-	await get_tree().create_timer(duration/3.0)
+	match randi_range(0,1):
+		0:
+			get_parent().position = morning
+		1:
+			get_parent().position = sunset
+	await get_tree().create_timer(duration/3.0).timeout
 	cycle()
 	
 func cycle() -> void:

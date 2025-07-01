@@ -41,7 +41,7 @@ fractal_lacunarity = 1.56
 fractal_gain = 0.645
 fractal_weighted_strength = 0.5
 
-[node name="TestLevelProcGen" type="Node2D"]
+[node name="TestLevelProcGen2" type="Node2D"]
 
 [node name="GameLevel" parent="." instance=ExtResource("1_pnpmv")]
 

@@ -13,7 +13,7 @@ polygon = PackedVector2Array(-18, -2, 10, -4, 23, 0, 10, 4, -18, 2)
 radius = 4.0
 height = 32.0
 
-[node name="WeaponProjectile" type="RigidBody2D" node_paths=PackedStringArray("thrust_sfx")]
+[node name="WeaponProjectile2" type="RigidBody2D" node_paths=PackedStringArray("thrust_sfx")]
 collision_layer = 2
 collision_mask = 29
 continuous_cd = 2
