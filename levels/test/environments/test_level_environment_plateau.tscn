@@ -1,18 +1,10 @@
-[gd_scene load_steps=18 format=3 uid="uid://xbu6vsgqj6ol"]
+[gd_scene load_steps=10 format=3 uid="uid://xbu6vsgqj6ol"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_ebxsw"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_hfb6e"]
 [ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_kba6h"]
 [ext_resource type="Texture2D" uid="uid://byy76mvisn1j0" path="res://terrain/terrain-strata.png" id="3_tlfxd"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="4_msec2"]
-[ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="5_u5fcy"]
-[ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="6_xy84y"]
-[ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="7_36rht"]
-[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="8_qmrmh"]
-[ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="9_dx7xg"]
-[ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="10_w62ko"]
-[ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="11_vkumi"]
-[ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="12_rg0lq"]
 [ext_resource type="PackedScene" uid="uid://dvkouaun7cdld" path="res://environment/procedural_object_plains_spawner.tscn" id="14_gabuw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gabuw"]
@@ -57,7 +49,6 @@ wall_mode = 1
 visible = false
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
-artillery_ai_types = Array[PackedScene]([ExtResource("5_u5fcy"), ExtResource("6_xy84y"), ExtResource("7_36rht"), ExtResource("8_qmrmh"), ExtResource("9_dx7xg"), ExtResource("10_w62ko"), ExtResource("11_vkumi"), ExtResource("12_rg0lq")])
 default_ai_players = Vector2i(3, 4)
 num_ai_teams = 2
 default_human_players = Vector2i(1, 1)
