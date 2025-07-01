@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://uaih1d1o2vd7"]
+[gd_scene load_steps=27 format=3 uid="uid://uaih1d1o2vd7"]
 
 [ext_resource type="Script" uid="uid://bfl71q3d57n8s" path="res://levels/game_level.gd" id="1_c8wet"]
 [ext_resource type="Script" uid="uid://ehj364xag1df" path="res://utils/game_timer.gd" id="1_x4c1e"]
@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://bamvmc2k56pyk" path="res://effects/post_processing/post_processing.tscn" id="19_onnnh"]
 [ext_resource type="PackedScene" uid="uid://dlh1i2cvw3mim" path="res://voiceovers/announcer.tscn" id="20_k1cdv"]
 [ext_resource type="PackedScene" uid="uid://cduo8m7j3bl8g" path="res://progression/difficulty_modifier.tscn" id="21_rs00r"]
+[ext_resource type="Script" uid="uid://cra17reymo1tj" path="res://levels/day_cycle.gd" id="22_2bx2d"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_chthv"]
 shader = ExtResource("6_y871r")
@@ -29,7 +30,19 @@ shader_parameter/speed = 0.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_60ghs"]
 size = Vector2(1248, 688)
 
+[sub_resource type="Gradient" id="Gradient_rs00r"]
+offsets = PackedFloat32Array(0, 0.996503)
+colors = PackedColorArray(0.36, 0.819, 0.9, 1, 0.893948, 0.934432, 0.610706, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2bx2d"]
+gradient = SubResource("Gradient_rs00r")
+width = 1280
+height = 720
+fill_from = Vector2(1, 0.239316)
+fill_to = Vector2(1, 0.773504)
+
 [node name="GameLevel" type="Node2D" groups=["GameLevel"]]
+modulate = Color(0.77, 0.77, 0.77, 1)
 script = ExtResource("1_c8wet")
 
 [node name="GameTimer" type="Node" parent="."]
@@ -101,5 +114,21 @@ unique_name_in_owner = true
 [node name="Announcer" parent="." instance=ExtResource("20_k1cdv")]
 
 [node name="DifficultyModifier" parent="." instance=ExtResource("21_rs00r")]
+
+[node name="TheSunLight" type="PointLight2D" parent="."]
+position = Vector2(640, -640)
+color = Color(0.9, 0.9, 0.9, 1)
+energy = 0.33
+range_item_cull_mask = 3
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 1)
+shadow_filter = 1
+shadow_item_cull_mask = 5
+texture = SubResource("GradientTexture2D_2bx2d")
+offset = Vector2(0, 720)
+texture_scale = 2.5
+
+[node name="DayCycle" type="Node" parent="TheSunLight"]
+script = ExtResource("22_2bx2d")
 
 [editable path="Walls"]

@@ -52,7 +52,7 @@ soundtrack_file = ExtResource("2_2r3lq")
 outline_mesh_dist_threshold = 0.8
 texture_resources = Array[ExtResource("2_qth8w")]([SubResource("Resource_yxvgw"), SubResource("Resource_lsksp")])
 
-[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array(-104, -8, -28.125, -307.353, 50.7813, 29.4117, 414.063, -485.294, 452.344, -295.588, 539.844, -248.529, 639.844, 89.7059, 750, 101.471, 852.344, -305.882, 905.458, -3.48077, 937, -3, 945, 445, -103, 448)
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("2_auldx")]

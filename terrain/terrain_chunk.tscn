@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dmbj0iglwwo7x"]
+[gd_scene load_steps=9 format=3 uid="uid://dmbj0iglwwo7x"]
 
 [ext_resource type="Script" uid="uid://ng7sthm4nght" path="res://terrain/terrain_chunk.gd" id="1_m7lgb"]
 [ext_resource type="Script" uid="uid://dncglgy7n0c4f" path="res://destructible/destructible_poly_operations.gd" id="2_41dms"]
@@ -20,17 +20,31 @@ material = SubResource("ShaderMaterial_m70bf")
 repeat = 3
 offset = Vector2(0, 400)
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_pkghx"]
+
 [node name="TerrainChunk" type="StaticBody2D" groups=["Destructible", "TerrainChunk"]]
 collision_layer = 8
 collision_mask = 59
 script = ExtResource("1_m7lgb")
 texture_resources = Array[ExtResource("2_obytp")]([SubResource("Resource_jrpiv")])
 
+[node name="ShadowWizardMakerGang" type="LightOccluder2D" parent="."]
+unique_name_in_owner = true
+show_behind_parent = true
+light_mask = 2
+visibility_layer = 2
+occluder = SubResource("OccluderPolygon2D_pkghx")
+sdf_collision = false
+occluder_light_mask = 4
+
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 visible = false
 polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 390, -447, 609, -8, 937, -3, 945, 445, -103, 448)
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
+light_mask = 2
+visibility_layer = 2
+antialiased = true
 polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300, -224, 390, -447, 609, -8, 937, -3, 945, 445, -103, 448)
 
 [node name="Overlap" type="Area2D" parent="."]

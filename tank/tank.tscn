@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dvr6bm2hlj5h4"]
+[gd_scene load_steps=20 format=3 uid="uid://dvr6bm2hlj5h4"]
 
 [ext_resource type="Script" uid="uid://capm81lvak2c3" path="res://tank/tank.gd" id="1_0iy80"]
 [ext_resource type="Script" uid="uid://iirywjtssovs" path="res://tank/tank_body.gd" id="2_o5qn2"]
@@ -18,6 +18,9 @@
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1pofo"]
 friction = 100.0
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_dewsc"]
+polygon = PackedVector2Array(-6, -8, -2, -11, 5, -11, 10, -8, 10, 0, 8, 4, 8, 10, -9, 10, -10, 7, -7, 2)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qqqyu"]
 size = Vector2(26, 26)
@@ -52,6 +55,12 @@ sleep_angular_threshold = 0.0174533
 use_parent_material = true
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("7_dewsc")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="TankBody/TankBodySprite"]
+show_behind_parent = true
+scale = Vector2(10, 10)
+occluder = SubResource("OccluderPolygon2D_dewsc")
+sdf_collision = false
 
 [node name="TankBodyCollision" type="CollisionShape2D" parent="TankBody"]
 shape = SubResource("RectangleShape2D_qqqyu")

@@ -12,6 +12,8 @@ class TerrainTexture:
 @onready var collisionMesh: CollisionPolygon2D = $CollisionPolygon2D
 @onready var overlapMesh: CollisionPolygon2D = $Overlap/CollisionPolygon2D
 @onready var destructiblePolyOperations: DestructiblePolyOperations = $DestructiblePolyOperations
+@onready var shadow_wizard_maker_gang: LightOccluder2D = %ShadowWizardMakerGang
+@onready var shadow_wizard_maker_gang_occluder:OccluderPolygon2D = shadow_wizard_maker_gang.occluder
 
 var terrain: Terrain
 
@@ -264,6 +266,9 @@ class DeferredPolygonUpdateApplier:
 		
 		if parent.outlineMeshEnabled: 
 			parent.regenerate_outline_mesh()
+			
+		if "shadow_wizard_maker_gang_occluder" in parent:
+			parent.shadow_wizard_maker_gang_occluder.polygon = new_poly
 
 		parent._can_be_updated = true
 		is_applied = true

@@ -72,8 +72,10 @@ color_ramp = SubResource("Gradient_gugk1")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 color = Color(0.904395, 0.905264, 0.840633, 1)
+range_item_cull_mask = 3
 shadow_enabled = true
 shadow_filter = 1
+shadow_item_cull_mask = 3
 texture = SubResource("GradientTexture2D_f3b2q")
 height = 8.0
 

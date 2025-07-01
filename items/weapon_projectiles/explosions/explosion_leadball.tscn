@@ -84,8 +84,10 @@ scale_amount_max = 0.75
 [node name="PointLight2D" type="PointLight2D" parent="."]
 color = Color(0.904395, 0.905264, 0.840633, 1)
 energy = 0.75
+range_item_cull_mask = 3
 shadow_enabled = true
 shadow_filter = 1
+shadow_item_cull_mask = 3
 texture = SubResource("GradientTexture2D_dj1jv")
 texture_scale = 0.33
 height = 4.0

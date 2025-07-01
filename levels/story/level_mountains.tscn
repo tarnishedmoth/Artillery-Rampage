@@ -40,7 +40,7 @@ outlineMeshEnabled = false
 outline_mesh_dist_threshold = 0.3
 texture_resources = Array[ExtResource("2_ww66m")]([SubResource("Resource_msmqt")])
 
-[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array(-34.375, -186.765, 95.8944, -314.62, 238.281, -317.647, 300, -216.176, 342.969, -51.4706, 360.938, 223.529, 439.844, 308.824, 631.25, 310.294, 653.125, 141.176, 685.938, 11.7647, 718.75, -130.882, 816.406, -129.412, 854.688, 77.9412, 935.938, 107.353, 944.531, 166.176, 945, 445, -103, 448, -101.563, 63.2353, -98.4375, -102.941)
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("5_3wyx6")]

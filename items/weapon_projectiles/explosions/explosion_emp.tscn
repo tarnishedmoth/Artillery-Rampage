@@ -132,7 +132,9 @@ hue_variation_max = 0.38
 [node name="PointLight2D" type="PointLight2D" parent="."]
 color = Color(0.716489, 0.997089, 0.935687, 1)
 energy = 1.25
+range_item_cull_mask = 3
 shadow_enabled = true
 shadow_filter = 1
+shadow_item_cull_mask = 3
 texture = SubResource("GradientTexture2D_dj1jv")
 height = 4.0

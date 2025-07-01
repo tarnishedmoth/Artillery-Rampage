@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bb7kpruyfrk8b"]
+[gd_scene load_steps=9 format=3 uid="uid://bb7kpruyfrk8b"]
 
 [ext_resource type="Script" uid="uid://cmjsdf2jf8epg" path="res://items/weapon_projectiles/weapon_projectile_missile.gd" id="1_i33yu"]
 [ext_resource type="PackedScene" uid="uid://ctbymmvkiyfhu" path="res://items/weapon_projectiles/explosions/explosion_kilonuke.tscn" id="2_4tg6q"]
@@ -6,6 +6,9 @@
 [ext_resource type="AudioStream" uid="uid://clcb4lxiicjhg" path="res://items/weapon_projectiles/missiles/missile_thruster.wav" id="4_37o5p"]
 [ext_resource type="AudioStream" uid="uid://ka2pekrao6yr" path="res://items/weapon_projectiles/missiles/alarm_f.wav" id="5_4gj83"]
 [ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="5_rhfto"]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_4gj83"]
+polygon = PackedVector2Array(-18, -2, 10, -4, 23, 0, 10, 4, -18, 2)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ojyh2"]
 radius = 4.0
@@ -21,12 +24,18 @@ script = ExtResource("1_i33yu")
 behavior = 1
 thrust_sfx = NodePath("MissileThruster/Thruster")
 acquired_target_sfx = NodePath("MissileThruster/AcquiredTarget")
+color = Color(1, 1, 1, 1)
 explosion_to_spawn = ExtResource("2_4tg6q")
 min_falloff_distance = 20.0
 max_falloff_distance = 150.0
 min_damage = 15.0
 max_damage = 80.0
 destructible_scale_multiplier = Vector2(8, 8)
+
+[node name="LightOccluder2D2" type="LightOccluder2D" parent="."]
+show_behind_parent = true
+occluder = SubResource("OccluderPolygon2D_4gj83")
+sdf_collision = false
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.183745, 0.183745)
