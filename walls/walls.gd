@@ -195,7 +195,8 @@ func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 	tracked_projectiles.append(projectile)
 
 	# Need to bind the extra projectile argument to connect
-	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind(projectile))
+	#projectile.completed_lifespan.connect(_on_projectile_destroyed.bind(projectile))
+	projectile.completed_lifespan.connect(_on_projectile_destroyed)
 
 # Bind arguments are passed as an array
 func _on_projectile_destroyed(projectile: WeaponProjectile) -> void:
@@ -207,7 +208,8 @@ func _on_beam_fired(beam: WeaponNonPhysicalBeam) -> void:
 	tracked_beams.append(beam)
 
 	# Need to bind the extra projectile argument to connect
-	beam.completed_lifespan.connect(_on_beam_destroyed.bind(beam))
+	#beam.completed_lifespan.connect(_on_beam_destroyed.bind(beam))
+	beam.completed_lifespan.connect(_on_beam_destroyed)
 
 # Bind arguments are passed as an array
 func _on_beam_destroyed(beam: WeaponNonPhysicalBeam) -> void:

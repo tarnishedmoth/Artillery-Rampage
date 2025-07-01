@@ -102,7 +102,7 @@ func _on_body_entered(_body: Node) -> void: ## Internal signal
 	#print_debug("Deployable body entered")
 	trigger()
 
-func _on_deployable_lifetime_completed() -> void:
+func _on_deployable_lifetime_completed(_var) -> void:
 	_deployed_lifespan_completed += 1
 	if _deployed_lifespan_completed >= deploy_number:
 		destroy()

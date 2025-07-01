@@ -264,11 +264,16 @@ func _update_attributes():
 func shoot() -> bool:
 	var weapon: Weapon = get_equipped_weapon()
 	if check_can_shoot_weapon(weapon):
-		controller.submit_intended_action(weapon.shoot.bind(power), controller)
+		controller.submit_intended_action(_shoot_weapon.bind(weapon, power), controller)
 		return true
 	else:
 		weapon.dry_fire() # For sound effect (if assigned in Weapon scene)
 		return false
+		
+func _shoot_weapon(weapon:Weapon, power:float) -> void:
+	if shooting_trajectory_indicator:
+		shooting_trajectory_indicator.kill_all_projectiles()
+	weapon.shoot(power)
 
 #region Damage and Death
 func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float) -> void:

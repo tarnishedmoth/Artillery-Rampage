@@ -399,7 +399,8 @@ func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 
 	last_opponent_history_entry.fire_time = _get_current_time_seconds()
 	# Need to bind the extra projectile argument to connect
-	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind(projectile, last_opponent_history_entry))
+	#projectile.completed_lifespan.connect(_on_projectile_destroyed.bind(projectile, last_opponent_history_entry))
+	projectile.completed_lifespan.connect(_on_projectile_destroyed.bind(last_opponent_history_entry))
 
 # Bind arguments are passed as an array
 func _on_projectile_destroyed(projectile: WeaponProjectile, opponent_history_entry: OpponentTargetHistory) -> void:

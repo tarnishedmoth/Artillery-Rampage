@@ -199,6 +199,8 @@ var _awaiting_lifespan_completion: int ## Internal: Counter for [signal weapon_a
 var mode:int = 0 ## Subclasses and components can make use of this counter.
 var modes_total:int = 0 ## Subclasses and components can make use of this counter.
 
+var active_projectiles:Array[WeaponProjectile]
+
 var _enforced_projectile_properties:Dictionary
 var _cached_projectile_instance
 
@@ -478,6 +480,7 @@ func stop_all_sounds(_only_looping: bool = true) -> void: # TODO args
 ## [signal WeaponProjectile.completed_lifespan]
 ## and increments an internal counter.
 func _add_projectile_awaiting(projectile: WeaponProjectile) -> void:
+	active_projectiles.append(projectile)
 	projectile.completed_lifespan.connect(_on_projectile_completed_lifespan) # So we know when the projectile is finished.
 	_awaiting_lifespan_completion += 1
 
@@ -515,6 +518,21 @@ func get_projectile_instance() -> Object:
 			push_error("Can't instantiate scene_to_spawn.")
 			_cached_projectile_instance = null
 	return _cached_projectile_instance
+	
+func kill_all_projectiles() -> void:
+	var to_erase:Array
+	for p:WeaponProjectile in active_projectiles:
+		if is_instance_valid(p):
+			p.destroy()
+		else:
+			to_erase.append(p)
+		
+		## Bugged, lazy, thats why this code exists, nothing else uses active_projectiles array except this method.
+		## We have a counter already for how many projectiles we're waiting on.
+		## This is basically duplicate functionality because it's bugged and it could
+		## easily replace the other counter.
+		for x in to_erase:
+			active_projectiles.erase(x)
 
 ## Emits death signals if appropriate and calls [method queue_free].
 func destroy() -> void:
@@ -601,6 +619,7 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 			_setup_new_beam(new_shot, barrel)
 		
 		container.add_child(new_shot)
+		active_projectiles.append(new_shot)
 		
 		#print_debug("Shot fired with ", velocity, " at ", aim_angle)
 		projectile_spawned.emit(new_shot)
@@ -631,8 +650,9 @@ func _setup_new_beam(new_shot: WeaponNonPhysicalBeam, barrel: Marker2D) -> void:
 	new_shot.global_position = barrel.global_position
 	new_shot.aim_angle = barrel.global_rotation
 
-func _on_projectile_completed_lifespan() -> void:
+func _on_projectile_completed_lifespan(projectile:WeaponProjectile) -> void:
 	_awaiting_lifespan_completion -= 1
+	active_projectiles.erase(projectile)
 	
 	if not emit_action_signals: return
 	if not is_shooting: # Wait til we've fired all our shots this action

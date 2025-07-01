@@ -1,7 +1,7 @@
 class_name WeaponNonPhysicalBeam extends Node2D
 ## An alternative to WeaponProjectile for weapons with non-physical bodies
 
-signal completed_lifespan ## Tracked by Weapon class
+signal completed_lifespan(projectile) ## Tracked by Weapon class
 
 @onready var laser_start = $LaserStart
 @onready var laser_end = $LaserEnd
@@ -57,7 +57,7 @@ func explode_and_force_destroy(body:PhysicsBody2D = null, force:bool = false):
 	destroy()
 
 func destroy():
-	completed_lifespan.emit()
+	completed_lifespan.emit(self)
 	queue_free()
 
 func destroy_after_lifetime(lifetime:float = max_lifetime) -> void:

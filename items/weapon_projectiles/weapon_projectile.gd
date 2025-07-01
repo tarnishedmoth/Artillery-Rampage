@@ -14,7 +14,7 @@ class CollisionResult:
 	var global_position: Vector2
 	var collider: Node2D
 
-signal completed_lifespan ## Tracked by Weapon class
+signal completed_lifespan(projectile:WeaponProjectile) ## Tracked by Weapon class
 
 
 # The idea here is that we are using RigidBody2D for the physics behavior
@@ -274,8 +274,8 @@ func destroy():
 		spawn_explosion(explosion_to_spawn)
 	
 	_apply_post_processing()
-		
-	completed_lifespan.emit()
+	completed_lifespan.emit(self)
+	
 	queue_free()
 	
 func destroy_after_lifetime(lifetime:float = max_lifetime) -> void:
@@ -413,7 +413,7 @@ func _get_container() -> Node:
 
 func _emit_completed_lifespan_without_destroying(time:float) -> void:
 	if time > 0.0: await get_tree().create_timer(time).timeout
-	completed_lifespan.emit()
+	completed_lifespan.emit(self)
 	
 func _on_turn_ended() -> void:
 	# Increment turn count
