@@ -25,3 +25,8 @@ static func disable_all_buttons(buttons_container: Container, reenable_timeout:f
 		if is_instance_valid(button):
 			push_warning("UIUtils: Re-enabling button %s after timeout of %fs" % [button.name, reenable_timeout])
 			button.disabled = false
+
+static func desaturate(source:Color, amount:float) -> Color:
+	# Desaturate the color
+		var lum:float = source.get_luminance()
+		return source.lerp(Color(lum, lum, lum, 1.0), amount)

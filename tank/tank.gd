@@ -110,10 +110,17 @@ var debuff_emp_charge:float = 0.0:
 @onready var controller = get_parent()
 @onready var damaged_smoke_particles: CPUParticles2D = %DamagedSmokeParticles
 
+var tank_decor_light_color:Color = Color.WHITE:
+	set(value):
+		tank_decor_light_color = UIUtils.desaturate(value, 0.25) # 25% desaturated
+		
+		for light in lights:
+			light.color = tank_decor_light_color
 
 func _on_update_color():
 	modulate = color
-	%Spotlight.color = color
+	#%Spotlight.color = color
+	tank_decor_light_color = color # Using the setter to config multiple lights
 	# TODO: Setter is not supposed to be called for @onready or initial value but it is so guard against initial nil
 	if turret:
 		turret.modulate = color.darkened(1 - turret_color_value)

@@ -19,13 +19,13 @@ interpolation_color_space = 1
 offsets = PackedFloat32Array(0.0736842, 0.271579, 0.738947)
 colors = PackedColorArray(0.755934, 0.394078, 0.254461, 1, 0.970102, 0.829246, 0, 1, 0, 0, 0, 0.380392)
 
-[sub_resource type="Gradient" id="Gradient_uthto"]
+[sub_resource type="Gradient" id="Gradient_5lmyx"]
 interpolation_mode = 2
 interpolation_color_space = 1
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_dj1jv"]
-gradient = SubResource("Gradient_uthto")
+gradient = SubResource("Gradient_5lmyx")
 width = 256
 height = 256
 use_hdr = true
@@ -83,13 +83,12 @@ scale_amount_max = 0.75
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 color = Color(0.904395, 0.905264, 0.840633, 1)
-energy = 0.75
-range_item_cull_mask = 3
-shadow_enabled = true
+energy = 6.0
+range_item_cull_mask = 7
 shadow_filter = 1
-shadow_item_cull_mask = 3
+shadow_item_cull_mask = 0
 texture = SubResource("GradientTexture2D_dj1jv")
-texture_scale = 0.33
+texture_scale = 0.75
 height = 4.0
 
 [node name="Fire" parent="." instance=ExtResource("3_18emd")]

@@ -46,6 +46,7 @@ script = ExtResource("1_7v7m5")
 particles = [NodePath("CPUParticles2D"), NodePath("Dust")]
 sfx = [NodePath("AudioStreamPlayer2D")]
 lights = [NodePath("PointLight2D")]
+lights_fade_time = 2.5
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("2_h6dvj")
@@ -72,11 +73,12 @@ color_ramp = SubResource("Gradient_gugk1")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 color = Color(0.904395, 0.905264, 0.840633, 1)
-range_item_cull_mask = 3
-shadow_enabled = true
+energy = 8.0
+range_item_cull_mask = 7
 shadow_filter = 1
 shadow_item_cull_mask = 3
 texture = SubResource("GradientTexture2D_f3b2q")
+texture_scale = 2.0
 height = 8.0
 
 [node name="Fire" parent="." instance=ExtResource("3_pjjxo")]
