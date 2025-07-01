@@ -134,6 +134,8 @@ func _ready() -> void:
 		damage_material = damage_material.duplicate()
 
 	_on_update_color()
+	for light in lights:
+		light.hide()
 	scan_available_weapons()
 
 	health = max_health
