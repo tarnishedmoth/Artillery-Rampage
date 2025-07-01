@@ -1,4 +1,4 @@
-class_name ArtillerySpawner extends Node
+class_name ArtillerySpawner extends Node2D
 
 @export var artillery_ai_types: Array[PackedScene] = []
 @export var artillery_ai_starting_weapons: Array[PackedScene] ## These must be of class Weapon

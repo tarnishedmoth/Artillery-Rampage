@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="6_10d8o"]
 [ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="7_byf6e"]
 
-[node name="ArtillerySpawner" type="Node"]
+[node name="ArtillerySpawner" type="Node2D"]
 script = ExtResource("1_2ysy7")
 artillery_ai_types = Array[PackedScene]([ExtResource("2_phkem"), ExtResource("3_byf6e"), ExtResource("4_6mivl"), ExtResource("5_r2wmc"), ExtResource("6_10d8o"), ExtResource("7_byf6e")])
 min_boundary_x_distance = 80.0
