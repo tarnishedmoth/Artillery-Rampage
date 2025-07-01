@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dvr6bm2hlj5h4"]
+[gd_scene load_steps=21 format=3 uid="uid://dvr6bm2hlj5h4"]
 
 [ext_resource type="Script" uid="uid://capm81lvak2c3" path="res://tank/tank.gd" id="1_0iy80"]
 [ext_resource type="Script" uid="uid://iirywjtssovs" path="res://tank/tank_body.gd" id="2_o5qn2"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://cu7a4bvlikg2j" path="res://tank/fall_damage_causer.gd" id="8_5poe7"]
 [ext_resource type="Texture2D" uid="uid://bifkhqeyaoopt" path="res://tank/artillery-turret.png" id="8_73k0t"]
 [ext_resource type="PackedScene" uid="uid://eqdcshl1me76" path="res://effects/smoke_particles.tscn" id="8_adwvx"]
+[ext_resource type="Texture2D" uid="uid://b1rtks5mrjg34" path="res://tank/spotlight.png" id="9_73k0t"]
 [ext_resource type="PackedScene" uid="uid://c2yvcwfpdhnvx" path="res://weapons/weapon_beam_trajectory_previewer.tscn" id="9_ucdxg"]
 [ext_resource type="Script" uid="uid://bybxweqiag1x8" path="res://items/weapon_projectiles/explosions/emp_discharger.gd" id="12_0knov"]
 [ext_resource type="PackedScene" uid="uid://b15v5mova33di" path="res://items/weapon_projectiles/weapon_projectile_emp_widespread.tscn" id="13_sdcn4"]
@@ -28,12 +29,13 @@ size = Vector2(26, 26)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bbvof"]
 size = Vector2(6, 30.8)
 
-[node name="Tank" type="Node2D" node_paths=PackedStringArray("shooting_trajectory_indicator", "beam_trajectory_indicator") groups=["Damageable", "DamageableRoot", "Unit"]]
+[node name="Tank" type="Node2D" node_paths=PackedStringArray("shooting_trajectory_indicator", "beam_trajectory_indicator", "lights") groups=["Damageable", "DamageableRoot", "Unit"]]
 texture_filter = 6
 script = ExtResource("1_0iy80")
 drop_on_death = ExtResource("2_qlwk0")
 shooting_trajectory_indicator = NodePath("WeaponTrajectoryPreviewer")
 beam_trajectory_indicator = NodePath("WeaponBeamTrajectoryPreviewer")
+lights = [NodePath("TankBody/TankTurret/Spotlight")]
 max_power_v_health = ExtResource("3_6i2oc")
 aim_deviation_v_health = ExtResource("4_cvubm")
 damage_material = ExtResource("5_16yu1")
@@ -84,6 +86,20 @@ shape = SubResource("RectangleShape2D_bbvof")
 [node name="WeaponFireLocation" type="Marker2D" parent="TankBody/TankTurret"]
 position = Vector2(0, -33.14)
 rotation = -1.5708
+
+[node name="Spotlight" type="PointLight2D" parent="TankBody/TankTurret"]
+unique_name_in_owner = true
+visible = false
+position = Vector2(0, -20)
+energy = 0.5
+range_item_cull_mask = 3
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 4.0
+shadow_item_cull_mask = 5
+texture = ExtResource("9_73k0t")
+offset = Vector2(0, -187.5)
+texture_scale = 0.75
 
 [node name="Bottom" type="Marker2D" parent="TankBody"]
 position = Vector2(0, 13)

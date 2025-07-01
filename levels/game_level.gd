@@ -7,6 +7,7 @@ class_name GameLevel extends Node2D
 @onready var walls: Walls = %Walls
 @onready var game_timer:GameTimer = %GameTimer
 @onready var post_processing: PostProcessingEffects = %PostProcessing
+@onready var day_weather: Node = %DayWeather
 
 ## Name of level displayed to player
 @export var level_name:StringName

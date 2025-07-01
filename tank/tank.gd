@@ -15,6 +15,7 @@ signal tank_stopped_falling(tank: Tank)
 @export var shooting_trajectory_indicator:Weapon
 ## Trajectory Indicator for beam-based weapons
 @export var beam_trajectory_indicator:Weapon
+@export var lights:Array[CanvasItem]
 
 @export var min_angle:float = -90.0
 @export var max_angle:float = 90.0
@@ -112,12 +113,14 @@ var debuff_emp_charge:float = 0.0:
 
 func _on_update_color():
 	modulate = color
+	%Spotlight.color = color
 	# TODO: Setter is not supposed to be called for @onready or initial value but it is so guard against initial nil
 	if turret:
 		turret.modulate = color.darkened(1 - turret_color_value)
 
 func _ready() -> void:
 	GameEvents.turn_ended.connect(_on_turn_ended)
+	GameEvents.is_nighttime.connect(_on_is_nighttime_changed)
 	# Need to duplicate as we are using a uniform for the start_time and this is shared on all instances
 	# As not using "instance uniform" as this isn't available in compatibility rendering needed for web
 	if damage_material:
@@ -621,3 +624,7 @@ func get_body_reference_points_global() -> PackedVector2Array:
 	]
 
 #endregion
+
+func _on_is_nighttime_changed(yes:bool) -> void:
+	for light in lights:
+			light.visible = yes
