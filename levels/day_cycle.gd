@@ -57,6 +57,12 @@ func _ready() -> void:
 		TOD.Night:
 			night()
 			
+	await GameEvents.round_started
+	if is_night:
+		GameEvents.is_nighttime.emit(true)
+	else:
+		GameEvents.is_nighttime.emit(false)
+		
 	await get_tree().create_timer(day_segment).timeout
 	cycle()
 	

@@ -627,4 +627,4 @@ func get_body_reference_points_global() -> PackedVector2Array:
 
 func _on_is_nighttime_changed(yes:bool) -> void:
 	for light in lights:
-			light.visible = yes
+		light.visible = yes
