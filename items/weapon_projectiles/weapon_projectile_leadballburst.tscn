@@ -18,7 +18,7 @@ min_falloff_distance = 15.0
 max_falloff_distance = 45.0
 min_damage = 4.0
 max_damage = 15.0
-destructible_scale_multiplier = Vector2(5.5, 5.5)
+destructible_scale_multiplier = Vector2(5, 5)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.09, 0.09)
