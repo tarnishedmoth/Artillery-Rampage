@@ -520,22 +520,16 @@ func get_projectile_instance() -> Object:
 	return _cached_projectile_instance
 	
 func kill_all_projectiles() -> void:
-	var to_erase:Array
 	for p:WeaponProjectile in active_projectiles:
 		if is_instance_valid(p):
 			p.destroy()
-		else:
-			to_erase.append(p)
 		
 		## Bugged, lazy, thats why this code exists, nothing else uses active_projectiles array except this method.
 		## We have a counter already for how many projectiles we're waiting on.
 		## This is basically duplicate functionality because it's bugged and it could
 		## easily replace the other counter.
-		for x in to_erase:
-			if x in active_projectiles:
-				active_projectiles.erase(x)
-			to_erase.clear()
-
+	# clear any previously freed projectiles
+	active_projectiles.clear()
 ## Emits death signals if appropriate and calls [method queue_free].
 func destroy() -> void:
 	if emit_action_signals: weapon_destroyed.emit(self)
