@@ -90,8 +90,11 @@ func _place_objects(object_type : ProceduralObjectContraints) -> void:
 func compute_center_bottom_offset(bounds:Rect2) -> Vector2:
 	return Vector2(bounds.position.x + bounds.size.x * 0.5, -(bounds.position.y + bounds.size.y))
 
-func _add_object(node: Node, bounds:Rect2, bottom_center_offset:Vector2) -> void:	
-	container.add_child(node)
+func _add_object(node: Node, bounds:Rect2, bottom_center_offset:Vector2) -> void:
+	#container.add_child(node)
+	# Changed this so that parameters passed from parent to child continue to these objects within the game scene,
+	# such as MODULATE.
+	add_child(node)
 
 	bounds.position += bottom_center_offset
 	bounds = _adjust_bounds_position(bounds, node)
