@@ -68,6 +68,7 @@ stretch_mode = 4
 [node name="Precompilation" parent="." instance=ExtResource("2_krgqr")]
 unique_name_in_owner = true
 position = Vector2(640, 359)
+scene_folders = Array[String](["res://buildings", "res://buildings/boat/", "res://buildings/city/", "res://buildings/evaporator/", "res://buildings/house/", "res://buildings/house_backup/", "res://buildings/lighthouse", "res://effects/post_processing", "res://environment/rocks", "res://environment/trees", "res://items", "res://items/weapon_projectiles", "res://items/weapon_projectiles/explosions", "res://items/rubble", "res://tank", "res://terrain", "res://weapons"])
 
 [node name="ProgressUI" parent="." instance=ExtResource("6_55h8v")]
 unique_name_in_owner = true
