@@ -35,7 +35,7 @@ script = ExtResource("1_0iy80")
 drop_on_death = ExtResource("2_qlwk0")
 shooting_trajectory_indicator = NodePath("WeaponTrajectoryPreviewer")
 beam_trajectory_indicator = NodePath("WeaponBeamTrajectoryPreviewer")
-lights = [NodePath("TankBody/TankTurret/Spotlight")]
+lights = [NodePath("TankBody/TankTurret/Spotlight"), NodePath("TankBody/PointLight2D"), NodePath("TankBody/PointLight2D2")]
 max_power_v_health = ExtResource("3_6i2oc")
 aim_deviation_v_health = ExtResource("4_cvubm")
 damage_material = ExtResource("5_16yu1")
@@ -112,6 +112,22 @@ position = Vector2(13, 0)
 
 [node name="Top" type="Marker2D" parent="TankBody"]
 position = Vector2(0, -13)
+
+[node name="PointLight2D" type="PointLight2D" parent="TankBody"]
+position = Vector2(-12, -10)
+rotation = -1.5708
+energy = 0.55
+texture = ExtResource("9_73k0t")
+offset = Vector2(0, -12)
+texture_scale = 0.25
+
+[node name="PointLight2D2" type="PointLight2D" parent="TankBody"]
+position = Vector2(18, -10)
+rotation = 1.5708
+energy = 0.45
+texture = ExtResource("9_73k0t")
+offset = Vector2(0, -12)
+texture_scale = 0.25
 
 [node name="DamagedSmokeParticles" parent="TankBody" instance=ExtResource("8_adwvx")]
 unique_name_in_owner = true
