@@ -1,16 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://po4aso615xjj"]
+[gd_scene load_steps=11 format=3 uid="uid://po4aso615xjj"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_nycs2"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_a10x2"]
 [ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_5ddo4"]
 [ext_resource type="Texture2D" uid="uid://ba7dq172ainja" path="res://terrain/terrain-strata-beach.png" id="3_kh1qs"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_s2jhl"]
-[ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="7_hpsnb"]
-[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="9_142us"]
-[ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="10_ev1wd"]
-[ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="11_s2ybm"]
-[ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="12_rajqm"]
-[ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="13_ykatp"]
 [ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="14_0ml33"]
 [ext_resource type="PackedScene" uid="uid://dyoeqogv8xoye" path="res://environment/procedural_object_seaside_spawner.tscn" id="16_ju8ix"]
 
@@ -71,7 +65,6 @@ wall_randomization_weights = Dictionary[int, float]({
 visible = false
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
-artillery_ai_types = Array[PackedScene]([ExtResource("7_hpsnb"), ExtResource("9_142us"), ExtResource("10_ev1wd"), ExtResource("11_s2ybm"), ExtResource("12_rajqm"), ExtResource("13_ykatp")])
 default_ai_players = Vector2i(5, 7)
 num_ai_teams = 1
 default_human_players = Vector2i(1, 1)

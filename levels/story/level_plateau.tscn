@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cvfl051e8sedk"]
+[gd_scene load_steps=15 format=3 uid="uid://cvfl051e8sedk"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_3ae2s"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_kvwiq"]
@@ -6,14 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://byy76mvisn1j0" path="res://terrain/terrain-strata.png" id="4_53de2"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_8hr62"]
 [ext_resource type="Resource" uid="uid://dgrisjpfie3hx" path="res://terrain/terrain_outline_grass.tres" id="5_bxbil"]
-[ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="6_num7w"]
-[ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="7_l1cic"]
-[ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="8_8vwy3"]
 [ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="9_i20v3"]
 [ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="10_jb7gp"]
 [ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="11_k0f58"]
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="12_lnoob"]
-[ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="13_fn1nr"]
 [ext_resource type="PackedScene" uid="uid://dvkouaun7cdld" path="res://environment/procedural_object_plains_spawner.tscn" id="14_ljbfk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gabuw"]
@@ -63,7 +59,7 @@ wall_randomization_weights = Dictionary[int, float]({
 visible = false
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
-artillery_ai_types = Array[PackedScene]([ExtResource("6_num7w"), ExtResource("7_l1cic"), ExtResource("8_8vwy3"), ExtResource("9_i20v3"), ExtResource("10_jb7gp"), ExtResource("11_k0f58"), ExtResource("12_lnoob"), ExtResource("13_fn1nr")])
+artillery_ai_types = Array[PackedScene]([ExtResource("9_i20v3"), ExtResource("10_jb7gp"), ExtResource("12_lnoob"), ExtResource("11_k0f58")])
 default_ai_players = Vector2i(3, 4)
 num_ai_teams = 2
 default_human_players = Vector2i(1, 1)

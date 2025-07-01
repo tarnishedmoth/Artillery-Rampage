@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bw47p6vpbsrkn"]
+[gd_scene load_steps=13 format=3 uid="uid://bw47p6vpbsrkn"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_b3eo7"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_8e6i4"]
@@ -6,14 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://my1pco86ryy2" path="res://terrain/terrain-grass-and-dirt.png" id="4_jxaaa"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_v266i"]
 [ext_resource type="Resource" uid="uid://dgrisjpfie3hx" path="res://terrain/terrain_outline_grass.tres" id="5_wf0wo"]
-[ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="6_ekbu6"]
-[ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="7_c083e"]
-[ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="8_b3x1v"]
-[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="9_rtqmd"]
-[ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="10_kiicv"]
-[ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="11_neocr"]
-[ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="12_y6s4d"]
-[ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="13_wgxfo"]
 [ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="14_k2vcv"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="15_x84ix"]
 [ext_resource type="PackedScene" uid="uid://dyoeqogv8xoye" path="res://environment/procedural_object_seaside_spawner.tscn" id="16_nntc6"]
@@ -71,7 +63,6 @@ wall_randomization_weights = Dictionary[int, float]({
 visible = false
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
-artillery_ai_types = Array[PackedScene]([ExtResource("6_ekbu6"), ExtResource("7_c083e"), ExtResource("8_b3x1v"), ExtResource("9_rtqmd"), ExtResource("10_kiicv"), ExtResource("11_neocr"), ExtResource("12_y6s4d"), ExtResource("13_wgxfo")])
 default_ai_players = Vector2i(1, 2)
 ideal_min_spawn_separation = 250.0
 min_boundary_x_distance = 20.0

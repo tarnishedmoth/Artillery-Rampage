@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://d0ckjsiikvkkt"]
+[gd_scene load_steps=16 format=3 uid="uid://d0ckjsiikvkkt"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_fp4gr"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_vjbc6"]
@@ -6,14 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://c6drjfyj22hs4" path="res://terrain/terrain-grass-to-dirt.png" id="4_uocfp"]
 [ext_resource type="Resource" uid="uid://dgrisjpfie3hx" path="res://terrain/terrain_outline_grass.tres" id="5_6xt0d"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_7gt6j"]
-[ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="6_di83b"]
-[ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="7_ja6lr"]
-[ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="8_eshwo"]
 [ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="9_q02cm"]
-[ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="10_bkcnl"]
-[ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="11_vh0ut"]
-[ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="12_3fuhn"]
-[ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="13_l8ici"]
+[ext_resource type="PackedScene" uid="uid://bquwvo2blan2o" path="res://controller/ai/variations/ai_tank_lobber_easy.tscn" id="12_i3677"]
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house/house.tscn" id="15_i2cnw"]
 [ext_resource type="PackedScene" uid="uid://cdu7jxpquqjer" path="res://environment/trees/shatterable_tree.tscn" id="16_mafpu"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="18_6xt0d"]
@@ -64,7 +58,7 @@ consistency = 0.9
 visible = false
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
-artillery_ai_types = Array[PackedScene]([ExtResource("6_di83b"), ExtResource("7_ja6lr"), ExtResource("8_eshwo"), ExtResource("9_q02cm"), ExtResource("10_bkcnl"), ExtResource("11_vh0ut"), ExtResource("12_3fuhn"), ExtResource("13_l8ici")])
+artillery_ai_types = Array[PackedScene]([ExtResource("9_q02cm")])
 ideal_min_spawn_separation = 250.0
 
 [node name="House2" parent="GameLevel" instance=ExtResource("15_i2cnw")]
@@ -82,21 +76,21 @@ position = Vector2(1197, 442)
 [node name="Player" parent="GameLevel" instance=ExtResource("18_6xt0d")]
 position = Vector2(378, 430)
 
-[node name="AITank" parent="GameLevel" instance=ExtResource("6_di83b")]
-position = Vector2(949, 432)
-
-[node name="Tank" parent="GameLevel/AITank" index="0"]
-color = Color(1, 0.445, 0.1, 1)
-
 [node name="ShatterableRock" parent="GameLevel" instance=ExtResource("18_vjbc6")]
 position = Vector2(61, 435)
 
 [node name="ShatterableRock2" parent="GameLevel" instance=ExtResource("18_vjbc6")]
 position = Vector2(707, 497)
 
+[node name="Enemy" parent="GameLevel" instance=ExtResource("12_i3677")]
+position = Vector2(949, 432)
+
+[node name="Tank" parent="GameLevel/Enemy" index="0"]
+color = Color(0.1, 0.175, 1, 1)
+
 [editable path="GameLevel"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]
 [editable path="GameLevel/ArtillerySpawner"]
-[editable path="GameLevel/AITank"]
+[editable path="GameLevel/Enemy"]

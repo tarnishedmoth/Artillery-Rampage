@@ -80,7 +80,7 @@ force_player_goes_first = false
 script = ExtResource("2_rsbj2")
 weapons = Array[PackedScene]([ExtResource("4_hln00"), ExtResource("6_suwir")])
 weapon_count = Vector2i(1, 1)
-artillery_ai_types = Array[PackedScene]([ExtResource("3_kbv8t")])
+artillery_ai_types = Array[PackedScene]([])
 metadata/_custom_type_script = "uid://dwd2f2a37y3g0"
 
 [sub_resource type="Resource" id="Resource_1jm8t"]

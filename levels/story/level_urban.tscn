@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bsn1aw61qtr54"]
+[gd_scene load_steps=15 format=3 uid="uid://bsn1aw61qtr54"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_1jr6l"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_0xmgj"]
@@ -6,14 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://c6drjfyj22hs4" path="res://terrain/terrain-grass-to-dirt.png" id="4_y721a"]
 [ext_resource type="Resource" uid="uid://csj8tgks7843i" path="res://terrain/terrain_outline_road.tres" id="5_cq167"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_pv8ko"]
-[ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="6_rtx7x"]
-[ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="7_5va50"]
-[ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="8_ro8ig"]
-[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="9_o6of5"]
-[ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="10_3dlo6"]
-[ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="11_clyr0"]
-[ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="12_xmwrm"]
-[ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="13_y4s5a"]
 [ext_resource type="PackedScene" uid="uid://0y11k01gaq4w" path="res://buildings/city/city_building_short.tscn" id="15_0xmgj"]
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house/house.tscn" id="15_lmepw"]
 [ext_resource type="PackedScene" uid="uid://cdu7jxpquqjer" path="res://environment/trees/shatterable_tree.tscn" id="16_5w4s6"]
@@ -70,7 +62,6 @@ wall_randomization_weights = Dictionary[int, float]({
 visible = false
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
-artillery_ai_types = Array[PackedScene]([ExtResource("6_rtx7x"), ExtResource("7_5va50"), ExtResource("8_ro8ig"), ExtResource("9_o6of5"), ExtResource("10_3dlo6"), ExtResource("11_clyr0"), ExtResource("12_xmwrm"), ExtResource("13_y4s5a")])
 default_ai_players = Vector2i(2, 4)
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0

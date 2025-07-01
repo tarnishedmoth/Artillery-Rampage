@@ -1,18 +1,14 @@
-[gd_scene load_steps=18 format=3 uid="uid://dl5j6juyhc1qk"]
+[gd_scene load_steps=14 format=3 uid="uid://dl5j6juyhc1qk"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_cnef0"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_ww66m"]
 [ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_27qb1"]
 [ext_resource type="Texture2D" uid="uid://bqxc5xpyuad54" path="res://terrain/terrain-rock.png" id="4_2vfvv"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_3wyx6"]
-[ext_resource type="PackedScene" uid="uid://5tt4q4rs2fkg" path="res://controller/ai/variations/ai_tank_rando.tscn" id="6_x3hhr"]
-[ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="7_2id4r"]
-[ext_resource type="PackedScene" uid="uid://mpnerje7sfp3" path="res://controller/ai/variations/ai_tank_brute_no_wind.tscn" id="8_i56fo"]
 [ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="9_kfgex"]
 [ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="10_miab5"]
 [ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="11_o8mwu"]
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="12_fro7q"]
-[ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="13_y7l5h"]
 [ext_resource type="PackedScene" uid="uid://c0f6pn0mperks" path="res://environment/procedural_object_mountain_spawner.tscn" id="14_ymbvv"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gabuw"]
@@ -65,7 +61,7 @@ wall_randomization_weights = Dictionary[int, float]({
 visible = false
 
 [node name="ArtillerySpawner" parent="GameLevel" index="8"]
-artillery_ai_types = Array[PackedScene]([ExtResource("6_x3hhr"), ExtResource("7_2id4r"), ExtResource("8_i56fo"), ExtResource("9_kfgex"), ExtResource("10_miab5"), ExtResource("11_o8mwu"), ExtResource("12_fro7q"), ExtResource("13_y7l5h")])
+artillery_ai_types = Array[PackedScene]([ExtResource("9_kfgex"), ExtResource("10_miab5"), ExtResource("12_fro7q"), ExtResource("11_o8mwu")])
 default_ai_players = Vector2i(3, 5)
 num_ai_teams = 2
 default_human_players = Vector2i(1, 1)

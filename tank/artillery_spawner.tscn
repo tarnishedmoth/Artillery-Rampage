@@ -1,10 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://d3q2cfp8mqu2x"]
+[gd_scene load_steps=8 format=3 uid="uid://d3q2cfp8mqu2x"]
 
 [ext_resource type="Script" uid="uid://diw3rx144gfuj" path="res://tank/artillery_spawner.gd" id="1_2ysy7"]
-[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_33h1m"]
+[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="2_phkem"]
+[ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="3_byf6e"]
+[ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="4_6mivl"]
+[ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="5_r2wmc"]
+[ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="6_10d8o"]
+[ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="7_byf6e"]
 
 [node name="ArtillerySpawner" type="Node"]
 script = ExtResource("1_2ysy7")
-artillery_ai_types = Array[PackedScene]([ExtResource("2_33h1m")])
+artillery_ai_types = Array[PackedScene]([ExtResource("2_phkem"), ExtResource("3_byf6e"), ExtResource("4_6mivl"), ExtResource("5_r2wmc"), ExtResource("6_10d8o"), ExtResource("7_byf6e")])
 min_boundary_x_distance = 80.0
 ai_colors = Array[Color]([Color(1, 0.1, 0.1, 1), Color(1, 0.34, 0.1, 1), Color(1, 0.73, 0.1, 1), Color(0.985, 1, 0.1, 1), Color(0.1, 1, 0.685, 1), Color(0.1, 0.775, 1, 1), Color(0.1, 0.28, 1, 1), Color(0.52, 0.1, 1, 1), Color(0.88, 0.1, 1, 1), Color(1, 0.1, 0.7, 1)])

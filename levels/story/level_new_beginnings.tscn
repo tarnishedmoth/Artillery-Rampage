@@ -3,8 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_qnumu"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_qmg41"]
 [ext_resource type="Texture2D" uid="uid://ba7dq172ainja" path="res://terrain/terrain-strata-beach.png" id="3_c5en4"]
-[ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="4_dvhh2"]
-[ext_resource type="PackedScene" uid="uid://6b6y8xulf247" path="res://controller/ai/behaviors/rando_ai_behavior.tscn" id="5_oc7lu"]
+[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="4_21x2i"]
+[ext_resource type="PackedScene" uid="uid://bquwvo2blan2o" path="res://controller/ai/variations/ai_tank_lobber_easy.tscn" id="6_6eq0i"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="6_jwug6"]
 [ext_resource type="PackedScene" uid="uid://sa0oyrt453vy" path="res://buildings/lighthouse/light_house.tscn" id="7_yscme"]
 [ext_resource type="PackedScene" uid="uid://3v701qdrjblk" path="res://environment/rocks/precomputed/precomputed_shatterable_rock01.tscn" id="8_6eq0i"]
@@ -41,19 +41,17 @@ wall_mode = 4
 wind_max = 0
 max_per_orbit_variance = 0
 
-[node name="Enemy" parent="GameLevel" instance=ExtResource("4_dvhh2")]
+[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+artillery_ai_types = Array[PackedScene]([ExtResource("4_21x2i")])
+
+[node name="Player" parent="GameLevel" instance=ExtResource("6_jwug6")]
+position = Vector2(120, 427)
+
+[node name="Enemy" parent="GameLevel" instance=ExtResource("6_6eq0i")]
 position = Vector2(653, 442)
 
 [node name="Tank" parent="GameLevel/Enemy" index="0"]
 color = Color(0.1, 0.175, 1, 1)
-
-[node name="AimDamageWobble" parent="GameLevel/Enemy/Tank" index="7"]
-position = Vector2(5, 20)
-
-[node name="RandoAiBehavior" parent="GameLevel/Enemy/StateMachine" index="0" instance=ExtResource("5_oc7lu")]
-
-[node name="Player" parent="GameLevel" instance=ExtResource("6_jwug6")]
-position = Vector2(120, 427)
 
 [node name="Lighthouse" parent="GameLevel" instance=ExtResource("7_yscme")]
 position = Vector2(48, 442)
