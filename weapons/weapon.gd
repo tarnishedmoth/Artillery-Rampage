@@ -532,7 +532,9 @@ func kill_all_projectiles() -> void:
 		## This is basically duplicate functionality because it's bugged and it could
 		## easily replace the other counter.
 		for x in to_erase:
-			active_projectiles.erase(x)
+			if x in active_projectiles:
+				active_projectiles.erase(x)
+			to_erase.clear()
 
 ## Emits death signals if appropriate and calls [method queue_free].
 func destroy() -> void:
