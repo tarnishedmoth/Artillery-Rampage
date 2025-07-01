@@ -112,7 +112,7 @@ var debuff_emp_charge:float = 0.0:
 
 var tank_decor_light_color:Color = Color.WHITE:
 	set(value):
-		tank_decor_light_color = UIUtils.desaturate(value, 0.25) # 25% desaturated
+		tank_decor_light_color = UIUtils.desaturate(value, 0.16) # 16% desaturated
 		
 		for light in lights:
 			light.color = tank_decor_light_color
