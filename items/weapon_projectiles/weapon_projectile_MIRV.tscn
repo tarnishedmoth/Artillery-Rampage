@@ -21,11 +21,11 @@ deploy_scene_to_spawn = ExtResource("2_duidj")
 deploy_number = 3
 deploy_velocity_impulse = 120.0
 deploy_delay = 0.3
+should_explode_on_impact = false
 explosion_to_spawn = ExtResource("3_riydy")
 min_damage = 2.0
 max_damage = 15.0
-destructible_scale_multiplier = Vector2(1, 1)
-should_explode_on_impact = false
+destructible_scale_multiplier = Vector2(7, 7)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.25, 0.25)

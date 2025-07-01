@@ -28,7 +28,7 @@ explosion_to_spawn = ExtResource("2_het2b")
 min_falloff_distance = 25.0
 max_falloff_distance = 80.0
 max_damage = 60.0
-destructible_scale_multiplier = Vector2(6, 6)
+destructible_scale_multiplier = Vector2(7, 7)
 
 [node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="."]
 z_index = 20

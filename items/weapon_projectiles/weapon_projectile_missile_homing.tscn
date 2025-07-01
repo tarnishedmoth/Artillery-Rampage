@@ -30,7 +30,7 @@ min_falloff_distance = 20.0
 max_falloff_distance = 150.0
 min_damage = 15.0
 max_damage = 80.0
-destructible_scale_multiplier = Vector2(8, 8)
+destructible_scale_multiplier = Vector2(9, 9)
 
 [node name="LightOccluder2D2" type="LightOccluder2D" parent="."]
 show_behind_parent = true

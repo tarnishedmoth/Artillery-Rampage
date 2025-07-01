@@ -23,12 +23,12 @@ deploy_velocity_impulse = 240.0
 deploy_delay = 0.1
 color = Color(0.0807833, 0.0807833, 0.0807833, 1)
 max_lifetime = 8.0
+should_explode_on_impact = false
 explosion_to_spawn = ExtResource("3_kndst")
 max_falloff_distance = 50.0
 min_damage = 1.0
 max_damage = 10.0
-destructible_scale_multiplier = Vector2(1, 3)
-should_explode_on_impact = false
+destructible_scale_multiplier = Vector2(4.5, 4.5)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.25, 0.25)
