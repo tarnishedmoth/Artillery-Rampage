@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://d0ckjsiikvkkt"]
+[gd_scene load_steps=20 format=3 uid="uid://d0ckjsiikvkkt"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_fp4gr"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_vjbc6"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c6drjfyj22hs4" path="res://terrain/terrain-grass-to-dirt.png" id="4_uocfp"]
 [ext_resource type="Resource" uid="uid://dgrisjpfie3hx" path="res://terrain/terrain_outline_grass.tres" id="5_6xt0d"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_7gt6j"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="8_w04kr"]
 [ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="9_q02cm"]
 [ext_resource type="PackedScene" uid="uid://bquwvo2blan2o" path="res://controller/ai/variations/ai_tank_lobber_easy.tscn" id="12_i3677"]
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house/house.tscn" id="15_i2cnw"]
@@ -32,6 +33,33 @@ frequency = 0.0102
 fractal_octaves = 3
 fractal_lacunarity = 2.52
 fractal_gain = 0.605
+
+[sub_resource type="Resource" id="Resource_876hk"]
+script = ExtResource("8_w04kr")
+display_name = "Morning"
+sun_position = Vector2(-400, 300)
+sun_energy = 0.31
+ambient_color = Color(0.901961, 0.901961, 0.901961, 1)
+is_dark = false
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[sub_resource type="Resource" id="Resource_vgcik"]
+script = ExtResource("8_w04kr")
+display_name = "Noon"
+sun_position = Vector2(0, -140)
+sun_energy = 0.35
+ambient_color = Color(0.901961, 0.901961, 0.901961, 1)
+is_dark = false
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[sub_resource type="Resource" id="Resource_dwws4"]
+script = ExtResource("8_w04kr")
+display_name = "Afternoon"
+sun_position = Vector2(400, 0)
+sun_energy = 0.28
+ambient_color = Color(0.901961, 0.901961, 0.901961, 1)
+is_dark = false
+metadata/_custom_type_script = "uid://blr3jie556r2m"
 
 [node name="TestLevelProcGen" type="Node2D"]
 
@@ -62,7 +90,7 @@ artillery_ai_types = Array[PackedScene]([ExtResource("9_q02cm")])
 ideal_min_spawn_separation = 250.0
 
 [node name="DayWeather" parent="GameLevel" index="12"]
-enabled_tods = Array[int]([0, 1, 2])
+presets_queue = Array[ExtResource("8_w04kr")]([SubResource("Resource_876hk"), SubResource("Resource_vgcik"), SubResource("Resource_dwws4")])
 
 [node name="House2" parent="GameLevel" instance=ExtResource("15_i2cnw")]
 position = Vector2(1097, 440)

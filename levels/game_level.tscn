@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://uaih1d1o2vd7"]
+[gd_scene load_steps=32 format=3 uid="uid://uaih1d1o2vd7"]
 
 [ext_resource type="Script" uid="uid://bfl71q3d57n8s" path="res://levels/game_level.gd" id="1_c8wet"]
 [ext_resource type="Script" uid="uid://ehj364xag1df" path="res://utils/game_timer.gd" id="1_x4c1e"]
@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://dlh1i2cvw3mim" path="res://voiceovers/announcer.tscn" id="20_k1cdv"]
 [ext_resource type="PackedScene" uid="uid://cduo8m7j3bl8g" path="res://progression/difficulty_modifier.tscn" id="21_rs00r"]
 [ext_resource type="Script" uid="uid://cra17reymo1tj" path="res://levels/day_cycle.gd" id="22_2bx2d"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="23_4edbn"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_chthv"]
 shader = ExtResource("6_y871r")
@@ -29,6 +30,42 @@ shader_parameter/speed = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_60ghs"]
 size = Vector2(1248, 688)
+
+[sub_resource type="Resource" id="Resource_876hk"]
+script = ExtResource("23_4edbn")
+display_name = "Morning"
+sun_position = Vector2(-400, 300)
+sun_energy = 0.31
+ambient_color = Color(0.892612, 0.912973, 0.847658, 1)
+is_dark = false
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[sub_resource type="Resource" id="Resource_vgcik"]
+script = ExtResource("23_4edbn")
+display_name = "Noon"
+sun_position = Vector2(0, -140)
+sun_energy = 0.35
+ambient_color = Color(0.901961, 0.901961, 0.901961, 1)
+is_dark = false
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[sub_resource type="Resource" id="Resource_dwws4"]
+script = ExtResource("23_4edbn")
+display_name = "Afternoon"
+sun_position = Vector2(400, 0)
+sun_energy = 0.28
+ambient_color = Color(0.96245, 0.880774, 0.875271, 1)
+is_dark = false
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[sub_resource type="Resource" id="Resource_3n2a7"]
+script = ExtResource("23_4edbn")
+display_name = "Night"
+sun_position = Vector2(640, -640)
+sun_energy = 0.33
+ambient_color = Color(0.156863, 0.196078, 0.27451, 1)
+is_dark = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"
 
 [sub_resource type="Gradient" id="Gradient_rs00r"]
 offsets = PackedFloat32Array(0, 0.996503)
@@ -118,7 +155,7 @@ unique_name_in_owner = true
 [node name="DayWeather" type="Node" parent="." node_paths=PackedStringArray("sun_light", "game_level")]
 unique_name_in_owner = true
 script = ExtResource("22_2bx2d")
-enabled_tods = Array[int]([0, 1, 2, 3])
+presets_queue = Array[ExtResource("23_4edbn")]([SubResource("Resource_876hk"), SubResource("Resource_vgcik"), SubResource("Resource_dwws4"), SubResource("Resource_3n2a7")])
 sun_light = NodePath("../TheSunLight")
 game_level = NodePath("..")
 

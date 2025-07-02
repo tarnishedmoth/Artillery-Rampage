@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://dnjj6ctq55yvc"]
+[gd_scene load_steps=13 format=3 uid="uid://dnjj6ctq55yvc"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_qnumu"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_qmg41"]
 [ext_resource type="Texture2D" uid="uid://ba7dq172ainja" path="res://terrain/terrain-strata-beach.png" id="3_c5en4"]
 [ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="4_21x2i"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="5_21x2i"]
 [ext_resource type="PackedScene" uid="uid://bquwvo2blan2o" path="res://controller/ai/variations/ai_tank_lobber_easy.tscn" id="6_6eq0i"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="6_jwug6"]
 [ext_resource type="PackedScene" uid="uid://sa0oyrt453vy" path="res://buildings/lighthouse/light_house.tscn" id="7_yscme"]
@@ -16,6 +17,15 @@ texture = ExtResource("3_c5en4")
 repeat = 3
 offset = Vector2(0, 360)
 metadata/_custom_type_script = "uid://43ab121okvpb"
+
+[sub_resource type="Resource" id="Resource_876hk"]
+script = ExtResource("5_21x2i")
+display_name = "Morning"
+sun_position = Vector2(-400, 300)
+sun_energy = 0.31
+ambient_color = Color(0.901961, 0.901961, 0.901961, 1)
+is_dark = false
+metadata/_custom_type_script = "uid://blr3jie556r2m"
 
 [node name="TestLevelLighthouse" type="Node2D"]
 
@@ -45,7 +55,9 @@ max_per_orbit_variance = 0
 artillery_ai_types = Array[PackedScene]([ExtResource("4_21x2i")])
 
 [node name="DayWeather" parent="GameLevel" index="12"]
-enabled_tods = Array[int]([0])
+randomize_starting_tod = false
+day_length = 20.0
+presets_queue = Array[ExtResource("5_21x2i")]([SubResource("Resource_876hk")])
 
 [node name="Player" parent="GameLevel" instance=ExtResource("6_jwug6")]
 position = Vector2(120, 427)
