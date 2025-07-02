@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://dofcv781occp4"]
+
+[ext_resource type="Script" uid="uid://dc4f83cxf83bh" path="res://effects/screen_shake/screen_shake_camera2d.gd" id="1_o3dgc"]
+[ext_resource type="Script" uid="uid://clqf7dxnl8idt" path="res://effects/screen_shake/weapon_projectile_shaker.gd" id="2_xc4il"]
+[ext_resource type="Curve" uid="uid://mu3ilg4q73hb" path="res://effects/screen_shake/trauma_v_max_damage.tres" id="3_iht2y"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ylnpq"]
+noise_type = 3
+frequency = 0.1
+fractal_octaves = 2
+
+[node name="ScreenShakeCamera2D" type="Camera2D"]
+anchor_mode = 0
+script = ExtResource("1_o3dgc")
+decay = 0.6
+max_offset = Vector2(25, 100)
+noise_template = SubResource("FastNoiseLite_ylnpq")
+
+[node name="WeaponProjectileShaker" type="Node2D" parent="." node_paths=PackedStringArray("screen_shake_camera")]
+script = ExtResource("2_xc4il")
+trauma_v_max_damage = ExtResource("3_iht2y")
+screen_shake_camera = NodePath("..")

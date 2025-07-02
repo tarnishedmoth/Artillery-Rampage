@@ -1,9 +1,10 @@
-[gd_scene load_steps=32 format=3 uid="uid://uaih1d1o2vd7"]
+[gd_scene load_steps=33 format=3 uid="uid://uaih1d1o2vd7"]
 
 [ext_resource type="Script" uid="uid://bfl71q3d57n8s" path="res://levels/game_level.gd" id="1_c8wet"]
 [ext_resource type="Script" uid="uid://ehj364xag1df" path="res://utils/game_timer.gd" id="1_x4c1e"]
 [ext_resource type="PackedScene" uid="uid://bg64wc8fibctr" path="res://ui/hud.tscn" id="2_pmdi8"]
 [ext_resource type="PackedScene" uid="uid://btq3rsvojx8jg" path="res://ui/pause_menu.tscn" id="3_272d0"]
+[ext_resource type="PackedScene" uid="uid://dofcv781occp4" path="res://effects/screen_shake/screen_shake_camera2d.tscn" id="3_876hk"]
 [ext_resource type="PackedScene" uid="uid://l1x5kvupj7so" path="res://terrain/terrain.tscn" id="3_nb1rg"]
 [ext_resource type="PackedScene" uid="uid://b7vpl03hcrs3e" path="res://walls/walls.tscn" id="4_h0s8o"]
 [ext_resource type="PackedScene" uid="uid://dgmcs2um4230a" path="res://ui/ui_game_sfx.tscn" id="4_mib3t"]
@@ -86,6 +87,8 @@ script = ExtResource("1_c8wet")
 unique_name_in_owner = true
 process_mode = 1
 script = ExtResource("1_x4c1e")
+
+[node name="ScreenShakeCamera2D" parent="." instance=ExtResource("3_876hk")]
 
 [node name="RoundDirector" type="Node" parent="."]
 unique_name_in_owner = true
@@ -172,4 +175,5 @@ texture = SubResource("GradientTexture2D_2bx2d")
 offset = Vector2(0, 720)
 texture_scale = 2.5
 
+[editable path="ScreenShakeCamera2D"]
 [editable path="Walls"]
