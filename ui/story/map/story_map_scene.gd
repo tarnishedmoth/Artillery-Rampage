@@ -203,7 +203,7 @@ func _generate_nodes() -> Array[StoryLevelNode]:
 	var edge_dir_bias_count:int = 0
 
 	# Start in the middle in y
-	var pos:Vector2 = Vector2(bounds.position.x, (bounds.position.y + bounds.size.y) / 2.0)
+	var pos:Vector2 = Vector2(0, (bounds.position.y + bounds.size.y) / 2.0)
 	
 	for i in range(levels.size()):
 		var level:StoryLevel = levels[i]
@@ -213,8 +213,8 @@ func _generate_nodes() -> Array[StoryLevelNode]:
 			continue
 
 		# Position so that left edge attachment is where we want to add the node
-		#if i > 0:
-		pos.x += node.right_edge.position.x
+		if i > 0:
+			pos.x += node.right_edge.position.x
 
 		print_debug("%s: Add node(%s) at position=%s" % [name, level.name, pos])
 		node.position = pos
