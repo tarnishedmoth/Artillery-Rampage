@@ -77,6 +77,8 @@ var enemy_names: Array[String] = [
 	"Kate Wins It", "Scope Leo", "Orlando Boom", "Nicolas Rage", "Bruce Will Miss",
 	"Sandra Bullet", "Bomb Haul End", "Barton Plink", "Earthquaker", "Bombstation Vita",
 	"Bomb Box Series X", "Team Rocket", "Cannonball Z", "Aimbot", "Center Strike",
+	"Lead Zeppelin", "Boomhowser", "Kantmiss", "Tanksgiving", "Shrapnella", "Explodabeth",
+	"Kablamuel L Jackson", "Sir Aimsalot",
 ]
 
 # Called when the node enters the scene tree for the first time.
