@@ -6,7 +6,8 @@ signal transitioned
 signal cycle_completed
 
 
-@export var randomize_starting_tod:bool = true ## Overrides current_tod on match start if true.
+@export var randomize_starting_state:bool = true ## Overrides current_tod on match start if true.
+@export_enum("Ordered:0", "Random:1") var state_change_logic:int = 0
 
 @export var day_length:float = 240.0 ## In seconds, an entire day cycle. See [member day_segment].
 ## Divides the [member day_length] by the number of entries in [member presets_queue].
@@ -53,7 +54,7 @@ func reset_queue() -> void:
 func _ready() -> void:
 	reset_queue()
 	
-	if randomize_starting_tod:
+	if randomize_starting_state:
 		current_state = _state_queue.pick_random()
 		_state_queue = _state_queue.slice(_state_queue.find(current_state))
 	else:
@@ -74,7 +75,12 @@ func next_state() -> void:
 	_transitions_lengths.clear()
 	
 	if _state_queue.is_empty(): reset_queue()
-	current_state = _state_queue.pop_front()
+	match state_change_logic:
+		0: # Ordered
+			current_state = _state_queue.pop_front()
+		1: # Random
+			current_state = _state_queue.pick_random()
+			_state_queue.erase(current_state)
 	apply_state(current_state)
 	
 	GameEvents.day_weather_changed.emit(current_state, _transitions_lengths.values().reduce(sum))
