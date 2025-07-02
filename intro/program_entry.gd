@@ -1,9 +1,14 @@
 extends Control
 
+@onready var gd_text: Sprite2D = %GDText
+@onready var gd_rocket: Sprite2D = %GDRocket
+@onready var v_box_container: VBoxContainer = $VBoxContainer
+
+
 func _ready() -> void:
 	modulate = Color.BLACK
-	%GameIcon.modulate = Color.TRANSPARENT
-	%MadeInGodot.modulate = Color.TRANSPARENT
+	v_box_container.modulate = Color.TRANSPARENT
+	#%MadeInGodot.modulate = Color.TRANSPARENT
 	#%Precompilation.modulate = Color.TRANSPARENT
 	%ProgressUI.modulate = Color.TRANSPARENT
 	
@@ -12,8 +17,8 @@ func _ready() -> void:
 	%ProgressUI.start()
 	
 	var tween = create_tween()
-	tween.tween_property(%GameIcon, "modulate", Color.WHITE, Juice.PATIENT).set_ease(Tween.EASE_OUT)
-	tween.tween_property(%GameIcon, "position:y", %GameIcon.position.y - 256.0, Juice.VERYLONG).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.tween_property(v_box_container, "modulate", Color.WHITE, Juice.PATIENT).set_ease(Tween.EASE_OUT)
+	tween.tween_property(gd_rocket, "position:y", gd_rocket.position.y - 256.0, Juice.VERYLONG).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	tween.parallel()
 	tween.tween_property(%MadeInGodot, "modulate", Color.WHITE, Juice.LONG).set_ease(Tween.EASE_IN)
 	
