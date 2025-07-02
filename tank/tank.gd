@@ -127,7 +127,7 @@ func _on_update_color():
 
 func _ready() -> void:
 	GameEvents.turn_ended.connect(_on_turn_ended)
-	GameEvents.is_nighttime.connect(_on_is_nighttime_changed)
+	GameEvents.tod_changed.connect(_on_dayweather_tod_changed)
 	# Need to duplicate as we are using a uniform for the start_time and this is shared on all instances
 	# As not using "instance uniform" as this isn't available in compatibility rendering needed for web
 	if damage_material:
@@ -639,6 +639,12 @@ func get_body_reference_points_global() -> PackedVector2Array:
 
 #endregion
 
-func _on_is_nighttime_changed(yes:bool) -> void:
-	for light in lights:
-		light.visible = yes
+func _on_dayweather_tod_changed(tod:DayWeather.TOD, transition_time:float) -> void:
+	await get_tree().create_timer(randfn(transition_time/2.0, transition_time/5.0)).timeout
+	match tod:
+		3: # Nighttime
+			for light in lights:
+				light.show()
+		_: # Daytime
+			for light in lights:
+				light.hide()

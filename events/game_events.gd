@@ -65,6 +65,6 @@ signal wall_interaction(walls: Walls, projectile: WeaponProjectile, interaction_
 ## [param damage] The amount of raw damage that was done to the object. This is always > 0 for Damageable objects and 0 for destructible objects. This is not clamped to damageable object health.
 signal took_damage(object: Node, instigatorController: Node2D, instigator: Node2D, contact_point: Vector2, damage: float)
 
-signal is_nighttime(yes:bool)
+signal tod_changed(new_tod:DayWeather.TOD, transition_time:float)
 
 @warning_ignore_restore("unused_signal")
