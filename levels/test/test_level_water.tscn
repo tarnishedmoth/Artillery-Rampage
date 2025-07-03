@@ -48,15 +48,15 @@ shader_parameter/offset2 = Vector2(0.04, 0.04)
 
 [node name="GameLevel" parent="." instance=ExtResource("1_hr00p")]
 
+[node name="RoundDirector" parent="GameLevel" index="2"]
+player_goes_first = true
+shuffle_order = false
+
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
 texture_resources = Array[ExtResource("2_j7aeg")]([SubResource("Resource_d4u4r")])
 
-[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 209.375, 61.7647, 232.813, -132.353, 260.938, -132.353, 476.563, -407.353, 609, -8, 937, -3, 945, 445, -103, 448)
-
-[node name="RoundDirector" parent="GameLevel" index="7"]
-player_goes_first = true
-shuffle_order = false
 
 [node name="WaterHazard" parent="GameLevel" instance=ExtResource("6_scx2d")]
 position = Vector2(257, 488)
@@ -98,6 +98,7 @@ position = Vector2(425, 460)
 gizmo_extents = 30.0
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]

@@ -8,6 +8,11 @@ class_name WaterHazard extends Node2D
 @export_range(0, 1e9, 1, "or_greater")
 var damage_per_turn:float = 10
 
+## damage_per_turn only applied once if one_time_damage is true
+@export_group("Damage")
+@export
+var one_time_damage:bool = true
+
 @export_group("Damage")
 @export
 var immediate_damage:bool = true
@@ -15,6 +20,8 @@ var immediate_damage:bool = true
 var _damageables:Array[Node] = []
 
 var _immediate_damage_queue:Array[Node] = []
+
+var _recorded_damageables:Dictionary[int, bool] = {}
 
 ## Frequencies for water shader - using prime numbers to lessen chance of wave cancellations
 @export var wave_frequencies:PackedInt32Array = [11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59]
@@ -75,9 +82,15 @@ func _get_collision_rect_global() -> Rect2:
 func _on_overlap_begin(body: PhysicsBody2D) -> void:
 	print_debug("%s: body=%s entered" % [name, body.name])
 	var damageable:Node = Groups.get_parent_in_group(body, Groups.Damageable)
-	if not damageable:
+	if not is_instance_valid(damageable):
 		print_debug("%s - Ignoring non-damageable body=%s" % [name, body.name])
 		return
+
+	# Skip if already damaged and one_time_damage is true
+	if one_time_damage and damageable.get_instance_id() in _recorded_damageables:
+		print_debug("%s: %s already damaged, skipping" % [name, damageable.name])
+		return
+	
 	if damageable in _damageables:
 		print_debug("%s - damageable=%s already in the damage set" % [name, damageable.name])
 		return
@@ -89,7 +102,7 @@ func _on_overlap_begin(body: PhysicsBody2D) -> void:
 	
 	if immediate_damage:
 		_immediate_damage_queue.push_back(damageable)
-	
+		
 func _on_overlap_ended(body: PhysicsBody2D) -> void:
 	print_debug("%s: body=%s exited" % [name, body.name])
 	var damageable:Node = Groups.get_parent_in_group(body, Groups.Damageable)
@@ -107,13 +120,21 @@ func _damage(damageable: Node) -> void:
 	if !is_instance_valid(damageable):
 		return
 
+	# Skip if already damaged and one_time_damage is true
+	if one_time_damage and damageable.get_instance_id() in _recorded_damageables:
+		print_debug("%s: %s already damaged, skipping" % [name, damageable.name])
+		return
+		
 	# Only actually damage if center of damageable is inside the hazard
 	var damage_bounds:Rect2 = _get_collision_rect_global()
 	if !damage_bounds.has_point(damageable.global_position):
 		print_debug("%s: center of %s is not inside the hazard, ignoring damage" % [name, damageable.name])
 		return
-	
+			
 	damageable.take_damage(damageable.owner, self, damage_per_turn)
+	
+	var damageable_id:int = damageable.get_instance_id()
+	_recorded_damageables[damageable_id] = true
 	
 func _damage_all() -> void:
 	for damageable in _damageables:
