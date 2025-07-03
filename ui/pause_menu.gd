@@ -7,6 +7,9 @@ var paused = false;
 @onready var pause_menu: Control = %PauseMenu
 @onready var exit_to_desktop_button: Button = %QuitToDesktop
 
+@onready var round_director: RoundDirector = %RoundDirector
+
+
 ## Super secret cheat codes (shh!)
 enum Keys{UP,DOWN,LEFT,RIGHT,SHOOT}
 enum Cheats{
@@ -19,6 +22,8 @@ enum Cheats{
 	INSTAKILL,
 	NO_WIND,
 	MAX_WIND,
+	INSTAWIN,
+	INSTALOSE
 	}
 var CheatCodes:Dictionary[Array, Cheats] = {
 	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.LEFT,Keys.RIGHT,Keys.LEFT,Keys.RIGHT]: Cheats.FULL_HEALTH,
@@ -30,6 +35,8 @@ var CheatCodes:Dictionary[Array, Cheats] = {
 	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.UP,Keys.UP,Keys.UP,Keys.DOWN]: Cheats.LIGHTNING,
 	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.UP,Keys.UP,Keys.LEFT,Keys.DOWN]: Cheats.NO_WIND,
 	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.UP,Keys.UP,Keys.RIGHT,Keys.DOWN]: Cheats.MAX_WIND,
+	[Keys.DOWN,Keys.UP,Keys.DOWN,Keys.UP,Keys.RIGHT,Keys.UP,Keys.UP,Keys.UP]: Cheats.INSTAWIN,
+	[Keys.DOWN,Keys.UP,Keys.DOWN,Keys.UP,Keys.RIGHT,Keys.DOWN,Keys.DOWN,Keys.DOWN]: Cheats.INSTALOSE
 }
 var input_buffer:Array[Keys]
 var input_buffer_listening:bool = false
@@ -172,6 +179,15 @@ func _check_cheat_code_entered(code:Array[Keys]) -> void:
 				if level_root is GameLevel:
 					var sign:float = 1.0 if level_root.wind.wind.x >= 0.0 else -1.0
 					level_root.wind.wind = Vector2(level_root.wind.wind_max * sign, 0.0)
+					
+			Cheats.INSTAWIN:
+				cheat_name = "PLATINUM CHIP"
+				GameEvents.round_ended.emit()
+				
+			Cheats.INSTALOSE:
+				cheat_name = "COURIER'S FATE"
+				GameEvents.player_died.emit(_get_player_controller())
+				GameEvents.round_ended.emit()
 
 
 		print_debug("-- CHEAT: ", cheat_name)
