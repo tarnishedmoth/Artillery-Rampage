@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://by40b3dms4xj"]
+[gd_scene load_steps=6 format=3 uid="uid://by40b3dms4xj"]
 
 [ext_resource type="Script" uid="uid://cv27a066o2gl5" path="res://ui/story/story_completed.gd" id="1_7ik1a"]
 [ext_resource type="Theme" uid="uid://ddklgnmfj25sv" path="res://ui/story/story_theme.tres" id="1_qc4x1"]
 [ext_resource type="Texture2D" uid="uid://dwo00a3vqhcou" path="res://icon.svg" id="2_8r2ij"]
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="4_lqido"]
+[ext_resource type="PackedScene" uid="uid://8u74efql1hxt" path="res://ui/ar_confirmation_dialog.tscn" id="5_lqido"]
 
 [node name="StoryCompleted" type="Control"]
 layout_mode = 3
@@ -70,5 +71,9 @@ layout_mode = 2
 theme = ExtResource("4_lqido")
 text = "No"
 
+[node name="ARConfirmationDialog" parent="CenterContainer" instance=ExtResource("5_lqido")]
+unique_name_in_owner = true
+
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ButtonsContainer/Yes" to="." method="_on_yes_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ButtonsContainer/No" to="." method="_on_no_pressed"]
+[connection signal="confirmed" from="CenterContainer/ARConfirmationDialog" to="." method="_on_no_confirmed"]

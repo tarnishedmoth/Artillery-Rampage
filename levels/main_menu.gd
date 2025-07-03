@@ -83,6 +83,7 @@ func _on_story_pressed() -> void:
 	if StorySaveUtils.story_save_exists():
 		confirmation_dialog.set_text("Are you sure you want to start a new story?\n This will overwrite your current story progress.")
 		confirmation_dialog.confirmed.connect(_on_new_story_confirmed)
+		confirmation_dialog.canceled.connect(_on_new_story_canceled) # Disconnect to avoid multiple connections
 		confirmation_dialog.popup_centered()
 	else:
 		_new_story()
@@ -90,6 +91,11 @@ func _on_story_pressed() -> void:
 func _on_new_story_confirmed() -> void:
 	_new_story()
 	confirmation_dialog.confirmed.disconnect(_on_new_story_confirmed)
+	
+func _on_new_story_canceled() -> void:
+	print_debug("New story canceled")
+	confirmation_dialog.confirmed.disconnect(_on_new_story_confirmed)
+	confirmation_dialog.canceled.disconnect(_on_new_story_canceled)
 	
 func _new_story() -> void:
 	PlayerStateManager.enable = true
