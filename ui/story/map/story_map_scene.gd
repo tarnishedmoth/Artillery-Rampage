@@ -46,10 +46,11 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	for layer_id in parallax_layers.size():
 		parallax_layers[layer_id].global_position = _parallax_layers[layer_id] + (
-			get_global_mouse_position() - (
-				get_viewport().get_visible_rect().size * 0.5
-				)
+			get_global_mouse_position() - _get_center_screen()
 			) * (parallax_amount + (layer_id * parallax_layer_factor)) / 4.0
+			
+func _get_center_screen() -> Vector2:
+	return get_viewport().get_visible_rect().size * 0.5
 
 #region Savable
 
@@ -149,6 +150,16 @@ func _create_graph() -> void:
 	if story_incomplete:
 		var next_level:StoryLevel = _story_levels_resource.levels[_next_level_index]
 		_create_scrolling_narrative(next_level, active_node)
+		
+	var graph_offset:float
+	var _node_to_center:StoryLevelNode
+	if active_node:
+		_node_to_center = active_node
+	else:
+		_node_to_center = nodes.back()
+	
+	graph_offset = _get_center_screen().x - (_node_to_center.global_position.x + _node_to_center.get_combined_minimum_size().x)
+	graph_container.offset_left = graph_offset
 
 func _generate_or_load_nodes() -> Array[StoryLevelNode]:
 	var saved_state: StoryMapSaveState = _get_save_state()
@@ -259,6 +270,7 @@ func get_edge_dir(node: StoryLevelNode, sign_bias:int) -> Vector2:
 
 func _get_node_width(node: StoryLevelNode) -> float:
 	return node.right_edge.position.x - node.left_edge.position.x
+	#return node.get_minimum_size().x
 
 func _clear_graph() -> void:
 	for i in range(graph_container.get_child_count() - 1, -1, -1):
