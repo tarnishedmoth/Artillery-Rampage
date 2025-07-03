@@ -42,9 +42,14 @@ class RoundData:
 	var enemies_damaged:Dictionary[int, EnemyData]
 	var total_enemies:int
 	
+	# Additional rewards based on groups + metadata when objects destroyed
+	var additional_scrap_rewarded:int
+	var additional_personnel_rewarded:int
+	
 var round_data:RoundData 
 var _player:Player
 var _current_level:GameLevel
+var _rewarded_objects:Dictionary[int, bool] = {}
 
 func _ready() -> void:
 	round_data = RoundData.new() #Simplify null reference checks
@@ -56,9 +61,13 @@ func _ready() -> void:
 	GameEvents.player_added.connect(_on_player_added)
 	GameEvents.turn_started.connect(_on_turn_started)
 	
+	GameEvents.took_damage.connect(_on_object_took_damage)
+	
 @warning_ignore_start("unused_parameter")
 func _on_level_loaded(level: GameLevel) -> void:
 	_current_level = level
+	_rewarded_objects.clear()
+
 	round_data = RoundData.new()
 	print_debug("%s: Level loaded - (name=%s)" % [name, _current_level.level_name])	
 
@@ -160,5 +169,43 @@ func _on_turn_started(player: TankController) -> void:
 		return
 	round_data.turns += 1
 	print_debug("%s: Player turn started (turns=%d)" % [name, round_data.turns])
+
+func _on_object_took_damage(object: Node, instigatorController: Node2D, instigator: Node2D, contact_point: Vector2, damage: float) -> void:
+	if not object.is_in_group(Groups.RewardableOnDestroy):
+		return
+	# Make sure took damage from live player
+	if not instigatorController or not _player or instigatorController != _player:
+		return
+
+	# Check that health is zero
+	if not "health" in object:
+		push_warning("%s: Ignore took damage on %s as no health property available" % [name, object.name])
+		return
+
+	var health:float = float(object.health)
+	if not is_zero_approx(health):
+		return
 	
-# TODO: Listen for event for building/destructible object damage done
+	var object_id:int = object.get_instance_id()
+	if object_id in _rewarded_objects:
+		print_debug("%s: Ignore %s destroyed as already rewarded" % [name, object.name])
+		return
+	
+	if object.has_meta(Groups.RewardOnDestroyDetails.RewardTypeKey) and object.has_meta(Groups.RewardOnDestroyDetails.RewardAmountKey):
+		var reward_type:String = object.get_meta(Groups.RewardOnDestroyDetails.RewardTypeKey)
+		if reward_type.nocasecmp_to(Groups.RewardOnDestroyDetails.Scrap) == 0:
+			var scrap_amount:int = int(object.get_meta(Groups.RewardOnDestroyDetails.RewardAmountKey))
+			round_data.additional_scrap_rewarded += scrap_amount
+			print_debug("%s: Rewarded %d scrap for %s" % [name, scrap_amount, object.name])
+		elif reward_type.nocasecmp_to(Groups.RewardOnDestroyDetails.Personnel) == 0:
+			var personnel_amount:int = int(object.get_meta(Groups.RewardOnDestroyDetails.RewardAmountKey))
+			round_data.additional_personnel_rewarded += personnel_amount
+			print_debug("%s: Rewarded %d personnel for %s" % [name, personnel_amount, object.name])
+		else:
+			push_warning("%s: Unknown reward type '%s' for %s" % [name, reward_type, object.name])
+			return
+	else:
+		push_warning("%s: No reward type and/or reward amount key defined for %s" % [name, object.name])
+		return
+
+	_rewarded_objects[object_id] = true

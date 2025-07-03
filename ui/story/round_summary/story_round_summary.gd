@@ -79,6 +79,10 @@ func _update_attributes() -> void:
 		return
 		
 	var personnel_change:int = _calculate_personnel_change()
+	if stats.additional_personnel_rewarded > 0:
+		print_debug("%s: Awarding additional %d personnel from level-specific rewards" % [name, stats.additional_personnel_rewarded])
+		# Add any additional personnel rewarded
+		personnel_change += stats.additional_personnel_rewarded
 
 	# Player gets scrap even when lose based on collected data
 	var scrap_change:int = _calculate_scrap_earned()
@@ -150,6 +154,11 @@ func _calculate_scrap_earned() -> int:
 			earned_scrap += 1
 
 			print_debug("%s: Awarding 1 scrap for some damage against %s" % [name, enemy_data.name])
+	
+	if stats.additional_scrap_rewarded > 0:
+		print_debug("%s: Awarding additional %d scrap from level-specific rewards" % [name, stats.additional_scrap_rewarded])
+		earned_scrap += stats.additional_scrap_rewarded
+
 	return earned_scrap
 
 func _on_next_pressed() -> void:

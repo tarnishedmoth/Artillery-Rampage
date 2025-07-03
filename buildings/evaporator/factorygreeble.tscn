@@ -7,13 +7,15 @@
 [ext_resource type="Script" uid="uid://bybxweqiag1x8" path="res://items/weapon_projectiles/explosions/emp_discharger.gd" id="5_5gcc6"]
 [ext_resource type="PackedScene" uid="uid://xbbrj3p1ed11" path="res://items/weapon_projectiles/explosions/explosion_emp.tscn" id="6_o07g7"]
 
-[node name="Evaporator" type="Node2D" groups=["Damageable", "DamageableRoot"]]
+[node name="Evaporator" type="Node2D" groups=["Damageable", "DamageableRoot", "RewardableOnDestroy"]]
 script = ExtResource("1_f3koo")
 can_be_emp_charged = true
 emp_discharge_per_turn = 30.0
 display_name = "a factory tower"
 chunk_scene = ExtResource("2_f3koo")
 smoothing = false
+metadata/RewardType = "Scrap"
+metadata/RewardAmount = 4
 
 [node name="UiComponentHealthbar" parent="." node_paths=PackedStringArray("node_with_health") instance=ExtResource("3_ydiim")]
 position = Vector2(0, 16)
