@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://bpq3kfwju28e8"]
+[gd_scene load_steps=39 format=3 uid="uid://bpq3kfwju28e8"]
 
 [ext_resource type="Script" uid="uid://bfl71q3d57n8s" path="res://levels/game_level.gd" id="1_8ylxn"]
 [ext_resource type="Script" uid="uid://ehj364xag1df" path="res://utils/game_timer.gd" id="2_iwr3d"]
@@ -29,6 +29,7 @@
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="21_k8tcd"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="22_4t21x"]
 [ext_resource type="Script" uid="uid://dlosg08ehpwdc" path="res://levels/special/factory.gd" id="22_ja3hk"]
+[ext_resource type="PackedScene" uid="uid://cv6k5ub7mpj8t" path="res://levels/day_weather.tscn" id="28_h1k02"]
 [ext_resource type="PackedScene" uid="uid://xnyh8uolctrv" path="res://buildings/evaporator/factorygreeble.tscn" id="30_5dbbs"]
 [ext_resource type="PackedScene" uid="uid://dkju13ltbvatr" path="res://buildings/evaporator/factorygreeble2.tscn" id="31_2i235"]
 [ext_resource type="Texture2D" uid="uid://32r1u2b1v6jo" path="res://buildings/evaporator/factory_greebles.png" id="32_h1k02"]
@@ -39,6 +40,17 @@ shader_parameter/speed = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_60ghs"]
 size = Vector2(1248, 688)
+
+[sub_resource type="Gradient" id="Gradient_876hk"]
+offsets = PackedFloat32Array(0, 0.996503)
+colors = PackedColorArray(0.36, 0.819, 0.9, 1, 0.893948, 0.934432, 0.610706, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_h1k02"]
+gradient = SubResource("Gradient_876hk")
+width = 1280
+height = 720
+fill_from = Vector2(1, 0.149573)
+fill_to = Vector2(1, 0.84188)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iwr3d"]
 size = Vector2(192, 20)
@@ -84,10 +96,10 @@ z_index = -10
 position = Vector2(118, 444)
 scale = Vector2(1.28, 0.68)
 
-[node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk" index="0"]
+[node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
 polygon = PackedVector2Array()
 
-[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array(-103.125, 7.35297, -53.9063, -16.1765, 19.5313, -36.7647, 75, -36.7647, 128.906, -2.94116, 168.75, 17.647, 229.688, 20.5883, 289.844, 4.41174, 321.094, -29.4117, 335.156, -72.0588, 345.313, -107.353, 361.719, -120.588, 377.344, -107.353, 384.375, -63.2353, 387.5, 4.41174, 394.531, 82.353, 596.094, 82.353, 941.406, 82.353, 945, 445, -103, 448)
 
 [node name="Walls" parent="GameLevel" instance=ExtResource("10_hw8a8")]
@@ -132,6 +144,23 @@ artillery_ai_starting_weapons = Array[PackedScene]([ExtResource("16_4t21x"), Ext
 unique_name_in_owner = true
 
 [node name="Announcer" parent="GameLevel" instance=ExtResource("20_8saf5")]
+
+[node name="DayWeather" parent="GameLevel" node_paths=PackedStringArray("sun_light", "game_level") instance=ExtResource("28_h1k02")]
+sun_light = NodePath("../TheSunLight")
+game_level = NodePath("..")
+
+[node name="TheSunLight" type="PointLight2D" parent="GameLevel"]
+position = Vector2(640, -640)
+color = Color(0.9, 0.9, 0.9, 1)
+energy = 0.33
+range_item_cull_mask = 3
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 1)
+shadow_filter = 1
+shadow_item_cull_mask = 5
+texture = SubResource("GradientTexture2D_h1k02")
+offset = Vector2(0, 720)
+texture_scale = 3.0
 
 [node name="Player" parent="GameLevel" instance=ExtResource("21_iwr3d")]
 position = Vector2(173, 404)

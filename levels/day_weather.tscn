@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://cv6k5ub7mpj8t"]
+
+[ext_resource type="Script" uid="uid://cra17reymo1tj" path="res://levels/day_cycle.gd" id="1_a8uc0"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="2_bs5xx"]
+
+[sub_resource type="Resource" id="Resource_876hk"]
+script = ExtResource("2_bs5xx")
+display_name = "Morning"
+sun_position = Vector2(-400, 300)
+sun_energy = 0.31
+ambient_color = Color(0.892612, 0.912973, 0.847658, 1)
+is_dark = false
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[sub_resource type="Resource" id="Resource_vgcik"]
+script = ExtResource("2_bs5xx")
+display_name = "Noon"
+sun_position = Vector2(0, -140)
+sun_energy = 0.35
+ambient_color = Color(0.901961, 0.901961, 0.901961, 1)
+is_dark = false
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[sub_resource type="Resource" id="Resource_dwws4"]
+script = ExtResource("2_bs5xx")
+display_name = "Afternoon"
+sun_position = Vector2(400, 0)
+sun_energy = 0.28
+ambient_color = Color(0.96245, 0.880774, 0.875271, 1)
+is_dark = false
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[sub_resource type="Resource" id="Resource_3n2a7"]
+script = ExtResource("2_bs5xx")
+display_name = "Night"
+sun_position = Vector2(640, 140)
+sun_energy = 0.33
+ambient_color = Color(0.156863, 0.196078, 0.27451, 1)
+is_dark = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[node name="DayWeather" type="Node"]
+script = ExtResource("1_a8uc0")
+presets_queue = Array[ExtResource("2_bs5xx")]([SubResource("Resource_876hk"), SubResource("Resource_vgcik"), SubResource("Resource_dwws4"), SubResource("Resource_3n2a7")])
