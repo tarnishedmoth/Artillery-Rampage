@@ -17,6 +17,7 @@ var credits_list_is_focused:bool = false
 @onready var soundtrack: AudioStreamPlayer2D = %Soundtrack
 @onready var btn_continue_story:Button = %ContinueStory
 @onready var buttons_container:Container = %MainMenuButtons
+@onready var confirmation_dialog = %ARConfirmationDialog
 
 #endregion
 
@@ -78,7 +79,19 @@ func _on_play_now_pressed() -> void:
 		_disable_buttons()
 
 func _on_story_pressed() -> void:
-	print_debug("Start button")
+	print_debug("New Story Pressed")
+	if StorySaveUtils.story_save_exists():
+		confirmation_dialog.set_text("Are you sure you want to start a new story?\n This will overwrite your current story progress.")
+		confirmation_dialog.confirmed.connect(_on_new_story_confirmed)
+		confirmation_dialog.popup_centered()
+	else:
+		_new_story()
+
+func _on_new_story_confirmed() -> void:
+	_new_story()
+	confirmation_dialog.confirmed.disconnect(_on_new_story_confirmed)
+	
+func _new_story() -> void:
 	PlayerStateManager.enable = true
 	StorySaveUtils.new_story_save()
 	SaveStateManager.add_state_flag(SceneManager.new_story_selected)
@@ -86,7 +99,7 @@ func _on_story_pressed() -> void:
 	SceneManager.play_mode = SceneManager.PlayMode.STORY
 
 	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryStart, 0.0)
-	
+
 	_disable_buttons()
 
 func _on_level_select_pressed() -> void:
