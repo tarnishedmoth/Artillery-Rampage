@@ -51,6 +51,9 @@ const story_shop_scene_file = "res://ui/story/shop/story_shop.tscn"
 const game_over_scene_file = "res://levels/game_over.tscn"
 
 var _current_level_index:int = -1
+var next_level_index:int:
+	get: return 0 if is_on_last_story_level() else _current_level_index + 1
+	
 var _current_level_root_node:GameLevel
 var _current_story_level:StoryLevel
 

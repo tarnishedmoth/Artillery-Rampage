@@ -124,7 +124,7 @@ func _create_graph() -> void:
 	_clear_graph()
 
 	# We display the next story index
-	_next_level_index = SceneManager._current_level_index + 1
+	_next_level_index = SceneManager.next_level_index
 
 	_story_levels_resource = SceneManager.story_levels
 	if not _story_levels_resource or not _story_levels_resource.levels:
