@@ -64,9 +64,9 @@ margins = Vector2(20, 150)
 min_edge_length = 20.0
 max_edge_length = 30.0
 edge_dir_max_count = Vector2i(3, 7)
-parallax_layers = [NodePath("LevelNodesContainer"), NodePath("GridBG")]
-parallax_amount = -0.25
-parallax_layer_factor = -0.05
+parallax_layers = [NodePath("GridBG"), NodePath("LevelNodesContainer")]
+parallax_amount = -0.2
+parallax_layer_factor = -0.04
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
@@ -94,10 +94,10 @@ script = ExtResource("7_464bj")
 texture_repeat = 2
 layout_mode = 1
 anchors_preset = -1
-offset_left = -744.0
-offset_top = -504.0
-offset_right = 1760.0
-offset_bottom = 1208.0
+offset_left = -2024.0
+offset_top = -944.0
+offset_right = 2848.0
+offset_bottom = 1672.0
 texture = ExtResource("7_px7av")
 expand_mode = 1
 stretch_mode = 1

@@ -29,6 +29,7 @@ class_name StoryMapScene extends Control
 @export_group("Parallax", "parallax_")
 @export var parallax_layers:Array[CanvasItem] ## node reference
 var _parallax_layers: Array[Vector2] ## starting global position. This could probably be a dict but I'm small brain
+var _center_node_offset:Vector2
 @export var parallax_amount:float = 0.1
 @export var parallax_layer_factor:float = 1.0
 
@@ -36,8 +37,9 @@ var _story_levels_resource:StoryLevelsResource
 var _next_level_index:int
 
 func _ready() -> void:
-	if graph_container.get_child_count() == 0:
+	if graph_container.get_child_count() == 0: ## In testing, removing these two lines has no impact whether starting a new story or continuing.
 		_update()
+		
 	for layer in parallax_layers:
 		_parallax_layers.append(layer.global_position)
 		
@@ -45,10 +47,11 @@ func _ready() -> void:
 		
 func _process(delta: float) -> void:
 	for layer_id in parallax_layers.size():
-		parallax_layers[layer_id].global_position = _parallax_layers[layer_id] + (
+		parallax_layers[layer_id].global_position = _parallax_layers[layer_id] - _center_node_offset + (
 			get_global_mouse_position() - _get_center_screen()
-			) * (parallax_amount + (layer_id * parallax_layer_factor)) / 4.0
+			) * (parallax_amount + (layer_id * parallax_layer_factor) / 4.0)
 			
+	
 func _get_center_screen() -> Vector2:
 	return get_viewport().get_visible_rect().size * 0.5
 
@@ -158,8 +161,7 @@ func _create_graph() -> void:
 	else:
 		_node_to_center = nodes.back()
 	
-	graph_offset = _get_center_screen().x - (_node_to_center.global_position.x + _node_to_center.get_combined_minimum_size().x)
-	graph_container.offset_left = graph_offset
+	_center_node_offset = Vector2((_node_to_center.global_position.x + _node_to_center.get_combined_minimum_size().x * 0.5) - _get_center_screen().x, 0.0)
 
 func _generate_or_load_nodes() -> Array[StoryLevelNode]:
 	var saved_state: StoryMapSaveState = _get_save_state()
@@ -273,6 +275,8 @@ func _get_node_width(node: StoryLevelNode) -> float:
 	#return node.get_minimum_size().x
 
 func _clear_graph() -> void:
+	#graph_container.set_global_position(Vector2.ZERO) ## Parallax
+	
 	for i in range(graph_container.get_child_count() - 1, -1, -1):
 		var child:Node = graph_container.get_child(i)
 		graph_container.remove_child(child)
@@ -286,7 +290,8 @@ func _clear_graph() -> void:
 		var child:Control = tooltipper.sequence.pop_back()
 		tooltipper.remove_child(child)
 		child.queue_free()
-
+		
+		
 func _create_story_level_node(index:int, metadata:StoryLevel) -> StoryLevelNode:
 	# TODO: Maybe knowing about future node is an unlockable or a more complex strategy is adopted
 	# If it is unlockable then the story sequence would need to be more procedural
