@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://gey66hj1mi8t"]
+[gd_scene load_steps=19 format=3 uid="uid://gey66hj1mi8t"]
 
 [ext_resource type="PackedScene" uid="uid://cwssjadyxw2gg" path="res://environment/procedural_object_spawner.tscn" id="1_rf2od"]
 [ext_resource type="Script" uid="uid://bke3gd68u5yjw" path="res://environment/procedural_object_constraints.gd" id="2_qsifb"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://0y11k01gaq4w" path="res://buildings/city/city_building_short.tscn" id="4_m1dfb"]
 [ext_resource type="PackedScene" uid="uid://cdu7jxpquqjer" path="res://environment/trees/shatterable_tree.tscn" id="4_qsifb"]
 [ext_resource type="PackedScene" uid="uid://br6g03crdregh" path="res://environment/rocks/shatterable_rock01.tscn" id="5_rf2od"]
+[ext_resource type="PackedScene" uid="uid://diynnaqs0omtw" path="res://environment/trees/shatterable_tree2.tscn" id="6_m1dfb"]
 [ext_resource type="PackedScene" uid="uid://dopwqpmocmicx" path="res://environment/rocks/shatterable_rock02.tscn" id="6_qsifb"]
 [ext_resource type="PackedScene" uid="uid://3v701qdrjblk" path="res://environment/rocks/precomputed/precomputed_shatterable_rock01.tscn" id="7_m1dfb"]
 [ext_resource type="PackedScene" uid="uid://csxcn63v0ed70" path="res://environment/rocks/precomputed/precomputed_shatterable_rock02.tscn" id="8_13n4m"]
@@ -34,6 +35,14 @@ scene = ExtResource("4_qsifb")
 min_spacing = 50.0
 count = Vector2i(2, 4)
 max_slant_angle_deg = 20.0
+adjacent_constraints = Dictionary[PackedScene, float]({})
+
+[sub_resource type="Resource" id="Resource_0moj5"]
+script = ExtResource("2_qsifb")
+scene = ExtResource("6_m1dfb")
+min_spacing = 50.0
+count = Vector2i(2, 4)
+max_slant_angle_deg = 10.0
 adjacent_constraints = Dictionary[PackedScene, float]({})
 
 [sub_resource type="Resource" id="Resource_e208n"]
@@ -69,5 +78,5 @@ max_slant_angle_deg = 20.0
 adjacent_constraints = Dictionary[PackedScene, float]({})
 
 [node name="ProceduralObjectResidentialSpawner" instance=ExtResource("1_rf2od")]
-objects = Array[ExtResource("2_qsifb")]([SubResource("Resource_m1dfb"), SubResource("Resource_7vgcl"), SubResource("Resource_13n4m"), SubResource("Resource_e208n"), SubResource("Resource_st2vu"), SubResource("Resource_dl0pb"), SubResource("Resource_unhpm")])
+objects = Array[ExtResource("2_qsifb")]([SubResource("Resource_m1dfb"), SubResource("Resource_7vgcl"), SubResource("Resource_13n4m"), SubResource("Resource_0moj5"), SubResource("Resource_e208n"), SubResource("Resource_st2vu"), SubResource("Resource_dl0pb"), SubResource("Resource_unhpm")])
 randomize_object_priorities = true

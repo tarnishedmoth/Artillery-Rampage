@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://diynnaqs0omtw"]
+
+[ext_resource type="PackedScene" uid="uid://pdcv81wpv3s8" path="res://destructible/shatter/shatterable_object.tscn" id="1_wspcq"]
+[ext_resource type="PackedScene" uid="uid://j0csm15jfdr4" path="res://environment/trees/shatterable_tree2_body.tscn" id="2_5mng5"]
+
+[node name="ShatterableTree2" instance=ExtResource("1_wspcq")]
+
+[node name="TreeBody" parent="BodyContainer" index="0" instance=ExtResource("2_5mng5")]

@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://j0csm15jfdr4"]
+
+[ext_resource type="PackedScene" uid="uid://bekgd5xyqpiwk" path="res://destructible/shatter/shatterable_object_body.tscn" id="1_hkli4"]
+[ext_resource type="Texture2D" uid="uid://hv1bngw1v288" path="res://environment/trees/tree2.png" id="2_4s3lk"]
+[ext_resource type="Script" uid="uid://drmphl37ptnyi" path="res://destructible/shatter/shatter_delaunay.gd" id="3_0y4u2"]
+
+[node name="ShatterableTree2Body" instance=ExtResource("1_hkli4")]
+mass = 1000.0
+center_of_mass_mode = 1
+center_of_mass = Vector2(0, -70)
+
+[node name="Mesh" parent="." index="0"]
+position = Vector2(-52, -51)
+texture = ExtResource("2_4s3lk")
+texture_offset = Vector2(-9.26, 61.18)
+texture_scale = Vector2(3, 3)
+polygon = PackedVector2Array(19, 51, 86.63, 51, 81.63, 35, 57.63, 34, 55.63, 17, 57.63, 3, 80.63, 0, 84.63, -11, 87.63, -27, 82.63, -36, 69.63, -49, 58.63, -49, 36.63, -50, 34.63, -42, 23.63, -42, 21.63, -34, 22.63, -27, 14.63, -24, 11.63, -12, 20.63, -4, 31.63, -2, 42.63, -1, 49.63, 4, 47.63, 34, 26.63, 36)
+
+[node name="Collision" parent="." index="1"]
+visible = false
+
+[node name="ShatterDelaunay" type="Node" parent="DestructiblePolyOperations" index="0"]
+script = ExtResource("3_0y4u2")
+metadata/_custom_type_script = "uid://drmphl37ptnyi"
