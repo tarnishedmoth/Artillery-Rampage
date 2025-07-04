@@ -12,7 +12,7 @@ project_file="project.godot"
 #config/version
 perl -pi -e "s/\d+\.\d+\.\d+/${version}/" $project_file
 
-git add $ini_file
+git add $project_file
 git commit -m "Releasing version ${version}"
 git tag -a "${version}" -m "version ${version}"
 
