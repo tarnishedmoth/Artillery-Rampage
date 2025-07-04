@@ -80,22 +80,22 @@ height_win_size_min_variation = -0.05
 height_win_size_max_variation = 0.05
 max_height_clearance = 60.0
 
-[node name="Walls" parent="GameLevel" index="5"]
+[node name="Walls" parent="GameLevel" index="6"]
 wall_randomization_weights = Dictionary[int, float]({
 0: 1.0,
 1: 1.0,
 4: 0.5
 })
 
-[node name="Floor" parent="GameLevel" index="6"]
+[node name="Floor" parent="GameLevel" index="7"]
 visible = false
 
-[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+[node name="ArtillerySpawner" parent="GameLevel" index="9"]
 default_ai_players = Vector2i(1, 2)
 ideal_min_spawn_separation = 250.0
 min_boundary_x_distance = 20.0
 
-[node name="DayWeather" parent="GameLevel" index="12"]
+[node name="DayWeather" parent="GameLevel" index="13"]
 presets_queue = Array[ExtResource("7_aaafy")]([SubResource("Resource_876hk"), SubResource("Resource_vgcik"), SubResource("Resource_dwws4")])
 
 [node name="WaterHazard" parent="GameLevel" instance=ExtResource("14_k2vcv")]
@@ -108,6 +108,7 @@ position = Vector2(374, 479)
 [node name="ProceduralObjectTropicalSpawner" parent="GameLevel" instance=ExtResource("16_nntc6")]
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]

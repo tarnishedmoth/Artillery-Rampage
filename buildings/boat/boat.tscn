@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://br0qwys1y3pw8"]
+
+[ext_resource type="PackedScene" uid="uid://b00kdwwjo4hg8" path="res://destructible/destructible_object.tscn" id="1_lmjwg"]
+[ext_resource type="PackedScene" uid="uid://bt7f2ad2xja2g" path="res://buildings/boat/boat_chunk.tscn" id="2_d72gw"]
+[ext_resource type="PackedScene" uid="uid://d0fthn43xgog3" path="res://destructible/rubble/rubble_chunks_spawner.tscn" id="3_ywff1"]
+
+[node name="Boat" instance=ExtResource("1_lmjwg")]
+display_name = "Boat"
+chunk_scene = ExtResource("2_d72gw")
+crumbling = true
+create_new_chunks = true
+
+[node name="BoatChunk" parent="." index="0" instance=ExtResource("2_d72gw")]
+
+[node name="RubbleChunksSpawner" parent="." index="2" instance=ExtResource("3_ywff1")]

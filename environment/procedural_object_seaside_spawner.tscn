@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dyoeqogv8xoye"]
+[gd_scene load_steps=11 format=3 uid="uid://dyoeqogv8xoye"]
 
 [ext_resource type="PackedScene" uid="uid://cwssjadyxw2gg" path="res://environment/procedural_object_spawner.tscn" id="1_qi55m"]
 [ext_resource type="Script" uid="uid://bke3gd68u5yjw" path="res://environment/procedural_object_constraints.gd" id="2_w2x4k"]
@@ -9,7 +9,8 @@
 [ext_resource type="Resource" uid="uid://dc5j54tnccd2d" path="res://environment/rocks/precomputed/precomputed_shatterable_rock01_constraints.tres" id="7_haaq8"]
 [ext_resource type="Resource" uid="uid://daqpk2vponnaa" path="res://environment/rocks/precomputed/precomputed_shatterable_rock02_constraints.tres" id="8_r4v2k"]
 [ext_resource type="Resource" uid="uid://ldxbldjxfpsq" path="res://environment/trees/shatterable_tree2_object_constraint.tres" id="9_haaq8"]
+[ext_resource type="Resource" uid="uid://dyiiy1c0israx" path="res://buildings/boat/boat_constraints.tres" id="10_r4v2k"]
 
 [node name="ProceduralObjectTropicalSpawner" instance=ExtResource("1_qi55m")]
-objects = Array[ExtResource("2_w2x4k")]([ExtResource("3_fn3hi"), ExtResource("4_haaq8"), ExtResource("5_r4v2k"), ExtResource("6_jej56"), ExtResource("7_haaq8"), ExtResource("8_r4v2k"), ExtResource("9_haaq8")])
+objects = Array[ExtResource("2_w2x4k")]([ExtResource("3_fn3hi"), ExtResource("4_haaq8"), ExtResource("5_r4v2k"), ExtResource("6_jej56"), ExtResource("7_haaq8"), ExtResource("8_r4v2k"), ExtResource("9_haaq8"), ExtResource("10_r4v2k")])
 randomize_object_priorities = true

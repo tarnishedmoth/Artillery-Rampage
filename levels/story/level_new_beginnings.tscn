@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dnjj6ctq55yvc"]
+[gd_scene load_steps=14 format=3 uid="uid://dnjj6ctq55yvc"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_qnumu"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_qmg41"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://sa0oyrt453vy" path="res://buildings/lighthouse/light_house.tscn" id="7_yscme"]
 [ext_resource type="PackedScene" uid="uid://3v701qdrjblk" path="res://environment/rocks/precomputed/precomputed_shatterable_rock01.tscn" id="8_6eq0i"]
 [ext_resource type="PackedScene" uid="uid://dopwqpmocmicx" path="res://environment/rocks/shatterable_rock02.tscn" id="9_21x2i"]
+[ext_resource type="PackedScene" uid="uid://br0qwys1y3pw8" path="res://buildings/boat/boat.tscn" id="10_jfhj8"]
 
 [sub_resource type="Resource" id="Resource_fi6ty"]
 script = ExtResource("2_qmg41")
@@ -31,7 +32,7 @@ metadata/_custom_type_script = "uid://blr3jie556r2m"
 
 [node name="GameLevel" parent="." instance=ExtResource("1_qnumu")]
 
-[node name="RoundDirector" parent="GameLevel" index="1"]
+[node name="RoundDirector" parent="GameLevel" index="2"]
 lightning_time = 100
 lightning_strength = 0.0
 player_goes_first = true
@@ -44,18 +45,17 @@ texture_resources = Array[ExtResource("2_qmg41")]([SubResource("Resource_fi6ty")
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array(-104, -8, 66, -4, 170.313, 47.0588, 288.281, 41.1765, 609, -8, 937, -3, 945, 445, -103, 448)
 
-[node name="Walls" parent="GameLevel" index="5"]
+[node name="Walls" parent="GameLevel" index="6"]
 wall_mode = 4
 
-[node name="Wind" parent="GameLevel" index="7"]
+[node name="Wind" parent="GameLevel" index="8"]
 wind_max = 0
 max_per_orbit_variance = 0
 
-[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+[node name="ArtillerySpawner" parent="GameLevel" index="9"]
 artillery_ai_types = Array[PackedScene]([ExtResource("4_21x2i")])
 
-[node name="DayWeather" parent="GameLevel" index="12"]
-randomize_starting_tod = false
+[node name="DayWeather" parent="GameLevel" index="13"]
 day_length = 20.0
 presets_queue = Array[ExtResource("5_21x2i")]([SubResource("Resource_876hk")])
 
@@ -74,10 +74,14 @@ position = Vector2(48, 442)
 [node name="ShatterableRock" parent="GameLevel" instance=ExtResource("8_6eq0i")]
 position = Vector2(793, 446)
 
+[node name="Boat" parent="GameLevel" instance=ExtResource("10_jfhj8")]
+position = Vector2(933, 435)
+
 [node name="ShatterableRock2" parent="GameLevel" instance=ExtResource("9_21x2i")]
-position = Vector2(969, 436)
+position = Vector2(1109, 437)
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]

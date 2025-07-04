@@ -37,7 +37,7 @@ fractal_gain = 0.605
 outlineMeshEnabled = false
 texture_resources = Array[ExtResource("2_k7l5h")]([SubResource("Resource_msmqt")])
 
-[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array(-103.906, 91.1765, 27.3438, 97.0588, 180.469, 58.8235, 285.156, 1.47058, 408.594, 105.882, 586.719, 176.471, 746.094, 182.353, 806.25, 129.412, 856.25, 129.412, 883.594, 73.5294, 939.844, 82.353, 945, 445, -103, 448)
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("5_g3v77")]
@@ -47,17 +47,17 @@ height_win_size_min_variation = -0.02
 height_win_size_max_variation = 0.02
 max_height_clearance = 60.0
 
-[node name="Walls" parent="GameLevel" index="5"]
+[node name="Walls" parent="GameLevel" index="6"]
 wall_mode = 4
 
-[node name="Floor" parent="GameLevel" index="6"]
+[node name="Floor" parent="GameLevel" index="7"]
 visible = false
 
-[node name="Wind" parent="GameLevel" index="7"]
+[node name="Wind" parent="GameLevel" index="8"]
 wind_scale = 650.0
 wind_sign_bias = 0.2
 
-[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+[node name="ArtillerySpawner" parent="GameLevel" index="9"]
 default_ai_players = Vector2i(1, 3)
 num_ai_teams = 1
 default_human_players = Vector2i(1, 1)
@@ -79,6 +79,7 @@ scale = Vector2(7.02656, 4.6518)
 [node name="ProceduralObjectPlainsSpawner" parent="GameLevel" instance=ExtResource("16_kdse1")]
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]

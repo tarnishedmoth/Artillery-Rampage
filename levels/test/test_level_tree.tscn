@@ -10,7 +10,7 @@
 
 [node name="GameLevel" parent="." instance=ExtResource("1_hqq45")]
 
-[node name="RoundDirector" parent="GameLevel" index="7"]
+[node name="RoundDirector" parent="GameLevel" index="2"]
 player_goes_first = true
 shuffle_order = false
 
@@ -43,6 +43,7 @@ position = Vector2(960, 438)
 position = Vector2(1190, 440)
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Walls"]
 [editable path="GameLevel/Enemy1"]

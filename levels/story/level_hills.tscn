@@ -48,20 +48,20 @@ frequency = 0.008
 [node name="GameLevel" parent="." instance=ExtResource("1_1hylc")]
 metadata/_edit_lock_ = true
 
-[node name="RoundDirector" parent="GameLevel" index="1"]
+[node name="RoundDirector" parent="GameLevel" index="2"]
 is_simultaneous_fire = true
 
-[node name="Background" parent="GameLevel" index="3"]
+[node name="Background" parent="GameLevel" index="4"]
 metadata/_edit_lock_ = true
 
-[node name="Terrain" parent="GameLevel" index="4"]
+[node name="Terrain" parent="GameLevel" index="5"]
 metadata/_edit_lock_ = true
 
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
 texture_resources = Array[ExtResource("2_kfkss")]([SubResource("Resource_jrpiv"), ExtResource("5_evx1h")])
 metadata/_edit_lock_ = true
 
-[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array()
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" node_paths=PackedStringArray("stop_at") instance=ExtResource("2_l3r7e")]
@@ -109,7 +109,7 @@ consistency = 0.8
 [node name="Start" type="Marker2D" parent="GameLevel/Terrain/ProceduralTerrainModifier3"]
 position = Vector2(546.875, 13.2353)
 
-[node name="Walls" parent="GameLevel" index="5"]
+[node name="Walls" parent="GameLevel" index="6"]
 wall_randomization_weights = Dictionary[int, float]({
 0: 0.0,
 1: 1.0,
@@ -118,11 +118,11 @@ wall_randomization_weights = Dictionary[int, float]({
 })
 metadata/_edit_lock_ = true
 
-[node name="Floor" parent="GameLevel" index="6"]
+[node name="Floor" parent="GameLevel" index="7"]
 visible = false
 metadata/_edit_lock_ = true
 
-[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+[node name="ArtillerySpawner" parent="GameLevel" index="9"]
 artillery_ai_types = Array[PackedScene]([ExtResource("3_iqtpf"), ExtResource("4_y45k5"), ExtResource("5_tislf"), ExtResource("6_dpkxb"), ExtResource("7_onhht"), ExtResource("8_scdsq"), ExtResource("9_qfat7"), ExtResource("10_36d0b")])
 default_ai_players = Vector2i(1, 4)
 default_human_players = Vector2i(1, 1)
@@ -131,6 +131,7 @@ ideal_min_spawn_separation = 250.0
 [node name="ProceduralObjectPlainsSpawner" parent="GameLevel" instance=ExtResource("11_rrpa8")]
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]

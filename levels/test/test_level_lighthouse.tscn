@@ -48,6 +48,7 @@ position = Vector2(48, 442)
 position = Vector2(937, 443)
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Walls"]
 [editable path="GameLevel/Enemy1"]

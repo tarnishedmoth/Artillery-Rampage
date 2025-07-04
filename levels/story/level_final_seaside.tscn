@@ -32,7 +32,7 @@ fractal_gain = 0.605
 
 [node name="GameLevel" parent="." instance=ExtResource("1_nycs2")]
 
-[node name="RoundDirector" parent="GameLevel" index="1"]
+[node name="RoundDirector" parent="GameLevel" index="2"]
 player_goes_first = true
 
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
@@ -40,11 +40,11 @@ outlineMeshEnabled = false
 outline_mesh_dist_threshold = 0.4
 texture_resources = Array[ExtResource("2_a10x2")]([SubResource("Resource_msmqt")])
 
-[node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk" index="0"]
+[node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
 visible = true
 polygon = PackedVector2Array()
 
-[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array(-101.563, 166.176, -64.0625, -352.941, 13.2813, -357.353, 0, 52.9412, 62.5, 61.7647, 109.375, -77.9412, 192.969, -79.4117, 182.813, 127.941, 262.5, 135.294, 299.219, 33.8235, 361.719, 38.2353, 378.125, -301.471, 477.344, -295.588, 477.344, -151.471, 429.688, 180.882, 487.5, 179.412, 489.844, 282.353, 514.063, 323.529, 567.969, 323.529, 585.156, 210.294, 624.219, 80.8823, 687.5, 80.8823, 696.094, 263.235, 790.625, 261.765, 846.094, 166.176, 921.094, 172.059, 945, 445, -103, 448)
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("5_s2jhl")]
@@ -54,17 +54,17 @@ height_win_size_min_variation = -0.08
 height_win_size_max_variation = 0.08
 max_height_clearance = 60.0
 
-[node name="Walls" parent="GameLevel" index="5"]
+[node name="Walls" parent="GameLevel" index="6"]
 wall_randomization_weights = Dictionary[int, float]({
 0: 1.0,
 1: 1.0,
 2: 1.0
 })
 
-[node name="Floor" parent="GameLevel" index="6"]
+[node name="Floor" parent="GameLevel" index="7"]
 visible = false
 
-[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+[node name="ArtillerySpawner" parent="GameLevel" index="9"]
 default_ai_players = Vector2i(5, 7)
 num_ai_teams = 1
 default_human_players = Vector2i(1, 1)
@@ -91,6 +91,7 @@ scale = Vector2(0.285773, 0.792226)
 [node name="ProceduralObjectTropicalSpawner" parent="GameLevel" instance=ExtResource("16_ju8ix")]
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]
