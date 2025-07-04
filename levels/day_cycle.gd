@@ -5,6 +5,7 @@ signal env_transitioned
 signal transitioned
 signal cycle_completed
 
+const PRECIPITATION_SCENE = preload("res://effects/precipitation.tscn")
 
 @export var randomize_starting_state:bool = true ## Overrides current_tod on match start if true.
 @export_enum("Ordered:0", "Random:1") var state_change_logic:int = 0
@@ -19,6 +20,10 @@ var day_segment:float:
 var current_state:DayWeatherState
 
 var is_night:bool = true ## Status of the environment/modulate, not necessarily "TOD"
+
+@export_group("Weather")
+@export var randomize_precipitation:bool = true
+@export_enum("None:0", "Raining:1") var precipitation_type:int = 0
 
 @export_group("Export Nodes")
 @export var sun_light:PointLight2D
@@ -37,6 +42,8 @@ var _transitions_lengths:Dictionary[StringName, float] = {}
 var sum:Callable = func(a,b): return a+b
 
 var next_state_timer:Timer
+
+var _active_weather_node:Node2D
 
 func _enter_tree() -> void:
 	next_state_timer = Timer.new()
@@ -59,6 +66,9 @@ func _ready() -> void:
 		_state_queue = _state_queue.slice(_state_queue.find(current_state))
 	else:
 		current_state = presets_queue.front()
+		
+	if randomize_precipitation:
+		current_state.precipitation = true if randf() > 0.9 else false
 		
 	## Setup for start
 	apply_state(current_state, true)
@@ -91,6 +101,7 @@ func apply_state(state:DayWeatherState, immediate:bool = false) -> void:
 	is_night = state.is_dark
 	change_ambient(state.ambient_color, immediate)
 	change_sun(state.sun_position, state.sun_energy, immediate)
+	change_weather(state.precipitation)
 	
 	
 func change_sun(new_position:Vector2, new_energy:float = starting_energy, immediate:bool = false) -> void: #, hold:float) -> Tween:
@@ -144,6 +155,20 @@ func change_ambient(mod_color:Color, immediate:bool = false) -> void:
 		game_level.modulate = mod_color
 		_on_transition_completed.call_deferred()
 		
+
+func change_weather(precipitation:bool) -> void:
+	## TODO: amount of rain (intensity), wind affecting particles, tank lights catching particles
+	if precipitation:
+		if _active_weather_node:
+			# Already raining
+			return
+		else:
+			_active_weather_node = PRECIPITATION_SCENE.instantiate()
+			add_child(_active_weather_node)
+	else:
+		if _active_weather_node:
+			_active_weather_node.queue_free()
+
 
 func transition_time() -> float:
 	return randf_range(Juice.LONG, Juice.VERYLONG)

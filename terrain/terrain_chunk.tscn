@@ -34,7 +34,6 @@ show_behind_parent = true
 light_mask = 2
 visibility_layer = 2
 occluder = SubResource("OccluderPolygon2D_pkghx")
-sdf_collision = false
 occluder_light_mask = 4
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]

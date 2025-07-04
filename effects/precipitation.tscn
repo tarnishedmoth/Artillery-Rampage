@@ -1,0 +1,80 @@
+[gd_scene load_steps=9 format=3 uid="uid://dt07m835543w6"]
+
+[ext_resource type="Texture2D" uid="uid://ctki8b1hsuh3k" path="res://effects/raindrop_texture.tres" id="1_3p5hu"]
+
+[sub_resource type="Gradient" id="Gradient_3p5hu"]
+colors = PackedColorArray(1, 1, 1, 0.603922, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_g4q2l"]
+gradient = SubResource("Gradient_3p5hu")
+width = 16
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_g4q2l"]
+particle_flag_align_y = true
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(660, -24, 0)
+emission_shape = 3
+emission_box_extents = Vector3(640, 1, 1)
+direction = Vector3(0, 1, 0)
+spread = 2.0
+initial_velocity_min = 640.0
+initial_velocity_max = 680.0
+gravity = Vector3(0, 98, 0)
+color_initial_ramp = SubResource("GradientTexture1D_g4q2l")
+collision_mode = 2
+sub_emitter_mode = 3
+sub_emitter_amount_at_collision = 3
+
+[sub_resource type="Gradient" id="Gradient_g4q2l"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_cq8nu"]
+gradient = SubResource("Gradient_g4q2l")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_igwdn"]
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 30.0
+flatness = 1.0
+initial_velocity_min = 24.0
+initial_velocity_max = 30.0
+gravity = Vector3(0, 98, 0)
+color_ramp = SubResource("GradientTexture1D_cq8nu")
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_3jiq0"]
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 16, 0, 16)
+
+[node name="Precipitation" type="Node2D"]
+
+[node name="Raindrop" type="GPUParticles2D" parent="."]
+modulate = Color(0.540881, 0.781596, 0.906216, 1)
+top_level = true
+light_mask = 2
+visibility_layer = 2
+amount = 128
+sub_emitter = NodePath("Splash")
+texture = ExtResource("1_3p5hu")
+lifetime = 2.0
+explosiveness = 0.1
+randomness = 0.1
+fixed_fps = 24
+collision_base_size = 2.0
+visibility_rect = Rect2(0, 0, 1280, 720)
+process_material = SubResource("ParticleProcessMaterial_g4q2l")
+
+[node name="Splash" type="GPUParticles2D" parent="Raindrop"]
+emitting = false
+amount = 16
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+use_fixed_seed = true
+seed = 1
+fixed_fps = 18
+process_material = SubResource("ParticleProcessMaterial_igwdn")
+
+[node name="TestLightOccluder2D" type="LightOccluder2D" parent="."]
+visible = false
+position = Vector2(312, 323)
+occluder = SubResource("OccluderPolygon2D_3jiq0")
