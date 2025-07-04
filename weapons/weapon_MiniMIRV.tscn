@@ -15,6 +15,7 @@ stream_0/stream = ExtResource("3_f8es1")
 script = ExtResource("1_0yig6")
 scene_to_spawn = ExtResource("2_b70co")
 display_name = "MIRV Mini"
+description = "Fires a projectile that explodes in air quickly and breaks into smaller projectiles that fall and damage targets on impact."
 accuracy_angle_spread = 0.0698132
 fire_velocity = 1000.0
 power_launch_speed_mult = 1.1

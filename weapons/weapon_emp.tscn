@@ -14,6 +14,7 @@ stream_0/stream = ExtResource("3_gu30n")
 script = ExtResource("1_i3iqj")
 scene_to_spawn = ExtResource("2_cj6ii")
 display_name = "EMP"
+description = "Disables targets caught in its radius for a turn."
 accuracy_angle_spread = 0.0174533
 fire_velocity = 1000.0
 retain_when_empty = false

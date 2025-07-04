@@ -57,6 +57,9 @@ var parent_tank: Tank
 			return str(display_name + ": Modified")
 		else: return display_name
 
+## Used by the Story Shop UI to provide tooltip info about the weapon.
+@export_multiline var description: String
+
 ## Used for applying upgrades and nerfs at runtime. This array is applied in the [method _ready] function.
 ## The [ModWeapon] directly (permanently) alters the exposed properties of this instance.
 ## They can contain [ModProjectile] within that is automatically applied to [WeaponProjectile]

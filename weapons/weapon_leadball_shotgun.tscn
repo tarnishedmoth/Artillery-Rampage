@@ -19,6 +19,7 @@ stream_2/volume = -6.0
 script = ExtResource("1_78ohm")
 scene_to_spawn = ExtResource("2_flncf")
 display_name = "Shot Gun"
+description = "Fires a more powerful burst of projectiles for a short range that have higher impact damage."
 accuracy_angle_spread = 0.314159
 fire_velocity = 1000.0
 number_of_scenes_to_spawn = 8

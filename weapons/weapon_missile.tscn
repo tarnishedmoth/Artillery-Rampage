@@ -15,6 +15,7 @@ stream_0/stream = ExtResource("3_ltdyu")
 script = ExtResource("1_bbd4g")
 scene_to_spawn = ExtResource("2_cm802")
 display_name = "Hellfire"
+description = "Fires a hellfire missile that quickly accelerates downward once it reaches its apex.  Uses magazines to manage its ammo that must be purchased in bulk."
 fire_velocity = 1500.0
 power_launch_speed_mult = 1.25
 use_ammo = true

@@ -7,6 +7,7 @@ var shop_item:ShopItemResource
 
 @onready var weapon_buy_control: WeaponBuyControl = $WeaponBuy
 @onready var ammo_purchase_control: AmmoPurchaseControl = $AmmoPurchase
+@onready var description_container: Container = %DescriptionContainer
 
 var weapon:Weapon:
 	get: return _existing_weapon if _existing_weapon else _new_weapon
@@ -63,7 +64,14 @@ func _ready() -> void:
 		return
 	
 	# Use new weapon so it doesn't show "Modified"
-	weapon_label.text = _new_weapon.display_name
+	weapon_label.text = weapon.display_name
+	
+
+	# Display a tooltip containing the weapon description if available
+	if weapon.description:
+		description_container.tooltip_text = weapon.description
+		# set mouse filter to stop to make the tooltip able to appear
+		description_container.mouse_filter = Control.MOUSE_FILTER_STOP
 	
 	weapon_buy_control.weapon = weapon
 	weapon_buy_control.player_state = player_state

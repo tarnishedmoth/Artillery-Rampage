@@ -15,6 +15,7 @@ stream_0/stream = ExtResource("5_54r5s")
 script = ExtResource("1_ajd5j")
 scene_to_spawn = ExtResource("2_u3ymg")
 display_name = "Lead Ball Burst"
+description = "Fires multiple lead ball projectiles that spread out and cover a larger area than a single lead ball."
 accuracy_angle_spread = 0.0872665
 fire_velocity = 900.0
 power_launch_speed_mult = 0.9

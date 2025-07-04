@@ -15,6 +15,7 @@ stream_0/stream = ExtResource("3_jc2w8")
 script = ExtResource("1_ij436")
 scene_to_spawn = ExtResource("2_fwcj5")
 display_name = "MIRV"
+description = "Fires a projectile that has a higher range than the mini-MIRV and breaks into smaller projectiles that fall and damage targets on impact with greater effect."
 fire_velocity = 1000.0
 power_launch_speed_mult = 1.1
 use_fire_rate = true

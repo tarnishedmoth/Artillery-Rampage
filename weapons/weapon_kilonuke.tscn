@@ -16,6 +16,7 @@ stream_1/volume = 0.0
 script = ExtResource("1_miv0k")
 scene_to_spawn = ExtResource("2_pqsvc")
 display_name = "Kilo Nuke"
+description = "Fires a powerful projectile that has a large area of effect."
 accuracy_angle_spread = 0.0349066
 fire_velocity = 1000.0
 retain_when_empty = false
