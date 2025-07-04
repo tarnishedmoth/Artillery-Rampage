@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bpy071ovoevnq"]
+[gd_scene load_steps=11 format=3 uid="uid://bpy071ovoevnq"]
 
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="1_1lcqw"]
 [ext_resource type="Script" uid="uid://bn7hgaa71swpl" path="res://levels/main_menu.gd" id="1_3vdg5"]
@@ -9,6 +9,7 @@
 [ext_resource type="VideoStream" uid="uid://vnivder7uust" path="res://videos/main_menu.ogv" id="5_6flho"]
 [ext_resource type="PackedScene" uid="uid://8u74efql1hxt" path="res://ui/ar_confirmation_dialog.tscn" id="6_ofye2"]
 [ext_resource type="PackedScene" uid="uid://da23m08ml50op" path="res://ui/options_menu.tscn" id="6_snioo"]
+[ext_resource type="PackedScene" uid="uid://drs0e27vsvk42" path="res://ui/project_version_label.tscn" id="8_7ty7c"]
 
 [node name="MainMenu" type="Node2D" node_paths=PackedStringArray("revealables")]
 script = ExtResource("1_3vdg5")
@@ -246,6 +247,11 @@ size_flags_stretch_ratio = 0.05
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.25
+
+[node name="ProjectVersionLabel" parent="Controls/MainMenu" instance=ExtResource("8_7ty7c")]
+layout_mode = 2
+horizontal_alignment = 2
+vertical_alignment = 2
 
 [node name="BottomSpacer" type="Control" parent="Controls/MainMenu"]
 layout_mode = 2
