@@ -1,0 +1,101 @@
+[gd_resource type="Resource" script_class="AIRunModifiers" load_steps=26 format=3 uid="uid://cctq101dy4htk"]
+
+[ext_resource type="Script" uid="uid://popvifyikjk6" path="res://story/ai_run_modifiers.gd" id="1_ybfsi"]
+[ext_resource type="Script" uid="uid://ck01216jo3djh" path="res://story/ai_run_weapon_config.gd" id="2_pb4wx"]
+[ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="3_ktv0m"]
+[ext_resource type="PackedScene" uid="uid://hlpewhe5vg2k" path="res://weapons/weapon_leadball_shotgun.tscn" id="4_xkfx1"]
+[ext_resource type="PackedScene" uid="uid://dychmx0p2ex84" path="res://weapons/weapon_bouncing_ball.tscn" id="5_ud48d"]
+[ext_resource type="PackedScene" uid="uid://b86jghsmvnyg8" path="res://weapons/weapon_shield.tscn" id="6_j1oc6"]
+[ext_resource type="PackedScene" uid="uid://ccl2oyo13754i" path="res://weapons/weapon_MiniMIRV.tscn" id="7_fnn6g"]
+[ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="8_b7hmb"]
+[ext_resource type="PackedScene" uid="uid://bx3va4wmvmw4o" path="res://weapons/weapon_MIRV.tscn" id="9_lafpu"]
+[ext_resource type="PackedScene" uid="uid://do2r411gtohhx" path="res://weapons/weapon_missile_homing.tscn" id="10_bia7p"]
+[ext_resource type="PackedScene" uid="uid://u028oi7ixkmi" path="res://weapons/weapon_laser_3.tscn" id="11_t8ytb"]
+[ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="12_7mikl"]
+[ext_resource type="PackedScene" uid="uid://bwdyexrcswl12" path="res://items/weapon_projectiles/weapon_projectile_meganuke.tscn" id="13_diwyn"]
+
+[sub_resource type="Resource" id="Resource_q7eis"]
+script = ExtResource("2_pb4wx")
+weapon = ExtResource("3_ktv0m")
+min_run_count = 2
+metadata/_custom_type_script = "uid://ck01216jo3djh"
+
+[sub_resource type="Resource" id="Resource_gbh1l"]
+script = ExtResource("2_pb4wx")
+weapon = ExtResource("4_xkfx1")
+min_run_count = 2
+metadata/_custom_type_script = "uid://ck01216jo3djh"
+
+[sub_resource type="Resource" id="Resource_5b2mu"]
+script = ExtResource("2_pb4wx")
+weapon = ExtResource("5_ud48d")
+min_run_count = 2
+metadata/_custom_type_script = "uid://ck01216jo3djh"
+
+[sub_resource type="Resource" id="Resource_i8nns"]
+script = ExtResource("2_pb4wx")
+weapon = ExtResource("6_j1oc6")
+min_run_count = 2
+metadata/_custom_type_script = "uid://ck01216jo3djh"
+
+[sub_resource type="Resource" id="Resource_cegii"]
+script = ExtResource("2_pb4wx")
+weapon = ExtResource("7_fnn6g")
+min_run_count = 2
+metadata/_custom_type_script = "uid://ck01216jo3djh"
+
+[sub_resource type="Resource" id="Resource_81l6b"]
+script = ExtResource("2_pb4wx")
+weapon = ExtResource("8_b7hmb")
+min_run_count = 2
+metadata/_custom_type_script = "uid://ck01216jo3djh"
+
+[sub_resource type="Resource" id="Resource_0s4pg"]
+script = ExtResource("2_pb4wx")
+weapon = ExtResource("9_lafpu")
+min_run_count = 3
+metadata/_custom_type_script = "uid://ck01216jo3djh"
+
+[sub_resource type="Resource" id="Resource_mhwr4"]
+script = ExtResource("2_pb4wx")
+weapon = ExtResource("10_bia7p")
+min_run_count = 4
+metadata/_custom_type_script = "uid://ck01216jo3djh"
+
+[sub_resource type="Resource" id="Resource_4hpul"]
+script = ExtResource("2_pb4wx")
+weapon = ExtResource("11_t8ytb")
+min_run_count = 3
+metadata/_custom_type_script = "uid://ck01216jo3djh"
+
+[sub_resource type="Resource" id="Resource_rxonu"]
+script = ExtResource("2_pb4wx")
+weapon = ExtResource("12_7mikl")
+min_run_count = 3
+metadata/_custom_type_script = "uid://ck01216jo3djh"
+
+[sub_resource type="Resource" id="Resource_wc43b"]
+script = ExtResource("2_pb4wx")
+weapon = ExtResource("13_diwyn")
+min_run_count = 5
+metadata/_custom_type_script = "uid://ck01216jo3djh"
+
+[sub_resource type="Resource" id="Resource_t61l5"]
+script = ExtResource("2_pb4wx")
+weapon = ExtResource("10_bia7p")
+min_run_count = 4
+metadata/_custom_type_script = "uid://ck01216jo3djh"
+
+[resource]
+script = ExtResource("1_ybfsi")
+weapon_config = Array[ExtResource("2_pb4wx")]([SubResource("Resource_q7eis"), SubResource("Resource_gbh1l"), SubResource("Resource_5b2mu"), SubResource("Resource_i8nns"), SubResource("Resource_cegii"), SubResource("Resource_81l6b"), SubResource("Resource_0s4pg"), SubResource("Resource_mhwr4"), SubResource("Resource_4hpul"), SubResource("Resource_rxonu"), SubResource("Resource_wc43b"), SubResource("Resource_t61l5")])
+additional_weapon_count_by_run_count = Dictionary[int, int]({
+2: 2,
+3: 3,
+4: 5,
+5: 6,
+6: 8,
+7: 10,
+8: 100
+})
+metadata/_custom_type_script = "uid://popvifyikjk6"

@@ -4,6 +4,7 @@ extends Node
 var _ai_config: AIStoryConfig
 var _story_level: StoryLevel = SceneManager.current_story_level
 var _artillery_spawner:ArtillerySpawner
+# TODO: Add in run modifiers as well
 
 func _ready() -> void:
 	# Skip if precompiler running

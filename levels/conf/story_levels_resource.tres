@@ -33,6 +33,7 @@ ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
 0: SubResource("Resource_eaw1u")
 })
 force_player_goes_first = true
+absolute_max_ai = 0
 
 [sub_resource type="Resource" id="Resource_di2g2"]
 script = ExtResource("2_s2f7y")
@@ -59,6 +60,7 @@ ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
 2: SubResource("Resource_1y2yw")
 })
 force_player_goes_first = false
+absolute_max_ai = 0
 
 [sub_resource type="Resource" id="Resource_njefd"]
 script = ExtResource("2_s2f7y")
@@ -85,6 +87,7 @@ ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
 2: SubResource("Resource_1jm8t")
 })
 force_player_goes_first = false
+absolute_max_ai = 0
 
 [sub_resource type="Resource" id="Resource_wt4ba"]
 script = ExtResource("2_s2f7y")
@@ -119,6 +122,7 @@ ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
 2: SubResource("Resource_walwf")
 })
 force_player_goes_first = false
+absolute_max_ai = 0
 
 [sub_resource type="Resource" id="Resource_6s3ft"]
 script = ExtResource("2_s2f7y")
@@ -153,6 +157,7 @@ ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
 2: SubResource("Resource_8ak2e")
 })
 force_player_goes_first = false
+absolute_max_ai = 0
 
 [sub_resource type="Resource" id="Resource_aru85"]
 script = ExtResource("2_s2f7y")
@@ -187,6 +192,7 @@ ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
 2: SubResource("Resource_j6akc")
 })
 force_player_goes_first = false
+absolute_max_ai = 0
 
 [sub_resource type="Resource" id="Resource_a1i58"]
 script = ExtResource("2_s2f7y")
@@ -221,6 +227,7 @@ ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
 2: SubResource("Resource_y2f26")
 })
 force_player_goes_first = false
+absolute_max_ai = 0
 
 [sub_resource type="Resource" id="Resource_uyxng"]
 script = ExtResource("2_s2f7y")
@@ -255,6 +262,7 @@ ai_config_by_difficulty = Dictionary[int, ExtResource("2_s2f7y")]({
 2: SubResource("Resource_fw35h")
 })
 force_player_goes_first = false
+absolute_max_ai = 0
 
 [resource]
 script = ExtResource("1_e5mo0")

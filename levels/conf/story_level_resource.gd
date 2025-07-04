@@ -26,3 +26,6 @@ class_name StoryLevel extends Resource
 
 @export_group("Level Modifiers")
 @export var force_player_goes_first:bool = false
+
+@export_group("Run Modifiers")
+@export var absolute_max_ai:int
