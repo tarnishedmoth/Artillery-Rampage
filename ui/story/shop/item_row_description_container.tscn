@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7pkqvicaahn7"]
+
+[ext_resource type="Theme" uid="uid://bf5nv0nins5p6" path="res://ui/themes/shop.tres" id="1_0a404"]
+[ext_resource type="Script" uid="uid://b8g7tky5234kw" path="res://ui/story/shop/item_row_description_container.gd" id="1_procp"]
+
+[node name="ItemRowDescriptionContainer" type="VBoxContainer"]
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_filter = 0
+theme = ExtResource("1_0a404")
+script = ExtResource("1_procp")

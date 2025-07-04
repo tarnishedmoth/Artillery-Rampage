@@ -70,8 +70,6 @@ func _ready() -> void:
 	# Display a tooltip containing the weapon description if available
 	if weapon.description:
 		description_container.tooltip_text = weapon.description
-		# set mouse filter to stop to make the tooltip able to appear
-		description_container.mouse_filter = Control.MOUSE_FILTER_STOP
 	
 	weapon_buy_control.weapon = weapon
 	weapon_buy_control.player_state = player_state

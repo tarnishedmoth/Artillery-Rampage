@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cxb6b42bgqvel"]
+[gd_scene load_steps=5 format=3 uid="uid://cxb6b42bgqvel"]
 
 [ext_resource type="Script" uid="uid://cckc0hm277iv3" path="res://ui/story/shop/shop_weapon_row.gd" id="1_03bpo"]
 [ext_resource type="PackedScene" uid="uid://dfqpo363uk5q1" path="res://ui/story/shop/weapon_buy.tscn" id="1_7inv6"]
 [ext_resource type="PackedScene" uid="uid://bfei0rked6csm" path="res://ui/story/shop/ammo_purchase.tscn" id="2_03bpo"]
+[ext_resource type="PackedScene" uid="uid://c7pkqvicaahn7" path="res://ui/story/shop/item_row_description_container.tscn" id="2_e4rke"]
 
 [node name="ShopWeaponRow" type="HBoxContainer"]
 offset_right = 40.0
@@ -13,11 +14,9 @@ script = ExtResource("1_03bpo")
 [node name="Spacer" type="Control" parent="."]
 layout_mode = 2
 
-[node name="DescriptionContainer" type="VBoxContainer" parent="."]
+[node name="DescriptionContainer" parent="." instance=ExtResource("2_e4rke")]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
 
 [node name="Weapon" type="Label" parent="DescriptionContainer"]
 unique_name_in_owner = true
