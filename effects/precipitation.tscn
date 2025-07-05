@@ -1,7 +1,21 @@
-[gd_scene load_steps=10 format=3 uid="uid://dt07m835543w6"]
+[gd_scene load_steps=16 format=3 uid="uid://dt07m835543w6"]
 
 [ext_resource type="Texture2D" uid="uid://ctki8b1hsuh3k" path="res://effects/raindrop_texture.tres" id="1_3p5hu"]
 [ext_resource type="Script" uid="uid://b140wp0eblg7d" path="res://effects/precipitation.gd" id="1_g4q2l"]
+[ext_resource type="Script" uid="uid://cd5ni08uw4fdt" path="res://effects/precipitation_audio.gd" id="3_cq8nu"]
+[ext_resource type="AudioStream" uid="uid://c43u2lvtvyb3w" path="res://effects/rain/rain_1.wav" id="3_pt70m"]
+[ext_resource type="AudioStream" uid="uid://dxaauww8838d" path="res://effects/rain/rain_2.wav" id="4_gn3wk"]
+[ext_resource type="AudioStream" uid="uid://cr7aua1aii8fd" path="res://effects/rain/rain_3.wav" id="5_o8dcj"]
+[ext_resource type="AudioStream" uid="uid://c3x0husehkk1d" path="res://effects/rain/rain_4.wav" id="6_71upr"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_vydqa"]
+playback_mode = 1
+random_volume_offset_db = 3.0
+streams_count = 4
+stream_0/stream = ExtResource("3_pt70m")
+stream_1/stream = ExtResource("4_gn3wk")
+stream_2/stream = ExtResource("5_o8dcj")
+stream_3/stream = ExtResource("6_71upr")
 
 [sub_resource type="Gradient" id="Gradient_3p5hu"]
 colors = PackedColorArray(1, 1, 1, 0.603922, 1, 1, 1, 1)
@@ -52,6 +66,21 @@ polygon = PackedVector2Array(0, 0, 640, 0, 640, 16, 0, 16)
 [node name="WeatherEffects" type="Node2D"]
 script = ExtResource("1_g4q2l")
 
+[node name="Audio" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_cq8nu")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer" parent="Audio"]
+stream = SubResource("AudioStreamRandomizer_vydqa")
+volume_db = -20.0
+max_polyphony = 8
+bus = &"Environment"
+
+[node name="Timer" type="Timer" parent="Audio"]
+wait_time = 0.5
+one_shot = true
+ignore_time_scale = true
+
 [node name="Raindrops" type="GPUParticles2D" parent="." groups=["Wind_Particles2D"]]
 unique_name_in_owner = true
 modulate = Color(0.540881, 0.781596, 0.906216, 1)
@@ -84,3 +113,5 @@ process_material = SubResource("ParticleProcessMaterial_igwdn")
 visible = false
 position = Vector2(312, 323)
 occluder = SubResource("OccluderPolygon2D_3jiq0")
+
+[connection signal="timeout" from="Audio/Timer" to="Audio" method="_on_timer_timeout"]

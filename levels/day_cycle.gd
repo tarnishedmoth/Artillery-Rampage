@@ -73,7 +73,7 @@ func _ready() -> void:
 func wait_and_next_state() -> void:
 	next_state_timer.start(current_state.duration_ratio * day_segment)
 	if is_raining:
-		print_debug("The current day cycle is ", current_state.display_name, "and it's raining.")
+		print_debug("The current day cycle is ", current_state.display_name, " and it's raining.")
 	else:
 		print_debug("The current day cycle is ", current_state.display_name)
 

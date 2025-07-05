@@ -2,6 +2,7 @@ class_name WeatherEffects extends Node2D
 
 @onready var rain: GPUParticles2D = %Raindrops
 @onready var rain_particle_process_mat:ParticleProcessMaterial = rain.process_material
+@onready var audio: PrecipitationAudio = %Audio
 
 var rain_amount_tween:Tween
 
@@ -16,10 +17,14 @@ func set_rain_intensity(intensity:float, transition_time: float = 0.0) -> void:
 			
 	if not transition_time > 0.0:
 		rain.amount_ratio = intensity
-		
 	else:
 		rain_amount_tween = create_tween()
 		rain_amount_tween.tween_property(rain, ^"amount_ratio", intensity, transition_time)
+		
+	if intensity > 0.0:
+		audio.start(maxf(transition_time, 1.0), intensity)
+	else:
+		audio.stop(maxf(transition_time, 1.0))
 	
 func start_rain(intensity:float, transition_time: float) -> void:
 	rain.amount_ratio = 0.0
