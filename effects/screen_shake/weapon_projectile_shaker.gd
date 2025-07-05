@@ -14,6 +14,8 @@ func _ready() -> void:
 	GameEvents.projectile_fired.connect(_on_projectile_fired)
 	
 func _on_projectile_fired(projectile: WeaponProjectile) -> void:
+	if projectile.is_in_group(&"TrajectoryPreviewer"): return ## Don't monitor these
+	
 	if OS.is_debug_build():
 		print_debug("%s: projectile %s fired" % [name, projectile.name])
 	projectile.completed_lifespan.connect(_on_projectile_exploded)
