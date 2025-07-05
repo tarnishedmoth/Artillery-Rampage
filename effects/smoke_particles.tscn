@@ -18,7 +18,7 @@ point_count = 3
 [sub_resource type="Gradient" id="Gradient_61qm2"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
-[node name="DamagedSmokeParticles" type="CPUParticles2D" groups=["Wind_CPUParticles2D"]]
+[node name="DamagedSmokeParticles" type="CPUParticles2D" groups=["Wind_Particles2D"]]
 z_index = -1
 emitting = false
 amount = 12

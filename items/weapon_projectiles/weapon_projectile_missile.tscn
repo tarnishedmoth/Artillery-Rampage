@@ -35,7 +35,6 @@ max_damage = 90.0
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
 show_behind_parent = true
 occluder = SubResource("OccluderPolygon2D_0et3j")
-sdf_collision = false
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.183745, 0.183745)

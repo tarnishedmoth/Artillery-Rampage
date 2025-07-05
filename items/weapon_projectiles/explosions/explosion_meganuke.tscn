@@ -40,7 +40,7 @@ stream = ExtResource("2_ur366")
 bus = &"SFX"
 area_mask = 2
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="." groups=["Wind_CPUParticles2D"]]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." groups=["Wind_Particles2D"]]
 amount = 32
 lifetime = 1.5
 explosiveness = 1.0

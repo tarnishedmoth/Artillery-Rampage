@@ -19,7 +19,7 @@ point_count = 2
 [sub_resource type="Gradient" id="Gradient_61qm2"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
-[node name="Dust" type="CPUParticles2D" groups=["Wind_CPUParticles2D"]]
+[node name="Dust" type="CPUParticles2D" groups=["Wind_Particles2D"]]
 z_index = -1
 amount = 12
 texture = SubResource("GradientTexture2D_x1oaf")
