@@ -178,7 +178,7 @@ func change_ambient(mod_color:Color, immediate:bool = false) -> void:
 
 func change_weather(state:DayWeatherState, immediate:bool) -> void:
 	## TODO: tank lights catching particles, terrain chunk sets light occluder on start
-	var transition_time:float = 0.0 if immediate else state.weather_transition_time
+	var transition_time:float = 1.0 if immediate else state.weather_transition_time
 	
 	if is_raining:
 		# Current state wants rain
@@ -186,7 +186,7 @@ func change_weather(state:DayWeatherState, immediate:bool) -> void:
 			# Node is invalid
 			_active_weather_node = PRECIPITATION_SCENE.instantiate()
 			add_child(_active_weather_node)
-			_active_weather_node.call_deferred(&"start_rain", state.rain_intensity, transition_time)
+			_active_weather_node.start_rain(state.rain_intensity, transition_time)
 			
 		else:
 			

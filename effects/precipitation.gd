@@ -37,5 +37,5 @@ func stop_rain_and_delete(transition_time:float) ->  void:
 	
 	await rain_amount_tween.finished
 	rain.emitting = false
-	await rain.finished
+	await get_tree().create_timer(rain.lifetime)
 	queue_free()
