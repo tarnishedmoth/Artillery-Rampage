@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dnjj6ctq55yvc"]
+[gd_scene load_steps=15 format=3 uid="uid://dnjj6ctq55yvc"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_qnumu"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_qmg41"]
@@ -22,10 +22,35 @@ metadata/_custom_type_script = "uid://43ab121okvpb"
 [sub_resource type="Resource" id="Resource_876hk"]
 script = ExtResource("5_21x2i")
 display_name = "Morning"
+skip_chance = 0.0
+duration_ratio = 1.2
 sun_position = Vector2(-400, 300)
 sun_energy = 0.31
 ambient_color = Color(0.901961, 0.901961, 0.901961, 1)
 is_dark = false
+weather_transition_time = 25.0
+rain_chance = 0.0
+rain_intensity = 0.5
+rain_ambient_color = Color(0.282353, 0.819608, 0.8, 1)
+rain_sun_energy = 0.22
+rain_is_dark = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[sub_resource type="Resource" id="Resource_jfhj8"]
+script = ExtResource("5_21x2i")
+display_name = "Hopeful Sunset"
+skip_chance = 0.0
+duration_ratio = 0.8
+sun_position = Vector2(860, 300)
+sun_energy = 0.33
+ambient_color = Color(0.811606, 0.366525, 0.487116, 1)
+is_dark = false
+weather_transition_time = 25.0
+rain_chance = 0.4
+rain_intensity = 0.1
+rain_ambient_color = Color(0.811606, 0.366525, 0.487116, 1)
+rain_sun_energy = 0.31
+rain_is_dark = false
 metadata/_custom_type_script = "uid://blr3jie556r2m"
 
 [node name="TestLevelLighthouse" type="Node2D"]
@@ -56,8 +81,9 @@ max_per_orbit_variance = 0
 artillery_ai_types = Array[PackedScene]([ExtResource("4_21x2i")])
 
 [node name="DayWeather" parent="GameLevel" index="13"]
-day_length = 20.0
-presets_queue = Array[ExtResource("5_21x2i")]([SubResource("Resource_876hk")])
+randomize_starting_state = false
+day_length = 120.0
+presets_queue = Array[ExtResource("5_21x2i")]([SubResource("Resource_876hk"), SubResource("Resource_jfhj8")])
 
 [node name="Player" parent="GameLevel" instance=ExtResource("6_jwug6")]
 position = Vector2(120, 427)

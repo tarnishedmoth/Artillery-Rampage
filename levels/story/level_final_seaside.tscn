@@ -1,10 +1,15 @@
-[gd_scene load_steps=11 format=3 uid="uid://po4aso615xjj"]
+[gd_scene load_steps=16 format=3 uid="uid://po4aso615xjj"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_nycs2"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_a10x2"]
 [ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_5ddo4"]
 [ext_resource type="Texture2D" uid="uid://ba7dq172ainja" path="res://terrain/terrain-strata-beach.png" id="3_kh1qs"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_s2jhl"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="6_kh1qs"]
+[ext_resource type="Resource" uid="uid://bo2ij3wxvfil" path="res://environment/day_weather_states/morning_humid.tres" id="7_c352j"]
+[ext_resource type="Resource" uid="uid://btmvihjsjvfmp" path="res://environment/day_weather_states/default_noon.tres" id="8_epomo"]
+[ext_resource type="Resource" uid="uid://drgl8rrxwae10" path="res://environment/day_weather_states/afternoon_golden.tres" id="9_6qyad"]
+[ext_resource type="Resource" uid="uid://3kiscxsblfn1" path="res://environment/day_weather_states/night_stormy.tres" id="10_c352j"]
 [ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="14_0ml33"]
 [ext_resource type="PackedScene" uid="uid://dyoeqogv8xoye" path="res://environment/procedural_object_seaside_spawner.tscn" id="16_ju8ix"]
 
@@ -70,6 +75,9 @@ num_ai_teams = 1
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
 min_boundary_x_distance = 20.0
+
+[node name="DayWeather" parent="GameLevel" index="13"]
+presets_queue = Array[ExtResource("6_kh1qs")]([ExtResource("7_c352j"), ExtResource("8_epomo"), ExtResource("9_6qyad"), ExtResource("10_c352j")])
 
 [node name="WaterHazard" parent="GameLevel" instance=ExtResource("14_0ml33")]
 position = Vector2(1387, 728)

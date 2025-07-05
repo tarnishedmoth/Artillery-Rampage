@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://nakbldkdlgld"]
+[gd_scene load_steps=23 format=3 uid="uid://nakbldkdlgld"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_h067f"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_1inrc"]
@@ -12,8 +12,13 @@
 [ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="11_kiquu"]
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="12_x537k"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="13_dax8i"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="13_h3tdh"]
 [ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="14_1n34l"]
+[ext_resource type="Resource" uid="uid://b7ptujvsi6nmw" path="res://environment/day_weather_states/overcast.tres" id="14_23wxl"]
+[ext_resource type="Resource" uid="uid://btmvihjsjvfmp" path="res://environment/day_weather_states/default_noon.tres" id="15_3facp"]
 [ext_resource type="PackedScene" uid="uid://dvkouaun7cdld" path="res://environment/procedural_object_plains_spawner.tscn" id="15_ywhuq"]
+[ext_resource type="Resource" uid="uid://drgl8rrxwae10" path="res://environment/day_weather_states/afternoon_golden.tres" id="16_plrn2"]
+[ext_resource type="Resource" uid="uid://dipfggpo6tkd4" path="res://environment/day_weather_states/default_night.tres" id="17_e0lbq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_52q06"]
 shader = ExtResource("3_givri")
@@ -43,7 +48,7 @@ fractal_gain = 0.605
 outline_mesh_dist_threshold = 0.1
 texture_resources = Array[ExtResource("2_1inrc")]([SubResource("Resource_msmqt"), ExtResource("5_2675c")])
 
-[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array(-103.125, -182.353, 185.938, -195.588, 214.063, -182.353, 275.781, 294.118, 400, 472.059, 473.438, 470.588, 581.25, 310.294, 551.563, -25, 623.438, -161.765, 654.688, -189.706, 935.938, -164.706, 948.438, 505.882, -103.906, 505.882)
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("5_quplg")]
@@ -55,22 +60,25 @@ min_height_value = 0.0
 max_height_clearance = 110.0
 consistency = 0.2
 
-[node name="Walls" parent="GameLevel" index="5"]
+[node name="Walls" parent="GameLevel" index="6"]
 wall_randomization_weights = Dictionary[int, float]({
 1: 1.0,
 2: 1.0,
 3: 1.0
 })
 
-[node name="Floor" parent="GameLevel" index="6"]
+[node name="Floor" parent="GameLevel" index="7"]
 visible = false
 
-[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+[node name="ArtillerySpawner" parent="GameLevel" index="9"]
 artillery_ai_types = Array[PackedScene]([ExtResource("7_r62ck"), ExtResource("9_7seap"), ExtResource("10_6gu8j"), ExtResource("11_kiquu"), ExtResource("12_x537k"), ExtResource("13_dax8i")])
 default_ai_players = Vector2i(4, 4)
 num_ai_teams = 2
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
+
+[node name="DayWeather" parent="GameLevel" index="13"]
+presets_queue = Array[ExtResource("13_h3tdh")]([ExtResource("14_23wxl"), ExtResource("15_3facp"), ExtResource("14_23wxl"), ExtResource("16_plrn2"), ExtResource("17_e0lbq")])
 
 [node name="WaterHazard" parent="GameLevel" instance=ExtResource("14_1n34l")]
 position = Vector2(691, 718)
@@ -79,6 +87,7 @@ scale = Vector2(1.28, 0.68)
 [node name="ProceduralObjectPlainsSpawner" parent="GameLevel" instance=ExtResource("15_ywhuq")]
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="DayWeatherState" load_steps=2 format=3 uid="uid://b7ptujvsi6nmw"]
+
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="1_gyrgd"]
+
+[resource]
+script = ExtResource("1_gyrgd")
+display_name = "Overcast"
+skip_chance = 0.5
+duration_ratio = 1.0
+sun_position = Vector2(640, -640)
+sun_energy = 0.15
+ambient_color = Color(0.481501, 0.48776, 0.54192, 1)
+is_dark = false
+weather_transition_time = 20.0
+rain_chance = 0.4
+rain_intensity = 0.5
+rain_ambient_color = Color(0.481501, 0.48776, 0.54192, 1)
+rain_sun_energy = 0.15
+rain_is_dark = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bw47p6vpbsrkn"]
+[gd_scene load_steps=18 format=3 uid="uid://bw47p6vpbsrkn"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_b3eo7"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_8e6i4"]
@@ -34,28 +34,69 @@ fractal_gain = 0.605
 [sub_resource type="Resource" id="Resource_876hk"]
 script = ExtResource("7_aaafy")
 display_name = "Morning"
+skip_chance = 0.0
+duration_ratio = 1.0
 sun_position = Vector2(-400, 300)
 sun_energy = 0.31
-ambient_color = Color(0.901961, 0.901961, 0.901961, 1)
+ambient_color = Color(0.892612, 0.912973, 0.847658, 1)
 is_dark = false
+weather_transition_time = 10.0
+rain_chance = 0.0
+rain_intensity = 0.1
+rain_ambient_color = Color(0.861651, 0.914441, 0.920588, 1)
+rain_sun_energy = 0.31
+rain_is_dark = false
 metadata/_custom_type_script = "uid://blr3jie556r2m"
 
 [sub_resource type="Resource" id="Resource_vgcik"]
 script = ExtResource("7_aaafy")
 display_name = "Noon"
+skip_chance = 0.0
+duration_ratio = 1.0
 sun_position = Vector2(0, -140)
 sun_energy = 0.35
 ambient_color = Color(0.901961, 0.901961, 0.901961, 1)
 is_dark = false
+weather_transition_time = 10.0
+rain_chance = 0.0
+rain_intensity = 0.5
+rain_ambient_color = Color(0.282353, 0.819608, 0.8, 1)
+rain_sun_energy = 0.22
+rain_is_dark = false
 metadata/_custom_type_script = "uid://blr3jie556r2m"
 
-[sub_resource type="Resource" id="Resource_dwws4"]
+[sub_resource type="Resource" id="Resource_mtct1"]
 script = ExtResource("7_aaafy")
 display_name = "Afternoon"
+skip_chance = 0.0
+duration_ratio = 1.0
 sun_position = Vector2(400, 0)
 sun_energy = 0.28
-ambient_color = Color(0.901961, 0.901961, 0.901961, 1)
+ambient_color = Color(0.96245, 0.880774, 0.875271, 1)
 is_dark = false
+weather_transition_time = 10.0
+rain_chance = 0.1
+rain_intensity = 0.4
+rain_ambient_color = Color(0.761982, 0.417769, 0.334205, 1)
+rain_sun_energy = 0.33
+rain_is_dark = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[sub_resource type="Resource" id="Resource_aaafy"]
+script = ExtResource("7_aaafy")
+display_name = "Storm"
+skip_chance = 0.75
+duration_ratio = 1.0
+sun_position = Vector2(400, 300)
+sun_energy = 0.2
+ambient_color = Color(0.6417, 0.69, 0.68839, 1)
+is_dark = true
+weather_transition_time = 25.0
+rain_chance = 1.0
+rain_intensity = 1.0
+rain_ambient_color = Color(0.104398, 0.390447, 0.380367, 1)
+rain_sun_energy = 0.31
+rain_is_dark = true
 metadata/_custom_type_script = "uid://blr3jie556r2m"
 
 [node name="TestLevelProcGen" type="Node2D"]
@@ -96,7 +137,7 @@ ideal_min_spawn_separation = 250.0
 min_boundary_x_distance = 20.0
 
 [node name="DayWeather" parent="GameLevel" index="13"]
-presets_queue = Array[ExtResource("7_aaafy")]([SubResource("Resource_876hk"), SubResource("Resource_vgcik"), SubResource("Resource_dwws4")])
+presets_queue = Array[ExtResource("7_aaafy")]([SubResource("Resource_876hk"), SubResource("Resource_vgcik"), SubResource("Resource_mtct1"), SubResource("Resource_aaafy")])
 
 [node name="WaterHazard" parent="GameLevel" instance=ExtResource("14_k2vcv")]
 position = Vector2(701, 720)

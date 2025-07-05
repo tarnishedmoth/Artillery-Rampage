@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="DayWeatherState" load_steps=2 format=3 uid="uid://bedte7j6h4t6h"]
+
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="1_v15b4"]
+
+[resource]
+script = ExtResource("1_v15b4")
+display_name = "Gloomy Morning"
+skip_chance = 0.0
+duration_ratio = 1.0
+sun_position = Vector2(-400, 300)
+sun_energy = 0.36
+ambient_color = Color(0.52959, 0.596457, 0.582727, 1)
+is_dark = true
+weather_transition_time = 20.0
+rain_chance = 0.3
+rain_intensity = 0.25
+rain_ambient_color = Color(0.342653, 0.413653, 0.467056, 1)
+rain_sun_energy = 0.28
+rain_is_dark = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"

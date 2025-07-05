@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://coose27rhb2ox"]
+[gd_scene load_steps=22 format=3 uid="uid://coose27rhb2ox"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_1hylc"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_j1q4l"]
@@ -9,7 +9,13 @@
 [ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="7_onhht"]
 [ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="8_scdsq"]
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="9_qfat7"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="10_soky2"]
 [ext_resource type="PackedScene" uid="uid://dvkouaun7cdld" path="res://environment/procedural_object_plains_spawner.tscn" id="11_mhixt"]
+[ext_resource type="Resource" uid="uid://dfp7emnp2l0eb" path="res://environment/day_weather_states/default_morning.tres" id="11_n0cm0"]
+[ext_resource type="Resource" uid="uid://b7ptujvsi6nmw" path="res://environment/day_weather_states/overcast.tres" id="12_7yhpb"]
+[ext_resource type="Resource" uid="uid://b8oudrpxm0p46" path="res://environment/day_weather_states/noon_desert.tres" id="13_djxjk"]
+[ext_resource type="Resource" uid="uid://dcsv3ifhia30m" path="res://environment/day_weather_states/afternoon_desert.tres" id="14_nnlr6"]
+[ext_resource type="Resource" uid="uid://i3nss04pr7oy" path="res://environment/day_weather_states/night_calm.tres" id="15_73a13"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_m70bf"]
 shader = ExtResource("3_dxqwm")
@@ -111,6 +117,9 @@ default_ai_players = Vector2i(1, 4)
 num_ai_teams = 2
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
+
+[node name="DayWeather" parent="GameLevel" index="13"]
+presets_queue = Array[ExtResource("10_soky2")]([ExtResource("11_n0cm0"), ExtResource("12_7yhpb"), ExtResource("13_djxjk"), ExtResource("14_nnlr6"), ExtResource("15_73a13")])
 
 [node name="ProceduralObjectPlainsSpawner" parent="GameLevel" instance=ExtResource("11_mhixt")]
 

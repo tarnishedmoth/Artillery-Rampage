@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_jaby2")
 display_name = "Night"
-skip_chance = 0.0
+skip_chance = 0.5
 duration_ratio = 1.0
 sun_position = Vector2(640, 140)
 sun_energy = 0.33

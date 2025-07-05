@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="DayWeatherState" load_steps=2 format=3 uid="uid://bo2ij3wxvfil"]
+
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="1_42ej3"]
+
+[resource]
+script = ExtResource("1_42ej3")
+display_name = "Humid Morning"
+skip_chance = 0.0
+duration_ratio = 1.0
+sun_position = Vector2(-400, 300)
+sun_energy = 0.31
+ambient_color = Color(0.670352, 0.445698, 0.581018, 1)
+is_dark = true
+weather_transition_time = 45.0
+rain_chance = 0.05
+rain_intensity = 0.1
+rain_ambient_color = Color(0.745069, 0.452899, 0.514027, 1)
+rain_sun_energy = 0.31
+rain_is_dark = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"

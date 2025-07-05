@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="DayWeatherState" load_steps=2 format=3 uid="uid://dns8un2uqaij3"]
+
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="1_l3ti1"]
+
+[resource]
+script = ExtResource("1_l3ti1")
+display_name = "Desert Morning"
+skip_chance = 0.0
+duration_ratio = 1.0
+sun_position = Vector2(-400, 300)
+sun_energy = 0.31
+ambient_color = Color(0.561878, 0.466322, 0.402789, 1)
+is_dark = false
+weather_transition_time = 20.0
+rain_chance = 0.0
+rain_intensity = 0.25
+rain_ambient_color = Color(0.866833, 0.570908, 0.646552, 1)
+rain_sun_energy = 0.27
+rain_is_dark = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"

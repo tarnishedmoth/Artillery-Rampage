@@ -113,23 +113,19 @@ position = Vector2(13, 0)
 position = Vector2(0, -13)
 
 [node name="PointLight2D" type="PointLight2D" parent="TankBody"]
-visible = false
 position = Vector2(-12, -10)
 rotation = -1.5708
-scale = Vector2(0.25, 0.25)
 energy = 0.55
 texture = ExtResource("9_73k0t")
-offset = Vector2(0, -12)
+offset = Vector2(0, -51)
 texture_scale = 0.25
 
 [node name="PointLight2D2" type="PointLight2D" parent="TankBody"]
-visible = false
 position = Vector2(18, -10)
 rotation = 1.5708
-scale = Vector2(0.25, 0.25)
 energy = 0.45
 texture = ExtResource("9_73k0t")
-offset = Vector2(0, -12)
+offset = Vector2(0, -50)
 texture_scale = 0.25
 
 [node name="DamagedSmokeParticles" parent="TankBody" instance=ExtResource("8_adwvx")]

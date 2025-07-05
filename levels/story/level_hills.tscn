@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cwknfpytuiul1"]
+[gd_scene load_steps=24 format=3 uid="uid://cwknfpytuiul1"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_1hylc"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_kfkss"]
@@ -13,6 +13,11 @@
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="9_qfat7"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="10_36d0b"]
 [ext_resource type="PackedScene" uid="uid://dvkouaun7cdld" path="res://environment/procedural_object_plains_spawner.tscn" id="11_rrpa8"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="13_jsq8e"]
+[ext_resource type="Resource" uid="uid://dfp7emnp2l0eb" path="res://environment/day_weather_states/default_morning.tres" id="14_evx1h"]
+[ext_resource type="Resource" uid="uid://btmvihjsjvfmp" path="res://environment/day_weather_states/default_noon.tres" id="15_vl3yg"]
+[ext_resource type="Resource" uid="uid://drgl8rrxwae10" path="res://environment/day_weather_states/afternoon_golden.tres" id="16_7srcy"]
+[ext_resource type="Resource" uid="uid://i3nss04pr7oy" path="res://environment/day_weather_states/night_calm.tres" id="17_evx1h"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_m70bf"]
 shader = ExtResource("3_27nwa")
@@ -125,6 +130,9 @@ artillery_ai_types = Array[PackedScene]([ExtResource("4_y45k5"), ExtResource("6_
 default_ai_players = Vector2i(1, 4)
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
+
+[node name="DayWeather" parent="GameLevel" index="13"]
+presets_queue = Array[ExtResource("13_jsq8e")]([ExtResource("14_evx1h"), ExtResource("15_vl3yg"), ExtResource("16_7srcy"), ExtResource("17_evx1h")])
 
 [node name="ProceduralObjectPlainsSpawner" parent="GameLevel" instance=ExtResource("11_rrpa8")]
 

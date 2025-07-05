@@ -1,10 +1,15 @@
-[gd_scene load_steps=12 format=3 uid="uid://h1ep2hd1eoke"]
+[gd_scene load_steps=17 format=3 uid="uid://h1ep2hd1eoke"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_ls7ny"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_k7l5h"]
 [ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_dft5m"]
 [ext_resource type="Texture2D" uid="uid://bqds07ajtn7ei" path="res://terrain/terrain-scorched-earth.png" id="4_57lle"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_g3v77"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="6_2fkir"]
+[ext_resource type="Resource" uid="uid://bo2ij3wxvfil" path="res://environment/day_weather_states/morning_humid.tres" id="7_8u6rg"]
+[ext_resource type="Resource" uid="uid://dcsv3ifhia30m" path="res://environment/day_weather_states/afternoon_desert.tres" id="7_j0owa"]
+[ext_resource type="Resource" uid="uid://b8oudrpxm0p46" path="res://environment/day_weather_states/noon_desert.tres" id="7_ul4cw"]
+[ext_resource type="Resource" uid="uid://i3nss04pr7oy" path="res://environment/day_weather_states/night_calm.tres" id="8_ul4cw"]
 [ext_resource type="Texture2D" uid="uid://couf67gr1ds88" path="res://background_items/background_scorchedplains.png" id="14_rbkm7"]
 [ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="15_6s7rf"]
 [ext_resource type="PackedScene" uid="uid://dvkouaun7cdld" path="res://environment/procedural_object_plains_spawner.tscn" id="16_kdse1"]
@@ -62,6 +67,9 @@ default_ai_players = Vector2i(1, 3)
 num_ai_teams = 1
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
+
+[node name="DayWeather" parent="GameLevel" index="13"]
+presets_queue = Array[ExtResource("6_2fkir")]([ExtResource("7_8u6rg"), ExtResource("7_ul4cw"), ExtResource("7_j0owa"), ExtResource("8_ul4cw")])
 
 [node name="StaticBackground" type="Sprite2D" parent="GameLevel"]
 modulate = Color(1, 1, 1, 0.635294)

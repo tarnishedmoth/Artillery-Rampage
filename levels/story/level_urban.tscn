@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bsn1aw61qtr54"]
+[gd_scene load_steps=19 format=3 uid="uid://bsn1aw61qtr54"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_1jr6l"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_0xmgj"]
@@ -6,6 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://c6drjfyj22hs4" path="res://terrain/terrain-grass-to-dirt.png" id="4_y721a"]
 [ext_resource type="Resource" uid="uid://csj8tgks7843i" path="res://terrain/terrain_outline_road.tres" id="5_cq167"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_pv8ko"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="7_b5vlx"]
+[ext_resource type="Resource" uid="uid://btmvihjsjvfmp" path="res://environment/day_weather_states/default_noon.tres" id="9_0xmgj"]
+[ext_resource type="Resource" uid="uid://dipfggpo6tkd4" path="res://environment/day_weather_states/default_night.tres" id="11_y721a"]
+[ext_resource type="Resource" uid="uid://b7ptujvsi6nmw" path="res://environment/day_weather_states/overcast.tres" id="12_1jr6l"]
 [ext_resource type="PackedScene" uid="uid://0y11k01gaq4w" path="res://buildings/city/city_building_short.tscn" id="15_0xmgj"]
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house/house.tscn" id="15_lmepw"]
 [ext_resource type="PackedScene" uid="uid://cdu7jxpquqjer" path="res://environment/trees/shatterable_tree.tscn" id="16_5w4s6"]
@@ -65,6 +69,10 @@ visible = false
 default_ai_players = Vector2i(2, 4)
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
+
+[node name="DayWeather" parent="GameLevel" index="13"]
+day_length = 200.0
+presets_queue = Array[ExtResource("7_b5vlx")]([ExtResource("12_1jr6l"), ExtResource("9_0xmgj"), ExtResource("11_y721a")])
 
 [node name="CityBuilding" parent="GameLevel" instance=ExtResource("15_0xmgj")]
 position = Vector2(363, 444)

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="DayWeatherState" load_steps=2 format=3 uid="uid://i3nss04pr7oy"]
+
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="1_e3vg5"]
+
+[resource]
+script = ExtResource("1_e3vg5")
+display_name = "Calm Night"
+skip_chance = 0.0
+duration_ratio = 1.0
+sun_position = Vector2(640, 140)
+sun_energy = 0.45
+ambient_color = Color(0.166834, 0.250763, 0.387722, 1)
+is_dark = true
+weather_transition_time = 30.0
+rain_chance = 0.0
+rain_intensity = 0.75
+rain_ambient_color = Color(0.111479, 0.16416, 0.254641, 1)
+rain_sun_energy = 0.18
+rain_is_dark = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"

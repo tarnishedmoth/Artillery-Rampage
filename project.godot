@@ -152,6 +152,10 @@ pause={
 2d_physics/layer_9="Collectibles"
 2d_physics/layer_10="ProjectileBlocker"
 
+[rendering]
+
+limits/time/time_rollover_secs=300.0
+
 [shader_globals]
 
 game_time={

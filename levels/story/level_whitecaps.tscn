@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://67rtvpiv2p1x"]
+[gd_scene load_steps=22 format=3 uid="uid://67rtvpiv2p1x"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_qhffn"]
 [ext_resource type="AudioStream" uid="uid://o2aq3qhc7qb" path="res://music/SoundtrackWhitecaps.mp3" id="2_a3med"]
@@ -9,8 +9,12 @@
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="7_g6jvu"]
 [ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="11_a3k3j"]
 [ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="12_g0n4y"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="12_qc7q3"]
+[ext_resource type="Resource" uid="uid://bo2ij3wxvfil" path="res://environment/day_weather_states/morning_humid.tres" id="13_743sk"]
 [ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="13_nqmfy"]
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="14_npr3d"]
+[ext_resource type="Resource" uid="uid://b7ptujvsi6nmw" path="res://environment/day_weather_states/overcast.tres" id="14_qqnul"]
+[ext_resource type="Resource" uid="uid://i3nss04pr7oy" path="res://environment/day_weather_states/night_calm.tres" id="15_88eia"]
 [ext_resource type="Texture2D" uid="uid://bbgp31owjo7sk" path="res://background_items/background_snowymountains.png" id="16_5rf11"]
 [ext_resource type="PackedScene" uid="uid://c0f6pn0mperks" path="res://environment/procedural_object_mountain_spawner.tscn" id="17_bqjdq"]
 
@@ -38,6 +42,23 @@ fractal_lacunarity = 1.56
 fractal_gain = 0.645
 fractal_weighted_strength = 0.5
 
+[sub_resource type="Resource" id="Resource_ol75n"]
+script = ExtResource("12_qc7q3")
+display_name = "Noon"
+skip_chance = 0.0
+duration_ratio = 1.0
+sun_position = Vector2(0, -140)
+sun_energy = 0.35
+ambient_color = Color(0.901764, 0.900002, 0.915993, 1)
+is_dark = false
+weather_transition_time = 30.0
+rain_chance = 0.0
+rain_intensity = 0.45
+rain_ambient_color = Color(0.705177, 0.726864, 0.781251, 1)
+rain_sun_energy = 0.35
+rain_is_dark = false
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
 [node name="TestLevelProcGen" type="Node2D"]
 
 [node name="GameLevel" parent="." instance=ExtResource("1_qhffn")]
@@ -49,7 +70,7 @@ soundtrack_file = ExtResource("2_a3med")
 outline_mesh_dist_threshold = 0.8
 texture_resources = Array[ExtResource("3_kw5jy")]([SubResource("Resource_yxvgw"), ExtResource("6_qc7q3")])
 
-[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array(-104, -8, -28.125, -307.353, 50.7813, 29.4117, 414.063, -485.294, 452.344, -295.588, 539.844, -248.529, 639.844, 89.7059, 750, 101.471, 852.344, -305.882, 905.458, -3.48077, 937, -3, 945, 445, -103, 448)
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("7_g6jvu")]
@@ -57,7 +78,7 @@ noise_template = SubResource("FastNoiseLite_iuf40")
 additional_vertices = 84
 max_height_clearance = 115.0
 
-[node name="Walls" parent="GameLevel" index="5"]
+[node name="Walls" parent="GameLevel" index="6"]
 wall_randomization_weights = Dictionary[int, float]({
 0: 1.0,
 1: 1.0,
@@ -65,18 +86,21 @@ wall_randomization_weights = Dictionary[int, float]({
 3: 0.5
 })
 
-[node name="Floor" parent="GameLevel" index="6"]
+[node name="Floor" parent="GameLevel" index="7"]
 visible = false
 
-[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+[node name="ArtillerySpawner" parent="GameLevel" index="9"]
 artillery_ai_types = Array[PackedScene]([ExtResource("11_a3k3j"), ExtResource("12_g0n4y"), ExtResource("14_npr3d"), ExtResource("13_nqmfy")])
 default_ai_players = Vector2i(3, 4)
 num_ai_teams = 2
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
 
-[node name="Announcer" parent="GameLevel" index="10"]
+[node name="Announcer" parent="GameLevel" index="11"]
 is_avalance_level = true
+
+[node name="DayWeather" parent="GameLevel" index="13"]
+presets_queue = Array[ExtResource("12_qc7q3")]([ExtResource("13_743sk"), ExtResource("14_qqnul"), SubResource("Resource_ol75n"), ExtResource("15_88eia")])
 
 [node name="StaticBackground" type="Sprite2D" parent="GameLevel"]
 z_index = -98
@@ -89,6 +113,7 @@ offset = Vector2(-4, -214.915)
 [node name="ProceduralObjectMountainSpawner" parent="GameLevel" instance=ExtResource("17_bqjdq")]
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]

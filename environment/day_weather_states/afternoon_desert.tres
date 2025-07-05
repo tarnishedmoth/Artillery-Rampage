@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="DayWeatherState" load_steps=2 format=3 uid="uid://dcsv3ifhia30m"]
+
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="1_cbn1c"]
+
+[resource]
+script = ExtResource("1_cbn1c")
+display_name = "Desert Afternoon"
+skip_chance = 0.0
+duration_ratio = 1.0
+sun_position = Vector2(640, 400)
+sun_energy = 0.5
+ambient_color = Color(0.859761, 0.706394, 0.636504, 1)
+is_dark = false
+weather_transition_time = 20.0
+rain_chance = 0.0
+rain_intensity = 1.0
+rain_ambient_color = Color(0.761982, 0.417769, 0.334205, 1)
+rain_sun_energy = 0.28
+rain_is_dark = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"

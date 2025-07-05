@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="DayWeatherState" load_steps=2 format=3 uid="uid://b8oudrpxm0p46"]
+
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="1_awigt"]
+
+[resource]
+script = ExtResource("1_awigt")
+display_name = "Desert Noon"
+skip_chance = 0.0
+duration_ratio = 1.0
+sun_position = Vector2(640, -200)
+sun_energy = 0.6
+ambient_color = Color(0.905042, 0.913387, 0.900946, 1)
+is_dark = false
+weather_transition_time = 30.0
+rain_chance = 0.0
+rain_intensity = 0.45
+rain_ambient_color = Color(0.705177, 0.726864, 0.781251, 1)
+rain_sun_energy = 0.35
+rain_is_dark = false
+metadata/_custom_type_script = "uid://blr3jie556r2m"
