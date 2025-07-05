@@ -8,7 +8,7 @@ class WeaponWeights:
 	var weight: float
 
 class AIRunLevelWeaponConfig:
-	var additional_weapons: Array[WeaponWeights] 
+	var weapons: Array[WeaponWeights] 
 	var additional_weapon_count: int
 
 func _ready() -> void:
@@ -46,6 +46,9 @@ func _modify_artillery_spawner(spawner: ArtillerySpawner) -> void:
 	if run_count <= 0:
 		push_error("%s: Invalid run count %d" % [name, run_count])
 		return
+	if run_count == 1:
+		print_debug("%s: Skip modifiers on first run" % name)
+		return
 	
 	spawner.default_ai_players += Vector2i.ONE * (run_count - 1)
 
@@ -57,17 +60,17 @@ func _modify_artillery_spawner(spawner: ArtillerySpawner) -> void:
 		mini(spawner.default_ai_players.y, max_ai_players)
 	)
 
-	var modifier_weapon_config: AIRunLevelWeaponConfig = _get_run_level_weapon_config(run_count)
+	var modifier_weapon_config: AIRunLevelWeaponConfig = _get_run_level_weapon_config(spawner, run_count)
 	if modifier_weapon_config:
 		_modify_ai_weapons_by_config(spawner, modifier_weapon_config)
 
-func _get_run_level_weapon_config(run_count: int) -> AIRunLevelWeaponConfig:
+func _get_run_level_weapon_config(spawner: ArtillerySpawner, run_count: int) -> AIRunLevelWeaponConfig:
 	var run_modifiers:AIRunModifiers = SceneManager.story_levels.run_modifiers
 	if not run_modifiers:
 		return null
 
 	var weapon_config:AIRunLevelWeaponConfig = AIRunLevelWeaponConfig.new()
-	weapon_config.additional_weapons = []
+	weapon_config.weapons = []
 	weapon_config.additional_weapon_count = run_modifiers.additional_weapon_count_by_run_count.get(run_count, 0)
 
 	for config in run_modifiers.weapon_config:
@@ -85,33 +88,40 @@ func _get_run_level_weapon_config(run_count: int) -> AIRunLevelWeaponConfig:
 		else:
 			weapon_weights.weight = 1.0
 		
-		weapon_config.additional_weapons.push_back(weapon_weights)
+		weapon_config.weapons.push_back(weapon_weights)
+	
+	# Add existing weapons with weight 1.0 that are not modified
+	var scored_weapon_scenes: Array = weapon_config.weapons.map(func(x): return x.weapon)
+
+	for weapon_scene in spawner.artillery_ai_starting_weapons:
+		if not scored_weapon_scenes.any(func(scored): return scored.resource_path == weapon_scene.resource_path):
+			var weapon_weights := WeaponWeights.new()
+			weapon_weights.weapon = weapon_scene
+			weapon_weights.weight = 1.0
+			weapon_config.weapons.push_back(weapon_weights)
+
+	# Sort so that highest priority weapons come first
+	weapon_config.weapons.sort_custom(func(a,b): return a.weight > b.weight)
+
 	return weapon_config
 
 func _modify_ai_weapons_by_config(spawner: ArtillerySpawner, modifier_weapon_config: AIRunLevelWeaponConfig) -> void:
-	# Sort so that highest priority weapons come first
-	modifier_weapon_config.additional_weapons.sort_custom(func(a,b): return a.weight > b.weight)
 
 	spawner.artillery_ai_starting_weapon_count += Vector2i.ONE * modifier_weapon_config.additional_weapon_count
 	var min_weapon_count:int = spawner.artillery_ai_starting_weapon_count.x
+	var max_weapon_count:int = spawner.artillery_ai_starting_weapon_count.y
 
 	var final_weapons:Array[PackedScene] = []
-	for weapon_config in modifier_weapon_config.additional_weapons:
-		if weapon_config.weight >= 1.0:
-			final_weapons.push_back(weapon_config.weapon)
-	
-	# Now add regular weapons
-	if final_weapons.size() < min_weapon_count:
-		for weapon in spawner.artillery_ai_starting_weapons:
-			if not final_weapons.any(func(elm): return elm.resource_path == weapon.resource_path):
-				final_weapons.push_back(weapon)
+	for weapon_config in modifier_weapon_config.weapons:
+		var weight:float = weapon_config.weight
+		var weapon_scene:PackedScene = weapon_config.weapon
 
-	# Add in low priority weapons
-	if final_weapons.size() < min_weapon_count:
-		for weapon_config in modifier_weapon_config.additional_weapons:
-			var weapon:PackedScene = weapon_config.weapon
-			if weapon_config.weight < 1.0 and not final_weapons.any(func(elm): return elm.resource_path == weapon.resource_path):
-				final_weapons.push_back(weapon)
+		if weight > 1.0 \
+		 or (is_equal_approx(weight, 1.0) and final_weapons.size() < max_weapon_count) \
+		 or (weight < 1.0 and final_weapons.size() < min_weapon_count):
+			final_weapons.push_back(weapon_scene)
+		else:
+			break
 
 	spawner.artillery_ai_starting_weapons = final_weapons
 	
