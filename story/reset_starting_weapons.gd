@@ -45,7 +45,7 @@ func _should_reset_weapons(level:GameLevel) -> bool:
 		print_debug("%s: Skip resetting weapons as level=%s is level %d" % [name, level.level_name, SceneManager._current_level_index])
 		return false
 	
-	var story_level_state:StoryLevelState = get_tree().get_first_node_in_group(Groups.StoryLevelState) as StoryLevelState
+	var story_level_state:StoryLevelState = SceneManager.story_level_state
 	if not story_level_state:
 		push_warning("%s: StoryLevelState not found in tree - unable to check run number" % name)
 		return true
