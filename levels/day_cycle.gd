@@ -18,7 +18,7 @@ var day_segment:float:
 @export var presets_queue:Array[DayWeatherState]
 
 var current_state:DayWeatherState
-
+var is_raining:bool = false
 var is_night:bool = true ## Status of the environment/modulate, not necessarily "TOD"
 
 @export_group("Export Nodes")
@@ -71,19 +71,36 @@ func _ready() -> void:
 	wait_and_next_state()
 	
 func wait_and_next_state() -> void:
-	next_state_timer.start(day_segment)
-	print_debug("The current day cycle is ", current_state.display_name)
+	next_state_timer.start(current_state.duration_ratio * day_segment)
+	if is_raining:
+		print_debug("The current day cycle is ", current_state.display_name, "and it's raining.")
+	else:
+		print_debug("The current day cycle is ", current_state.display_name)
 
 func next_state() -> void:
 	_transitions_lengths.clear()
 	
 	if _state_queue.is_empty(): reset_queue()
-	match state_change_logic:
-		0: # Ordered
-			current_state = _state_queue.pop_front()
-		1: # Random
-			current_state = _state_queue.pick_random()
-			_state_queue.erase(current_state)
+	
+	var getting_state:bool = true
+	while getting_state:
+		var state:DayWeatherState
+		
+		match state_change_logic:
+			0: # Ordered
+				state = _state_queue.pop_front()
+			1: # Random
+				state = _state_queue.pick_random()
+				_state_queue.erase(state)
+		
+		if state.skip_chance > 0.0:
+			if randf() < state.skip_chance:
+				continue
+		
+		current_state = state
+		getting_state = false
+		break
+		
 	apply_state(current_state)
 	
 	GameEvents.day_weather_changed.emit(current_state, _transitions_lengths.values().reduce(sum))
@@ -91,9 +108,19 @@ func next_state() -> void:
 	wait_and_next_state()
 	
 func apply_state(state:DayWeatherState, immediate:bool = false) -> void:
-	is_night = state.is_dark
-	change_ambient(state.ambient_color, immediate)
-	change_sun(state.sun_position, state.sun_energy, immediate)
+	if randf() < state.rain_chance:
+		# Raining
+		is_raining = true
+		is_night = state.rain_is_dark
+		change_ambient(state.rain_ambient_color, immediate)
+		change_sun(state.sun_position, state.rain_sun_energy, immediate)
+	else:
+		# Not raining
+		is_raining = false
+		is_night = state.is_dark
+		change_ambient(state.ambient_color, immediate)
+		change_sun(state.sun_position, state.sun_energy, immediate)
+		
 	change_weather(state)
 	
 	
@@ -151,7 +178,7 @@ func change_ambient(mod_color:Color, immediate:bool = false) -> void:
 
 func change_weather(state:DayWeatherState) -> void:
 	## TODO: amount of rain (intensity), tank lights catching particles
-	if state.is_raining:
+	if is_raining:
 		if _active_weather_node:
 			# Already raining
 			return
