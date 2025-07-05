@@ -6,6 +6,7 @@
 
 [node name="LobberAiBehavior" parent="StateMachine" index="0"]
 aim_error_chance = 0.5
-aim_deviation_degrees = 20.0
+aim_deviation_degrees = 30.0
 aim_power_pct = 0.25
 min_power_pct = 0.15
+error_reduction_exp = 2.0

@@ -6,3 +6,5 @@
 [node name="AITank" instance=ExtResource("1_noyvk")]
 
 [node name="BruteAiBehavior" parent="StateMachine" index="0" instance=ExtResource("2_nn2t6")]
+aim_error_chance = 0.25
+aim_deviation_degrees = 10.0

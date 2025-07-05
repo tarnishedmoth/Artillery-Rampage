@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://dtswvjna48727"]
+
+[ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="1_gq8ri"]
+
+[node name="AITank" instance=ExtResource("1_gq8ri")]
+
+[node name="WallmasterAiBehavior" parent="StateMachine" index="0"]
+aim_error_chance = 0.4
+aim_deviation_degrees = 25.0
+error_reduction_exp = 2.0

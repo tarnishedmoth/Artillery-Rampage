@@ -6,3 +6,6 @@
 [node name="AITank" instance=ExtResource("1_joaus")]
 
 [node name="LobberAiBehavior" parent="StateMachine" index="0" instance=ExtResource("2_q0p85")]
+aim_error_chance = 0.2
+aim_deviation_degrees = 10.0
+error_reduction_exp = 2.5

@@ -6,7 +6,7 @@ class_name SniperAIErrorCalculation extends Node
 
 @export_group("Sniper")
 ## Max target distance
-@export_range(100.0, 1.0, 0.01) var max_target_distance: float = 500.0
+@export_range(1.0, 1000.0, 1.0) var max_target_distance: float = 500.0
 
 @export_group("Sniper")
 @export_range(1.0, 10.0, 0.1) var error_dist_exp: float = 2.0

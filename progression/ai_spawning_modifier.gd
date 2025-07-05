@@ -48,15 +48,15 @@ func remap_ai_types_for_effective_difficulty(difficulty: Difficulty.DifficultyLe
 	var ai_difficulty_config:AIDifficultyConfig = ai_difficulty_map.get(difficulty)
 	
 	if is_instance_valid(_artillery_spawner) and ai_difficulty_config and ai_difficulty_config.ai_type_mappings:
-		var mappings:Dictionary[PackedScene, PackedScene] = ai_difficulty_config.ai_type_mappings
+		var mappings:Dictionary[String, PackedScene] = ai_difficulty_config.ai_type_mappings
 
 		for i in _artillery_spawner.artillery_ai_types.size():
 			var artillery_type:PackedScene = _artillery_spawner.artillery_ai_types[i]
-
-			var remapped_type:PackedScene = mappings.get(artillery_type)
+			var type_scene_path:String = artillery_type.resource_path
+			var remapped_type:PackedScene = mappings.get(type_scene_path)
 			if remapped_type:
 				_artillery_spawner.artillery_ai_types[i] = remapped_type
-				print_debug("%s: Modify Artillery Spawner - remap AI %s -> %s" % [name, artillery_type.resource_path, remapped_type.resource_path])
+				print_debug("%s: Modify Artillery Spawner - remap AI %s -> %s" % [name, type_scene_path, remapped_type.resource_path])
 			
 func _on_difficulty_changed(new_difficulty: Difficulty.DifficultyLevel, _old_difficulty: Difficulty.DifficultyLevel) -> void:
 	if is_instance_valid(_artillery_spawner):

@@ -6,5 +6,6 @@
 [node name="SniperLobber" type="Node"]
 script = ExtResource("1_15mt4")
 aim_error_chance = 1.0
+error_reduction_exp = 3.0
 
 [node name="SniperErrorCalc" parent="." instance=ExtResource("2_1ajj7")]

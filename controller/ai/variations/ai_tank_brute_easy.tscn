@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://7g185x7h7w2d"]
+
+[ext_resource type="PackedScene" uid="uid://sthucbuglqt5" path="res://controller/ai/variations/ai_tank_brute.tscn" id="1_8hhxq"]
+
+[node name="AITank" instance=ExtResource("1_8hhxq")]
+
+[node name="BruteAiBehavior" parent="StateMachine" index="0"]
+aim_error_chance = 0.5
+aim_deviation_degrees = 25.0

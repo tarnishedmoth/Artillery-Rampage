@@ -11,8 +11,13 @@ direct_fire_wind_threshold = 20.0
 preferred_ai_priority = 20
 
 [node name="WallmasterAiBehavior" parent="StateMachine" index="0" instance=ExtResource("3_s2s7f")]
+aim_error_chance = 0.15
+aim_deviation_degrees = 5.0
+error_reduction_exp = 3.0
 
 [node name="BruteAiBehavior" parent="StateMachine" index="1" instance=ExtResource("4_t8h2u")]
+aim_error_chance = 0.2
+aim_deviation_degrees = 10.0
 forces_mask = 15
 power_attempt_reduction = 0.1
 min_power_fraction = 0.5

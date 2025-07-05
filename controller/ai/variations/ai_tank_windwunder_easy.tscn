@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://dx77nijt8s2hs"]
+
+[ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="1_w17rt"]
+
+[node name="AITank" instance=ExtResource("1_w17rt")]
+
+[node name="WallmasterAiBehavior" parent="StateMachine" index="0"]
+aim_error_chance = 0.4
+aim_deviation_degrees = 20.0
+error_reduction_exp = 2.0
+
+[node name="BruteAiBehavior" parent="StateMachine" index="1"]
+aim_error_chance = 0.4
+aim_deviation_degrees = 25.0

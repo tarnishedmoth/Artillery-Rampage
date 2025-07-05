@@ -16,7 +16,7 @@ class_name LobberAIBehavior extends AIBehavior
 @export_range(0.0, 10.0, 0.05) var error_reduction_exp: float = 2.0
 
 @export_group("Config")
-@export_range(0.0, 1.0, 0.05) var angles: Array[float] = [80.0, 75.0, 70.0, 65.0, 60.0, 55.0, 50.0, 45.0]
+@export var angles: Array[float] = [80.0, 75.0, 70.0, 65.0, 60.0, 55.0, 50.0, 45.0]
 
 @export_group("Config")
 @export_flags("Gravity", "Wind", "Warp Walls", "Elastic Walls") var forces_mask: int = Forces.Gravity | Forces.Wind

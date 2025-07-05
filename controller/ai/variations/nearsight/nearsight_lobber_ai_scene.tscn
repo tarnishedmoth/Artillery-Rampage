@@ -5,5 +5,7 @@
 
 [node name="NearsightLobber" type="Node"]
 script = ExtResource("1_jc52e")
+aim_deviation_degrees = 5.0
+error_reduction_exp = 3.0
 
 [node name="NearsightErrorCalculation" parent="." instance=ExtResource("2_feg3f")]
