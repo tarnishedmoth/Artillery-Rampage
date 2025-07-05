@@ -3,9 +3,6 @@ class_name WeaponNonPhysicalBeam extends Node2D
 
 signal completed_lifespan(projectile) ## Tracked by Weapon class
 
-@onready var laser_start = $LaserStart
-@onready var laser_end = $LaserEnd
-
 ## Self destroys once this time has passed.[br]
 ## When [member kill_after_turns_elapsed] is used, this time emits [signal completed_lifespan].
 @export var max_lifetime: float = 10.0
@@ -66,23 +63,41 @@ func destroy_after_lifetime(lifetime:float = max_lifetime) -> void:
 	timer.timeout.connect(destroy)
 	timer.start(lifetime)
 
+func _get_current_segment() -> Node:
+	# TODO: get segment based on current index
+	return $LaserSegment1
+
+func get_current_laser_start():
+	return _get_current_segment().get_node("LaserStart")
+
+func get_current_laser_end():
+	return _get_current_segment().get_node("LaserEnd")
+
+func get_current_beam_sprite():
+	return _get_current_segment().get_node("BeamSprite")
+
 func _process(delta):
-	# Only move laser_start at the end of the beam's lifetime
-	#var laser_start_velocity = laser_end_velocity / 100
-	#laser_start.position += laser_start_velocity.rotated(aim_angle)
+	var laser_start = get_current_laser_start()
+	var laser_end = get_current_laser_end()
+	var beam_sprite = get_current_beam_sprite()
+	
 	if can_travel:
 		travel_distance += speed * delta
 		laser_end.position = laser_start.position + Vector2(travel_distance, 0.0).rotated(aim_angle)
 		see_if_beam_collides_with_anything()
-		$BeamSprite.global_rotation = aim_angle + deg_to_rad(90)
-		$BeamSprite.position =  (laser_end.position + laser_start.position) / 2
-		$BeamSprite.scale.y = laser_end.position.length() - laser_start.position.length()
+		beam_sprite.global_rotation = aim_angle + deg_to_rad(90)
+		beam_sprite.position = (laser_end.position + laser_start.position) / 2
+		beam_sprite.scale.y = laser_end.position.length() - laser_start.position.length()
 	else:
 		time_since_last_hit += delta
 		if time_since_last_hit >= time_to_wait_between_hits:
 			can_travel = true
 
 func see_if_beam_collides_with_anything():
+	var laser_start = get_current_laser_start()
+	var laser_end = get_current_laser_end()
+	var beam_sprite = get_current_beam_sprite()
+
 	var space_state = get_world_2d().direct_space_state
 	var query_params := PhysicsRayQueryParameters2D.create(
 		global_position, laser_end.global_position,
@@ -100,6 +115,8 @@ func get_destructible_component() -> CollisionPolygon2D:
 
 ## Runs damage logic and explodes if an interaction occurs
 func explode(collided_body: PhysicsBody2D = null, force:bool = false):
+	var laser_end = get_current_laser_end()
+
 	# Need to do a sweep to see all the things we have influenced
 	# Need to be sure not to "double-damage" things both from influence and from direct hit 
 	# The body here is the direct hit body that will trigger the projectile to explode if an interaction happens
@@ -196,6 +213,7 @@ func get_instigator() -> Node2D:
 
 ## Override to return laser transform
 func _get_collision_transform() -> Transform2D:
+	var laser_end = get_current_laser_end()
 	return Transform2D(0, laser_end.global_position)
 
 func _find_interaction_overlaps() -> Array[Node2D]:
@@ -241,4 +259,5 @@ func _find_interaction_overlaps() -> Array[Node2D]:
 
 ## Override to change the destructible position to laser end position
 func _on_destructible_component_interaction(in_destructible_component: CollisionPolygon2D, destructible_node:Node) -> void:
+	var laser_end = get_current_laser_end()
 	in_destructible_component.position = laser_end.position

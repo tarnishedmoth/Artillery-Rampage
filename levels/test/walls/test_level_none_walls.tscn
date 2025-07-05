@@ -10,17 +10,17 @@
 
 [node name="GameLevel" parent="." instance=ExtResource("1_r76ji")]
 
-[node name="RoundDirector" parent="GameLevel" index="1"]
+[node name="RoundDirector" parent="GameLevel" index="2"]
 player_goes_first = true
 shuffle_order = false
 
-[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array(-104, -8, 14.0625, -2.94116, -7.8125, 422.059, 320.313, 429.412, 325, -222.059, 373.438, -227.941, 390, -447, 609, -8, 937, -3, 945, 445, -103, 448)
 
-[node name="Walls" parent="GameLevel" index="5"]
+[node name="Walls" parent="GameLevel" index="6"]
 wall_mode = 4
 
-[node name="Wind" parent="GameLevel" index="7"]
+[node name="Wind" parent="GameLevel" index="8"]
 wind_max = 0
 
 [node name="Enemy1" parent="GameLevel" instance=ExtResource("2_p8t2b")]
@@ -51,6 +51,7 @@ position = Vector2(934, 407)
 position = Vector2(120, 427)
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]
