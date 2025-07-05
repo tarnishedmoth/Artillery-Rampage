@@ -73,11 +73,11 @@ Savable="Class that participates in save/load system"
 DamageableRoot="Root node in the damageable or destructible tree - e.g. Terrain for TerrainChunk"
 TerrainChunk="Class that can be used as a child in Terrain system. Allows for destructible and shatterable objects in addition to standard static TerrainChunk"
 GameLevel="GameLevel node"
-Wind_CPUParticles2D="CPUParticles2D that should be blown around by wind"
 WobbleActivator="Activation node for the wobble damage mechanic"
 StoryLevelState="Contains info about run and completed levels"
 TrajectoryPreviewer="Weapon or Projectile, used to filter out in events etc"
 RewardableOnDestroy="Tag for nodes that reward scrap or personnel when they are destroyed other than tanks"
+Wind_Particles2D="CPUParticles2D that should be blown around by wind"
 
 [input]
 

@@ -7,4 +7,5 @@ class_name DayWeatherState extends Resource
 @export var is_dark:bool = false ## Signals things with lights to respond.
 
 @export_group("Weather")
-@export var precipitation:bool = false
+@export var is_raining:bool = false
+@export_range(0.1, 1.0, 0.1) var rain_intensity:float = 0.5

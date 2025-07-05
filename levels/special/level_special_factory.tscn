@@ -146,6 +146,7 @@ unique_name_in_owner = true
 [node name="Announcer" parent="GameLevel" instance=ExtResource("20_8saf5")]
 
 [node name="DayWeather" parent="GameLevel" node_paths=PackedStringArray("sun_light", "game_level") instance=ExtResource("28_h1k02")]
+unique_name_in_owner = true
 sun_light = NodePath("../TheSunLight")
 game_level = NodePath("..")
 
