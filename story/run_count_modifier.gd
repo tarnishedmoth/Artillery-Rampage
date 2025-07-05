@@ -50,6 +50,12 @@ func _modify_artillery_spawner(spawner: ArtillerySpawner) -> void:
 		print_debug("%s: Skip modifiers on first run" % name)
 		return
 	
+	# Change the AI strength
+	var effective_difficulty:Difficulty.DifficultyLevel = _get_effective_difficulty_for_run_count(run_count)
+	print_debug("%s: Effective AI difficulty %s -> %s" % \
+		[name, EnumUtils.enum_to_string(Difficulty.DifficultyLevel, Difficulty.current_difficulty), EnumUtils.enum_to_string(Difficulty.DifficultyLevel, effective_difficulty)])
+	GameEvents.ai_effective_difficulty_changed.emit(effective_difficulty)
+
 	spawner.default_ai_players += Vector2i.ONE * (run_count - 1)
 
 	# Clamp to max
@@ -64,6 +70,17 @@ func _modify_artillery_spawner(spawner: ArtillerySpawner) -> void:
 	if modifier_weapon_config:
 		_modify_ai_weapons_by_config(spawner, modifier_weapon_config)
 
+func _get_effective_difficulty_for_run_count(run_count:int) -> Difficulty.DifficultyLevel:
+	var current_difficulty: int = EnumUtils.enum_as_int(Difficulty.current_difficulty)
+	var hardest_difficulty: int = EnumUtils.enum_as_int(Difficulty.DifficultyLevel.HARD)
+
+	var effective_difficulty_int: int = current_difficulty + (run_count - 1)
+
+	if effective_difficulty_int >= hardest_difficulty:
+		return Difficulty.DifficultyLevel.HARD
+
+	return effective_difficulty_int as Difficulty.DifficultyLevel
+	
 func _get_run_level_weapon_config(spawner: ArtillerySpawner, run_count: int) -> AIRunLevelWeaponConfig:
 	var run_modifiers:AIRunModifiers = SceneManager.story_levels.run_modifiers
 	if not run_modifiers:
@@ -106,7 +123,6 @@ func _get_run_level_weapon_config(spawner: ArtillerySpawner, run_count: int) -> 
 	return weapon_config
 
 func _modify_ai_weapons_by_config(spawner: ArtillerySpawner, modifier_weapon_config: AIRunLevelWeaponConfig) -> void:
-
 	spawner.artillery_ai_starting_weapon_count += Vector2i.ONE * modifier_weapon_config.additional_weapon_count
 	var min_weapon_count:int = spawner.artillery_ai_starting_weapon_count.x
 	var max_weapon_count:int = spawner.artillery_ai_starting_weapon_count.y

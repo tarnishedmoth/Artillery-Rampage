@@ -16,6 +16,10 @@ static func enum_from_string(enum_type, enum_name:String, case_sensitive:bool = 
 static func enum_ordinal(enum_type, enum_value) -> int:
 	return enum_type.values().find(enum_value)
 
+## Returns the enum corresponding to the ordinal int index of the enum returned from enum_ordinal
+static func ordinal_to_enum(enum_type, ordinal):
+	return enum_type.values()[ordinal] if ordinal >= 0 and ordinal < enum_type.values().size() else null
+
 ## Returns the enum value as an int
 ## enum Animal { DOG = 3, CAT = 5, RHINO = 7 } # Animal.RHINO returns 7
 static func enum_as_int(enum_value) -> int:
