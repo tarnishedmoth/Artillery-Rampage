@@ -119,7 +119,6 @@ var tank_decor_light_color:Color = Color.WHITE:
 
 func _on_update_color():
 	modulate = color
-	#%Spotlight.color = color
 	tank_decor_light_color = color # Using the setter to config multiple lights
 	# TODO: Setter is not supposed to be called for @onready or initial value but it is so guard against initial nil
 	if turret:

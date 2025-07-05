@@ -10,7 +10,8 @@
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_vydqa"]
 playback_mode = 1
-random_volume_offset_db = 3.0
+random_pitch = 1.01
+random_volume_offset_db = 4.0
 streams_count = 4
 stream_0/stream = ExtResource("3_pt70m")
 stream_1/stream = ExtResource("4_gn3wk")
@@ -72,7 +73,7 @@ script = ExtResource("3_cq8nu")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer" parent="Audio"]
 stream = SubResource("AudioStreamRandomizer_vydqa")
-volume_db = -20.0
+volume_db = -14.0
 max_polyphony = 8
 bus = &"Environment"
 

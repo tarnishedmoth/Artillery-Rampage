@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="DayWeatherState" load_steps=2 format=3 uid="uid://dipfggpo6tkd4"]
+
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="1_jaby2"]
+
+[resource]
+script = ExtResource("1_jaby2")
+display_name = "Night"
+skip_chance = 0.0
+duration_ratio = 1.0
+sun_position = Vector2(640, 140)
+sun_energy = 0.33
+ambient_color = Color(0.156863, 0.196078, 0.27451, 1)
+is_dark = true
+weather_transition_time = 30.0
+rain_chance = 0.25
+rain_intensity = 0.75
+rain_ambient_color = Color(0.111479, 0.16416, 0.254641, 1)
+rain_sun_energy = 0.18
+rain_is_dark = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"

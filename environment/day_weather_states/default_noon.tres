@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="DayWeatherState" load_steps=2 format=3 uid="uid://btmvihjsjvfmp"]
+
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="1_u1gtl"]
+
+[resource]
+script = ExtResource("1_u1gtl")
+display_name = "Noon"
+skip_chance = 0.0
+duration_ratio = 1.0
+sun_position = Vector2(0, -140)
+sun_energy = 0.35
+ambient_color = Color(0.901961, 0.901961, 0.901961, 1)
+is_dark = false
+weather_transition_time = 20.0
+rain_chance = 0.25
+rain_intensity = 0.5
+rain_ambient_color = Color(0.282353, 0.819608, 0.8, 1)
+rain_sun_energy = 0.22
+rain_is_dark = false
+metadata/_custom_type_script = "uid://blr3jie556r2m"
