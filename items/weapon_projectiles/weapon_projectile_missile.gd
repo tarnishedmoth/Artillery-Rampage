@@ -76,10 +76,17 @@ func targeting() -> void:
 
 func _find_nearest_target() -> Vector2:
 	var targets:Array
-	if owner_tank.is_in_group(Groups.Player):
-		targets = get_tree().get_nodes_in_group(Groups.Bot) # Target AI units
+	
+	var game_level = SceneManager.get_current_level_root()
+	if game_level:
+		if game_level is GameLevel:
+			if owner_tank:
+				targets = TankController.get_opponents_of(get_instigator(), game_level.round_director.tank_controllers)
+			else:
+				targets = game_level.round_director.tank_controllers
 	else:
-		targets = get_tree().get_nodes_in_group(Groups.Player) # Target player units
+		push_warning("Missile targeting out of game level.")
+		return self.global_position
 	
 	var nearest_target:Node2D = null
 	var nearest_distance:float

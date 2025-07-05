@@ -62,14 +62,16 @@ func execute(tank_unit: Tank) -> AIState:
 
 func get_opponents() -> Array[TankController]:
 	# Array.filter is broken!  See https://github.com/godotengine/godot/issues/72566
-	var opponents: Array[TankController] = []
-
-	var my_controller: TankController = tank.owner
-	for controller in game_level.round_director.tank_controllers:
-		# Make sure we are not on the same team
-		if controller != my_controller and not my_controller.is_on_same_team_as(controller):
-			opponents.push_back(controller)
-	return opponents
+	#var opponents: Array[TankController] = []
+#
+	#var my_controller: TankController = tank.owner
+	#for controller in game_level.round_director.tank_controllers:
+		## Make sure we are not on the same team
+		#if controller != my_controller and not my_controller.is_on_same_team_as(controller):
+			#opponents.push_back(controller)
+	#return opponents
+	
+	return TankController.get_opponents_of(tank.owner, game_level.round_director.tank_controllers)
 	
 #region Aim and LOS	
 

@@ -83,7 +83,7 @@ ignore_time_scale = true
 
 [node name="Raindrops" type="GPUParticles2D" parent="." groups=["Wind_Particles2D"]]
 unique_name_in_owner = true
-modulate = Color(0.540881, 0.781596, 0.906216, 1)
+modulate = Color(0.95523, 0.964059, 0.971753, 1)
 top_level = true
 light_mask = 2
 visibility_layer = 2
@@ -94,7 +94,6 @@ texture = ExtResource("1_3p5hu")
 lifetime = 2.0
 explosiveness = 0.1
 randomness = 0.1
-fixed_fps = 24
 collision_base_size = 2.0
 visibility_rect = Rect2(0, 0, 1280, 720)
 process_material = SubResource("ParticleProcessMaterial_g4q2l")

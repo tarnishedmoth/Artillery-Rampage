@@ -54,6 +54,15 @@ func is_on_same_team_as(other) -> bool:
 		return team == other.team
 	else:
 		return team == other # int comparison
+		
+static func get_opponents_of(controller:TankController, group:Array[TankController]) -> Array[TankController]:
+	var opponents: Array[TankController] = []
+	
+	for _controller in group:
+		# Make sure we are not on the same team
+		if _controller != controller and not _controller.is_on_same_team_as(controller):
+			opponents.push_back(_controller)
+	return opponents
 
 func begin_round() -> void:
 	if pending_state:

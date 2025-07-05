@@ -1,6 +1,6 @@
 class_name RoundDirector extends Node
 
-var tank_controllers: Array = []
+var tank_controllers: Array[TankController] = []
 var active_player_index: int = -1
 
 var turns_since_damage: int = 0
