@@ -1,10 +1,79 @@
-[gd_scene load_steps=6 format=3 uid="uid://cxrjwa6ccjgmm"]
+[gd_scene load_steps=11 format=3 uid="uid://cxrjwa6ccjgmm"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_vvubb"]
 [ext_resource type="PackedScene" uid="uid://dmtjm8de7ep32" path="res://controller/ai/ai_tank.tscn" id="2_te32p"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="2_xqjs5"]
 [ext_resource type="PackedScene" uid="uid://c5g3m0l3ccwf1" path="res://controller/ai/behaviors/lobber_ai_behavior.tscn" id="3_xqjs5"]
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house/house.tscn" id="4_yqelh"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="5_gafwv"]
+
+[sub_resource type="Resource" id="Resource_yqelh"]
+script = ExtResource("2_xqjs5")
+display_name = "Morning"
+skip_chance = 0.0
+duration_ratio = 1.0
+sun_position = Vector2(-400, 300)
+sun_energy = 0.31
+ambient_color = Color(0.892612, 0.912973, 0.847658, 1)
+is_dark = false
+weather_transition_time = 10.0
+rain_chance = 1.0
+rain_intensity = 0.25
+rain_ambient_color = Color(0.866833, 0.570908, 0.646552, 1)
+rain_sun_energy = 0.27
+rain_is_dark = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[sub_resource type="Resource" id="Resource_gafwv"]
+script = ExtResource("2_xqjs5")
+display_name = "Noon"
+skip_chance = 0.0
+duration_ratio = 1.0
+sun_position = Vector2(0, -140)
+sun_energy = 0.35
+ambient_color = Color(0.901961, 0.901961, 0.901961, 1)
+is_dark = false
+weather_transition_time = 10.0
+rain_chance = 0.0
+rain_intensity = 0.5
+rain_ambient_color = Color(0.282353, 0.819608, 0.8, 1)
+rain_sun_energy = 0.22
+rain_is_dark = false
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[sub_resource type="Resource" id="Resource_blldl"]
+script = ExtResource("2_xqjs5")
+display_name = "Afternoon"
+skip_chance = 0.0
+duration_ratio = 1.0
+sun_position = Vector2(400, 0)
+sun_energy = 0.28
+ambient_color = Color(0.96245, 0.880774, 0.875271, 1)
+is_dark = false
+weather_transition_time = 10.0
+rain_chance = 1.0
+rain_intensity = 1.0
+rain_ambient_color = Color(0.761982, 0.417769, 0.334205, 1)
+rain_sun_energy = 0.28
+rain_is_dark = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[sub_resource type="Resource" id="Resource_7emhd"]
+script = ExtResource("2_xqjs5")
+display_name = "Night"
+skip_chance = 0.0
+duration_ratio = 1.0
+sun_position = Vector2(640, 140)
+sun_energy = 0.33
+ambient_color = Color(0.156863, 0.196078, 0.27451, 1)
+is_dark = true
+weather_transition_time = 10.0
+rain_chance = 0.5
+rain_intensity = 0.75
+rain_ambient_color = Color(0.111479, 0.16416, 0.254641, 1)
+rain_sun_energy = 0.18
+rain_is_dark = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"
 
 [node name="TestLevel01" type="Node2D"]
 
@@ -13,6 +82,11 @@
 [node name="RoundDirector" parent="GameLevel" index="2"]
 player_goes_first = true
 shuffle_order = false
+
+[node name="DayWeather" parent="GameLevel" index="13"]
+randomize_starting_state = false
+day_length = 50.0
+presets_queue = Array[ExtResource("2_xqjs5")]([SubResource("Resource_yqelh"), SubResource("Resource_gafwv"), SubResource("Resource_blldl"), SubResource("Resource_7emhd")])
 
 [node name="Enemy1" parent="GameLevel" instance=ExtResource("2_te32p")]
 position = Vector2(479, 278)

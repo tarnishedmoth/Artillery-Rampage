@@ -61,7 +61,7 @@ func _ready() -> void:
 		current_state = _state_queue.pick_random()
 		_state_queue = _state_queue.slice(_state_queue.find(current_state))
 	else:
-		current_state = presets_queue.front()
+		current_state = _state_queue.pop_front()
 		
 	## Setup for start
 	apply_state(current_state, true)
@@ -121,7 +121,7 @@ func apply_state(state:DayWeatherState, immediate:bool = false) -> void:
 		change_ambient(state.ambient_color, immediate)
 		change_sun(state.sun_position, state.sun_energy, immediate)
 		
-	change_weather(state)
+	change_weather(state, immediate)
 	
 	
 func change_sun(new_position:Vector2, new_energy:float = starting_energy, immediate:bool = false) -> void: #, hold:float) -> Tween:
@@ -176,21 +176,34 @@ func change_ambient(mod_color:Color, immediate:bool = false) -> void:
 		_on_transition_completed.call_deferred()
 		
 
-func change_weather(state:DayWeatherState) -> void:
-	## TODO: amount of rain (intensity), tank lights catching particles
+func change_weather(state:DayWeatherState, immediate:bool) -> void:
+	## TODO: tank lights catching particles, terrain chunk sets light occluder on start
+	var transition_time:float = 0.0 if immediate else state.weather_transition_time
+	
 	if is_raining:
-		if _active_weather_node:
-			# Already raining
-			return
-		else:
+		# Current state wants rain
+		if not _active_weather_node:
+			# Node is invalid
 			_active_weather_node = PRECIPITATION_SCENE.instantiate()
 			add_child(_active_weather_node)
-		
-		_active_weather_node.set_rain_intensity(state.rain_intensity)
+			_active_weather_node.call_deferred(&"start_rain", state.rain_intensity, transition_time)
+			
+		else:
+			
+			# Node is valid
+			if _active_weather_node.is_deleting:
+				# Still transitioning to delete
+				await _active_weather_node.tree_exited
+				change_weather(state, immediate)
+				return
+			else:
+				# Chilling
+				_active_weather_node.set_rain_intensity(state.rain_intensity, transition_time)
 		
 	else:
+		# Current state wants not rain
 		if _active_weather_node:
-			_active_weather_node.queue_free()
+			_active_weather_node.stop_rain_and_delete(transition_time)
 
 
 func transition_time() -> float:

@@ -15,6 +15,7 @@ class_name DayWeatherState extends Resource
 @export var is_dark:bool = false ## Signals things with lights to respond.
 
 @export_group("Weather")
+@export_range(0.1, 30.0, 0.1, "or_greater") var weather_transition_time:float = 10.0
 @export_range(0.0, 1.0, 0.05) var rain_chance:float = 0.0
 @export_range(0.1, 1.0, 0.05) var rain_intensity:float = 0.5
 @export var rain_ambient_color:Color = Color.MEDIUM_TURQUOISE
