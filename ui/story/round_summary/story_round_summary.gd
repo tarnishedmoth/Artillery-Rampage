@@ -148,11 +148,11 @@ func _calculate_personnel_change() -> int:
 	var letter_grade:String = _get_letter_grade(_grade)
 
 	match letter_grade:
-		"A+": return 4
-		"A": return 3
-		"A-": return 3
-		"B+", "B", "B-": return 2
-		"C+", "C", "C-": return 1 #C- is lowest win, anything lower is a loss
+		"A+": return 3
+		"A": return 2
+		"A-": return 2
+		"B+", "B", "B-": return 1
+		"C+", "C", "C-": return 0 #C- is lowest win, anything lower is a loss
 		"D+": return -1
 		"D","D-": return -2
 		"F" : return -3

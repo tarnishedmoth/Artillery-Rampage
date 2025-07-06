@@ -33,6 +33,13 @@ ai_type_mappings = Dictionary[String, PackedScene]({
 })
 metadata/_custom_type_script = "uid://sbvphvf2745y"
 
+[sub_resource type="Resource" id="Resource_7dh3p"]
+script = ExtResource("3_jn5uf")
+ai_type_mappings = Dictionary[String, PackedScene]({
+"res://controller/ai/variations/ai_tank_rando.tscn": ExtResource("11_0gg2v")
+})
+metadata/_custom_type_script = "uid://sbvphvf2745y"
+
 [sub_resource type="Resource" id="Resource_3rgkj"]
 script = ExtResource("3_jn5uf")
 ai_type_mappings = Dictionary[String, PackedScene]({
@@ -41,13 +48,6 @@ ai_type_mappings = Dictionary[String, PackedScene]({
 "res://controller/ai/variations/ai_tank_rando.tscn": ExtResource("8_hfvir"),
 "res://controller/ai/variations/ai_tank_wallmaster.tscn": ExtResource("9_y2os0"),
 "res://controller/ai/variations/ai_tank_windwunder.tscn": ExtResource("10_e615x")
-})
-metadata/_custom_type_script = "uid://sbvphvf2745y"
-
-[sub_resource type="Resource" id="Resource_7dh3p"]
-script = ExtResource("3_jn5uf")
-ai_type_mappings = Dictionary[String, PackedScene]({
-"res://controller/ai/variations/ai_tank_rando.tscn": ExtResource("11_0gg2v")
 })
 metadata/_custom_type_script = "uid://sbvphvf2745y"
 
