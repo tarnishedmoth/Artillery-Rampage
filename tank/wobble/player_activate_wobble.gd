@@ -40,7 +40,8 @@ func _input(event: InputEvent) -> void:
 	if not _turn_active or not _wobble_ready or not enabled:
 		return
 
-	if event.is_action_pressed("shoot"):
+	# Make sure player can shoot with current weapon
+	if event.is_action_pressed("shoot") and _can_shoot():
 		if not aim_damage_wobble.wobble_activated:
 			print_debug("%s(%s) intercepting shoot to activate wobble" % [name, controller])
 			_start_wobble()
@@ -49,15 +50,9 @@ func _input(event: InputEvent) -> void:
 		else:
 			# Hide the hud 
 			_end_wobble()
-	# Don't allow aim or power changes during wobble mechanic
-	else:
-		_check_consume_event(event)
-		
-func _check_consume_event(event: InputEvent) -> void:
-	if event.is_action("aim_left") or event.is_action("aim_right") or event.is_action("power_increase") or event.is_action("power_decrease"):
-		# Mark event as handled so that the player controller does not process it
-		# TODO: This doesn't work as these events checked in _process with Input.is_action_pressed
-		get_viewport().set_input_as_handled()
+
+func _can_shoot() -> bool:
+	return is_instance_valid(controller.tank) and controller.tank.check_can_shoot_weapon(controller.tank.current_equipped_weapon)
 
 func _start_wobble() -> void:
 	aim_damage_wobble.activate_wobble.emit()

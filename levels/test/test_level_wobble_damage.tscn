@@ -12,13 +12,12 @@ script = ExtResource("1_m0w0l")
 
 [node name="GameLevel" parent="." instance=ExtResource("2_13ilf")]
 
-[node name="Wind" parent="GameLevel" index="6"]
-wind_min = 0
-wind_max = 0
-
-[node name="RoundDirector" parent="GameLevel" index="7"]
+[node name="RoundDirector" parent="GameLevel" index="2"]
 player_goes_first = true
 shuffle_order = false
+
+[node name="Wind" parent="GameLevel" index="8"]
+wind_max = 0
 
 [node name="Enemy1" parent="GameLevel" instance=ExtResource("3_m0vbc")]
 position = Vector2(479, 278)
@@ -46,7 +45,18 @@ script = null
 [node name="Player" parent="GameLevel" instance=ExtResource("6_i82na")]
 position = Vector2(120, 427)
 
+[node name="WeaponMissile" parent="GameLevel/Player/Weapons" index="9"]
+current_ammo = 0
+magazines = 0
+
+[node name="WeaponMissileHoming" parent="GameLevel/Player/Weapons" index="10"]
+current_ammo = 0
+magazines = 0
+
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Walls"]
 [editable path="GameLevel/Enemy1"]
 [editable path="GameLevel/Enemy2"]
+[editable path="GameLevel/Player"]
+[editable path="GameLevel/Player/Tank/AimDamageWobble/PlayerActivateWobble"]
