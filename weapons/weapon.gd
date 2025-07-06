@@ -493,7 +493,7 @@ func _add_projectile_awaiting(projectile: WeaponProjectile) -> void:
 ## [signal WeaponNonPhysicalBeam.completed_lifespan]
 ## and increments an internal counter.
 func _add_beam_awaiting(beam: WeaponNonPhysicalBeam) -> void:
-	beam.completed_lifespan.connect(_on_projectile_completed_lifespan)
+	beam.completed_lifespan.connect(_on_beam_completed_lifespan)
 	_awaiting_lifespan_completion += 1
 
 ## The [Weapon] class doesn't inherently use modes, but components and subclasses can make use of them.
@@ -652,6 +652,14 @@ func _setup_new_beam(new_shot: WeaponNonPhysicalBeam, barrel: Marker2D) -> void:
 func _on_projectile_completed_lifespan(projectile:WeaponProjectile) -> void:
 	_awaiting_lifespan_completion -= 1
 	active_projectiles.erase(projectile)
+	
+	if not emit_action_signals: return
+	if not is_shooting: # Wait til we've fired all our shots this action
+		if _awaiting_lifespan_completion < 1:
+			weapon_actions_completed.emit(self) # If this doesn't emit, the game turn will be stuck.
+
+func _on_beam_completed_lifespan(beam: WeaponNonPhysicalBeam) -> void:
+	_awaiting_lifespan_completion -= 1
 	
 	if not emit_action_signals: return
 	if not is_shooting: # Wait til we've fired all our shots this action
