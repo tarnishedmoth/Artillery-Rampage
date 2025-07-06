@@ -44,6 +44,7 @@ var current_deviation:float
 var current_deviation_period:float
 var deviation_alpha:float
 var current_rads_per_sec:float
+var _alpha_skip:float
 
 var _deviation_delta_time:float
 
@@ -78,6 +79,7 @@ func _ready() -> void:
 func reset_wobble() -> void:
 	deviation_alpha = 0.0
 	_deviation_delta_time = 0.0
+	_alpha_skip = 0.0
 
 func _process(delta_time: float) -> void:
 	if not _is_active():
@@ -104,20 +106,15 @@ func _process(delta_time: float) -> void:
 	var aim_will_change:bool = _tank.can_aim_delta(aim_delta_rads)
 	
 	if aim_will_change:
-		_modifying_aim = true
-		_tank.aim_delta(aim_delta_rads)
-		_modifying_aim = false
-	else:
-		var alpha_skip:float = 0.25 - fmod(deviation_alpha, 0.25)
-		if phase == 1:
-			alpha_skip += 0.25
-		elif phase == 2:
-			alpha_skip += 0.5
-		elif phase == 3:
-			alpha_skip += 0.25
-		_deviation_delta_time += alpha_skip * current_deviation_period
-		deviation_alpha = _deviation_delta_time / current_deviation_period
-		
+		if is_zero_approx(_alpha_skip):
+			_modifying_aim = true
+			_tank.aim_delta(aim_delta_rads)
+			_modifying_aim = false
+		else:
+			_alpha_skip = maxf(_alpha_skip - eased_delta, 0.0)
+	else: 	# Skip remainder of this phase as turret is locked at full extension in one direction
+		_alpha_skip += eased_delta
+	
 	wobble_updated.emit()
 	
 func get_phase(in_deviation_alpha:float) -> int:
