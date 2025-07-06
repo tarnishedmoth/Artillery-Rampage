@@ -229,28 +229,25 @@ func beam_elastic(beam: WeaponNonPhysicalBeam):
 	return
 
 func beam_warp(beam: WeaponNonPhysicalBeam):
-	# TODO: implement
-	#var pos: Vector2 = projectile.global_position
+	var pos: Vector2 = beam.get_current_laser_end().global_position
 
-	#if(pos.x <= bounds.position.x):
-		#pos.x = bounds.position.x + bounds.size.x - warp_offset
+	if(pos.x <= bounds.position.x):
+		var spawn_pos = Vector2(bounds.position.x + bounds.size.x - warp_offset, pos.y)
+		beam.create_new_segment(spawn_pos)
 		#print_debug("Warp to right side %s -> %s" % [str(projectile.global_position), str(pos)])
 		#GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Left)
-	#elif pos.x >= bounds.position.x + bounds.size.x:
-		#pos.x = bounds.position.x + warp_offset
+	elif pos.x >= bounds.position.x + bounds.size.x:
+		var spawn_pos = Vector2(bounds.position.x + warp_offset, pos.y)
+		beam.create_new_segment(spawn_pos)
 		#print_debug("Warp to left side %s -> %s" % [str(projectile.global_position), str(pos)])
 		#GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Right)
 
-	## Beam weapons can't be pointed downwards; does this case need to be implemented?
+	# Beam weapons can't be pointed downwards; does this case need to be implemented?
 	#if pos.y >= bounds.position.y + bounds.size.y:
 		#print_debug("Hit bottom %s - destroying" % [str(pos)])
 		#GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Bottom)
 		#Delete projectile
 		#projectile.explode_and_force_destroy()
-	
-	# is there an equivalent to this for beams?
-	#projectile.global_position = pos
-	return
 
 func beam_none(beam: WeaponNonPhysicalBeam):
 	var pos: Vector2 = beam.get_current_laser_end().global_position

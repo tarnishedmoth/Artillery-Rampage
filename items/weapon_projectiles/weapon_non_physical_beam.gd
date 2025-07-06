@@ -29,10 +29,12 @@ var speed: float = 800.0
 ## The angle of the barrel firing the beam. This will be used to determine the trajectory of the beam.
 var aim_angle: float
 
-var travel_distance = 0
 var can_travel = true
 var time_since_last_hit = 0
 var time_to_wait_between_hits = 0.0075
+
+var number_of_segments = 1
+var distance_traveled_per_segment: Array[float] = [0]
 
 func _ready() -> void:
 	if has_node('Destructible'):
@@ -64,7 +66,10 @@ func destroy_after_lifetime(lifetime:float = max_lifetime) -> void:
 	timer.start(lifetime)
 
 func _get_current_segment() -> Node:
-	# TODO: get segment based on current index
+	if number_of_segments == 1:
+		return $LaserSegment1
+	elif number_of_segments == 2:
+		return $LaserSegment2
 	return $LaserSegment1
 
 func get_current_laser_start():
@@ -76,13 +81,23 @@ func get_current_laser_end():
 func get_current_beam_sprite():
 	return _get_current_segment().get_node("BeamSprite")
 
+func create_new_segment(pos: Vector2):
+	if number_of_segments == 1:
+		$LaserSegment2.visible = true
+		number_of_segments = 2
+		distance_traveled_per_segment.push_back(0)
+	get_current_laser_start().global_position = pos
+	get_current_laser_end().global_position = pos
+
 func _process(delta):
 	var laser_start = get_current_laser_start()
 	var laser_end = get_current_laser_end()
 	var beam_sprite = get_current_beam_sprite()
-	
+	var travel_distance = distance_traveled_per_segment[number_of_segments - 1]
+
 	if can_travel:
 		travel_distance += speed * delta
+		distance_traveled_per_segment[number_of_segments - 1] = travel_distance
 		laser_end.position = laser_start.position + Vector2(travel_distance, 0.0).rotated(aim_angle)
 		see_if_beam_collides_with_anything()
 		beam_sprite.global_rotation = aim_angle + deg_to_rad(90)
