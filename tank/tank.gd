@@ -217,14 +217,23 @@ func reset_orientation() -> void:
 	tankBody.reset_orientation()
 
 #region Aim and Power
-# TODO: Account for new curve errors
+
 func aim_at(angle_rads: float) -> void:
 	turret.rotation = clampf(angle_rads, deg_to_rad(min_angle), deg_to_rad(max_angle))
+
+	#Still fire event when no change for legacy purposes
 	GameEvents.aim_updated.emit(owner)
 
+func can_aim_at(angle_rads: float) -> bool:
+	var angle_degs:float = rad_to_deg(angle_rads)
+	return angle_degs >= min_angle and angle_degs <= max_angle
+	
 func aim_delta(angle_rads_delta: float) -> void:
 	aim_at(turret.rotation + angle_rads_delta)
-
+	
+func can_aim_delta(angle_rads_delta: float) -> bool:
+	return can_aim_at(turret.rotation + angle_rads_delta)
+	
 ## [0-100]
 func set_power_percent(power_pct: float) -> void:
 	power = clampf(power_pct * max_power / 100.0, 0.0, max_power)

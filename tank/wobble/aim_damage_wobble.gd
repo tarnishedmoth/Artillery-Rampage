@@ -44,6 +44,7 @@ var current_deviation:float
 var current_deviation_period:float
 var deviation_alpha:float
 var current_rads_per_sec:float
+var _alpha_skip:float
 
 var _deviation_delta_time:float
 
@@ -78,6 +79,7 @@ func _ready() -> void:
 func reset_wobble() -> void:
 	deviation_alpha = 0.0
 	_deviation_delta_time = 0.0
+	_alpha_skip = 0.0
 
 func _process(delta_time: float) -> void:
 	if not _is_active():
@@ -95,19 +97,31 @@ func _process(delta_time: float) -> void:
 
 	# Value 0-1 within current cycle
 	deviation_alpha = _deviation_delta_time / current_deviation_period
-	var phase_sign:float = get_phase_sign(deviation_alpha)
+
+	var phase:int = get_phase(deviation_alpha)
+	var phase_sign:float = get_phase_sign(phase)
 
 	var aim_delta_rads := phase_sign * current_rads_per_sec * eased_delta
 
-	_modifying_aim = true
-	_tank.aim_delta(aim_delta_rads)
-	_modifying_aim = false
+	var aim_will_change:bool = _tank.can_aim_delta(aim_delta_rads)
+	
+	if aim_will_change:
+		if is_zero_approx(_alpha_skip):
+			_modifying_aim = true
+			_tank.aim_delta(aim_delta_rads)
+			_modifying_aim = false
+		else:
+			_alpha_skip = maxf(_alpha_skip - eased_delta, 0.0)
+	else: 	# Skip remainder of this phase as turret is locked at full extension in one direction
+		_alpha_skip += eased_delta
 	
 	wobble_updated.emit()
 	
-func get_phase_sign(in_deviation_alpha:float) -> float:
+func get_phase(in_deviation_alpha:float) -> int:
 	# Determine the phase of the animation (1-4)
-	var phase:int = ceili(in_deviation_alpha * 4.0)
+	return ceili(in_deviation_alpha * 4.0)
+
+func get_phase_sign(phase:int) -> float:
 	#print_debug("phase=%d" % phase)
 	match phase:
 		1,4: return -1.0
