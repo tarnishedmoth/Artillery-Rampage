@@ -19,10 +19,11 @@ var is_player_turn:bool = false
 
 func _ready() -> void:
 	GameEvents.turn_started.connect(_on_turn_started)
-
 	GameEvents.user_options_changed.connect(_on_user_options_changed)
-	toggle_visibility(true)
+	GameEvents.level_loaded.connect(_on_level_loaded)
 
+func _on_level_loaded(game_level:GameLevel) -> void:
+	toggle_visibility(true)
 
 func toggle_visibility(toggle:bool = true) -> void:
 	if UserOptions.show_tooltips and toggle == true:
@@ -61,12 +62,28 @@ func recursive_get_children(node:Node) -> Array:
 	return children
 
 func check_glyphs(top_node: Control) -> void:
-	var tooltips = recursive_get_children(top_node)
+	check_and_remove_conditional_tooltips(top_node as TextSequence)
 
+	var tooltips = recursive_get_children(top_node)
+	
 	for control in tooltips:
 		if "text" in control:
 			control.text = replace_keybind_glyphs(control.text)
 
+func check_and_remove_conditional_tooltips(text_sequence: TextSequence) -> void:		
+	if not text_sequence or not text_sequence.sequence:
+		return
+	
+	for i in range(text_sequence.sequence.size() - 1, -1, -1):
+		var tooltip:Control = text_sequence.sequence[i]
+		if tooltip.is_in_group(Groups.SimultaneousFire) and not _is_simultaneous_fire_mode():
+			print_debug("%s: Removing simultaneous fire only tooltip: %s" % [name, tooltip.name])
+			text_sequence.remove_from_sequence(tooltip)
+
+func _is_simultaneous_fire_mode() -> bool:
+	var game_level:GameLevel = SceneManager.get_current_level_root()
+	return game_level.round_director.is_simultaneous_fire if is_instance_valid(game_level) else false
+			
 func replace_keybind_glyphs(text: String) -> String: # I don't understand why this isn't working
 	var new_text = text
 
@@ -93,9 +110,10 @@ func _on_user_options_changed() -> void:
 	toggle_visibility()
 
 func _on_turn_started(controller: TankController) -> void:
-	if controller is not Player:
-		is_player_turn = false
-		switch_display_to_new_context(Context.EnemyTurn)
-	else:
+	if controller is Player:
 		is_player_turn = true
 		switch_display_to_new_context(Context.PlayerTurn)
+	# Don't show enemy tooltips for simultaneous fire mode
+	elif not _is_simultaneous_fire_mode():
+		is_player_turn = false
+		switch_display_to_new_context(Context.EnemyTurn)

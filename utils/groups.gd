@@ -33,6 +33,8 @@ const StoryLevelState:StringName = &"StoryLevelState"
 ## 2) RewardAmount - int indicating how much of 1 to reward
 const RewardableOnDestroy:StringName = &"RewardableOnDestroy"
 
+const SimultaneousFire:StringName = &"SimultaneousFire"
+
 class RewardOnDestroyDetails:
 	const Scrap:StringName = &"Scrap"
 	const Personnel:StringName = &"Personnel"

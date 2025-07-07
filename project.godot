@@ -78,6 +78,7 @@ StoryLevelState="Contains info about run and completed levels"
 TrajectoryPreviewer="Weapon or Projectile, used to filter out in events etc"
 RewardableOnDestroy="Tag for nodes that reward scrap or personnel when they are destroyed other than tanks"
 Wind_Particles2D="CPUParticles2D that should be blown around by wind"
+SimultaneousFire="Simultaneous Fire mode only feature"
 
 [input]
 

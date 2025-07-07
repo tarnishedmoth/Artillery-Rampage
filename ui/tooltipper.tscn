@@ -34,7 +34,24 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 8
 script = ExtResource("2_2oifc")
-sequence = [NodePath("TooltipAim"), NodePath("TooltipPower"), NodePath("TooltipShoot"), NodePath("TooltipChangeWeapon")]
+sequence = [NodePath("TooltipSimultaneousFire"), NodePath("TooltipAim"), NodePath("TooltipPower"), NodePath("TooltipShoot"), NodePath("TooltipChangeWeapon")]
+
+[node name="TooltipSimultaneousFire" type="HBoxContainer" parent="PanelContainer/TooltipsPlayerTurn" groups=["SimultaneousFire"]]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipSimultaneousFire"]
+layout_mode = 2
+text = "Simultaneous Fire Mode"
+
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/TooltipSimultaneousFire"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="Description" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipSimultaneousFire"]
+layout_mode = 2
+text = "All units will fire at the same time once everyone presses shoot to fire."
 
 [node name="TooltipPower" type="HBoxContainer" parent="PanelContainer/TooltipsPlayerTurn"]
 visible = false

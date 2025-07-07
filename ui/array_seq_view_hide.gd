@@ -33,16 +33,46 @@ func start_sequence(array:Array) -> void:
 	_timer.timeout.connect(_on_cycle_timeout)
 	_timer.start(cycle_time)
 
+func remove_from_sequence(element:Control) -> void:
+	var index:int = sequence.find(element)
+	if index == -1:
+		push_warning("%s: Attempted to remove non-existent control=%s from sequence" % [name, element])
+		return
+		
+	sequence.remove_at(index)
+	
+	# Need to show next element in sequence if removing the currently active control
+	# This is actually now the current active index
+	if element == currently_visible_control:
+		if not sequence.is_empty():
+			_show_current_sequence_index()
+			resume()
+		else: #Nothing can be shown
+			stop()
+	
+	element.queue_free()	
+
+	
 func advance_sequence() -> void:
 	# Linear forward
 	if _current_sequence_index + 1 < current_sequence.size():
 		_current_sequence_index += 1
 	else:
 		_current_sequence_index = 0
-	currently_visible_control.hide()
-	currently_visible_control = current_sequence[_current_sequence_index]
-	currently_visible_control.show()
 
+	_show_current_sequence_index()
+
+func _show_current_sequence_index() -> void:
+	if is_instance_valid(currently_visible_control):
+		currently_visible_control.hide()
+	
+	if _current_sequence_index >= 0 and _current_sequence_index < current_sequence.size():
+		currently_visible_control = current_sequence[_current_sequence_index]
+		currently_visible_control.show()
+	else:
+		currently_visible_control = null
+		_current_sequence_index = -1
+	
 func stop() -> void:
 	_timer.queue_free()
 
