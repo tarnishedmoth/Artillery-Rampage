@@ -3,12 +3,14 @@ class_name AIBehavior extends Node
 var behavior_type: Enums.AIBehaviorType
 
 ## Set default priority returned when no other conditions match for state selection
-@export var default_priority:int = 1
+@export var default_priority: int = 1
 
-@export var launch_collision_linear_threshold:float = 0.1
-@export var min_collision_test_dist:float = 50
+@export var launch_collision_linear_threshold: float = 0.1
+@export var min_collision_test_dist: float = 50
 
-var track_shot_history:bool = false
+@export_range(0.0, 1.0, 0.01) var ceiling_velocity_threshold: float = 0.1
+
+var track_shot_history: bool = false
 
 class LaunchProperties:
 	var speed: float
@@ -54,7 +56,7 @@ var game_level: GameLevel:
 	
 
 var aim_fulcrum_position: Vector2:
-	get: return  tank.turret.global_position
+	get: return tank.turret.global_position
 	
 func execute(tank_unit: Tank) -> AIState:
 	self.tank = tank_unit
@@ -70,12 +72,11 @@ func get_opponents() -> Array[TankController]:
 		#if controller != my_controller and not my_controller.is_on_same_team_as(controller):
 			#opponents.push_back(controller)
 	#return opponents
-	
 	return TankController.get_opponents_of(tank.owner, game_level.round_director.tank_controllers)
 	
 #region Aim and LOS	
 
-func get_power_for_target_and_angle(target: Vector2, angle: float, launch_props: LaunchProperties, forces: int = 0, hit_test:bool = true) -> float:
+func get_power_for_target_and_angle(target: Vector2, angle: float, launch_props: LaunchProperties, forces: int = 0, hit_test: bool = true) -> float:
 	# See https://en.wikipedia.org/wiki/Range_of_a_projectile
 	var source: Vector2 = aim_fulcrum_position
 
@@ -96,10 +97,10 @@ func get_power_for_target_and_angle(target: Vector2, angle: float, launch_props:
 	var y: float = adjusted_target.y - source.y
 	var x: float = absf(adjusted_target.x - source.x)
 
-	var g : float = PhysicsUtils.get_gravity_vector().y
-
-	var sin_angle: float = sin(deg_to_rad(angle))
-	var cos_angle: float = cos(deg_to_rad(angle))
+	var g: float = PhysicsUtils.get_gravity_vector().y
+	var angle_rads: float = deg_to_rad(angle)
+	var sin_angle: float = sin(angle_rads)
+	var cos_angle: float = cos(angle_rads)
 
 	var sqrt_term: float = 2 * x * sin_angle + 2 * y * cos_angle
 	if sqrt_term <= 0:
@@ -116,6 +117,10 @@ func get_power_for_target_and_angle(target: Vector2, angle: float, launch_props:
 	if target_power > tank.max_power:
 		return -1
 
+	# Check if we will hit the ceiling, if it applies, at an unacceptable speed
+	if will_hit_ceiling_at_unacceptable_speed(source, angle, speed, forces):
+		return -1
+	
 	# Since the ascent is half of the total flight time, this means the linear phase accounts for about 5–15% of the total flight time.
 	# vy = vo * sin(theta) - g * t
 	# Determine initial ratio of y / x and then deviation threshold to solve for time when it is no longer linear
@@ -126,16 +131,16 @@ func get_power_for_target_and_angle(target: Vector2, angle: float, launch_props:
 		return target_power
 	
 	# Check that it won't collide with something in front of us
-	var aim_dir:Vector2 = Vector2(cos_angle, -sin_angle)
+	var aim_dir: Vector2 = Vector2(cos_angle, -sin_angle)
 	
-	var ratio:float = aim_dir.y / aim_dir.x
-	var deviation_threshold:float = ratio * launch_collision_linear_threshold
+	var ratio: float = aim_dir.y / aim_dir.x
+	var deviation_threshold: float = ratio * launch_collision_linear_threshold
 
 	# y will increase toward zero on the upward trajectory
 	# Use v = vo + a * t and split into x and y components. Since vx doesn't change, it cancels out
 	# Want to solve for when vy decreases by 1 - deviation_threshold
-	var time_to_linear:float = -deviation_threshold * speed * sin_angle / g
-	var hit_test_dist:float = maxf(time_to_linear * speed, min_collision_test_dist)
+	var time_to_linear: float = - deviation_threshold * speed * sin_angle / g
+	var hit_test_dist: float = maxf(time_to_linear * speed, min_collision_test_dist)
 	var hit_test_target: Vector2 = source + aim_dir * hit_test_dist
 
 	var result: Dictionary = has_line_of_sight_to(source, hit_test_target)
@@ -150,12 +155,19 @@ func has_line_of_sight_to(start_pos: Vector2, end_pos: Vector2) -> Dictionary:
 
 	if !result:
 		print_debug("%s: start_pos=%s; end_pos=%s -> TRUE" % [tank.owner.name, str(start_pos), str(end_pos)])
-		return { test = true }
+		return {test = true}
 	
-	print_debug("%s: start_pos=%s; end_pos=%s -> FALSE - hit=%s -> %s" 
+	print_debug("%s: start_pos=%s; end_pos=%s -> FALSE - hit=%s -> %s"
 		% [tank.owner.name, str(start_pos), str(end_pos), result.collider.name, str(result.position)])
 
-	return { test = false, position = result.position }
+	return {test = false, position = result.position}
+
+func calculate_ceiling_reflection_target(start_pos: Vector2, end_pos: Vector2) -> Vector2:
+	var ceiling_y: float = game_level.walls.ceiling_y
+	var mirrored_target := Vector2(end_pos.x, 2.0 * ceiling_y - end_pos.y)
+	var dir: Vector2 = mirrored_target - start_pos
+	var t: float = (ceiling_y - start_pos.y) / dir.y
+	return start_pos + dir * t
 
 func check_world_collision(start_pos: Vector2, end_pos: Vector2) -> Dictionary:
 	var space_state := tank.get_world_2d().direct_space_state
@@ -175,7 +187,7 @@ func get_direct_aim_angle_to(opponent: TankController, launch_props: LaunchPrope
 	var opponent_position: Vector2 = get_target_end_walls(aim_source_pos, opponent.tank.tankBody.global_position, forces)
 
 	var to_opponent: Vector2 = opponent_position - aim_source_pos
-	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, launch_props, forces)
+	var pos_offset: Vector2 = _get_active_forces_offset(to_opponent, launch_props, forces)
 	
 	var aim_target_pos: Vector2 = opponent_position + pos_offset
 
@@ -205,10 +217,10 @@ func global_angle_to_turret_angle(global_angle: float) -> float:
 func turret_angle_to_global_angle(turret_angle: float) -> float:
 	return 90 - turret_angle
 
-func has_direct_shot_to(opponent : TankController, launch_props: LaunchProperties, forces: int = 0) -> Dictionary:
+func has_direct_shot_to(opponent: TankController, launch_props: LaunchProperties, forces: int = 0) -> Dictionary:
 	# Test from barrel to test points on artillery
 	var aim_source_position: Vector2 = aim_fulcrum_position
-	var opponent_position:Vector2 = get_target_end_walls(aim_source_position, opponent.tank.tankBody.global_position, forces)
+	var opponent_position: Vector2 = get_target_end_walls(aim_source_position, opponent.tank.tankBody.global_position, forces)
 
 	var up_vector: Vector2 = Vector2.UP.rotated(tank.tankBody.global_rotation)
 	
@@ -218,22 +230,22 @@ func has_direct_shot_to(opponent : TankController, launch_props: LaunchPropertie
 	var test_positions: PackedVector2Array = opponent_tank.get_body_reference_points_local()
 
 	var to_opponent: Vector2 = opponent_position - aim_source_position
-	var pos_offset : Vector2 = _get_active_forces_offset(to_opponent, launch_props, forces)
+	var pos_offset: Vector2 = _get_active_forces_offset(to_opponent, launch_props, forces)
 
-	print_debug("%s: LOS opponent=%s; calculated pos_offset=%s -> %f"  % [tank.owner.name, opponent.name, pos_offset, pos_offset.length()])
+	print_debug("%s: LOS opponent=%s; calculated pos_offset=%s -> %f" % [tank.owner.name, opponent.name, pos_offset, pos_offset.length()])
 
 	for i in range(test_positions.size()):
 		test_positions[i] += opponent_position + pos_offset
 	
 	# First check that we can even aim directly at the opponent and limit to those viable positions
 	var viable_positions: PackedVector2Array = []
-	var viable_angles : PackedFloat32Array = []
+	var viable_angles: PackedFloat32Array = []
 
 	for position in test_positions:
 		var to_pos := aim_source_position.direction_to(position)
 		var angle := rad_to_deg(up_vector.angle_to(to_pos))
 		
-		print_debug("%s: LOS opponent=%s; pos=%s; angle=%f"  % [tank.owner.name, opponent.name, position, angle])
+		print_debug("%s: LOS opponent=%s; pos=%s; angle=%f" % [tank.owner.name, opponent.name, position, angle])
 
 		if angle >= tank.min_angle and angle <= tank.max_angle:
 			viable_positions.append(position)
@@ -241,20 +253,20 @@ func has_direct_shot_to(opponent : TankController, launch_props: LaunchPropertie
 				
 	var fire_position: Vector2 = tank.get_weapon_fire_locations().global_position
 
-	var has_los:bool = false
-	var max_position:Vector2 = fire_position
-	var max_distance:float = 0.0
-	var aim_position:Vector2 = Vector2.ZERO
-	var aim_angle:float = 0.0
+	var has_los: bool = false
+	var max_position: Vector2 = fire_position
+	var max_distance: float = 0.0
+	var aim_position: Vector2 = Vector2.ZERO
+	var aim_angle: float = 0.0
 	
 	for i in range(viable_positions.size()):
 		var position: Vector2 = viable_positions[i]
-		var line_of_sight_positions : PackedVector2Array = get_line_of_sight_positions(fire_position, position, forces)
+		var line_of_sight_positions: PackedVector2Array = get_line_of_sight_positions(fire_position, position, forces)
 
-		var result : Dictionary
+		var result: Dictionary
 		# line of sight positions are pairwise (0, 1), (1, 2), (2, 3), etc. starting with fire_position
-		var los_passed:bool = true
-		var j:int = 0
+		var los_passed: bool = true
+		var j: int = 0
 		while j < line_of_sight_positions.size() - 1:
 			result = has_line_of_sight_to(line_of_sight_positions[j], line_of_sight_positions[j + 1])
 			if !result.test:
@@ -277,24 +289,24 @@ func has_direct_shot_to(opponent : TankController, launch_props: LaunchPropertie
 	if has_los:
 		print_debug("%s: LOS to opponent=%s -> TRUE; tested_positions=%d"
 		 % [tank.owner.name, opponent.name, viable_positions.size()])
-		return { test = true, position = aim_position, aim_angle = aim_angle, adjusted_opponent_position = opponent_position }
+		return {test = true, position = aim_position, aim_angle = aim_angle, adjusted_opponent_position = opponent_position}
 		
-	print_debug("%s: LOS to opponent=%s -> FALSE -> %s; tested_positions=%d" 
+	print_debug("%s: LOS to opponent=%s -> FALSE -> %s; tested_positions=%d"
 		% [tank.owner.name, opponent.name, str(max_position), viable_positions.size()])
 	
-	return { test = false, position = max_position, adjusted_opponent_position = opponent_position }
+	return {test = false, position = max_position, adjusted_opponent_position = opponent_position}
 
 #endregion
 
 #region Forces
 class Forces:
-	const Gravity:int = 1
+	const Gravity: int = 1
 	
 	@warning_ignore("shadowed_global_identifier")
-	const Wind:int = 1 << 1
+	const Wind: int = 1 << 1
 
-	const Walls_Warp:int = 1 << 2
-	const Walls_Elastic:int = 1 << 3
+	const Walls_Warp: int = 1 << 2
+	const Walls_Elastic: int = 1 << 3
 
 	@warning_ignore("shadowed_global_identifier")
 	const Walls: int = Walls_Warp | Walls_Elastic
@@ -322,7 +334,7 @@ func _get_wind_offset(aim_trajectory: Vector2, launch_props: LaunchProperties) -
 		return Vector2.ZERO
 		
 	# F = m * a
-	var wind_accel : Vector2 = _get_wind_accel(wind_force, launch_props)
+	var wind_accel: Vector2 = _get_wind_accel(wind_force, launch_props)
 
 	return _get_force_accel_offset(aim_trajectory, launch_props.speed, wind_accel)
 	
@@ -338,10 +350,10 @@ func _get_force_accel_offset(aim_trajectory: Vector2, launch_speed: float, accel
 		
 	# Calculate time from horizontal component
 	# x = vx  * t
-	var flight_time: float =  aim_trajectory.x / launch_velocity.x
+	var flight_time: float = aim_trajectory.x / launch_velocity.x
 	
 	# d = 1/2 * a * t^2 + voy * t
-	var final_pos : Vector2 = 0.5 * acceleration * flight_time * flight_time + launch_velocity * flight_time
+	var final_pos: Vector2 = 0.5 * acceleration * flight_time * flight_time + launch_velocity * flight_time
 	
 	# Determine how much additional pos we need to hit the final pos of the flight
 	var additional_pos: Vector2 = aim_trajectory - final_pos
@@ -353,7 +365,7 @@ func _get_wind_force() -> Vector2:
 
 func _get_wind_accel(wind_force: Vector2, launch_props: LaunchProperties) -> Vector2:
 	# F = m * a
-	var wind_accel : Vector2 = wind_force / launch_props.mass / 100
+	var wind_accel: Vector2 = wind_force / launch_props.mass / 100
 	return wind_accel
 #endregion
 	
@@ -423,7 +435,7 @@ func should_wall_compensate(forces: int) -> bool:
 	match walls.wall_mode:
 		Walls.WallType.WARP:
 			return forces & Forces.Walls_Warp != 0
-		Walls.WallType.ELASTIC:
+		Walls.WallType.ELASTIC, Walls.WallType.ACCELERATE, Walls.WallType.STICKY:
 			return forces & Forces.Walls_Elastic != 0
 	return false
 
@@ -439,16 +451,24 @@ func get_shortest_path_walls(start_pos: Vector2, end_pos: Vector2) -> Dictionary
 	# for elastic you may get 4 results - start -> right_wall -> bounce -> end
 	# for none you may get 2 results - start -> end
 	# TODO: We should calculate this just once and store on this AIBehavior
-
 	# For being determine los and collisions, need to return the intermediate test points when there are walls
-	var results: Dictionary = {}
-	results.use_walls = false
+	var results: Dictionary = {
+		use_walls = false,
+		end = end_pos
+	}
 
 	var walls: Walls = game_level.walls
-	if !walls or walls.wall_mode != Walls.WallType.WARP:
-		results.end = end_pos
+	if not walls or walls.wall_mode == Walls.WallType.NONE:
 		return results
-	
+
+	match walls.wall_mode:
+		Walls.WallType.WARP:
+			get_shorted_path_warp_walls(start_pos, end_pos, results)
+
+	# Need to handle elastic walls in a different way since it doesn't affect the target position
+	return results
+
+func get_shorted_path_warp_walls(start_pos: Vector2, end_pos: Vector2, results: Dictionary) -> void:
 	# Compare distance squared direct to target and distance squared using walls
 	var direction: Vector2 = end_pos - start_pos
 	var direct_distance: float = absf(direction.x)
@@ -457,6 +477,8 @@ func get_shortest_path_walls(start_pos: Vector2, end_pos: Vector2) -> Dictionary
 	# We will assume they aren't there and just extend the x distance
 	var dir_sign: float = signf(direction.x)
 	var wall_x_positions: PackedFloat32Array = []
+
+	var walls: Walls = game_level.walls
 
 	if dir_sign > 0: # Aiming to right want to check left
 		wall_x_positions.push_back(walls.min_extent.x)
@@ -475,10 +497,7 @@ func get_shortest_path_walls(start_pos: Vector2, end_pos: Vector2) -> Dictionary
 	else:
 		results.end = end_pos
 
-	return results
-
 func get_line_of_sight_positions(start_pos: Vector2, end_pos: Vector2, forces: int) -> PackedVector2Array:
-
 	var results: PackedVector2Array = []
 	if !should_wall_compensate(forces):
 		results.push_back(start_pos)
@@ -520,7 +539,45 @@ func get_sorted_angles_by_wall_type(angles: Array[float]) -> Array[float]:
 			angles.sort()
 	
 	return angles
+
+func will_hit_ceiling_at_unacceptable_speed(start_pos: Vector2, angle: float, speed: float, forces:int) -> bool:
+	# Only applies for elastic-like walls
+	var walls: Walls = game_level.walls
+	if not walls or not walls.is_elastic_variety or not should_wall_compensate(forces):
+		return false
+
+	# If the angle is too high then it will hit the ceiling
+	var ceiling_y: float = game_level.walls.ceiling_y
+	# Starting above the ceiling so immediately return true
+	if ceiling_y >= start_pos.y:
+		print_debug("%s: Hits ceiling from start - start_pos=%s; ceiling_y=%f" % [tank.owner.name, str(start_pos), ceiling_y ])
+		return true
+
+	var angle_rads: float = deg_to_rad(angle)
+	var sin_angle: float = sin(angle_rads)
+	var g: float = PhysicsUtils.get_gravity_vector().y
+
+	# vy^2 = (Vo*sin(theta))^2 - 2 * g * dy
+	# y increases going down so subtract ceiling y from start pos y for a positive result
+	var dy:float = start_pos.y - ceiling_y
+	var initial_speed_y:float = speed * sin_angle
+
+	var speed_squared: float = initial_speed_y * initial_speed_y - 2 * g * dy
+	if speed_squared <= 0:
+		# Not enough velocity to hit the ceiling
+		return false
 	
+	# See if final y speed exceeds threshold
+	var speed_threshold:float = initial_speed_y * ceiling_velocity_threshold
+	var speed_threshold_squared:float = speed_threshold * speed_threshold
+
+	var hits_ceiling:bool = speed_squared >= speed_threshold_squared
+
+	if OS.is_debug_build():
+		print_debug("%s: Hits ceiling at unacceptable speed - %s - start_pos=%s; angle=%f; speed=%f; initial_y_speed=%f; final_y_speed=%f" \
+			% [name, str(hits_ceiling), str(start_pos), angle, speed, initial_speed_y, sqrt(speed_squared)])
+	return hits_ceiling
+
 #endregion
 
 #region Opponent History
@@ -562,13 +619,13 @@ func _get_current_time_seconds() -> float:
 func _get_playable_x_extent() -> float:
 	return get_viewport().get_visible_rect().size.x
 
-func compute_damage_score(weapon:Weapon, projectile: WeaponProjectile) -> float:
-	var count_multiplier:float = weapon.number_of_scenes_to_spawn
+func compute_damage_score(weapon: Weapon, projectile: WeaponProjectile) -> float:
+	var count_multiplier: float = weapon.number_of_scenes_to_spawn
 	if weapon.always_shoot_for_duration > 0:
 		count_multiplier *= weapon.always_shoot_for_duration * weapon.fire_rate
 	else:
 		count_multiplier *= weapon.ammo_used_per_shot
-	var score : float = projectile.max_damage * projectile.max_damage * projectile.min_falloff_distance * projectile.max_falloff_distance * count_multiplier
+	var score: float = projectile.max_damage * projectile.max_damage * projectile.min_falloff_distance * projectile.max_falloff_distance * count_multiplier
 
 	return score
 

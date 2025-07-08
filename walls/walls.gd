@@ -40,6 +40,12 @@ var bounds: Rect2;
 var min_extent: Vector2
 var max_extent: Vector2
 
+var ceiling_y:float:
+	get: return bounds.position.y
+var is_elastic_variety:bool:
+	get:
+		return wall_mode == Walls.WallType.ELASTIC or wall_mode == Walls.WallType.STICKY or wall_mode == Walls.WallType.ACCELERATE 
+
 var tracked_projectiles: Array[WeaponProjectile]
 var tracked_beams: Array[WeaponNonPhysicalBeam]
 
