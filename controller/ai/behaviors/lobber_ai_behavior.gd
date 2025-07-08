@@ -355,7 +355,7 @@ func _select_best_opponent() -> Dictionary:
 func _get_power_and_angle_to_opponent(opponent: TankController, launch_props: AIBehavior.LaunchProperties, hit_test:bool = true) -> Dictionary:
 	var target: Vector2 = opponent.tank.global_position
 
-	for angle in angles:
+	for angle in get_sorted_angles_by_wall_type(angles):
 		var power := get_power_for_target_and_angle(target, angle, launch_props, forces_mask, hit_test)
 		if power > 0.0:
 			return { angle = angle, power = power }

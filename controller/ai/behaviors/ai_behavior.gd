@@ -508,6 +508,19 @@ func get_line_of_sight_positions(start_pos: Vector2, end_pos: Vector2, forces: i
 
 	results.push_back(end_pos)
 	return results
+
+func get_sorted_angles_by_wall_type(angles: Array[float]) -> Array[float]:
+	# Sort angles by wall type
+	var walls: Walls = game_level.walls
+	
+	match walls.wall_mode:
+		Walls.WallType.ELASTIC, Walls.WallType.STICKY, Walls.WallType.ACCELERATE:
+			# Prefer lower trajectories
+			angles = angles.duplicate()
+			angles.sort()
+	
+	return angles
+	
 #endregion
 
 #region Opponent History
