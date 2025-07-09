@@ -22,4 +22,3 @@ script = ExtResource("1_cuql0")
 
 [node name="RubbleChunksSpawner" parent="." instance=ExtResource("6_mk5yb")]
 max_lifetime = 10.0
-max_rubble_count = 5

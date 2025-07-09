@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ck1q7mup8cgul"]
+
+[ext_resource type="Script" uid="uid://cguettyakfwug" path="res://utils/spawn_limiter_manager.gd" id="1_2ks8x"]
+
+[node name="SpawnLimiterManager" type="Node"]
+script = ExtResource("1_2ks8x")

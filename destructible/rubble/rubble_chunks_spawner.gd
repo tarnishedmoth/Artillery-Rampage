@@ -5,7 +5,7 @@ class_name RubbleChunksSpawner extends Node
 @export var min_body_impulse:float = 100
 @export var max_body_impulse:float = 200
 
-@export var max_rubble_count:int = 10
+@export var max_rubble_count:int = 5
 
 @export var min_velocity_angle_dev: float = 0
 @export var max_velocity_angle_dev: float = 90
@@ -110,6 +110,7 @@ func spawn_rubble(destructible_poly_global:PackedVector2Array, orig_poly_global:
 		_init_node(new_instance, pos)
 		(func():
 			rubble_container.add_child(new_instance)
+			SpawnLimiterManager.track(&"Rubble", new_instance, Callable(new_instance, "delete"))
 			Collisions.add_exception_for_layer_and_group(new_instance, Collisions.Layers.tank, Groups.Unit)
 			_apply_impulse_to_new_body(new_instance, new_instance.mesh.polygon, impact_velocity_dir)
 		).call_deferred()
