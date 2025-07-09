@@ -87,6 +87,7 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.25
 
 [node name="LeftColumn" type="VBoxContainer" parent="Controls/MainMenu/Columns"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -102,6 +103,7 @@ expand_mode = 5
 stretch_mode = 6
 
 [node name="Spacer2" type="Control" parent="Controls/MainMenu/Columns"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.13
@@ -207,33 +209,51 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
-text = "A Lorem ipsum odor amet, consectetuer adipiscing elit. Malesuada velit iaculis suscipit maximus, vivamus lacus. Class ad nulla facilisi facilisi facilisi, ultrices
+text = "Project Lead: Justin Montgomery
+Weapons System Lead: Michael Avrie
 
-B eros id. Interdum pretium vitae malesuada; praesent venenatis scelerisque. Euismod maecenas dui odio dis tortor vivamus
+CONTRIBUTORS:
+Dan Dela Rosa
+Christer Kaitila
+Vaan Hope Khani:
+Matt Ayme
+Rodrigo Bonzerr S. Lopez
+George Carter
+Michael Tanner
+Owen \"Q-Bit\"
+Chris DeLeon
 
-C commodo taciti. Adipiscing adipiscing
+PLAYTESTERS:
+Meatball
+kittykatmeowmeow
 
-D molestie sollicitudin mollis lorem montes. Iaculis lobortis consequat
+DETAILED CREDITS
 
-E consectetur elit primis amet est tellus natoque. Massa placerat auctor quisque vestibulum arcu ridiculus. Consectetur purus amet ullamcorper proin mattis nunc pell
+Justin Montgomery: Project lead, core gameplay, terrain (including procedural generation, destruction, fragmentation, randomization, smoothing), object damage and shattering, story mode systems, shop and upgrades with resources, shot mechanics including wind impact, tank gravity, spawning, difficulties, turn management, damage behaviors (wobble etc), AI opponents (including all major behavioral variations, names), water, save/load, gameplay timer, announcer one liners script and voiceover, bloom/nuke shaders, most edge modes (wrap, accelerate, sticky, none), round grading, game over detection, simultaneous fire mode improvements, additional weapon tuning, desert level, physics tuning, memory leak repairs, numerous bug fixes and contribution integration
 
-F entesque. Nascetur porttitor dui congue curae praesent justo pulvinar vehicula.
+Michael Avrie: Weapons Systems Lead (types, selection, explosions, nuke, flares, missiles, EMP, stats, upgrades), UI Lead (typing reveal, scrolling, ammo, tooltips, healthbars, options, key remap, pause logs, fine aiming, story map improvements, loading screen, upgrade screen additions), level design (snowy mountain, plateau, islands, divide, plains, factory), narrative randomization, theming and UI design (main menu, options, story sequence, tooltips, font), day/night, enemy units, pickup helicopter, sounds (turn change, most weapons, tank destroyed, rain), dust/smoke/rubble, wind and weather, simultaneous fire mode, assorted audio integration, internal documentation, terrain depth tint, bouncing mode, bug fixes, terrain chunk fading, light balancing, various tuning
 
-G Molestie platea cursus conubia tortor eros consequat mi nascetur. Molestie rhoncus ad risus vulputate
+Dan Dela Rosa: House destructibility, laser visual and main functionality, weapon cycle key, laser variants, effect optimizations, laser wrap/elastic handling
 
-H lacus aptent. Ligula dictum ornare, lacus justo scelerisque ex. Vivamus potenti class risus senectus ultricies felis luctus platea. Dui ex tellus sed nascetur blandit ultricies. Porta bibendum
+Christer Kaitila: Trajectory dots, UI backgrounds, HUD icons, terrain textures and related support, scrolling sky, rock music for menu, announcer voies, explosion sprites, terrain outlines and crusts, artillery sprites, grass, ground burn, graphics fixes
 
-I et imperdiet dapibus vulputate dictum rhoncus.
+Vaan Hope Khani: Elastic wall, sounds (small/medium explosions, laser, round win/loss, round start), additional sound integration
 
-J Vulputate ligula penatibus vitae
+Matt Ayme: Parachute defense item (sprite and functionality), boat
 
-K est hendrerit vestibulum sem?
+Rodrigo Bonzerr S. Lopez: Environment sprites (missiles with variations, tree, rock with variations), game over and retry screens
 
-L Nullam enim magna semper efficitur vestibulum
+George Carter: Lighting system (first pass), burst ammo bug fix
 
-M convallis pulvinar habitasse laoreet. Eros sapien quisque elit laoreet mattis non ultricies. Feugiat id quis; mi imperdiet eu fringilla.
+Michael Tanner: Pause menu with Main Menu exit
 
-N Facilisis turpis finibus sit rutrum enim consectetur ultrices ridiculus. Himenaeos"
+Owen \"Q-Bit\" Good: Lighthouse sprite
+
+Chris DeLeon: Tree variant sprite
+
+Playtesters: Meatball, kittykatmeowmeow
+
+Made with the Godot Engine. See godotengine.org/license for license details"
 shortcut_keys_enabled = false
 threaded = true
 visible_characters_behavior = 1
