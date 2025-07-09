@@ -390,7 +390,7 @@ func _delete_chunk(chunk: TerrainChunk) -> void:
 	chunk.delete()
 
 	# Wait until chunk is destroyed
-	await ObjectUtils.wait_free_free(chunk)
+	await ObjectUtils.wait_free(chunk)
 	
 	if get_chunk_count() == 0:
 		destroyed.emit(self)

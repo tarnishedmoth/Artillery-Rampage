@@ -34,6 +34,10 @@ var _init_owner: Node
 var density: float = 0.0
 var area: float = 0.0
 
+var ready_completed:bool
+
+var _orphaned_nodes:Dictionary[int, Node] = {}
+
 signal ready_finished(body: ShatterableObjectBody)
 
 # Note that should apply the offset position to the root position rather than the mesh position otherwise
@@ -76,6 +80,7 @@ func _ready() -> void:
 		timer.timeout.connect(_on_lifetime_ended)
 		add_child(timer)
 	
+	ready_completed = true
 	ready_finished.emit(self)
 
 func get_area() -> float:
@@ -147,6 +152,7 @@ func delete() -> void:
 		owner.body_deleted.emit(self)
 	
 	queue_free.call_deferred()
+	_free_tracked_nodes()
 
 func _create_shatter_polys() -> Array[PackedVector2Array]:
 	var max_area: float = maxf(min_shatter_area, area * max_shatter_area_fract)
@@ -184,6 +190,8 @@ func _new_node_from_poly(poly: PackedVector2Array, position_offset: Vector2) -> 
 
 	var stuck_detector := _create_stuck_detector()
 	if stuck_detector:
+		_track_node(stuck_detector)
+
 		# Child nodes are null until the node is added to the tree 
 		# so wait for ready
 		new_instance.ready_finished.connect(func(_i):
@@ -193,12 +201,14 @@ func _new_node_from_poly(poly: PackedVector2Array, position_offset: Vector2) -> 
 		)
 	
 	return new_instance
-	
+
 func _add_stuck_detector(new_instance:Node2D, stuck_detector: StuckDetector) -> void:
 	if OS.is_debug_build():
 		print_debug("ShatterableObjectBody(%s) - adding stuck detector to %s" % [name, new_instance.name])
 	stuck_detector.body_stuck.connect(_on_stuck)
 	new_instance.add_child(stuck_detector)
+	# will be deleted with new_instance
+	_untrack_node(stuck_detector)
 
 static func _on_stuck(detector: StuckDetector) -> void:
 	var parent:Node2D = detector.get_parent()
@@ -244,3 +254,21 @@ func _get_random_point_in_or_near_poly(poly: PackedVector2Array) -> Vector2:
 
 func _to_string() -> String:
 	return name
+
+
+#region Memory Leak Prevention
+
+func _track_node(instance:Node) -> void:
+	_orphaned_nodes[instance.get_instance_id()] = instance
+
+func _untrack_node(instance:Node) -> void:
+	if is_instance_valid(instance):
+		_orphaned_nodes.erase(instance.get_instance_id())
+
+func _free_tracked_nodes() -> void:
+	for node_id in _orphaned_nodes:
+		if is_instance_id_valid(node_id):
+			_orphaned_nodes[node_id].queue_free()
+	_orphaned_nodes.clear()
+
+#endregion
