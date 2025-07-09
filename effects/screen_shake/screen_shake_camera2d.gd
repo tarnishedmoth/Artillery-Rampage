@@ -29,9 +29,9 @@ func shake():
 	var amt:float = pow(trauma, trauma_power)
 	noise_y += 1.0
 	
-	offset.x = max_offset.x * amt * _noise.get_noise_2d(_noise.seed * 2, noise_y)
-	offset.y = max_offset.y * amt * _noise.get_noise_2d(_noise.seed * 3, noise_y)
-	rotation = max_roll * amt * _noise.get_noise_2d(_noise.seed, noise_y)
+	offset.x = clampf(max_offset.x * amt * _noise.get_noise_2d(_noise.seed * 2, noise_y), -max_offset.x, max_offset.x)
+	offset.y = clampf(max_offset.y * amt * _noise.get_noise_2d(_noise.seed * 3, noise_y), -max_offset.y, max_offset.y)
+	rotation = clampf(max_roll * amt * _noise.get_noise_2d(_noise.seed, noise_y), -max_roll, max_roll)
 
 func _generate_noise() -> FastNoiseLite:
 	var noise : FastNoiseLite
