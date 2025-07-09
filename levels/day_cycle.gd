@@ -84,7 +84,7 @@ func next_state() -> void:
 	
 	var getting_state:bool = true
 	while getting_state:
-		var state:DayWeatherState
+		var state:DayWeatherState = null
 		
 		match state_change_logic:
 			0: # Ordered
@@ -92,7 +92,15 @@ func next_state() -> void:
 			1: # Random
 				state = _state_queue.pick_random()
 				_state_queue.erase(state)
+			_:
+				assert(false, "%s: Unexpected state flag=%d" % [name, state_change_logic])
 		
+		# If queue is empty state will be null
+		if not state:
+			if _state_queue.is_empty():
+				reset_queue()
+			continue
+				
 		if state.skip_chance > 0.0:
 			if randf() < state.skip_chance:
 				continue
