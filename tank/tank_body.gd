@@ -53,17 +53,14 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 		set_deferred("freeze", true)
 		freeze_from_sleep = true
 		queue_sleep = false
-	elif freeze:
-		state.linear_velocity = Vector2.ZERO
-		state.angular_velocity = 0
+	elif freeze or gravity_scale == 0.0:
+		_reset_physics_state(state)
 
 func _do_reset_orientation(state: PhysicsDirectBodyState2D) -> void:
 	print("Tank(%s): _do_reset_orientation" %  [get_parent().get_parent().name])
 	toggle_gravity(false)
 	
-	state.linear_velocity = Vector2.ZERO
-	state.angular_velocity = 0
-	
+	_reset_physics_state(state)
 	rotation = 0
 	
 	if freeze_from_sleep:
@@ -72,7 +69,12 @@ func _do_reset_orientation(state: PhysicsDirectBodyState2D) -> void:
 	queue_sleep = false
 	
 	on_reset_orientation.emit(self)
-	
+
+func _reset_physics_state(state: PhysicsDirectBodyState2D) -> void:
+	state.linear_velocity = Vector2.ZERO
+	state.angular_velocity = 0
+	state.set_constant_force(Vector2.ZERO)
+
 func is_falling() -> bool:
 	# TODO: May want to do raycast instead (See parent tank script "get_ground_position"
 	# This seems to always return true as they are slightly in motion
