@@ -87,9 +87,11 @@ presets_queue = Array[ExtResource("5_21x2i")]([SubResource("Resource_876hk"), Su
 
 [node name="Player" parent="GameLevel" instance=ExtResource("6_jwug6")]
 position = Vector2(120, 427)
+enable_damage_before_first_turn = false
 
 [node name="Enemy" parent="GameLevel" instance=ExtResource("6_6eq0i")]
 position = Vector2(653, 442)
+enable_damage_before_first_turn = false
 
 [node name="Tank" parent="GameLevel/Enemy" index="0"]
 color = Color(0.1, 0.175, 1, 1)

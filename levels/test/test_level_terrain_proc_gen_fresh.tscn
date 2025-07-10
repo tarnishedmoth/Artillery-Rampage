@@ -1,13 +1,34 @@
-[gd_scene load_steps=3 format=3 uid="uid://kgy6jgf0n1qg"]
+[gd_scene load_steps=9 format=3 uid="uid://kgy6jgf0n1qg"]
 
 [ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_j3o20"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="2_gemlh"]
+[ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_gnwdk"]
+[ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_raxml"]
+[ext_resource type="Texture2D" uid="uid://byy76mvisn1j0" path="res://terrain/terrain-strata.png" id="4_s8ois"]
+[ext_resource type="Resource" uid="uid://dgrisjpfie3hx" path="res://terrain/terrain_outline_grass.tres" id="5_la4gc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_52q06"]
+shader = ExtResource("3_raxml")
+shader_parameter/amount = Vector3(1, 1, 1)
+shader_parameter/multiply = 1.35
+shader_parameter/minimum = 0.0
+shader_parameter/maximum = 1.15
+
+[sub_resource type="Resource" id="Resource_msmqt"]
+script = ExtResource("2_gnwdk")
+texture = ExtResource("4_s8ois")
+material = SubResource("ShaderMaterial_52q06")
+repeat = 3
+offset = Vector2(0, 400)
 
 [node name="TestLevelProcGen" type="Node2D"]
 
 [node name="GameLevel" parent="." instance=ExtResource("1_j3o20")]
 
-[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+[node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
+texture_resources = Array[ExtResource("2_gnwdk")]([SubResource("Resource_msmqt"), ExtResource("5_la4gc")])
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array()
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("2_gemlh")]
@@ -16,12 +37,13 @@ replace_existing_heights = true
 height_win_size_min_variation = -0.185
 height_win_size_max_variation = 0.18
 
-[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+[node name="ArtillerySpawner" parent="GameLevel" index="9"]
 default_ai_players = Vector2i(1, 4)
 default_human_players = Vector2i(1, 1)
 ideal_min_spawn_separation = 250.0
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]

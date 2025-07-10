@@ -37,7 +37,7 @@ fractal_gain = 0.605
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
 texture_resources = Array[ExtResource("3_ok7pe")]([SubResource("Resource_msmqt")])
 
-[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array(-104, -8, 101.563, -1.47058, 283.594, 1.47058, 385.156, 25, 460.156, 95.5883, 547.656, 29.4117, 639.844, 7.35297, 753.125, 1.47058, 950, -2.94116, 945, 445, -103, 448)
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("5_h3ok2")]
@@ -48,10 +48,10 @@ height_win_size_max_variation = 0.02
 max_height_clearance = 50.0
 consistency = 0.9
 
-[node name="Floor" parent="GameLevel" index="6"]
+[node name="Floor" parent="GameLevel" index="7"]
 visible = false
 
-[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+[node name="ArtillerySpawner" parent="GameLevel" index="9"]
 default_ai_players = Vector2i(2, 4)
 num_ai_teams = 2
 default_human_players = Vector2i(1, 1)
@@ -76,6 +76,7 @@ position = Vector2(132, 433)
 [node name="ProceduralObjectPlainsSpawner" parent="GameLevel" instance=ExtResource("17_cr1wu")]
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]

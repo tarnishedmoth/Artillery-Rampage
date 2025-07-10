@@ -130,6 +130,7 @@ position = Vector2(1197, 442)
 
 [node name="Player" parent="GameLevel" instance=ExtResource("18_6xt0d")]
 position = Vector2(378, 430)
+enable_damage_before_first_turn = false
 
 [node name="ShatterableRock" parent="GameLevel" instance=ExtResource("18_vjbc6")]
 position = Vector2(61, 435)
@@ -139,6 +140,7 @@ position = Vector2(707, 497)
 
 [node name="Enemy" parent="GameLevel" instance=ExtResource("12_i3677")]
 position = Vector2(949, 432)
+enable_damage_before_first_turn = false
 
 [node name="Tank" parent="GameLevel/Enemy" index="0"]
 color = Color(0.1, 0.175, 1, 1)
