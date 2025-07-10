@@ -271,7 +271,7 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 		new_terrain_vertices = terrain_vertices
 	
 	# Update final terrain
-	chunk.replace_contents(new_terrain_vertices)
+	chunk.replace_contents(new_terrain_vertices, [], TerrainChunk.UpdateFlags.Immediate)
 
 func _get_first_non_surface_index(chunk: TerrainChunk, terrain_vertices: PackedVector2Array):
 	# Because of winding order find the first vertex that is not on the surface and that starts the interior sequence
