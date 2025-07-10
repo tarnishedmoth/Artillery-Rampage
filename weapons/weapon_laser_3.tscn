@@ -14,7 +14,7 @@ stream_0/stream = ExtResource("3_a5vp5")
 [node name="WeaponLaser" type="Node2D" node_paths=PackedStringArray("sfx_fire")]
 script = ExtResource("1_wldd8")
 scene_to_spawn = ExtResource("2_wldd8")
-display_name = "Laser3"
+display_name = "Laser"
 description = "Fires an energy beam that is unaffected by gravity and can burrow through and damage multiple targets over its effect time."
 trajectory_indicator_type = "Beam"
 fire_velocity = 100000.0

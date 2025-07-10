@@ -14,7 +14,7 @@ stream_0/stream = ExtResource("3_ppygw")
 [node name="WeaponLaser" type="Node2D" node_paths=PackedStringArray("sfx_fire")]
 script = ExtResource("1_l583l")
 scene_to_spawn = ExtResource("2_l583l")
-display_name = "Laser"
+display_name = "Laser1"
 trajectory_indicator_type = "Beam"
 fire_velocity = 100000.0
 power_launch_speed_mult = 10.0
