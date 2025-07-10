@@ -160,6 +160,8 @@ func _modify_chunk(chunk: TerrainChunk, terrain_bounds:Rect2, modification_bound
 				max_height
 			)
 		terrain_vertices[i].y = new_height
+
+		_ensure_last_three_vertices_triangulate(terrain_vertices, i)
 #endregion
 #region new terrain
 	# Now add additional vertices requested
@@ -317,6 +319,35 @@ func _generate_noise() -> FastNoiseLite:
 	if randomize_seed:
 		noise.seed = randi()
 	
-	print_debug("%s - Using seed=%d for noise" % [name, noise.seed])
+	print_debug("ProceduralTerrainModifier(%s) - Using seed=%d for noise" % [name, noise.seed])
 	
 	return noise
+
+func _ensure_last_three_vertices_triangulate(terrain_vertices: PackedVector2Array, last_index:int) -> void:
+	if last_index < 2:
+		return
+
+	var ai:int = last_index - 2
+	var bi:int = last_index - 1
+	var ci:int = last_index
+
+	var a:Vector2 = terrain_vertices[ai]
+	var b:Vector2 = terrain_vertices[bi]
+	var c:Vector2 = terrain_vertices[ci]
+
+	if a.x < b.x and b.x < c.x:
+		return
+
+	push_warning("ProceduralTerrainModifier(%s): Invalid starting terrain between indices [%d,%d] - Each subsequent x should be greater" % [name, ai,ci])
+	if b.x >= c.x:
+		if c.x - a.x > 2.0:
+			b.x = randf_range(a.x + 1, c.x - 1)
+			terrain_vertices[bi] = b
+		else:
+			b.x = c.x - 1
+			a.x = b.x - 1
+			terrain_vertices[bi] = b
+			terrain_vertices[ai] = a
+	else: #a.x >= b.x
+		a.x = b.x - 1
+		terrain_vertices[ai] = a
