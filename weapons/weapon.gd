@@ -202,7 +202,7 @@ var _awaiting_lifespan_completion: int ## Internal: Counter for [signal weapon_a
 var mode:int = 0 ## Subclasses and components can make use of this counter.
 var modes_total:int = 0 ## Subclasses and components can make use of this counter.
 
-var active_projectiles:Array[WeaponProjectile]
+var active_projectiles:Array[Node2D]
 
 var _enforced_projectile_properties:Dictionary
 var _cached_projectile_instance
@@ -493,6 +493,7 @@ func _add_projectile_awaiting(projectile: WeaponProjectile) -> void:
 ## [signal WeaponNonPhysicalBeam.completed_lifespan]
 ## and increments an internal counter.
 func _add_beam_awaiting(beam: WeaponNonPhysicalBeam) -> void:
+	active_projectiles.append(beam)
 	beam.completed_lifespan.connect(_on_beam_completed_lifespan)
 	_awaiting_lifespan_completion += 1
 
@@ -523,14 +524,9 @@ func get_projectile_instance() -> Object:
 	return _cached_projectile_instance
 	
 func kill_all_projectiles() -> void:
-	for p:WeaponProjectile in active_projectiles:
+	for p in active_projectiles:
 		if is_instance_valid(p):
 			p.destroy()
-		
-		## Bugged, lazy, thats why this code exists, nothing else uses active_projectiles array except this method.
-		## We have a counter already for how many projectiles we're waiting on.
-		## This is basically duplicate functionality because it's bugged and it could
-		## easily replace the other counter.
 	# clear any previously freed projectiles
 	active_projectiles.clear()
 ## Emits death signals if appropriate and calls [method queue_free].
@@ -660,7 +656,8 @@ func _on_projectile_completed_lifespan(projectile:WeaponProjectile) -> void:
 
 func _on_beam_completed_lifespan(beam: WeaponNonPhysicalBeam) -> void:
 	_awaiting_lifespan_completion -= 1
-	
+	active_projectiles.erase(beam)
+
 	if not emit_action_signals: return
 	if not is_shooting: # Wait til we've fired all our shots this action
 		if _awaiting_lifespan_completion < 1:
