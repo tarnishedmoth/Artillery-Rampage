@@ -66,6 +66,14 @@ func try_spawn_new_artillery() -> bool:
 	slot.occupant.global_position = slot.global_position
 	slot.physics_body.freeze = true
 
+	# Assign to teams - only works correctly if there is 1 team or no teams
+	# otherwise they will change teams mid-game
+	var all_occupants:Array[TankController] = []
+	for s in conveyor_slots:
+		if is_instance_valid(s.occupant):
+			all_occupants.push_back(s.occupant)
+	game_level.spawner.assign_teams(all_occupants)
+
 	popup_message("Assembled Unit", PopupNotification.PulsePresets.One)
 	artillery_spawned.emit()
 	return true

@@ -313,7 +313,7 @@ func spawn_multiple_units(positions:Array[Vector2], num_human:int, parent = self
 		if spawned:
 			all_spawned.push_back(spawned)
 
-	_assign_teams(all_spawned)
+	assign_teams(all_spawned)
 	return all_spawned
 
 func spawn_unit(_global_position:Vector2, is_ai:bool = true, parent = self) -> TankController:
@@ -344,7 +344,7 @@ func spawn_unit(_global_position:Vector2, is_ai:bool = true, parent = self) -> T
 	else:
 		return null
 
-func _assign_teams(spawned: Array[TankController]) -> void:
+func assign_teams(spawned: Array[TankController]) -> void:
 	if num_ai_teams <= 0:
 		return
 
@@ -368,7 +368,7 @@ func _assign_teams(spawned: Array[TankController]) -> void:
 			# AI get color of their team leader
 			ai_players[i].set_color(ai_players[team_leader].get_color())
 		ai_players[i].team = team_number
-			
+		
 func _get_spawn_position(terrain: Terrain, x: float, min_x:float, max_x:float, error: Dictionary[String, Variant]) -> Vector2:
 	error.clear()
 
