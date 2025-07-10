@@ -37,35 +37,59 @@ fractal_gain = 0.605
 [sub_resource type="Resource" id="Resource_876hk"]
 script = ExtResource("8_w04kr")
 display_name = "Morning"
+skip_chance = 0.0
+duration_ratio = 1.0
 sun_position = Vector2(-400, 300)
 sun_energy = 0.31
 ambient_color = Color(0.901961, 0.901961, 0.901961, 1)
 is_dark = false
+weather_transition_time = 10.0
+rain_chance = 0.0
+rain_intensity = 0.5
+rain_ambient_color = Color(0.282353, 0.819608, 0.8, 1)
+rain_sun_energy = 0.22
+rain_is_dark = true
 metadata/_custom_type_script = "uid://blr3jie556r2m"
 
 [sub_resource type="Resource" id="Resource_vgcik"]
 script = ExtResource("8_w04kr")
 display_name = "Noon"
+skip_chance = 0.0
+duration_ratio = 1.0
 sun_position = Vector2(0, -140)
 sun_energy = 0.35
 ambient_color = Color(0.901961, 0.901961, 0.901961, 1)
 is_dark = false
+weather_transition_time = 10.0
+rain_chance = 0.0
+rain_intensity = 0.5
+rain_ambient_color = Color(0.282353, 0.819608, 0.8, 1)
+rain_sun_energy = 0.22
+rain_is_dark = true
 metadata/_custom_type_script = "uid://blr3jie556r2m"
 
 [sub_resource type="Resource" id="Resource_dwws4"]
 script = ExtResource("8_w04kr")
 display_name = "Afternoon"
+skip_chance = 0.0
+duration_ratio = 1.0
 sun_position = Vector2(400, 0)
 sun_energy = 0.28
 ambient_color = Color(0.901961, 0.901961, 0.901961, 1)
 is_dark = false
+weather_transition_time = 10.0
+rain_chance = 0.0
+rain_intensity = 0.5
+rain_ambient_color = Color(0.282353, 0.819608, 0.8, 1)
+rain_sun_energy = 0.22
+rain_is_dark = true
 metadata/_custom_type_script = "uid://blr3jie556r2m"
 
 [node name="TestLevelProcGen" type="Node2D"]
 
 [node name="GameLevel" parent="." instance=ExtResource("1_fp4gr")]
 
-[node name="RoundDirector" parent="GameLevel" index="1"]
+[node name="RoundDirector" parent="GameLevel" index="2"]
 is_simultaneous_fire = true
 
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
@@ -82,14 +106,14 @@ height_win_size_max_variation = 0.02
 max_height_clearance = 50.0
 consistency = 0.9
 
-[node name="Floor" parent="GameLevel" index="6"]
+[node name="Floor" parent="GameLevel" index="7"]
 visible = false
 
-[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+[node name="ArtillerySpawner" parent="GameLevel" index="9"]
 artillery_ai_types = Array[PackedScene]([ExtResource("9_q02cm")])
 ideal_min_spawn_separation = 250.0
 
-[node name="DayWeather" parent="GameLevel" index="12"]
+[node name="DayWeather" parent="GameLevel" index="13"]
 presets_queue = Array[ExtResource("8_w04kr")]([SubResource("Resource_876hk"), SubResource("Resource_vgcik"), SubResource("Resource_dwws4")])
 
 [node name="House2" parent="GameLevel" instance=ExtResource("15_i2cnw")]
@@ -120,6 +144,7 @@ position = Vector2(949, 432)
 color = Color(0.1, 0.175, 1, 1)
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]

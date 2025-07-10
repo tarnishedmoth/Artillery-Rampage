@@ -50,17 +50,17 @@ height_win_size_min_variation = -0.125
 height_win_size_max_variation = 0.125
 min_height_value = 10.0
 
-[node name="Walls" parent="GameLevel" index="5"]
+[node name="Walls" parent="GameLevel" index="6"]
 wall_mode = 1
 wall_randomization_weights = Dictionary[int, float]({
 0: 1.0,
 2: 1.0
 })
 
-[node name="Floor" parent="GameLevel" index="6"]
+[node name="Floor" parent="GameLevel" index="7"]
 visible = false
 
-[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+[node name="ArtillerySpawner" parent="GameLevel" index="9"]
 artillery_ai_types = Array[PackedScene]([ExtResource("9_kfgex"), ExtResource("10_miab5"), ExtResource("12_fro7q"), ExtResource("11_o8mwu")])
 default_ai_players = Vector2i(3, 5)
 num_ai_teams = 2
@@ -70,6 +70,7 @@ ideal_min_spawn_separation = 250.0
 [node name="ProceduralObjectMountainSpawner" parent="GameLevel" instance=ExtResource("14_ymbvv")]
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]

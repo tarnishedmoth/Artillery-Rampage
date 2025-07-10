@@ -40,14 +40,14 @@ fractal_gain = 0.605
 outline_mesh_dist_threshold = 0.3
 texture_resources = Array[ExtResource("2_kvwiq")]([SubResource("Resource_msmqt"), ExtResource("5_bxbil")])
 
-[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array(-96.0938, -313.235, 311.719, -316.176, 376.563, -117.647, 417.188, -64.7059, 453.906, 186.765, 477.344, 219.118, 503.906, 195.588, 635.938, 191.176, 692.188, 175, 942.969, 189.706, 945, 445, -103, 448)
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("5_8hr62")]
 noise_template = SubResource("FastNoiseLite_iuf40")
 additional_vertices = 64
 
-[node name="Walls" parent="GameLevel" index="5"]
+[node name="Walls" parent="GameLevel" index="6"]
 wall_mode = 1
 wall_randomization_weights = Dictionary[int, float]({
 0: 1.0,
@@ -55,10 +55,10 @@ wall_randomization_weights = Dictionary[int, float]({
 2: 0.5
 })
 
-[node name="Floor" parent="GameLevel" index="6"]
+[node name="Floor" parent="GameLevel" index="7"]
 visible = false
 
-[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+[node name="ArtillerySpawner" parent="GameLevel" index="9"]
 artillery_ai_types = Array[PackedScene]([ExtResource("9_i20v3"), ExtResource("10_jb7gp"), ExtResource("12_lnoob"), ExtResource("11_k0f58")])
 default_ai_players = Vector2i(3, 4)
 num_ai_teams = 2
@@ -68,6 +68,7 @@ ideal_min_spawn_separation = 250.0
 [node name="ProceduralObjectPlainsSpawner" parent="GameLevel" instance=ExtResource("14_ljbfk")]
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]
