@@ -15,10 +15,10 @@ class TrackedNode:
 var _objects: Dictionary[int, TrackedNode] = {}
 
 func _ready() -> void:
-	SpawnLimiterManager.register(spawn_type,self)
+	SpawnLimiterManager.register(spawn_type, self)
 	clear()
 
-func exit_tree() -> void:
+func _exit_tree() -> void:
 	SpawnLimiterManager.unregister(spawn_type)
 
 func clear() -> void:
