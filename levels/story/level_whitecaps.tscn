@@ -67,7 +67,7 @@ metadata/_custom_type_script = "uid://blr3jie556r2m"
 soundtrack_file = ExtResource("2_a3med")
 
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
-outline_mesh_dist_threshold = 0.8
+outline_mesh_dist_threshold = 0.75
 texture_resources = Array[ExtResource("3_kw5jy")]([SubResource("Resource_yxvgw"), ExtResource("6_qc7q3")])
 
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]

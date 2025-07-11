@@ -14,6 +14,7 @@ shader_parameter/discard_match_distance = 32.0
 shader_parameter/enable_damage_texture = true
 shader_parameter/blend_damage_texture = false
 shader_parameter/damage_texture = ExtResource("2_rjtdu")
+shader_parameter/modulate = Color(1, 1, 1, 1)
 
 [resource]
 script = ExtResource("2_pfxuv")
