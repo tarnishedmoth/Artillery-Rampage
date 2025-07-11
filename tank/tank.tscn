@@ -29,11 +29,11 @@ size = Vector2(26, 26)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bbvof"]
 size = Vector2(6, 30.8)
 
-[node name="Tank" type="Node2D" node_paths=PackedStringArray("shooting_trajectory_indicator", "beam_trajectory_indicator", "lights") groups=["Damageable", "DamageableRoot", "Unit"]]
+[node name="Tank" type="Node2D" node_paths=PackedStringArray("shooting_trajectory_previewer", "beam_trajectory_indicator", "lights") groups=["Damageable", "DamageableRoot", "Unit"]]
 texture_filter = 6
 script = ExtResource("1_0iy80")
 drop_on_death = ExtResource("2_qlwk0")
-shooting_trajectory_indicator = NodePath("WeaponTrajectoryPreviewer")
+shooting_trajectory_previewer = NodePath("WeaponTrajectoryPreviewer")
 beam_trajectory_indicator = NodePath("WeaponBeamTrajectoryPreviewer")
 lights = [NodePath("TankBody/TankTurret/Spotlight"), NodePath("TankBody/PointLight2D"), NodePath("TankBody/PointLight2D2")]
 max_power_v_health = ExtResource("3_6i2oc")

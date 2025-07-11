@@ -12,7 +12,7 @@ signal tank_stopped_falling(tank: Tank)
 
 @export var drop_on_death:PackedScene ## Scene is spawned at tank's global position when it dies.
 ## Trajectory Indicator for projectile-based weapons
-@export var shooting_trajectory_indicator:Weapon
+@export var shooting_trajectory_previewer:Weapon
 ## Trajectory Indicator for beam-based weapons
 @export var beam_trajectory_indicator:Weapon
 @export var lights:Array[CanvasItem]
@@ -281,8 +281,8 @@ func shoot() -> bool:
 		return false
 		
 func _shoot_weapon(weapon:Weapon, power:float) -> void:
-	if shooting_trajectory_indicator:
-		shooting_trajectory_indicator.kill_all_projectiles()
+	if shooting_trajectory_previewer:
+		shooting_trajectory_previewer.kill_all_projectiles()
 	weapon.shoot(power)
 
 #region Damage and Death
@@ -321,10 +321,11 @@ func kill():
 	queue_free()
 
 func spawn_death_drop() -> void:
-	var spawn = drop_on_death.instantiate()
-	spawn.global_position = global_position
-	var container = _get_scene_container()
-	container.add_child.call_deferred(spawn)
+	if drop_on_death:
+		var spawn = drop_on_death.instantiate()
+		spawn.global_position = global_position
+		var container = _get_scene_container()
+		container.add_child.call_deferred(spawn)
 
 func _separate_particles_to_despawn(particles:CPUParticles2D) -> void:
 	particles.reparent(_get_scene_container())
@@ -538,8 +539,8 @@ func check_can_shoot_weapon(weapon: Weapon) -> bool:
 func scan_available_weapons() -> void:
 	weapons.clear()
 
-	if shooting_trajectory_indicator:
-		shooting_trajectory_indicator.connect_to_tank(self)
+	if shooting_trajectory_previewer:
+		shooting_trajectory_previewer.connect_to_tank(self)
 	if beam_trajectory_indicator:
 		beam_trajectory_indicator.connect_to_tank(self)
 
@@ -584,17 +585,17 @@ func visualize_trajectory() -> void:
 	# Maybe this needs to be refactored too
 	if beam_trajectory_indicator and current_equipped_weapon and current_equipped_weapon.trajectory_indicator_type == "Beam":
 		beam_trajectory_indicator.shoot(power)
-	elif current_equipped_weapon and shooting_trajectory_indicator:
+	elif current_equipped_weapon and shooting_trajectory_previewer:
 		# Lets be real I was definitely better off rigging Weapon to show its trajectory innately
 		# instead of trying to mirror another object on the fly lol but this works.
-		shooting_trajectory_indicator.power_launch_speed_mult = current_equipped_weapon.power_launch_speed_mult
+		shooting_trajectory_previewer.power_launch_speed_mult = current_equipped_weapon.power_launch_speed_mult
 		var projectile_data = current_equipped_weapon.get_projectile_instance()
 		if "mass" in projectile_data:
-			shooting_trajectory_indicator.enforce_projectile_property("mass", projectile_data.mass)
+			shooting_trajectory_previewer.enforce_projectile_property("mass", projectile_data.mass)
 		if "is_affected_by_wind" in projectile_data:
-			shooting_trajectory_indicator.enforce_projectile_property("is_affected_by_wind", projectile_data.is_affected_by_wind)
+			shooting_trajectory_previewer.enforce_projectile_property("is_affected_by_wind", projectile_data.is_affected_by_wind)
 
-		shooting_trajectory_indicator.shoot(power)
+		shooting_trajectory_previewer.shoot(power)
 
 
 func _on_weapon_destroyed(weapon: Weapon) -> void:
