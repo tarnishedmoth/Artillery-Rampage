@@ -13,6 +13,12 @@ const SLOW = 1.5
 const LONG = 3.5
 const VERYLONG = 7.0
 
+const PulsePresets = {
+	"One": [2.0],
+	"Two": [0.75, 1.0],
+	"Three": [0.9, 0.9, 1.3],
+}
+
 ## Linearly animates [member CanvasItem.modulate] from [param from] to [member Color.WHITE].
 static func fade_in(node, speed:float = SNAPPY, from:Color = Color.TRANSPARENT) -> Tween:
 	var tween:Tween = node.create_tween()
@@ -65,3 +71,26 @@ static func ks(tween:Tween, callable:Callable) -> Tween:
 		tween.kill()
 	tween = callable.call()
 	return tween
+
+static func flash(node:Control, pulses:Array[float] = PulsePresets.Two, final_color:Color = node.modulate, trans_color:Color = semitransparent(final_color)) -> Tween:
+	var tween = node.create_tween()
+	var semitransparent:Color = final_color * Color(Color.WHITE, 0.5)
+	for pulse:float in pulses:
+		tween.tween_property(node, ^"modulate", final_color, pulse).from(trans_color)
+	return tween
+
+static func flash_using(tween:Tween, node:Control, pulses:Array[float] = PulsePresets.Two, final_color:Color = node.modulate, trans_color:Color = semitransparent(final_color)) -> Tween:
+	if tween:
+		if tween.is_running():
+			tween.kill()
+			tween = node.create_tween()
+	else:
+		tween = node.create_tween()
+		
+	var semitransparent:Color = final_color * Color(Color.WHITE, 0.5)
+	for pulse:float in pulses:
+		tween.tween_property(node, ^"modulate", final_color, pulse).from(trans_color)
+	return tween
+
+static func semitransparent(color:Color) -> Color:
+	return color * Color(Color.WHITE, 0.25)

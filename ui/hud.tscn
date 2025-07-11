@@ -37,75 +37,75 @@ visible = false
 layout_mode = 2
 text = "Level"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="LeftContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 20.0
 offset_top = 20.0
 offset_right = 159.0
 offset_bottom = 92.0
 
-[node name="MouseHoverControlAutohide" parent="VBoxContainer" instance=ExtResource("2_spcu4")]
+[node name="MouseHoverControlAutohide" parent="LeftContainer" instance=ExtResource("2_spcu4")]
 unhide_delay = 0.1
 
-[node name="background" type="Sprite2D" parent="VBoxContainer"]
+[node name="background" type="Sprite2D" parent="LeftContainer"]
 position = Vector2(-20, -30)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_2w7a5")
 centered = false
 
-[node name="Angle" parent="VBoxContainer" instance=ExtResource("1_iign6")]
+[node name="Angle" parent="LeftContainer" instance=ExtResource("1_iign6")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Label" parent="VBoxContainer/Angle" index="0"]
+[node name="Label" parent="LeftContainer/Angle" index="0"]
 text = "⊾ Angle:"
 
-[node name="Power" parent="VBoxContainer" instance=ExtResource("1_iign6")]
+[node name="Power" parent="LeftContainer" instance=ExtResource("1_iign6")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Label" parent="VBoxContainer/Power" index="0"]
+[node name="Label" parent="LeftContainer/Power" index="0"]
 text = "✹ Power:"
 
-[node name="Value" parent="VBoxContainer/Power" index="1"]
+[node name="Value" parent="LeftContainer/Power" index="1"]
 text = "1000"
 
-[node name="Health" parent="VBoxContainer" instance=ExtResource("1_iign6")]
+[node name="Health" parent="LeftContainer" instance=ExtResource("1_iign6")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Label" parent="VBoxContainer/Health" index="0"]
+[node name="Label" parent="LeftContainer/Health" index="0"]
 text = "⛨ Health:"
 
-[node name="Value" parent="VBoxContainer/Health" index="1"]
+[node name="Value" parent="LeftContainer/Health" index="1"]
 text = "100.0%"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+[node name="RightContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 1050.0
 offset_top = 20.0
 offset_right = 1264.0
 offset_bottom = 92.0
 
-[node name="MouseHoverControlAutohide" parent="VBoxContainer2" instance=ExtResource("2_spcu4")]
+[node name="MouseHoverControlAutohide" parent="RightContainer" instance=ExtResource("2_spcu4")]
 unhide_delay = 0.1
 
-[node name="background" type="Sprite2D" parent="VBoxContainer2"]
+[node name="background" type="Sprite2D" parent="RightContainer"]
 position = Vector2(-30, -20)
 texture = ExtResource("4_fd2cg")
 centered = false
 
-[node name="Walls" parent="VBoxContainer2" instance=ExtResource("1_iign6")]
+[node name="WallsHudElement" parent="RightContainer" instance=ExtResource("1_iign6")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Label" parent="VBoxContainer2/Walls" index="0"]
+[node name="Label" parent="RightContainer/WallsHudElement" index="0"]
 text = "Edges:"
 
-[node name="Value" parent="VBoxContainer2/Walls" index="1"]
+[node name="Value" parent="RightContainer/WallsHudElement" index="1"]
 text = "Accelerate"
 
-[node name="CenterBackground" type="TextureRect" parent="."]
+[node name="CenterContainer" type="TextureRect" parent="."]
 layout_mode = 2
 offset_left = 389.5
 offset_top = 20.0
@@ -114,10 +114,10 @@ offset_bottom = 148.0
 texture = ExtResource("5_toij6")
 stretch_mode = 3
 
-[node name="MouseHoverControlAutohide" parent="CenterBackground" instance=ExtResource("2_spcu4")]
+[node name="MouseHoverControlAutohide" parent="CenterContainer" instance=ExtResource("2_spcu4")]
 unhide_delay = 0.1
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="CenterBackground"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -127,35 +127,38 @@ offset_right = 250.5
 offset_bottom = 110.0
 grow_horizontal = 2
 
-[node name="ActivePlayer" type="Label" parent="CenterBackground/VBoxContainer3"]
+[node name="ActivePlayerText" type="Label" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 label_settings = SubResource("LabelSettings_ln601")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Wind" parent="CenterBackground/VBoxContainer3" instance=ExtResource("1_iign6")]
+[node name="WindHudElement" parent="CenterContainer/VBoxContainer" instance=ExtResource("1_iign6")]
+unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
 
-[node name="Label" parent="CenterBackground/VBoxContainer3/Wind" index="0"]
+[node name="Label" parent="CenterContainer/VBoxContainer/WindHudElement" index="0"]
 text = "☁ Wind:"
 
-[node name="Value" parent="CenterBackground/VBoxContainer3/Wind" index="1"]
+[node name="Value" parent="CenterContainer/VBoxContainer/WindHudElement" index="1"]
 text = "50 ◀
 "
 
-[node name="Weapon" type="HBoxContainer" parent="CenterBackground/VBoxContainer3"]
+[node name="WeaponHudElement" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
 script = ExtResource("6_t13h5")
 
-[node name="Label" type="Label" parent="CenterBackground/VBoxContainer3/Weapon"]
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/WeaponHudElement"]
 layout_mode = 2
 text = "Weapon"
 label_settings = ExtResource("7_y12xy")
 
-[node name="Value" type="Label" parent="CenterBackground/VBoxContainer3/Weapon"]
+[node name="Value" type="Label" parent="CenterContainer/VBoxContainer/WeaponHudElement"]
 layout_mode = 2
 text = "Ammo"
 label_settings = ExtResource("7_y12xy")
@@ -173,8 +176,8 @@ offset_bottom = 320.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[editable path="VBoxContainer/Angle"]
-[editable path="VBoxContainer/Power"]
-[editable path="VBoxContainer/Health"]
-[editable path="VBoxContainer2/Walls"]
-[editable path="CenterBackground/VBoxContainer3/Wind"]
+[editable path="LeftContainer/Angle"]
+[editable path="LeftContainer/Power"]
+[editable path="LeftContainer/Health"]
+[editable path="RightContainer/WallsHudElement"]
+[editable path="CenterContainer/VBoxContainer/WindHudElement"]
