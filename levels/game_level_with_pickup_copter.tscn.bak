@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://uaih1d1o2vd7"]
+[gd_scene load_steps=29 format=3 uid="uid://uaih1d1o2vd7"]
 
 [ext_resource type="Script" uid="uid://bfl71q3d57n8s" path="res://levels/game_level.gd" id="1_c8wet"]
 [ext_resource type="Script" uid="uid://ehj364xag1df" path="res://utils/game_timer.gd" id="1_x4c1e"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://dp0yqs3ec4c18" path="res://terrain/sky-tile.png" id="5_8f76g"]
 [ext_resource type="Script" uid="uid://c34my4i57wvu7" path="res://levels/round/round_director.gd" id="6_fyk6u"]
 [ext_resource type="Script" uid="uid://d1h6tovc4c4ol" path="res://background_items/background.gd" id="6_hs6sd"]
+[ext_resource type="PackedScene" uid="uid://bogp8cydgto88" path="res://personnel/pickup_copter.tscn" id="6_jdphu"]
 [ext_resource type="Shader" uid="uid://bpm1kus70ig4j" path="res://background_items/background.gdshader" id="6_y871r"]
 [ext_resource type="PackedScene" uid="uid://d3q2cfp8mqu2x" path="res://tank/artillery_spawner.tscn" id="7_f5i3m"]
 [ext_resource type="PackedScene" uid="uid://boa5a2v0w2ag0" path="res://terrain/floor.tscn" id="8_bp7d6"]
@@ -97,6 +98,9 @@ shape = SubResource("RectangleShape2D_60ghs")
 
 [node name="LeftBlockingWall" parent="Walls/BlockingAreas" index="0"]
 position = Vector2(-11, -2)
+
+[node name="PickupCopter" parent="Walls" instance=ExtResource("6_jdphu")]
+position = Vector2(640, -192)
 
 [node name="Floor" parent="." instance=ExtResource("8_bp7d6")]
 unique_name_in_owner = true
