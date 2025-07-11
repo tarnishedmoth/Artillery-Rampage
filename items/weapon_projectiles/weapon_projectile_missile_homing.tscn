@@ -8,11 +8,11 @@
 [ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="5_rhfto"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_4gj83"]
-polygon = PackedVector2Array(-18, -2, 10, -4, 23, 0, 10, 4, -18, 2)
+polygon = PackedVector2Array(-20, -1, 2, -3, 12, 0, 2, 3, -20, 1)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ojyh2"]
-radius = 4.0
-height = 32.0
+radius = 2.0
+height = 22.0
 
 [node name="WeaponProjectile" type="RigidBody2D" node_paths=PackedStringArray("thrust_sfx", "acquired_target_sfx")]
 collision_layer = 2
@@ -32,13 +32,22 @@ min_damage = 15.0
 max_damage = 80.0
 destructible_scale_multiplier = Vector2(9, 9)
 
+[node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="."]
+position = Vector2(-18, 0)
+amount = 100
+lifetime = 5.0
+gravity = Vector2(0, 0)
+scale_amount_min = 4.0
+scale_amount_max = 4.0
+
 [node name="LightOccluder2D2" type="LightOccluder2D" parent="."]
 show_behind_parent = true
 occluder = SubResource("OccluderPolygon2D_4gj83")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.183745, 0.183745)
+scale = Vector2(0.15, 0.15)
 texture = ExtResource("3_4iye4")
+offset = Vector2(-38, 0)
 
 [node name="PhysicsShape" type="CollisionShape2D" parent="."]
 rotation = 1.5708
@@ -60,14 +69,6 @@ bus = &"SFX"
 stream = ExtResource("5_4gj83")
 volume_db = -6.0
 bus = &"Environment"
-
-[node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="MissileThruster"]
-z_index = 20
-amount = 100
-lifetime = 5.0
-gravity = Vector2(0, 0)
-scale_amount_min = 4.0
-scale_amount_max = 4.0
 
 [node name="Debug_Target" type="Sprite2D" parent="."]
 visible = false

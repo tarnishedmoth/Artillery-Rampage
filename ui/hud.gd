@@ -1,11 +1,14 @@
 extends Control
 
 const color_flash:Color = Color.RED
+const color_flash_2:Color = Color.BLUE_VIOLET
 
 @onready var angle_ui_hudelement:HUDElement = %Angle
 @onready var power_ui_hudelement:HUDElement = %Power
 @onready var health_ui_hudelement:HUDElement = %Health
 @onready var walls_ui_hudelement:HUDElement = %WallsHudElement
+
+@onready var center_container: TextureRect = %CenterContainer
 
 @onready var active_player_ui_label:Label = %ActivePlayerText
 @onready var wind_ui_hudelement:HUDElement = %WindHudElement
@@ -16,6 +19,7 @@ const color_flash:Color = Color.RED
 
 var _active_player:TankController = null
 
+var _center_tween:Tween
 var _player_tween:Tween
 var _health_tween:Tween
 var _power_tween:Tween
@@ -35,7 +39,7 @@ func _ready() -> void:
 	
 	modulate = Color.TRANSPARENT
 	
-	await GameEvents.all_players_added
+	await GameEvents.round_started
 	Juice.fade_in(self, Juice.PATIENT)
 
 func init_signals():
@@ -61,7 +65,7 @@ func _on_turn_started(player: TankController) -> void:
 
 	active_player_ui_label.text = player.name
 	
-	Juice.flash_using(_player_tween, active_player_ui_label, [Juice.SMOOTH, Juice.PATIENT], Color.WHITE)
+	Juice.flash_using(_player_tween, active_player_ui_label, [Juice.FAST], Color.WHITE, MathUtils.semitransparent(color_flash_2, 0.65))
 	
 	_update_health(player)
 	_on_aim_updated(player)
@@ -118,7 +122,9 @@ func _on_wind_updated(wind: Wind) -> void:
 	wind_ui_hudelement.set_value("%d %s" % [_fmt_wind_value(value), _get_direction_string(direction)])
 	
 	if wind_ui_hudelement.value_changed:
-		Juice.flash_using(_wind_tween, wind_ui_hudelement, [Juice.SLOW, Juice.SLOW], Color.WHITE)
+		await Juice.fade_in(wind_ui_hudelement, Juice.PATIENT).finished
+		#await get_tree().create_timer(1.0).timeout # Too much happening at once on turn change
+		Juice.flash_using(_wind_tween, wind_ui_hudelement.value, [Juice.SNAP, Juice.SNAP], Color.WHITE, MathUtils.semitransparent(color_flash_2, 0.7))
 
 func _fmt_wind_value(value: float) -> int:
 	return int(abs(value))

@@ -72,14 +72,14 @@ static func ks(tween:Tween, callable:Callable) -> Tween:
 	tween = callable.call()
 	return tween
 
-static func flash(node:Control, pulses:Array[float] = PulsePresets.Two, final_color:Color = node.modulate, trans_color:Color = semitransparent(final_color)) -> Tween:
+static func flash(node:Control, pulses:Array[float] = PulsePresets.Two, final_color:Color = node.modulate, trans_color:Color = MathUtils.semitransparent(final_color)) -> Tween:
 	var tween = node.create_tween()
 	var semitransparent:Color = final_color * Color(Color.WHITE, 0.5)
 	for pulse:float in pulses:
 		tween.tween_property(node, ^"modulate", final_color, pulse).from(trans_color)
 	return tween
 
-static func flash_using(tween:Tween, node:Control, pulses:Array[float] = PulsePresets.Two, final_color:Color = node.modulate, trans_color:Color = semitransparent(final_color)) -> Tween:
+static func flash_using(tween:Tween, node:Control, pulses:Array[float] = PulsePresets.Two, final_color:Color = node.modulate, trans_color:Color = MathUtils.semitransparent(final_color)) -> Tween:
 	if tween:
 		if tween.is_running():
 			tween.kill()
@@ -91,6 +91,3 @@ static func flash_using(tween:Tween, node:Control, pulses:Array[float] = PulsePr
 	for pulse:float in pulses:
 		tween.tween_property(node, ^"modulate", final_color, pulse).from(trans_color)
 	return tween
-
-static func semitransparent(color:Color) -> Color:
-	return color * Color(Color.WHITE, 0.25)
