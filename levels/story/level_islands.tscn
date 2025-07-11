@@ -144,7 +144,8 @@ position = Vector2(701, 720)
 scale = Vector2(7.02656, 4.6518)
 
 [node name="Player" parent="GameLevel" instance=ExtResource("15_x84ix")]
-position = Vector2(374, 479)
+position = Vector2(344, 481)
+enable_damage_before_first_turn = false
 
 [node name="ProceduralObjectTropicalSpawner" parent="GameLevel" instance=ExtResource("16_nntc6")]
 
