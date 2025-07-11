@@ -1,6 +1,8 @@
 class_name ModDisplayPanel extends Control
 
-var mods:Array:
+const DespawnTimeWhenScrapped:float = Juice.PATIENT
+
+var mods:Array[ModBundle]:
 	set(value):
 		mods = value
 		configure_from_mods()
@@ -23,6 +25,9 @@ var confirming:bool = false
 @onready var confirm: Button = %Confirm
 @onready var confirm_label: Label = %ConfirmLabel
 
+@onready var scrapped_valuation: VBoxContainer = %ScrappedValuation
+@onready var scrapped_value: Label = %ScrappedValue
+
 
 func _enter_tree() -> void:
 	mouse_entered.connect(_on_mouse_entered)
@@ -38,6 +43,8 @@ func _ready() -> void:
 	cancel.hide()
 	confirm.hide()
 	confirm_label.hide()
+	scrapped_valuation.hide()
+	everything.show()
 	
 	if not mods.is_empty():
 		configure_from_mods()
@@ -47,15 +54,12 @@ func _ready() -> void:
 func configure_from_mods() -> void:
 	var _mods:Array
 	for mod in mods:
-		if mod is ModBundle:
-			_mods.append_array(mod.components_weapon_mods)
-			_mods.append_array(mod.components_projectile_mods)
-		else:
-			_mods.append(mod)
+		_mods.append_array(mod.components_weapon_mods)
+		_mods.append_array(mod.components_projectile_mods)
 			
 	## NOTE
-	## This logic makes no sense yet because it'll just show the first mod in the ModBundle array's data (see the return at the end).
-	## Not sure how to sort this yet but I think in all cases right now, it will only be one mod.
+	## This logic will only show the first mod in the ModBundle array's data (see the return at the end).
+	## Not sure how to sort this yet but I think in -all- cases right now, it will only be one mod per bundle.
 	## This will definitely change once layers are used in the bundle.
 	## It will probably be worth doing aggregation in the upgrade list script instead of the display panel.
 	for mod in _mods:
@@ -71,9 +75,25 @@ func configure_from_mods() -> void:
 		return
 	
 func exchange_mod_for_scrap() -> void:
-	print("Foo!")
-	# TASK
-	queue_free()
+	# Get scrap value & remove upgrade from player
+	var scrap_value:int = 0
+	for mod in mods:
+		if mod is ModBundle:
+			scrap_value += PlayerUpgrades.remove_upgrade_and_get_scrap_value(mod)
+			
+	# Give that scrap to the player
+	PlayerAttributes.scrap += scrap_value
+	print_debug("Player exchanged mods for %s scrap." % [scrap_value])
+	
+	# UI Response
+	Juice.fade_out(everything, Juice.SNAP)
+	var exit_tween:Tween = Juice.fade_in(scrapped_valuation, Juice.SNAP)
+	exit_tween.tween_interval(DespawnTimeWhenScrapped)
+	exit_tween.tween_property(self, ^"modulate", Color.TRANSPARENT, Juice.SNAPPY)
+	exit_tween.tween_callback(queue_free)
+	
+	scrapped_valuation.show()
+	scrapped_value.text = "%s  %s" % ["+" if scrap_value > 0 else "-", scrap_value]
 	
 func toggle_buttons(to_confirm:bool = true) -> void:
 	if to_confirm:

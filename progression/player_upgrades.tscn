@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://c8lr1o013mf8c"]
 
 [ext_resource type="Script" uid="uid://c4464llb26spf" path="res://progression/player_upgrades.gd" id="1_6d171"]
-[ext_resource type="AudioStream" uid="uid://bngaenut45u0e" path="res://ui/sounds/snare_roll_3.wav" id="2_nv3vs"]
+[ext_resource type="AudioStream" uid="uid://g8coshapm1yx" path="res://ui/sounds/snare_roll_7.wav" id="2_nv3vs"]
 
 [node name="PlayerUpgrades" type="Node" groups=["Savable"]]
 script = ExtResource("1_6d171")
@@ -9,5 +9,4 @@ script = ExtResource("1_6d171")
 [node name="AcquiredUpgradeSound" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("2_nv3vs")
-pitch_scale = 0.96
 bus = &"UI"

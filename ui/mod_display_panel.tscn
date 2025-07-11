@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://ci2sausuoqug6"]
+[gd_scene load_steps=7 format=3 uid="uid://ci2sausuoqug6"]
 
 [ext_resource type="Script" uid="uid://1mijitrtty48" path="res://progression/mod_display_panel.gd" id="1_kt7ub"]
 [ext_resource type="Theme" uid="uid://dhdbc8ledcupg" path="res://ui/themes/control_theme_upgrade_mod_displays.tres" id="1_o625h"]
@@ -12,6 +12,9 @@ font_color = Color(0.756087, 0.756087, 0.756087, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_h6i1s"]
 font_size = 12
 font_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_45q20"]
+font_size = 32
 
 [node name="ModDisplayPanel" type="Control"]
 custom_minimum_size = Vector2(160, 220)
@@ -45,6 +48,7 @@ theme = ExtResource("1_o625h")
 
 [node name="Everything" type="VBoxContainer" parent="PanelContainer"]
 unique_name_in_owner = true
+visible = false
 clip_contents = true
 custom_minimum_size = Vector2(140, 200)
 layout_mode = 2
@@ -161,6 +165,26 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 mouse_filter = 1
 text = "CONFIRM"
+
+[node name="ScrappedValuation" type="VBoxContainer" parent="PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="PanelContainer/ScrappedValuation"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Scrapped!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScrappedValue" type="Label" parent="PanelContainer/ScrappedValuation"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "+  1"
+label_settings = SubResource("LabelSettings_45q20")
+horizontal_alignment = 1
 
 [connection signal="timeout" from="PanelContainer/Everything/Buttons/HideTimer" to="." method="_on_hide_timer_timeout"]
 [connection signal="pressed" from="PanelContainer/Everything/Buttons/HBoxContainer/Delete" to="." method="_on_delete_pressed"]

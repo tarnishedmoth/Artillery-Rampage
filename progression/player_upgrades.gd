@@ -23,6 +23,17 @@ func apply_all_upgrades(weapons: Array[Weapon]) -> void:
 func acquire_upgrade(mod_bundle:ModBundle) -> void:
 	acquired_upgrade_sound.play()
 	_on_acquired_upgrade(mod_bundle)
+	
+func remove_upgrade_and_get_scrap_value(mod_bundle:ModBundle) -> int:
+	if mod_bundle in current_upgrades:
+		print_debug("Removed an upgrade: %s" % [mod_bundle._to_string()])
+		current_upgrades.erase(mod_bundle)
+		
+	var raw_scrap_value:int = mod_bundle.get_scrap_value()
+	# Reduce value when you have many upgrades
+	var actual_scrap_value:int = maxi(0, raw_scrap_value - (float(current_upgrades.size()) * 0.3))
+	
+	return actual_scrap_value
 
 func _on_acquired_upgrade(mod_bundle:ModBundle) -> void:
 	print_debug("Acquired upgrade")

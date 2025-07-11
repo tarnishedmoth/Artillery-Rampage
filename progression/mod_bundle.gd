@@ -225,6 +225,11 @@ func _to_string() -> String:
 			parts.push_back("%.2f" % value)
 	
 	return " ".join(parts)
+	
+func get_scrap_value() -> int:
+	## TODO deterministic valuation
+	## Implement in Mod classes and match case here
+	return 4
 
 #region Savable
 
