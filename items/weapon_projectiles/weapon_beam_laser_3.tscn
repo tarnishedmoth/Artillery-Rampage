@@ -67,6 +67,33 @@ offset_right = 2.0
 offset_bottom = 2.0
 color = Color(0.778615, 0.524467, 1, 1)
 
+[node name="LaserSegment3" type="Node2D" parent="."]
+visible = false
+
+[node name="BeamSprite" type="Sprite2D" parent="LaserSegment3"]
+rotation = 1.5708
+texture = SubResource("GradientTexture1D_yuec4")
+
+[node name="LaserStart" type="Node2D" parent="LaserSegment3"]
+
+[node name="ColorRect" type="ColorRect" parent="LaserSegment3/LaserStart"]
+visible = false
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+color = Color(0.139995, 0.711158, 0.973731, 1)
+
+[node name="LaserEnd" type="Node2D" parent="LaserSegment3"]
+
+[node name="ColorRect" type="ColorRect" parent="LaserSegment3/LaserEnd"]
+visible = false
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+color = Color(0.778615, 0.524467, 1, 1)
+
 [node name="Destructible" type="CollisionPolygon2D" parent="."]
 visible = false
 scale = Vector2(1.07263, 1.07263)

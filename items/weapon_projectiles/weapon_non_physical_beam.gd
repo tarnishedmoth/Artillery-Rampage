@@ -70,6 +70,8 @@ func _get_current_segment() -> Node:
 		return $LaserSegment1
 	elif number_of_segments == 2:
 		return $LaserSegment2
+	elif number_of_segments == 3:
+		return $LaserSegment3
 	return $LaserSegment1
 
 func get_current_laser_start():
@@ -82,12 +84,21 @@ func get_current_beam_sprite():
 	return _get_current_segment().get_node("BeamSprite")
 
 func create_new_segment(pos: Vector2):
+	# prevent wrapping if there are no more segments
+	if number_of_segments == 2:
+		return
 	if number_of_segments == 1:
 		$LaserSegment2.visible = true
-		number_of_segments = 2
-		distance_traveled_per_segment.push_back(0)
+	elif number_of_segments == 2:
+		$LaserSegment3.visible = true
+	number_of_segments += 1
+	distance_traveled_per_segment.push_back(0)
 	get_current_laser_start().global_position = pos
 	get_current_laser_end().global_position = pos
+	print_debug("got pos", pos);
+	print_debug("laser start", get_current_laser_start().global_position);
+	print_debug("laser end", get_current_laser_end().global_position);
+	return
 
 func _process(delta):
 	var laser_start = get_current_laser_start()
@@ -101,12 +112,17 @@ func _process(delta):
 		laser_end.position = laser_start.position + Vector2(travel_distance, 0.0).rotated(aim_angle)
 		see_if_beam_collides_with_anything()
 		beam_sprite.global_rotation = aim_angle + deg_to_rad(90)
-		beam_sprite.position = (laser_end.position + laser_start.position) / 2
-		beam_sprite.scale.y = laser_end.position.length() - laser_start.position.length()
+		beam_sprite.global_position = (laser_end.global_position + laser_start.global_position) / 2
+		# Not sure why this is needed to get the laser to render properly, but it works
+		if number_of_segments == 1:
+			beam_sprite.scale.y = laser_end.position.length() - laser_start.position.length()
+		else:
+			beam_sprite.global_scale.y = laser_end.global_position.length() - laser_start.global_position.length()
 	else:
 		time_since_last_hit += delta
 		if time_since_last_hit >= time_to_wait_between_hits:
 			can_travel = true
+	return
 
 func see_if_beam_collides_with_anything():
 	var laser_start = get_current_laser_start()
@@ -115,7 +131,7 @@ func see_if_beam_collides_with_anything():
 
 	var space_state = get_world_2d().direct_space_state
 	var query_params := PhysicsRayQueryParameters2D.create(
-		global_position, laser_end.global_position,
+		laser_start.global_position, laser_end.global_position,
 		 Collisions.CompositeMasks.damageable)
 	query_params.exclude = [self]
 	var result: Dictionary = space_state.intersect_ray(query_params)
