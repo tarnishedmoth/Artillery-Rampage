@@ -57,6 +57,7 @@ script = ExtResource("1_x4c1e")
 [node name="RoundDirector" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("6_fyk6u")
+lightning_time = 1000000000
 
 [node name="UI" type="CanvasLayer" parent="."]
 unique_name_in_owner = true

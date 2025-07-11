@@ -58,7 +58,7 @@ metadata/_custom_type_script = "uid://blr3jie556r2m"
 [node name="GameLevel" parent="." instance=ExtResource("1_qnumu")]
 
 [node name="RoundDirector" parent="GameLevel" index="2"]
-lightning_time = 100
+lightning_time = 1000
 lightning_strength = 0.0
 player_goes_first = true
 shuffle_order = false
