@@ -39,7 +39,7 @@ color = Color(0.137255, 0.180392, 0.701961, 1)
 forces_mask = 15
 
 [node name="House1" parent="GameLevel" instance=ExtResource("4_xyl62")]
-position = Vector2(43, 409)
+position = Vector2(187, 621)
 
 [node name="House2" parent="GameLevel" instance=ExtResource("4_xyl62")]
 position = Vector2(934, 407)
