@@ -201,3 +201,4 @@ func _on_turn_ended(player: TankController) -> void:
 
 func _on_wobble_activated() -> void:
 	_is_wobble_activated = true
+	_tank.kill_active_previewer()

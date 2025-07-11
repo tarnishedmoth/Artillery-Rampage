@@ -281,9 +281,14 @@ func shoot() -> bool:
 		return false
 		
 func _shoot_weapon(weapon:Weapon, power:float) -> void:
+	kill_active_previewer()
+	weapon.shoot(power)
+	
+func kill_active_previewer() -> void:
 	if shooting_trajectory_previewer:
 		shooting_trajectory_previewer.kill_all_projectiles()
-	weapon.shoot(power)
+	if beam_trajectory_indicator:
+		beam_trajectory_indicator.kill_all_projectiles()
 
 #region Damage and Death
 func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float) -> void:
