@@ -14,6 +14,7 @@ width = 8
 size = Vector2(1, 8)
 
 [node name="WeaponBeam2" type="RigidBody2D"]
+top_level = true
 gravity_scale = 0.0
 script = ExtResource("1_5q0cl")
 max_lifetime = 5.0

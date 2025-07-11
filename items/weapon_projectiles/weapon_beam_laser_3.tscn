@@ -11,6 +11,7 @@ gradient = SubResource("Gradient_mhdbg")
 width = 8
 
 [node name="WeaponNonPhysicalBeam" type="Node2D"]
+top_level = true
 script = ExtResource("1_yuec4")
 metadata/_custom_type_script = "uid://dcadsd3apky27"
 
