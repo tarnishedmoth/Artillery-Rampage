@@ -31,9 +31,10 @@ func remove_upgrade_and_get_scrap_value(mod_bundle:ModBundle) -> int:
 		
 	var raw_scrap_value:int = mod_bundle.get_scrap_value()
 	# Reduce value when you have many upgrades
-	var actual_scrap_value:int = maxi(0, raw_scrap_value - (float(current_upgrades.size()) * 0.3))
-	
-	return actual_scrap_value
+	#var actual_scrap_value:int = maxi(0, raw_scrap_value - (float(current_upgrades.size()) * 0.3))
+	#return actual_scrap_value
+	## HACK -- fixed value to 1 for release, until we think about balancing this
+	return 1
 
 func _on_acquired_upgrade(mod_bundle:ModBundle) -> void:
 	print_debug("Acquired upgrade")
