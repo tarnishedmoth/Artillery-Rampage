@@ -33,6 +33,7 @@ func collect() -> void:
 
 func die() -> void:
 	# Do Foo
+	await Juice.fade_out(self).finished
 	queue_free()
 #endregion
 
@@ -54,3 +55,8 @@ func _on_glint_sfx_timeout() -> void:
 func _on_sfx_collected_finished() -> void:
 	die()
 #endregion
+
+
+## NOTICE REMOVE OR LENGTHEN DESPAWN TIMER IF ENABLING COPTER
+func _on_despawn_timer_timeout() -> void:
+	die()
