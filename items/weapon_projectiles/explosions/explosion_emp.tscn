@@ -1,10 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://xbbrj3p1ed11"]
+[gd_scene load_steps=11 format=3 uid="uid://xbbrj3p1ed11"]
 
 [ext_resource type="Script" uid="uid://bl6jwqokvmogc" path="res://items/weapon_projectiles/explosions/explosion.gd" id="1_wjfsp"]
 [ext_resource type="AudioStream" uid="uid://dlh3tqoi34qet" path="res://items/weapon_projectiles/explosions/sounds/sfx_small_explosion.wav" id="2_ba8uh"]
 [ext_resource type="PackedScene" uid="uid://cjk1xlwijbmno" path="res://items/weapon_projectiles/explosions/dust.tscn" id="3_1x5fp"]
 [ext_resource type="AudioStream" uid="uid://bvdegnhqkad5d" path="res://weapons/sounds/sfx_shot_a_6.wav" id="3_xheie"]
-[ext_resource type="Texture2D" uid="uid://8xc0o7f4ipq8" path="res://items/weapon_projectiles/explosions/images/explosions.png" id="5_854fq"]
 [ext_resource type="Texture2D" uid="uid://drlrhymq3lay4" path="res://items/weapon_projectiles/explosions/explosion_sprite.tres" id="6_vao68"]
 
 [sub_resource type="Curve" id="Curve_n12t2"]
@@ -28,14 +27,6 @@ colors = PackedColorArray(0.453111, 0.495954, 0.697603, 1, 0, 0.975291, 0.763194
 [sub_resource type="Gradient" id="Gradient_r6uu2"]
 offsets = PackedFloat32Array(0, 0.502262, 1)
 colors = PackedColorArray(0.494658, 0.476219, 0.56092, 1, 1, 1, 1, 1, 0.666202, 0.738932, 0.635233, 1)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vao68"]
-atlas = ExtResource("5_854fq")
-region = Rect2(0, 0, 128, 128)
-
-[sub_resource type="Curve" id="Curve_kgpcx"]
-_data = [Vector2(0, 0), 0.0, 6.46183, 0, 0, Vector2(0.0838816, 0.933893), 0.382793, 0.382793, 0, 0, Vector2(0.768092, 0.656242), -2.00966, -2.00966, 0, 0, Vector2(1, 0), 0.121111, 0.0, 0, 0]
-point_count = 4
 
 [node name="ExplosionEMP" type="Node2D" node_paths=PackedStringArray("particles", "sfx", "lights")]
 script = ExtResource("1_wjfsp")
@@ -91,30 +82,6 @@ damping_min = 4.0
 damping_max = 5.0
 scale_amount_min = 0.5
 scale_amount_max = 0.75
-
-[node name="Fire" parent="." instance=ExtResource("3_1x5fp")]
-modulate = Color(0.788948, 0.974265, 1, 1)
-emitting = false
-amount = 4
-texture = SubResource("AtlasTexture_vao68")
-lifetime = 0.75
-one_shot = true
-emission_sphere_radius = 16.0
-gravity = Vector2(0, 0)
-initial_velocity_min = 4.0
-initial_velocity_max = 32.0
-angular_velocity_min = -180.0
-angular_velocity_max = 180.0
-damping_min = 4.0
-damping_max = 5.0
-angle_min = 0.0
-angle_max = 360.0
-scale_amount_min = 0.5
-scale_amount_max = 0.75
-scale_amount_curve = SubResource("Curve_kgpcx")
-color = Color(1, 0.395769, 0.0622668, 1)
-hue_variation_min = 0.15
-hue_variation_max = 0.38
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 color = Color(0.716489, 0.997089, 0.935687, 1)
