@@ -18,6 +18,7 @@ revealables = [NodePath("Controls/MainMenu/Columns/CenterColumn/MainMenuHeader")
 [node name="Soundtrack" type="AudioStreamPlayer2D" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("2_60dqb")
+volume_db = -10.0
 bus = &"Music"
 
 [node name="Controls" type="Control" parent="."]
