@@ -3,8 +3,8 @@ extends Control
 @onready var run_header_label:Label = %RunHeaderLabel
 @onready var yes_button:Button = %Yes
 @onready var no_button:Button = %No
-@onready var confirmation_dialog:ConfirmationDialog = %ARConfirmationDialog
 @onready var victory_texture:TextureRect = %VictoryImage
+@onready var buttons_container:Container = %ButtonsContainer
 
 func _ready() -> void:
 	# Set to player color
@@ -23,22 +23,13 @@ func _on_yes_pressed() -> void:
 	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryMap)
 	
 	_disable_buttons()
-
-func _on_no_pressed() -> void:
-	confirmation_dialog.set_text("Are you sure you want to end your run?\n This will delete your current save.")
-	confirmation_dialog.popup_centered()
-
-func _on_no_confirmed() -> void:
-	_on_no_action()
-
-func _on_no_action() -> void:
-	print_debug("%s: Selected to end story" % name)
-
-	StorySaveUtils.delete_story_save()
-	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.MainMenu)
 	
+func _on_no_pressed() -> void:
+	print_debug("%s: Selected to end story" % name)
+	# Don't delete save here so player has another chance to change mind on main menu
+	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.MainMenu)
+
 	_disable_buttons()
 
 func _disable_buttons() -> void:
-	yes_button.disabled = true
-	no_button.disabled = true
+	UIUtils.disable_all_buttons(buttons_container, 15.0)
