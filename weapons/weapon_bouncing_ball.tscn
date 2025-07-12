@@ -29,7 +29,4 @@ bus = &"Guns"
 
 [node name="Modes" type="Node" parent="."]
 script = ExtResource("4_xtshw")
-number_of_bounces = Array[int]([1, 2, 3])
-
-[connection signal="mode_change" from="." to="Modes" method="_on_weapon_bouncing_ball_mode_change"]
-[connection signal="projectile_spawned" from="." to="Modes" method="_on_weapon_bouncing_ball_projectile_spawned"]
+modes = [1, 2, 3]

@@ -201,6 +201,7 @@ var _awaiting_lifespan_completion: int ## Internal: Counter for [signal weapon_a
 
 var mode:int = 0 ## Subclasses and components can make use of this counter.
 var modes_total:int = 0 ## Subclasses and components can make use of this counter.
+var mode_node:WeaponModes ## Subclasses and components can make use of this pointer.
 
 var active_projectiles:Array[Node2D]
 
@@ -245,14 +246,22 @@ func _process(_delta: float) -> void:
 ## [method configure_barrels] and finally [method reload]s the [Weapon] so it's ready to shoot.
 func connect_to_tank(tank: Tank) -> void:
 	parent_tank = tank
+	
 	if not weapon_actions_completed.is_connected(parent_tank._on_weapon_actions_completed):
 		weapon_actions_completed.connect(parent_tank._on_weapon_actions_completed)
+		
 	if not weapon_destroyed.is_connected(parent_tank._on_weapon_destroyed): # Will push error
 		weapon_destroyed.connect(parent_tank._on_weapon_destroyed)
-		if use_ammo:
-			ammo_changed.connect(parent_tank._on_weapon_ammo_changed)
-		if use_magazines:
-			magazines_changed.connect(parent_tank._on_weapon_magazines_changed)
+		
+	if not ammo_changed.is_connected(parent_tank._on_weapon_ammo_changed):
+		ammo_changed.connect(parent_tank._on_weapon_ammo_changed)
+	
+	if not magazines_changed.is_connected(parent_tank._on_weapon_magazines_changed):
+		magazines_changed.connect(parent_tank._on_weapon_magazines_changed)
+	
+	if not mode_change.is_connected(parent_tank._on_weapon_mode_changed):
+		mode_change.connect(parent_tank._on_weapon_mode_changed)
+		
 	barrels.append(parent_tank.get_weapon_fire_locations())
 	configure_barrels()
 	#Reload immediately during configuration but we must wait until tank parent ready runs so wait a tick

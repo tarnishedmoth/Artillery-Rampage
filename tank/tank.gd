@@ -617,6 +617,9 @@ func _on_weapon_ammo_changed(_new_ammo:int) -> void:
 
 func _on_weapon_magazines_changed(_new_mags:int) -> void:
 	push_weapon_update_to_hud()
+	
+func _on_weapon_mode_changed(_new_mode:int) -> void:
+	push_weapon_update_to_hud()
 
 func _on_weapon_changed(new_weapon: Weapon) -> void:
 	push_weapon_update_to_hud(new_weapon)
