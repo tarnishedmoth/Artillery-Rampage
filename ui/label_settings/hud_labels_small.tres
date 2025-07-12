@@ -1,0 +1,11 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://b78ym4w40wujs"]
+
+[ext_resource type="FontFile" uid="uid://cr7d38d0438qq" path="res://ui/fonts/FreeSerifBold-rdMp.otf" id="1_nuqpy"]
+
+[resource]
+font = ExtResource("1_nuqpy")
+font_size = 14
+font_color = Color(0.03, 0.03, 0.03, 1)
+outline_size = 5
+outline_color = Color(1, 0, 1, 1)
+shadow_size = 0

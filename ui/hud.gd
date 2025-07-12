@@ -1,7 +1,8 @@
 extends Control
 
-const color_flash:Color = Color.RED
-const color_flash_2:Color = Color.BLUE_VIOLET
+@export var color_flash:Color = Color.RED
+@export var color_flash_2:Color = Color.BLUE_VIOLET
+@export var color_disabled:Color = Color.DARK_GRAY
 
 @onready var angle_ui_hudelement:HUDElement = %Angle
 @onready var power_ui_hudelement:HUDElement = %Power
@@ -13,6 +14,7 @@ const color_flash_2:Color = Color.BLUE_VIOLET
 @onready var active_player_ui_label:Label = %ActivePlayerText
 @onready var wind_ui_hudelement:HUDElement = %WindHudElement
 @onready var weapon_ui_hudelement:HUDElement = %WeaponHudElement
+@onready var weapon_magazines_hud_element: HUDElement = %WeaponMagazinesHudElement
 
 @onready var debug_level_name: Label = %DebugLevelName
 @onready var tooltipper: Control = %Tooltipper
@@ -29,6 +31,7 @@ var _wind_tween:Tween
 
 var _weapon_tween:Tween
 var _ammo_tween:Tween
+var _mags_tween:Tween
 
 var _is_new_turn:bool = false
 
@@ -145,16 +148,42 @@ func _on_weapon_updated(weapon: Weapon) -> void:
 		else:
 			if weapon_ui_hudelement.value_changed:
 				Juice.flash_using(_ammo_tween, weapon_ui_hudelement.value, [Juice.SMOOTH], Color.WHITE, color_flash)
+				
+	## Show a different color if we're out of ammo
+	var container_modulate:Color = Color.WHITE
+	if weapon.use_ammo:
+		if weapon.use_magazines:
+			weapon_magazines_hud_element.show()
+			weapon_magazines_hud_element.set_value(str(weapon.magazines))
+			
+			if not _is_new_turn && weapon_magazines_hud_element.value_changed:
+				Juice.flash_using(_mags_tween, weapon_magazines_hud_element.label, [Juice.SMOOTH, Juice.SMOOTH, Juice.SMOOTH], Color.WHITE, color_flash)
+			
+			if weapon.current_ammo < 1 and weapon.magazines < 1:
+				container_modulate = color_disabled
+				
+		else:
+			weapon_magazines_hud_element.hide()
+			
+			if weapon.current_ammo < 1:
+				container_modulate = color_disabled
+	else:
+		weapon_magazines_hud_element.hide()
+	weapon_ui_hudelement.modulate = container_modulate
 
 func _get_ammo_text(weapon: Weapon) -> String:
 	if not weapon.use_ammo:
 		return char(9854)
-	var tokens:Array[String] = []
-	tokens.push_back(str(weapon.current_ammo))
-	if weapon.use_magazines:
-		tokens.push_back(" (%d x %d)" % [weapon.magazine_capacity, weapon.magazines])
-	
-	return "".join(tokens)
+		
+	else:
+		#var tokens:Array[String] = []
+		#tokens.push_back(str(weapon.current_ammo))
+		#
+		#if weapon.use_magazines:
+			#tokens.push_back(" (%d x %d)" % [weapon.magazine_capacity, weapon.magazines])
+		#
+		#return "".join(tokens)
+		return str(weapon.current_ammo)
 	
 func _on_level_changed(level: GameLevel) -> void:
 	if OS.is_debug_build():

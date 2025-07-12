@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bg64wc8fibctr"]
+[gd_scene load_steps=14 format=3 uid="uid://bg64wc8fibctr"]
 
 [ext_resource type="PackedScene" uid="uid://csk42q7q75rcy" path="res://ui/hud_value.tscn" id="1_iign6"]
 [ext_resource type="Script" uid="uid://qt8fgnh0x5bx" path="res://ui/hud.gd" id="1_qwt2x"]
@@ -9,6 +9,9 @@
 [ext_resource type="Script" uid="uid://c56hl8owfw0k6" path="res://ui/hud_value.gd" id="6_t13h5"]
 [ext_resource type="LabelSettings" uid="uid://d2qiettag13xr" path="res://ui/label_settings/hud_labels.tres" id="7_y12xy"]
 [ext_resource type="PackedScene" uid="uid://cuvkkaw31jk5y" path="res://ui/tooltipper.tscn" id="8_rj5xb"]
+[ext_resource type="LabelSettings" uid="uid://b78ym4w40wujs" path="res://ui/label_settings/hud_labels_small.tres" id="8_spcu4"]
+[ext_resource type="LabelSettings" uid="uid://ckve5dbqttaql" path="res://ui/label_settings/hud_values.tres" id="9_b00kl"]
+[ext_resource type="LabelSettings" uid="uid://bthovvyaght2r" path="res://ui/label_settings/hud_values_small.tres" id="11_so1yu"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ln601"]
 font_size = 24
@@ -59,6 +62,7 @@ layout_mode = 2
 
 [node name="Label" parent="LeftContainer/Angle" index="0"]
 text = "⊾ Angle:"
+label_settings = ExtResource("7_y12xy")
 
 [node name="Power" parent="LeftContainer" instance=ExtResource("1_iign6")]
 unique_name_in_owner = true
@@ -66,6 +70,7 @@ layout_mode = 2
 
 [node name="Label" parent="LeftContainer/Power" index="0"]
 text = "✹ Power:"
+label_settings = ExtResource("7_y12xy")
 
 [node name="Value" parent="LeftContainer/Power" index="1"]
 text = "1000"
@@ -76,6 +81,7 @@ layout_mode = 2
 
 [node name="Label" parent="LeftContainer/Health" index="0"]
 text = "⛨ Health:"
+label_settings = ExtResource("7_y12xy")
 
 [node name="Value" parent="LeftContainer/Health" index="1"]
 text = "100.0%"
@@ -101,6 +107,7 @@ layout_mode = 2
 
 [node name="Label" parent="RightContainer/WallsHudElement" index="0"]
 text = "Edges:"
+label_settings = ExtResource("7_y12xy")
 
 [node name="Value" parent="RightContainer/WallsHudElement" index="1"]
 text = "Accelerate"
@@ -127,6 +134,7 @@ offset_left = -250.5
 offset_right = 250.5
 offset_bottom = 110.0
 grow_horizontal = 2
+theme_override_constants/separation = 0
 
 [node name="ActivePlayerText" type="Label" parent="CenterContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -138,15 +146,19 @@ vertical_alignment = 1
 
 [node name="WindHudElement" parent="CenterContainer/VBoxContainer" instance=ExtResource("1_iign6")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+size_flags_vertical = 4
 alignment = 1
 
 [node name="Label" parent="CenterContainer/VBoxContainer/WindHudElement" index="0"]
 text = "☁ Wind:"
+label_settings = ExtResource("7_y12xy")
+vertical_alignment = 1
 
 [node name="Value" parent="CenterContainer/VBoxContainer/WindHudElement" index="1"]
-text = "50 ◀
-"
+text = "50 ◀"
+vertical_alignment = 1
 
 [node name="WeaponHudElement" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -162,7 +174,24 @@ label_settings = ExtResource("7_y12xy")
 [node name="Value" type="Label" parent="CenterContainer/VBoxContainer/WeaponHudElement"]
 layout_mode = 2
 text = "Ammo"
-label_settings = ExtResource("7_y12xy")
+label_settings = ExtResource("9_b00kl")
+
+[node name="WeaponMagazinesHudElement" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+alignment = 1
+script = ExtResource("6_t13h5")
+
+[node name="Value" type="Label" parent="CenterContainer/VBoxContainer/WeaponMagazinesHudElement"]
+layout_mode = 2
+text = "Mags"
+label_settings = ExtResource("11_so1yu")
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/WeaponMagazinesHudElement"]
+layout_mode = 2
+text = "Magazines"
+label_settings = ExtResource("8_spcu4")
 
 [node name="Tooltipper" parent="." instance=ExtResource("8_rj5xb")]
 unique_name_in_owner = true

@@ -17,6 +17,8 @@ const SCRIPTS = [
 	"res://controller/tank_controller.gd",
 	"res://controller/player/player.gd",
 	"res://controller/ai/ai_tank.gd",
+	
+	"res://utils/juice.gd",
 ]
 
 func _ready() -> void:
