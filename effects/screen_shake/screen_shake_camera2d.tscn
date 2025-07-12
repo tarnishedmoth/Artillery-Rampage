@@ -14,6 +14,7 @@ anchor_mode = 0
 script = ExtResource("1_o3dgc")
 decay = 0.6
 max_offset = Vector2(25, 100)
+max_roll = 0.0
 noise_template = SubResource("FastNoiseLite_ylnpq")
 
 [node name="WeaponProjectileShaker" type="Node2D" parent="." node_paths=PackedStringArray("screen_shake_camera")]
