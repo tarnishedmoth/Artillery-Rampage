@@ -15,6 +15,7 @@ extends Control
 @onready var wind_ui_hudelement:HUDElement = %WindHudElement
 @onready var weapon_ui_hudelement:HUDElement = %WeaponHudElement
 @onready var weapon_magazines_hud_element: HUDElement = %WeaponMagazinesHudElement
+@onready var weapon_mode_hud_element: HUDElement = %WeaponModeHudElement
 
 @onready var debug_level_name: Label = %DebugLevelName
 @onready var tooltipper: Control = %Tooltipper
@@ -142,6 +143,7 @@ func _on_weapon_updated(weapon: Weapon) -> void:
 	weapon_ui_hudelement.set_label(weapon.display_name)
 	weapon_ui_hudelement.set_value(_get_ammo_text(weapon))
 	
+	## Weapon Name & Ammo
 	if not _is_new_turn:
 		if weapon_ui_hudelement.label_changed:
 			Juice.flash_using(_weapon_tween, weapon_ui_hudelement.label, [Juice.SNAP, Juice.SNAP, Juice.SNAP], Color.WHITE)
@@ -149,27 +151,38 @@ func _on_weapon_updated(weapon: Weapon) -> void:
 			if weapon_ui_hudelement.value_changed:
 				Juice.flash_using(_ammo_tween, weapon_ui_hudelement.value, [Juice.SMOOTH], Color.WHITE, color_flash)
 				
-	## Show a different color if we're out of ammo
+	## Magazines & Out Of Ammo
 	var container_modulate:Color = Color.WHITE
-	if weapon.use_ammo:
-		if weapon.use_magazines:
-			weapon_magazines_hud_element.show()
-			weapon_magazines_hud_element.set_value(str(weapon.magazines))
+	if not weapon.use_ammo:
+		weapon_magazines_hud_element.hide()
+	elif weapon.use_magazines:
+		weapon_magazines_hud_element.show()
+		weapon_magazines_hud_element.set_value(str(weapon.magazines))
+		
+		if not _is_new_turn && weapon_magazines_hud_element.value_changed:
+			Juice.flash_using(_mags_tween, weapon_magazines_hud_element.label, [Juice.SMOOTH, Juice.SMOOTH, Juice.SMOOTH], Color.WHITE, color_flash)
+		
+		if weapon.current_ammo < 1 and weapon.magazines < 1:
+			container_modulate = color_disabled
 			
-			if not _is_new_turn && weapon_magazines_hud_element.value_changed:
-				Juice.flash_using(_mags_tween, weapon_magazines_hud_element.label, [Juice.SMOOTH, Juice.SMOOTH, Juice.SMOOTH], Color.WHITE, color_flash)
-			
-			if weapon.current_ammo < 1 and weapon.magazines < 1:
-				container_modulate = color_disabled
-				
-		else:
-			weapon_magazines_hud_element.hide()
-			
-			if weapon.current_ammo < 1:
-				container_modulate = color_disabled
 	else:
 		weapon_magazines_hud_element.hide()
+		
+		if weapon.current_ammo < 1:
+			container_modulate = color_disabled
 	weapon_ui_hudelement.modulate = container_modulate
+	
+	## Weapon Modes
+	if not weapon.mode_node:
+		weapon_mode_hud_element.hide()
+	else:
+		## Necessary await because the WeaponMode component reacts to the same signal
+		## that triggers this update.
+		await get_tree().process_frame
+		weapon_mode_hud_element.show()
+		var display:WeaponModes.LabelValue = weapon.mode_node.get_display_text()
+		weapon_mode_hud_element.set_label(display.label)
+		weapon_mode_hud_element.set_value(display.value)
 
 func _get_ammo_text(weapon: Weapon) -> String:
 	if not weapon.use_ammo:
@@ -184,6 +197,7 @@ func _get_ammo_text(weapon: Weapon) -> String:
 		#
 		#return "".join(tokens)
 		return str(weapon.current_ammo)
+	
 	
 func _on_level_changed(level: GameLevel) -> void:
 	if OS.is_debug_build():

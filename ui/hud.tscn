@@ -193,6 +193,23 @@ layout_mode = 2
 text = "Magazines"
 label_settings = ExtResource("8_spcu4")
 
+[node name="WeaponModeHudElement" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+alignment = 1
+script = ExtResource("6_t13h5")
+
+[node name="Value" type="Label" parent="CenterContainer/VBoxContainer/WeaponModeHudElement"]
+layout_mode = 2
+text = "Num"
+label_settings = ExtResource("11_so1yu")
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/WeaponModeHudElement"]
+layout_mode = 2
+text = "Bounces"
+label_settings = ExtResource("8_spcu4")
+
 [node name="Tooltipper" parent="." instance=ExtResource("8_rj5xb")]
 unique_name_in_owner = true
 layout_mode = 1
