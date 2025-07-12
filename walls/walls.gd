@@ -231,29 +231,58 @@ func check_beam_wall_interaction(beam: WeaponNonPhysicalBeam):
 			beam_none(beam)
 
 func beam_elastic(beam: WeaponNonPhysicalBeam):
-	# TODO: implement
-	return
+	var pos: Vector2 = beam.get_current_laser_end().global_position
+	var current_aim_angle = beam.get_current_aim_angle()
+	var movement_dir = Vector2(1, 0).rotated(current_aim_angle)
+	
+	if(pos.x <= bounds.position.x):
+		if(movement_dir.x < 0):
+			movement_dir.x = -movement_dir.x
+			var new_aim_angle = movement_dir.angle()
+			beam.create_new_segment(pos, new_aim_angle)
+			movement_dir.x = -movement_dir.x
+			# TODO: implement beam announcer events
+			#GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Left)
+	elif pos.x >= bounds.position.x + bounds.size.x:
+		if(movement_dir.x > 0):
+			movement_dir.x = -movement_dir.x
+			var new_aim_angle = movement_dir.angle()
+			beam.create_new_segment(pos, new_aim_angle)
+			# TODO: implement beam announcer events
+			#GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Right)
+			
+	#Top
+	if pos.y <= bounds.position.y:
+		if movement_dir.y < 0:
+			movement_dir.y = -movement_dir.y
+			var new_aim_angle = movement_dir.angle()
+			beam.create_new_segment(pos, new_aim_angle)
+			# TODO: implement beam announcer events
+			#GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Top)
+	#Bottom
+	elif pos.y >= bounds.position.y + bounds.size.y:
+		if movement_dir.y > 0:
+			movement_dir.y = -movement_dir.y
+			var new_aim_angle = movement_dir.angle()
+			beam.create_new_segment(pos, new_aim_angle)
+			# TODO: implement beam announcer events
+			#GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Bottom)
 
 func beam_warp(beam: WeaponNonPhysicalBeam):
 	var pos: Vector2 = beam.get_current_laser_end().global_position
 
 	if(pos.x <= bounds.position.x):
 		var spawn_pos = Vector2(bounds.position.x + bounds.size.x - warp_offset, pos.y)
-		beam.create_new_segment(spawn_pos)
+		beam.create_new_segment(spawn_pos, beam.get_current_aim_angle())
+		# TODO: implement beam announcer events
 		#print_debug("Warp to right side %s -> %s" % [str(projectile.global_position), str(pos)])
 		#GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Left)
 	elif pos.x >= bounds.position.x + bounds.size.x:
 		var spawn_pos = Vector2(bounds.position.x + warp_offset, pos.y)
-		beam.create_new_segment(spawn_pos)
+		beam.create_new_segment(spawn_pos, beam.get_current_aim_angle())
+		# TODO: implement beam announcer events
 		#print_debug("Warp to left side %s -> %s" % [str(projectile.global_position), str(pos)])
 		#GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Right)
-
-	# Beam weapons can't be pointed downwards; does this case need to be implemented?
-	#if pos.y >= bounds.position.y + bounds.size.y:
-		#print_debug("Hit bottom %s - destroying" % [str(pos)])
-		#GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Bottom)
-		#Delete projectile
-		#projectile.explode_and_force_destroy()
 
 func beam_none(beam: WeaponNonPhysicalBeam):
 	var pos: Vector2 = beam.get_current_laser_end().global_position

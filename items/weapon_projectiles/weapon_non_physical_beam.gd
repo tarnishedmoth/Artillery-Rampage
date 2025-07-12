@@ -28,6 +28,7 @@ var speed: float = 800.0
 
 ## The angle of the barrel firing the beam. This will be used to determine the trajectory of the beam.
 var aim_angle: float
+var aim_angle_per_segment: Array[float] = []
 
 var can_travel = true
 var time_since_last_hit = 0
@@ -43,6 +44,7 @@ func _ready() -> void:
 	if has_node('Destructible'):
 		destructible_component = get_node('Destructible')
 	if max_lifetime > 0.0: destroy_after_lifetime()
+	aim_angle_per_segment.push_back(aim_angle)
 	
 	GameEvents.beam_fired.emit(self)
 
@@ -85,10 +87,13 @@ func get_current_laser_end():
 
 func get_current_beam_sprite():
 	return _get_current_segment().get_node("BeamSprite")
+	
+func get_current_aim_angle():
+	return aim_angle_per_segment[number_of_segments - 1]
 
-func create_new_segment(pos: Vector2):
+func create_new_segment(pos: Vector2, new_aim_angle: float):
 	# prevent wrapping if there are no more segments
-	if number_of_segments == 2:
+	if number_of_segments == 3:
 		return
 	if number_of_segments == 1:
 		$LaserSegment2.visible = true
@@ -98,29 +103,23 @@ func create_new_segment(pos: Vector2):
 	distance_traveled_per_segment.push_back(0)
 	get_current_laser_start().global_position = pos
 	get_current_laser_end().global_position = pos
-	print_debug("got pos", pos);
-	print_debug("laser start", get_current_laser_start().global_position);
-	print_debug("laser end", get_current_laser_end().global_position);
-	return
+	aim_angle_per_segment.push_back(new_aim_angle)
 
 func _process(delta):
 	var laser_start = get_current_laser_start()
 	var laser_end = get_current_laser_end()
 	var beam_sprite = get_current_beam_sprite()
 	var travel_distance = distance_traveled_per_segment[number_of_segments - 1]
+	var current_aim_angle = get_current_aim_angle()
 
 	if can_travel:
 		travel_distance += speed * delta
 		distance_traveled_per_segment[number_of_segments - 1] = travel_distance
-		laser_end.position = laser_start.position + Vector2(travel_distance, 0.0).rotated(aim_angle)
+		laser_end.position = laser_start.position + Vector2(travel_distance, 0.0).rotated(current_aim_angle)
 		see_if_beam_collides_with_anything(delta)
-		beam_sprite.global_rotation = aim_angle + deg_to_rad(90)
+		beam_sprite.global_rotation = current_aim_angle + deg_to_rad(90)
 		beam_sprite.global_position = (laser_end.global_position + laser_start.global_position) / 2
-		# Not sure why this is needed to get the laser to render properly, but it works
-		if number_of_segments == 1:
-			beam_sprite.scale.y = laser_end.position.length() - laser_start.position.length()
-		else:
-			beam_sprite.global_scale.y = laser_end.global_position.length() - laser_start.global_position.length()
+		beam_sprite.scale.y = (laser_end.position -  laser_start.position).length()
 	else:
 		time_since_last_hit += delta
 		if time_since_last_hit >= time_to_wait_between_hits:
