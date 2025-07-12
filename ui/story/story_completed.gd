@@ -3,9 +3,14 @@ extends Control
 @onready var run_header_label:Label = %RunHeaderLabel
 @onready var yes_button:Button = %Yes
 @onready var no_button:Button = %No
-@onready var confirmation_dialog = %ARConfirmationDialog
+@onready var confirmation_dialog:ConfirmationDialog = %ARConfirmationDialog
+@onready var victory_texture:TextureRect = %VictoryImage
 
 func _ready() -> void:
+	# Set to player color
+	# TODO: This can be swapped out for a better image. By default showing the player tank as victorious
+	victory_texture.modulate = Color(0xab/256.0, 0xff/256.0, 0x1a/256.0).darkened(0.3)
+	
 	var story_level_state:StoryLevelState = get_tree().get_first_node_in_group(Groups.StoryLevelState) as StoryLevelState
 	if story_level_state:
 		var run_count:int = story_level_state.run_count
