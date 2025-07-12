@@ -1,99 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://bffrf0jumcsap"]
+[gd_scene load_steps=3 format=3 uid="uid://bffrf0jumcsap"]
 
 [ext_resource type="Script" uid="uid://dcadsd3apky27" path="res://items/weapon_projectiles/weapon_non_physical_beam.gd" id="1_yuec4"]
-
-[sub_resource type="Gradient" id="Gradient_mhdbg"]
-offsets = PackedFloat32Array(0, 0.5, 1)
-colors = PackedColorArray(0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_yuec4"]
-gradient = SubResource("Gradient_mhdbg")
-width = 8
+[ext_resource type="PackedScene" uid="uid://g06ecwpwp862" path="res://items/weapon_projectiles/weapon_laser_segment.tscn" id="2_co1n1"]
 
 [node name="WeaponNonPhysicalBeam" type="Node2D"]
 top_level = true
 script = ExtResource("1_yuec4")
 metadata/_custom_type_script = "uid://dcadsd3apky27"
 
-[node name="LaserSegment1" type="Node2D" parent="."]
+[node name="LaserSegments" type="Node2D" parent="."]
 
-[node name="BeamSprite" type="Sprite2D" parent="LaserSegment1"]
-rotation = 1.5708
-texture = SubResource("GradientTexture1D_yuec4")
-
-[node name="LaserStart" type="Node2D" parent="LaserSegment1"]
-
-[node name="ColorRect" type="ColorRect" parent="LaserSegment1/LaserStart"]
-visible = false
-offset_left = -2.0
-offset_top = -2.0
-offset_right = 2.0
-offset_bottom = 2.0
-color = Color(0.139995, 0.711158, 0.973731, 1)
-
-[node name="LaserEnd" type="Node2D" parent="LaserSegment1"]
-
-[node name="ColorRect" type="ColorRect" parent="LaserSegment1/LaserEnd"]
-visible = false
-offset_left = -2.0
-offset_top = -2.0
-offset_right = 2.0
-offset_bottom = 2.0
-color = Color(0.778615, 0.524467, 1, 1)
-
-[node name="LaserSegment2" type="Node2D" parent="."]
-visible = false
-
-[node name="BeamSprite" type="Sprite2D" parent="LaserSegment2"]
-rotation = 1.5708
-texture = SubResource("GradientTexture1D_yuec4")
-
-[node name="LaserStart" type="Node2D" parent="LaserSegment2"]
-
-[node name="ColorRect" type="ColorRect" parent="LaserSegment2/LaserStart"]
-visible = false
-offset_left = -2.0
-offset_top = -2.0
-offset_right = 2.0
-offset_bottom = 2.0
-color = Color(0.139995, 0.711158, 0.973731, 1)
-
-[node name="LaserEnd" type="Node2D" parent="LaserSegment2"]
-
-[node name="ColorRect" type="ColorRect" parent="LaserSegment2/LaserEnd"]
-visible = false
-offset_left = -2.0
-offset_top = -2.0
-offset_right = 2.0
-offset_bottom = 2.0
-color = Color(0.778615, 0.524467, 1, 1)
-
-[node name="LaserSegment3" type="Node2D" parent="."]
-visible = false
-
-[node name="BeamSprite" type="Sprite2D" parent="LaserSegment3"]
-rotation = 1.5708
-texture = SubResource("GradientTexture1D_yuec4")
-
-[node name="LaserStart" type="Node2D" parent="LaserSegment3"]
-
-[node name="ColorRect" type="ColorRect" parent="LaserSegment3/LaserStart"]
-visible = false
-offset_left = -2.0
-offset_top = -2.0
-offset_right = 2.0
-offset_bottom = 2.0
-color = Color(0.139995, 0.711158, 0.973731, 1)
-
-[node name="LaserEnd" type="Node2D" parent="LaserSegment3"]
-
-[node name="ColorRect" type="ColorRect" parent="LaserSegment3/LaserEnd"]
-visible = false
-offset_left = -2.0
-offset_top = -2.0
-offset_right = 2.0
-offset_bottom = 2.0
-color = Color(0.778615, 0.524467, 1, 1)
+[node name="LaserSegment1" parent="LaserSegments" instance=ExtResource("2_co1n1")]
 
 [node name="Destructible" type="CollisionPolygon2D" parent="."]
 visible = false

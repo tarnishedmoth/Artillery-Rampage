@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://g06ecwpwp862"]
+
+[sub_resource type="Gradient" id="Gradient_mhdbg"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5bxt4"]
+gradient = SubResource("Gradient_mhdbg")
+width = 8
+
+[node name="WeaponLaserSegment" type="Node2D"]
+
+[node name="BeamSprite" type="Sprite2D" parent="."]
+rotation = 1.5708
+texture = SubResource("GradientTexture1D_5bxt4")
+
+[node name="LaserStart" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="LaserStart"]
+visible = false
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+color = Color(0.139995, 0.711158, 0.973731, 1)
+
+[node name="LaserEnd" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="LaserEnd"]
+visible = false
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+color = Color(0.778615, 0.524467, 1, 1)

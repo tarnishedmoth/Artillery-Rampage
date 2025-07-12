@@ -1,6 +1,8 @@
 class_name WeaponNonPhysicalBeam extends Node2D
 ## An alternative to WeaponProjectile for weapons with non-physical bodies
 
+const beam_segment_scene: PackedScene = preload("res://items/weapon_projectiles/weapon_laser_segment.tscn")
+
 signal completed_lifespan(projectile) ## Tracked by Weapon class
 
 ## Self destroys once this time has passed.[br]
@@ -71,13 +73,7 @@ func destroy_after_lifetime(lifetime:float = max_lifetime) -> void:
 	timer.start(lifetime)
 
 func _get_current_segment() -> Node:
-	if number_of_segments == 1:
-		return $LaserSegment1
-	elif number_of_segments == 2:
-		return $LaserSegment2
-	elif number_of_segments == 3:
-		return $LaserSegment3
-	return $LaserSegment1
+	return $LaserSegments.get_child(number_of_segments - 1)
 
 func get_current_laser_start():
 	return _get_current_segment().get_node("LaserStart")
@@ -92,14 +88,9 @@ func get_current_aim_angle():
 	return aim_angle_per_segment[number_of_segments - 1]
 
 func create_new_segment(pos: Vector2, new_aim_angle: float):
-	# prevent wrapping if there are no more segments
-	if number_of_segments == 3:
-		return
-	if number_of_segments == 1:
-		$LaserSegment2.visible = true
-	elif number_of_segments == 2:
-		$LaserSegment3.visible = true
 	number_of_segments += 1
+	var beam_segment = beam_segment_scene.instantiate()
+	$LaserSegments.add_child(beam_segment)
 	distance_traveled_per_segment.push_back(0)
 	get_current_laser_start().global_position = pos
 	get_current_laser_end().global_position = pos
