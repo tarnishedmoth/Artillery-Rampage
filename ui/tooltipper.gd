@@ -84,7 +84,7 @@ func _is_simultaneous_fire_mode() -> bool:
 	var game_level:GameLevel = SceneManager.get_current_level_root()
 	return game_level.round_director.is_simultaneous_fire if is_instance_valid(game_level) else false
 			
-func replace_keybind_glyphs(text: String) -> String: # I don't understand why this isn't working
+func replace_keybind_glyphs(text: String) -> String:
 	var new_text = text
 
 	for action in UserOptions.get_all_keybinds():

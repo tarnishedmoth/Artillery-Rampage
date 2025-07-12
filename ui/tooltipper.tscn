@@ -25,7 +25,6 @@ grow_vertical = 2
 
 [node name="TooltipsPlayerTurn" type="MarginContainer" parent="PanelContainer" node_paths=PackedStringArray("sequence")]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
@@ -34,10 +33,9 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 8
 script = ExtResource("2_2oifc")
-sequence = [NodePath("TooltipSimultaneousFire"), NodePath("TooltipAim"), NodePath("TooltipPower"), NodePath("TooltipShoot"), NodePath("TooltipChangeWeapon")]
+sequence = [NodePath("TooltipSimultaneousFire"), NodePath("TooltipAim"), NodePath("TooltipPower"), NodePath("TooltipShoot"), NodePath("TooltipChangeWeapon"), NodePath("HintHealth")]
 
 [node name="TooltipSimultaneousFire" type="HBoxContainer" parent="PanelContainer/TooltipsPlayerTurn" groups=["SimultaneousFire"]]
-unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
@@ -51,7 +49,7 @@ layout_mode = 2
 
 [node name="Description" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipSimultaneousFire"]
 layout_mode = 2
-text = "All units will fire at the same time once everyone presses shoot to fire."
+text = "All units will fire at the same time once everyone has decided their shot."
 
 [node name="TooltipPower" type="HBoxContainer" parent="PanelContainer/TooltipsPlayerTurn"]
 visible = false
@@ -75,7 +73,7 @@ layout_mode = 2
 
 [node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipAim"]
 layout_mode = 2
-text = "[aim_left] / [aim_right]"
+text = "[aim_left] / [aim_right], [fine_control]"
 
 [node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/TooltipAim"]
 custom_minimum_size = Vector2(16, 0)
@@ -83,7 +81,7 @@ layout_mode = 2
 
 [node name="Description" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipAim"]
 layout_mode = 2
-text = "Aim"
+text = "Aim Angle"
 
 [node name="TooltipShoot" type="HBoxContainer" parent="PanelContainer/TooltipsPlayerTurn"]
 visible = false
@@ -107,7 +105,7 @@ layout_mode = 2
 
 [node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipChangeWeapon"]
 layout_mode = 2
-text = "[cycle_next_weapon]"
+text = "[cycle_next_weapon] / [cycle_prev_weapon]"
 
 [node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/TooltipChangeWeapon"]
 custom_minimum_size = Vector2(16, 0)
@@ -144,8 +142,24 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 8
 script = ExtResource("2_2oifc")
-sequence = [NodePath("HintWaiting"), NodePath("HintAI1"), NodePath("HintHealth"), NodePath("HintAI2")]
+sequence = [NodePath("TooltipSimultaneousFire2"), NodePath("HintWaiting"), NodePath("HintHovering"), NodePath("HintHealth"), NodePath("HintAI"), NodePath("HintTypes")]
 cycle_time = 4.5
+
+[node name="TooltipSimultaneousFire2" type="HBoxContainer" parent="PanelContainer/TooltipsEnemyTurn" groups=["SimultaneousFire"]]
+visible = false
+layout_mode = 2
+
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsEnemyTurn/TooltipSimultaneousFire2"]
+layout_mode = 2
+text = "Simultaneous Fire Mode"
+
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsEnemyTurn/TooltipSimultaneousFire2"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="Description" type="Label" parent="PanelContainer/TooltipsEnemyTurn/TooltipSimultaneousFire2"]
+layout_mode = 2
+text = "All units will fire at the same time once everyone has decided their shot."
 
 [node name="HintHealth" type="HBoxContainer" parent="PanelContainer/TooltipsEnemyTurn"]
 visible = false
@@ -161,37 +175,37 @@ layout_mode = 2
 
 [node name="Description" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintHealth"]
 layout_mode = 2
-text = "Taking damage will affect your ability to shoot."
+text = "Taking damage might make your aim wobble."
 
-[node name="HintAI1" type="HBoxContainer" parent="PanelContainer/TooltipsEnemyTurn"]
+[node name="HintHovering" type="HBoxContainer" parent="PanelContainer/TooltipsEnemyTurn"]
 visible = false
 layout_mode = 2
 
-[node name="Glyph" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintAI1"]
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintHovering"]
 layout_mode = 2
-text = "Hint: Opponents"
+text = "Hint: Hiding the HUD"
 
-[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsEnemyTurn/HintAI1"]
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsEnemyTurn/HintHovering"]
 custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
-[node name="Description" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintAI1"]
+[node name="Description" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintHovering"]
 layout_mode = 2
-text = "Be wary of tough enemy."
+text = "You can hover your mouse over anything to hide it."
 
-[node name="HintAI2" type="HBoxContainer" parent="PanelContainer/TooltipsEnemyTurn"]
+[node name="HintAI" type="HBoxContainer" parent="PanelContainer/TooltipsEnemyTurn"]
 visible = false
 layout_mode = 2
 
-[node name="Glyph" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintAI2"]
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintAI"]
 layout_mode = 2
 text = "Hint: Opponents"
 
-[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsEnemyTurn/HintAI2"]
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsEnemyTurn/HintAI"]
 custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
-[node name="Description" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintAI2"]
+[node name="Description" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintAI"]
 layout_mode = 2
 text = "Ahh, ranged battle..."
 
@@ -210,3 +224,19 @@ layout_mode = 2
 [node name="Description" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintWaiting"]
 layout_mode = 2
 text = "You'll have to wait for your turn before taking any actions."
+
+[node name="HintTypes" type="HBoxContainer" parent="PanelContainer/TooltipsEnemyTurn"]
+visible = false
+layout_mode = 2
+
+[node name="Glyph" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintTypes"]
+layout_mode = 2
+text = "Hint:"
+
+[node name="GSpacer" type="Control" parent="PanelContainer/TooltipsEnemyTurn/HintTypes"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="Description" type="Label" parent="PanelContainer/TooltipsEnemyTurn/HintTypes"]
+layout_mode = 2
+text = "Enemies have many behaviors. Watch and strategize!"
