@@ -14,6 +14,7 @@ class TerrainTexture:
 @onready var destructiblePolyOperations: DestructiblePolyOperations = $DestructiblePolyOperations
 @onready var shadow_wizard_maker_gang: LightOccluder2D = %ShadowWizardMakerGang
 @onready var shadow_wizard_maker_gang_occluder:OccluderPolygon2D = shadow_wizard_maker_gang.occluder
+@onready var polygon_pruner:PolygonPruner = $PolygonPruner
 
 var terrain: Terrain
 
@@ -280,6 +281,8 @@ class UpdateFlags:
 func replace_contents(new_poly_global: PackedVector2Array, influence_poly_global: PackedVector2Array = [], update_flags:int = UpdateFlags.Crumble) -> Array[PackedVector2Array]:
 	print_poly("replace_contents", new_poly_global)
 
+	new_poly_global = polygon_pruner.prune_polygons(new_poly_global)
+	
 	# Transform updated polygon back to local space
 	var terrain_global_inv_transform: Transform2D = terrainMesh.global_transform.affine_inverse()
 	var updated_terrain_poly_local: PackedVector2Array = terrain_global_inv_transform * new_poly_global

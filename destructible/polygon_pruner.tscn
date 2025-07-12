@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3ksvn2h1kw5l"]
+
+[ext_resource type="Script" uid="uid://g821obrac6bu" path="res://destructible/polygon_pruner.gd" id="1_yehwk"]
+
+[node name="PolygonPruner" type="Node"]
+script = ExtResource("1_yehwk")

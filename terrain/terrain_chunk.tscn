@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://dmbj0iglwwo7x"]
+[gd_scene load_steps=10 format=3 uid="uid://dmbj0iglwwo7x"]
 
 [ext_resource type="Script" uid="uid://ng7sthm4nght" path="res://terrain/terrain_chunk.gd" id="1_m7lgb"]
 [ext_resource type="Script" uid="uid://dncglgy7n0c4f" path="res://destructible/destructible_poly_operations.gd" id="2_41dms"]
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_obytp"]
 [ext_resource type="Texture2D" uid="uid://byy76mvisn1j0" path="res://terrain/terrain-strata.png" id="2_sdw60"]
 [ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_pkghx"]
+[ext_resource type="PackedScene" uid="uid://b3ksvn2h1kw5l" path="res://destructible/polygon_pruner.tscn" id="6_m70bf"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_m70bf"]
 shader = ExtResource("3_pkghx")
@@ -57,3 +58,5 @@ polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 220, -2, 259, -223, 300
 
 [node name="DestructiblePolyOperations" type="Node" parent="."]
 script = ExtResource("2_41dms")
+
+[node name="PolygonPruner" parent="." instance=ExtResource("6_m70bf")]
