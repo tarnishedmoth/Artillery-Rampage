@@ -15,7 +15,7 @@ signal completed_lifespan(projectile) ## Tracked by Weapon class
 @export var falloff_distance_multiplier: float = 1.0 # ModProjectile
 
 @export_category("Destructible")
-@export var destructible_scale_multiplier:Vector2 = Vector2(2.0 , 2.0):
+@export var destructible_scale_multiplier:Vector2 = Vector2(4.0 , 4.0):
 	get: return destructible_scale_multiplier*destructible_scale_multiplier_scalar
 @export var destructible_scale_multiplier_scalar:float = 1.0 # ModProjectile
 
@@ -31,7 +31,10 @@ var aim_angle: float
 
 var can_travel = true
 var time_since_last_hit = 0
-var time_to_wait_between_hits = 0.0075
+var time_to_wait_between_hits = 0.0
+
+var explosion_timer = 0
+var time_to_explode = 0.25
 
 var number_of_segments = 1
 var distance_traveled_per_segment: Array[float] = [0]
@@ -110,7 +113,7 @@ func _process(delta):
 		travel_distance += speed * delta
 		distance_traveled_per_segment[number_of_segments - 1] = travel_distance
 		laser_end.position = laser_start.position + Vector2(travel_distance, 0.0).rotated(aim_angle)
-		see_if_beam_collides_with_anything()
+		see_if_beam_collides_with_anything(delta)
 		beam_sprite.global_rotation = aim_angle + deg_to_rad(90)
 		beam_sprite.global_position = (laser_end.global_position + laser_start.global_position) / 2
 		# Not sure why this is needed to get the laser to render properly, but it works
@@ -124,7 +127,7 @@ func _process(delta):
 			can_travel = true
 	return
 
-func see_if_beam_collides_with_anything():
+func see_if_beam_collides_with_anything(delta):
 	var laser_start = get_current_laser_start()
 	var laser_end = get_current_laser_end()
 	var beam_sprite = get_current_beam_sprite()
@@ -137,7 +140,11 @@ func see_if_beam_collides_with_anything():
 	var result: Dictionary = space_state.intersect_ray(query_params)
 	if result.size() > 0:
 		laser_end.global_position = result.position
-		explode()
+		if explosion_timer > time_to_explode:
+			explode()
+			explosion_timer = 0
+		else:
+			explosion_timer += delta
 		can_travel = false
 		time_since_last_hit = 0
 
