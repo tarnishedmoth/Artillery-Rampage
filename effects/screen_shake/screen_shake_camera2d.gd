@@ -12,20 +12,28 @@ var _noise:FastNoiseLite
 
 var trauma: float = 0.0
 var noise_y: float= 0.0
-
+		
 func _ready():
 	_noise = _generate_noise()
-	make_current()
+	if enabled:
+		make_current()
 
 func add_trauma(amount: float):
+	if not enabled:
+		return
+		
 	trauma = clampf(trauma + amount, 0.0, 1.0)
 
 func _process(delta):
+	if not enabled:
+		return
+	if not is_current():
+		make_current()
 	if trauma > 0.0:
 		trauma = maxf(trauma - decay * delta, 0.0)
-		shake()
+		_shake()
 
-func shake():
+func _shake():
 	var amt:float = pow(trauma, trauma_power)
 	noise_y += 1.0
 	

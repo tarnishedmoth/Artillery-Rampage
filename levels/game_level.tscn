@@ -52,6 +52,7 @@ process_mode = 1
 script = ExtResource("1_x4c1e")
 
 [node name="ScreenShakeCamera2D" parent="." instance=ExtResource("3_876hk")]
+unique_name_in_owner = true
 
 [node name="RoundDirector" type="Node" parent="."]
 unique_name_in_owner = true

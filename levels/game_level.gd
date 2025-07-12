@@ -9,17 +9,23 @@ class_name GameLevel extends Node2D
 @onready var post_processing: PostProcessingEffects = %PostProcessing
 @onready var day_weather: Node = %DayWeather
 
+@onready var screen_shake:Camera2D = %ScreenShakeCamera2D
+
 ## Name of level displayed to player
 @export var level_name:StringName
 
 var _scene_transitioned:bool = false
 
 ## Used to hold various spawnables such as [WeaponProjectile] and particle effects.
-var container_for_spawnables
+var container_for_spawnables:Node2D
 
 func _ready() -> void:
+	screen_shake.enabled = UserOptions.enable_screenshake
+	GameEvents.user_options_changed.connect(_on_options_applied)
+	
 	GameEvents.connect("round_ended", _on_round_ended)
 	container_for_spawnables = make_container_node() # For spawnables
+	
 	GameEvents.level_loaded.emit(self)
 	
 	await begin_round()
@@ -99,3 +105,6 @@ func get_container() -> Node2D:
 	if not container_for_spawnables.is_inside_tree():
 		container_for_spawnables = make_container_node()
 	return container_for_spawnables
+
+func _on_options_applied() -> void:
+	screen_shake.enabled = UserOptions.enable_screenshake

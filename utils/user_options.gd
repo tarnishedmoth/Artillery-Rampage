@@ -5,6 +5,7 @@ var keybinds:Dictionary[StringName,Array] # action, InputEvents TODO
 var show_tooltips:bool = true
 var show_hud:bool = true
 var show_assist_trajectory_preview:bool = true
+var enable_screenshake:bool = true
 
 var volume_music:float = 0.8
 var volume_sfx:float = 1.0
@@ -110,6 +111,7 @@ func restore_from_save_state(save: SaveState) -> void:
 	show_tooltips = state.show_tooltips
 	show_hud = state.show_hud
 	show_assist_trajectory_preview = state.show_assist_trajectory_preview
+	enable_screenshake = state.get("enable_screenshake", true)
 	
 func update_save_state(save:SaveState) -> void:
 	# Only save on explicit node trigger (see below)
@@ -120,6 +122,7 @@ func update_save_state(save:SaveState) -> void:
 	state.show_tooltips = show_tooltips
 	state.show_hud = show_hud
 	state.show_assist_trajectory_preview = show_assist_trajectory_preview
+	state.enable_screenshake = enable_screenshake
 	
 	# Force the difficulty option to save as well
 	Difficulty.update_save_state(save)

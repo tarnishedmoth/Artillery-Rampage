@@ -108,6 +108,19 @@ text = "Preview Trajectory"
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="EnableScreenshake" type="HBoxContainer" parent="Options/MarginContainer/VBoxContainer/Options"]
+layout_mode = 2
+alignment = 2
+
+[node name="Label" type="Label" parent="Options/MarginContainer/VBoxContainer/Options/EnableScreenshake"]
+layout_mode = 2
+text = "Screenshake"
+
+[node name="EnableScreenshakeToggle" type="CheckButton" parent="Options/MarginContainer/VBoxContainer/Options/EnableScreenshake"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+
 [node name="Difficulty" type="HBoxContainer" parent="Options/MarginContainer/VBoxContainer/Options"]
 layout_mode = 2
 alignment = 2
