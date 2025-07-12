@@ -18,17 +18,20 @@ stream_0/stream = ExtResource("6_frkrk")
 [node name="WeaponProjectile" type="RigidBody2D"]
 collision_layer = 2
 collision_mask = 541
+mass = 1.5
 physics_material_override = SubResource("PhysicsMaterial_6h8cr")
 continuous_cd = 2
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_6h8cr")
+color = Color(0.221302, 0.221302, 0.221302, 1)
 should_explode_on_impact = false
 explosion_to_spawn = ExtResource("2_het2b")
-min_falloff_distance = 25.0
-max_falloff_distance = 80.0
+rescale_explosion = Vector2(1.3, 1.3)
+min_falloff_distance = 40.0
+max_falloff_distance = 110.0
 max_damage = 60.0
-destructible_scale_multiplier = Vector2(7, 7)
+destructible_scale_multiplier = Vector2(7.5, 7.5)
 
 [node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="."]
 z_index = 20
