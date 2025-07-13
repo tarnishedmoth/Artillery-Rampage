@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://o55c1iigswjc"]
+[gd_scene load_steps=14 format=3 uid="uid://o55c1iigswjc"]
 
 [ext_resource type="Theme" uid="uid://bf5nv0nins5p6" path="res://ui/themes/shop.tres" id="1_abhue"]
 [ext_resource type="Script" uid="uid://blcakxdcf5gn4" path="res://ui/story/shop/story_shop.gd" id="1_po24w"]
@@ -8,6 +8,7 @@
 [ext_resource type="LabelSettings" uid="uid://caafhio2r1ekd" path="res://ui/story/round_summary/round_summary_header.tres" id="4_mpdqb"]
 [ext_resource type="Script" uid="uid://b8idjgo18fqvv" path="res://ui/story/shop/growing_scroll_container.gd" id="4_xg2qo"]
 [ext_resource type="FontFile" uid="uid://cr7d38d0438qq" path="res://ui/fonts/FreeSerifBold-rdMp.otf" id="6_wkf8e"]
+[ext_resource type="PackedScene" uid="uid://csk42q7q75rcy" path="res://ui/hud_value.tscn" id="9_tajcp"]
 
 [sub_resource type="Gradient" id="Gradient_qpegy"]
 colors = PackedColorArray(0.85, 0.827333, 0.8075, 1, 0.6417, 0.64492, 0.69, 1)
@@ -18,6 +19,13 @@ gradient = SubResource("Gradient_qpegy")
 [sub_resource type="Theme" id="Theme_mpdqb"]
 default_font = ExtResource("6_wkf8e")
 default_font_size = 18
+
+[sub_resource type="LabelSettings" id="LabelSettings_6xw2n"]
+font = ExtResource("6_wkf8e")
+font_size = 24
+font_color = Color(0.03, 0.03, 0.03, 1)
+outline_size = 5
+shadow_size = 0
 
 [node name="StoryShop" type="Control"]
 layout_mode = 3
@@ -159,6 +167,17 @@ custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Reset"
 
+[node name="TotalScrapSpending" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer" instance=ExtResource("9_tajcp")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer/TotalScrapSpending" index="0"]
+text = "Total:"
+label_settings = SubResource("LabelSettings_6xw2n")
+
+[node name="Value" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer/TotalScrapSpending" index="1"]
+text = "15 Scrap"
+
 [node name="Done" type="Button" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
@@ -167,3 +186,5 @@ text = "Done
 
 [connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer/Reset" to="." method="_on_reset_pressed"]
 [connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer/Done" to="." method="_on_done_pressed"]
+
+[editable path="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer/TotalScrapSpending"]

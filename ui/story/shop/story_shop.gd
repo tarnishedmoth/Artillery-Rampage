@@ -8,6 +8,8 @@ extends Control
 @onready var resources_control:ShopResourceRowControl = %ResourceRow
 @onready var buttons_container:Container = %ButtonsContainer
 
+@onready var total_scrap_spending: HUDElement = %TotalScrapSpending
+
 # Shop item row scenes by ItemType (Currently only weapon)
 const weapon_row_scene:PackedScene = preload("res://ui/story/shop/shop_weapon_row.tscn")
 
@@ -59,8 +61,8 @@ class ItemPurchaseState:
 ## Keyed by the scene file path of the instantiated item
 var _purchase_item_state_dictionary:Dictionary[String, ItemPurchaseState] = {}
 
-var pending_scrap_spend:int
-var pending_personnel_spend:int
+var pending_scrap_spend:int = 0
+var pending_personnel_spend:int = 0
 
 func _ready() -> void:
 	var player_state:PlayerState =_initialize_player_state()
@@ -229,6 +231,12 @@ func _update_resources_control_state() -> void:
 		PlayerAttributes.scrap - pending_scrap_spend,
 		PlayerAttributes.personnel - pending_personnel_spend
 	)
+	
+	total_scrap_spending.set_value(pending_scrap_spend)
+	if pending_scrap_spend > 0:
+		total_scrap_spending.show()
+	else:
+		total_scrap_spending.hide()
 
 func _on_weapon_ammo_state_changed(weapon: Weapon, new_ammo:int, old_ammo:int, cost:int) -> void:
 	print_debug("%s - Weapon Ammo State changed for %s - new_ammo=%d; old_ammo=%d; cost=%d" % [name, weapon.display_name, new_ammo, old_ammo, cost])
@@ -254,6 +262,7 @@ func _update_row_states() -> void:
 	for purchase_state_key in _purchase_item_state_dictionary:
 		var purchase_state:ItemPurchaseState = _purchase_item_state_dictionary[purchase_state_key]
 		var item: ShopItemResource = purchase_state.item
+		
 
 		# If not yet buying make sure still have enough
 		if not purchase_state.buy and not purchase_state.existing_item:
