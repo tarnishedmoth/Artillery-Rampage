@@ -19,12 +19,14 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.8, 0.8)
 
-[node name="Evaporator" type="Node2D" groups=["Damageable", "DamageableRoot"]]
+[node name="Evaporator" type="Node2D" groups=["Damageable", "DamageableRoot", "RewardableOnDestroy"]]
 script = ExtResource("1_ieeyv")
 can_be_emp_charged = true
 display_name = "a factory tower"
 chunk_scene = ExtResource("3_ieeyv")
 smoothing = false
+metadata/RewardType = "Scrap"
+metadata/RewardAmount = 4
 
 [node name="UiComponentHealthbar" parent="." node_paths=PackedStringArray("node_with_health") instance=ExtResource("3_vw6kc")]
 position = Vector2(0, 16)

@@ -125,6 +125,8 @@ func _reassign_slots(from:ConveyorSlot, to:ConveyorSlot) -> void:
 func defeated() -> void:
 	#End the round
 	#TODO would be cool if the factory exploded first
+	# Wait a tick for all rewards to compute
+	await get_tree().process_frame
 	%RoundDirector.end_round()
 
 func _on_turn_ended(_tank:TankController) -> void:
