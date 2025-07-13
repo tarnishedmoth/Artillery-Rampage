@@ -6,6 +6,8 @@ class_name WeaponBuyControl extends VBoxContainer
 
 @onready var buy_button:Button = %BuyButton
 @onready var current_ammo:Label = %CurrentAmmo
+@onready var current_ammo_row: HBoxContainer = %CurrentAmmoRow
+
 
 var item: ShopItemResource
 var weapon:Weapon
@@ -58,15 +60,15 @@ func _get_total_current_ammo(in_weapon: Weapon) -> int:
 func set_buy_button_text_by_state() -> void:
 	if buy_button.disabled:
 		buy_button.text = buy_button_owned_text
-		current_ammo.show()
+		current_ammo_row.show()
 	else:
 		buy_button.text = buy_button_not_owned_text
-		current_ammo.hide()
+		current_ammo_row.hide()
 
 func _on_buy_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		buy_button.text = buy_button_toggled_text
-		current_ammo.show()
+		current_ammo_row.show()
 	else:
 		buy_button.text = buy_button_not_owned_text
-		current_ammo.hide()
+		current_ammo_row.hide()
