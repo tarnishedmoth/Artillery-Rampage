@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://sa0oyrt453vy"]
+[gd_scene load_steps=6 format=3 uid="uid://sa0oyrt453vy"]
 
 [ext_resource type="PackedScene" uid="uid://b00kdwwjo4hg8" path="res://destructible/destructible_object.tscn" id="1_4bptg"]
 [ext_resource type="PackedScene" uid="uid://d32uo8rsaysp3" path="res://buildings/lighthouse/light_house_chunk.tscn" id="2_5d6b8"]
+[ext_resource type="Texture2D" uid="uid://b1rtks5mrjg34" path="res://tank/spotlight.png" id="3_huli0"]
+[ext_resource type="PackedScene" uid="uid://c7gtykfc1h1xq" path="res://effects/day_weather_react.tscn" id="3_jka0s"]
+[ext_resource type="Script" uid="uid://c2sibt28tydqh" path="res://buildings/lighthouse/lights_delete.gd" id="3_k7ao2"]
 
 [node name="Lighthouse" instance=ExtResource("1_4bptg")]
 display_name = "a lighthouse"
@@ -10,3 +13,23 @@ crumbling = true
 create_new_chunks = true
 
 [node name="LighthouseChunk" parent="." index="0" instance=ExtResource("2_5d6b8")]
+
+[node name="Lights" type="Node2D" parent="LighthouseChunk" index="3"]
+script = ExtResource("3_k7ao2")
+
+[node name="DayWeatherReact" parent="LighthouseChunk/Lights" index="0" node_paths=PackedStringArray("lights") instance=ExtResource("3_jka0s")]
+lights = [NodePath("../PointLight2D"), NodePath("../PointLight2D2")]
+
+[node name="PointLight2D" type="PointLight2D" parent="LighthouseChunk/Lights" index="1"]
+position = Vector2(-187, -241)
+rotation = -1.5708
+texture = ExtResource("3_huli0")
+offset = Vector2(0, -51)
+
+[node name="PointLight2D2" type="PointLight2D" parent="LighthouseChunk/Lights" index="2"]
+position = Vector2(195, -245)
+rotation = -4.71238
+texture = ExtResource("3_huli0")
+offset = Vector2(0, -51)
+
+[connection signal="took_damage" from="." to="LighthouseChunk/Lights" method="delete"]

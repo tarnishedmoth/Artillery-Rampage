@@ -22,6 +22,9 @@ metadata/_custom_type_script = "uid://43ab121okvpb"
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
 texture_resources = Array[ExtResource("2_piky0")]([SubResource("Resource_fi6ty")])
 
+[node name="DayWeather" parent="GameLevel" index="13"]
+day_length = 60.0
+
 [node name="Enemy1" parent="GameLevel" instance=ExtResource("2_ykylo")]
 position = Vector2(479, 278)
 
