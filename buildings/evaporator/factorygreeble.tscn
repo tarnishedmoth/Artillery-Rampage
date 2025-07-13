@@ -1,11 +1,23 @@
-[gd_scene load_steps=7 format=3 uid="uid://xnyh8uolctrv"]
+[gd_scene load_steps=12 format=3 uid="uid://xnyh8uolctrv"]
 
 [ext_resource type="Script" uid="uid://bacs4oxxgmiqp" path="res://destructible/damageable_destructible_object.gd" id="1_f3koo"]
 [ext_resource type="PackedScene" uid="uid://c2imoahrkuj2r" path="res://buildings/evaporator/factorygreeble_chunk.tscn" id="2_f3koo"]
 [ext_resource type="Script" uid="uid://cj4ks2od2ywxd" path="res://destructible/destructible_shape_calculator.gd" id="2_qoh1s"]
 [ext_resource type="PackedScene" uid="uid://o3v5fd18tutn" path="res://ui/ui_component_healthbar.tscn" id="3_ydiim"]
+[ext_resource type="Script" uid="uid://c2sibt28tydqh" path="res://buildings/lighthouse/lights_delete.gd" id="4_1h008"]
 [ext_resource type="Script" uid="uid://bybxweqiag1x8" path="res://items/weapon_projectiles/explosions/emp_discharger.gd" id="5_5gcc6"]
+[ext_resource type="PackedScene" uid="uid://c7gtykfc1h1xq" path="res://effects/day_weather_react.tscn" id="5_xnijh"]
+[ext_resource type="Texture2D" uid="uid://b1rtks5mrjg34" path="res://tank/spotlight.png" id="6_1m51w"]
 [ext_resource type="PackedScene" uid="uid://xbbrj3p1ed11" path="res://items/weapon_projectiles/explosions/explosion_emp.tscn" id="6_o07g7"]
+
+[sub_resource type="Gradient" id="Gradient_b484f"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_i28yk"]
+gradient = SubResource("Gradient_b484f")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.8, 0.8)
 
 [node name="Evaporator" type="Node2D" groups=["Damageable", "DamageableRoot", "RewardableOnDestroy"]]
 script = ExtResource("1_f3koo")
@@ -23,6 +35,37 @@ node_with_health = NodePath("..")
 
 [node name="DestructibleObjectChunk" parent="." instance=ExtResource("2_f3koo")]
 
+[node name="Lights" type="Node2D" parent="DestructibleObjectChunk"]
+script = ExtResource("4_1h008")
+
+[node name="DayWeatherReact" parent="DestructibleObjectChunk/Lights" node_paths=PackedStringArray("lights") instance=ExtResource("5_xnijh")]
+lights = [NodePath("../PointLight2D"), NodePath("../Spotlight"), NodePath("../Spotlight2")]
+
+[node name="PointLight2D" type="PointLight2D" parent="DestructibleObjectChunk/Lights"]
+position = Vector2(0, -96)
+energy = 1.2
+shadow_enabled = true
+shadow_item_cull_mask = 5
+texture = SubResource("GradientTexture2D_i28yk")
+texture_scale = 7.0
+height = 10.0
+
+[node name="Spotlight" type="PointLight2D" parent="DestructibleObjectChunk/Lights"]
+position = Vector2(-35, 0)
+rotation = -3.14159
+shadow_enabled = true
+shadow_item_cull_mask = 5
+texture = ExtResource("6_1m51w")
+texture_scale = 0.5
+
+[node name="Spotlight2" type="PointLight2D" parent="DestructibleObjectChunk/Lights"]
+position = Vector2(160, -72)
+rotation = -4.18878
+shadow_enabled = true
+shadow_item_cull_mask = 5
+texture = ExtResource("6_1m51w")
+texture_scale = 0.5
+
 [node name="DestructibleShapeCalculator" type="Node" parent="."]
 script = ExtResource("2_qoh1s")
 
@@ -31,3 +74,5 @@ script = ExtResource("5_5gcc6")
 target = NodePath("..")
 activation_turn_cycle = 2
 scene_to_spawn = ExtResource("6_o07g7")
+
+[connection signal="was_damaged" from="." to="DestructibleObjectChunk/Lights" method="delete"]

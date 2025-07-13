@@ -23,13 +23,19 @@ lights = [NodePath("../PointLight2D"), NodePath("../PointLight2D2")]
 [node name="PointLight2D" type="PointLight2D" parent="LighthouseChunk/Lights" index="1"]
 position = Vector2(-187, -241)
 rotation = -1.5708
+energy = 1.3
+shadow_enabled = true
+shadow_item_cull_mask = 5
 texture = ExtResource("3_huli0")
 offset = Vector2(0, -51)
 
 [node name="PointLight2D2" type="PointLight2D" parent="LighthouseChunk/Lights" index="2"]
 position = Vector2(195, -245)
 rotation = -4.71238
+energy = 1.3
+shadow_enabled = true
+shadow_item_cull_mask = 5
 texture = ExtResource("3_huli0")
 offset = Vector2(0, -51)
 
-[connection signal="took_damage" from="." to="LighthouseChunk/Lights" method="delete"]
+[connection signal="was_damaged" from="." to="LighthouseChunk/Lights" method="delete"]

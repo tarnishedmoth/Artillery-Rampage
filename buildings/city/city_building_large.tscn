@@ -1,8 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://b0a0gcxknjivp"]
+[gd_scene load_steps=8 format=3 uid="uid://b0a0gcxknjivp"]
 
 [ext_resource type="PackedScene" uid="uid://b00kdwwjo4hg8" path="res://destructible/destructible_object.tscn" id="1_ba335"]
 [ext_resource type="PackedScene" uid="uid://bh2cbxv8syk18" path="res://buildings/city/city_building_large_chunk.tscn" id="2_rc2mt"]
 [ext_resource type="PackedScene" uid="uid://d0fthn43xgog3" path="res://destructible/rubble/rubble_chunks_spawner.tscn" id="3_32i04"]
+[ext_resource type="Script" uid="uid://c2sibt28tydqh" path="res://buildings/lighthouse/lights_delete.gd" id="4_b484f"]
+[ext_resource type="PackedScene" uid="uid://c7gtykfc1h1xq" path="res://effects/day_weather_react.tscn" id="5_nqduk"]
+
+[sub_resource type="Gradient" id="Gradient_b484f"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_83161"]
+gradient = SubResource("Gradient_b484f")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.8, 0.8)
 
 [node name="CityBuilding" instance=ExtResource("1_ba335")]
 display_name = "City Building"
@@ -12,4 +23,21 @@ create_new_chunks = true
 
 [node name="CityBuildingChunk" parent="." index="0" instance=ExtResource("2_rc2mt")]
 
+[node name="Lights" type="Node2D" parent="CityBuildingChunk" index="3"]
+script = ExtResource("4_b484f")
+
+[node name="DayWeatherReact" parent="CityBuildingChunk/Lights" index="0" node_paths=PackedStringArray("lights") instance=ExtResource("5_nqduk")]
+lights = [NodePath("../PointLight2D")]
+
+[node name="PointLight2D" type="PointLight2D" parent="CityBuildingChunk/Lights" index="1"]
+position = Vector2(0, -37)
+energy = 1.2
+shadow_enabled = true
+shadow_item_cull_mask = 5
+texture = SubResource("GradientTexture2D_83161")
+texture_scale = 6.0
+height = 10.0
+
 [node name="RubbleChunksSpawner" parent="." index="2" instance=ExtResource("3_32i04")]
+
+[connection signal="was_damaged" from="." to="CityBuildingChunk/Lights" method="delete"]

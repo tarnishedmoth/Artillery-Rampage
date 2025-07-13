@@ -15,7 +15,7 @@ var initial_chunk_name: String
 var chunk_update_flags:int
 
 @warning_ignore("unused_signal")
-signal took_damage()
+signal was_damaged()
 
 @warning_ignore("unused_signal")
 signal chunk_split(chunk: DestructibleObjectChunk,  new_chunk: DestructibleObjectChunk)
@@ -66,7 +66,7 @@ func get_chunk_count() -> int:
 @warning_ignore("unused_parameter")
 func damage(chunk: DestructibleObjectChunk, projectile: WeaponPhysicsContainer, contact_point: Vector2, poly_scale: Vector2 = Vector2(1,1)):
 	print_debug("%s - chunk=%s damaged by %s with poly_scale=%s" % [name, chunk.name, projectile.name, poly_scale])
-	took_damage.emit()
+	was_damaged.emit()
 
 	var projectile_poly: CollisionPolygon2D = projectile.get_destructible_component()
 	var projectile_poly_global: PackedVector2Array = _destructible_shape_calculator.get_projectile_poly_global(projectile_poly, poly_scale)
