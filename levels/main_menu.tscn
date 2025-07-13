@@ -43,7 +43,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource("4_pppj1")
 
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="Controls"]
+[node name="VideoContainer" type="AspectRatioContainer" parent="Controls"]
+modulate = Color(0.490196, 0.490196, 0.490196, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -53,7 +54,7 @@ grow_vertical = 2
 alignment_horizontal = 0
 alignment_vertical = 0
 
-[node name="BackgroundVideo" type="VideoStreamPlayer" parent="Controls/AspectRatioContainer"]
+[node name="BackgroundVideo" type="VideoStreamPlayer" parent="Controls/VideoContainer"]
 layout_mode = 2
 stream = ExtResource("5_6flho")
 autoplay = true
