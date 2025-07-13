@@ -10,11 +10,11 @@
 [ext_resource type="Texture2D" uid="uid://b1rtks5mrjg34" path="res://tank/spotlight.png" id="6_1m51w"]
 [ext_resource type="PackedScene" uid="uid://xbbrj3p1ed11" path="res://items/weapon_projectiles/explosions/explosion_emp.tscn" id="6_o07g7"]
 
-[sub_resource type="Gradient" id="Gradient_b484f"]
+[sub_resource type="Gradient" id="Gradient_1h008"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_i28yk"]
-gradient = SubResource("Gradient_b484f")
+gradient = SubResource("Gradient_1h008")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.8, 0.8)
@@ -59,12 +59,12 @@ texture = ExtResource("6_1m51w")
 texture_scale = 0.5
 
 [node name="Spotlight2" type="PointLight2D" parent="DestructibleObjectChunk/Lights"]
-position = Vector2(160, -72)
-rotation = -4.18878
+position = Vector2(168, -88)
+rotation = -4.45058
 shadow_enabled = true
 shadow_item_cull_mask = 5
 texture = ExtResource("6_1m51w")
-texture_scale = 0.5
+texture_scale = 0.75
 
 [node name="DestructibleShapeCalculator" type="Node" parent="."]
 script = ExtResource("2_qoh1s")

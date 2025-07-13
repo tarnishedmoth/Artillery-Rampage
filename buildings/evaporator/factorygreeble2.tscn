@@ -56,12 +56,11 @@ texture = ExtResource("6_nh2vm")
 texture_scale = 0.5
 
 [node name="Spotlight2" type="PointLight2D" parent="DestructibleObjectChunk/Lights"]
-position = Vector2(-160, -32)
-rotation = -2.09439
+position = Vector2(-272, -112)
+rotation = -1.71472
 shadow_enabled = true
 shadow_item_cull_mask = 5
 texture = ExtResource("6_nh2vm")
-texture_scale = 0.5
 
 [node name="DestructibleShapeCalculator" type="Node" parent="."]
 script = ExtResource("4_jc07n")
