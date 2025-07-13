@@ -20,6 +20,8 @@ var conveyor_slot_x_offset:float = 50.0
 var conveyor_move_duration:float = 1.0
 var conveyor_slots:Array[ConveyorSlot]
 
+@export var explosion_scene:PackedScene = preload("res://items/weapon_projectiles/explosions/explosion_meganuke.tscn")
+
 var turn_counter:int = 0
 var popups:Array[PopupNotification]
 var emp_disabling_threshold:float = 40.0
@@ -124,7 +126,12 @@ func _reassign_slots(from:ConveyorSlot, to:ConveyorSlot) -> void:
 
 func defeated() -> void:
 	#End the round
-	#TODO would be cool if the factory exploded first
+	
+	var explosion_instance:Explosion = explosion_scene.instantiate()
+	explosion_instance.global_position = global_position
+	get_parent().add_child(explosion_instance)
+	#await explosion_instance.completed
+	
 	# Wait a tick for all rewards to compute
 	await get_tree().process_frame
 	%RoundDirector.end_round()
