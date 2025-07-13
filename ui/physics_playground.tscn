@@ -1,0 +1,170 @@
+[gd_scene load_steps=9 format=3 uid="uid://ttxjggljb6fs"]
+
+[ext_resource type="Script" uid="uid://ceao0gocc6tih" path="res://utils/mouse_follower.gd" id="1_gwpex"]
+[ext_resource type="Script" uid="uid://bp7t5i4iyfvml" path="res://ui/physics_playground.gd" id="1_vsddv"]
+[ext_resource type="PackedScene" uid="uid://cqbcgkw62vmhs" path="res://items/rubble/rubble_piece.tscn" id="2_vsddv"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_w3vgd"]
+
+[sub_resource type="Gradient" id="Gradient_eclf1"]
+interpolation_color_space = 1
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_aab2y"]
+gradient = SubResource("Gradient_eclf1")
+width = 512
+height = 512
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.85, 0.15)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bsnl6"]
+friction = 0.0
+absorbent = true
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qcrq3"]
+radius = 60.0
+
+[node name="PhysicsPlayground" type="Node2D"]
+script = ExtResource("1_vsddv")
+spawnables = Array[PackedScene]([ExtResource("2_vsddv")])
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(640, 640)
+
+[node name="Polygon2D" type="Polygon2D" parent="StaticBody2D"]
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-640, 0, 640, 0, 640, 20, -640, 20)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("WorldBoundaryShape2D_w3vgd")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(640, -312)
+rotation = -1.5708
+shape = SubResource("WorldBoundaryShape2D_w3vgd")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-640, -320)
+rotation = -4.71239
+shape = SubResource("WorldBoundaryShape2D_w3vgd")
+
+[node name="MouseHighlight" type="PointLight2D" parent="."]
+position = Vector2(1056, 512)
+energy = 1.25
+blend_mode = 2
+range_item_cull_mask = 3
+shadow_enabled = true
+shadow_filter = 2
+texture = SubResource("GradientTexture2D_aab2y")
+height = 256.0
+
+[node name="MouseFollower" type="Node2D" parent="MouseHighlight"]
+script = ExtResource("1_gwpex")
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="MouseHighlight"]
+physics_material_override = SubResource("PhysicsMaterial_bsnl6")
+sync_to_physics = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MouseHighlight/AnimatableBody2D"]
+shape = SubResource("CircleShape2D_qcrq3")
+
+[node name="RubblePieces" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(104, -592)
+
+[node name="RubblePieces2" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(1000, -608)
+rotation = -1.37346
+
+[node name="RubblePieces3" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(424, -488)
+
+[node name="RubblePieces4" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(408, -592)
+rotation = -1.37346
+
+[node name="RubblePieces5" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(952, -432)
+
+[node name="RubblePieces6" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(936, -560)
+rotation = -1.37346
+
+[node name="RubblePieces7" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(1032, -320)
+
+[node name="RubblePieces8" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(192, -440)
+rotation = -1.37346
+
+[node name="RubblePieces9" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(48, -488)
+
+[node name="RubblePieces10" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(768, -472)
+rotation = -1.37346
+
+[node name="RubblePieces11" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(264, -768)
+rotation = -2.43228
+
+[node name="RubblePieces12" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(1160, -784)
+rotation = -2.43228
+
+[node name="RubblePieces13" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(584, -664)
+rotation = -2.43228
+
+[node name="RubblePieces14" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(568, -768)
+rotation = -2.43228
+
+[node name="RubblePieces15" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(1112, -608)
+rotation = 2.47745
+
+[node name="RubblePieces16" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(1096, -736)
+rotation = -2.43228
+
+[node name="RubblePieces17" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(1192, -496)
+rotation = 2.47745
+
+[node name="RubblePieces18" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(352, -616)
+rotation = -2.43228
+
+[node name="RubblePieces19" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(208, -664)
+rotation = 2.47745
+
+[node name="RubblePieces20" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(928, -648)
+rotation = -2.43228
+
+[node name="RubblePieces21" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(672, -960)
+rotation = 2.47745
+
+[node name="RubblePieces22" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(656, -1088)
+rotation = -2.43228
+
+[node name="RubblePieces23" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(752, -848)
+rotation = 2.47745
+
+[node name="RubblePieces24" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(704, -376)
+rotation = -2.43228
+
+[node name="RubblePieces25" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(560, -424)
+rotation = 2.47745
+
+[node name="RubblePieces26" parent="." instance=ExtResource("2_vsddv")]
+position = Vector2(488, -1000)
+rotation = -2.43228

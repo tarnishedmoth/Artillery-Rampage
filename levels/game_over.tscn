@@ -1,50 +1,112 @@
-[gd_scene load_steps=3 format=3 uid="uid://j4if1rryqdp3"]
+[gd_scene load_steps=11 format=3 uid="uid://j4if1rryqdp3"]
 
 [ext_resource type="Script" uid="uid://cxevx3vi7ixrc" path="res://levels/game_over.gd" id="1_51duh"]
+[ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="1_375dy"]
 [ext_resource type="AudioStream" uid="uid://bfsk5b6gxtcen" path="res://music/round_lost.wav" id="2_i7eks"]
+[ext_resource type="Script" uid="uid://dgw2wj1hif438" path="res://utils/pulse_modulate.gd" id="3_b3xmm"]
+[ext_resource type="PackedScene" uid="uid://ttxjggljb6fs" path="res://ui/physics_playground.tscn" id="5_b3xmm"]
 
-[node name="game_over" type="CanvasLayer"]
+[sub_resource type="Gradient" id="Gradient_px7av"]
+interpolation_mode = 2
+interpolation_color_space = 1
+colors = PackedColorArray(0.423381, 0.460071, 0.475623, 1, 0.841941, 0.86221, 0.873903, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_i7eks"]
+gradient = SubResource("Gradient_px7av")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.625, 0.125)
+repeat = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_w3vgd"]
+font_size = 32
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_b3xmm"]
+friction = 0.0
+absorbent = true
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_b3xmm"]
+points = PackedVector2Array(0, -100, 140, 0, 140, 220, -140, 220, -140, 0)
+
+[node name="game_over" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_375dy")
 script = ExtResource("1_51duh")
 
-[node name="Label" type="Label" parent="."]
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.965
-offset_left = 547.0
-offset_top = 298.0
-offset_right = -641.0
-offset_bottom = -373.8
-text = "GAME OVER"
-
-[node name="retry" type="Button" parent="."]
-unique_name_in_owner = true
+[node name="Background" type="TextureRect" parent="."]
+self_modulate = Color(0.427922, 0.270337, 0.279386, 1)
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 568.0
-offset_top = 375.0
-offset_right = -662.0
-offset_bottom = -314.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = SubResource("GradientTexture2D_i7eks")
+
+[node name="Pulse" type="Node" parent="Background"]
+script = ExtResource("3_b3xmm")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -144.0
+offset_right = 144.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "GAME OVER"
+label_settings = SubResource("LabelSettings_w3vgd")
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Try again?"
+horizontal_alignment = 1
+
+[node name="retry" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
 text = "Retry"
 
-[node name="quit" type="Button" parent="."]
+[node name="quit" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 572.0
-offset_top = 429.0
-offset_right = -666.0
-offset_bottom = -260.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 24
 text = "Quit"
 
-[node name="loseSound" type="AudioStreamPlayer2D" parent="."]
+[node name="loseSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_i7eks")
 autoplay = true
+bus = &"UI"
 
-[connection signal="pressed" from="retry" to="." method="_on_retry_pressed"]
-[connection signal="pressed" from="quit" to="." method="_on_quit_pressed"]
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+position = Vector2(640, 192)
+physics_material_override = SubResource("PhysicsMaterial_b3xmm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+position = Vector2(0, 64)
+shape = SubResource("ConvexPolygonShape2D_b3xmm")
+
+[node name="PhysicsPlayground" parent="." instance=ExtResource("5_b3xmm")]
+modulate = Color(0.138638, 0.138637, 0.138637, 1)
+
+[connection signal="pressed" from="VBoxContainer/retry" to="." method="_on_retry_pressed"]
+[connection signal="pressed" from="VBoxContainer/quit" to="." method="_on_quit_pressed"]
+
+[editable path="PhysicsPlayground"]

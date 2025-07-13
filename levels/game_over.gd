@@ -1,11 +1,11 @@
-extends CanvasLayer
+extends Control
 
 @onready var retry_button:Button = %retry
 @onready var quit_button:Button = %quit
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	Juice.fade_in(self, Juice.SLOW, Color.BLACK)
 
 
 func _on_retry_pressed():

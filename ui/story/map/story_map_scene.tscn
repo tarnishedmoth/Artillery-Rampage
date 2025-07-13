@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bh3bmcratw025"]
+[gd_scene load_steps=23 format=3 uid="uid://bh3bmcratw025"]
 
 [ext_resource type="Script" uid="uid://d3mw66c4x3kum" path="res://ui/story/map/story_map_scene.gd" id="1_5v7n8"]
 [ext_resource type="Theme" uid="uid://ddklgnmfj25sv" path="res://ui/story/story_theme.tres" id="1_nmkcg"]
@@ -11,17 +11,18 @@
 [ext_resource type="PackedScene" uid="uid://8hat5mrejfwr" path="res://ui/story/round_summary/round_summary_hud_element.tscn" id="7_b87u6"]
 [ext_resource type="PackedScene" uid="uid://b4hy7hmnoewje" path="res://narrative/auto_narrative.tscn" id="7_mer82"]
 [ext_resource type="Texture2D" uid="uid://csaq0u25lccwx" path="res://ui/story/map/grid_tile.png" id="7_px7av"]
+[ext_resource type="Texture2D" uid="uid://d4l0fjsjek7l8" path="res://ui/hud_bg_topright.png" id="9_jpvwg"]
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="10_eclf1"]
 [ext_resource type="FontFile" uid="uid://cg5hjbm350ehu" path="res://ui/typewriter_font.fnt" id="10_h2lnq"]
 [ext_resource type="AudioStream" uid="uid://cudd5extbrrsl" path="res://ui/sounds/chatty_signal_short_b.wav" id="13_2etp1"]
 
-[sub_resource type="Gradient" id="Gradient_px7av"]
+[sub_resource type="Gradient" id="Gradient_jpvwg"]
 interpolation_mode = 2
 interpolation_color_space = 1
 colors = PackedColorArray(0.423381, 0.460071, 0.475623, 1, 0.841941, 0.86221, 0.873903, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_464bj"]
-gradient = SubResource("Gradient_px7av")
+gradient = SubResource("Gradient_jpvwg")
 width = 128
 height = 128
 fill = 1
@@ -29,12 +30,12 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.625, 0.125)
 repeat = 2
 
-[sub_resource type="Gradient" id="Gradient_eclf1"]
+[sub_resource type="Gradient" id="Gradient_y8rqc"]
 interpolation_color_space = 1
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_2etp1"]
-gradient = SubResource("Gradient_eclf1")
+gradient = SubResource("Gradient_y8rqc")
 width = 512
 height = 512
 use_hdr = true
@@ -42,49 +43,24 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.85, 0.15)
 
-[sub_resource type="LabelSettings" id="LabelSettings_2etp1"]
-font = ExtResource("10_h2lnq")
-font_size = 18
-font_color = Color(0, 0, 0, 1)
-shadow_size = 0
-
-[sub_resource type="LabelSettings" id="LabelSettings_h2lnq"]
-font = ExtResource("10_h2lnq")
-font_size = 18
-font_color = Color(0, 0, 0, 1)
-shadow_size = 0
-
-[sub_resource type="LabelSettings" id="LabelSettings_jpvwg"]
-font = ExtResource("10_h2lnq")
-font_size = 18
-font_color = Color(0, 0, 0, 1)
-shadow_size = 0
-
-[sub_resource type="LabelSettings" id="LabelSettings_y8rqc"]
-font = ExtResource("10_h2lnq")
-font_size = 18
-font_color = Color(0, 0, 0, 1)
-shadow_size = 0
-
-[sub_resource type="LabelSettings" id="LabelSettings_5yfjk"]
-font = ExtResource("10_h2lnq")
-font_size = 18
-font_color = Color(0, 0, 0, 1)
-shadow_size = 0
-
-[sub_resource type="LabelSettings" id="LabelSettings_8olf0"]
-font = ExtResource("10_h2lnq")
-font_size = 18
-font_color = Color(0, 0, 0, 1)
-shadow_size = 0
-
 [sub_resource type="LabelSettings" id="LabelSettings_eclf1"]
 line_spacing = -3.0
 shadow_size = 20
 shadow_color = Color(0, 0, 0, 0.85098)
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y8rqc"]
+texture = ExtResource("9_jpvwg")
+expand_margin_left = 80.0
+expand_margin_top = 40.0
+expand_margin_right = 30.0
+expand_margin_bottom = 60.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_2etp1"]
+font = ExtResource("10_h2lnq")
+font_size = 18
+shadow_size = 0
+
 [node name="StoryMapScene" type="Control" node_paths=PackedStringArray("parallax_layers") groups=["Savable"]]
-modulate = Color(0.789878, 0.789879, 0.789879, 1)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -102,10 +78,11 @@ min_edge_length = 20.0
 max_edge_length = 30.0
 edge_dir_max_count = Vector2i(3, 7)
 parallax_layers = [NodePath("GridBG"), NodePath("LevelNodesContainer")]
-parallax_amount = -0.2
-parallax_layer_factor = -0.04
+parallax_amount = -0.18
+parallax_layer_factor = -0.06
 
 [node name="Background" type="TextureRect" parent="."]
+self_modulate = Color(0.730913, 0.730913, 0.730913, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -138,49 +115,6 @@ offset_bottom = 1672.0
 texture = ExtResource("7_px7av")
 expand_mode = 1
 stretch_mode = 1
-
-[node name="AttributeLabels" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_left = 1020.0
-offset_top = 20.0
-offset_right = 1245.0
-offset_bottom = 130.0
-
-[node name="HealthHUD" parent="AttributeLabels" instance=ExtResource("7_b87u6")]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="Label" parent="AttributeLabels/HealthHUD" index="0"]
-text = "Health:"
-label_settings = SubResource("LabelSettings_2etp1")
-
-[node name="Value" parent="AttributeLabels/HealthHUD" index="1"]
-text = ""
-label_settings = SubResource("LabelSettings_h2lnq")
-
-[node name="PersonnelHUD" parent="AttributeLabels" instance=ExtResource("7_b87u6")]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="Label" parent="AttributeLabels/PersonnelHUD" index="0"]
-text = "Personnel:"
-label_settings = SubResource("LabelSettings_jpvwg")
-
-[node name="Value" parent="AttributeLabels/PersonnelHUD" index="1"]
-text = ""
-label_settings = SubResource("LabelSettings_y8rqc")
-
-[node name="ScrapHUD" parent="AttributeLabels" instance=ExtResource("7_b87u6")]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="Label" parent="AttributeLabels/ScrapHUD" index="0"]
-text = "Scrap:"
-label_settings = SubResource("LabelSettings_5yfjk")
-
-[node name="Value" parent="AttributeLabels/ScrapHUD" index="1"]
-text = ""
-label_settings = SubResource("LabelSettings_8olf0")
 
 [node name="StoryTooltips" type="MarginContainer" parent="." node_paths=PackedStringArray("sequence")]
 unique_name_in_owner = true
@@ -225,6 +159,57 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -232.0
+offset_top = 32.0
+offset_right = -41.0
+offset_bottom = 118.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_y8rqc")
+
+[node name="AttributeLabels" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+
+[node name="HealthHUD" parent="Panel/AttributeLabels" instance=ExtResource("7_b87u6")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" parent="Panel/AttributeLabels/HealthHUD" index="0"]
+text = "Health:"
+label_settings = SubResource("LabelSettings_2etp1")
+
+[node name="Value" parent="Panel/AttributeLabels/HealthHUD" index="1"]
+text = ""
+label_settings = SubResource("LabelSettings_2etp1")
+
+[node name="PersonnelHUD" parent="Panel/AttributeLabels" instance=ExtResource("7_b87u6")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" parent="Panel/AttributeLabels/PersonnelHUD" index="0"]
+text = "Personnel:"
+label_settings = SubResource("LabelSettings_2etp1")
+
+[node name="Value" parent="Panel/AttributeLabels/PersonnelHUD" index="1"]
+text = ""
+label_settings = SubResource("LabelSettings_2etp1")
+
+[node name="ScrapHUD" parent="Panel/AttributeLabels" instance=ExtResource("7_b87u6")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" parent="Panel/AttributeLabels/ScrapHUD" index="0"]
+text = "Scrap:"
+label_settings = SubResource("LabelSettings_2etp1")
+
+[node name="Value" parent="Panel/AttributeLabels/ScrapHUD" index="1"]
+text = ""
+label_settings = SubResource("LabelSettings_2etp1")
+
 [node name="Buttons" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -255,6 +240,6 @@ bus = &"UI"
 
 [connection signal="pressed" from="Buttons/NextButton" to="." method="_on_next_button_pressed"]
 
-[editable path="AttributeLabels/HealthHUD"]
-[editable path="AttributeLabels/PersonnelHUD"]
-[editable path="AttributeLabels/ScrapHUD"]
+[editable path="Panel/AttributeLabels/HealthHUD"]
+[editable path="Panel/AttributeLabels/PersonnelHUD"]
+[editable path="Panel/AttributeLabels/ScrapHUD"]
