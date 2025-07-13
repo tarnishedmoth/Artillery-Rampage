@@ -36,3 +36,7 @@ mono_crash.*.json
 
 # Audacity temp files
 *.aup3-*
+
+# Krita temp files
+*.kra~
+*.png~

@@ -7,11 +7,11 @@
 [ext_resource type="AudioStream" uid="uid://c8m44nf2qa2fn" path="res://ui/sounds/chatty_signal_full.wav" id="5_cxhl0"]
 [ext_resource type="AudioStream" uid="uid://ddspsoaqj8x58" path="res://ui/sounds/alarm_c_press.wav" id="5_yker4"]
 
-[sub_resource type="Gradient" id="Gradient_nw3j5"]
+[sub_resource type="Gradient" id="Gradient_qpegy"]
 colors = PackedColorArray(0.85, 0.827333, 0.8075, 1, 0.6417, 0.64492, 0.69, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_gkxf4"]
-gradient = SubResource("Gradient_nw3j5")
+gradient = SubResource("Gradient_qpegy")
 
 [sub_resource type="AudioStreamSynchronized" id="AudioStreamSynchronized_audl8"]
 stream_count = 2

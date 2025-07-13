@@ -1,11 +1,18 @@
-[gd_scene load_steps=8 format=3 uid="uid://o55c1iigswjc"]
+[gd_scene load_steps=11 format=3 uid="uid://o55c1iigswjc"]
 
 [ext_resource type="Theme" uid="uid://bf5nv0nins5p6" path="res://ui/themes/shop.tres" id="1_abhue"]
 [ext_resource type="Script" uid="uid://blcakxdcf5gn4" path="res://ui/story/shop/story_shop.gd" id="1_po24w"]
 [ext_resource type="PackedScene" uid="uid://dpxoc5ysgsvep" path="res://ui/story/shop/resource_shop_row.tscn" id="2_gms1v"]
 [ext_resource type="Resource" uid="uid://kpcvdmtfoeh3" path="res://progression/shop/shop_items.tres" id="2_xg2qo"]
+[ext_resource type="LabelSettings" uid="uid://caafhio2r1ekd" path="res://ui/story/round_summary/round_summary_header.tres" id="4_mpdqb"]
 [ext_resource type="Script" uid="uid://b8idjgo18fqvv" path="res://ui/story/shop/growing_scroll_container.gd" id="4_xg2qo"]
 [ext_resource type="FontFile" uid="uid://cr7d38d0438qq" path="res://ui/fonts/FreeSerifBold-rdMp.otf" id="6_wkf8e"]
+
+[sub_resource type="Gradient" id="Gradient_qpegy"]
+colors = PackedColorArray(0.85, 0.827333, 0.8075, 1, 0.6417, 0.64492, 0.69, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gkxf4"]
+gradient = SubResource("Gradient_qpegy")
 
 [sub_resource type="Theme" id="Theme_mpdqb"]
 default_font = ExtResource("6_wkf8e")
@@ -23,6 +30,13 @@ size_flags_vertical = 3
 theme = ExtResource("1_abhue")
 script = ExtResource("1_po24w")
 item_resources = ExtResource("2_xg2qo")
+
+[node name="Background" type="TextureRect" parent="."]
+self_modulate = Color(0.686275, 0.686275, 0.686275, 1)
+layout_mode = 0
+offset_right = 1290.0
+offset_bottom = 735.0
+texture = SubResource("GradientTexture2D_gkxf4")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -49,6 +63,7 @@ theme_override_constants/separation = 15
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Item Shop"
+label_settings = ExtResource("4_mpdqb")
 horizontal_alignment = 1
 
 [node name="ResourceRow" parent="HBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_gms1v")]
