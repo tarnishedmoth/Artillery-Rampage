@@ -119,26 +119,30 @@ texture = ExtResource("7_px7av")
 expand_mode = 1
 stretch_mode = 1
 
-[node name="StoryTooltips" type="MarginContainer" parent="." node_paths=PackedStringArray("sequence")]
+[node name="StoryTooltips" type="Control" parent="." node_paths=PackedStringArray("sequence")]
 unique_name_in_owner = true
 layout_mode = 2
-offset_left = 600.0
-offset_top = 450.0
-offset_right = 664.0
-offset_bottom = 466.0
+anchors_preset = 0
+offset_left = 664.0
+offset_top = 596.0
+offset_right = 728.0
+offset_bottom = 612.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme = ExtResource("10_eclf1")
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 8
 script = ExtResource("6_8dcih")
 sequence = [NodePath("Tooltip")]
 
 [node name="Tooltip" type="HBoxContainer" parent="StoryTooltips"]
 visible = false
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -412.5
+offset_right = 412.5
+offset_bottom = 23.0
+grow_horizontal = 2
 
 [node name="Glyph" type="Label" parent="StoryTooltips/Tooltip"]
 custom_minimum_size = Vector2(800, 0)

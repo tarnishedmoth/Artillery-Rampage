@@ -403,7 +403,7 @@ func _create_scrolling_narrative(level:StoryLevel, active_node: StoryLevelNode) 
 	else:
 		narrative_pos.x += 100
 
-	tooltipper.position = narrative_pos
+	#tooltipper.position = narrative_pos
 
 #region Auto Narrative Round Summary
 
