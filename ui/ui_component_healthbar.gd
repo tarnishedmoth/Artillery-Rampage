@@ -3,6 +3,7 @@ class_name UIComponentHealthbar extends Node2D
 @export var node_with_health:Node ## Must have a [b]health_changed[/b] signal to connect to.
 @export var progress_bar: ProgressBar
 @export_range(0.1, 4.0) var progress_bar_tween_speed:float = Juice.SNAPPY
+@export var offset_position:Vector2 = Vector2(0.0, 20.0)
 
 var tween:Tween
 var starting_health:float
@@ -13,13 +14,19 @@ func _ready() -> void:
 		var parent = get_parent()
 		if "health_changed" in parent:
 			connect_signal(parent)
+			#global_position = node_with_health.global_position + offset_position
 		else:
 			push_warning("No Node configured for UIComponentHealthbar to observe.")
 	elif not "health_changed" in node_with_health:
 		push_error("Node configured for UIComponentHealthbar does not have a Health property.")
 	else:
 		connect_signal(node_with_health)
+		#global_position = node_with_health.global_position + offset_position
 	hide()
+	
+func _process(delta: float) -> void:
+	if node_with_health:
+		global_position = node_with_health.global_position + offset_position
 
 func connect_signal(node:Node) -> void:
 	if not node.is_node_ready():

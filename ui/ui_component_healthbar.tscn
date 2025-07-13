@@ -31,17 +31,25 @@ color = Color(0, 0.333333, 1, 1)
 thickness = 8
 
 [node name="UiComponentHealthbar" type="Node2D" node_paths=PackedStringArray("progress_bar")]
+top_level = true
+light_mask = 0
+z_index = 4096
 script = ExtResource("1_lui74")
 progress_bar = NodePath("PanelContainer/ProgressBar")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+light_mask = 0
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
+offset_left = -35.0
+offset_right = 35.0
+offset_bottom = 12.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fogv2")
 
 [node name="ProgressBar" type="ProgressBar" parent="PanelContainer"]
+light_mask = 0
 custom_minimum_size = Vector2(64, 8)
 layout_mode = 2
 theme = ExtResource("2_fogv2")
