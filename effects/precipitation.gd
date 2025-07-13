@@ -4,14 +4,19 @@ class_name WeatherEffects extends Node2D
 @onready var rain_particle_process_mat:ParticleProcessMaterial = rain.process_material
 @onready var audio: PrecipitationAudio = %Audio
 
+@onready var snow: GPUParticles2D = %Snow
+@onready var snow_particle_process_mat:ParticleProcessMaterial = snow.process_material
+
 var rain_amount_tween:Tween
+var snow_amount_tween:Tween
 
 var is_deleting:bool = false
 
 func _ready() -> void:
 	rain.emitting = false
+	snow.emitting = false
 
-func set_rain_intensity(intensity:float, transition_time: float = 0.0) -> void:
+func set_rain_intensity(intensity:float, transition_time: float = 0.0, use_snow:bool = false) -> void:
 	if rain_amount_tween:
 		if rain_amount_tween.is_running(): rain_amount_tween.kill()
 			
@@ -25,17 +30,34 @@ func set_rain_intensity(intensity:float, transition_time: float = 0.0) -> void:
 		audio.start(maxf(transition_time, 1.0), intensity)
 	else:
 		audio.stop(maxf(transition_time, 1.0))
+		
+func set_snow_intensity(intensity:float, transition_time: float = 0.0, use_snow:bool = false) -> void:
+	if snow_amount_tween:
+		if snow_amount_tween.is_running(): snow_amount_tween.kill()
+			
+	if not transition_time > 0.0:
+		snow.amount_ratio = intensity
+	else:
+		snow_amount_tween = create_tween()
+		snow_amount_tween.tween_property(snow, ^"amount_ratio", intensity, transition_time)
 	
-func start_rain(intensity:float, transition_time: float) -> void:
-	rain.amount_ratio = 0.0
-	rain.emitting = true
-	set_rain_intensity(intensity, transition_time)
+func start_rain(intensity:float, transition_time: float, use_snow:bool = false) -> void:
+	if not use_snow:
+		rain.amount_ratio = 0.0
+		rain.emitting = true
+		set_rain_intensity(intensity, transition_time)
+	else:
+		snow.amount_ratio = 0.0
+		snow.emitting = true
+		set_snow_intensity(intensity, transition_time)
 
-func stop_rain_and_delete(transition_time:float) ->  void:
+func stop_and_delete(transition_time:float) ->  void:
 	set_rain_intensity(0.0, transition_time)
+	set_snow_intensity(0.0, transition_time)
 	is_deleting = true
 	
-	await rain_amount_tween.finished
+	await rain_amount_tween.finished or snow_amount_tween.finished
 	rain.emitting = false
+	snow.emitting = false
 	await get_tree().create_timer(rain.lifetime).timeout
 	queue_free()

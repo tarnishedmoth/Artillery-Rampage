@@ -21,5 +21,6 @@ class_name DayWeatherState extends Resource
 @export var rain_ambient_color:Color = Color.MEDIUM_TURQUOISE
 @export var rain_sun_energy:float = 0.22
 @export var rain_is_dark:bool = true ## Signals things with lights to respond.
+@export var use_snow:bool = false ## Replaces the rain with snow.
 
 var is_raining:bool = false

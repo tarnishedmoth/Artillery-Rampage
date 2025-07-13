@@ -10,11 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="11_a3k3j"]
 [ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="12_g0n4y"]
 [ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="12_qc7q3"]
-[ext_resource type="Resource" uid="uid://bo2ij3wxvfil" path="res://environment/day_weather_states/morning_humid.tres" id="13_743sk"]
 [ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="13_nqmfy"]
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="14_npr3d"]
-[ext_resource type="Resource" uid="uid://b7ptujvsi6nmw" path="res://environment/day_weather_states/overcast.tres" id="14_qqnul"]
-[ext_resource type="Resource" uid="uid://i3nss04pr7oy" path="res://environment/day_weather_states/night_calm.tres" id="15_88eia"]
 [ext_resource type="Texture2D" uid="uid://bbgp31owjo7sk" path="res://background_items/background_snowymountains.png" id="16_5rf11"]
 [ext_resource type="PackedScene" uid="uid://c0f6pn0mperks" path="res://environment/procedural_object_mountain_spawner.tscn" id="17_bqjdq"]
 
@@ -42,7 +39,43 @@ fractal_lacunarity = 1.56
 fractal_gain = 0.645
 fractal_weighted_strength = 0.5
 
-[sub_resource type="Resource" id="Resource_ol75n"]
+[sub_resource type="Resource" id="Resource_6hmpm"]
+script = ExtResource("12_qc7q3")
+display_name = "Humid Morning"
+skip_chance = 0.0
+duration_ratio = 1.0
+sun_position = Vector2(-400, 300)
+sun_energy = 0.31
+ambient_color = Color(0.670352, 0.445698, 0.581018, 1)
+is_dark = true
+weather_transition_time = 45.0
+rain_chance = 0.2
+rain_intensity = 0.1
+rain_ambient_color = Color(0.745069, 0.452899, 0.514027, 1)
+rain_sun_energy = 0.31
+rain_is_dark = true
+use_snow = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[sub_resource type="Resource" id="Resource_r181f"]
+script = ExtResource("12_qc7q3")
+display_name = "Overcast"
+skip_chance = 0.5
+duration_ratio = 1.0
+sun_position = Vector2(640, -640)
+sun_energy = 0.15
+ambient_color = Color(0.481501, 0.48776, 0.54192, 1)
+is_dark = false
+weather_transition_time = 20.0
+rain_chance = 0.6
+rain_intensity = 1.0
+rain_ambient_color = Color(0.481501, 0.48776, 0.54192, 1)
+rain_sun_energy = 0.15
+rain_is_dark = true
+use_snow = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[sub_resource type="Resource" id="Resource_qc7q3"]
 script = ExtResource("12_qc7q3")
 display_name = "Noon"
 skip_chance = 0.0
@@ -53,10 +86,29 @@ ambient_color = Color(0.901764, 0.900002, 0.915993, 1)
 is_dark = false
 weather_transition_time = 30.0
 rain_chance = 0.0
-rain_intensity = 0.45
+rain_intensity = 0.5
 rain_ambient_color = Color(0.705177, 0.726864, 0.781251, 1)
 rain_sun_energy = 0.35
 rain_is_dark = false
+use_snow = true
+metadata/_custom_type_script = "uid://blr3jie556r2m"
+
+[sub_resource type="Resource" id="Resource_lf122"]
+script = ExtResource("12_qc7q3")
+display_name = "Calm Night"
+skip_chance = 0.0
+duration_ratio = 1.0
+sun_position = Vector2(640, 140)
+sun_energy = 0.45
+ambient_color = Color(0.166834, 0.250763, 0.387722, 1)
+is_dark = true
+weather_transition_time = 30.0
+rain_chance = 0.25
+rain_intensity = 0.75
+rain_ambient_color = Color(0.111479, 0.16416, 0.254641, 1)
+rain_sun_energy = 0.18
+rain_is_dark = true
+use_snow = true
 metadata/_custom_type_script = "uid://blr3jie556r2m"
 
 [node name="TestLevelProcGen" type="Node2D"]
@@ -100,7 +152,7 @@ ideal_min_spawn_separation = 250.0
 is_avalance_level = true
 
 [node name="DayWeather" parent="GameLevel" index="13"]
-presets_queue = Array[ExtResource("12_qc7q3")]([ExtResource("13_743sk"), ExtResource("14_qqnul"), SubResource("Resource_ol75n"), ExtResource("15_88eia")])
+presets_queue = Array[ExtResource("12_qc7q3")]([SubResource("Resource_6hmpm"), SubResource("Resource_r181f"), SubResource("Resource_qc7q3"), SubResource("Resource_lf122")])
 
 [node name="StaticBackground" type="Sprite2D" parent="GameLevel"]
 z_index = -98

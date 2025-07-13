@@ -17,4 +17,5 @@ rain_intensity = 0.1
 rain_ambient_color = Color(0.745069, 0.452899, 0.514027, 1)
 rain_sun_energy = 0.31
 rain_is_dark = true
+use_snow = false
 metadata/_custom_type_script = "uid://blr3jie556r2m"

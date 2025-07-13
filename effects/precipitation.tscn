@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dt07m835543w6"]
+[gd_scene load_steps=19 format=3 uid="uid://dt07m835543w6"]
 
 [ext_resource type="Texture2D" uid="uid://ctki8b1hsuh3k" path="res://effects/raindrop_texture.tres" id="1_3p5hu"]
 [ext_resource type="Script" uid="uid://b140wp0eblg7d" path="res://effects/precipitation.gd" id="1_g4q2l"]
@@ -30,7 +30,7 @@ particle_flag_align_y = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(660, -24, 0)
 emission_shape = 3
-emission_box_extents = Vector3(640, 1, 1)
+emission_box_extents = Vector3(800, 1, 1)
 direction = Vector3(0, 1, 0)
 spread = 2.0
 initial_velocity_min = 640.0
@@ -60,6 +60,35 @@ damping_min = 5.0
 damping_max = 10.0
 color = Color(0.936265, 0.936265, 0.936265, 1)
 color_ramp = SubResource("GradientTexture1D_cq8nu")
+
+[sub_resource type="Gradient" id="Gradient_pt70m"]
+interpolation_mode = 2
+colors = PackedColorArray(0.892756, 0.892756, 0.892756, 1, 0.739288, 0.739288, 0.739288, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gn3wk"]
+gradient = SubResource("Gradient_pt70m")
+width = 12
+height = 12
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.9, 0.9)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pt70m"]
+particle_flag_align_y = true
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(640, -24, 0)
+emission_shape = 3
+emission_box_extents = Vector3(800, 1, 1)
+direction = Vector3(0, 1, 0)
+spread = 8.0
+initial_velocity_min = 80.0
+initial_velocity_max = 160.0
+gravity = Vector3(0, 40, 0)
+scale_min = 0.3
+color_initial_ramp = SubResource("GradientTexture1D_g4q2l")
+collision_mode = 2
+sub_emitter_mode = 3
+sub_emitter_amount_at_collision = 2
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_3jiq0"]
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 16, 0, 16)
@@ -108,6 +137,21 @@ explosiveness = 1.0
 randomness = 0.2
 fixed_fps = 15
 process_material = SubResource("ParticleProcessMaterial_igwdn")
+
+[node name="Snow" type="GPUParticles2D" parent="." groups=["Wind_Particles2D"]]
+unique_name_in_owner = true
+modulate = Color(0.95523, 0.964059, 0.971753, 1)
+top_level = true
+light_mask = 2
+visibility_layer = 2
+amount = 256
+amount_ratio = 0.5
+texture = SubResource("GradientTexture2D_gn3wk")
+lifetime = 4.5
+explosiveness = 0.1
+randomness = 0.1
+visibility_rect = Rect2(0, 0, 1280, 720)
+process_material = SubResource("ParticleProcessMaterial_pt70m")
 
 [node name="TestLightOccluder2D" type="LightOccluder2D" parent="."]
 visible = false
