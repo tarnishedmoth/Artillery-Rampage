@@ -57,6 +57,7 @@ alignment_vertical = 0
 [node name="BackgroundVideo" type="VideoStreamPlayer" parent="Controls/VideoContainer"]
 layout_mode = 2
 stream = ExtResource("5_6flho")
+volume_db = -80.0
 autoplay = true
 loop = true
 
@@ -145,28 +146,48 @@ theme_override_constants/separation = 8
 
 [node name="PlayNow" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons"]
 layout_mode = 2
+tooltip_text = "Arcade mode"
+focus_next = NodePath("../ContinueStory")
+focus_previous = NodePath("../Quit")
 theme_type_variation = &"BigButton"
 text = "Play Now!"
+
+[node name="Spacer2" type="Control" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons"]
+layout_mode = 2
 
 [node name="ContinueStory" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Continue your Story progress"
+focus_next = NodePath("../Story")
+focus_previous = NodePath("../PlayNow")
 theme_type_variation = &"BigButton"
 disabled = true
 text = "Continue Story"
 
 [node name="Story" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons"]
 layout_mode = 2
+tooltip_text = "New Story mode"
+focus_next = NodePath("../LevelSelect")
+focus_previous = NodePath("../ContinueStory")
 theme_type_variation = &"BigButton"
 text = "New Story"
 
+[node name="Spacer3" type="Control" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons"]
+layout_mode = 2
+
 [node name="LevelSelect" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons"]
 layout_mode = 2
+focus_next = NodePath("../Options")
+focus_previous = NodePath("../Story")
 theme_type_variation = &"BigButton"
 text = "Select Level"
 
 [node name="Options" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons"]
 layout_mode = 2
+tooltip_text = "Change your game options"
+focus_next = NodePath("../Quit")
+focus_previous = NodePath(".")
 theme_type_variation = &"BigButton"
 text = "Options"
 
@@ -178,6 +199,9 @@ size_flags_stretch_ratio = 0.13
 [node name="Quit" type="Button" parent="Controls/MainMenu/Columns/CenterColumn/MarginContainer/MainMenuButtons"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Exit the game"
+focus_next = NodePath("../PlayNow")
+focus_previous = NodePath("../Options")
 theme_type_variation = &"BigButton"
 text = "Quit"
 
@@ -197,7 +221,7 @@ size_flags_horizontal = 3
 [node name="Spacer" type="Control" parent="Controls/MainMenu/Columns/RightColumn"]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.45
+size_flags_stretch_ratio = 0.1
 
 [node name="CreditsHeader" type="Label" parent="Controls/MainMenu/Columns/RightColumn"]
 layout_mode = 2
@@ -209,6 +233,7 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/line_separation = 3
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
 text = "Project Lead: Justin Montgomery
@@ -263,17 +288,17 @@ visible_characters_behavior = 1
 [node name="Spacer2" type="Control" parent="Controls/MainMenu/Columns/RightColumn"]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.05
+size_flags_stretch_ratio = 0.1
+
+[node name="ProjectVersionLabel" parent="Controls/MainMenu/Columns/RightColumn" instance=ExtResource("8_7ty7c")]
+layout_mode = 2
+horizontal_alignment = 2
+vertical_alignment = 2
 
 [node name="Spacer4" type="Control" parent="Controls/MainMenu/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.25
-
-[node name="ProjectVersionLabel" parent="Controls/MainMenu" instance=ExtResource("8_7ty7c")]
-layout_mode = 2
-horizontal_alignment = 2
-vertical_alignment = 2
+size_flags_stretch_ratio = 0.1
 
 [node name="BottomSpacer" type="Control" parent="Controls/MainMenu"]
 layout_mode = 2

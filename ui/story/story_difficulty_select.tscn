@@ -9,6 +9,8 @@ colors = PackedColorArray(0.85, 0.827333, 0.8075, 1, 0.6417, 0.64492, 0.69, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_gkxf4"]
 gradient = SubResource("Gradient_qpegy")
+width = 128
+height = 128
 
 [node name="StoryDifficultySelect" type="Control"]
 layout_mode = 3
@@ -21,53 +23,58 @@ theme = ExtResource("1_qpegy")
 script = ExtResource("1_frkse")
 
 [node name="TextureRect" type="TextureRect" parent="."]
-layout_mode = 0
-offset_left = 9.0
-offset_top = -11.0
-offset_right = 1298.0
-offset_bottom = 745.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = SubResource("GradientTexture2D_gkxf4")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -82.5
-offset_top = -73.0
-offset_right = 82.5
-offset_bottom = 73.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="DifficultySelectContainer" type="VBoxContainer" parent="CenterContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+alignment = 1
 
 [node name="Label" type="Label" parent="CenterContainer/DifficultySelectContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_522bt")
 text = "Select Story Difficulty"
+horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="CenterContainer/DifficultySelectContainer"]
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_522bt")
 theme_override_font_sizes/font_size = 10
 text = "(You can always change it later)"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Easy" type="Button" parent="CenterContainer/DifficultySelectContainer"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+size_flags_horizontal = 4
 text = "Easy"
 
 [node name="Normal" type="Button" parent="CenterContainer/DifficultySelectContainer"]
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
+size_flags_horizontal = 4
 text = "Normal"
 
 [node name="Hard" type="Button" parent="CenterContainer/DifficultySelectContainer"]
+custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 text = "Hard"
 

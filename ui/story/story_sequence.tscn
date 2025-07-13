@@ -92,7 +92,7 @@ This is the western front coalition. We are broadcasting on all frequenc-\"
 (the signal is weak)
 
 
-Press Next to respond..."
+Press Next to tune the radio..."
 fit_content = true
 visible_characters_behavior = 1
 
@@ -217,7 +217,9 @@ size_flags_horizontal = 8
 
 [node name="SkipButton" type="Button" parent="Container/HBoxContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 60)
 layout_mode = 2
+size_flags_horizontal = 8
 size_flags_vertical = 0
 text = "Skip"
 
@@ -227,6 +229,7 @@ size_flags_vertical = 3
 
 [node name="NextButton" type="Button" parent="Container/HBoxContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 size_flags_vertical = 8
 text = "Next"

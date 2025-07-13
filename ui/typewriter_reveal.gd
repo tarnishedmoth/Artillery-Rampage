@@ -1,7 +1,7 @@
 class_name TypewriterEffect
 
 const DEFAULT_SPEED:float = 0.15
-const MAX_SPEED:float = 1.6
+const MAX_SPEED:float = 1.8
 const MIN_SPEED:float = 0.016
 const ACCELERATION:float = 0.88
 
