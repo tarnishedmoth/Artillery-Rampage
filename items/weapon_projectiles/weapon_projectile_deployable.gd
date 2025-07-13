@@ -54,8 +54,13 @@ func deploy() -> void:
 		else:
 			_setup_deployable(deployable, false)
 		if deployable is WeaponProjectile:
-			deployable.set_sources(owner_tank,source_weapon)
-			source_weapon._add_projectile_awaiting(deployable)
+			if is_instance_valid(owner_tank) and is_instance_valid(source_weapon):
+				deployable.set_sources(owner_tank,source_weapon)
+				source_weapon._add_projectile_awaiting(deployable)
+			else:
+				print_debug("%s: Tank and/or weapon invalid - destroying immediately" % [name])
+				deployable.explode_and_force_destroy()
+				break
 		_current_projectile_index += 1 # Track which one we're setting up
 	
 	if destroy_after_deployed: destroy()
