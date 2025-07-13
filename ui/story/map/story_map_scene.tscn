@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bh3bmcratw025"]
+[gd_scene load_steps=24 format=3 uid="uid://bh3bmcratw025"]
 
 [ext_resource type="Script" uid="uid://d3mw66c4x3kum" path="res://ui/story/map/story_map_scene.gd" id="1_5v7n8"]
 [ext_resource type="Theme" uid="uid://ddklgnmfj25sv" path="res://ui/story/story_theme.tres" id="1_nmkcg"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://8hat5mrejfwr" path="res://ui/story/round_summary/round_summary_hud_element.tscn" id="7_b87u6"]
 [ext_resource type="PackedScene" uid="uid://b4hy7hmnoewje" path="res://narrative/auto_narrative.tscn" id="7_mer82"]
 [ext_resource type="Texture2D" uid="uid://csaq0u25lccwx" path="res://ui/story/map/grid_tile.png" id="7_px7av"]
+[ext_resource type="PackedScene" uid="uid://bqfcd8w6wtoo0" path="res://utils/pulse_modulate.tscn" id="7_y8rqc"]
 [ext_resource type="Texture2D" uid="uid://d4l0fjsjek7l8" path="res://ui/hud_bg_topright.png" id="9_jpvwg"]
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="10_eclf1"]
 [ext_resource type="FontFile" uid="uid://cg5hjbm350ehu" path="res://ui/typewriter_font.fnt" id="10_h2lnq"]
@@ -90,6 +91,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_464bj")
+
+[node name="PulseModulate" parent="Background" instance=ExtResource("7_y8rqc")]
 
 [node name="MouseHighlight" type="PointLight2D" parent="."]
 position = Vector2(1056, 512)

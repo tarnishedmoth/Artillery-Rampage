@@ -11,12 +11,10 @@ offset_bottom = 40.0
 theme_override_constants/separation = 20
 script = ExtResource("1_03bpo")
 
-[node name="Spacer" type="Control" parent="."]
-layout_mode = 2
-
 [node name="DescriptionContainer" parent="." instance=ExtResource("2_e4rke")]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="Weapon" type="Label" parent="DescriptionContainer"]
 unique_name_in_owner = true
@@ -31,16 +29,13 @@ size_flags_horizontal = 0
 
 [node name="WeaponBuy" parent="." instance=ExtResource("1_7inv6")]
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 3
 size_flags_vertical = 0
-alignment = 2
+alignment = 1
 
 [node name="AmmoPurchase" parent="." instance=ExtResource("2_03bpo")]
 custom_minimum_size = Vector2(175, 0)
 layout_mode = 2
-size_flags_horizontal = 8
+size_flags_horizontal = 10
 size_flags_vertical = 0
 alignment = 2
-
-[node name="Spacer2" type="Control" parent="."]
-layout_mode = 2

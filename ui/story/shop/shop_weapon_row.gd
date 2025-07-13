@@ -78,7 +78,7 @@ func _ready() -> void:
 	if weapon_buy_control.already_owned:
 		cost_label.text = "(Owned)"
 	else:
-		cost_label.text = ShopUtils.format_cost(shop_item.unlock_cost,shop_item.unlock_cost_type)
+		cost_label.text = "Costs " + ShopUtils.format_cost(shop_item.unlock_cost,shop_item.unlock_cost_type) + " to purchase"
 	
 	# TODO: If we support mod purchases may need to to change this state dynamically and expose as function
 	# Alternatively could swap out the child for a new instance of the weapon row so that everything is initialized properly

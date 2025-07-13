@@ -7,7 +7,7 @@ extends Node
 @onready var orig_mod:Color = parent.modulate
 
 func _ready() -> void:
-	await get_tree().create_timer(speed/2)
+	await get_tree().create_timer(speed/2).timeout
 	var tween:Tween = parent.create_tween()
 	tween.set_loops()
 	tween.set_trans(Tween.TRANS_CUBIC)

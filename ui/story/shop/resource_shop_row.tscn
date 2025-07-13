@@ -1,6 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://dpxoc5ysgsvep"]
+[gd_scene load_steps=5 format=3 uid="uid://dpxoc5ysgsvep"]
 
 [ext_resource type="Script" uid="uid://djgsu21x88pgk" path="res://ui/story/shop/resource_shop_row.gd" id="1_h7ms6"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_h7ms6"]
+font_size = 20
+
+[sub_resource type="LabelSettings" id="LabelSettings_2d2tq"]
+font_size = 20
+font_color = Color(0.959263, 0.841336, 0.380551, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ivcxb"]
+font_color = Color(0.959263, 0.841336, 0.380551, 1)
 
 [node name="ResourceRow" type="HBoxContainer"]
 theme_override_constants/separation = 20
@@ -18,16 +28,22 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="PanelContainer/Scrap"]
 layout_mode = 2
-text = "Scrap: "
+text = "Scrap ($): "
+label_settings = SubResource("LabelSettings_h7ms6")
 
 [node name="ScrapValue" type="Label" parent="PanelContainer/Scrap"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "10"
+label_settings = SubResource("LabelSettings_2d2tq")
 
 [node name="Spacer2" type="Control" parent="PanelContainer/Scrap"]
 custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
+
+[node name="Spacer" type="Control" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="PanelContainer2" type="PanelContainer" parent="."]
 layout_mode = 2
@@ -47,6 +63,7 @@ text = "Personnel:"
 unique_name_in_owner = true
 layout_mode = 2
 text = "5"
+label_settings = SubResource("LabelSettings_ivcxb")
 
 [node name="Spacer2" type="Control" parent="PanelContainer2/Personnel"]
 custom_minimum_size = Vector2(10, 0)

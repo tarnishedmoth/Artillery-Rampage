@@ -4,27 +4,40 @@
 
 [node name="WeaponBuy" type="VBoxContainer"]
 offset_right = 78.0
+theme_override_constants/separation = 0
 script = ExtResource("1_qgamc")
 
 [node name="BuyRow" type="HBoxContainer" parent="."]
 layout_mode = 2
+alignment = 1
 
 [node name="Label" type="Label" parent="BuyRow"]
+visible = false
 layout_mode = 2
 text = "Buy"
 
 [node name="BuyButton" type="CheckButton" parent="BuyRow"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
+tooltip_text = "Check this box to purchase the weapon"
+theme_override_colors/font_disabled_color = Color(0.417244, 0.495648, 0.654514, 1)
+theme_override_colors/font_color = Color(0.959263, 0.841336, 0.380551, 1)
+theme_override_colors/font_focus_color = Color(0.959263, 0.841336, 0.380551, 1)
+theme_override_colors/font_pressed_color = Color(0.974858, 0.554126, 0.503607, 1)
+text = "Buy"
 
 [node name="CurrentAmmoRow" type="HBoxContainer" parent="."]
 layout_mode = 2
+alignment = 1
 
 [node name="Label" type="Label" parent="CurrentAmmoRow"]
 layout_mode = 2
-text = "Ammo"
+text = "Current Ammo:"
 
 [node name="CurrentAmmo" type="Label" parent="CurrentAmmoRow"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "3"
+
+[connection signal="toggled" from="BuyRow/BuyButton" to="." method="_on_buy_button_toggled"]

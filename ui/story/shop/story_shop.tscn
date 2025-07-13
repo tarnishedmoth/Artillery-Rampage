@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://o55c1iigswjc"]
+[gd_scene load_steps=12 format=3 uid="uid://o55c1iigswjc"]
 
 [ext_resource type="Theme" uid="uid://bf5nv0nins5p6" path="res://ui/themes/shop.tres" id="1_abhue"]
 [ext_resource type="Script" uid="uid://blcakxdcf5gn4" path="res://ui/story/shop/story_shop.gd" id="1_po24w"]
 [ext_resource type="PackedScene" uid="uid://dpxoc5ysgsvep" path="res://ui/story/shop/resource_shop_row.tscn" id="2_gms1v"]
 [ext_resource type="Resource" uid="uid://kpcvdmtfoeh3" path="res://progression/shop/shop_items.tres" id="2_xg2qo"]
+[ext_resource type="PackedScene" uid="uid://bqfcd8w6wtoo0" path="res://utils/pulse_modulate.tscn" id="4_ccaak"]
 [ext_resource type="LabelSettings" uid="uid://caafhio2r1ekd" path="res://ui/story/round_summary/round_summary_header.tres" id="4_mpdqb"]
 [ext_resource type="Script" uid="uid://b8idjgo18fqvv" path="res://ui/story/shop/growing_scroll_container.gd" id="4_xg2qo"]
 [ext_resource type="FontFile" uid="uid://cr7d38d0438qq" path="res://ui/fonts/FreeSerifBold-rdMp.otf" id="6_wkf8e"]
@@ -38,6 +39,10 @@ offset_right = 1290.0
 offset_bottom = 735.0
 texture = SubResource("GradientTexture2D_gkxf4")
 
+[node name="PulseModulate" parent="Background" instance=ExtResource("4_ccaak")]
+color_pulse = Color(0.619065, 0.762072, 0.859327, 1)
+speed = 12.0
+
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -47,6 +52,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
 layout_mode = 2
@@ -56,6 +62,7 @@ theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 theme_override_constants/separation = 15
 
@@ -102,6 +109,7 @@ theme_override_constants/separation = 10
 [node name="Header" type="HBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer"]
 layout_mode = 2
 theme = SubResource("Theme_mpdqb")
+alignment = 1
 
 [node name="Spacer" type="Control" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer/Header"]
 custom_minimum_size = Vector2(15, 30)
@@ -110,17 +118,34 @@ layout_mode = 2
 [node name="Item" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer/Header"]
 custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
-text = "Item"
+text = "Weapon"
+vertical_alignment = 1
+
+[node name="Spacer2" type="Control" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="Buy" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer/Header"]
+visible = false
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
+vertical_alignment = 1
+
+[node name="Spacer3" type="Control" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="Ammo" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer/Header"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Purchase Ammo"
+vertical_alignment = 1
 metadata/_edit_lock_ = true
+
+[node name="Divider" type="ColorRect" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+color = Color(0, 0, 0, 1)
 
 [node name="ButtonsContainer" type="HBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer"]
 unique_name_in_owner = true

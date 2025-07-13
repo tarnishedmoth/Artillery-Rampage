@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cxevx3vi7ixrc" path="res://levels/game_over.gd" id="1_51duh"]
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="1_375dy"]
 [ext_resource type="AudioStream" uid="uid://bfsk5b6gxtcen" path="res://music/round_lost.wav" id="2_i7eks"]
-[ext_resource type="Script" uid="uid://dgw2wj1hif438" path="res://utils/pulse_modulate.gd" id="3_b3xmm"]
+[ext_resource type="PackedScene" uid="uid://bqfcd8w6wtoo0" path="res://utils/pulse_modulate.tscn" id="3_b3xmm"]
 [ext_resource type="PackedScene" uid="uid://ttxjggljb6fs" path="res://ui/physics_playground.tscn" id="5_b3xmm"]
 
 [sub_resource type="Gradient" id="Gradient_px7av"]
@@ -50,8 +50,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_i7eks")
 
-[node name="Pulse" type="Node" parent="Background"]
-script = ExtResource("3_b3xmm")
+[node name="PulseModulate" parent="Background" instance=ExtResource("3_b3xmm")]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
