@@ -1,16 +1,25 @@
-[gd_scene load_steps=8 format=3 uid="uid://by40b3dms4xj"]
+[gd_scene load_steps=13 format=3 uid="uid://by40b3dms4xj"]
 
 [ext_resource type="Script" uid="uid://cv27a066o2gl5" path="res://ui/story/story_completed.gd" id="1_7ik1a"]
 [ext_resource type="Theme" uid="uid://ddklgnmfj25sv" path="res://ui/story/story_theme.tres" id="1_qc4x1"]
 [ext_resource type="LabelSettings" uid="uid://caafhio2r1ekd" path="res://ui/story/round_summary/round_summary_header.tres" id="3_pyj84"]
+[ext_resource type="PackedScene" uid="uid://bqfcd8w6wtoo0" path="res://utils/pulse_modulate.tscn" id="3_xw0yj"]
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="4_lqido"]
 [ext_resource type="Texture2D" uid="uid://byu7nafjbwkll" path="res://story/artillery-victory.png" id="4_pyj84"]
+[ext_resource type="FontFile" uid="uid://cg5hjbm350ehu" path="res://ui/typewriter_font.fnt" id="5_jmuml"]
+[ext_resource type="PackedScene" uid="uid://ttxjggljb6fs" path="res://ui/physics_playground.tscn" id="7_aphng"]
+[ext_resource type="AudioStream" uid="uid://cbowxug2pgc4y" path="res://music/MenuRock.mp3" id="7_xw0yj"]
 
 [sub_resource type="Gradient" id="Gradient_nw3j5"]
 colors = PackedColorArray(0.85, 0.827333, 0.8075, 1, 0.6417, 0.64492, 0.69, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_xw0yj"]
 gradient = SubResource("Gradient_nw3j5")
+
+[sub_resource type="LabelSettings" id="LabelSettings_6ywup"]
+font = ExtResource("5_jmuml")
+font_size = 24
+font_color = Color(0, 0, 0, 1)
 
 [node name="StoryCompleted" type="Control"]
 layout_mode = 3
@@ -23,11 +32,17 @@ theme = ExtResource("1_qc4x1")
 script = ExtResource("1_7ik1a")
 
 [node name="TextureRect" type="TextureRect" parent="."]
-offset_left = 9.0
-offset_top = -11.0
-offset_right = 1298.0
-offset_bottom = 745.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = SubResource("GradientTexture2D_xw0yj")
+
+[node name="PulseModulate" parent="TextureRect" instance=ExtResource("3_xw0yj")]
+color_pulse = Color(0.888862, 0.868027, 0.793464, 1)
+speed = 4.0
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
@@ -45,10 +60,7 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Story Mode Run %RUN% Complete!"
 label_settings = ExtResource("3_pyj84")
-
-[node name="Spacer" type="Control" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
+horizontal_alignment = 1
 
 [node name="VictoryImage" type="TextureRect" parent="CenterContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -58,16 +70,32 @@ size_flags_vertical = 4
 texture = ExtResource("4_pyj84")
 stretch_mode = 4
 
+[node name="StaticBody2D" type="StaticBody2D" parent="CenterContainer/VBoxContainer/VictoryImage"]
+position = Vector2(126, 182)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CenterContainer/VBoxContainer/VictoryImage/StaticBody2D"]
+polygon = PackedVector2Array(-60, 46, -40, 18, -41, -32, -12, -52, -93, -121, -81, -135, 15, -56, 45, -51, 59, -35, 64, 8, 54, 20, 52, 62, -49, 63)
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "You defeated the AI and saved humanity!"
+label_settings = SubResource("LabelSettings_6ywup")
+horizontal_alignment = 1
+
 [node name="Spacer2" type="Control" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
 [node name="Label2" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Replay a new run with harder difficulty and more rewards?"
+text = "Start a new run with harder difficulty and more rewards?
+You will retain your weapons and upgrades."
 horizontal_alignment = 1
-autowrap_mode = 2
+
+[node name="Spacer3" type="Control" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
 
 [node name="ButtonsContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -80,6 +108,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme = ExtResource("4_lqido")
+theme_override_font_sizes/font_size = 24
 text = "Yes"
 
 [node name="No" type="Button" parent="CenterContainer/VBoxContainer/ButtonsContainer"]
@@ -87,7 +116,28 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme = ExtResource("4_lqido")
+theme_override_font_sizes/font_size = 24
 text = "No"
+
+[node name="PhysicsPlayground" parent="." instance=ExtResource("7_aphng")]
+modulate = Color(0.971692, 0.714781, 1, 1)
+position = Vector2(0, 45)
+
+[node name="StaticBody2D" parent="PhysicsPlayground" index="0"]
+position = Vector2(640, 675)
+
+[node name="Polygon2D" parent="PhysicsPlayground/StaticBody2D" index="0"]
+visible = false
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_xw0yj")
+volume_db = -6.0
+pitch_scale = 1.1
+autoplay = true
+bus = &"Music"
+parameters/looping = true
 
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ButtonsContainer/Yes" to="." method="_on_yes_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ButtonsContainer/No" to="." method="_on_no_pressed"]
+
+[editable path="PhysicsPlayground"]
