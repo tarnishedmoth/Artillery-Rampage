@@ -239,7 +239,9 @@ func next_player() -> void:
 	await get_tree().process_frame
 
 	_check_trigger_lightening()
-
+	if tank_controllers.size() == 0: ## HACK
+		push_error("No tanks")
+		return
 	active_player_index = (active_player_index + 1) % tank_controllers.size()
 	var active_player = tank_controllers[active_player_index]
 	if not is_instance_valid(active_player):
