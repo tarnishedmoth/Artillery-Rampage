@@ -18,7 +18,7 @@ var day_segment:float:
 @export var presets_queue:Array[DayWeatherState]
 
 var current_state:DayWeatherState
-var is_raining:bool = false
+
 var is_night:bool = true ## Status of the environment/modulate, not necessarily "TOD"
 
 @export_group("Export Nodes")
@@ -72,7 +72,7 @@ func _ready() -> void:
 	
 func wait_and_next_state() -> void:
 	next_state_timer.start(current_state.duration_ratio * day_segment)
-	if is_raining:
+	if current_state.is_raining:
 		print_debug("The current day cycle is ", current_state.display_name, " and it's raining.")
 	else:
 		print_debug("The current day cycle is ", current_state.display_name)
@@ -118,13 +118,13 @@ func next_state() -> void:
 func apply_state(state:DayWeatherState, immediate:bool = false) -> void:
 	if randf() < state.rain_chance:
 		# Raining
-		is_raining = true
+		state.is_raining = true
 		is_night = state.rain_is_dark
 		change_ambient(state.rain_ambient_color, immediate)
 		change_sun(state.sun_position, state.rain_sun_energy, immediate)
 	else:
 		# Not raining
-		is_raining = false
+		state.is_raining = false
 		is_night = state.is_dark
 		change_ambient(state.ambient_color, immediate)
 		change_sun(state.sun_position, state.sun_energy, immediate)
@@ -188,7 +188,7 @@ func change_weather(state:DayWeatherState, immediate:bool) -> void:
 	## TODO: tank lights catching particles, terrain chunk sets light occluder on start
 	var transition_time:float = 1.0 if immediate else state.weather_transition_time
 	
-	if is_raining:
+	if state.is_raining:
 		# Current state wants rain
 		if not _active_weather_node:
 			# Node is invalid

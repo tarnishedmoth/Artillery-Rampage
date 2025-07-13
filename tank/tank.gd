@@ -15,7 +15,6 @@ signal tank_stopped_falling(tank: Tank)
 @export var shooting_trajectory_previewer:Weapon
 ## Trajectory Indicator for beam-based weapons
 @export var beam_trajectory_indicator:Weapon
-@export var lights:Array[CanvasItem]
 
 @export var min_angle:float = -90.0
 @export var max_angle:float = 90.0
@@ -31,6 +30,8 @@ signal tank_stopped_falling(tank: Tank)
 @export var turret_shot_angle_offset:float = -90 ## @deprecated: - corrected the rotation of the marker2D and math instead
 
 @export var turret_color_value: float = 0.7
+
+@export var lights:Array[CanvasItem]
 
 @export_category("Damage")
 @export_group("Fall Damage")
@@ -126,7 +127,6 @@ func _on_update_color():
 
 func _ready() -> void:
 	GameEvents.turn_ended.connect(_on_turn_ended)
-	GameEvents.day_weather_changed.connect(_on_dayweather_changed)
 	# Need to duplicate as we are using a uniform for the start_time and this is shared on all instances
 	# As not using "instance uniform" as this isn't available in compatibility rendering needed for web
 	if damage_material:
@@ -655,9 +655,3 @@ func get_body_reference_points_global() -> PackedVector2Array:
 	]
 
 #endregion
-
-func _on_dayweather_changed(new_state:DayWeatherState, transition_time:float) -> void:
-	await get_tree().create_timer(randfn(transition_time/2.0, transition_time/5.0)).timeout
-	
-	for light in lights:
-		light.visible = new_state.is_dark

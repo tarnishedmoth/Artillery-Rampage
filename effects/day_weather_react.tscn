@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c7gtykfc1h1xq"]
+
+[ext_resource type="Script" uid="uid://cs5jok0ad4adj" path="res://effects/day_weather_react.gd" id="1_6d18y"]
+
+[node name="DayWeatherReact" type="Node"]
+script = ExtResource("1_6d18y")

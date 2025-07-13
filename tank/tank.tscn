@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://dvr6bm2hlj5h4"]
+[gd_scene load_steps=22 format=3 uid="uid://dvr6bm2hlj5h4"]
 
 [ext_resource type="Script" uid="uid://capm81lvak2c3" path="res://tank/tank.gd" id="1_0iy80"]
 [ext_resource type="Script" uid="uid://iirywjtssovs" path="res://tank/tank_body.gd" id="2_o5qn2"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://eqdcshl1me76" path="res://effects/smoke_particles.tscn" id="8_adwvx"]
 [ext_resource type="Texture2D" uid="uid://b1rtks5mrjg34" path="res://tank/spotlight.png" id="9_73k0t"]
 [ext_resource type="PackedScene" uid="uid://c2yvcwfpdhnvx" path="res://weapons/weapon_beam_trajectory_previewer.tscn" id="9_ucdxg"]
+[ext_resource type="PackedScene" uid="uid://c7gtykfc1h1xq" path="res://effects/day_weather_react.tscn" id="10_yxfy5"]
 [ext_resource type="Script" uid="uid://bybxweqiag1x8" path="res://items/weapon_projectiles/explosions/emp_discharger.gd" id="12_0knov"]
 [ext_resource type="PackedScene" uid="uid://b15v5mova33di" path="res://items/weapon_projectiles/weapon_projectile_emp_widespread.tscn" id="13_sdcn4"]
 [ext_resource type="Texture2D" uid="uid://5fotp567tkxb" path="res://items/weapon_projectiles/parachute.png" id="14_sdcn4"]
@@ -127,6 +128,9 @@ energy = 0.45
 texture = ExtResource("9_73k0t")
 offset = Vector2(0, -50)
 texture_scale = 0.25
+
+[node name="DayWeatherReact" parent="TankBody" node_paths=PackedStringArray("lights") instance=ExtResource("10_yxfy5")]
+lights = [NodePath("../TankTurret/Spotlight"), NodePath("../PointLight2D"), NodePath("../PointLight2D2")]
 
 [node name="DamagedSmokeParticles" parent="TankBody" instance=ExtResource("8_adwvx")]
 unique_name_in_owner = true
