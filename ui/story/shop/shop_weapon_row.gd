@@ -98,6 +98,10 @@ func _connect_signals() -> void:
 			# if toggle buy to false then reset any ammo purchased and be sure to fire signals so that resources updated appropriately
 			if not toggled_on and ammo_purchase_control.display:
 				ammo_purchase_control.reset(true)
+			elif toggled_on and ammo_purchase_control.display:
+				# Ensures that the ammo increment is updated properly with magazines
+				# Since we always set ammo back to zero when toggling buy off, resetting the labels is always fine
+				ammo_purchase_control.initialize()
 		)
 	
 	if ammo_purchase_control.enabled:

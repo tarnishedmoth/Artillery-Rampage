@@ -53,10 +53,11 @@ class ItemPurchaseState:
 		# We make a duplicate of the resource so okay to modify it. Ordinarily resources are global resources
 		# We do not need to re-purchase previously unlocked weapons
 		item.apply_refill_discount = weapon.retain_when_empty
-		print_debug("%s: apply_refill_discount=%s" % [item.item_scene.resource_path, str(item.apply_refill_discount)])
-
 		item.uses_magazines = weapon.use_magazines
 		item.ammo_purchase_increment = weapon.magazine_capacity if weapon.use_magazines else 1
+		
+		print_debug("%s: _on_item_set(%s) - apply_refill_discount=%s; uses_magazines=%s; ammo_purchase_increment=%d" \
+			 % [item.item_scene.resource_path, weapon.display_name, str(item.apply_refill_discount), str(item.uses_magazines), item.ammo_purchase_increment])
 
 ## Keyed by the scene file path of the instantiated item
 var _purchase_item_state_dictionary:Dictionary[String, ItemPurchaseState] = {}
