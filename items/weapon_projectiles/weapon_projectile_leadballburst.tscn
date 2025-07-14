@@ -12,13 +12,12 @@ continuous_cd = 2
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_gtnid")
-max_lifetime = 8.0
 explosion_to_spawn = ExtResource("2_7f66c")
 min_falloff_distance = 15.0
 max_falloff_distance = 45.0
 min_damage = 4.0
-max_damage = 15.0
-destructible_scale_multiplier = Vector2(5, 5)
+max_damage = 16.0
+destructible_scale_multiplier = Vector2(4.5, 4.5)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.09, 0.09)
