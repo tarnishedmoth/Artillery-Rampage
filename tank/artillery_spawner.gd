@@ -256,7 +256,7 @@ func _choose_positions(count: int) -> void:
 		
 		var last_index:int = 0
 		for i in range(0, count):
-			var index:int = last_index + mini(roundi(randf_range(i * stride, (i + 1) * stride)), max_position)
+			var index:int = mini(last_index + roundi(randf_range(i * stride, (i + 1) * stride)), max_position)
 			# Already guarded against infinite loop as clamp count to max positions
 			# This shouldn't happen much - only in cases of player count to 
 			while index in _used_indices:
