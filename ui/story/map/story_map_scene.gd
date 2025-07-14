@@ -381,10 +381,6 @@ func _create_scrolling_narrative(level:StoryLevel, active_node: StoryLevelNode) 
 
 	# Set text on first instance
 	prototype.get_child(0).text = all_narratives[0]
-	# FIXME: This causes only the first narrative to show, temporarily disabling until we find a fix
-	# What we need to do at high level is once all the text is revealed, (timeout or wait for exit tree?)
-	# we need to advance the text sequence and show typewriter for next and then loop it
-	#TypewriterEffect.apply_to(prototype.get_child(0))
 
 	# Position above current node if <= bounds and below current node otherwise
 	var active_node_pos:Vector2 = active_node.position

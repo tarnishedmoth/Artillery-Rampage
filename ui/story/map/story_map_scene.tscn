@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bh3bmcratw025"]
+[gd_scene load_steps=25 format=3 uid="uid://bh3bmcratw025"]
 
 [ext_resource type="Script" uid="uid://d3mw66c4x3kum" path="res://ui/story/map/story_map_scene.gd" id="1_5v7n8"]
 [ext_resource type="Theme" uid="uid://ddklgnmfj25sv" path="res://ui/story/story_theme.tres" id="1_nmkcg"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://d4l0fjsjek7l8" path="res://ui/hud_bg_topright.png" id="9_jpvwg"]
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="10_eclf1"]
 [ext_resource type="FontFile" uid="uid://cg5hjbm350ehu" path="res://ui/typewriter_font.fnt" id="10_h2lnq"]
+[ext_resource type="PackedScene" uid="uid://dk3gncj3bxnyj" path="res://ui/apply_typewriter_effect.tscn" id="12_5yfjk"]
 [ext_resource type="AudioStream" uid="uid://cudd5extbrrsl" path="res://ui/sounds/chatty_signal_short_b.wav" id="13_2etp1"]
 
 [sub_resource type="Gradient" id="Gradient_jpvwg"]
@@ -150,12 +151,16 @@ layout_mode = 2
 label_settings = SubResource("LabelSettings_eclf1")
 autowrap_mode = 3
 
+[node name="ApplyTypewriterEffect" parent="StoryTooltips/Tooltip/Glyph" instance=ExtResource("12_5yfjk")]
+
 [node name="GSpacer" type="Control" parent="StoryTooltips/Tooltip"]
 custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
 [node name="Description" type="Label" parent="StoryTooltips/Tooltip"]
 layout_mode = 2
+
+[node name="ApplyTypewriterEffect" parent="StoryTooltips/Tooltip/Description" instance=ExtResource("12_5yfjk")]
 
 [node name="LevelNodesContainer" type="Control" parent="."]
 unique_name_in_owner = true

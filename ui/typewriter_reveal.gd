@@ -29,18 +29,26 @@ class TypewriterTextRevealer extends Timer:
 			timeout.connect(cycle)
 	func cycle() -> void:
 		TypewriterEffect.on_reveal_timeout(self)
+	func kill() -> void:
+		node.visible_ratio = 1.0
+		queue_free()
 
 #region--Public Methods
 func _init() -> void: push_error("Abstract class")
 
 ## Use this to apply the effect to a node.
-static func apply_to(node:Control, speed:float = DEFAULT_SPEED) -> void:
+static func apply_to(node:Control, speed:float = DEFAULT_SPEED, looping:bool = false) -> TypewriterTextRevealer:
 	if "set_visible_characters" in node:
 		clear(node)
 		var new_timer = TypewriterTextRevealer.new()
 		node.add_child(new_timer)
 		new_timer.speed = speed
+		new_timer.repeat_after_fully_revealed = looping
 		new_timer.start(new_timer.speed)
+		return new_timer
+	else:
+		push_error("TypewriterEffect.apply_to(): Property not found in node.")
+		return null
 	
 static func clear(node:Control) -> void:
 	node.set_visible_characters(0)

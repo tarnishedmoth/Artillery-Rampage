@@ -57,7 +57,7 @@ layout_mode = 2
 
 [node name="Glyph" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipPower"]
 layout_mode = 2
-text = "[power_increase] / [power_decrease]"
+text = "[power_increase] / [power_decrease], [fine_control]"
 
 [node name="GSpacer" type="Control" parent="PanelContainer/TooltipsPlayerTurn/TooltipPower"]
 custom_minimum_size = Vector2(16, 0)
@@ -65,7 +65,7 @@ layout_mode = 2
 
 [node name="Description" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipPower"]
 layout_mode = 2
-text = "Power"
+text = "Set Power"
 
 [node name="TooltipAim" type="HBoxContainer" parent="PanelContainer/TooltipsPlayerTurn"]
 visible = false
@@ -81,7 +81,7 @@ layout_mode = 2
 
 [node name="Description" type="Label" parent="PanelContainer/TooltipsPlayerTurn/TooltipAim"]
 layout_mode = 2
-text = "Aim Angle"
+text = "Set Aim Angle"
 
 [node name="TooltipShoot" type="HBoxContainer" parent="PanelContainer/TooltipsPlayerTurn"]
 visible = false

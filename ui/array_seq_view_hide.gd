@@ -16,13 +16,16 @@ func _ready() -> void:
 		start_sequence(sequence)
 
 func start_sequence(array:Array) -> void:
-	current_sequence = array
-	for control in array:
-		control.hide()
+	if array.size() == 1:
+		array[0].show() 
+	else:
+		current_sequence = array
+		for control in array:
+			control.hide()
 
-	currently_visible_control = current_sequence.front()
-	currently_visible_control.show()
-	_current_sequence_index = 0
+		currently_visible_control = current_sequence.front()
+		currently_visible_control.show()
+		_current_sequence_index = 0
 
 	if _timer:
 		_timer.queue_free()
