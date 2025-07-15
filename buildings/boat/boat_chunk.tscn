@@ -3,14 +3,16 @@
 [ext_resource type="PackedScene" uid="uid://cklh78tsa5qcj" path="res://destructible/destructible_object_chunk.tscn" id="1_lakug"]
 [ext_resource type="Texture2D" uid="uid://n4vwside57po" path="res://buildings/boat/Boat.png" id="2_8j4jy"]
 
-[node name="CityBuildingChunk" instance=ExtResource("1_lakug")]
+[node name="BoatChunk" instance=ExtResource("1_lakug")]
 mass = 1000.0
 center_of_mass_mode = 1
+center_of_mass = Vector2(0, 100)
+inertia = 1e+10
 min_mass = 100.0
 destroy_below_min_mass = true
 
 [node name="Mesh" parent="." index="0"]
-position = Vector2(75, 180)
+position = Vector2(79, 180)
 texture = ExtResource("2_8j4jy")
 texture_offset = Vector2(122.615, 246.56)
 texture_scale = Vector2(2, 2)
@@ -22,3 +24,6 @@ crack_delta_min = 4.0
 crack_delta_max = 15.0
 crumble_y_step_max = 25.0
 crumble_x_jitter = 5.0
+
+[node name="Marker2D" type="Marker2D" parent="." index="3"]
+position = Vector2(37.5, 100)

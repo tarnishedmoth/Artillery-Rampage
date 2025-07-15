@@ -34,6 +34,7 @@ rain_intensity = 0.5
 rain_ambient_color = Color(0.282353, 0.819608, 0.8, 1)
 rain_sun_energy = 0.22
 rain_is_dark = true
+use_snow = false
 metadata/_custom_type_script = "uid://blr3jie556r2m"
 
 [sub_resource type="Resource" id="Resource_jfhj8"]
@@ -51,6 +52,7 @@ rain_intensity = 0.1
 rain_ambient_color = Color(0.811606, 0.366525, 0.487116, 1)
 rain_sun_energy = 0.31
 rain_is_dark = false
+use_snow = false
 metadata/_custom_type_script = "uid://blr3jie556r2m"
 
 [node name="TestLevelLighthouse" type="Node2D"]
