@@ -17,6 +17,8 @@ uniform sampler2D noise_tex2: repeat_enable;
 uniform vec2 offset1 = vec2(0.1);
 uniform vec2 offset2 = vec2(0.04);
 
+uniform vec4 modulate: source_color = vec4(1.0,1.0,1.0,1.0);
+
 float wave_func_1(vec2 uv) {
 	// Normalize to 0-1 range
 	return (sin(uv.x * wave_frequency + TIME * wave_speed) + 1.0) * 0.5;
@@ -60,5 +62,5 @@ void fragment() {
 		color.a += avg_noise * wave_modifier;
 	}
 
-    COLOR = color;
+    COLOR = color * modulate;
 }

@@ -192,7 +192,8 @@ func _on_update_wind(wind_node: Wind) -> void:
 	water_material.set_shader_parameter(&"wave_pct", wave_pct)
 	water_material.set_shader_parameter(&"wave_agitation", wave_agitation)
 	water_material.set_shader_parameter(&"wave_choppiness", wave_choppiness)
-
+	water_material.set_shader_parameter(&"modulate", ObjectUtils.get_effective_modulate(self))
+	
 func _alpha_to_value(alpha: float, array: PackedInt32Array) -> float:
 	var index: int = clampi(roundi(alpha * (array.size() - 1)), 0, array.size() - 1)
 	var value:float = float(array[index])

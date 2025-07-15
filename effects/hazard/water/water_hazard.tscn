@@ -29,6 +29,7 @@ shader_parameter/noise_tex1 = SubResource("NoiseTexture2D_700nr")
 shader_parameter/noise_tex2 = SubResource("NoiseTexture2D_muiwd")
 shader_parameter/offset1 = Vector2(0.1, 0.1)
 shader_parameter/offset2 = Vector2(0.04, 0.04)
+shader_parameter/modulate = Color(1, 1, 1, 1)
 
 [sub_resource type="Gradient" id="Gradient_mvjr0"]
 offsets = PackedFloat32Array(0, 0.00248756)
