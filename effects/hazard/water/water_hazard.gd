@@ -80,7 +80,9 @@ func _get_collision_rect_global() -> Rect2:
 	return collision.global_transform * bounds
 
 func _on_overlap_begin(body: PhysicsBody2D) -> void:
-	print_debug("%s: body=%s entered" % [name, body.name])
+	print_debug("%s: body=%s entered - added tag %s" % [name, body.name, Groups.InWaterTag])
+	body.set_meta(Groups.InWaterTag, self)
+	
 	var damageable:Node = Groups.get_parent_in_group(body, Groups.Damageable)
 	if not is_instance_valid(damageable):
 		print_debug("%s - Ignoring non-damageable body=%s" % [name, body.name])
@@ -104,7 +106,13 @@ func _on_overlap_begin(body: PhysicsBody2D) -> void:
 		_immediate_damage_queue.push_back(damageable)
 		
 func _on_overlap_ended(body: PhysicsBody2D) -> void:
-	print_debug("%s: body=%s exited" % [name, body.name])
+	var existing_tag:WaterHazard = body.get_meta(Groups.InWaterTag) as WaterHazard
+	var remove_water_tag:bool = existing_tag == self
+	if remove_water_tag:
+		body.remove_meta(Groups.InWaterTag)
+		
+	print_debug("%s: body=%s exited - removed tag %s=%s" % [name, body.name, Groups.InWaterTag, str(remove_water_tag)])
+	
 	var damageable:Node = Groups.get_parent_in_group(body, Groups.Damageable)
 	if not damageable:
 		print_debug("%s - Ignoring non-damageable body=%s" % [name, body.name])

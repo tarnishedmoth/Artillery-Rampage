@@ -51,6 +51,11 @@ texture = SubResource("GradientTexture2D_yxd2d")
 
 [node name="WaterOverlap" type="Area2D" parent="."]
 collision_layer = 128
+collision_mask = 3
+linear_damp_space_override = 1
+linear_damp = 4.0
+angular_damp_space_override = 1
+angular_damp = 2.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WaterOverlap"]
 shape = SubResource("RectangleShape2D_t3upm")

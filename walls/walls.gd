@@ -116,13 +116,19 @@ func projectile_elastic(projectile: WeaponProjectile):
 	var pos = projectile.global_position
 	var movement_dir : Vector2 = projectile.linear_velocity.normalized()
 	
+	#Left
 	if(pos.x <= bounds.position.x):
+		if _check_interaction_force_explode(projectile, WallInteractionLocation.Left):
+			return
 		pos.x = bounds.position.x
 		if(movement_dir.x < 0):
 			movement_dir.x = -movement_dir.x
 			_adjust_interaction_velocity(projectile, movement_dir)
 			GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Left)
+	#Right
 	elif pos.x >= bounds.position.x + bounds.size.x:
+		if _check_interaction_force_explode(projectile, WallInteractionLocation.Right):
+			return
 		pos.x = bounds.position.x + bounds.size.x
 		if(movement_dir.x > 0):
 			movement_dir.x = -movement_dir.x
@@ -131,6 +137,8 @@ func projectile_elastic(projectile: WeaponProjectile):
 			
 	#Top
 	if pos.y <= bounds.position.y:
+		if _check_interaction_force_explode(projectile, WallInteractionLocation.Top):
+			return
 		pos.y = bounds.position.y
 		if movement_dir.y < 0:
 			movement_dir.y = -movement_dir.y
@@ -138,6 +146,8 @@ func projectile_elastic(projectile: WeaponProjectile):
 			GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Top)
 	#Bottom
 	elif pos.y >= bounds.position.y + bounds.size.y:
+		if _check_interaction_force_explode(projectile, WallInteractionLocation.Bottom):
+			return
 		pos.y = bounds.position.y + bounds.size.y
 		if movement_dir.y > 0:
 			movement_dir.y = -movement_dir.y
@@ -152,42 +162,61 @@ func projectile_elastic(projectile: WeaponProjectile):
 			projectile.explode_and_force_destroy()
 		else:
 			print_debug("Hit bottom %s with velocity=%s; speed=%f above threshold" % [str(pos), projectile.linear_velocity, sqrt(speed)])
-	
+	projectile.global_position = pos
+
 func projectile_warp(projectile: WeaponProjectile):
 	var pos: Vector2 = projectile.global_position
 
+#	#left
 	if(pos.x <= bounds.position.x):
+		if _check_interaction_force_explode(projectile, WallInteractionLocation.Left):
+			return
 		pos.x = bounds.position.x + bounds.size.x - warp_offset
 		print_debug("Warp to right side %s -> %s" % [str(projectile.global_position), str(pos)])
 		GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Left)
+	#Right
 	elif pos.x >= bounds.position.x + bounds.size.x:
+		if _check_interaction_force_explode(projectile, WallInteractionLocation.Right):
+			return
 		pos.x = bounds.position.x + warp_offset
 		print_debug("Warp to left side %s -> %s" % [str(projectile.global_position), str(pos)])
 		GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Right)
-
+	#Bottom
 	if pos.y >= bounds.position.y + bounds.size.y:
+		if _check_interaction_force_explode(projectile, WallInteractionLocation.Bottom):
+			return
 		print_debug("Hit bottom %s - destroying" % [str(pos)])
 		GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Bottom)
 		#Delete projectile
 		projectile.explode_and_force_destroy()
+		
+	# Top - check just for force explode
+	elif pos.y <= bounds.position.y and _check_interaction_force_explode(projectile, WallInteractionLocation.Top):
+		return
 	
 	projectile.global_position = pos
 
 func projectile_none(projectile: WeaponProjectile):
 	var pos: Vector2 = projectile.global_position
 
+	#Left
 	if(pos.x <= bounds.position.x):
 		print_debug("Hit left side %s at %s" % [projectile.name, projectile.global_position])
 		GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Left)
 		projectile.explode_and_force_destroy()
+	#Right
 	elif pos.x >= bounds.position.x + bounds.size.x:
 		print_debug("Hit right side %s at %s" % [projectile.name, projectile.global_position])
 		GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Right)
 		projectile.explode_and_force_destroy()
+	#Bottom
 	elif pos.y >= bounds.position.y + bounds.size.y:
 		print_debug("Hit bottom %s at %s" % [projectile.name, projectile.global_position])
 		GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Bottom)
 		projectile.explode_and_force_destroy()
+	# Top - check just for force explode
+	elif pos.y <= bounds.position.y and _check_interaction_force_explode(projectile, WallInteractionLocation.Top):
+		return
 		
 func _adjust_interaction_velocity(projectile: WeaponProjectile, new_dir:Vector2) -> void:
 	var speed:float = projectile.linear_velocity.length()
@@ -209,7 +238,20 @@ func _on_projectile_destroyed(projectile: WeaponProjectile) -> void:
 	#print_debug("%s: Projectile Destroyed=%s" % [name, projectile.name])
 
 	tracked_projectiles.erase(projectile)
+
+func _check_interaction_force_explode(projectile: WeaponProjectile, location: WallInteractionLocation) -> bool:
+	# If we are in the water when we hit a wall, then always explode
+	var force_explode:bool = false
+	if projectile.has_meta(Groups.InWaterTag):
+		force_explode = true
+		print_debug("Hit wall %s while in water: %s" % [EnumUtils.enum_to_string(WallInteractionLocation, location), projectile.name])
+		
+	if force_explode:
+		GameEvents.wall_interaction.emit(self, projectile, location)
+		projectile.explode_and_force_destroy()
+	return force_explode
 	
+#region Laser	
 func _on_beam_fired(beam: WeaponNonPhysicalBeam) -> void:
 	tracked_beams.append(beam)
 
@@ -303,3 +345,5 @@ func beam_none(beam: WeaponNonPhysicalBeam):
 		# TODO: implement beam announcer events
 		#GameEvents.wall_interaction.emit(self, projectile, WallInteractionLocation.Bottom)
 		beam.explode_and_force_destroy()
+		
+#endregion

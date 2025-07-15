@@ -56,7 +56,10 @@ shuffle_order = false
 texture_resources = Array[ExtResource("2_j7aeg")]([SubResource("Resource_d4u4r")])
 
 [node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
-polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 209.375, 61.7647, 232.813, -132.353, 260.938, -132.353, 476.563, -407.353, 609, -8, 937, -3, 945, 445, -103, 448)
+polygon = PackedVector2Array(-104, -8, 66, -4, 147, 153, 209.375, 61.7647, 232.813, -132.353, 260.938, -132.353, 467.188, -229.412, 601.563, 2.94116, 628.125, 450, -103, 448)
+
+[node name="Walls" parent="GameLevel" index="6"]
+wall_mode = 1
 
 [node name="WaterHazard" parent="GameLevel" instance=ExtResource("6_scx2d")]
 position = Vector2(257, 488)
@@ -78,9 +81,6 @@ forces_mask = 15
 
 [node name="House1" parent="GameLevel" instance=ExtResource("4_d3cex")]
 position = Vector2(43, 409)
-
-[node name="House2" parent="GameLevel" instance=ExtResource("4_d3cex")]
-position = Vector2(934, 407)
 
 [node name="Player" parent="GameLevel" instance=ExtResource("5_xyt2g")]
 position = Vector2(120, 427)

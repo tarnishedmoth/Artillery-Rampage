@@ -157,7 +157,7 @@ func explode(collided_body: PhysicsBody2D = null, force:bool = false):
 	if is_instance_valid(collided_body) and collided_body.get_collision_layer_value(10): # ProjectileBlocker (shield, etc) hack
 		# FIXME if not inside_of_players_shield...:
 		had_interaction = true
-	var affected_nodes = _find_interaction_overlaps()
+	var affected_nodes: Array[Node2D] = _find_interaction_overlaps()
 	
 	#region Node Group Determination
 

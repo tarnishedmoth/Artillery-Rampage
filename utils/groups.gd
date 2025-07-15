@@ -40,6 +40,8 @@ class RewardOnDestroyDetails:
 	const Personnel:StringName = &"Personnel"
 	const RewardTypeKey:StringName = &"RewardType"
 	const RewardAmountKey:StringName = &"RewardAmount"
+
+const InWaterTag:StringName = &"in_water"
 	
 func get_parent_in_group(node: Node, group: StringName) -> Node:
 	if node.is_in_group(group):
