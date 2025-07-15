@@ -6,8 +6,14 @@ class_name ApplyTypewriterEffect extends Node
 var effect:TypewriterEffect.TypewriterTextRevealer
 var cached_text:String
 
+# Needed for when we duplicate a node and the parent was derived instead of explicitly set
+# In that case we want to always replace it on ready
+var _derived_apply_to:bool
+
 func _ready() -> void:
-	if not apply_to: apply_to = get_parent()
+	if not apply_to or _derived_apply_to:
+		apply_to = get_parent()
+		_derived_apply_to = true
 
 	if connect_to_events:
 		if apply_to is CanvasItem:
@@ -15,8 +21,8 @@ func _ready() -> void:
 
 func run() -> void:
 	stop()
-	TypewriterEffect.apply_to(apply_to)
-
+	effect = TypewriterEffect.apply_to(apply_to)
+	
 func stop() -> void: if effect: effect.kill()
 
 func _on_visibility_changed() -> void:

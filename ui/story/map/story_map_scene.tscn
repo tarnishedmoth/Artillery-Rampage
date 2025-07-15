@@ -145,20 +145,11 @@ offset_right = 412.5
 offset_bottom = 23.0
 grow_horizontal = 2
 
-[node name="Glyph" type="Label" parent="StoryTooltips/Tooltip"]
+[node name="Description" type="Label" parent="StoryTooltips/Tooltip"]
 custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 label_settings = SubResource("LabelSettings_eclf1")
 autowrap_mode = 3
-
-[node name="ApplyTypewriterEffect" parent="StoryTooltips/Tooltip/Glyph" instance=ExtResource("12_5yfjk")]
-
-[node name="GSpacer" type="Control" parent="StoryTooltips/Tooltip"]
-custom_minimum_size = Vector2(16, 0)
-layout_mode = 2
-
-[node name="Description" type="Label" parent="StoryTooltips/Tooltip"]
-layout_mode = 2
 
 [node name="ApplyTypewriterEffect" parent="StoryTooltips/Tooltip/Description" instance=ExtResource("12_5yfjk")]
 

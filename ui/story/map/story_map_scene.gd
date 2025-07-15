@@ -36,10 +36,7 @@ var _center_node_offset:Vector2
 var _story_levels_resource:StoryLevelsResource
 var _next_level_index:int
 
-func _ready() -> void:
-	if graph_container.get_child_count() == 0: ## In testing, removing these two lines has no impact whether starting a new story or continuing.
-		_update()
-		
+func _ready() -> void:		
 	for layer in parallax_layers:
 		_parallax_layers.append(layer.global_position)
 		
@@ -363,8 +360,6 @@ func _create_scrolling_narrative(level:StoryLevel, active_node: StoryLevelNode) 
 		% [name, tooltipper.name, level.name])
 
 	var prototype:Control = tooltipper.sequence.back()
-	var narrative_nodes:Array[Control] = [prototype]
-	# TODO: all_narratives is dead code but keeping until we figure out typewriter
 	var all_narratives:Array[String] = level.narratives
 
 	# Copy and add the prototype
@@ -375,9 +370,7 @@ func _create_scrolling_narrative(level:StoryLevel, active_node: StoryLevelNode) 
 		node.hide()
 
 		tooltipper.sequence.push_back(node)
-
 		tooltipper.add_child(node)
-		narrative_nodes.append(node)
 
 	# Set text on first instance
 	prototype.get_child(0).text = all_narratives[0]
@@ -400,6 +393,7 @@ func _create_scrolling_narrative(level:StoryLevel, active_node: StoryLevelNode) 
 		narrative_pos.x += 100
 
 	#tooltipper.position = narrative_pos
+	tooltipper.restart_sequence()
 
 #region Auto Narrative Round Summary
 

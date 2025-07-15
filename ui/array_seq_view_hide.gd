@@ -9,12 +9,16 @@ var currently_visible_control: Control
 var current_sequence: Array
 var _current_sequence_index: int
 var _timer: Timer
+var starting:bool
 
 func _ready() -> void:
 	visibility_changed.connect(_on_visibility_changed)
+	restart_sequence()
+
+func restart_sequence() -> void:
 	if not sequence.is_empty():
 		start_sequence(sequence)
-
+		
 func start_sequence(array:Array) -> void:
 	if array.size() == 1:
 		array[0].show() 
@@ -28,8 +32,11 @@ func start_sequence(array:Array) -> void:
 		_current_sequence_index = 0
 
 	if _timer:
-		_timer.queue_free()
-		await _timer.tree_exited
+		# Capture the timer in the async stack so if it's called again without awaiting the timer still can be removed
+		var timer := _timer
+		_timer = null
+		timer.queue_free()
+		await timer.tree_exited
 
 	_timer = Timer.new()
 	add_child(_timer)
@@ -77,7 +84,8 @@ func _show_current_sequence_index() -> void:
 		_current_sequence_index = -1
 	
 func stop() -> void:
-	_timer.queue_free()
+	if _timer:
+		_timer.queue_free()
 
 func pause() -> void:
 	_timer.stop()
