@@ -1,0 +1,99 @@
+[gd_scene load_steps=8 format=3 uid="uid://wkgf24nayfc4"]
+
+[ext_resource type="Script" uid="uid://15p0x6nkxuml" path="res://ui/toast_notification.gd" id="1_hyh2t"]
+[ext_resource type="Theme" uid="uid://somhyiu2b38w" path="res://ui/themes/control_theme_tooltips.tres" id="2_hcqje"]
+[ext_resource type="FontFile" uid="uid://cr7d38d0438qq" path="res://ui/fonts/FreeSerifBold-rdMp.otf" id="3_tkii5"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_skg2d"]
+font = ExtResource("3_tkii5")
+font_size = 80
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_hcqje"]
+resource_name = "toast_fade"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(325, 348.5), Vector2(325, 100)]
+}
+
+[sub_resource type="Animation" id="Animation_tkii5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(595.5, 348.5)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_skg2d"]
+_data = {
+&"RESET": SubResource("Animation_tkii5"),
+&"toast_fade": SubResource("Animation_hcqje")
+}
+
+[node name="ToastNotification" type="CanvasLayer"]
+script = ExtResource("1_hyh2t")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -315.0
+offset_top = -260.0
+offset_right = 314.0
+offset_bottom = -23.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_hcqje")
+label_settings = SubResource("LabelSettings_skg2d")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_skg2d")
+}
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

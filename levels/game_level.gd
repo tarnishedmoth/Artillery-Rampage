@@ -19,6 +19,11 @@ var _scene_transitioned:bool = false
 ## Used to hold various spawnables such as [WeaponProjectile] and particle effects.
 var container_for_spawnables:Node2D
 
+const toast_notification_scene:PackedScene = preload("res://ui/toast_notification.tscn")
+
+@export_group("Notifications")
+@export var simultaneous_fire_message:String = "Shoot at same time!"
+
 func _ready() -> void:
 	screen_shake.enabled = UserOptions.enable_screenshake
 	GameEvents.user_options_changed.connect(_on_options_applied)
@@ -51,10 +56,18 @@ func begin_round():
 				
 	await round_director.begin_round()
 	
+	if round_director.is_simultaneous_fire:
+		_on_simultaneous_fire_mode_begin_round()
+	
 func activate_tank_controller(unit:TankController) -> void:
 	connect_events(unit)
 	round_director.add_controller(unit)
 		
+func _on_simultaneous_fire_mode_begin_round() -> void:
+	var toast_scene:Node = toast_notification_scene.instantiate()
+	toast_scene.message = simultaneous_fire_message
+	add_child(toast_scene)
+	
 func _on_player_killed(in_player: Player) -> void:
 	# Must free player as the player class does not do this when the tank is killed
 	# AI tank gets freed when the tank is killed

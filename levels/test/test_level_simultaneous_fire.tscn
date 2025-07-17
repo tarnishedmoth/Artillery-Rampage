@@ -10,7 +10,7 @@
 
 [node name="GameLevel" parent="." instance=ExtResource("1_vqxbj")]
 
-[node name="RoundDirector" parent="GameLevel" index="1"]
+[node name="RoundDirector" parent="GameLevel" index="2"]
 is_simultaneous_fire = true
 
 [node name="Enemy1" parent="GameLevel" instance=ExtResource("2_fxd5w")]
@@ -41,6 +41,7 @@ position = Vector2(934, 407)
 position = Vector2(120, 427)
 
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Walls"]
 [editable path="GameLevel/Enemy1"]
 [editable path="GameLevel/Enemy2"]
