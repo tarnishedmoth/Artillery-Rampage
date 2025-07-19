@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://eqdcshl1me76"]
+[gd_scene load_steps=8 format=3 uid="uid://eqdcshl1me76"]
 
 [sub_resource type="Gradient" id="Gradient_rfeyq"]
 colors = PackedColorArray(0.19, 0.187625, 0.1843, 1, 0.140447, 0.140447, 0.140447, 0)
@@ -11,34 +11,43 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.8, 0.8)
 
+[sub_resource type="Gradient" id="Gradient_61qm2"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_xr5mr"]
+gradient = SubResource("Gradient_61qm2")
+
 [sub_resource type="Curve" id="Curve_16yu1"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.266667, 0.730649), 1.33058, 1.33058, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="Gradient" id="Gradient_61qm2"]
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+[sub_resource type="CurveTexture" id="CurveTexture_ulbyk"]
+curve = SubResource("Curve_16yu1")
 
-[node name="DamagedSmokeParticles" type="CPUParticles2D" groups=["Wind_Particles2D"]]
-z_index = -1
-emitting = false
-amount = 12
-texture = SubResource("GradientTexture2D_x1oaf")
-lifetime = 2.8
-explosiveness = 0.01
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_66j7q"]
 lifetime_randomness = 0.2
-draw_order = 1
+particle_flag_disable_z = true
 emission_shape = 1
 emission_sphere_radius = 8.0
-direction = Vector2(0, -1)
+angle_min = -45.0
+angle_max = 45.0
+direction = Vector3(0, -1, 0)
 spread = 24.0
-gravity = Vector2(0, -6)
 initial_velocity_min = 16.0
 initial_velocity_max = 32.0
 angular_velocity_min = 10.0
 angular_velocity_max = 50.0
-angle_min = -45.0
-angle_max = 45.0
-scale_amount_min = 0.3
-scale_amount_max = 0.5
-scale_amount_curve = SubResource("Curve_16yu1")
-color_ramp = SubResource("Gradient_61qm2")
+gravity = Vector3(0, -6, 0)
+scale_min = 0.3
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_ulbyk")
+color_ramp = SubResource("GradientTexture1D_xr5mr")
+
+[node name="DamagedSmokeParticles" type="GPUParticles2D" groups=["Wind_Particles2D"]]
+z_index = -1
+amount = 32
+texture = SubResource("GradientTexture2D_x1oaf")
+lifetime = 5.0
+explosiveness = 0.01
+fixed_fps = 0
+process_material = SubResource("ParticleProcessMaterial_66j7q")
