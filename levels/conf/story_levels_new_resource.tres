@@ -316,7 +316,7 @@ ai_config_by_difficulty = Dictionary[int, ExtResource("2_rsbj2")]({
 2: SubResource("Resource_fw35h")
 })
 force_player_goes_first = false
-absolute_max_ai = 8
+absolute_max_ai = 5
 metadata/_custom_type_script = "uid://bbu2pp1ggq3ya"
 
 [sub_resource type="Resource" id="Resource_kbv8t"]

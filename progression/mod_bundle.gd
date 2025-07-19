@@ -160,12 +160,12 @@ func _new_rand_mod_weapon(chance_bias:int = 0) -> ModWeapon:
 			## Projectile shooting velocity.
 			mod.property = ModWeapon.Modifiables.POWER_LAUNCH_SPEED_MULT
 			mod.operation = ModWeapon.Operations.MULTIPLY
-			buff = chance(90 + chance_bias)
+			buff = chance(75 + chance_bias)
 			if buff:
-				mod.value = randf_range(maxf(0.1, randfn(0.5,0.25)),0.99)
+				mod.value = randf_range(maxf(1.0, randfn(1.25,0.75)),2.0)
 				_add_to_display_name_components("Increase Max Power", mod.value)
 			else:
-				mod.value = maxf(randf_range(randfn(1.5, 0.5),randfn(3.0, 1.0)), 1.1)
+				mod.value = randf_range(minf(1.0, randfn(0.75,0.25)),0.5)
 				_add_to_display_name_components("Reduce Max Power", mod.value)
 		4:
 			## Keep this weapon even when out of ammo.
@@ -182,7 +182,7 @@ func _new_rand_mod_weapon(chance_bias:int = 0) -> ModWeapon:
 		5:
 			## Infinite Ammo
 			mod.property = ModWeapon.Modifiables.USE_AMMO
-			buff = chance(90 + chance_bias)
+			buff = chance(75 + chance_bias)
 			if buff:
 				mod.operation = ModWeapon.Operations.SET_FALSE # Infinite ammo
 				# mod.value not needed

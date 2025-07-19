@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://bpq3kfwju28e8"]
+[gd_scene load_steps=38 format=3 uid="uid://bpq3kfwju28e8"]
 
 [ext_resource type="Script" uid="uid://bfl71q3d57n8s" path="res://levels/game_level.gd" id="1_8ylxn"]
 [ext_resource type="Script" uid="uid://ehj364xag1df" path="res://utils/game_timer.gd" id="2_iwr3d"]
@@ -27,6 +27,7 @@
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="21_iwr3d"]
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="21_k8tcd"]
 [ext_resource type="Script" uid="uid://dlosg08ehpwdc" path="res://levels/special/factory.gd" id="22_ja3hk"]
+[ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="24_2i235"]
 [ext_resource type="PackedScene" uid="uid://cv6k5ub7mpj8t" path="res://levels/day_weather.tscn" id="28_h1k02"]
 [ext_resource type="PackedScene" uid="uid://xnyh8uolctrv" path="res://buildings/evaporator/factorygreeble.tscn" id="30_5dbbs"]
 [ext_resource type="PackedScene" uid="uid://dkju13ltbvatr" path="res://buildings/evaporator/factorygreeble2.tscn" id="31_2i235"]
@@ -139,7 +140,7 @@ shuffle_order = false
 [node name="ArtillerySpawner" parent="GameLevel" instance=ExtResource("15_k8tcd")]
 unique_name_in_owner = true
 artillery_ai_types = Array[PackedScene]([ExtResource("18_vl2c1"), ExtResource("19_2i235"), ExtResource("20_h1k02"), ExtResource("21_k8tcd")])
-artillery_ai_starting_weapons = Array[PackedScene]([ExtResource("16_4t21x"), ExtResource("17_put14"), ExtResource("18_ba3th")])
+artillery_ai_starting_weapons = Array[PackedScene]([ExtResource("16_4t21x"), ExtResource("17_put14"), ExtResource("18_ba3th"), ExtResource("24_2i235")])
 num_ai_teams = 1
 
 [node name="PostProcessing" parent="GameLevel" instance=ExtResource("19_pk5c6")]
