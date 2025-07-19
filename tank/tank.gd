@@ -85,6 +85,8 @@ var angle_deviation:float
 var fall_start_position: Vector2
 var mark_falling: bool
 
+var previewer_disabled:bool = false
+
 # Effects
 @export_group("Debuffs (EMP, ...)", "debuff_")
 var emp_charge:float:
@@ -284,11 +286,16 @@ func _shoot_weapon(weapon:Weapon, power:float) -> void:
 	kill_active_previewer()
 	weapon.shoot(power)
 	
-func kill_active_previewer() -> void:
+func kill_active_previewer(until_next_turn:bool = true) -> void:
 	if shooting_trajectory_previewer:
 		shooting_trajectory_previewer.kill_all_projectiles()
 	if beam_trajectory_indicator:
 		beam_trajectory_indicator.kill_all_projectiles()
+	
+	if until_next_turn:
+		previewer_disabled = true
+		await GameEvents.turn_ended
+		previewer_disabled = false
 
 #region Damage and Death
 func take_damage(instigatorController: Node2D, instigator: Node2D, amount: float) -> void:
@@ -587,6 +594,7 @@ func push_weapon_update_to_hud(weapon: Weapon = get_equipped_weapon()) -> void:
 
 ## This method is not used by this class, instead it's used by [Player].
 func visualize_trajectory() -> void:
+	if previewer_disabled: return
 	if current_equipped_weapon:
 		match current_equipped_weapon.trajectory_indicator_type:
 			Weapon.TRAJECTORY_TYPES.BEAM:
