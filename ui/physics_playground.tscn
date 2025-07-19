@@ -40,7 +40,6 @@ shape = SubResource("WorldBoundaryShape2D_w3vgd")
 [node name="MouseHighlight" parent="." instance=ExtResource("3_vsddv")]
 
 [node name="AnimatableBody2D2" type="AnimatableBody2D" parent="MouseHighlight"]
-position = Vector2(1056, 512)
 physics_material_override = SubResource("PhysicsMaterial_bsnl6")
 sync_to_physics = false
 
