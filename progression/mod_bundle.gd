@@ -123,10 +123,12 @@ func _new_rand_mod_weapon(chance_bias:int = 0) -> ModWeapon:
 			mod.property = ModWeapon.Modifiables.ACCURACY_ANGLE_SPREAD
 			buff = chance(75 + chance_bias)
 			if buff:
+				mod.is_buff = true
 				mod.operation = ModWeapon.Operations.MULTIPLY
 				mod.value = randf_range(randfn(0.5, 0.25), 0.95)
 				_add_to_display_name_components("Reduce Spread", mod.value)
 			else:
+				mod.is_buff = false
 				mod.operation = ModWeapon.Operations.ADD
 				mod.value = randf_range(PI/36, PI/9)
 				_add_to_display_name_components("Increase Spread", mod.value)
@@ -136,10 +138,12 @@ func _new_rand_mod_weapon(chance_bias:int = 0) -> ModWeapon:
 			mod.property = ModWeapon.Modifiables.ALWAYS_SHOOT_FOR_COUNT
 			buff = chance(80 + chance_bias)
 			if buff:
+				mod.is_buff = true
 				mod.operation = ModWeapon.Operations.ADD
 				mod.value = randi_range(1,randi_range(1,5))
 				_add_to_display_name_components("More Shots", mod.value)
 			else:
+				mod.is_buff = false
 				mod.operation = ModWeapon.Operations.MULTIPLY
 				mod.value = randf_range(0.52, 0.9)
 				_add_to_display_name_components("Fewer Shots", mod.value)
@@ -149,10 +153,12 @@ func _new_rand_mod_weapon(chance_bias:int = 0) -> ModWeapon:
 			mod.property = ModWeapon.Modifiables.NUMBER_OF_SCENES_TO_SPAWN
 			buff = chance(80 + chance_bias)
 			if buff:
+				mod.is_buff = true
 				mod.operation = ModWeapon.Operations.ADD
 				mod.value = randi_range(1,randi_range(1,5))
 				_add_to_display_name_components("More Projectiles", mod.value)
 			else:
+				mod.is_buff = false
 				mod.operation = ModWeapon.Operations.MULTIPLY
 				mod.value = randf_range(0.52, 0.9)
 				_add_to_display_name_components("Fewer Projectiles", mod.value)
@@ -162,9 +168,11 @@ func _new_rand_mod_weapon(chance_bias:int = 0) -> ModWeapon:
 			mod.operation = ModWeapon.Operations.MULTIPLY
 			buff = chance(75 + chance_bias)
 			if buff:
+				mod.is_buff = true
 				mod.value = randf_range(maxf(1.0, randfn(1.25,0.75)),2.0)
 				_add_to_display_name_components("Increase Max Power", mod.value)
 			else:
+				mod.is_buff = false
 				mod.value = randf_range(minf(1.0, randfn(0.75,0.25)),0.5)
 				_add_to_display_name_components("Reduce Max Power", mod.value)
 		4:
@@ -172,10 +180,12 @@ func _new_rand_mod_weapon(chance_bias:int = 0) -> ModWeapon:
 			mod.property = ModWeapon.Modifiables.RETAIN_WHEN_EMPTY
 			buff = true
 			if buff:
+				mod.is_buff = true
 				mod.operation = ModWeapon.Operations.SET_TRUE # Retain when out of ammo
 				# mod.value not needed
 				_add_to_display_name_components("Retain when Empty", true)
 			else:
+				mod.is_buff = false
 				mod.operation = ModWeapon.Operations.SET_FALSE # Discard when out of ammo
 				# mod.value not needed
 				_add_to_display_name_components("Retain when Empty", false)
@@ -184,10 +194,12 @@ func _new_rand_mod_weapon(chance_bias:int = 0) -> ModWeapon:
 			mod.property = ModWeapon.Modifiables.USE_AMMO
 			buff = chance(75 + chance_bias)
 			if buff:
+				mod.is_buff = true
 				mod.operation = ModWeapon.Operations.SET_FALSE # Infinite ammo
 				# mod.value not needed
 				_add_to_display_name_components("Requires Ammunition", false)
 			else:
+				mod.is_buff = false
 				mod.operation = ModWeapon.Operations.SET_TRUE # Noninfinite ammo
 				# mod.value not needed
 				_add_to_display_name_components("Requires Ammunition", true)

@@ -27,6 +27,8 @@ enum Modifiables {
 @export var operation: Operations ## What operation to perform on the property value.
 @export var value:float ## Int or Float. Not used if Operation is SET_TRUE or SET_FALSE.
 
+@export var is_buff:bool = true ## Set by randomizer, used by item shop.
+
 func modify_projectile(projectile: WeaponProjectile) -> void:
 	var property_string:String = get_property_key(property)
 	var current_value = projectile.get(property_string) # This could be float, int, or bool

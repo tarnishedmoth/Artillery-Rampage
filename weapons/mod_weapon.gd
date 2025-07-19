@@ -40,6 +40,8 @@ enum Modifiables {
 @export_placeholder("Only needs set if not attached to weapon.") var target_weapon_name:String
 @export_placeholder("Only needs set if not attached to weapon.") var target_weapon_scene_path:String
 
+@export var is_buff:bool = true ## Set by randomizer, used by item shop.
+
 func modify_weapon(weapon: Weapon) -> void:
 	target_weapon_name = weapon.display_name # keep track
 	target_weapon_scene_path = weapon.scene_file_path
