@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://cwx6a57nrpgas"]
+[gd_scene load_steps=9 format=3 uid="uid://cwx6a57nrpgas"]
 
 [ext_resource type="Script" uid="uid://btecvempmygq6" path="res://items/weapon_projectiles/weapon_projectile_deployable.gd" id="1_rigkk"]
 [ext_resource type="PackedScene" uid="uid://b5qb8k2xaexhf" path="res://items/weapon_projectiles/weapon_projectile_leadballburst.tscn" id="2_wyx84"]
-[ext_resource type="PackedScene" uid="uid://gj55bahvsd7g" path="res://items/weapon_projectiles/explosions/explosion_leadball.tscn" id="3_kndst"]
+[ext_resource type="PackedScene" uid="uid://cypvrw81yj727" path="res://items/weapon_projectiles/explosions/mirv_projectile_launch_blast.tscn" id="3_t261w"]
+[ext_resource type="PackedScene" uid="uid://b6wcmxufjceme" path="res://items/weapon_projectiles/explosions/explosion_tiny.tscn" id="4_t261w"]
 [ext_resource type="Texture2D" uid="uid://dfrc1q8sg8747" path="res://items/weapon_projectiles/mirv_sprite_24.png" id="4_ujxr8"]
 [ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="5_4orei"]
 [ext_resource type="AudioStream" uid="uid://cgac4miv6d3uq" path="res://weapons/sounds/sfx_weapon_singleshot15.wav" id="6_hmlfd"]
@@ -18,13 +19,14 @@ max_contacts_reported = 1
 script = ExtResource("1_rigkk")
 sfx_trigger = NodePath("TriggerSFX")
 deploy_scene_to_spawn = ExtResource("2_wyx84")
+deploy_scene_riders = Array[PackedScene]([ExtResource("3_t261w")])
 deploy_number = 12
 deploy_velocity_impulse = 240.0
 deploy_delay = 0.1
 color = Color(0.345946, 0.345946, 0.345946, 1)
 max_lifetime = 8.0
 should_explode_on_impact = false
-explosion_to_spawn = ExtResource("3_kndst")
+explosion_to_spawn = ExtResource("4_t261w")
 max_falloff_distance = 50.0
 min_damage = 1.0
 max_damage = 10.0

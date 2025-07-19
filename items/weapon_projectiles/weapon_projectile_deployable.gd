@@ -70,7 +70,7 @@ func deploy() -> void:
 				var instance:Node2D = rider.instantiate()
 				instance.global_position = deployable.global_position
 				instance.global_rotation = deployable.global_rotation
-				deployable.add_child(instance)
+				deployed_container.add_child(instance)
 		
 		_current_projectile_index += 1 # Track which one we're setting up
 	
@@ -98,6 +98,7 @@ func _setup_deployable(deployable:Node2D, physics:bool = true) -> void:
 	var aim_angle = (TAU / deploy_number * _current_projectile_index) + random_offset
 	
 	deployable.global_position = self.global_position
+	deployable.global_rotation = aim_angle
 	if physics:
 		var spawn_velocity = Vector2(deploy_velocity_impulse, 0.0)
 		deployable.linear_velocity = spawn_velocity.rotated(aim_angle)

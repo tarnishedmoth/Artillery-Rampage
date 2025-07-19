@@ -1,0 +1,102 @@
+[gd_scene load_steps=16 format=3 uid="uid://cypvrw81yj727"]
+
+[ext_resource type="Script" uid="uid://bl6jwqokvmogc" path="res://items/weapon_projectiles/explosions/explosion.gd" id="1_jen0a"]
+[ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="3_03p0u"]
+[ext_resource type="Texture2D" uid="uid://drlrhymq3lay4" path="res://items/weapon_projectiles/explosions/explosion_sprite.tres" id="3_83ql4"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_83ql4"]
+blend_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_uthto"]
+interpolation_color_space = 1
+offsets = PackedFloat32Array(0.491503, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_83ql4"]
+gradient = SubResource("Gradient_uthto")
+width = 3
+height = 4
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.86, 0.86)
+
+[sub_resource type="Curve" id="Curve_83ql4"]
+_data = [Vector2(0, 1), 0.0, 0.0389057, 0, 0, Vector2(1, 0.859375), -0.222321, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_03p0u"]
+width = 32
+curve = SubResource("Curve_83ql4")
+
+[sub_resource type="Gradient" id="Gradient_33twc"]
+colors = PackedColorArray(0.972484, 0.996558, 0.878044, 1, 1, 0.908906, 0.843794, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_qjdep"]
+gradient = SubResource("Gradient_33twc")
+width = 16
+
+[sub_resource type="Gradient" id="Gradient_jen0a"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.0957004, 0.525659)
+colors = PackedColorArray(0.833144, 0.290312, 0, 1, 0.981759, 1, 0.377401, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_83ql4"]
+gradient = SubResource("Gradient_jen0a")
+width = 64
+
+[sub_resource type="Curve" id="Curve_gmydq"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.89062, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_d85sg"]
+width = 32
+curve = SubResource("Curve_gmydq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_jen0a"]
+particle_flag_align_y = true
+particle_flag_disable_z = true
+particle_flag_damping_as_friction = true
+angle_min = -45.0
+angle_max = 45.0
+inherit_velocity_ratio = 1.0
+direction = Vector3(0, 1, 0)
+spread = 5.0
+flatness = 1.0
+initial_velocity_min = 200.0
+initial_velocity_max = 300.0
+gravity = Vector3(0, 0, 0)
+damping_max = 1.0
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_d85sg")
+color_ramp = SubResource("GradientTexture1D_83ql4")
+color_initial_ramp = SubResource("GradientTexture1D_qjdep")
+alpha_curve = SubResource("CurveTexture_03p0u")
+
+[node name="MIRVProjectileLaunchBlast" type="Node2D" node_paths=PackedStringArray("gpu_particles", "lights")]
+z_index = 64
+script = ExtResource("1_jen0a")
+gpu_particles = [NodePath("Particles")]
+lights = [NodePath("PointLight2D")]
+lights_fade_time = 0.25
+metadata/_custom_type_script = "uid://bl6jwqokvmogc"
+
+[node name="Particles" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_83ql4")
+amount = 6
+texture = SubResource("GradientTexture2D_83ql4")
+lifetime = 0.2
+explosiveness = 1.0
+randomness = 0.25
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_jen0a")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(0, 8)
+energy = 1.5
+texture = ExtResource("3_83ql4")
+texture_scale = 0.5
+
+[node name="DebugSprite" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("3_03p0u")

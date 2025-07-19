@@ -36,9 +36,13 @@ position = Vector2(120, 427)
 
 [node name="WeaponMIRV" parent="GameLevel/Player/Weapons" index="0" instance=ExtResource("4_odlq2")]
 always_shoot_for_count = 6
+retain_when_empty = true
+use_ammo = false
 
 [node name="WeaponMiniMIRV2" parent="GameLevel/Player/Weapons" index="1" instance=ExtResource("7_u13ms")]
 always_shoot_for_count = 6
+retain_when_empty = true
+use_ammo = false
 
 [editable path="GameLevel/Enemy1"]
 [editable path="GameLevel/Player"]
