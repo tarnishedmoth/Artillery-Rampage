@@ -33,10 +33,14 @@ fractal_gain = 0.605
 
 [node name="GameLevel" parent="." instance=ExtResource("1_xgqds")]
 
+[node name="RoundDirector" parent="GameLevel" index="2"]
+player_goes_first = true
+shuffle_order = false
+
 [node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
 texture_resources = Array[ExtResource("3_qerjt")]([SubResource("Resource_msmqt")])
 
-[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="1"]
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
 polygon = PackedVector2Array(-103.906, 91.1765, 27.3438, 97.0588, 180.469, 58.8235, 408.594, 105.882, 586.719, 104.412, 939.844, 82.353, 945, 445, -103, 448)
 
 [node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("5_3waqd")]
@@ -46,18 +50,14 @@ height_win_size_min_variation = -0.02
 height_win_size_max_variation = 0.02
 max_height_clearance = 60.0
 
-[node name="Floor" parent="GameLevel" index="5"]
+[node name="Floor" parent="GameLevel" index="7"]
 visible = false
 
-[node name="Wind" parent="GameLevel" index="6"]
+[node name="Wind" parent="GameLevel" index="8"]
 wind_scale = 650.0
 wind_sign_bias = 0.2
 
-[node name="RoundDirector" parent="GameLevel" index="7"]
-player_goes_first = true
-shuffle_order = false
-
-[node name="ArtillerySpawner" parent="GameLevel" index="8"]
+[node name="ArtillerySpawner" parent="GameLevel" index="9"]
 artillery_ai_types = Array[PackedScene]([ExtResource("6_35a47"), ExtResource("7_3kjkd"), ExtResource("8_y2gw2"), ExtResource("9_cpjcf"), ExtResource("10_eg3ug"), ExtResource("11_awsy3"), ExtResource("12_jvp14"), ExtResource("13_kftm8")])
 default_ai_players = Vector2i(1, 4)
 ideal_min_spawn_separation = 250.0
@@ -80,9 +80,14 @@ position = Vector2(344, 463)
 [node name="WeaponShield" parent="GameLevel/Player/Weapons" index="0" instance=ExtResource("16_b0mkc")]
 use_ammo = false
 
+[node name="WeaponLaser3" parent="GameLevel/Player/Weapons" index="12"]
+trajectory_indicator_type = 1
+
 [editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
 [editable path="GameLevel/Terrain"]
 [editable path="GameLevel/Terrain/TerrainChunk"]
 [editable path="GameLevel/Walls"]
 [editable path="GameLevel/ArtillerySpawner"]
 [editable path="GameLevel/Player"]
+[editable path="GameLevel/Player/Tank/AimDamageWobble/PlayerActivateWobble"]

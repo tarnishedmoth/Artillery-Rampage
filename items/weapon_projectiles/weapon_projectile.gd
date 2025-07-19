@@ -26,6 +26,7 @@ signal completed_lifespan(projectile:WeaponProjectile) ## Tracked by Weapon clas
 ## When [member kill_after_turns_elapsed] is used, this time emits [signal completed_lifespan].
 @export var max_lifetime: float = 10.0
 @export_range(0,99) var kill_after_turns_elapsed:int = 0 ## If >0, destroys after turns passed.
+@export var kill_after_turns_elapsed_count_only_self_turns:bool = true ## Related to [member kill_after_turns_elapsed].
 @export var is_affected_by_wind:bool = true ## Whether or not [Wind] tracks and applies forces to this object.
 ## Indicate whether this projectile should destroy itself after an interaction.
 ## See [method disarm] and [method arm] to change the state at runtime.
@@ -89,7 +90,7 @@ func _ready() -> void:
 		destructible_component = get_node('Destructible')
 		
 	if kill_after_turns_elapsed > 0:
-		GameEvents.turn_ended.connect(_on_turn_ended.unbind(1))
+		GameEvents.turn_started.connect(_on_turn_started)
 		_emit_completed_lifespan_without_destroying(max_lifetime) # Relinquish turn control
 	elif max_lifetime > 0.0: destroy_after_lifetime()
 	
@@ -415,7 +416,12 @@ func _emit_completed_lifespan_without_destroying(time:float) -> void:
 	if time > 0.0: await get_tree().create_timer(time).timeout
 	completed_lifespan.emit(self)
 	
-func _on_turn_ended() -> void:
+func _on_turn_started(_controller: TankController) -> void:
+	if kill_after_turns_elapsed_count_only_self_turns:
+		## Only count turn changes if owner tank is alive and their turn just ended.
+		if owner_tank:
+			if _controller != owner_tank.controller:
+				return
 	# Increment turn count
 	_turns_since_spawned += 1
 	if _turns_since_spawned >= kill_after_turns_elapsed:

@@ -6,11 +6,14 @@
 [node name="WeaponProjectile" type="RigidBody2D" groups=["Player"]]
 collision_layer = 0
 collision_mask = 0
+gravity_scale = 0.0
 freeze = true
 max_contacts_reported = 1
 script = ExtResource("1_6p7r8")
 max_lifetime = 1.0
-kill_after_turns_elapsed = 2
+kill_after_turns_elapsed = 1
+is_affected_by_wind = false
+should_explode_on_impact = false
 damage_falloff_type = 0
 min_falloff_distance = 0.0
 max_falloff_distance = 0.0
@@ -19,6 +22,5 @@ max_damage = 0.0
 damage_multiplier = 0.0
 destructible_scale_multiplier = Vector2(6, 6)
 destructible_scale_multiplier_scalar = 0.0
-should_explode_on_impact = false
 
 [node name="KineticShield" parent="." instance=ExtResource("2_nps0b")]
