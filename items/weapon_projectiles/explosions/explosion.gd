@@ -17,6 +17,7 @@ signal completed
 
 ## Will wait until all emit [signal finished] to [method queue_free] this object.
 @export var particles:Array[CPUParticles2D]
+@export var gpu_particles:Array[GPUParticles2D]
 # AudioStreamPlayer and AudioStreamPlayer2D are not related
 # Also we could use the type of Player that layers sounds itself.
 ## Will wait until all emit [signal finished] to [method queue_free] this object.
@@ -38,6 +39,13 @@ func destroy() -> void:
 func play_all() -> void:
 	var emitted:int = 0
 	for effect in particles:
+		effect.emitting = false
+		effect.one_shot = true
+		effect.finished.connect(_on_particles_finished)
+		effect.restart() # We could just set the nodes themselves to autoplay & not intervene
+		emitted += 1
+		
+	for effect in gpu_particles:
 		effect.emitting = false
 		effect.one_shot = true
 		effect.finished.connect(_on_particles_finished)
