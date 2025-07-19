@@ -44,6 +44,9 @@ always_shoot_for_count = 6
 retain_when_empty = true
 use_ammo = false
 
+[node name="WeaponLaser3" parent="GameLevel/Player/Weapons" index="13"]
+trajectory_indicator_type = 1
+
 [editable path="GameLevel/Enemy1"]
 [editable path="GameLevel/Player"]
 [editable path="GameLevel/Player/Tank/AimDamageWobble/PlayerActivateWobble"]

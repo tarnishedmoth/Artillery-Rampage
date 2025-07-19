@@ -39,6 +39,12 @@ signal magazines_changed(current_magazines:int)
 ## Emitted when Player presses the "Cycle Weapon Mode" key.
 signal mode_change(current_mode:int)
 
+enum TRAJECTORY_TYPES {
+	NONE = 0,
+	PROJECTILE = 1,
+	BEAM = 2,
+}
+
 #region Variables
 ## This scene is spawned and set up when this weapon is fired. It is designed to use
 ## [WeaponProjectile], but it also accepts other types, you may need to tinker.
@@ -72,7 +78,7 @@ var projectile_mods: Array[ModProjectile]
 
 @export_group("Behavior")
 
-@export_enum("Projectile", "Beam") var trajectory_indicator_type: String = "Projectile"
+@export var trajectory_indicator_type: TRAJECTORY_TYPES = TRAJECTORY_TYPES.PROJECTILE
 
 ## Inaccuracy of projectiles fired. A value of 0.0 is always perfectly accurate.
 @export_range(0.0,360,0.0001,"radians_as_degrees") var accuracy_angle_spread: float = 0.0
