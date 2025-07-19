@@ -60,9 +60,11 @@ func _get_total_current_ammo(in_weapon: Weapon) -> int:
 func set_buy_button_text_by_state() -> void:
 	if buy_button.disabled:
 		buy_button.text = buy_button_owned_text
+		buy_button.set_pressed_no_signal(true)
 		current_ammo_row.show()
 	else:
 		buy_button.text = buy_button_not_owned_text
+		buy_button.set_pressed_no_signal(false)
 		current_ammo_row.hide()
 
 func _on_buy_button_toggled(toggled_on: bool) -> void:
