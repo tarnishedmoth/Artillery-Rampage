@@ -2,16 +2,16 @@
 
 [ext_resource type="Script" uid="uid://btecvempmygq6" path="res://items/weapon_projectiles/weapon_projectile_deployable.gd" id="1_wgrqp"]
 [ext_resource type="PackedScene" uid="uid://qjakm7qdri7x" path="res://items/weapon_projectiles/weapon_projectile_small.tscn" id="2_duidj"]
-[ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="3_3drbo"]
 [ext_resource type="PackedScene" uid="uid://gj55bahvsd7g" path="res://items/weapon_projectiles/explosions/explosion_leadball.tscn" id="3_riydy"]
 [ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="4_trup7"]
+[ext_resource type="Texture2D" uid="uid://dfrc1q8sg8747" path="res://items/weapon_projectiles/mirv_sprite_24.png" id="4_ud1ss"]
 [ext_resource type="AudioStream" uid="uid://cgac4miv6d3uq" path="res://weapons/sounds/sfx_weapon_singleshot15.wav" id="5_544do"]
 [ext_resource type="Script" uid="uid://bjpelktvpajtj" path="res://items/weapon_projectiles/apex_sensor.gd" id="7_v0wp2"]
 
 [node name="WeaponProjectileDeployableMIRV" type="RigidBody2D" node_paths=PackedStringArray("sfx_trigger")]
 collision_layer = 2
 collision_mask = 29
-mass = 2.0
+mass = 4.0
 continuous_cd = 2
 contact_monitor = true
 max_contacts_reported = 1
@@ -21,6 +21,7 @@ deploy_scene_to_spawn = ExtResource("2_duidj")
 deploy_number = 3
 deploy_velocity_impulse = 120.0
 deploy_delay = 0.3
+color = Color(0.181798, 0.181798, 0.181798, 1)
 should_explode_on_impact = false
 explosion_to_spawn = ExtResource("3_riydy")
 min_damage = 2.0
@@ -28,10 +29,9 @@ max_damage = 15.0
 destructible_scale_multiplier = Vector2(5, 5)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("3_3drbo")
+texture = ExtResource("4_ud1ss")
 
-[node name="CollisionShade2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = ExtResource("4_trup7")
 
 [node name="TriggerSFX" type="AudioStreamPlayer2D" parent="."]
