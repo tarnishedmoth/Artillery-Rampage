@@ -264,7 +264,7 @@ func explode_and_force_destroy(body:PhysicsBody2D = null, force:bool = false):
 	
 func destroy():
 	if destroyed:
-		print_debug("WeaponProjectile(%s): Already destroyed" % name)
+		#print_debug("WeaponProjectile(%s): Already destroyed" % name)
 		return
 		
 	destroyed = true
@@ -345,7 +345,7 @@ func _find_interaction_overlaps() -> Array[Node2D]:
 
 	var collision_results: Array[Node2D] = []
 
-	print("WeaponProjectile(" + name + "): Found " + str(results.size()) + " overlaps with projectile")
+	#print("WeaponProjectile(" + name + "): Found " + str(results.size()) + " overlaps with projectile")
 	for result:Dictionary in results:
 		var collider = result["collider"] as Node2D
 		if(!is_instance_valid(collider)):
@@ -432,7 +432,7 @@ func apply_new_mod(mod: ModProjectile) -> void:
 func _apply_post_processing() -> void:
 	if not post_processing_scene or not SceneManager._current_level_root_node:
 		return
-	print_debug("%s - Adding post-processing scene=%s" % [name, post_processing_scene.resource_path])
+	#print_debug("%s - Adding post-processing scene=%s" % [name, post_processing_scene.resource_path])
 	var effect_node: Node2D = post_processing_scene.instantiate() as Node2D
 	if not effect_node:
 		push_error("%s - Could not instantiate post-processing scene=%s" % [name, post_processing_scene.resource_path])

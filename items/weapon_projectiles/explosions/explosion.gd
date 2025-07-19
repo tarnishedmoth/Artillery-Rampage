@@ -61,7 +61,8 @@ func play_all() -> void:
 		player.play() # We could just set the nodes themselves to autoplay & not intervene
 		played += 1
 	if emitted > 0 or played > 0:
-		print_debug("Explosion handled ",played," sfx & ",emitted," particles.")
+		#print_debug("Explosion handled ",played," sfx & ",emitted," particles.")
+		pass
 	else:
 		free_after_delay() # Bad configuration
 		
