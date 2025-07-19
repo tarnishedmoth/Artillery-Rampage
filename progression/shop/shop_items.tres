@@ -165,12 +165,12 @@ metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 script = ExtResource("1_553xf")
 item_scene = ExtResource("14_kc67y")
 item_type = 0
-unlock_cost = 6
+unlock_cost = 10
 unlock_cost_type = 0
-refill_cost = 2.0
-retain_empty_refill_discount = 0.5
+refill_cost = 1.0
+retain_empty_refill_discount = 1.0
 refill_cost_type = 0
-disable = true
+disable = false
 metadata/_custom_type_script = "uid://c4t1rw2yd6b0j"
 
 [sub_resource type="Resource" id="Resource_hcws4"]
