@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://btq3rsvojx8jg"]
+[gd_scene load_steps=10 format=3 uid="uid://btq3rsvojx8jg"]
 
 [ext_resource type="Script" uid="uid://h6u2jfcquhy4" path="res://ui/pause_menu.gd" id="1_4r0b1"]
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="1_smh4t"]
@@ -6,6 +6,7 @@
 [ext_resource type="Theme" uid="uid://somhyiu2b38w" path="res://ui/themes/control_theme_tooltips.tres" id="4_avurv"]
 [ext_resource type="Script" uid="uid://dppl1kjawyh70" path="res://ui/events_log.gd" id="4_npydk"]
 [ext_resource type="PackedScene" uid="uid://4fvuu8ogar6b" path="res://ui/mouse_highlight_follower.tscn" id="6_6ap7o"]
+[ext_resource type="PackedScene" uid="uid://dqkfnyd4k7b7t" path="res://ui/story/run_count_label.tscn" id="6_j3kxr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uvw1r"]
 bg_color = Color(0, 0, 0, 0.427451)
@@ -140,6 +141,11 @@ vertical_alignment = 1
 [node name="Spacer2" type="Control" parent="Panel/PauseMenu/EventsLog/VBoxContainer"]
 custom_minimum_size = Vector2(0, 128)
 layout_mode = 2
+
+[node name="StoryRunCountLabel" parent="." instance=ExtResource("6_j3kxr")]
+layout_mode = 1
+offset_right = 180.0
+offset_bottom = 60.0
 
 [node name="MouseHighlight" parent="." instance=ExtResource("6_6ap7o")]
 

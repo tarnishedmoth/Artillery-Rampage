@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://j4if1rryqdp3"]
+[gd_scene load_steps=12 format=3 uid="uid://j4if1rryqdp3"]
 
 [ext_resource type="Script" uid="uid://cxevx3vi7ixrc" path="res://levels/game_over.gd" id="1_51duh"]
 [ext_resource type="Theme" uid="uid://djf2yc1tmc0u8" path="res://ui/themes/control_theme_main_menu.tres" id="1_375dy"]
 [ext_resource type="AudioStream" uid="uid://bfsk5b6gxtcen" path="res://music/round_lost.wav" id="2_i7eks"]
 [ext_resource type="PackedScene" uid="uid://bqfcd8w6wtoo0" path="res://utils/pulse_modulate.tscn" id="3_b3xmm"]
+[ext_resource type="PackedScene" uid="uid://dqkfnyd4k7b7t" path="res://ui/story/run_count_label.tscn" id="4_bsnl6"]
 [ext_resource type="PackedScene" uid="uid://ttxjggljb6fs" path="res://ui/physics_playground.tscn" id="5_b3xmm"]
 
 [sub_resource type="Gradient" id="Gradient_px7av"]
@@ -88,6 +89,11 @@ layout_mode = 2
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 24
 text = "Quit"
+
+[node name="StoryRunCountLabel" parent="." instance=ExtResource("4_bsnl6")]
+layout_mode = 0
+offset_right = 180.0
+offset_bottom = 60.0
 
 [node name="loseSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_i7eks")

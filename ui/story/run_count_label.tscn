@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://dqkfnyd4k7b7t"]
+
+[ext_resource type="FontFile" uid="uid://cg5hjbm350ehu" path="res://ui/typewriter_font.fnt" id="1_og5pj"]
+[ext_resource type="Script" uid="uid://k16uk7si8jf8" path="res://ui/story/run_count_label.gd" id="2_m8ifd"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_8olf0"]
+font = ExtResource("1_og5pj")
+font_size = 24
+
+[node name="StoryRunCountLabel" type="Label"]
+modulate = Color(0.959263, 0.841336, 0.380551, 1)
+custom_minimum_size = Vector2(180, 60)
+offset_right = 40.0
+offset_bottom = 34.0
+text = "Run #2"
+label_settings = SubResource("LabelSettings_8olf0")
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("2_m8ifd")

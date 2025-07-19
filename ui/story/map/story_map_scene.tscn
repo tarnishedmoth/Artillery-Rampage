@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://bh3bmcratw025"]
+[gd_scene load_steps=26 format=3 uid="uid://bh3bmcratw025"]
 
 [ext_resource type="Script" uid="uid://d3mw66c4x3kum" path="res://ui/story/map/story_map_scene.gd" id="1_5v7n8"]
 [ext_resource type="Theme" uid="uid://ddklgnmfj25sv" path="res://ui/story/story_theme.tres" id="1_nmkcg"]
@@ -17,6 +17,7 @@
 [ext_resource type="FontFile" uid="uid://cg5hjbm350ehu" path="res://ui/typewriter_font.fnt" id="10_h2lnq"]
 [ext_resource type="PackedScene" uid="uid://dk3gncj3bxnyj" path="res://ui/apply_typewriter_effect.tscn" id="12_5yfjk"]
 [ext_resource type="AudioStream" uid="uid://cudd5extbrrsl" path="res://ui/sounds/chatty_signal_short_b.wav" id="13_2etp1"]
+[ext_resource type="PackedScene" uid="uid://dqkfnyd4k7b7t" path="res://ui/story/run_count_label.tscn" id="16_8olf0"]
 
 [sub_resource type="Gradient" id="Gradient_jpvwg"]
 interpolation_mode = 2
@@ -231,6 +232,9 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 8
 flat = true
+
+[node name="StoryRunCountLabel" parent="." instance=ExtResource("16_8olf0")]
+layout_mode = 0
 
 [node name="AutoNarrative" parent="." instance=ExtResource("7_mer82")]
 unique_name_in_owner = true
