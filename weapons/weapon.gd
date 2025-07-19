@@ -55,13 +55,12 @@ enum TRAJECTORY_TYPES {
 ## of [ModProjectile] when shot, in [method _spawn_projectile].
 var parent_tank: Tank
 
-## Used by the player's in-game HUD UI. It automatically adds a denotion when [code]get[/code]
-## if the [Weapon] is modified with [ModWeapon].
-@export var display_name: String:
-	get:
-		if not weapon_mods.is_empty():
-			return str(display_name + ": Modified")
-		else: return display_name
+## Used by the player's in-game HUD UI.
+@export var display_name: String#:
+	#get:
+		#if not weapon_mods.is_empty():
+			#return str(display_name + ": Modified")
+		#else: return display_name
 
 ## Used by the Story Shop UI to provide tooltip info about the weapon.
 @export_multiline var description: String
