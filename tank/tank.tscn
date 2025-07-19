@@ -132,8 +132,9 @@ texture_scale = 0.25
 [node name="DayWeatherReact" parent="TankBody" node_paths=PackedStringArray("lights") instance=ExtResource("10_yxfy5")]
 lights = [NodePath("../TankTurret/Spotlight"), NodePath("../PointLight2D"), NodePath("../PointLight2D2")]
 
-[node name="DamagedSmokeParticles" parent="TankBody" instance=ExtResource("8_adwvx")]
-unique_name_in_owner = true
+[node name="RemoteTransform2DforSmoke" type="RemoteTransform2D" parent="TankBody"]
+remote_path = NodePath("../../DamagedSmokeParticles")
+update_scale = false
 
 [node name="FiredWeaponContainer" type="Node" parent="."]
 
@@ -152,6 +153,9 @@ metadata/_custom_type_script = "uid://cu7a4bvlikg2j"
 script = ExtResource("12_0knov")
 target = NodePath("..")
 scene_to_spawn = ExtResource("13_sdcn4")
+
+[node name="DamagedSmokeParticles" parent="." instance=ExtResource("8_adwvx")]
+unique_name_in_owner = true
 
 [node name="Parachute" type="Sprite2D" parent="."]
 unique_name_in_owner = true

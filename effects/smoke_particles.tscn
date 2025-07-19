@@ -1,15 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://eqdcshl1me76"]
+[gd_scene load_steps=7 format=3 uid="uid://eqdcshl1me76"]
 
-[sub_resource type="Gradient" id="Gradient_rfeyq"]
-colors = PackedColorArray(0.19, 0.187625, 0.1843, 1, 0.140447, 0.140447, 0.140447, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_x1oaf"]
-gradient = SubResource("Gradient_rfeyq")
-width = 128
-height = 128
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.8, 0.8)
+[ext_resource type="Texture2D" uid="uid://iw266alg2pc2" path="res://destructible/rubble/smoke_3.png" id="1_ulbyk"]
 
 [sub_resource type="Gradient" id="Gradient_61qm2"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -26,6 +17,7 @@ curve = SubResource("Curve_16yu1")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_66j7q"]
 lifetime_randomness = 0.2
+particle_flag_rotate_y = true
 particle_flag_disable_z = true
 emission_shape = 1
 emission_sphere_radius = 8.0
@@ -35,19 +27,20 @@ direction = Vector3(0, -1, 0)
 spread = 24.0
 initial_velocity_min = 16.0
 initial_velocity_max = 32.0
-angular_velocity_min = 10.0
-angular_velocity_max = 50.0
+angular_velocity_min = 4.99998
+angular_velocity_max = 25.0
 gravity = Vector3(0, -6, 0)
-scale_min = 0.3
-scale_max = 0.5
+scale_min = 0.4
 scale_curve = SubResource("CurveTexture_ulbyk")
 color_ramp = SubResource("GradientTexture1D_xr5mr")
 
 [node name="DamagedSmokeParticles" type="GPUParticles2D" groups=["Wind_Particles2D"]]
+self_modulate = Color(0.391185, 0.391185, 0.391185, 0.227451)
 z_index = -1
 amount = 32
-texture = SubResource("GradientTexture2D_x1oaf")
+texture = ExtResource("1_ulbyk")
 lifetime = 5.0
 explosiveness = 0.01
 fixed_fps = 0
+draw_order = 2
 process_material = SubResource("ParticleProcessMaterial_66j7q")
