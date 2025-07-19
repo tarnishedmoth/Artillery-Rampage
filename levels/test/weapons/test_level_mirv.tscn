@@ -25,19 +25,6 @@ forces_mask = 15
 position = Vector2(479, 278)
 use_ammo = false
 
-[node name="Enemy2" parent="GameLevel" instance=ExtResource("2_bwejw")]
-position = Vector2(1100, 426)
-
-[node name="Tank" parent="GameLevel/Enemy2" index="0"]
-color = Color(0.137255, 0.180392, 0.701961, 1)
-
-[node name="LobberAiBehavior" parent="GameLevel/Enemy2/StateMachine" index="0" instance=ExtResource("3_yd5fc")]
-forces_mask = 15
-
-[node name="WeaponDeployableMIRV" parent="GameLevel/Enemy2/Weapons" index="0" instance=ExtResource("4_odlq2")]
-position = Vector2(1100, 426)
-use_ammo = false
-
 [node name="House1" parent="GameLevel" instance=ExtResource("4_f7dg7")]
 position = Vector2(43, 409)
 
@@ -47,8 +34,12 @@ position = Vector2(934, 407)
 [node name="Player" parent="GameLevel" instance=ExtResource("5_wxlom")]
 position = Vector2(120, 427)
 
-[node name="WeaponMiniMIRV" parent="GameLevel/Player/Weapons" index="0" instance=ExtResource("7_u13ms")]
+[node name="WeaponMIRV" parent="GameLevel/Player/Weapons" index="0" instance=ExtResource("4_odlq2")]
+always_shoot_for_count = 6
+
+[node name="WeaponMiniMIRV2" parent="GameLevel/Player/Weapons" index="1" instance=ExtResource("7_u13ms")]
+always_shoot_for_count = 6
 
 [editable path="GameLevel/Enemy1"]
-[editable path="GameLevel/Enemy2"]
 [editable path="GameLevel/Player"]
+[editable path="GameLevel/Player/Tank/AimDamageWobble/PlayerActivateWobble"]

@@ -15,6 +15,7 @@ class_name WeaponProjectileDeployable extends WeaponProjectile
 @export var sfx_trigger:AudioStreamPlayer2D
 @export_group("Deployables", "deploy_")
 @export var deploy_scene_to_spawn: PackedScene ## Spawned upon deployment
+@export var deploy_scene_riders: Array[PackedScene] ## Also spawned upon deployment and childed to each [deploy_scene_to_spawn]. Used for special effects not present in the base projectile scene.
 @export var deploy_number: int = 1 ## Spawns multiple scene_to_spawn distributed evenly
 @export var deploy_velocity_impulse: float = 0.0 ## Applies a one-time force to the spawned objects.
 @export var deploy_delay: float = 0.5 ## Delay after first collision before deploying.
@@ -23,7 +24,6 @@ class_name WeaponProjectileDeployable extends WeaponProjectile
 @export var destroy_after_deployables_destroyed:bool = false ## For spawning new projectiles i.e. MIRV
 @export_category("NOTE: WeaponProjectile settings below do not apply to deployable scene_to_spawn.")
 @export var understood:bool ## This has no effect.
-#@export var 
 # public
 var deployed_container:Node
 var deployed:Array
@@ -35,6 +35,7 @@ var _deployed_lifespan_completed:int = 0
 
 var _explosion_played:bool = false
 # @onready
+
 #endregion
 
 
@@ -48,11 +49,13 @@ func _ready() -> void:
 func deploy() -> void:
 	_current_projectile_index = 1
 	for i in deploy_number:
-		var deployable = deploy_scene_to_spawn.instantiate()
+		var deployable:Node2D = deploy_scene_to_spawn.instantiate()
+		
 		if deployable is RigidBody2D:
 			_setup_deployable(deployable, true)
 		else:
 			_setup_deployable(deployable, false)
+			
 		if deployable is WeaponProjectile:
 			if is_instance_valid(owner_tank) and is_instance_valid(source_weapon):
 				deployable.set_sources(owner_tank,source_weapon)
@@ -61,6 +64,14 @@ func deploy() -> void:
 				print_debug("%s: Tank and/or weapon invalid - destroying immediately" % [name])
 				deployable.explode_and_force_destroy()
 				break
+				
+		if deploy_scene_riders.size() > 0:
+			for rider in deploy_scene_riders:
+				var instance:Node2D = rider.instantiate()
+				instance.global_position = deployable.global_position
+				instance.global_rotation = deployable.global_rotation
+				deployable.add_child(instance)
+		
 		_current_projectile_index += 1 # Track which one we're setting up
 	
 	if destroy_after_deployed: destroy()
