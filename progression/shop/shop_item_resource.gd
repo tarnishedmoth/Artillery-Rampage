@@ -27,8 +27,8 @@ enum ItemType
 ## Fractional amounts will be always rounded up (ceili) when determining cost
 @export var refill_cost:float
 
-## Discount applied to refills when the retain when empty flag is set on the item
-@export var retain_empty_refill_discount:float = 0.5
+## Discount applied to refills when the retain when empty flag is set on the item. Multiplier (1.0 is no discount)
+@export_range(0.0, 1.0, 0.05, "or_greater") var retain_empty_refill_discount:float = 0.5
 
 @export var refill_cost_type:CostType = CostType.Scrap
 
