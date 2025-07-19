@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://d2kx5hvsxsu7h"]
+[gd_scene load_steps=22 format=3 uid="uid://d2kx5hvsxsu7h"]
 
 [ext_resource type="Script" uid="uid://e1gq6cjfgr7d" path="res://progression/upgrade_select.gd" id="1_dt2xf"]
 [ext_resource type="Theme" uid="uid://bf5nv0nins5p6" path="res://ui/themes/shop.tres" id="1_iqa7v"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://c2ybgs20rgnsl" path="res://progression/ui_upgrades_list.gd" id="6_qqn3m"]
 [ext_resource type="Theme" uid="uid://dhdbc8ledcupg" path="res://ui/themes/control_theme_upgrade_mod_displays.tres" id="7_7cnor"]
 [ext_resource type="PackedScene" uid="uid://ci2sausuoqug6" path="res://ui/mod_display_panel.tscn" id="9_s6y8q"]
+[ext_resource type="PackedScene" uid="uid://4fvuu8ogar6b" path="res://ui/mouse_highlight_follower.tscn" id="10_mftle"]
 
 [sub_resource type="Gradient" id="Gradient_vi8hs"]
 interpolation_mode = 2
@@ -100,6 +101,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -14.0
+offset_bottom = 14.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 32
@@ -237,6 +240,8 @@ theme_override_font_sizes/font_size = 20
 disabled = true
 text = "Continue ..."
 flat = true
+
+[node name="MouseHighlight" parent="." instance=ExtResource("10_mftle")]
 
 [connection signal="selected" from="Everything/VBoxContainer/ReceiveUpgradeButton" to="." method="_on_button_upgrade_random_selected"]
 [connection signal="pressed" from="Everything/VBoxContainer/CurrentUpgradesPanel/VBox/ContinueButton" to="." method="_on_continue_button_pressed"]

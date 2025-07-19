@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://4fvuu8ogar6b"]
+
+[ext_resource type="Script" uid="uid://ceao0gocc6tih" path="res://utils/mouse_follower.gd" id="1_0m4h3"]
+
+[sub_resource type="Gradient" id="Gradient_eclf1"]
+interpolation_color_space = 1
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_aab2y"]
+gradient = SubResource("Gradient_eclf1")
+width = 512
+height = 512
+use_hdr = true
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.85, 0.15)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bsnl6"]
+friction = 0.0
+absorbent = true
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qcrq3"]
+radius = 60.0
+
+[node name="MouseHighlight" type="PointLight2D"]
+energy = 1.25
+blend_mode = 2
+range_item_cull_mask = 3
+shadow_enabled = true
+shadow_filter = 2
+texture = SubResource("GradientTexture2D_aab2y")
+height = 256.0
+
+[node name="MouseFollower" type="Node2D" parent="."]
+script = ExtResource("1_0m4h3")
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="."]
+physics_material_override = SubResource("PhysicsMaterial_bsnl6")
+sync_to_physics = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableBody2D"]
+shape = SubResource("CircleShape2D_qcrq3")

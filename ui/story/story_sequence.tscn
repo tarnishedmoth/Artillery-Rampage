@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://b2y0ohhcprxun"]
+[gd_scene load_steps=12 format=3 uid="uid://b2y0ohhcprxun"]
 
 [ext_resource type="Script" uid="uid://c838e2q5kwly0" path="res://ui/story/story_sequence.gd" id="1_n5gvg"]
 [ext_resource type="Theme" uid="uid://ddklgnmfj25sv" path="res://ui/story/story_theme.tres" id="2_l35kj"]
 [ext_resource type="AudioStream" uid="uid://ctap40wc8oldk" path="res://ui/sounds/chatty_signal_short_a.wav" id="3_yker4"]
 [ext_resource type="AudioStream" uid="uid://cudd5extbrrsl" path="res://ui/sounds/chatty_signal_short_b.wav" id="4_audl8"]
 [ext_resource type="AudioStream" uid="uid://c8m44nf2qa2fn" path="res://ui/sounds/chatty_signal_full.wav" id="5_cxhl0"]
+[ext_resource type="PackedScene" uid="uid://4fvuu8ogar6b" path="res://ui/mouse_highlight_follower.tscn" id="5_iyary"]
 [ext_resource type="AudioStream" uid="uid://ddspsoaqj8x58" path="res://ui/sounds/alarm_c_press.wav" id="5_yker4"]
 
 [sub_resource type="Gradient" id="Gradient_qpegy"]
@@ -233,6 +234,8 @@ custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 size_flags_vertical = 8
 text = "Next"
+
+[node name="MouseHighlight" parent="." instance=ExtResource("5_iyary")]
 
 [node name="SFX" type="Node2D" parent="."]
 
