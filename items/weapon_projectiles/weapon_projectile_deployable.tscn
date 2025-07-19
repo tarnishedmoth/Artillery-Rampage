@@ -8,7 +8,7 @@
 
 [node name="WeaponProjectileDeployable" type="RigidBody2D" node_paths=PackedStringArray("sfx_trigger")]
 collision_layer = 2
-collision_mask = 31
+collision_mask = 541
 mass = 2.0
 contact_monitor = true
 max_contacts_reported = 1

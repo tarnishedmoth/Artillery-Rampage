@@ -275,7 +275,9 @@ func destroy():
 		spawn_explosion(explosion_to_spawn)
 	
 	_apply_post_processing()
-	completed_lifespan.emit(self)
+	
+	if not kill_after_turns_elapsed:
+		completed_lifespan.emit(self)
 	
 	queue_free()
 	

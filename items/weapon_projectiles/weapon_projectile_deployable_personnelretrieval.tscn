@@ -7,8 +7,8 @@
 [ext_resource type="AudioStream" uid="uid://cgac4miv6d3uq" path="res://weapons/sounds/sfx_weapon_singleshot15.wav" id="5_nya0e"]
 
 [node name="WeaponProjectileDeployable" type="RigidBody2D" node_paths=PackedStringArray("sfx_trigger")]
-collision_layer = 9
-collision_mask = 9
+collision_layer = 2
+collision_mask = 541
 mass = 2.0
 contact_monitor = true
 max_contacts_reported = 1

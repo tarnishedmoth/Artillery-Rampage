@@ -7,7 +7,7 @@
 
 [node name="WeaponProjectile" type="RigidBody2D"]
 collision_layer = 2
-collision_mask = 29
+collision_mask = 541
 mass = 1.25
 continuous_cd = 2
 contact_monitor = true
