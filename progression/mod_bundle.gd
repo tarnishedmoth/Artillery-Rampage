@@ -114,7 +114,7 @@ func clear_all() -> void:
 
 func _new_rand_mod_weapon(chance_bias:int = 0) -> ModWeapon:
 	var mod = ModWeapon.new()
-	var type:int = randi_range(0, 5)
+	var type:int = randi_range(0, 5) if chance(50) else randi_range(0, 4) ## Nerf unlimited ammo frequency
 	var buff:bool # Buff or debuff. Probability is set per type.
 	
 	match type:
