@@ -100,8 +100,8 @@ follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 4
 script = ExtResource("4_xg2qo")
-max_size_y = 575.0
-extra_margin = 10.0
+max_size_y = 518.0
+extra_margin = 20.0
 target_container = NodePath("ItemsPanel/ItemsContainer")
 
 [node name="ItemsPanel" type="PanelContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer"]
