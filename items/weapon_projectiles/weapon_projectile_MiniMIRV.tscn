@@ -42,10 +42,9 @@ stream = ExtResource("6_hmlfd")
 volume_db = -6.0
 pitch_scale = 2.0
 
-[node name="ApexSensor" type="Node2D" parent="." node_paths=PackedStringArray("tracking", "deployable")]
+[node name="ApexSensor" type="Node2D" parent="." node_paths=PackedStringArray("tracking")]
 script = ExtResource("7_uhyc4")
 tracking = NodePath("..")
-deployable = NodePath("..")
-y_velocity_min_threshold = 2.0
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="detected" from="ApexSensor" to="." method="trigger"]
