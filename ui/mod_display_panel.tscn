@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ci2sausuoqug6"]
+[gd_scene load_steps=9 format=3 uid="uid://ci2sausuoqug6"]
 
 [ext_resource type="Script" uid="uid://1mijitrtty48" path="res://progression/mod_display_panel.gd" id="1_kt7ub"]
 [ext_resource type="Theme" uid="uid://dhdbc8ledcupg" path="res://ui/themes/control_theme_upgrade_mod_displays.tres" id="1_o625h"]
@@ -8,6 +8,16 @@
 font = ExtResource("3_h6i1s")
 font_size = 11
 font_color = Color(0.756087, 0.756087, 0.756087, 1)
+
+[sub_resource type="Gradient" id="Gradient_h6i1s"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.315033, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.479834, 0.479834, 0.479834, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_tjeeo"]
+gradient = SubResource("Gradient_h6i1s")
+width = 160
+height = 1
 
 [sub_resource type="LabelSettings" id="LabelSettings_h6i1s"]
 font_size = 12
@@ -29,6 +39,7 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_kt7ub")
+buff_color = Color(0.96, 0.8448, 0.384, 0.27451)
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -48,7 +59,6 @@ theme = ExtResource("1_o625h")
 
 [node name="Everything" type="VBoxContainer" parent="PanelContainer"]
 unique_name_in_owner = true
-visible = false
 clip_contents = true
 custom_minimum_size = Vector2(140, 200)
 layout_mode = 2
@@ -81,6 +91,14 @@ color = Color(0.788235, 0.623529, 0.337255, 1)
 layout_mode = 2
 size_flags_vertical = 3
 alignment = 1
+
+[node name="BuffDebuffBGFill" type="Sprite2D" parent="PanelContainer/Everything/ModDisplay"]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0.435294)
+position = Vector2(0, -2)
+scale = Vector2(0.884375, 197)
+texture = SubResource("GradientTexture2D_tjeeo")
+centered = false
 
 [node name="Property" type="Label" parent="PanelContainer/Everything/ModDisplay"]
 unique_name_in_owner = true
@@ -168,6 +186,7 @@ text = "CONFIRM"
 
 [node name="ScrappedValuation" type="VBoxContainer" parent="PanelContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 alignment = 1
 

@@ -142,5 +142,4 @@ static func generate_random_upgrade(types:Array[ModBundle.Types], layers:int = 1
 			weapon_mod.target_weapon_name = selected_weapon.display_name
 			weapon_mod.target_weapon_scene_path = selected_weapon.scene_file_path
 
-	# TODO: how to apply projectile mods to weapons?
 	return upgrade

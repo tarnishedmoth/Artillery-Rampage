@@ -9,6 +9,9 @@ var mods:Array[ModBundle]:
 
 var confirming:bool = false
 
+@export var buff_color:Color = Color.WHITE
+@export var debuff_color:Color = Color.INDIAN_RED
+
 @onready var everything: VBoxContainer = %Everything
 
 @onready var header_label: Label = %HeaderLabel
@@ -17,6 +20,7 @@ var confirming:bool = false
 @onready var display_property: Label = %Property
 @onready var display_operation: Label = %Operation
 @onready var display_value: Label = %Value
+@onready var buff_debuff_bg_fill: Sprite2D = %BuffDebuffBGFill
 
 @onready var hide_timer: Timer = %HideTimer
 @onready var buttons: VBoxContainer = %Buttons
@@ -58,7 +62,7 @@ func configure_from_mods() -> void:
 		_mods.append_array(mod.components_projectile_mods)
 			
 	## NOTE
-	## This logic will only show the first mod in the ModBundle array's data (see the return at the end).
+	## This logic will only show the ___first___ mod in the ModBundle array's data (see the return at the end).
 	## Not sure how to sort this yet but I think in -all- cases right now, it will only be one mod per bundle.
 	## This will definitely change once layers are used in the bundle.
 	## It will probably be worth doing aggregation in the upgrade list script instead of the display panel.
@@ -69,6 +73,9 @@ func configure_from_mods() -> void:
 			display_property.text = mod.property_to_display_string()
 			display_operation.text = mod.operation_to_display_string()
 			display_value.text = mod.get_property_value_to_string()
+			
+			buff_debuff_bg_fill.modulate = buff_color if mod.is_buff else debuff_color
+			
 		if mod is ModProjectile:
 			# Find the appropriate weapon and display it
 			pass

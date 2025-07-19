@@ -191,6 +191,7 @@ func serialize() -> Dictionary:
 	data["name"] = target_weapon_name
 	data["scene"] = target_weapon_scene_path
 	data["projectiles"] = ModUtils.serialize_mod_array(projectile_mods)
+	data["is_buff"] = is_buff
 
 	return data
 
@@ -210,6 +211,7 @@ static func deserialize(state: Dictionary) -> ModWeapon:
 		[] as Array[ModProjectile],
 		Callable(ModProjectile.deserialize)
 	)
+	mod.is_buff = state.get("is_buff", true)
 
 	return mod
 #endregion
