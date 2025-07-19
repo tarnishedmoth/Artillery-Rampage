@@ -7,16 +7,26 @@ extends Control
 @onready var buttons_container:Container = %ButtonsContainer
 
 func _ready() -> void:
-	# Set to player color
-	# TODO: This can be swapped out for a better image. By default showing the player tank as victorious
-	victory_texture.modulate = Color(0xab/256.0, 0xff/256.0, 0x1a/256.0).darkened(0.3)
-	
+	_apply_tank_shader()
+
 	var story_level_state:StoryLevelState = get_tree().get_first_node_in_group(Groups.StoryLevelState) as StoryLevelState
 	if story_level_state:
 		var run_count:int = story_level_state.run_count
 		run_header_label.text = run_header_label.text.replace("%RUN%", str(run_count))
 	else:
 		push_error("%s: Could not find StoryLevelState node in tree" % name)
+
+func _apply_tank_shader() -> void:
+	# TODO: This can be swapped out for a better image. By default showing the player tank as victorious
+	var texture_modulate:Color = Color(0xab/256.0, 0xff/256.0, 0x1a/256.0).darkened(0.3)
+	# Set to player color
+	var image_material:ShaderMaterial = victory_texture.material as ShaderMaterial
+	if image_material:
+		# Looks better with full range
+		pass
+		# image_material.set_shader_parameter(&"modulate", texture_modulate)
+	else:
+		victory_texture.modulate = texture_modulate
 
 func _on_yes_pressed() -> void:
 	print_debug("%s: Selected new run" % name)
