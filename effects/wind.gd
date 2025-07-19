@@ -113,7 +113,7 @@ func _apply_wind_to_particles(group:Array) -> void:
 			var member_gravity:Vector3 = process_material.get_gravity()
 			
 			# Only control the x gravity
-			member.process_material.set_gravity(Vector3(windspeed*3.33, member_gravity.y, member_gravity.z))
+			member.process_material.set_gravity(Vector3(windspeed, member_gravity.y, member_gravity.z))
 			
 func _check_and_add_particles(node: Node) -> void:
 	if node.is_in_group(PARTICLES_GROUP_NAME):
