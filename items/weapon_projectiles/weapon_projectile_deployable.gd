@@ -35,7 +35,7 @@ var _deployed_lifespan_completed:int = 0
 
 var _explosion_played:bool = false
 # @onready
-
+@onready var random_offset:float = randf_range(-TAU, TAU)
 #endregion
 
 
@@ -95,7 +95,7 @@ func trigger() -> void:
 #region--Private Methods
 func _setup_deployable(deployable:Node2D, physics:bool = true) -> void:
 	#var new_spawn = scene_to_spawn.instantiate()
-	var aim_angle = TAU / deploy_number * _current_projectile_index
+	var aim_angle = (TAU / deploy_number * _current_projectile_index) + random_offset
 	
 	deployable.global_position = self.global_position
 	if physics:
