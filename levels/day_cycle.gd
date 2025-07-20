@@ -189,13 +189,19 @@ func change_weather(state:DayWeatherState, immediate:bool) -> void:
 	var transition_time:float = 1.0 if immediate else state.weather_transition_time
 	
 	if state.is_raining:
+		var effect:WeatherEffects.EFFECT
+		if not state.use_snow:
+			effect = WeatherEffects.EFFECT.RAIN
+		else:
+			effect = WeatherEffects.EFFECT.SNOW
+		
 		# Current state wants rain
 		if not _active_weather_node:
 			# Node is invalid
 			_active_weather_node = PRECIPITATION_SCENE.instantiate()
 			add_child(_active_weather_node)
 			
-			_active_weather_node.start_rain(state.rain_intensity, transition_time, state.use_snow)
+			_active_weather_node.start_effect(effect, state.rain_intensity, transition_time)
 				
 			
 		else:
@@ -207,8 +213,7 @@ func change_weather(state:DayWeatherState, immediate:bool) -> void:
 				change_weather(state, immediate)
 				return
 			else:
-				# Chilling
-				_active_weather_node.set_rain_intensity(state.rain_intensity, transition_time, state.use_snow)
+				_active_weather_node.set_intensity(effect, state.rain_intensity, transition_time)
 		
 	else:
 		# Current state wants not rain
