@@ -60,6 +60,7 @@ func begin_round():
 		_on_simultaneous_fire_mode_begin_round()
 	
 func activate_tank_controller(unit:TankController) -> void:
+	unit.disabled = false
 	connect_events(unit)
 	round_director.add_controller(unit)
 		

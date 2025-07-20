@@ -65,6 +65,7 @@ func try_spawn_new_artillery() -> bool:
 	## Something with how the decoupled tankBody physics object results in
 	## strange positional offsets so we have to set it after we spawn...
 	slot.occupant = game_level.spawner.spawn_unit(Vector2(0,0), true, self)
+	slot.occupant.disabled = true
 	slot.occupant.global_position = slot.global_position
 	slot.physics_body.freeze = true
 

@@ -1,6 +1,8 @@
 class_name RoundDirector extends Node
 
 var tank_controllers: Array[TankController] = []
+var disabled_tank_controllers: Array[TankController] = []
+
 var active_player_index: int = -1
 
 var turns_since_damage: int = 0
@@ -98,13 +100,15 @@ func _enter_tree() -> void:
 	GameEvents.tank_changed.connect(_on_tank_changed)
 
 func add_controller(tank_controller: TankController) -> void:
-	if not tank_controller in tank_controllers:
-		tank_controllers.append(tank_controller)
-
-	for controller:TankController in tank_controllers:
-		connect_controller(controller)
-
-	GameEvents.player_added.emit(tank_controller)
+	if tank_controller.disabled:
+		if not tank_controller in disabled_tank_controllers:
+			disabled_tank_controllers.append(tank_controller)
+			
+	else:
+		if not tank_controller in tank_controllers:
+			tank_controllers.append(tank_controller)
+			connect_controller(tank_controller)
+			GameEvents.player_added.emit(tank_controller)
 
 func connect_controller(controller: TankController) -> void:
 	if not controller.signals_connected:
@@ -187,6 +191,12 @@ func _swap_players(first_index: int, second_index: int) -> void:
 #endregion
 
 func check_players() -> bool:
+	# First check the disabled tanks and see if their state has changed.
+	for controller in disabled_tank_controllers:
+		if not controller.disabled:
+			add_controller(controller)
+			call_deferred("disabled_tank_controllers.erase", controller)
+	
 	# If there are 1 or 0 players left then the round is over
 	if directed_by_external_script:
 		# Allow for managed situations with only the Player left

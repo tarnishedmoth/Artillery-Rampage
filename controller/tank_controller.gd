@@ -6,6 +6,8 @@ var _initial_fall_damage:bool
 @export var weapons_container:Node = self ## Keep all Weapon components in here. If unassigned, self is used.
 
 signal intent_to_act(action: Callable, owner: Object)
+## CRITICAL If true, signals will not be hooked up by the round director.
+var disabled:bool = false
 ## This is set each turn start with the return of [method check_if_must_skip_actions].
 var can_take_action:bool = true
 ## This allows for shooting more than once per turn, for instance.
@@ -59,6 +61,8 @@ static func get_opponents_of(controller:TankController, group:Array[TankControll
 	var opponents: Array[TankController] = []
 	
 	for _controller in group:
+		if not is_instance_valid(_controller): # Edge case
+			continue
 		# Make sure we are not on the same team
 		if _controller != controller and not _controller.is_on_same_team_as(controller):
 			opponents.push_back(_controller)
@@ -73,9 +77,14 @@ func begin_round() -> void:
 func begin_turn() -> void:
 	print_debug("%s: Begin Turn" % [name])
 	_active_turn = true
+	if self is Player or not _is_simultaneous_fire_mode():
+		tank.push_weapon_update_to_hud()
+		
+	can_take_action = not check_if_must_skip_actions() # Check this in Player/AI for behavior. Will submit an empty action (to skip) this turn, if true.
 
-	tank.push_weapon_update_to_hud() # TODO: fix for simultaneous fire game
-	can_take_action = check_if_must_skip_actions() # Check this in Player/AI for behavior. Will submit an empty action (to skip) this turn, if true.
+func _is_simultaneous_fire_mode() -> bool:
+	var game_level:GameLevel = SceneManager.get_current_level_root()
+	return game_level.round_director.is_simultaneous_fire if is_instance_valid(game_level) else false
 
 func _on_tank_killed(_tank: Tank, _instigatorController: Node2D, _instigator: Node2D) -> void:
 	if _active_turn:
@@ -246,12 +255,14 @@ func _skip() -> void:
 
 ## Check for disabling effects like EMP
 func check_if_must_skip_actions() -> bool:
+	if disabled: return true
+	
 	if tank.debuff_emp_charge > tank.debuff_disabling_emp_charge_threshold:
 		#print_debug("EMP charge above threshold--turn must be skipped")
 		var _popup = popup_message(PopupNotification.Contexts.EMP_DISABLED)
-		return false
+		return true
 
-	return true
+	return false
 
 #region Popup Notifications
 func popup_message(message:String, pulses:Array = PopupNotification.PulsePresets.Three, lifetime:float = 0.0) -> PopupNotification:
