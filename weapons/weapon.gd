@@ -171,6 +171,8 @@ var current_barrel: int = 0
 @export_group("Sounds")
 ## Plays when [method _shoot] shoots successfully.
 @export var sfx_fire: AudioStreamPlayer2D
+## If true, the fire sfx will be Stopped when weapon actions are completed (all projectiles are finished).
+@export var sfx_fire_sustain:bool = false
 ## Plays when the weapon tries to shoot but is stopped, for example from being out of ammo.
 @export var sfx_dry_fire: AudioStreamPlayer2D
 ## Plays when [method reload] reloads successfully.
@@ -543,6 +545,7 @@ func kill_all_projectiles() -> void:
 			p.destroy()
 	# clear any previously freed projectiles
 	active_projectiles.clear()
+	
 ## Emits death signals if appropriate and calls [method queue_free].
 func destroy() -> void:
 	if emit_action_signals: weapon_destroyed.emit(self)
@@ -678,6 +681,10 @@ func _on_beam_completed_lifespan(beam: WeaponNonPhysicalBeam) -> void:
 			weapon_actions_completed.emit(self) # If this doesn't emit, the game turn will be stuck.
 
 func _on_weapon_actions_completed(_weapon: Weapon) -> void:
+	if sfx_fire_sustain: ## For laser beam specifically right now
+		for s in sounds:
+			if s.playing && s.stream == sfx_fire.stream:
+				s.stop()
 	if not retain_when_empty:
 		if current_ammo < 1:
 			if magazines < 1 or not use_magazines:
