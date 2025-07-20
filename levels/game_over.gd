@@ -7,9 +7,9 @@ extends Control
 func _ready():
 	Juice.fade_in(self, Juice.SLOW, Color.BLACK)
 
-
 func _on_retry_pressed():
 	# TODO: Code duplication with main menu - move this into scene manager
+	StorySaveUtils.new_story_save()
 	PlayerStateManager.enable = true
 	SaveStateManager.add_state_flag(SceneManager.new_story_selected)
 	SceneManager.play_mode = SceneManager.PlayMode.STORY
