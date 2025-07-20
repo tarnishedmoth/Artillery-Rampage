@@ -235,6 +235,8 @@ flat = true
 
 [node name="StoryRunCountLabel" parent="." instance=ExtResource("16_8olf0")]
 layout_mode = 0
+offset_right = 180.0
+offset_bottom = 60.0
 
 [node name="AutoNarrative" parent="." instance=ExtResource("7_mer82")]
 unique_name_in_owner = true

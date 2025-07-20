@@ -21,6 +21,7 @@ func update() -> void:
 	await get_tree().process_frame
 	
 	var upgrades: Array[ModBundle] = PlayerUpgrades.get_current_upgrades()
+	upgrades.sort_custom(ModUtils.sort_by_target_weapon) ## Ascending. Bind `false` for descending order.
 	
 	#var bundle_strings: PackedStringArray = []
 	#for mod in upgrades:

@@ -189,6 +189,8 @@ text = "Next"
 
 [node name="StoryRunCountLabel" parent="." instance=ExtResource("8_1mphu")]
 layout_mode = 0
+offset_right = 180.0
+offset_bottom = 60.0
 
 [node name="AutoNarrative" parent="." instance=ExtResource("6_5a4nf")]
 unique_name_in_owner = true
