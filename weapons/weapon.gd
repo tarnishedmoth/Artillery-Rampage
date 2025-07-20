@@ -232,6 +232,7 @@ var _cached_projectile_instance
 #region Virtuals
 func _ready() -> void:
 	weapon_actions_completed.connect(_on_weapon_actions_completed)
+	GameEvents.game_paused.connect(_on_game_paused)
 	apply_all_mods() # If the weapon's state is retained across scene trees, this could stack the effect unintentionally.
 	
 func _exit_tree() -> void:
@@ -489,9 +490,10 @@ func apply_new_mod(mod) -> void:
 
 ## Will stop all [AudioStreamPlayer2D] in [member sounds].
 func stop_all_sounds(_only_looping: bool = true) -> void: # TODO args
-	for s: AudioStreamPlayer2D in sounds:
-		#if it's a looping sound...
-		if s.playing: s.stop()
+	for s in sounds:
+		if is_instance_valid(s):
+			#if it's a looping sound...
+			if s.playing: s.stop()
 		
 ## Related to [signal weapon_actions_completed].
 ## [br]Connects the
@@ -683,10 +685,21 @@ func _on_beam_completed_lifespan(beam: WeaponNonPhysicalBeam) -> void:
 func _on_weapon_actions_completed(_weapon: Weapon) -> void:
 	if sfx_fire_sustain: ## For laser beam specifically right now
 		for s in sounds:
-			if s.playing && s.stream == sfx_fire.stream:
-				s.stop()
+			if is_instance_valid(s):
+				if s.playing && s.stream == sfx_fire.stream:
+					s.stop()
 	if not retain_when_empty:
 		if current_ammo < 1:
 			if magazines < 1 or not use_magazines:
 				destroy()
+				
+func _on_game_paused(paused:bool) -> void:
+	if paused:
+		for s in sounds:
+			if is_instance_valid(s):
+				s.stream_paused = true
+	else:
+		for s in sounds:
+			if is_instance_valid(s):
+				s.stream_paused = false
 #endregion

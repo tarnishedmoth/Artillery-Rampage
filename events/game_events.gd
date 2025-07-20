@@ -6,6 +6,7 @@ var current_level:GameLevel
 
 signal user_options_changed()
 signal difficulty_changed(new_difficulty: Difficulty.DifficultyLevel, old_difficulty: Difficulty.DifficultyLevel)
+signal game_paused(pause:bool)
 
 ## AI strength changed independent of the core difficulty
 signal ai_effective_difficulty_changed(effective_difficulty: Difficulty.DifficultyLevel)

@@ -86,12 +86,12 @@ func toggle_visibility():
 	if paused:
 		self.show()
 		get_tree().paused = true
-
+		GameEvents.game_paused.emit(true)
 		input_buffer_listening = true
 	else:
 		self.hide()
 		get_tree().paused = false
-
+		GameEvents.game_paused.emit(false)
 		input_buffer_listening = false
 	input_buffer.clear()
 
