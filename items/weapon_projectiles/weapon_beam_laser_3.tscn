@@ -13,6 +13,5 @@ metadata/_custom_type_script = "uid://dcadsd3apky27"
 [node name="LaserSegment1" parent="LaserSegments" instance=ExtResource("2_co1n1")]
 
 [node name="Destructible" type="CollisionPolygon2D" parent="."]
-visible = false
 scale = Vector2(1.07263, 1.07263)
-polygon = PackedVector2Array(-5.59373, 1.86458, -5.59373, 0, -4.66144, -2.79687, -2.79687, -4.66144, 0, -5.59373, 2.79687, -4.66144, 4.66144, -2.79687, 5.59373, 0, 4.66144, 2.79687, 2.79687, 4.66144, 0, 5.59373, -2, 5, -4, 4)
+polygon = PackedVector2Array(-5.59373, 0, -2.79686, -4.66144, 2.79686, -4.66144, 5.59373, 0, 2.79687, 4.66144, -2.79686, 4.66144)
