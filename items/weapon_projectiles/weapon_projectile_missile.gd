@@ -5,6 +5,8 @@ enum MissileBehaviorType {
 	Homing
 }
 
+const NIL_TARGET:Vector2 = -Vector2.ONE
+
 @export var behavior:MissileBehaviorType = MissileBehaviorType.Downward
 @export var thrust_sfx:AudioStreamPlayer2D
 @export var acquired_target_sfx:AudioStreamPlayer2D
@@ -58,6 +60,10 @@ func delay_thrusting(time:float = delay_before_thrusting) -> void:
 	if thrust_sfx: thrust_sfx.stop()
 	
 func targeting() -> void:
+	if target == NIL_TARGET:
+		behavior = MissileBehaviorType.Downward
+		## When there is no valid target for homing missiles, for instance
+	
 	var desired_target
 	var final_target
 	match behavior:
@@ -86,7 +92,7 @@ func _find_nearest_target() -> Vector2:
 				targets = game_level.round_director.tank_controllers
 	else:
 		push_warning("Missile targeting out of game level.")
-		return self.global_position
+		return NIL_TARGET
 	
 	var nearest_target:Node2D = null
 	var nearest_distance:float
@@ -109,7 +115,8 @@ func _find_nearest_target() -> Vector2:
 	if show_debug_targets:
 		debug_target.show()
 		debug_target2.show()
-	# catch-all
+		
 	if not is_instance_valid(nearest_target):
-		nearest_target = self # Lol
-	return nearest_target.global_position
+		return NIL_TARGET
+	else:
+		return nearest_target.global_position
