@@ -1,37 +1,37 @@
 [gd_scene load_steps=35 format=3 uid="uid://bpq3kfwju28e8"]
 
-[ext_resource type="Script" uid="uid://bfl71q3d57n8s" path="res://levels/game_level.gd" id="1_8ylxn"]
-[ext_resource type="Script" uid="uid://ehj364xag1df" path="res://utils/game_timer.gd" id="2_iwr3d"]
-[ext_resource type="PackedScene" uid="uid://bg64wc8fibctr" path="res://ui/hud.tscn" id="3_ja3hk"]
-[ext_resource type="PackedScene" uid="uid://dofcv781occp4" path="res://effects/screen_shake/screen_shake_camera2d.tscn" id="3_vl2c1"]
-[ext_resource type="PackedScene" uid="uid://btq3rsvojx8jg" path="res://ui/pause_menu.tscn" id="4_x3i4c"]
-[ext_resource type="PackedScene" uid="uid://dgmcs2um4230a" path="res://ui/ui_game_sfx.tscn" id="5_jppc8"]
-[ext_resource type="Shader" uid="uid://bpm1kus70ig4j" path="res://background_items/background.gdshader" id="6_xu7nj"]
-[ext_resource type="Texture2D" uid="uid://dp0yqs3ec4c18" path="res://terrain/sky-tile.png" id="7_u84lg"]
-[ext_resource type="Script" uid="uid://d1h6tovc4c4ol" path="res://background_items/background.gd" id="8_fbuyd"]
-[ext_resource type="PackedScene" uid="uid://l1x5kvupj7so" path="res://terrain/terrain.tscn" id="9_b5rak"]
-[ext_resource type="PackedScene" uid="uid://b7vpl03hcrs3e" path="res://walls/walls.tscn" id="10_hw8a8"]
-[ext_resource type="PackedScene" uid="uid://bogp8cydgto88" path="res://personnel/pickup_copter.tscn" id="11_5dbbs"]
-[ext_resource type="PackedScene" uid="uid://boa5a2v0w2ag0" path="res://terrain/floor.tscn" id="12_vl2c1"]
-[ext_resource type="PackedScene" uid="uid://no0hhhxjq8ql" path="res://effects/wind.tscn" id="13_2i235"]
-[ext_resource type="Script" uid="uid://c34my4i57wvu7" path="res://levels/round/round_director.gd" id="14_h1k02"]
-[ext_resource type="PackedScene" uid="uid://d3q2cfp8mqu2x" path="res://tank/artillery_spawner.tscn" id="15_k8tcd"]
-[ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="16_4t21x"]
-[ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="17_put14"]
-[ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="18_ba3th"]
-[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="18_vl2c1"]
-[ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="19_2i235"]
-[ext_resource type="PackedScene" uid="uid://bamvmc2k56pyk" path="res://effects/post_processing/post_processing.tscn" id="19_pk5c6"]
-[ext_resource type="PackedScene" uid="uid://dlh1i2cvw3mim" path="res://voiceovers/announcer.tscn" id="20_8saf5"]
-[ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="20_h1k02"]
-[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="21_iwr3d"]
-[ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="21_k8tcd"]
-[ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="24_2i235"]
-[ext_resource type="PackedScene" uid="uid://cv6k5ub7mpj8t" path="res://levels/day_weather.tscn" id="28_h1k02"]
-[ext_resource type="PackedScene" uid="uid://ddb05m7heyso3" path="res://levels/special/factory.tscn" id="29_hw8a8"]
+[ext_resource type="Script" uid="uid://bfl71q3d57n8s" path="res://levels/game_level.gd" id="1_7h6qy"]
+[ext_resource type="Script" uid="uid://ehj364xag1df" path="res://utils/game_timer.gd" id="2_uio3v"]
+[ext_resource type="PackedScene" uid="uid://dofcv781occp4" path="res://effects/screen_shake/screen_shake_camera2d.tscn" id="3_fqu16"]
+[ext_resource type="PackedScene" uid="uid://bg64wc8fibctr" path="res://ui/hud.tscn" id="4_m73is"]
+[ext_resource type="PackedScene" uid="uid://btq3rsvojx8jg" path="res://ui/pause_menu.tscn" id="5_xxom8"]
+[ext_resource type="PackedScene" uid="uid://dgmcs2um4230a" path="res://ui/ui_game_sfx.tscn" id="6_pfkyx"]
+[ext_resource type="Shader" uid="uid://bpm1kus70ig4j" path="res://background_items/background.gdshader" id="7_iorpy"]
+[ext_resource type="Texture2D" uid="uid://dp0yqs3ec4c18" path="res://terrain/sky-tile.png" id="8_gn5bf"]
+[ext_resource type="Script" uid="uid://d1h6tovc4c4ol" path="res://background_items/background.gd" id="9_h4dem"]
+[ext_resource type="PackedScene" uid="uid://l1x5kvupj7so" path="res://terrain/terrain.tscn" id="10_70un7"]
+[ext_resource type="PackedScene" uid="uid://b7vpl03hcrs3e" path="res://walls/walls.tscn" id="11_ew5f6"]
+[ext_resource type="PackedScene" uid="uid://bogp8cydgto88" path="res://personnel/pickup_copter.tscn" id="12_3jhaj"]
+[ext_resource type="PackedScene" uid="uid://boa5a2v0w2ag0" path="res://terrain/floor.tscn" id="13_mk575"]
+[ext_resource type="PackedScene" uid="uid://no0hhhxjq8ql" path="res://effects/wind.tscn" id="14_relw1"]
+[ext_resource type="Script" uid="uid://c34my4i57wvu7" path="res://levels/round/round_director.gd" id="15_f5c7v"]
+[ext_resource type="PackedScene" uid="uid://d3q2cfp8mqu2x" path="res://tank/artillery_spawner.tscn" id="16_qf5sc"]
+[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="17_vsnel"]
+[ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="18_bqpss"]
+[ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="19_auytb"]
+[ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="20_t7qa7"]
+[ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="21_08w85"]
+[ext_resource type="PackedScene" uid="uid://45gqgsjcmu2i" path="res://weapons/weapon_leadball_burst.tscn" id="22_x8lrf"]
+[ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="23_6npsj"]
+[ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="24_upw5b"]
+[ext_resource type="PackedScene" uid="uid://bamvmc2k56pyk" path="res://effects/post_processing/post_processing.tscn" id="25_yuw3i"]
+[ext_resource type="PackedScene" uid="uid://dlh1i2cvw3mim" path="res://voiceovers/announcer.tscn" id="26_a5sw5"]
+[ext_resource type="PackedScene" uid="uid://cv6k5ub7mpj8t" path="res://levels/day_weather.tscn" id="27_k32be"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="28_c0w7t"]
+[ext_resource type="PackedScene" uid="uid://ddb05m7heyso3" path="res://levels/special/factory.tscn" id="29_ddyir"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_chthv"]
-shader = ExtResource("6_xu7nj")
+shader = ExtResource("7_iorpy")
 shader_parameter/speed = 0.0
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_hw8a8"]
@@ -54,42 +54,42 @@ fill_to = Vector2(1, 0.84188)
 [node name="LevelSpecialFactory" type="Node2D"]
 
 [node name="GameLevel" type="Node2D" parent="."]
-script = ExtResource("1_8ylxn")
+script = ExtResource("1_7h6qy")
 level_name = &"Factory"
 
 [node name="GameTimer" type="Node" parent="GameLevel"]
 unique_name_in_owner = true
 process_mode = 1
-script = ExtResource("2_iwr3d")
+script = ExtResource("2_uio3v")
 
-[node name="ScreenShakeCamera2D" parent="GameLevel" instance=ExtResource("3_vl2c1")]
+[node name="ScreenShakeCamera2D" parent="GameLevel" instance=ExtResource("3_fqu16")]
 unique_name_in_owner = true
 
 [node name="UI" type="CanvasLayer" parent="GameLevel"]
 unique_name_in_owner = true
 layer = 100
 
-[node name="HUD" parent="GameLevel/UI" instance=ExtResource("3_ja3hk")]
+[node name="HUD" parent="GameLevel/UI" instance=ExtResource("4_m73is")]
 unique_name_in_owner = true
 
-[node name="PauseMenu" parent="GameLevel/UI" instance=ExtResource("4_x3i4c")]
+[node name="PauseMenu" parent="GameLevel/UI" instance=ExtResource("5_xxom8")]
 visible = false
 
-[node name="UI_Game_SFX" parent="GameLevel/UI" instance=ExtResource("5_jppc8")]
+[node name="UI_Game_SFX" parent="GameLevel/UI" instance=ExtResource("6_pfkyx")]
 
 [node name="Background" type="TextureRect" parent="GameLevel"]
 z_index = -100
 material = SubResource("ShaderMaterial_chthv")
 offset_right = 2048.0
 offset_bottom = 2048.0
-texture = ExtResource("7_u84lg")
+texture = ExtResource("8_gn5bf")
 expand_mode = 1
 stretch_mode = 1
-script = ExtResource("8_fbuyd")
+script = ExtResource("9_h4dem")
 wind_scoll_scale = 2.0
 min_wind_scroll_speed = 2.0
 
-[node name="Terrain" parent="GameLevel" instance=ExtResource("9_b5rak")]
+[node name="Terrain" parent="GameLevel" instance=ExtResource("10_70un7")]
 unique_name_in_owner = true
 z_index = -10
 position = Vector2(118, 444)
@@ -107,7 +107,7 @@ polygon = PackedVector2Array(-103.125, 7.35297, -53.9063, -16.1765, 19.5313, -36
 [node name="CollisionPolygon2D" parent="GameLevel/Terrain/TerrainChunk/Overlap" index="0"]
 polygon = PackedVector2Array(-103.125, 7.35297, -53.9063, -16.1765, 19.5313, -36.7647, 75, -36.7647, 128.906, -2.94116, 168.75, 17.647, 229.688, 20.5883, 289.844, 4.41174, 321.094, -29.4117, 335.156, -72.0588, 345.313, -107.353, 361.719, -120.588, 377.344, -107.353, 384.375, -63.2353, 387.5, 4.41174, 394.531, 82.353, 596.094, 82.353, 941.406, 82.353, 945, 445, -103, 448)
 
-[node name="Walls" parent="GameLevel" instance=ExtResource("10_hw8a8")]
+[node name="Walls" parent="GameLevel" instance=ExtResource("11_ew5f6")]
 unique_name_in_owner = true
 wall_randomization_weights = Dictionary[int, float]({
 0: 1.0
@@ -120,38 +120,38 @@ shape = SubResource("RectangleShape2D_60ghs")
 [node name="LeftBlockingWall" parent="GameLevel/Walls/BlockingAreas" index="0"]
 position = Vector2(-11, -2)
 
-[node name="PickupCopter" parent="GameLevel/Walls" instance=ExtResource("11_5dbbs")]
+[node name="PickupCopter" parent="GameLevel/Walls" instance=ExtResource("12_3jhaj")]
 position = Vector2(640, -192)
 
-[node name="Floor" parent="GameLevel" instance=ExtResource("12_vl2c1")]
+[node name="Floor" parent="GameLevel" instance=ExtResource("13_mk575")]
 unique_name_in_owner = true
 position = Vector2(-2, 731)
 
-[node name="Wind" parent="GameLevel" instance=ExtResource("13_2i235")]
+[node name="Wind" parent="GameLevel" instance=ExtResource("14_relw1")]
 unique_name_in_owner = true
 wind_scale = 200.0
 
 [node name="RoundDirector" type="Node" parent="GameLevel"]
 unique_name_in_owner = true
-script = ExtResource("14_h1k02")
+script = ExtResource("15_f5c7v")
 physics_check_time = 0.25
 fall_check_timeout = 0.5
 request_sleep_on_fall_detection = false
 player_goes_first = true
 shuffle_order = false
 
-[node name="ArtillerySpawner" parent="GameLevel" instance=ExtResource("15_k8tcd")]
+[node name="ArtillerySpawner" parent="GameLevel" instance=ExtResource("16_qf5sc")]
 unique_name_in_owner = true
-artillery_ai_types = Array[PackedScene]([ExtResource("18_vl2c1"), ExtResource("19_2i235"), ExtResource("20_h1k02"), ExtResource("21_k8tcd")])
-artillery_ai_starting_weapons = Array[PackedScene]([ExtResource("16_4t21x"), ExtResource("17_put14"), ExtResource("18_ba3th"), ExtResource("24_2i235")])
+artillery_ai_types = Array[PackedScene]([ExtResource("17_vsnel"), ExtResource("18_bqpss"), ExtResource("19_auytb"), ExtResource("20_t7qa7")])
+artillery_ai_starting_weapons = Array[PackedScene]([ExtResource("21_08w85"), ExtResource("22_x8lrf"), ExtResource("23_6npsj"), ExtResource("24_upw5b")])
 num_ai_teams = 1
 
-[node name="PostProcessing" parent="GameLevel" instance=ExtResource("19_pk5c6")]
+[node name="PostProcessing" parent="GameLevel" instance=ExtResource("25_yuw3i")]
 unique_name_in_owner = true
 
-[node name="Announcer" parent="GameLevel" instance=ExtResource("20_8saf5")]
+[node name="Announcer" parent="GameLevel" instance=ExtResource("26_a5sw5")]
 
-[node name="DayWeather" parent="GameLevel" node_paths=PackedStringArray("sun_light", "game_level") instance=ExtResource("28_h1k02")]
+[node name="DayWeather" parent="GameLevel" node_paths=PackedStringArray("sun_light", "game_level") instance=ExtResource("27_k32be")]
 unique_name_in_owner = true
 sun_light = NodePath("../TheSunLight")
 game_level = NodePath("..")
@@ -169,11 +169,11 @@ texture = SubResource("GradientTexture2D_h1k02")
 offset = Vector2(0, 720)
 texture_scale = 3.0
 
-[node name="Player" parent="GameLevel" instance=ExtResource("21_iwr3d")]
+[node name="Player" parent="GameLevel" instance=ExtResource("28_c0w7t")]
 position = Vector2(173, 404)
 enable_damage_before_first_turn = false
 
-[node name="Factory" parent="GameLevel" node_paths=PackedStringArray("round_director") instance=ExtResource("29_hw8a8")]
+[node name="Factory" parent="GameLevel" node_paths=PackedStringArray("round_director") instance=ExtResource("29_ddyir")]
 position = Vector2(934, 500)
 round_director = NodePath("../RoundDirector")
 

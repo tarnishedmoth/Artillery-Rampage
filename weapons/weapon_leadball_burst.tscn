@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://45gqgsjcmu2i"]
+[gd_scene load_steps=7 format=3 uid="uid://45gqgsjcmu2i"]
 
 [ext_resource type="Script" uid="uid://bkt30e3183urb" path="res://weapons/weapon.gd" id="1_ajd5j"]
 [ext_resource type="PackedScene" uid="uid://b5qb8k2xaexhf" path="res://items/weapon_projectiles/weapon_projectile_leadballburst.tscn" id="2_u3ymg"]
+[ext_resource type="AudioStream" uid="uid://qy6jau74odfd" path="res://weapons/sounds/dry_fire.wav" id="4_ryswq"]
 [ext_resource type="AudioStream" uid="uid://bh5ef3521wtkr" path="res://weapons/sounds/sfx_shot_a_5.wav" id="5_54r5s"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_0omdf"]
@@ -11,7 +12,14 @@ random_volume_offset_db = 0.4
 streams_count = 1
 stream_0/stream = ExtResource("5_54r5s")
 
-[node name="WeaponLeadballBurst" type="Node2D" node_paths=PackedStringArray("sfx_fire")]
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_2hrsk"]
+playback_mode = 1
+random_pitch = 1.05
+random_volume_offset_db = 0.1
+streams_count = 1
+stream_0/stream = ExtResource("4_ryswq")
+
+[node name="WeaponLeadballBurst" type="Node2D" node_paths=PackedStringArray("sfx_fire", "sfx_dry_fire")]
 script = ExtResource("1_ajd5j")
 scene_to_spawn = ExtResource("2_u3ymg")
 display_name = "Lead Ball Burst"
@@ -27,8 +35,13 @@ use_ammo = true
 current_ammo = 15
 magazine_capacity = 15
 sfx_fire = NodePath("Fire")
+sfx_dry_fire = NodePath("DryFire")
 
 [node name="Fire" type="AudioStreamPlayer2D" parent="."]
 stream = SubResource("AudioStreamRandomizer_0omdf")
 max_polyphony = 3
+bus = &"Guns"
+
+[node name="DryFire" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_2hrsk")
 bus = &"Guns"

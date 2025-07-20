@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://dtl6c4qaxjdaj"]
+[gd_scene load_steps=8 format=3 uid="uid://dtl6c4qaxjdaj"]
 
 [ext_resource type="Script" uid="uid://bkt30e3183urb" path="res://weapons/weapon.gd" id="1_miv0k"]
 [ext_resource type="PackedScene" uid="uid://b4i6p2nc43tmf" path="res://items/weapon_projectiles/weapon_projectile_kilonuke.tscn" id="2_pqsvc"]
 [ext_resource type="AudioStream" uid="uid://bqdf4m0rd0qbf" path="res://weapons/sounds/sfx_shot_b_1.wav" id="3_pk2as"]
 [ext_resource type="AudioStream" uid="uid://fuwxubu5mriu" path="res://weapons/sounds/sfx_shot_a_7.wav" id="4_rgq0j"]
+[ext_resource type="AudioStream" uid="uid://qy6jau74odfd" path="res://weapons/sounds/dry_fire.wav" id="5_rgq0j"]
 
 [sub_resource type="AudioStreamSynchronized" id="AudioStreamSynchronized_ywh7q"]
 stream_count = 2
@@ -12,7 +13,14 @@ stream_0/volume = 0.0
 stream_1/stream = ExtResource("4_rgq0j")
 stream_1/volume = 0.0
 
-[node name="WeaponKilonuke" type="Node2D" node_paths=PackedStringArray("sfx_fire")]
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_ywh7q"]
+playback_mode = 1
+random_pitch = 1.05
+random_volume_offset_db = 0.1
+streams_count = 1
+stream_0/stream = ExtResource("5_rgq0j")
+
+[node name="WeaponKilonuke" type="Node2D" node_paths=PackedStringArray("sfx_fire", "sfx_dry_fire")]
 script = ExtResource("1_miv0k")
 scene_to_spawn = ExtResource("2_pqsvc")
 display_name = "Kilo Nuke"
@@ -23,7 +31,13 @@ retain_when_empty = false
 use_ammo = true
 current_ammo = 1
 sfx_fire = NodePath("Fire")
+sfx_dry_fire = NodePath("DryFire")
 
 [node name="Fire" type="AudioStreamPlayer2D" parent="."]
 stream = SubResource("AudioStreamSynchronized_ywh7q")
+bus = &"Guns"
+
+[node name="DryFire" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_ywh7q")
+pitch_scale = 0.8
 bus = &"Guns"

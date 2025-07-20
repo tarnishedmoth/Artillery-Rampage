@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bpx30vx00emmd"]
+[gd_scene load_steps=7 format=3 uid="uid://bpx30vx00emmd"]
 
 [ext_resource type="Script" uid="uid://bkt30e3183urb" path="res://weapons/weapon.gd" id="1_bbd4g"]
 [ext_resource type="PackedScene" uid="uid://rvjcwiafo8ut" path="res://items/weapon_projectiles/weapon_projectile_missile.tscn" id="2_cm802"]
 [ext_resource type="AudioStream" uid="uid://fuwxubu5mriu" path="res://weapons/sounds/sfx_shot_a_7.wav" id="3_ltdyu"]
+[ext_resource type="AudioStream" uid="uid://qy6jau74odfd" path="res://weapons/sounds/dry_fire.wav" id="4_qhm76"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_qhm76"]
 playback_mode = 1
@@ -11,7 +12,14 @@ random_volume_offset_db = 0.1
 streams_count = 1
 stream_0/stream = ExtResource("3_ltdyu")
 
-[node name="WeaponMissile" type="Node2D" node_paths=PackedStringArray("sfx_fire")]
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_tws5r"]
+playback_mode = 1
+random_pitch = 1.05
+random_volume_offset_db = 0.1
+streams_count = 1
+stream_0/stream = ExtResource("4_qhm76")
+
+[node name="WeaponMissile" type="Node2D" node_paths=PackedStringArray("sfx_fire", "sfx_dry_fire")]
 script = ExtResource("1_bbd4g")
 scene_to_spawn = ExtResource("2_cm802")
 display_name = "Hellfire"
@@ -25,7 +33,12 @@ magazines = 1
 magazine_capacity = 5
 reload_delay_time = 0.4
 sfx_fire = NodePath("Fire")
+sfx_dry_fire = NodePath("DryFire")
 
 [node name="Fire" type="AudioStreamPlayer2D" parent="."]
 stream = SubResource("AudioStreamRandomizer_qhm76")
+bus = &"Guns"
+
+[node name="DryFire" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_tws5r")
 bus = &"Guns"
