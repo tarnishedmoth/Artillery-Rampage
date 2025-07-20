@@ -21,6 +21,7 @@ signal completed_lifespan(projectile:WeaponProjectile) ## Tracked by Weapon clas
 # and the Area2D as the overlap detection for detecting hits
 
 @export var color: Color = Color.BLACK
+@export var color_modulate_enabled:bool = true ## Set to false to not enforce color on all children.
 
 ## Self destroys once this time has passed.[br]
 ## When [member kill_after_turns_elapsed] is used, this time emits [signal completed_lifespan].
@@ -105,7 +106,7 @@ func _ready() -> void:
 	GameEvents.projectile_fired.emit(self)
 	
 func modulate_enabled() -> bool:
-	return true
+	return color_modulate_enabled
 	
 func set_sources(tank:Tank,weapon:Weapon) -> void:
 	owner_tank = tank

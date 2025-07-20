@@ -1,9 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://cs7gmoboe8c86"]
+[gd_scene load_steps=5 format=3 uid="uid://cs7gmoboe8c86"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ulvc5"]
+blend_mode = 1
+light_mode = 1
 
 [sub_resource type="Gradient" id="Gradient_i7kis"]
 interpolation_mode = 2
-offsets = PackedFloat32Array(0, 0.491603, 0.946565, 0.964885, 1)
-colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.163178, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+offsets = PackedFloat32Array(0.398693, 0.898039, 0.913725, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.501961, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_bwg1u"]
 gradient = SubResource("Gradient_i7kis")
@@ -23,6 +27,8 @@ collision_mask = 0
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(0.5248, 0.7708, 0.82, 0.678431)
 light_mask = 0
+z_index = -64
+material = SubResource("CanvasItemMaterial_ulvc5")
 texture = SubResource("GradientTexture2D_bwg1u")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
