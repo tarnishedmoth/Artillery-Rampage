@@ -156,6 +156,7 @@ scene_to_spawn = ExtResource("13_sdcn4")
 
 [node name="DamagedSmokeParticles" parent="." instance=ExtResource("8_adwvx")]
 unique_name_in_owner = true
+emitting = false
 
 [node name="Parachute" type="Sprite2D" parent="."]
 unique_name_in_owner = true

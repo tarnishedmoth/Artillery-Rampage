@@ -1,0 +1,75 @@
+[gd_scene load_steps=6 format=3 uid="uid://ddb05m7heyso3"]
+
+[ext_resource type="Script" uid="uid://dlosg08ehpwdc" path="res://levels/special/factory.gd" id="1_1r2d7"]
+[ext_resource type="PackedScene" uid="uid://xnyh8uolctrv" path="res://buildings/evaporator/factorygreeble.tscn" id="2_scl8n"]
+[ext_resource type="PackedScene" uid="uid://dkju13ltbvatr" path="res://buildings/evaporator/factorygreeble2.tscn" id="3_nl53u"]
+[ext_resource type="Texture2D" uid="uid://32r1u2b1v6jo" path="res://buildings/evaporator/factory_greebles.png" id="4_mdwqs"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iwr3d"]
+size = Vector2(192, 20)
+
+[node name="Factory" type="Node2D" node_paths=PackedStringArray("damageable_components")]
+script = ExtResource("1_1r2d7")
+schedule = Dictionary[int, int]({
+0: 2,
+3: 1,
+6: 1,
+10: 2,
+15: 2,
+20: 2,
+23: 1,
+25: 1,
+27: 1,
+30: 3,
+35: 3,
+40: 3,
+45: 3,
+50: 4,
+55: 4,
+60: 4,
+65: 4,
+70: 4,
+74: 4,
+78: 4,
+82: 4,
+85: 4,
+88: 4,
+90: 4,
+93: 4,
+95: 4,
+97: 4,
+99: 4,
+100: 4
+})
+damageable_components = [NodePath("Evaporator"), NodePath("Evaporator2")]
+
+[node name="Evaporator" parent="." instance=ExtResource("2_scl8n")]
+position = Vector2(-246, 0)
+
+[node name="Evaporator2" parent="." instance=ExtResource("3_nl53u")]
+position = Vector2(309, 0)
+
+[node name="Conveyor" type="AnimatableBody2D" parent="."]
+position = Vector2(-54, 0)
+collision_layer = 3
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Conveyor"]
+position = Vector2(80, -25)
+shape = SubResource("RectangleShape2D_iwr3d")
+
+[node name="Polygon2D" type="Polygon2D" parent="Conveyor"]
+color = Color(0.314316, 0.314316, 0.314316, 1)
+polygon = PackedVector2Array(-15.8578, -19.2205, -15.8578, -35.2205, 144.142, -35.2205, 144.142, -19.2205)
+uv = PackedVector2Array(-20, -16, -20, -32, 140, -32, 140, -16)
+
+[node name="Spawnpoint" type="Marker2D" parent="Conveyor"]
+unique_name_in_owner = true
+position = Vector2(126, -41)
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+position = Vector2(-78, 0)
+color = Color(0.372251, 0.372251, 0.372251, 1)
+texture = ExtResource("4_mdwqs")
+polygon = PackedVector2Array(-10, 0, -10, -40, 310, -40, 310, 0)
+uv = PackedVector2Array(-28, 256, -28, 176, 276, 176, 276, 256)

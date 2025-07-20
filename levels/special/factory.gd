@@ -11,6 +11,8 @@ extends Node2D
 signal conveyor_advanced ## This signal is used internally
 signal artillery_spawned ## This signal is unused, remove this comment if used
 
+@export var round_director:RoundDirector
+
 @export var schedule:Dictionary[int,int] ## Turn Count, Number to Spawn
 @export var damageable_components:Array[DamageableDestructibleObject] # Maybe?
 @onready var total_components:int = damageable_components.size()
@@ -31,7 +33,9 @@ var emp_disabling_threshold:float = 40.0
 
 
 func _ready() -> void:
-	%RoundDirector.directed_by_external_script = true
+	if not round_director:
+		push_error("Must assign export property Round Director node!")
+	round_director.directed_by_external_script = true
 	GameEvents.turn_ended.connect(_on_turn_ended) # For turn based logic
 
 	for component in damageable_components: # Observe the components that the player must destroy to kill the factory.
