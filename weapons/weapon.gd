@@ -684,9 +684,9 @@ func _on_beam_completed_lifespan(beam: WeaponNonPhysicalBeam) -> void:
 
 func _on_weapon_actions_completed(_weapon: Weapon) -> void:
 	if sfx_fire_sustain: ## For laser beam specifically right now
-		for s in sounds:
+		for s in barrels_sfx_fire:
 			if is_instance_valid(s):
-				if s.playing && s.stream == sfx_fire.stream:
+				if s.playing:
 					s.stop()
 	if not retain_when_empty:
 		if current_ammo < 1:
