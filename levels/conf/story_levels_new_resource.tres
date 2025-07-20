@@ -305,7 +305,7 @@ metadata/_custom_type_script = "uid://bbu2pp1ggq3ya"
 
 [sub_resource type="Resource" id="Resource_rsbj2"]
 script = ExtResource("1_eqg84")
-scene_res_path = &"res://levels/special/level_special_factory.tscn"
+scene_res_path = &"res://levels/special/level_special_factory_old.tscn"
 name = &"Special Factory"
 ui_map_node = ExtResource("5_vf55u")
 ui_map_node_texture = ExtResource("22_hocf4")
