@@ -177,8 +177,8 @@ func _check_cheat_code_entered(code:Array[Keys]) -> void:
 				cheat_name = "SUPERBREEZE"
 				var level_root = SceneManager.get_current_level_root()
 				if level_root is GameLevel:
-					var sign:float = 1.0 if level_root.wind.wind.x >= 0.0 else -1.0
-					level_root.wind.wind = Vector2(level_root.wind.wind_max * sign, 0.0)
+					var _sign:float = 1.0 if level_root.wind.wind.x >= 0.0 else -1.0
+					level_root.wind.wind = Vector2(level_root.wind.wind_max * _sign, 0.0)
 					
 			Cheats.INSTAWIN:
 				cheat_name = "PLATINUM CHIP"

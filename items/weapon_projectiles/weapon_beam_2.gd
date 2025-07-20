@@ -11,6 +11,7 @@ var time_to_wait_between_hits = 0.75
 func modulate_enabled() -> bool:
 	return false
 
+@warning_ignore("unused_parameter")
 func _calculate_damage(target: Node2D) -> float:
 	return 50
 

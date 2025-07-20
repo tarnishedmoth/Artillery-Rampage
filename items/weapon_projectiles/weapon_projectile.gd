@@ -145,6 +145,7 @@ func on_body_entered(body: PhysicsBody2D):
 	explode(body)
 
 ## Hook function for derived classes to take additional actions when having an interaction between the destructible component and another node
+@warning_ignore("unused_parameter")
 func _on_destructible_component_interaction(in_destructible_component: CollisionPolygon2D, destructible_node:Node) -> void:
 	pass
 
@@ -242,11 +243,11 @@ func damage_damageable_node(
 @warning_ignore("unused_parameter")
 func damage_destructible_node(
 	destructible:Node, instigator:Node, projectile:WeaponProjectile,
-	contact_point:Vector2, destructible_scale_multiplier:Vector2
+	contact_point:Vector2, destructible_scale_mult:Vector2
 	) -> void:
 	
 	var container = WeaponProjectilePhysicsContainer.new(self)
-	destructible.damage(container, contact_point, destructible_scale_multiplier)
+	destructible.damage(container, contact_point, destructible_scale_mult)
 
 func get_instigator() -> Node2D:
 	return owner_tank.get_parent() as Node2D if is_instance_valid(owner_tank) else null

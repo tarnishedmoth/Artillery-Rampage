@@ -80,7 +80,9 @@ func wait_and_next_state() -> void:
 func next_state() -> void:
 	_transitions_lengths.clear()
 	
-	if _state_queue.is_empty(): reset_queue()
+	if _state_queue.is_empty():
+		cycle_completed.emit()
+		reset_queue()
 	
 	var getting_state:bool = true
 	while getting_state:
@@ -143,7 +145,7 @@ func change_sun(new_position:Vector2, new_energy:float = starting_energy, immedi
 	if not immediate:
 		# Make 3 random numbers and record the total length of time this tween will take.
 		var transitions_durations:Array[float] = []
-		var _sum:float
+		var _sum:float = 0.0
 		for i in 3:
 			var time:float = transition_time()
 			transitions_durations.append(time)
@@ -155,10 +157,12 @@ func change_sun(new_position:Vector2, new_energy:float = starting_energy, immedi
 		sun_position_tween.tween_property(sun_light, ^"energy", 0.0, transitions_durations.pop_back())
 		sun_position_tween.tween_property(sun_light, ^"position", starting_position+new_position, transitions_durations.pop_back())
 		sun_position_tween.tween_property(sun_light, ^"energy", new_energy, transitions_durations.pop_back())
+		sun_position_tween.tween_callback(sun_transitioned.emit)
 		sun_position_tween.tween_callback(_on_transition_completed)
 	else:
 		sun_light.position = starting_position+new_position
 		sun_light.energy = new_energy
+		sun_transitioned.emit()
 		_on_transition_completed.call_deferred()
 	
 	
@@ -177,16 +181,18 @@ func change_ambient(mod_color:Color, immediate:bool = false) -> void:
 		
 		environment_tween = create_tween()
 		environment_tween.tween_property(game_level, ^"modulate", mod_color, time)
+		environment_tween.tween_callback(env_transitioned.emit)
 		environment_tween.tween_callback(_on_transition_completed)
 		
 	else:
 		game_level.modulate = mod_color
+		env_transitioned.emit()
 		_on_transition_completed.call_deferred()
 		
 
 func change_weather(state:DayWeatherState, immediate:bool) -> void:
 	## TODO: tank lights catching particles, terrain chunk sets light occluder on start
-	var transition_time:float = 1.0 if immediate else state.weather_transition_time
+	var _transition_time:float = 1.0 if immediate else state.weather_transition_time
 	
 	if state.is_raining:
 		var effect:WeatherEffects.EFFECT
@@ -201,7 +207,7 @@ func change_weather(state:DayWeatherState, immediate:bool) -> void:
 			_active_weather_node = PRECIPITATION_SCENE.instantiate()
 			add_child(_active_weather_node)
 			
-			_active_weather_node.start_effect(effect, state.rain_intensity, transition_time)
+			_active_weather_node.start_effect(effect, state.rain_intensity, _transition_time)
 				
 			
 		else:
@@ -213,12 +219,12 @@ func change_weather(state:DayWeatherState, immediate:bool) -> void:
 				change_weather(state, immediate)
 				return
 			else:
-				_active_weather_node.set_intensity(effect, state.rain_intensity, transition_time)
+				_active_weather_node.set_intensity(effect, state.rain_intensity, _transition_time)
 		
 	else:
 		# Current state wants not rain
 		if _active_weather_node:
-			_active_weather_node.stop_and_delete(transition_time)
+			_active_weather_node.stop_and_delete(_transition_time)
 
 
 func transition_time() -> float:

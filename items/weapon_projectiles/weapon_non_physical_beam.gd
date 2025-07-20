@@ -57,6 +57,7 @@ func set_sources(tank:Tank, weapon:Weapon) -> void:
 	owner_tank = tank
 	source_weapon = weapon
 
+@warning_ignore("unused_parameter")
 func _calculate_damage(target: Node2D) -> float:
 	return 50
 
@@ -123,7 +124,7 @@ func _process(delta):
 func see_if_beam_collides_with_anything(delta):
 	var laser_start = get_current_laser_start()
 	var laser_end = get_current_laser_end()
-	var beam_sprite = get_current_beam_sprite()
+	#var beam_sprite = get_current_beam_sprite() # Not used in code block
 
 	var space_state = get_world_2d().direct_space_state
 	var query_params := PhysicsRayQueryParameters2D.create(
@@ -238,11 +239,11 @@ func damage_damageable_node(
 @warning_ignore("unused_parameter")
 func damage_destructible_node(
 	destructible:Node, instigator:Node, projectile:WeaponNonPhysicalBeam,
-	contact_point:Vector2, destructible_scale_multiplier:Vector2
+	contact_point:Vector2, destructible_scale_mult:Vector2
 	) -> void:
 	
 	var container = WeaponBeamPhysicsContainer.new(self)
-	destructible.damage(container, contact_point, destructible_scale_multiplier)
+	destructible.damage(container, contact_point, destructible_scale_mult)
 
 func get_instigator() -> Node2D:
 	return owner_tank.get_parent() as Node2D if is_instance_valid(owner_tank) else null
@@ -293,6 +294,7 @@ func _find_interaction_overlaps() -> Array[Node2D]:
 	
 	return collision_results
 
+@warning_ignore("unused_parameter")
 ## Override to change the destructible position to laser end position
 func _on_destructible_component_interaction(in_destructible_component: CollisionPolygon2D, destructible_node:Node) -> void:
 	var laser_end = get_current_laser_end()

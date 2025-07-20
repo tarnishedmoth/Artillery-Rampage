@@ -282,9 +282,9 @@ func shoot() -> bool:
 		weapon.dry_fire() # For sound effect (if assigned in Weapon scene)
 		return false
 		
-func _shoot_weapon(weapon:Weapon, power:float) -> void:
+func _shoot_weapon(weapon:Weapon, _power:float) -> void:
 	kill_active_previewer()
-	weapon.shoot(power)
+	weapon.shoot(_power)
 	
 func kill_active_previewer(until_next_turn:bool = true) -> void:
 	if shooting_trajectory_previewer:

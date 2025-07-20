@@ -24,7 +24,7 @@ func _ready() -> void:
 		#global_position = node_with_health.global_position + offset_position
 	hide()
 	
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if node_with_health:
 		global_position = node_with_health.global_position + offset_position
 

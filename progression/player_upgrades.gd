@@ -29,22 +29,7 @@ func remove_upgrade_and_get_scrap_value(mod_bundle:ModBundle) -> int:
 		print_debug("Removed an upgrade: %s" % [mod_bundle._to_string()])
 		current_upgrades.erase(mod_bundle)
 		
-	var raw_scrap_value:int = mod_bundle.get_scrap_value()
-	# Reduce value when you have many upgrades
-	#var actual_scrap_value:int = maxi(0, raw_scrap_value - (float(current_upgrades.size()) * 0.3))
-	#return actual_scrap_value
-	## HACK -- fixed value to 1 for release, until we think about balancing this
-	#return 1
-	
-	var buff_stat:int = 1
-	const buff_stat_value_multiplier:float = 1.5
-	for mod in mod_bundle.components_weapon_mods:
-		if mod.is_buff:
-			buff_stat += mod.value * buff_stat_value_multiplier
-		else:
-			buff_stat -= mod.value * buff_stat_value_multiplier
-			
-	return maxi(1, roundi(buff_stat))
+	return mod_bundle.get_scrap_value()
 
 func _on_acquired_upgrade(mod_bundle:ModBundle) -> void:
 	print_debug("Acquired upgrade")

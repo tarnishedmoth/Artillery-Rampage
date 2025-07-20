@@ -29,7 +29,7 @@ func resize_to_fit() -> void:
 
 func get_summed_height_of_children(node:Node) -> float:
 	var children:Array
-	for child in target_container.get_children():
+	for child in node.get_children():
 		if child is Control:
 			children.append(child)
 

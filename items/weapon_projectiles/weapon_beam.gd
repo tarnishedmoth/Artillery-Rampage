@@ -7,6 +7,7 @@ var speed = 8
 func modulate_enabled() -> bool:
 	return false
 
+@warning_ignore("unused_parameter")
 func _calculate_damage(target: Node2D) -> float:
 	return 100
 

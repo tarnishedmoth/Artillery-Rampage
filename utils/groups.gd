@@ -1,5 +1,7 @@
 extends Node
 
+## https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_styleguide.html#naming-conventions
+
 const Collectible:StringName = &"Collectible"
 const Destructible:StringName = &"Destructible"
 const Damageable:StringName = &"Damageable"
@@ -24,7 +26,7 @@ const GameLevel:StringName = &"GameLevel"
 
 const WobbleActivator:StringName = &"WobbleActivator"
 
-const StoryLevelState:StringName = &"StoryLevelState"
+const STORY_LEVEL_STATE:StringName = &"StoryLevelState"
 
 ## Rewardable is used for objects that can be rewarded at the end of a round
 ## This is used by the RoundStatTracker to determine what to reward

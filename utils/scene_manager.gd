@@ -79,7 +79,7 @@ var current_story_level:StoryLevel:
 	
 var story_level_state:StoryLevelState:
 	get:
-		return get_tree().get_first_node_in_group(Groups.StoryLevelState) as StoryLevelState
+		return get_tree().get_first_node_in_group(Groups.STORY_LEVEL_STATE) as StoryLevelState
 		
 # Any scene, even if it is a UI scene and not a game level scene
 var _last_scene_resource:Resource

@@ -22,6 +22,7 @@ extends Control
 
 var _active_player:TankController = null
 
+@warning_ignore("unused_private_class_variable")
 var _center_tween:Tween
 var _player_tween:Tween
 var _health_tween:Tween

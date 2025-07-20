@@ -22,7 +22,7 @@ func _ready() -> void:
 	GameEvents.user_options_changed.connect(_on_user_options_changed)
 	GameEvents.level_loaded.connect(_on_level_loaded)
 
-func _on_level_loaded(game_level:GameLevel) -> void:
+func _on_level_loaded(_game_level:GameLevel) -> void:
 	toggle_visibility(true)
 
 func toggle_visibility(toggle:bool = true) -> void:
@@ -89,7 +89,7 @@ func replace_keybind_glyphs(text: String) -> String:
 
 	for action in UserOptions.get_all_keybinds():
 		var glyphs = UserOptions.get_glyphs(action)
-		var replacement_text:String
+		var replacement_text:String = ""
 
 		for glyph:String in glyphs:
 			# Remove crap

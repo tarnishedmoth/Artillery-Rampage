@@ -6,7 +6,6 @@ var parent:
 		return get_parent()
 
 var tween:Tween
-var _orig_modulate:Color
 
 func _ready() -> void:
 	if parent is Control:

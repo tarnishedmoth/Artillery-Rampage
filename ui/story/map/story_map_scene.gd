@@ -42,7 +42,7 @@ func _ready() -> void:
 		
 	Juice.fade_in(next_button, Juice.LONG)
 		
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	for layer_id in parallax_layers.size():
 		parallax_layers[layer_id].global_position = _parallax_layers[layer_id] - _center_node_offset + (
 			get_global_mouse_position() - _get_center_screen()
@@ -151,7 +151,6 @@ func _create_graph() -> void:
 		var next_level:StoryLevel = _story_levels_resource.levels[_next_level_index]
 		_create_scrolling_narrative(next_level, active_node)
 		
-	var graph_offset:float
 	var _node_to_center:StoryLevelNode
 	if active_node:
 		_node_to_center = active_node
@@ -400,7 +399,7 @@ func _create_scrolling_narrative(level:StoryLevel, active_node: StoryLevelNode) 
 func _get_prev_round_narrative_summary() -> String:
 	# TODO: Determine outcome based on actual results
 	# Here we are assuming we won since moving to next level but we aren't measuring the success level yet
-	var outcome:AutoNarrative.Outcomes = randi_range(0, 2)
+	var outcome:AutoNarrative.Outcomes = randi_range(0, 2) as AutoNarrative.Outcomes
 	return auto_narrative.generate_narrative(outcome)
 #endregion
 

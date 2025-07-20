@@ -9,7 +9,7 @@ extends Control
 func _ready() -> void:
 	_apply_tank_shader()
 
-	var story_level_state:StoryLevelState = get_tree().get_first_node_in_group(Groups.StoryLevelState) as StoryLevelState
+	var story_level_state:StoryLevelState = get_tree().get_first_node_in_group(Groups.STORY_LEVEL_STATE) as StoryLevelState
 	if story_level_state:
 		var run_count:int = story_level_state.run_count
 		run_header_label.text = run_header_label.text.replace("%RUN%", str(run_count))

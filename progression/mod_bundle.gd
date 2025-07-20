@@ -8,6 +8,10 @@ class_name ModBundle extends Resource
 
 const DEFAULT_DISPLAY_NAME:String = "Mystery"
 
+## Scrap value
+const BUFF_STAT_VALUE_MULTIPLIER: float = 1.5
+const MIN_SCRAP_VALUE: int = 1
+
 @export var display_name:String = DEFAULT_DISPLAY_NAME
 var display_name_components:Dictionary
 @export_group("Components", "component_")
@@ -206,6 +210,7 @@ func _new_rand_mod_weapon(chance_bias:int = 0) -> ModWeapon:
 	
 	return mod
 
+@warning_ignore("unused_parameter")
 func _new_rand_mod_projectile(chance_bias:int = 0) -> ModProjectile:
 	var mod = ModProjectile.new()
 	#TODO
@@ -239,9 +244,14 @@ func _to_string() -> String:
 	return " ".join(parts)
 	
 func get_scrap_value() -> int:
-	## TODO deterministic valuation
-	## Implement in Mod classes and match case here
-	return 4
+	var buff_stat: float = MIN_SCRAP_VALUE
+	for mod in components_weapon_mods:
+		if mod.is_buff:
+			buff_stat += mod.value * BUFF_STAT_VALUE_MULTIPLIER
+		else:
+			buff_stat -= mod.value * BUFF_STAT_VALUE_MULTIPLIER
+			
+	return maxi(MIN_SCRAP_VALUE, roundi(buff_stat))
 
 #region Savable
 

@@ -44,7 +44,7 @@ func take_damage(instigatorController: Node2D, instigator: Node2D, damage_amount
 	if health == 0.0:
 		delete()
 
-func take_emp(instigatorController: Node2D, instigator: Node2D, charge:float) -> void:
+func take_emp(_instigatorController: Node2D, _instigator: Node2D, charge:float) -> void:
 	if not can_be_emp_charged: return
 	var actual_charge = charge * emp_conductivity_multiplier
 	emp_charge += actual_charge

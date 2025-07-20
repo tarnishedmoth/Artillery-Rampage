@@ -17,8 +17,9 @@ extends Node
 @export var sfx_soundtrack: AudioStreamPlayer
 
 var initial_db_values:Dictionary
-var _sfx_volume_modifier:float = 1.0 ## This needs to be with other Options in a singleton so it can be requested.
-var _music_volume_modifier:float = 0.5 ## This needs to be with other Options in a singleton so it can be requested.
+var _sfx_volume_modifier:float = 1.0
+@warning_ignore("unused_private_class_variable")
+var _music_volume_modifier:float = 0.5
 
 func _ready() -> void:
 	GameEvents.turn_started.connect(_on_turn_started)

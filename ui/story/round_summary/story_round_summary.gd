@@ -9,7 +9,7 @@ class_name StoryRoundSummary extends Control
 @onready var kills:HUDElement = %Kills
 @onready var damage_done:HUDElement = %DamageDone
 @onready var health_lost:HUDElement = %HealthLost
-@onready var grade:HUDElement = %Grade
+@onready var grade_hudelement:HUDElement = %Grade
 @onready var personnel:HUDElement = %Personnel
 @onready var scrap:HUDElement = %Scrap
 
@@ -56,9 +56,9 @@ func _ready() -> void:
 	_grade = _calculate_grade()
 	# Hiding grade if you lose
 	if stats.won:
-		grade.set_value(_fmt_grade(_grade))
+		grade_hudelement.set_value(_fmt_grade(_grade))
 	else:
-		grade.hide()
+		grade_hudelement.hide()
 		
 	_set_narrative(_grade)
 	
