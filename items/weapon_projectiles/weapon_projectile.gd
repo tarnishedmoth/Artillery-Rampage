@@ -51,6 +51,9 @@ var run_collision_logic:bool = true ## Whether to affect damageables & destructi
 	get: return max_damage * damage_multiplier
 @export var damage_multiplier: float = 1.0 # ModProjectile
 
+## This multiplies the damage dealt when damaging the tank that fired this weapon.
+@export var damage_instigator_multiplier:float = 1.0
+
 #@export_category("Damage")
 #@export var last_collider_time_tolerance: float = 0.1
 
@@ -203,6 +206,11 @@ func explode(collided_body: PhysicsBody2D = null, force:bool = false):
 		var damage_amount:float = damaged_processed_map.get(node, 0.0)
 		# Default to global_position for contact point if this is just a damageable node
 		var contact_point:Vector2 = destructed_processed_map.get(node, global_position)
+		
+		if damage_instigator_multiplier != 1.0:
+			if node is Tank:
+				if node.controller == instigator: ## Damage the instigator less
+					damage_amount *= damage_instigator_multiplier
 
 		if node.is_in_group(Groups.Destructible):
 			damage_destructible_node(node, instigator, self, contact_point, destructible_scale_multiplier)
