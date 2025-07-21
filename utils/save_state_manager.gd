@@ -7,6 +7,10 @@ var _save_ext:StringName
 var _save_strategy: Callable
 var _load_strategy: Callable
 
+var save_state:SaveState
+
+var _flag_consumers:Dictionary[StringName, Dictionary] = {}
+
 func _ready() -> void:
 
 	# TODO: If save performance becomes an issue can switch to binary for release builds, but
@@ -32,11 +36,14 @@ func _ready() -> void:
 		# restore initial tree state
 		restore_tree_state.call_deferred(SaveState.ContextTriggers.LOAD)
 
+## Called by main menu & story complete loss (game_over.tscn) scenes.
+func start_new_story_with_new_save() -> void:
+	PlayerStateManager.enable = true
+	StorySaveUtils.new_story_save()
+	SaveStateManager.add_state_flag(SceneManager.new_story_selected)
+	SceneManager.play_mode = SceneManager.PlayMode.STORY
 
-var save_state:SaveState
-
-var _flag_consumers:Dictionary[StringName, Dictionary] = {}
-
+	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.StoryStart)
 
 ## Adds a flag that can be read in deserializers that need to ignore state in a certain context
 # such as a new story mode

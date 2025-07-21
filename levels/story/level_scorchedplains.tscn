@@ -5,7 +5,7 @@
 [ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_dft5m"]
 [ext_resource type="Texture2D" uid="uid://bqds07ajtn7ei" path="res://terrain/terrain-scorched-earth.png" id="4_57lle"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_g3v77"]
-[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="6_2fkir"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather/day_weather_state_resource.gd" id="6_2fkir"]
 [ext_resource type="Resource" uid="uid://bo2ij3wxvfil" path="res://environment/day_weather_states/morning_humid.tres" id="7_8u6rg"]
 [ext_resource type="Resource" uid="uid://dcsv3ifhia30m" path="res://environment/day_weather_states/afternoon_desert.tres" id="7_j0owa"]
 [ext_resource type="Resource" uid="uid://b8oudrpxm0p46" path="res://environment/day_weather_states/noon_desert.tres" id="7_ul4cw"]

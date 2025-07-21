@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="7_g6jvu"]
 [ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="11_a3k3j"]
 [ext_resource type="PackedScene" uid="uid://dtjulft5slr3v" path="res://controller/ai/variations/ai_tank_wallmaster.tscn" id="12_g0n4y"]
-[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="12_qc7q3"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather/day_weather_state_resource.gd" id="12_qc7q3"]
 [ext_resource type="PackedScene" uid="uid://d3hlh5amohta" path="res://controller/ai/variations/ai_tank_windwunder.tscn" id="13_nqmfy"]
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="14_npr3d"]
 [ext_resource type="Texture2D" uid="uid://bbgp31owjo7sk" path="res://background_items/background_snowymountains.png" id="16_5rf11"]

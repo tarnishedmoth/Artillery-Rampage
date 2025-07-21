@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c6drjfyj22hs4" path="res://terrain/terrain-grass-to-dirt.png" id="4_uocfp"]
 [ext_resource type="Resource" uid="uid://dgrisjpfie3hx" path="res://terrain/terrain_outline_grass.tres" id="5_6xt0d"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_7gt6j"]
-[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="8_w04kr"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather/day_weather_state_resource.gd" id="8_w04kr"]
 [ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="9_q02cm"]
 [ext_resource type="PackedScene" uid="uid://bquwvo2blan2o" path="res://controller/ai/variations/ai_tank_lobber_easy.tscn" id="12_i3677"]
 [ext_resource type="PackedScene" uid="uid://cq5edhs86n8r1" path="res://buildings/house/house.tscn" id="15_i2cnw"]

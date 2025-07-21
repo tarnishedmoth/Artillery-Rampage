@@ -9,9 +9,11 @@ extends EditorPlugin
 
 const SCRIPTS = [
 	"res://weapons/weapon.gd",
+	"res://items/weapon_projectiles/explosions/explosion.gd",
 	"res://weapons/mod_weapon.gd",
 	"res://items/weapon_projectiles/mod_projectile.gd",
 	"res://items/weapon_projectiles/weapon_projectile.gd",
+	"res://items/weapon_projectiles/explosions/explosion.gd",
 	
 	"res://tank/tank.gd",
 	"res://controller/tank_controller.gd",

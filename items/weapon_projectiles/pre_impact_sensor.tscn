@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://cn3fub5ghvbl5"]
+
+[ext_resource type="Script" uid="uid://bgi31yv0iguvm" path="res://items/weapon_projectiles/pre_impact_sensor.gd" id="1_ny784"]
+[ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="2_u62oy"]
+
+[node name="PreImpactSensor" type="Node2D"]
+script = ExtResource("1_ny784")
+collision_masks = 8
+metadata/_custom_type_script = "uid://bgi31yv0iguvm"
+
+[node name="DebugSprite" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+visible = false
+modulate = Color(1, 0, 0, 1)
+z_index = -1
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_u62oy")

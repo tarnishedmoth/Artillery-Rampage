@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="DayWeatherState" load_steps=2 format=3 uid="uid://dcsv3ifhia30m"]
 
-[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="1_cbn1c"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather/day_weather_state_resource.gd" id="1_cbn1c"]
 
 [resource]
 script = ExtResource("1_cbn1c")

@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3 uid="uid://cge2gyp2q0waf"]
+
+[ext_resource type="Script" uid="uid://bkt30e3183urb" path="res://weapons/weapon.gd" id="1_5bcx7"]
+[ext_resource type="PackedScene" uid="uid://dpgrogg5orlm5" path="res://items/weapon_projectiles/weapon_projectile_airburst.tscn" id="2_57kwd"]
+[ext_resource type="AudioStream" uid="uid://dvxk5v776ntbk" path="res://weapons/sounds/sfx_shot_a_3.wav" id="3_p6eo6"]
+[ext_resource type="AudioStream" uid="uid://qy6jau74odfd" path="res://weapons/sounds/dry_fire.wav" id="4_bgoyi"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_bgoyi"]
+playback_mode = 2
+random_pitch = 1.03
+streams_count = 1
+stream_0/stream = ExtResource("3_p6eo6")
+
+[node name="WeaponAirburst" type="Node2D" node_paths=PackedStringArray("sfx_fire", "sfx_dry_fire")]
+script = ExtResource("1_5bcx7")
+scene_to_spawn = ExtResource("2_57kwd")
+display_name = "Airburst"
+description = "Explodes in the air just before impact."
+accuracy_angle_spread = 0.139626
+fire_rate = 1.5
+use_ammo = true
+current_ammo = 1
+use_magazines = true
+magazines = 2
+magazine_capacity = 1
+reload_delay_time = 1.0
+sfx_fire = NodePath("Fire")
+sfx_dry_fire = NodePath("DryFire")
+metadata/_custom_type_script = "uid://bkt30e3183urb"
+
+[node name="Fire" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_bgoyi")
+pitch_scale = 0.84
+bus = &"Guns"
+
+[node name="DryFire" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_bgoyi")
+pitch_scale = 0.95
+bus = &"Guns"

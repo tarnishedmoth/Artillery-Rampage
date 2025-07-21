@@ -21,7 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://bamvmc2k56pyk" path="res://effects/post_processing/post_processing.tscn" id="19_onnnh"]
 [ext_resource type="PackedScene" uid="uid://dlh1i2cvw3mim" path="res://voiceovers/announcer.tscn" id="20_k1cdv"]
 [ext_resource type="PackedScene" uid="uid://cduo8m7j3bl8g" path="res://progression/difficulty_modifier.tscn" id="21_rs00r"]
-[ext_resource type="PackedScene" uid="uid://cv6k5ub7mpj8t" path="res://levels/day_weather.tscn" id="23_4edbn"]
+[ext_resource type="PackedScene" uid="uid://cv6k5ub7mpj8t" path="res://levels/day_weather/day_weather.tscn" id="23_4edbn"]
 [ext_resource type="PackedScene" uid="uid://cik2yg2jorw80" path="res://utils/spawn_limiter.tscn" id="24_876hk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_chthv"]

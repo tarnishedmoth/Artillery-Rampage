@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c6drjfyj22hs4" path="res://terrain/terrain-grass-to-dirt.png" id="4_6giqc"]
 [ext_resource type="Resource" uid="uid://csj8tgks7843i" path="res://terrain/terrain_outline_road.tres" id="5_4nsc0"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="6_0pbmw"]
-[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="7_jwp26"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather/day_weather_state_resource.gd" id="7_jwp26"]
 [ext_resource type="Resource" uid="uid://bedte7j6h4t6h" path="res://environment/day_weather_states/morning_gloomy.tres" id="8_q8asx"]
 [ext_resource type="Resource" uid="uid://btmvihjsjvfmp" path="res://environment/day_weather_states/default_noon.tres" id="9_0tkt6"]
 [ext_resource type="Resource" uid="uid://drgl8rrxwae10" path="res://environment/day_weather_states/afternoon_golden.tres" id="10_lsjv3"]

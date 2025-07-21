@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://do2r411gtohhx" path="res://weapons/weapon_missile_homing.tscn" id="7_cs5kv"]
 [ext_resource type="PackedScene" uid="uid://b86jghsmvnyg8" path="res://weapons/weapon_shield.tscn" id="8_8ylxn"]
 [ext_resource type="PackedScene" uid="uid://dychmx0p2ex84" path="res://weapons/weapon_bouncing_ball.tscn" id="9_iwr3d"]
-[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="10_ja3hk"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather/day_weather_state_resource.gd" id="10_ja3hk"]
 [ext_resource type="Resource" uid="uid://bedte7j6h4t6h" path="res://environment/day_weather_states/morning_gloomy.tres" id="11_x3i4c"]
 [ext_resource type="Resource" uid="uid://btmvihjsjvfmp" path="res://environment/day_weather_states/default_noon.tres" id="12_jppc8"]
 [ext_resource type="Resource" uid="uid://b7ptujvsi6nmw" path="res://environment/day_weather_states/overcast.tres" id="13_xu7nj"]

@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://csihivws7i8v6"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_fhke7"]
+[ext_resource type="PackedScene" uid="uid://cge2gyp2q0waf" path="res://weapons/sounds/weapon_airburst.tscn" id="5_h4btd"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="6_jr5lm"]
+
+[node name="TestLevel01" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_fhke7")]
+
+[node name="RoundDirector" parent="GameLevel" index="2"]
+player_goes_first = true
+
+[node name="ArtillerySpawner" parent="GameLevel" index="9"]
+default_ai_players = Vector2i(2, 2)
+
+[node name="Player" parent="GameLevel" instance=ExtResource("6_jr5lm")]
+position = Vector2(176, 424)
+
+[node name="WeaponAirburst2" parent="GameLevel/Player/Weapons" index="0" instance=ExtResource("5_h4btd")]
+use_ammo = false
+
+[editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/Player"]
+[editable path="GameLevel/Player/Tank/AimDamageWobble/PlayerActivateWobble"]

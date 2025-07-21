@@ -34,8 +34,8 @@ signal completed_lifespan(projectile:WeaponProjectile) ## Tracked by Weapon clas
 @export var should_explode_on_impact:bool = true
 var run_collision_logic:bool = true ## Whether to affect damageables & destructibles on collision. See [method arm] and [method disarm].
 
-@export var explosion_to_spawn:PackedScene
-@export var rescale_explosion:Vector2 = Vector2(1.0,1.0)
+@export var explosion_to_spawn:PackedScene ## Spawned uncoupled from this instance in [method destroy]. Scene must be of type [Explosion].
+@export var rescale_explosion:Vector2 = Vector2(1.0,1.0) ## Only applies to the [member explosion_to_spawn] scene.
 
 @export var upgrades: Array[ModProjectile] ## For upgrades and nerfs at runtime
 

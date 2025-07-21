@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://my1pco86ryy2" path="res://terrain/terrain-grass-and-dirt.png" id="4_jxaaa"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_v266i"]
 [ext_resource type="Resource" uid="uid://dgrisjpfie3hx" path="res://terrain/terrain_outline_grass.tres" id="5_wf0wo"]
-[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="7_aaafy"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather/day_weather_state_resource.gd" id="7_aaafy"]
 [ext_resource type="PackedScene" uid="uid://cmdqjyrjdgbl1" path="res://effects/hazard/water/water_hazard.tscn" id="14_k2vcv"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="15_x84ix"]
 [ext_resource type="PackedScene" uid="uid://dyoeqogv8xoye" path="res://environment/procedural_object_seaside_spawner.tscn" id="16_nntc6"]

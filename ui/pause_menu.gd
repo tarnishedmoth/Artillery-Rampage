@@ -23,7 +23,8 @@ enum Cheats{
 	NO_WIND,
 	MAX_WIND,
 	INSTAWIN,
-	INSTALOSE
+	INSTALOSE,
+	IMMATERIAL,
 	}
 var CheatCodes:Dictionary[Array, Cheats] = {
 	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.LEFT,Keys.RIGHT,Keys.LEFT,Keys.RIGHT]: Cheats.FULL_HEALTH,
@@ -36,7 +37,8 @@ var CheatCodes:Dictionary[Array, Cheats] = {
 	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.UP,Keys.UP,Keys.LEFT,Keys.DOWN]: Cheats.NO_WIND,
 	[Keys.UP,Keys.UP,Keys.DOWN,Keys.DOWN,Keys.UP,Keys.UP,Keys.RIGHT,Keys.DOWN]: Cheats.MAX_WIND,
 	[Keys.DOWN,Keys.UP,Keys.DOWN,Keys.UP,Keys.RIGHT,Keys.UP,Keys.UP,Keys.UP]: Cheats.INSTAWIN,
-	[Keys.DOWN,Keys.UP,Keys.DOWN,Keys.UP,Keys.RIGHT,Keys.DOWN,Keys.DOWN,Keys.DOWN]: Cheats.INSTALOSE
+	[Keys.DOWN,Keys.UP,Keys.DOWN,Keys.UP,Keys.RIGHT,Keys.DOWN,Keys.DOWN,Keys.DOWN]: Cheats.INSTALOSE,
+	[Keys.LEFT,Keys.LEFT,Keys.RIGHT,Keys.RIGHT,Keys.LEFT,Keys.RIGHT,Keys.UP,Keys.RIGHT]: Cheats.IMMATERIAL,
 }
 var input_buffer:Array[Keys]
 var input_buffer_listening:bool = false
@@ -188,6 +190,11 @@ func _check_cheat_code_entered(code:Array[Keys]) -> void:
 				cheat_name = "COURIER'S FATE"
 				GameEvents.player_died.emit(_get_player_controller())
 				GameEvents.round_ended.emit()
+				
+			Cheats.IMMATERIAL: 
+				cheat_name = "LUKE'S GOODBYE"
+				var tankBody = _get_player_controller().tank.tankBody
+				tankBody.set_collision_layer_value(1, false)
 
 
 		print_debug("-- CHEAT: ", cheat_name)

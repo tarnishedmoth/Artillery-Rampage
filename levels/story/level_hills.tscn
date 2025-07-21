@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="9_qfat7"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="10_36d0b"]
 [ext_resource type="PackedScene" uid="uid://dvkouaun7cdld" path="res://environment/procedural_object_plains_spawner.tscn" id="11_rrpa8"]
-[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="13_jsq8e"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather/day_weather_state_resource.gd" id="13_jsq8e"]
 [ext_resource type="Resource" uid="uid://dfp7emnp2l0eb" path="res://environment/day_weather_states/default_morning.tres" id="14_evx1h"]
 [ext_resource type="Resource" uid="uid://btmvihjsjvfmp" path="res://environment/day_weather_states/default_noon.tres" id="15_vl3yg"]
 [ext_resource type="Resource" uid="uid://drgl8rrxwae10" path="res://environment/day_weather_states/afternoon_golden.tres" id="16_7srcy"]

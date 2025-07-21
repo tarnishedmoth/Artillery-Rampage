@@ -1,15 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://cjk1xlwijbmno"]
 
-[sub_resource type="Gradient" id="Gradient_rfeyq"]
-colors = PackedColorArray(0.19, 0.187625, 0.1843, 1, 0.140447, 0.140447, 0.140447, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_x1oaf"]
-gradient = SubResource("Gradient_rfeyq")
-width = 128
-height = 128
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.8, 0.8)
+[ext_resource type="Texture2D" uid="uid://iw266alg2pc2" path="res://destructible/rubble/smoke_3.png" id="1_kr6oa"]
 
 [sub_resource type="Curve" id="Curve_3wgpn"]
 _limits = [0.0, 20.0, 0.0, 1.0]
@@ -17,12 +8,18 @@ _data = [Vector2(0, 20), 0.0, -77.9845, 0, 1, Vector2(0.256461, 0), -77.9845, 0.
 point_count = 2
 
 [sub_resource type="Gradient" id="Gradient_61qm2"]
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+offsets = PackedFloat32Array(0, 0.105125, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_kr6oa"]
+offsets = PackedFloat32Array(0, 0.327201, 0.630749, 1)
+colors = PackedColorArray(0.79, 0.79, 0.79, 0.690196, 0.789879, 0.789879, 0.789879, 1, 1, 1, 1, 1, 1, 1, 1, 0.74902)
 
 [node name="Dust" type="CPUParticles2D" groups=["Wind_Particles2D"]]
+self_modulate = Color(0.48, 0.48, 0.48, 0.137255)
 z_index = -1
 amount = 12
-texture = SubResource("GradientTexture2D_x1oaf")
+texture = ExtResource("1_kr6oa")
 lifetime = 3.0
 explosiveness = 1.0
 lifetime_randomness = 0.33
@@ -42,3 +39,4 @@ angle_min = -45.0
 angle_max = 45.0
 scale_amount_max = 2.0
 color_ramp = SubResource("Gradient_61qm2")
+color_initial_ramp = SubResource("Gradient_kr6oa")

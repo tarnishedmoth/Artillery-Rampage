@@ -5,7 +5,7 @@
 [ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_5ddo4"]
 [ext_resource type="Texture2D" uid="uid://ba7dq172ainja" path="res://terrain/terrain-strata-beach.png" id="3_kh1qs"]
 [ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="5_s2jhl"]
-[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="6_kh1qs"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather/day_weather_state_resource.gd" id="6_kh1qs"]
 [ext_resource type="Resource" uid="uid://bo2ij3wxvfil" path="res://environment/day_weather_states/morning_humid.tres" id="7_c352j"]
 [ext_resource type="Resource" uid="uid://btmvihjsjvfmp" path="res://environment/day_weather_states/default_noon.tres" id="8_epomo"]
 [ext_resource type="Resource" uid="uid://drgl8rrxwae10" path="res://environment/day_weather_states/afternoon_golden.tres" id="9_6qyad"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dps6lqs28tqa1"]
+[gd_scene load_steps=19 format=3 uid="uid://dps6lqs28tqa1"]
 
 [ext_resource type="Script" uid="uid://c3j0v57tdn8jy" path="res://controller/player/initial_aim.gd" id="1_5t8u5"]
 [ext_resource type="Script" uid="uid://drk5s6oo6lloa" path="res://controller/player/player.gd" id="1_t03mm"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="8_j0lm5"]
 [ext_resource type="PackedScene" uid="uid://ccl2oyo13754i" path="res://weapons/weapon_MiniMIRV.tscn" id="9_4e8rn"]
 [ext_resource type="PackedScene" uid="uid://do2r411gtohhx" path="res://weapons/weapon_missile_homing.tscn" id="10_lvkgb"]
+[ext_resource type="PackedScene" uid="uid://cge2gyp2q0waf" path="res://weapons/sounds/weapon_airburst.tscn" id="18_d3jwv"]
 
 [node name="Player" type="Node2D" node_paths=PackedStringArray("weapons_container")]
 script = ExtResource("1_t03mm")
@@ -70,6 +71,8 @@ current_ammo = 3
 [node name="WeaponMissileHoming" parent="Weapons" instance=ExtResource("10_lvkgb")]
 
 [node name="WeaponLaser3" parent="Weapons" instance=ExtResource("6_qdh30")]
+
+[node name="WeaponAirburst" parent="Weapons" instance=ExtResource("18_d3jwv")]
 
 [connection signal="timeout" from="TrajectoryPreviewer" to="." method="_on_trajectory_previewer_timeout"]
 

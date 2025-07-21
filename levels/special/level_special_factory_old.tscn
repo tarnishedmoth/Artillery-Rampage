@@ -26,7 +26,7 @@
 [ext_resource type="PackedScene" uid="uid://bpx30vx00emmd" path="res://weapons/weapon_missile.tscn" id="24_upw5b"]
 [ext_resource type="PackedScene" uid="uid://bamvmc2k56pyk" path="res://effects/post_processing/post_processing.tscn" id="25_yuw3i"]
 [ext_resource type="PackedScene" uid="uid://dlh1i2cvw3mim" path="res://voiceovers/announcer.tscn" id="26_a5sw5"]
-[ext_resource type="PackedScene" uid="uid://cv6k5ub7mpj8t" path="res://levels/day_weather.tscn" id="27_k32be"]
+[ext_resource type="PackedScene" uid="uid://cv6k5ub7mpj8t" path="res://levels/day_weather/day_weather.tscn" id="27_k32be"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="28_c0w7t"]
 [ext_resource type="PackedScene" uid="uid://ddb05m7heyso3" path="res://levels/special/factory.tscn" id="29_ddyir"]
 

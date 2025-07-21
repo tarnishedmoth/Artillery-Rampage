@@ -1,0 +1,51 @@
+[gd_scene load_steps=6 format=3 uid="uid://dpgrogg5orlm5"]
+
+[ext_resource type="Script" uid="uid://cm2b1mrcm6tml" path="res://items/weapon_projectiles/weapon_projectile.gd" id="1_nf7bj"]
+[ext_resource type="Texture2D" uid="uid://n0ljl2ukpglf" path="res://items/weapon_projectiles/projectile_ball.png" id="2_2f1ha"]
+[ext_resource type="PackedScene" uid="uid://dfo2rgk4qk2gk" path="res://items/weapon_projectiles/explosions/explosion_medium.tscn" id="2_jueut"]
+[ext_resource type="Shape2D" uid="uid://hrwr3000i363" path="res://items/weapon_projectiles/weapon_projectile.tres" id="3_ow816"]
+[ext_resource type="PackedScene" uid="uid://cn3fub5ghvbl5" path="res://items/weapon_projectiles/pre_impact_sensor.tscn" id="5_jueut"]
+
+[node name="WeaponProjectileAirburst" type="RigidBody2D"]
+collision_layer = 2
+collision_mask = 541
+mass = 2.0
+continuous_cd = 2
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_nf7bj")
+color_modulate_enabled = false
+explosion_to_spawn = ExtResource("2_jueut")
+rescale_explosion = Vector2(1.5, 1)
+min_falloff_distance = 50.0
+max_falloff_distance = 160.0
+min_damage = 6.0
+max_damage = 50.0
+destructible_scale_multiplier = Vector2(8.5, 6.5)
+metadata/_custom_type_script = "uid://cm2b1mrcm6tml"
+
+[node name="trajectory dots (CPUParticles2D)" type="CPUParticles2D" parent="."]
+self_modulate = Color(0.978584, 0.795162, 3.85046e-07, 1)
+z_index = 20
+scale = Vector2(0.183745, 0.183745)
+amount = 100
+lifetime = 5.0
+gravity = Vector2(0, 0)
+scale_amount_min = 4.0
+scale_amount_max = 4.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+self_modulate = Color(0, 0, 0, 1)
+scale = Vector2(0.183745, 0.183745)
+texture = ExtResource("2_2f1ha")
+
+[node name="PhysicsShape" type="CollisionShape2D" parent="."]
+shape = ExtResource("3_ow816")
+
+[node name="Destructible" type="CollisionPolygon2D" parent="."]
+scale = Vector2(1.07263, 1.07263)
+polygon = PackedVector2Array(-5.59373, 1.86458, -5.59373, 0, -4.66144, -2.79687, -2.79687, -4.66144, 0, -5.59373, 2.79687, -4.66144, 4.66144, -2.79687, 5.59373, 0, 4.66144, 2.79687, 2.79687, 4.66144, 0, 5.59373, -2, 5, -4, 4)
+
+[node name="PreImpactSensor" parent="." node_paths=PackedStringArray("tracking", "projectile") instance=ExtResource("5_jueut")]
+tracking = NodePath("..")
+projectile = NodePath("..")

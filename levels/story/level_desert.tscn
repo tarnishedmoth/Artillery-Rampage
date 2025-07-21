@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://4sagk5utumdt" path="res://controller/ai/variations/sniper/ai_tank_sniper.tscn" id="9_qfat7"]
 [ext_resource type="PackedScene" uid="uid://bad70clwv5pu3" path="res://controller/ai/variations/nearsight/ai_tank_nearsight.tscn" id="10_36d0b"]
 [ext_resource type="PackedScene" uid="uid://bo5mybelioapq" path="res://environment/procedural_object_desert_spawner.tscn" id="11_x78tg"]
-[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="12_6ymll"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather/day_weather_state_resource.gd" id="12_6ymll"]
 [ext_resource type="Resource" uid="uid://dns8un2uqaij3" path="res://environment/day_weather_states/morning_desert.tres" id="13_0dmf3"]
 [ext_resource type="Resource" uid="uid://b8oudrpxm0p46" path="res://environment/day_weather_states/noon_desert.tres" id="14_v8iie"]
 [ext_resource type="Resource" uid="uid://dcsv3ifhia30m" path="res://environment/day_weather_states/afternoon_desert.tres" id="15_y85fw"]

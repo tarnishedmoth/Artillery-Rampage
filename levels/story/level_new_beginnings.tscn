@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_qmg41"]
 [ext_resource type="Texture2D" uid="uid://ba7dq172ainja" path="res://terrain/terrain-strata-beach.png" id="3_c5en4"]
 [ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="4_21x2i"]
-[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="5_21x2i"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather/day_weather_state_resource.gd" id="5_21x2i"]
 [ext_resource type="PackedScene" uid="uid://bquwvo2blan2o" path="res://controller/ai/variations/ai_tank_lobber_easy.tscn" id="6_6eq0i"]
 [ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="6_jwug6"]
 [ext_resource type="PackedScene" uid="uid://sa0oyrt453vy" path="res://buildings/lighthouse/light_house.tscn" id="7_yscme"]

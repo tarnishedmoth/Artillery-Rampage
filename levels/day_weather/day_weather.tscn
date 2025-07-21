@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cv6k5ub7mpj8t"]
 
-[ext_resource type="Script" uid="uid://cra17reymo1tj" path="res://levels/day_cycle.gd" id="1_a8uc0"]
-[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather_state_resource.gd" id="2_bs5xx"]
+[ext_resource type="Script" uid="uid://cra17reymo1tj" path="res://levels/day_weather/day_cycle.gd" id="1_a8uc0"]
+[ext_resource type="Script" uid="uid://blr3jie556r2m" path="res://levels/day_weather/day_weather_state_resource.gd" id="2_bs5xx"]
 [ext_resource type="Resource" uid="uid://dfp7emnp2l0eb" path="res://environment/day_weather_states/default_morning.tres" id="3_07vbi"]
 [ext_resource type="Resource" uid="uid://btmvihjsjvfmp" path="res://environment/day_weather_states/default_noon.tres" id="4_evxrb"]
 [ext_resource type="Resource" uid="uid://twg3mgrrvwn4" path="res://environment/day_weather_states/default_afternoon.tres" id="5_lmqpe"]
