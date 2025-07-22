@@ -1,6 +1,19 @@
-[gd_resource type="Theme" load_steps=3 format=3 uid="uid://bf5nv0nins5p6"]
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://bf5nv0nins5p6"]
 
 [ext_resource type="FontFile" uid="uid://cr7d38d0438qq" path="res://ui/fonts/FreeSerifBold-rdMp.otf" id="1_sqwlw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gic68"]
+content_margin_left = 18.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.31, 0.29636, 0.2728, 1)
+border_width_left = 32
+border_width_top = 2
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.17, 0.17, 0.17, 0.0980392)
+border_blend = true
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sqwlw"]
 content_margin_left = 8.0
@@ -17,4 +30,5 @@ corner_detail = 5
 [resource]
 default_font = ExtResource("1_sqwlw")
 default_font_size = 16
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_gic68")
 TooltipPanel/styles/panel = SubResource("StyleBoxFlat_sqwlw")

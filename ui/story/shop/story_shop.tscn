@@ -1,8 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://o55c1iigswjc"]
+[gd_scene load_steps=19 format=3 uid="uid://o55c1iigswjc"]
 
 [ext_resource type="Theme" uid="uid://bf5nv0nins5p6" path="res://ui/themes/shop.tres" id="1_abhue"]
 [ext_resource type="Script" uid="uid://blcakxdcf5gn4" path="res://ui/story/shop/story_shop.gd" id="1_po24w"]
-[ext_resource type="PackedScene" uid="uid://dpxoc5ysgsvep" path="res://ui/story/shop/resource_shop_row.tscn" id="2_gms1v"]
+[ext_resource type="PackedScene" uid="uid://dpxoc5ysgsvep" path="res://ui/story/shop/shop_row_player_resources.tscn" id="2_gms1v"]
 [ext_resource type="Resource" uid="uid://kpcvdmtfoeh3" path="res://progression/shop/shop_items.tres" id="2_xg2qo"]
 [ext_resource type="PackedScene" uid="uid://bqfcd8w6wtoo0" path="res://utils/pulse_modulate.tscn" id="4_ccaak"]
 [ext_resource type="LabelSettings" uid="uid://caafhio2r1ekd" path="res://ui/story/round_summary/round_summary_header.tres" id="4_mpdqb"]
@@ -10,12 +10,19 @@
 [ext_resource type="FontFile" uid="uid://cr7d38d0438qq" path="res://ui/fonts/FreeSerifBold-rdMp.otf" id="6_wkf8e"]
 [ext_resource type="PackedScene" uid="uid://csk42q7q75rcy" path="res://ui/hud_value.tscn" id="9_tajcp"]
 [ext_resource type="PackedScene" uid="uid://4fvuu8ogar6b" path="res://ui/mouse_highlight_follower.tscn" id="10_6xw2n"]
+[ext_resource type="AudioStream" uid="uid://cktrcn4ytl8xj" path="res://ui/sounds/clang_c.wav" id="11_57wx4"]
+[ext_resource type="AudioStream" uid="uid://8yfc62je5neo" path="res://ui/sounds/rustle_i.wav" id="12_a8hou"]
+[ext_resource type="AudioStream" uid="uid://13ermc6gmmcl" path="res://ui/sounds/snare_roll_8.wav" id="13_e0d1i"]
+[ext_resource type="AudioStream" uid="uid://dbswoyuawu7xl" path="res://ui/sounds/snare_roll_9.wav" id="14_e0d1i"]
 
 [sub_resource type="Gradient" id="Gradient_qpegy"]
 colors = PackedColorArray(0.85, 0.827333, 0.8075, 1, 0.6417, 0.64492, 0.69, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_gkxf4"]
 gradient = SubResource("Gradient_qpegy")
+fill = 1
+fill_from = Vector2(0.209402, 0)
+fill_to = Vector2(1, 0.397436)
 
 [sub_resource type="Theme" id="Theme_mpdqb"]
 default_font = ExtResource("6_wkf8e")
@@ -43,6 +50,7 @@ item_resources = ExtResource("2_xg2qo")
 
 [node name="Background" type="TextureRect" parent="."]
 self_modulate = Color(0.686275, 0.686275, 0.686275, 1)
+texture_filter = 2
 layout_mode = 0
 offset_right = 1290.0
 offset_bottom = 735.0
@@ -113,21 +121,18 @@ size_flags_vertical = 3
 [node name="ItemsContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 15
 
 [node name="Header" type="HBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer"]
 layout_mode = 2
 theme = SubResource("Theme_mpdqb")
 alignment = 1
 
-[node name="Spacer" type="Control" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer/Header"]
-custom_minimum_size = Vector2(15, 30)
-layout_mode = 2
-
 [node name="Item" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer/Header"]
 custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 text = "Weapon"
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Spacer2" type="Control" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ScrollContainer/ItemsPanel/ItemsContainer/Header"]
@@ -186,6 +191,37 @@ text = "Done
 "
 
 [node name="MouseHighlight" parent="." instance=ExtResource("10_6xw2n")]
+
+[node name="SFX_BuyAmmo" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("11_57wx4")
+volume_db = -3.5
+bus = &"UI"
+
+[node name="SFX_BuyWeapon" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("12_a8hou")
+volume_db = -4.0
+bus = &"UI"
+
+[node name="SFX_UndoBuyWeapon" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("12_a8hou")
+volume_db = -6.0
+pitch_scale = 0.88
+bus = &"UI"
+
+[node name="SFX_Reset" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("13_e0d1i")
+volume_db = -4.0
+bus = &"UI"
+
+[node name="SFX_Done" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("14_e0d1i")
+volume_db = -3.0
+bus = &"UI"
 
 [connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer/Reset" to="." method="_on_reset_pressed"]
 [connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/ButtonsContainer/Done" to="." method="_on_done_pressed"]

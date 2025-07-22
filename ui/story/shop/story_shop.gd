@@ -11,7 +11,15 @@ extends Control
 @onready var total_scrap_spending: HUDElement = %TotalScrapSpending
 
 # Shop item row scenes by ItemType (Currently only weapon)
-const weapon_row_scene:PackedScene = preload("res://ui/story/shop/shop_weapon_row.tscn")
+@export var weapon_row_scene:PackedScene = preload("res://ui/story/shop/shop_row_weapon.tscn")
+
+## SFX
+@onready var sfx_buy_ammo: AudioStreamPlayer = %SFX_BuyAmmo
+@onready var sfx_buy_weapon: AudioStreamPlayer = %SFX_BuyWeapon
+@onready var sfx_undo_buy_weapon: AudioStreamPlayer = %SFX_UndoBuyWeapon
+@onready var sfx_reset: AudioStreamPlayer = %SFX_Reset
+@onready var sfx_done: AudioStreamPlayer = %SFX_Done
+
 
 class ItemPurchaseState:
 	var item:ShopItemResource
@@ -143,6 +151,8 @@ func can_afford_to_refill_any(item: ShopItemResource) -> bool:
 	return avail_spend - item.get_refill_cost(1) >= 0
 
 func _on_done_pressed() -> void:
+	sfx_done.play()
+	
 	_apply_changes()
 
 	if not SceneManager.deque_transition():
@@ -213,6 +223,11 @@ func _copy_weapon_ammo_and_magazines_from_to(from:Weapon, to:Weapon) -> void:
 
 func _on_weapon_buy_state_changed(weapon: Weapon, buy:bool) -> void:
 	print_debug("%s - Buy State changed for %s - buy=%s" % [name, weapon.display_name, str(buy)])
+	
+	if buy:
+		sfx_buy_weapon.play()
+	else:
+		sfx_undo_buy_weapon.play()
 
 	var state: ItemPurchaseState = _purchase_item_state_dictionary[weapon.scene_file_path]
 	state.buy = buy
@@ -241,6 +256,7 @@ func _update_resources_control_state() -> void:
 
 func _on_weapon_ammo_state_changed(weapon: Weapon, new_ammo:int, old_ammo:int, cost:int) -> void:
 	print_debug("%s - Weapon Ammo State changed for %s - new_ammo=%d; old_ammo=%d; cost=%d" % [name, weapon.display_name, new_ammo, old_ammo, cost])
+	sfx_buy_ammo.play()
 
 	var state: ItemPurchaseState = _purchase_item_state_dictionary[weapon.scene_file_path]
 	_update_state_refill_cost(state, new_ammo, cost)
@@ -285,3 +301,5 @@ func _on_reset_pressed() -> void:
 		purchase_state.reset()
 
 	_update_row_states()
+	
+	sfx_reset.play()

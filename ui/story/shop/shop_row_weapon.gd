@@ -1,12 +1,12 @@
-class_name ShopWeaponRow extends HBoxContainer
+class_name ShopWeaponRow extends PanelContainer
 
 var shop_item:ShopItemResource
 
 @onready var weapon_label: Label = %Weapon
 @onready var cost_label: Label = %CostLabel
 
-@onready var weapon_buy_control: WeaponBuyControl = $WeaponBuy
-@onready var ammo_purchase_control: AmmoPurchaseControl = $AmmoPurchase
+@onready var weapon_buy_control: WeaponBuyControl = %WeaponBuy
+@onready var ammo_purchase_control: AmmoPurchaseControl = %AmmoPurchase
 @onready var description_container: Container = %DescriptionContainer
 
 var weapon:Weapon:
@@ -76,9 +76,11 @@ func _ready() -> void:
 	weapon_buy_control.update()
 	
 	if weapon_buy_control.already_owned:
+		cost_label.hide()
 		cost_label.text = "(Owned)"
 	else:
-		cost_label.text = "Costs " + ShopUtils.format_cost(shop_item.unlock_cost,shop_item.unlock_cost_type) + " to purchase"
+		cost_label.show()
+		cost_label.text = ShopUtils.format_cost(shop_item.unlock_cost,shop_item.unlock_cost_type) + " to purchase"
 	
 	# TODO: If we support mod purchases may need to to change this state dynamically and expose as function
 	# Alternatively could swap out the child for a new instance of the weapon row so that everything is initialized properly

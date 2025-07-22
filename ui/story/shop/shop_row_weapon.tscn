@@ -1,0 +1,66 @@
+[gd_scene load_steps=8 format=3 uid="uid://cxb6b42bgqvel"]
+
+[ext_resource type="Script" uid="uid://cckc0hm277iv3" path="res://ui/story/shop/shop_row_weapon.gd" id="1_1yjpc"]
+[ext_resource type="StyleBox" uid="uid://bnhsgvtdrwswq" path="res://ui/story/shop/shop_row_weapon_panel.tres" id="1_vmcxs"]
+[ext_resource type="PackedScene" uid="uid://c7pkqvicaahn7" path="res://ui/story/shop/item_row_description_container.tscn" id="2_vmcxs"]
+[ext_resource type="PackedScene" uid="uid://dfqpo363uk5q1" path="res://ui/story/shop/item_row_weapon_buy.tscn" id="3_4kyub"]
+[ext_resource type="PackedScene" uid="uid://bfei0rked6csm" path="res://ui/story/shop/item_row_ammo_purchase.tscn" id="4_up8nw"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_vmcxs"]
+font_size = 19
+outline_size = 1
+outline_color = Color(1, 1, 1, 0.52549)
+shadow_size = 4
+shadow_color = Color(0, 0, 0, 0.509804)
+shadow_offset = Vector2(1, 2)
+
+[sub_resource type="LabelSettings" id="LabelSettings_1yjpc"]
+shadow_color = Color(0, 0, 0, 0.615686)
+shadow_offset = Vector2(0, 1)
+
+[node name="ShopWeaponRow" type="PanelContainer"]
+offset_right = 530.0
+offset_bottom = 54.0
+theme_override_styles/panel = ExtResource("1_vmcxs")
+script = ExtResource("1_1yjpc")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="DescriptionContainer" parent="HBoxContainer" instance=ExtResource("2_vmcxs")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_constants/separation = 0
+
+[node name="Weapon" type="Label" parent="HBoxContainer/DescriptionContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Leadball Shotgun"
+label_settings = SubResource("LabelSettings_vmcxs")
+
+[node name="CostLabel" type="Label" parent="HBoxContainer/DescriptionContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 6
+text = "Cost"
+label_settings = SubResource("LabelSettings_1yjpc")
+horizontal_alignment = 2
+
+[node name="WeaponBuy" parent="HBoxContainer" instance=ExtResource("3_4kyub")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_stretch_ratio = 1.2
+
+[node name="AmmoPurchase" parent="HBoxContainer" instance=ExtResource("4_up8nw")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+alignment = 1

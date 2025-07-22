@@ -4,6 +4,8 @@ class_name WeaponBuyControl extends VBoxContainer
 @export var buy_button_toggled_text:String = "Pending Sale"
 @export var buy_button_owned_text:String = "Owned"
 
+@export var out_of_ammo_color:Color = Color("ff8173")
+
 @onready var buy_button:Button = %BuyButton
 @onready var current_ammo:Label = %CurrentAmmo
 @onready var current_ammo_row: HBoxContainer = %CurrentAmmoRow
@@ -43,9 +45,15 @@ func update() -> void:
 	
 	buy_button.disabled = already_owned
 	set_buy_button_text_by_state()
-
+	
+	current_ammo.modulate = Color.WHITE
+	
 	if weapon.use_ammo:
-		current_ammo.text = str(_get_total_current_ammo(owned_weapon if already_owned else weapon))
+		var ammo:int = _get_total_current_ammo(owned_weapon if already_owned else weapon)
+		current_ammo.text = str(ammo)
+		
+		if not ammo > 0:
+			current_ammo.modulate = out_of_ammo_color
 	else:
 		# Infinity Unicode symbol
 		current_ammo.text = char(8734)
