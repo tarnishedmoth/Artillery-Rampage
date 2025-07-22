@@ -27,8 +27,9 @@ display_name = "Bouncing Ball"
 description = "Lead ball that bounces off objects multiple times before exploding.  Number of bounces can be cycled in the controls."
 fire_velocity = 1000.0
 use_ammo = true
-current_ammo = 6
-magazine_capacity = 6
+current_ammo = 8
+magazines = 1
+magazine_capacity = 8
 sfx_fire = NodePath("Fire")
 sfx_dry_fire = NodePath("DryFire")
 

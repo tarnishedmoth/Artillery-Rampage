@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="StoryRewardsConfig" load_steps=2 format=3 uid="uid://cbxyraq6dd5bq"]
+
+[ext_resource type="Script" uid="uid://kn72bjvvlhr2" path="res://progression/rewards_res.gd" id="1_oex4t"]
+
+[resource]
+script = ExtResource("1_oex4t")
+personnel_change_A_PLUS = 3
+personnel_change_A = 2
+personnel_change_A_MINUS = 2
+personnel_change_B_PLUS = 1
+personnel_change_B = 1
+personnel_change_B_MINUS = 1
+personnel_change_C_PLUS = 0
+personnel_change_C = 0
+personnel_change_C_MINUS = 0
+personnel_change_D_PLUS = -1
+personnel_change_D = -2
+personnel_change_D_MINUS = -2
+personnel_change_F = -3
+scrap_baseline_stipend = 0.0
+scrap_per_full_kill = 3.0
+scrap_per_partial_kill = 2.0
+scrap_per_enemy_damaged = 1.0
+scrap_multiplier_A_PLUS = 2.0
+scrap_multiplier_A = 1.8
+scrap_multiplier_A_MINUS = 1.6
+scrap_multiplier_B_PLUS = 1.55
+scrap_multiplier_B = 1.45
+scrap_multiplier_B_MINUS = 1.35
+scrap_multiplier_C_PLUS = 1.25
+scrap_multiplier_C = 1.15
+scrap_multiplier_C_MINUS = 1.1
+run_multipliers = Array[float]([1.0, 1.25, 1.375, 1.5, 1.75, 2.0, 2.5, 3.0])
+addtl_runs_multiplier = 0.25
+metadata/_custom_type_script = "uid://kn72bjvvlhr2"

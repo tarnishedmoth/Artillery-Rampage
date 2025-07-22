@@ -6,6 +6,9 @@
 [node name="WeaponNonPhysicalBeam" type="Node2D"]
 top_level = true
 script = ExtResource("1_yuec4")
+travel_speed = 600.0
+damage = 20.0
+max_falloff_distance = 54.0
 metadata/_custom_type_script = "uid://dcadsd3apky27"
 
 [node name="LaserSegments" type="Node2D" parent="."]

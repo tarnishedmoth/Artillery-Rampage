@@ -1,5 +1,7 @@
 class_name StoryRoundSummary extends Control
 
+@export var config: StoryRewardsConfig
+
 @export var win_background:Texture
 @export var lose_background:Texture
 
@@ -78,7 +80,11 @@ func _update_attributes() -> void:
 	if not stats:
 		return
 		
-	var personnel_change:int = _calculate_personnel_change()
+	if not config:
+		push_error("No rewards config assigned!")
+		return
+		
+	var personnel_change:int = config.calculate_personnel_change(_get_letter_grade(_grade))
 	if stats.additional_personnel_rewarded > 0:
 		print_debug("%s: Awarding additional %d personnel from level-specific rewards" % [name, stats.additional_personnel_rewarded])
 		# Add any additional personnel rewarded
@@ -89,7 +95,7 @@ func _update_attributes() -> void:
 	
 	if stats.won:
 		# If win get a bonus multiplier for scrap_change based on grade
-		var bonus_scrap_multiplier:float = _calculate_scrap_bonus_multiplier()
+		var bonus_scrap_multiplier:float = config.calculate_scrap_bonus_multiplier(_get_letter_grade(_grade))
 		print_debug("%s: Bonus scrap multiplier of %.2fx on win starting from %d scrap" % [name, bonus_scrap_multiplier, scrap_change])
 		scrap_change = ceili(scrap_change * bonus_scrap_multiplier)
 
@@ -110,17 +116,17 @@ func _update_attributes() -> void:
 
 	_is_game_over = PlayerAttributes.personnel <= 0
 
-func _calculate_scrap_bonus_multiplier() -> float:
-	match _get_letter_grade(_grade):
-		"A+": return 2.0
-		"A": return 1.8
-		"A-": return 1.6
-		"B+": return 1.5
-		"B": return 1.4
-		"B-": return 1.3
-		"C+": return 1.2
-		"C" : return 1.1
-		_: return 1.0
+#func _calculate_scrap_bonus_multiplier() -> float:
+	#match _get_letter_grade(_grade):
+		#"A+": return 2.0
+		#"A": return 1.8
+		#"A-": return 1.6
+		#"B+": return 1.5
+		#"B": return 1.4
+		#"B-": return 1.3
+		#"C+": return 1.2
+		#"C" : return 1.1
+		#_: return 1.0
 
 func _calculate_run_bonus_multiplier() -> float:
 	var story_level_state:StoryLevelState = SceneManager.story_level_state
@@ -128,59 +134,63 @@ func _calculate_run_bonus_multiplier() -> float:
 		push_error("%s: StoryLevelState not found in tree - unable to check run number" % name)
 		return 1.0
 	
-	var run_count:int = story_level_state.run_count
-	if run_count <= 0:
-		push_error("%s: Invalid run count %d" % [name, run_count])
-		return 1.0
+	return config.calculate_run_bonus_multiplier(story_level_state.run_count)
+	
+	#var run_count:int = story_level_state.run_count
+	#if run_count <= 0:
+		#push_error("%s: Invalid run count %d" % [name, run_count])
+		#return 1.0
+#
+	#match run_count:
+		#1: return 1.0 # No bonus for first run
+		#2: return 1.25 # 25% bonus for second run
+		#3: return 1.375 #37.5% bonus for third run
+		#4: return 1.50 # 50% bonus for fourth run
+		#5: return 1.75 # 75% bonus for fifth run
+		#6: return 2.0 # 100% bonus for sixth run
+		#7: return 2.5 # 150% bonus for seventh run
+		#8: return 3.0 # 200% bonus for eighth run
+		#_: return (run_count - 8) * 0.25 + 3.0 # 25% bonus for each run after eighth run
 
-	match run_count:
-		1: return 1.0 # No bonus for first run
-		2: return 1.25 # 25% bonus for second run
-		3: return 1.375 #37.5% bonus for third run
-		4: return 1.50 # 50% bonus for fourth run
-		5: return 1.75 # 75% bonus for fifth run
-		6: return 2.0 # 100% bonus for sixth run
-		7: return 2.5 # 150% bonus for seventh run
-		8: return 3.0 # 200% bonus for eighth run
-		_: return (run_count - 8) * 0.25 + 3.0 # 25% bonus for each run after eighth run
-
-func _calculate_personnel_change() -> int:
-	var letter_grade:String = _get_letter_grade(_grade)
-
-	match letter_grade:
-		"A+": return 3
-		"A": return 2
-		"A-": return 2
-		"B+", "B", "B-": return 1
-		"C+", "C", "C-": return 0 #C- is lowest win, anything lower is a loss
-		"D+": return -1
-		"D","D-": return -2
-		"F" : return -3
-
-	push_error("%s: Unexpected letter grade %s - returning 0" % [name, letter_grade])
-	return 0
+#func _calculate_personnel_change() -> int:
+	#var letter_grade:String = _get_letter_grade(_grade)
+#
+	#match letter_grade:
+		#"A+": return 3
+		#"A": return 2
+		#"A-": return 2
+		#"B+", "B", "B-": return 1
+		#"C+", "C", "C-": return 0 #C- is lowest win, anything lower is a loss
+		#"D+": return -1
+		#"D","D-": return -2
+		#"F" : return -3
+#
+	#push_error("%s: Unexpected letter grade %s - returning 0" % [name, letter_grade])
+	#return 0
 
 func _calculate_scrap_earned() -> int:
 	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
 	assert(stats, "_calculate_scrap_earned called without round data!")
+	assert(config, "_calculate_scrap_earned called without config data!")
 
 	# Earn 3 scrap for a full kill (player killed opponent and caused all the damage except for tank self damage)
 	# Earn 2 scrap for a partial kill (player killed opponent but some other opponent caused some damage)
 	# Earn 1 scrap for any damage to opponent
-
-	var earned_scrap:int = 0
+	
+	## TODO float scrap values?
+	var earned_scrap:int = config.scrap_baseline_stipend
 	for key in stats.enemies_damaged:
 		var enemy_data:RoundStatTracker.EnemyData = stats.enemies_damaged[key]
 		if enemy_data.is_full_kill():
-			earned_scrap += 3
-			print_debug("%s: Awarding 3 scrap for full kill against %s" % [name, enemy_data.name])
+			earned_scrap += config.scrap_per_full_kill
+			print_debug("%s: Awarding %i scrap for full kill against %s" % [name, config.scrap_per_full_kill, enemy_data.name])
 		elif enemy_data.is_partial_kill():
-			earned_scrap += 2
-			print_debug("%s: Awarding 2 scrap for partial kill against %s" % [name, enemy_data.name])
+			earned_scrap += config.scrap_per_partial_kill
+			print_debug("%s: Awarding %i scrap for partial kill against %s" % [name, config.scrap_per_partial_kill, enemy_data.name])
 		elif enemy_data.is_damaged():
-			earned_scrap += 1
+			earned_scrap += config.scrap_per_enemy_damaged
 
-			print_debug("%s: Awarding 1 scrap for some damage against %s" % [name, enemy_data.name])
+			print_debug("%s: Awarding %i scrap for some damage against %s" % [name, config.scrap_per_enemy_damaged, enemy_data.name])
 	
 	if stats.additional_scrap_rewarded > 0:
 		print_debug("%s: Awarding additional %d scrap from level-specific rewards" % [name, stats.additional_scrap_rewarded])

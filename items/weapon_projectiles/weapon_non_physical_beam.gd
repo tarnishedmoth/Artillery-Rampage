@@ -12,11 +12,15 @@ signal completed_lifespan(projectile) ## Tracked by Weapon class
 ## See [method disarm] and [method arm] to change the state at runtime.
 @export var should_explode_on_impact:bool = false
 
+## How far the beam can travel per second
+@export var travel_speed: float = 800.0
+## How much damage to deal 
+@export var damage: float = 50.0
 @export var max_falloff_distance: float = 60:
 	get: return max_falloff_distance*falloff_distance_multiplier
 @export var falloff_distance_multiplier: float = 1.0 # ModProjectile
 
-@export_category("Destructible")
+@export_group("Destructible")
 @export var destructible_scale_multiplier:Vector2 = Vector2(4.0 , 4.0):
 	get: return destructible_scale_multiplier*destructible_scale_multiplier_scalar
 @export var destructible_scale_multiplier_scalar:float = 1.0 # ModProjectile
@@ -27,9 +31,6 @@ signal completed_lifespan(projectile) ## Tracked by Weapon class
 var owner_tank: Tank;
 var source_weapon: Weapon ## The weapon we came from
 var destructible_component:CollisionPolygon2D
-
-## How far the beam can travel per second
-var speed: float = 800.0
 
 ## The angle of the barrel firing the beam. This will be used to determine the trajectory of the beam.
 var aim_angle: float
@@ -57,9 +58,9 @@ func set_sources(tank:Tank, weapon:Weapon) -> void:
 	owner_tank = tank
 	source_weapon = weapon
 
-@warning_ignore("unused_parameter")
+@warning_ignore("unused_parameter") ## TODO falloff types
 func _calculate_damage(target: Node2D) -> float:
-	return 50
+	return damage
 
 ## Explodes if supported and then ensures that the beam is destroyed
 func explode_and_force_destroy(body:PhysicsBody2D = null, force:bool = false):
@@ -108,7 +109,7 @@ func _process(delta):
 	var current_aim_angle = get_current_aim_angle()
 
 	if can_travel:
-		travel_distance += speed * delta
+		travel_distance += travel_speed * delta
 		distance_traveled_per_segment[number_of_segments - 1] = travel_distance
 		laser_end.position = laser_start.position + Vector2(travel_distance, 0.0).rotated(current_aim_angle)
 		see_if_beam_collides_with_anything(delta)

@@ -1,8 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://2lrjsixfec3s"]
+[gd_scene load_steps=14 format=3 uid="uid://2lrjsixfec3s"]
 
 [ext_resource type="Script" uid="uid://bwosyyfk5m2qq" path="res://ui/story/round_summary/story_round_summary.gd" id="1_gobxv"]
 [ext_resource type="Texture2D" uid="uid://dwgftpip8fi4m" path="res://ui/story/round_summary/win_background.tres" id="2_4a1kv"]
 [ext_resource type="PackedScene" uid="uid://8hat5mrejfwr" path="res://ui/story/round_summary/round_summary_hud_element.tscn" id="2_q3afb"]
+[ext_resource type="Resource" uid="uid://cbxyraq6dd5bq" path="res://ui/story/round_summary/story_rewards_config.tres" id="2_wwtrf"]
 [ext_resource type="Texture2D" uid="uid://cu5jf42lb8rpe" path="res://ui/story/round_summary/lose_background.tres" id="3_g56bg"]
 [ext_resource type="LabelSettings" uid="uid://caafhio2r1ekd" path="res://ui/story/round_summary/round_summary_header.tres" id="3_xarch"]
 [ext_resource type="PackedScene" uid="uid://bqfcd8w6wtoo0" path="res://utils/pulse_modulate.tscn" id="4_m67ci"]
@@ -30,6 +31,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gobxv")
+config = ExtResource("2_wwtrf")
 win_background = ExtResource("2_4a1kv")
 lose_background = ExtResource("3_g56bg")
 

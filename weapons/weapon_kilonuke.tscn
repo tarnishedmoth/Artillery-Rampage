@@ -30,6 +30,8 @@ fire_velocity = 1000.0
 retain_when_empty = false
 use_ammo = true
 current_ammo = 1
+magazines = 1
+magazine_capacity = 4
 sfx_fire = NodePath("Fire")
 sfx_dry_fire = NodePath("DryFire")
 

@@ -14,3 +14,5 @@ power_launch_speed_mult = 0.0
 retain_when_empty = false
 use_ammo = true
 current_ammo = 2
+magazines = 1
+magazine_capacity = 2
