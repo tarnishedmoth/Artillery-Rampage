@@ -21,6 +21,8 @@ func _ready() -> void:
 	completed_lifespan.emit(self)
 	
 func set_sources(tank:Tank, weapon:Weapon) -> void:
+	if SceneManager.is_precompiler_running: return
+	
 	_owner_tank = tank
 	_weapon = weapon
 	_game_level = SceneManager.get_current_level_root()
