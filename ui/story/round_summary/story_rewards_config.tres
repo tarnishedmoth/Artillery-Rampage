@@ -4,21 +4,21 @@
 
 [resource]
 script = ExtResource("1_oex4t")
-personnel_change_A_PLUS = 3
+personnel_change_A_PLUS = 4
 personnel_change_A = 2
 personnel_change_A_MINUS = 2
-personnel_change_B_PLUS = 1
+personnel_change_B_PLUS = 2
 personnel_change_B = 1
 personnel_change_B_MINUS = 1
-personnel_change_C_PLUS = 0
-personnel_change_C = 0
+personnel_change_C_PLUS = 1
+personnel_change_C = 1
 personnel_change_C_MINUS = 0
 personnel_change_D_PLUS = -1
 personnel_change_D = -2
 personnel_change_D_MINUS = -2
 personnel_change_F = -3
-scrap_baseline_stipend = 0.0
-scrap_per_full_kill = 3.0
+scrap_baseline_stipend = 0.1
+scrap_per_full_kill = 3.25
 scrap_per_partial_kill = 2.0
 scrap_per_enemy_damaged = 1.0
 scrap_multiplier_A_PLUS = 2.0

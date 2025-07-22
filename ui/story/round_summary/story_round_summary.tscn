@@ -31,7 +31,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gobxv")
-config = ExtResource("2_wwtrf")
+rewards_config = ExtResource("2_wwtrf")
 win_background = ExtResource("2_4a1kv")
 lose_background = ExtResource("3_g56bg")
 

@@ -141,7 +141,9 @@ var current_barrel: int = 0
 ## Whether to check and track ammo. If [code]false[/code], you have infinite ammo.
 @export var use_ammo: bool = false
 ## Starting ammo when this [Weapon] is instanced. Use [method reload] to refill this property.
-@export var current_ammo: int = 16
+@export var current_ammo: int = 16:
+	set(value):
+		current_ammo = maxi(value, 0)
 ## Each time [method _shoot] is called, decrement [member current_ammo] by this number. For example,
 ## if [code]number_of_scenes_to_spawn = 10[/code] and [code]ammo_used_per_shot = 3[/code], assuming
 ## the weapon is shot only once, 10 instances of the [member scene_to_spawn] will spawn, but [member current_ammo]
@@ -582,19 +584,30 @@ func _shoot(power:float = fire_velocity) -> void:
 		# Play sound effect
 		if not barrels_sfx_fire.is_empty(): barrels_sfx_fire[current_barrel].play()
 		
+		# Determine how many scenes to spawn.
+		# This is affected by ammo remaining if ammo is used.
+		var scenes_to_spawn:int = number_of_scenes_to_spawn
+		if use_ammo:
+			if current_ammo < ammo_used_per_shot:
+				scenes_to_spawn = maxi(
+					1,
+					floor(
+						lerp(0, number_of_scenes_to_spawn, float(current_ammo) / float(ammo_used_per_shot))
+					)
+				)
+		
+		
 		# Spawn projectiles
 		var scaled_speed := power * power_launch_speed_mult
-		for projectile in number_of_scenes_to_spawn:
+		for projectile in scenes_to_spawn:
 			_spawn_projectile(scaled_speed)
-		
 		# Cycle the gun
 		cycle()
 		
+		#print_debug("Weapon %s spawned %s projectiles." % [display_name, scenes_to_spawn])
+		
 		# Signals
 		if emit_action_signals:
-			## This has no game effects right now.
-			## It could be useful for things like screen shake, camera behavior, other reactions.
-			## (The logic for turn changes happens elsewhere.)
 			GameEvents.weapon_fired.emit(self)
 	else:
 		## Alternative handling for continuous weapons
@@ -604,11 +617,11 @@ func _shoot(power:float = fire_velocity) -> void:
 		
 	## Counters
 	if use_ammo:
-		current_ammo -= ammo_used_per_shot
+		current_ammo -= ammo_used_per_shot ## Clamped in current_ammo setter
 		ammo_changed.emit(current_ammo)
 	if _shoot_for_count_remaining > 0:
 		_shoot_for_count_remaining -= 1
-	if _shoot_for_count_remaining == 0 or current_ammo == 0:
+	if _shoot_for_count_remaining == 0 or current_ammo <= 0:
 		is_shooting = false
 	
 ## Instances the [member scene_to_spawn], configures critical properties and signals for [WeaponProjectile],

@@ -31,7 +31,7 @@ func _ready() -> void:
 	else:
 		debug_sprite.hide()
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if armed && _last_global_position:
 		#var velocity:Vector2 = tracking.global_position - _last_global_position
 		#

@@ -1,6 +1,6 @@
 class_name StoryRoundSummary extends Control
 
-@export var config: StoryRewardsConfig
+@export var rewards_config: StoryRewardsConfig
 
 @export var win_background:Texture
 @export var lose_background:Texture
@@ -42,9 +42,14 @@ static func _static_init():
 func _ready() -> void:
 	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
 	if not stats:
-		push_error("No stat tracking was recorded!")
+		push_error("No RoundStatTracker.RoundData was recorded!")
 		title.set_value("ERROR!")
 		return
+	if not rewards_config:
+		push_error("No StoryRewardsConfig is assigned!")
+		title.set_value("ERROR!")
+		return
+		
 	title.set_label("%s:" % [stats.level_name])
 	
 	if stats.won:
@@ -54,8 +59,8 @@ func _ready() -> void:
 	else:
 		title.set_value("Defeat :(")
 		background.texture = lose_background
-				
-	_grade = _calculate_grade()
+		
+	_grade = _calculate_grade(RoundStatTracker.round_data)
 	# Hiding grade if you lose
 	if stats.won:
 		grade_hudelement.set_value(_fmt_grade(_grade))
@@ -73,42 +78,49 @@ func _ready() -> void:
 	
 	_play_audio()
 	
-	_update_attributes.call_deferred()
+	_update_attributes.call_deferred(rewards_config, stats)
 
-func _update_attributes() -> void:
-	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
-	if not stats:
-		return
-		
+func _update_attributes(config: StoryRewardsConfig, stats: RoundStatTracker.RoundData) -> void:
 	if not config:
-		push_error("No rewards config assigned!")
+		push_error("No StoryRewardsConfig assigned!")
 		return
+	
+	#var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
+	if not stats:
+		push_error("No RoundStatTracker.RoundData!")
+		return
+	else:
+		var personnel_change:int = config.calculate_personnel_change(_get_letter_grade(_grade))
+		if stats.additional_personnel_rewarded > 0:
+			print_debug("%s: Awarding additional %d personnel from level-specific rewards" % [name, stats.additional_personnel_rewarded])
+			# Add any additional personnel rewarded
+			personnel_change += stats.additional_personnel_rewarded
+
+		# Player gets scrap even when lose based on collected data
+		var scrap_change:float = _calculate_scrap_earned(config, stats)
 		
-	var personnel_change:int = config.calculate_personnel_change(_get_letter_grade(_grade))
-	if stats.additional_personnel_rewarded > 0:
-		print_debug("%s: Awarding additional %d personnel from level-specific rewards" % [name, stats.additional_personnel_rewarded])
-		# Add any additional personnel rewarded
-		personnel_change += stats.additional_personnel_rewarded
-
-	# Player gets scrap even when lose based on collected data
-	var scrap_change:int = _calculate_scrap_earned()
+		if stats.won:
+			# If win get a bonus multiplier for scrap_change based on grade
+			var bonus_scrap_multiplier:float = config.calculate_scrap_bonus_multiplier(_get_letter_grade(_grade))
+			print_debug("%s: Bonus scrap multiplier of %.2fx on win starting from %d scrap" % [name, bonus_scrap_multiplier, scrap_change])
+			scrap_change = ceilf(scrap_change * bonus_scrap_multiplier)
 	
-	if stats.won:
-		# If win get a bonus multiplier for scrap_change based on grade
-		var bonus_scrap_multiplier:float = config.calculate_scrap_bonus_multiplier(_get_letter_grade(_grade))
-		print_debug("%s: Bonus scrap multiplier of %.2fx on win starting from %d scrap" % [name, bonus_scrap_multiplier, scrap_change])
-		scrap_change = ceili(scrap_change * bonus_scrap_multiplier)
+		if not SceneManager.story_level_state:
+			push_error("No scene level state!")
+			return
+		else:
+			var run_bonus_multiplier:float = config.calculate_run_bonus_multiplier(SceneManager.story_level_state.run_count)
+			print_debug("%s: Run bonus multiplier of %.2fx" % [name, run_bonus_multiplier])
+			personnel_change = ceili(personnel_change * run_bonus_multiplier)
+			scrap_change = ceilf(scrap_change * run_bonus_multiplier)
+		
+		@warning_ignore_start("narrowing_conversion")
+		PlayerAttributes.personnel = maxi(PlayerAttributes.personnel + personnel_change, 0)
+		PlayerAttributes.scrap = maxi(PlayerAttributes.scrap + scrap_change, 0)
 
-	var run_bonus_multiplier:float = _calculate_run_bonus_multiplier()
-	print_debug("%s: Run bonus multiplier of %.2fx" % [name, run_bonus_multiplier])
-	personnel_change = ceili(personnel_change * run_bonus_multiplier)
-	scrap_change = ceili(scrap_change * run_bonus_multiplier)
-	
-	PlayerAttributes.personnel = maxi(PlayerAttributes.personnel + personnel_change, 0)
-	PlayerAttributes.scrap = maxi(PlayerAttributes.scrap + scrap_change, 0)
-
-	personnel.set_value(_fmt_attr(PlayerAttributes.personnel, personnel_change))
-	scrap.set_value(_fmt_attr(PlayerAttributes.scrap, scrap_change))
+		personnel.set_value(_fmt_attr(PlayerAttributes.personnel, personnel_change))
+		scrap.set_value(_fmt_attr(PlayerAttributes.scrap, scrap_change))
+		@warning_ignore_restore("narrowing_conversion")
 
 	# TODO: Maybe do this from StatTracker as player could game the system and quit here and it wouldn't save
 	# Here we are explicitly forcing a save
@@ -128,14 +140,7 @@ func _update_attributes() -> void:
 		#"C" : return 1.1
 		#_: return 1.0
 
-func _calculate_run_bonus_multiplier() -> float:
-	var story_level_state:StoryLevelState = SceneManager.story_level_state
-	if not story_level_state:
-		push_error("%s: StoryLevelState not found in tree - unable to check run number" % name)
-		return 1.0
-	
-	return config.calculate_run_bonus_multiplier(story_level_state.run_count)
-	
+#func _calculate_run_bonus_multiplier(run_count: int) -> float:
 	#var run_count:int = story_level_state.run_count
 	#if run_count <= 0:
 		#push_error("%s: Invalid run count %d" % [name, run_count])
@@ -168,28 +173,26 @@ func _calculate_run_bonus_multiplier() -> float:
 	#push_error("%s: Unexpected letter grade %s - returning 0" % [name, letter_grade])
 	#return 0
 
-func _calculate_scrap_earned() -> int:
-	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
-	assert(stats, "_calculate_scrap_earned called without round data!")
-	assert(config, "_calculate_scrap_earned called without config data!")
-
-	# Earn 3 scrap for a full kill (player killed opponent and caused all the damage except for tank self damage)
-	# Earn 2 scrap for a partial kill (player killed opponent but some other opponent caused some damage)
-	# Earn 1 scrap for any damage to opponent
+func _calculate_scrap_earned(config: StoryRewardsConfig, stats: RoundStatTracker.RoundData) -> float:
+	# Earn scrap for a full kill (player killed opponent and caused all the damage except for tank self damage)
+	# Earn scrap for a partial kill (player killed opponent but some other opponent caused some damage)
+	# Earn scrap for any damage to opponent
 	
-	## TODO float scrap values?
-	var earned_scrap:int = config.scrap_baseline_stipend
+	
+	var earned_scrap:float = config.scrap_baseline_stipend
 	for key in stats.enemies_damaged:
 		var enemy_data:RoundStatTracker.EnemyData = stats.enemies_damaged[key]
+		
 		if enemy_data.is_full_kill():
 			earned_scrap += config.scrap_per_full_kill
 			print_debug("%s: Awarding %i scrap for full kill against %s" % [name, config.scrap_per_full_kill, enemy_data.name])
+			
 		elif enemy_data.is_partial_kill():
 			earned_scrap += config.scrap_per_partial_kill
 			print_debug("%s: Awarding %i scrap for partial kill against %s" % [name, config.scrap_per_partial_kill, enemy_data.name])
+			
 		elif enemy_data.is_damaged():
 			earned_scrap += config.scrap_per_enemy_damaged
-
 			print_debug("%s: Awarding %i scrap for some damage against %s" % [name, config.scrap_per_enemy_damaged, enemy_data.name])
 	
 	if stats.additional_scrap_rewarded > 0:
@@ -239,9 +242,11 @@ func _next_after_win() -> void:
 
 func _play_audio() -> void:
 	if RoundStatTracker.round_data.won:
-		win_audio.play()
+		if win_audio:
+			win_audio.play()
 	else:
-		lose_audio.play()
+		if lose_audio:
+			lose_audio.play()
 		
 #region Auto Narrative
 
@@ -262,7 +267,7 @@ func _calculate_outcome(grade: int) -> AutoNarrative.Outcomes:
 	
 #endregion
 
-#region Scoring
+#region Letter Grades
 		
 func _fmt_grade(grade: int) -> String:
 	return _get_letter_grade(grade)
@@ -278,11 +283,11 @@ func _fmt_attr(value: int, delta:int) -> String:
 	else:
 		return "%d (+0)" % value
 		
-func _calculate_grade() -> int:
+func _calculate_grade(stats: RoundStatTracker.RoundData) -> int:
 	# If won look at damage ratio and take into account kills
 	# TODO: For miracle, track damage done and kills at low health - probably need to bracket into percentiles (not dictionary with float)
 	# That tracks damage_done and kills at each health level
-	var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
+	#var stats : RoundStatTracker.RoundData = RoundStatTracker.round_data
 
 	# Damage to health lost ratio
 	var damage_to_health:float = stats.damage_done / maxf(stats.start_health - stats.final_health, 1.0)

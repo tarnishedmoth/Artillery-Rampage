@@ -17,24 +17,33 @@ class_name StoryRewardsConfig extends Resource
 
 
 @export_group("Scrap Earnings", "scrap_")
-@export var scrap_baseline_stipend: float = 0.0
-@export var scrap_per_full_kill: float = 3.0
-@export var scrap_per_partial_kill: float = 2.0
-@export var scrap_per_enemy_damaged: float = 1.0
+@export var scrap_baseline_stipend: float = 0.0 ## Rewarded regardless of win, loss, damage or kills.
+@export var scrap_per_full_kill: float = 3.0 ## Player was instigator for the kill, AND NOT another opponent other than the AI itself caused damage. See [RoundStatTrackerClass.EnemyData].
+@export var scrap_per_partial_kill: float = 2.0 ## Player was instigator for the kill, AND another opponent other than the AI itself caused damage. See [RoundStatTrackerClass.EnemyData].
+@export var scrap_per_enemy_damaged: float = 1.0 ## Player caused some damage to this opponent. See [RoundStatTrackerClass.EnemyData].
 
 @export_subgroup("Letter Grade Bonus", "scrap_multiplier_")
+	## Applied to total scrap earnings before run multiplier.
 @export var scrap_multiplier_A_PLUS: float = 2.0
+	## Applied to total scrap earnings before run multiplier.
 @export var scrap_multiplier_A: float = 1.8
+	## Applied to total scrap earnings before run multiplier.
 @export var scrap_multiplier_A_MINUS: float = 1.6
+	## Applied to total scrap earnings before run multiplier.
 @export var scrap_multiplier_B_PLUS: float = 1.55
+	## Applied to total scrap earnings before run multiplier.
 @export var scrap_multiplier_B: float = 1.45
+	## Applied to total scrap earnings before run multiplier.
 @export var scrap_multiplier_B_MINUS: float = 1.35
+	## Applied to total scrap earnings before run multiplier.
 @export var scrap_multiplier_C_PLUS: float = 1.25
+	## Applied to total scrap earnings before run multiplier.
 @export var scrap_multiplier_C: float = 1.15
+	## Applied to total scrap earnings before run multiplier.
 @export var scrap_multiplier_C_MINUS: float = 1.1
 
 @export_subgroup("Run Bonus")
-## Index == number of completed runs.
+	## Index == number of completed runs. Applied to total scrap earnings after letter grade bonus.
 @export var run_multipliers: Array[float] = [
 	1.0, # No bonus for first run
 	1.25, # 25% bonus for second run

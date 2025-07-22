@@ -60,7 +60,7 @@ var enemy_names: Array[String] = [
 	"Dedre Lode", "Blaster Chief", "KiloNuke Dukem", "Spare Parts", "Luna Tick",
 	"Grateful Lead", "Ratcheting Crank", "Gigadeath", "Blammstein", "Leadfinger",
 	"Nuke Skylobber", "Trinity", "Liquid Flank", "Tank Rampage", "Montbombery",
-	"HomingTeam", "Lobber Breaker", "Boolint Gloatstring", "Kaboomerang", "Broomhilda",
+	"HomingTeam", "Lobber Breaker", "Boolint Floatstring", "Kaboomerang", "Broomhilda",
 	"Boomer Simpson",  "Count Flakula", "Napalma Anderson", "Blammo Baggins",
 	"Mad Muzzle", "Boom Hower", "Recoil Kid", "Flintboom", "Boom Chakalaka", "Crater Tot",
 	"Missle Dontfire", "Muzzle Crow", "Minestrong", "Fuse Willis", "Killionaire",
@@ -78,7 +78,8 @@ var enemy_names: Array[String] = [
 	"Sandra Bullet", "Bomb Haul End", "Barton Plink", "Earthquaker", "Bombstation Vita",
 	"Bomb Box Series X", "Team Rocket", "Cannonball Z", "Aimbot", "Center Strike",
 	"Lead Zeppelin", "Boomhowser", "Kantmiss", "Tanksgiving", "Shrapnella", "Explodabeth",
-	"Kablamuel L Jackson", "Sir Aimsalot",
+	"Kablamuel L Jackson", "Sir Aimsalot", "Plink Panther S.", "Bomber Energy", "Bombstar",
+	"Blam Hathaway", "Midbommer", "Florence Pew-Pew", "Ice Snipes",
 ]
 
 # Called when the node enters the scene tree for the first time.

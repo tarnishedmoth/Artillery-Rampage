@@ -1,4 +1,4 @@
-extends Node
+class_name RoundStatTrackerClass extends Node
 
 ## Keep track of enemy damage to award scrap with different amounts when level complete
 class EnemyData:
