@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://dntmfa5iohhm4"]
+
+[ext_resource type="Script" uid="uid://bkt30e3183urb" path="res://weapons/weapon.gd" id="1_0ld4a"]
+[ext_resource type="PackedScene" uid="uid://trrpnbpfimve" path="res://items/weapon_projectiles/parachute_equip.tscn" id="2_2bht4"]
+
+[node name="WeaponParachute" type="Node2D"]
+script = ExtResource("1_0ld4a")
+scene_to_spawn = ExtResource("2_2bht4")
+display_name = "Parachute"
+description = "Readies a parachute that deploys the next time the player falls to prevent fall damage."
+trajectory_indicator_type = 0
+metadata/_custom_type_script = "uid://bkt30e3183urb"

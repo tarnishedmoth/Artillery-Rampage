@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://cdywsbpoieq6v"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_j8u7d"]
+[ext_resource type="PackedScene" uid="uid://dps6lqs28tqa1" path="res://controller/player/player.tscn" id="2_uehmr"]
+[ext_resource type="PackedScene" uid="uid://glc752ioound" path="res://controller/ai/variations/ai_tank_lobber.tscn" id="2_v51x2"]
+[ext_resource type="PackedScene" uid="uid://dntmfa5iohhm4" path="res://weapons/weapon_parachute.tscn" id="3_j8u7d"]
+
+[node name="TestLevelParachute" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_j8u7d")]
+
+[node name="RoundDirector" parent="GameLevel" index="2"]
+player_goes_first = true
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
+polygon = PackedVector2Array(-104, -8, -25, -11.7647, -18.75, -344.118, 29.6875, -345.588, 44.5313, -13.2353, 147, 153, 220, -2, 259, -223, 300, -224, 390, -447, 609, -8, 937, -3, 945, 445, -103, 448)
+
+[node name="ArtillerySpawner" parent="GameLevel" index="9"]
+artillery_ai_types = Array[PackedScene]([ExtResource("2_v51x2")])
+default_ai_players = Vector2i(2, 2)
+
+[node name="TheSunLight" parent="GameLevel" index="14"]
+position = Vector2(638, -660)
+
+[node name="Player" parent="GameLevel" instance=ExtResource("2_uehmr")]
+position = Vector2(129.99, 193.665)
+
+[node name="WeaponParachute" parent="GameLevel/Player/Weapons" index="0" instance=ExtResource("3_j8u7d")]
+
+[editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/Player"]
+[editable path="GameLevel/Player/Tank/AimDamageWobble/PlayerActivateWobble"]

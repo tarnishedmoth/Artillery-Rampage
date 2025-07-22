@@ -515,6 +515,11 @@ func _add_beam_awaiting(beam: WeaponNonPhysicalBeam) -> void:
 	beam.completed_lifespan.connect(_on_beam_completed_lifespan)
 	_awaiting_lifespan_completion += 1
 
+func _add_node_awaiting(node: Node2D) -> void:
+	active_projectiles.append(node)
+	node.completed_lifespan.connect(_end_lifespan)
+	_awaiting_lifespan_completion += 1
+	
 ## The [Weapon] class doesn't inherently use modes, but components and subclasses can make use of them.
 func next_mode() -> void:
 	## Or override this for functionality
@@ -540,12 +545,13 @@ func get_projectile_instance() -> Object:
 			push_error("Can't instantiate scene_to_spawn.")
 			_cached_projectile_instance = null
 	return _cached_projectile_instance
-	
+		
 func kill_all_projectiles() -> void:
 	for p in active_projectiles:
-		if is_instance_valid(p):
+		if is_instance_valid(p) and p.has_method("destroy"):
 			p.destroy()
-	# clear any previously freed projectiles
+	
+	# clear any previously freed projectiles or those that don't have a destroy method (e.g. Parachute Weapon spawn)
 	active_projectiles.clear()
 	
 ## Emits death signals if appropriate and calls [method queue_free].
@@ -631,9 +637,10 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 			_setup_new_projectile(new_shot, barrel, power)
 		elif new_shot is WeaponNonPhysicalBeam:
 			_setup_new_beam(new_shot, barrel)
+		else:
+			_setup_spawned_scene(new_shot, barrel)
 		
 		container.add_child(new_shot)
-		active_projectiles.append(new_shot)
 		
 		#print_debug("Shot fired with ", velocity, " at ", aim_angle)
 		projectile_spawned.emit(new_shot)
@@ -664,7 +671,21 @@ func _setup_new_beam(new_shot: WeaponNonPhysicalBeam, barrel: Marker2D) -> void:
 	new_shot.global_position = barrel.global_position
 	new_shot.aim_angle = barrel.global_rotation
 
+## If [member scene_to_spawn] is another [Node2D], use this method for reflection-based fallback set up
+func _setup_spawned_scene(new_shot: Node2D, barrel: Marker2D) -> void:
+	if new_shot.has_method("set_sources"):
+		new_shot.set_sources(parent_tank, self)
+	new_shot.global_transform = barrel.global_transform
+	assert(new_shot.has_signal("completed_lifespan"), "new_shot missing required signal - will cause turn to hang!")
+	_add_node_awaiting(new_shot)
+	
 func _on_projectile_completed_lifespan(projectile:WeaponProjectile) -> void:
+	_end_lifespan(projectile)
+
+func _on_beam_completed_lifespan(beam: WeaponNonPhysicalBeam) -> void:
+	_end_lifespan(beam)
+
+func _end_lifespan(projectile: Node2D) -> void:
 	_awaiting_lifespan_completion -= 1
 	active_projectiles.erase(projectile)
 	
@@ -672,16 +693,7 @@ func _on_projectile_completed_lifespan(projectile:WeaponProjectile) -> void:
 	if not is_shooting: # Wait til we've fired all our shots this action
 		if _awaiting_lifespan_completion < 1:
 			weapon_actions_completed.emit(self) # If this doesn't emit, the game turn will be stuck.
-
-func _on_beam_completed_lifespan(beam: WeaponNonPhysicalBeam) -> void:
-	_awaiting_lifespan_completion -= 1
-	active_projectiles.erase(beam)
-
-	if not emit_action_signals: return
-	if not is_shooting: # Wait til we've fired all our shots this action
-		if _awaiting_lifespan_completion < 1:
-			weapon_actions_completed.emit(self) # If this doesn't emit, the game turn will be stuck.
-
+			
 func _on_weapon_actions_completed(_weapon: Weapon) -> void:
 	if sfx_fire_sustain: ## For laser beam specifically right now
 		for s in barrels_sfx_fire:
