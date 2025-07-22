@@ -14,7 +14,7 @@ var credits_list_is_focused:bool = false
 @onready var level_select_menu: LevelSelect = %LevelSelect
 @onready var exit_to_desktop_button: Button = %Quit
 
-@onready var soundtrack: AudioStreamPlayer2D = %Soundtrack
+@onready var soundtrack: AudioStreamPlayer = %Soundtrack
 @onready var btn_continue_story:Button = %ContinueStory
 @onready var buttons_container:Container = %MainMenuButtons
 @onready var confirmation_dialog = %ARConfirmationDialog

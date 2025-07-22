@@ -15,11 +15,12 @@
 script = ExtResource("1_3vdg5")
 revealables = [NodePath("Controls/MainMenu/Columns/CenterColumn/MainMenuHeader"), NodePath("Controls/MainMenu/Columns/RightColumn/CreditsHeader"), NodePath("Controls/MainMenu/Columns/RightColumn/CreditsList")]
 
-[node name="Soundtrack" type="AudioStreamPlayer2D" parent="."]
+[node name="Soundtrack" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("2_60dqb")
-volume_db = -10.0
+volume_db = -8.0
 bus = &"Music"
+parameters/looping = true
 
 [node name="Controls" type="Control" parent="."]
 texture_filter = 6
