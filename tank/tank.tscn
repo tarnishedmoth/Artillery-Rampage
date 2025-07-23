@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dvr6bm2hlj5h4"]
+[gd_scene load_steps=23 format=3 uid="uid://dvr6bm2hlj5h4"]
 
 [ext_resource type="Script" uid="uid://capm81lvak2c3" path="res://tank/tank.gd" id="1_0iy80"]
 [ext_resource type="Script" uid="uid://iirywjtssovs" path="res://tank/tank_body.gd" id="2_o5qn2"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://bybxweqiag1x8" path="res://items/weapon_projectiles/explosions/emp_discharger.gd" id="12_0knov"]
 [ext_resource type="PackedScene" uid="uid://b15v5mova33di" path="res://items/weapon_projectiles/weapon_projectile_emp_widespread.tscn" id="13_sdcn4"]
 [ext_resource type="Texture2D" uid="uid://5fotp567tkxb" path="res://items/weapon_projectiles/parachute.png" id="14_sdcn4"]
+[ext_resource type="Texture2D" uid="uid://lq7jojr8mwke" path="res://items/weapon_projectiles/parachute-backpack.png" id="18_yldis"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1pofo"]
 friction = 100.0
@@ -164,3 +165,11 @@ visible = false
 z_index = -2
 position = Vector2(-1, -34)
 texture = ExtResource("14_sdcn4")
+
+[node name="ParachuteBackpack" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+visible = false
+z_index = -10
+position = Vector2(11, -3)
+scale = Vector2(0.333, 0.333)
+texture = ExtResource("18_yldis")

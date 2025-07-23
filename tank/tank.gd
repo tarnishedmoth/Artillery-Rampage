@@ -67,9 +67,17 @@ var current_equipped_weapon_index: int = -1
 
 @onready var fall_damage_causer: FallDamageCauser = %FallDamageCauser
 @onready var parachute = %Parachute
-# used to check whether the parachute should deploy or not when tank falls
-var has_parachute:bool = false
+@onready var parachute_pack = %ParachuteBackpack
 
+# used to check whether the parachute should deploy or not when tank falls
+var has_parachute:bool = false:
+	set(value):
+		has_parachute = value
+		if value:
+			parachute_pack.show()
+		else:
+			parachute_pack.hide()
+			
 var health: float:
 	set(value):
 		health = clampf(value, 0.0, max_health)
@@ -485,6 +493,7 @@ func _calculate_fall_damage(start_position: Vector2, end_position: Vector2) -> f
 func started_falling() -> void:
 	if has_parachute:
 		parachute.show()
+		parachute_pack.hide()
 	if mark_falling:
 		return
 	print_debug("tank(%s) started falling at position=%s" % [get_parent().name, str(tankBody.global_position)])
@@ -495,6 +504,7 @@ func started_falling() -> void:
 func stopped_falling() -> void:
 	if has_parachute:
 		parachute.hide()
+		parachute_pack.show()
 	if !mark_falling:
 		return
 
