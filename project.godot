@@ -44,6 +44,7 @@ PlayerAttributes="*res://progression/player_attributes.tscn"
 StoryModeManager="*res://story/story_mode_manager.tscn"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 GlobalXR="*res://xr/global_xr.tscn"
+StartXR="*res://addons/godot-xr-tools/xr/start_xr.tscn"
 XRToolsUserSettings="*res://addons/godot-xr-tools/user_settings/user_settings.gd"
 XRToolsRumbleManager="*res://addons/godot-xr-tools/rumble/rumble_manager.gd"
 

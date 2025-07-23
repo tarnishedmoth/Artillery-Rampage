@@ -1,9 +1,12 @@
-[gd_scene load_steps=15 format=3 uid="uid://br3ip0dg0a52d"]
+[gd_scene load_steps=17 format=3 uid="uid://br3ip0dg0a52d"]
 
 [ext_resource type="Script" uid="uid://cd82tnurg18sn" path="res://xr/program_entry_xr.gd" id="1_np8ie"]
-[ext_resource type="Script" uid="uid://dvn6qx78do8ds" path="res://addons/godot-xr-tools/player/player_body.gd" id="2_np8ie"]
+[ext_resource type="PackedScene" uid="uid://btknduttnmoxf" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="3_0bjtw"]
+[ext_resource type="PackedScene" uid="uid://hpr0v012ghsb" path="res://addons/godot-xr-tools/hands/scenes/highpoly/left_tac_glove.tscn" id="3_j8t2p"]
 [ext_resource type="PackedScene" uid="uid://clfh2l3a2t5f2" path="res://intro/program_entry.tscn" id="3_o5nmn"]
+[ext_resource type="PackedScene" uid="uid://dup2vp8v5rpi5" path="res://addons/godot-xr-tools/hands/scenes/highpoly/right_tac_glove.tscn" id="4_0bjtw"]
 [ext_resource type="Texture2D" uid="uid://bqxc5xpyuad54" path="res://terrain/terrain-rock.png" id="4_o5nmn"]
+[ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="5_j8t2p"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_np8ie"]
 
@@ -14,9 +17,6 @@ disable_ambient_light = true
 disable_fog = true
 albedo_texture = SubResource("ViewportTexture_np8ie")
 texture_filter = 5
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_np8ie"]
-height = 1.7
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2xtcp"]
 albedo_color = Color(0.404755, 0.464951, 0.705078, 1)
@@ -32,6 +32,10 @@ size = Vector2(10, 10)
 size = Vector2(3.2, 1.8)
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_o5nmn"]
+rayleigh_coefficient = 2.4
+rayleigh_color = Color(0.6, 0.337898, 0.575809, 1)
+turbidity = 15.0
+ground_color = Color(0, 0, 0, 1)
 
 [sub_resource type="Sky" id="Sky_2xtcp"]
 sky_material = SubResource("PhysicalSkyMaterial_o5nmn")
@@ -52,35 +56,35 @@ screen_material = SubResource("StandardMaterial3D_np8ie")
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 
+[node name="VRCommonShaderCache" parent="XROrigin3D/XRCamera3D" instance=ExtResource("3_0bjtw")]
+
 [node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
 tracker = &"left_hand"
+
+[node name="LeftHand" parent="XROrigin3D/LeftHand" instance=ExtResource("3_j8t2p")]
 
 [node name="RightHand" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
 tracker = &"right_hand"
 
-[node name="PlayerBody" type="CharacterBody3D" parent="XROrigin3D"]
-top_level = true
-script = ExtResource("2_np8ie")
+[node name="RightHand" parent="XROrigin3D/RightHand" instance=ExtResource("4_0bjtw")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/PlayerBody"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("CapsuleShape3D_np8ie")
+[node name="PlayerBody" parent="XROrigin3D" instance=ExtResource("5_j8t2p")]
 
 [node name="Game3DRoot" type="Node3D" parent="."]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Game3DRoot"]
+[node name="Floor" type="StaticBody3D" parent="Game3DRoot"]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Game3DRoot/StaticBody3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Game3DRoot/Floor"]
 mesh = SubResource("PlaneMesh_j8t2p")
 skeleton = NodePath("../..")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Game3DRoot/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Game3DRoot/Floor"]
 shape = SubResource("WorldBoundaryShape3D_np8ie")
 
 [node name="Screen" type="MeshInstance3D" parent="Game3DRoot"]
-transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0, 1, -2)
+transform = Transform3D(1, 0, 0, 0, 0.000803046, -0.999999, 0, 0.999999, 0.000803046, 0, 2.5, -1.8)
 cast_shadow = 2
 mesh = SubResource("PlaneMesh_o5nmn")
 
@@ -88,5 +92,6 @@ mesh = SubResource("PlaneMesh_o5nmn")
 environment = SubResource("Environment_o5nmn")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Game3DRoot"]
-transform = Transform3D(0.975408, -0.167794, 0.142915, -0.110204, 0.190258, 0.975529, -0.190879, -0.967288, 0.167087, 0, 0, 0)
+transform = Transform3D(-0.0721281, -0.975936, 0.205783, -0.897334, 0.153566, 0.413774, -0.435418, -0.154811, -0.886817, 0, 0, 0)
+light_energy = 5.0
 shadow_enabled = true
