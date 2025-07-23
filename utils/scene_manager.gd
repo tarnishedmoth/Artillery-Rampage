@@ -11,6 +11,7 @@ var levels_always_selectable: Array[StoryLevel] = []
 
 var is_switching_scene: bool
 var is_precompiler_running:bool = false
+var is_quitting_game: bool = false
 
 enum PlayMode {
 	DIRECT, # Happens with playing level directly
@@ -77,6 +78,8 @@ var current_scene:Node = null:
 	get: return current_scene if current_scene else get_current_game_scene_root()
 	set(value):
 		current_scene = value
+		
+var is_current_scene_set:bool = false
 
 var current_story_level:StoryLevel:
 	get:
@@ -93,6 +96,9 @@ var _last_scene_resource:Resource
 var _last_game_level_resource:Resource
 
 @onready var loading_bg: ColorRect = $LoadingBG
+
+func _enter_tree() -> void:
+	get_tree()
 
 func _ready()->void:
 	GameEvents.level_loaded.connect(_on_GameLevel_loaded)
@@ -118,9 +124,6 @@ func _init_selectable_levels() -> void:
 	levels_always_selectable.sort_custom(func(a,b)->bool: return a.name < b.name)
 	
 func get_current_game_scene_root() -> Node:
-	#if 2D:
-	#return root.get_child(root.get_child_count() - 1) ## FIXME XR
-	#else:
 	assert(InternalSceneRoot, "Null internal scene root!")
 	
 	if not InternalSceneRoot.get_child_count() > 0:
@@ -143,8 +146,9 @@ func get_current_level_root() -> GameLevel:
 	return null
 
 func quit() -> void:
+	is_quitting_game = true
 	game_quit.emit()
-	get_tree().quit() ## FIXME XR
+	get_tree().quit()
 	
 func restart_level(delay: float = default_delay) -> void:
 	print_debug("restart_level: %s, delay=%f" % [str(_current_level_root_node.name) if _current_level_root_node else "NULL", delay])
@@ -323,7 +327,7 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	else:
 		await get_tree().process_frame
 	
-	#var root = get_tree().root ## NOTICE XR
+	#var root = get_tree().root
 	await loading_screen(true)
 	
 	GameEvents.scene_leaving.emit(current_scene)
@@ -382,3 +386,6 @@ func get_spawnables_container() -> Node2D:
 		return get_current_level_root().get_container()
 	else:
 		return get_current_game_scene_root()
+
+func print_scene_tree_current_scene() -> void:
+	push_warning("Scene Tree current scene is %s." % [get_tree().current_scene])
