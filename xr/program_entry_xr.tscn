@@ -1,0 +1,86 @@
+[gd_scene load_steps=12 format=3 uid="uid://br3ip0dg0a52d"]
+
+[ext_resource type="Script" uid="uid://cd82tnurg18sn" path="res://xr/program_entry_xr.gd" id="1_np8ie"]
+[ext_resource type="Script" uid="uid://dvn6qx78do8ds" path="res://addons/godot-xr-tools/player/player_body.gd" id="2_np8ie"]
+[ext_resource type="Texture2D" uid="uid://bqxc5xpyuad54" path="res://terrain/terrain-rock.png" id="4_o5nmn"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_np8ie"]
+height = 1.7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2xtcp"]
+albedo_color = Color(0.404755, 0.464951, 0.705078, 1)
+albedo_texture = ExtResource("4_o5nmn")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_j8t2p"]
+material = SubResource("StandardMaterial3D_2xtcp")
+size = Vector2(10, 10)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_np8ie"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_o5nmn"]
+viewport_path = NodePath("Game2DRoot")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j8t2p"]
+resource_local_to_scene = true
+shading_mode = 0
+albedo_texture = SubResource("ViewportTexture_o5nmn")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_o5nmn"]
+material = SubResource("StandardMaterial3D_j8t2p")
+size = Vector2(3.2, 1.8)
+
+[sub_resource type="Environment" id="Environment_o5nmn"]
+ambient_light_color = Color(1, 1, 1, 1)
+
+[node name="ProgramEntryXR" type="Node3D"]
+script = ExtResource("1_np8ie")
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+
+[node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
+tracker = &"left_hand"
+
+[node name="RightHand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
+tracker = &"right_hand"
+
+[node name="PlayerBody" type="CharacterBody3D" parent="XROrigin3D"]
+top_level = true
+script = ExtResource("2_np8ie")
+metadata/_custom_type_script = "uid://dvn6qx78do8ds"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/PlayerBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_np8ie")
+
+[node name="Game2DRoot" type="SubViewport" parent="."]
+disable_3d = true
+gui_embed_subwindows = true
+size = Vector2i(1280, 720)
+render_target_update_mode = 3
+
+[node name="Game3DRoot" type="Node3D" parent="."]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Game3DRoot"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Game3DRoot/StaticBody3D"]
+mesh = SubResource("PlaneMesh_j8t2p")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Game3DRoot/StaticBody3D"]
+shape = SubResource("WorldBoundaryShape3D_np8ie")
+
+[node name="Screen" type="MeshInstance3D" parent="Game3DRoot"]
+transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0, 1, -2)
+mesh = SubResource("PlaneMesh_o5nmn")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Game3DRoot"]
+environment = SubResource("Environment_o5nmn")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Game3DRoot"]
+transform = Transform3D(0.975408, -0.167794, 0.142915, -0.110204, 0.190258, 0.975529, -0.190879, -0.967288, 0.167087, 0, 0, 0)
+shadow_enabled = true

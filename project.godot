@@ -12,7 +12,7 @@ config_version=5
 
 config/name="ArtilleryRampage"
 config/version="1.1.0"
-run/main_scene="uid://clfh2l3a2t5f2"
+run/main_scene="uid://br3ip0dg0a52d"
 config/features=PackedStringArray("4.4", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
@@ -42,6 +42,9 @@ PlayerStateManager="*res://levels/round/player_state_manager.tscn"
 PlayerAttributes="*res://progression/player_attributes.tscn"
 StoryModeManager="*res://story/story_mode_manager.tscn"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
+GlobalXR="*res://xr/global_xr.tscn"
+XRToolsUserSettings="*res://addons/godot-xr-tools/user_settings/user_settings.gd"
+XRToolsRumbleManager="*res://addons/godot-xr-tools/rumble/rumble_manager.gd"
 
 [debug]
 
@@ -60,7 +63,7 @@ project/assembly_name="ArtilleryRampage"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/documentation_regenerator/plugin.cfg")
+enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/documentation_regenerator/plugin.cfg", "res://addons/godot-xr-tools/plugin.cfg")
 
 [global_group]
 
@@ -156,6 +159,7 @@ pause={
 
 [rendering]
 
+renderer/rendering_method="mobile"
 limits/time/time_rollover_secs=300.0
 
 [shader_globals]
@@ -164,3 +168,10 @@ game_time={
 "type": "float",
 "value": 0.0
 }
+
+[xr]
+
+openxr/enabled=true
+openxr/reference_space=2
+openxr/extensions/debug_utils=1
+shaders/enabled=true

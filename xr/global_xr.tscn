@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://d108q1j2twf44"]
+
+[node name="GlobalXR" type="Node3D"]
