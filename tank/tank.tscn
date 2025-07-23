@@ -159,17 +159,26 @@ scene_to_spawn = ExtResource("13_sdcn4")
 unique_name_in_owner = true
 emitting = false
 
-[node name="Parachute" type="Sprite2D" parent="."]
+[node name="ParachuteGroup" type="Node2D" parent="."]
+
+[node name="Parachute" type="Sprite2D" parent="ParachuteGroup"]
 unique_name_in_owner = true
 visible = false
 z_index = -2
 position = Vector2(-1, -34)
 texture = ExtResource("14_sdcn4")
 
-[node name="ParachuteBackpack" type="Sprite2D" parent="."]
+[node name="ParachuteBackpack" type="Sprite2D" parent="ParachuteGroup"]
 unique_name_in_owner = true
 visible = false
 z_index = -10
 position = Vector2(11, -3)
 scale = Vector2(0.333, 0.333)
 texture = ExtResource("18_yldis")
+
+[node name="ParachuteActivationTimer" type="Timer" parent="ParachuteGroup"]
+unique_name_in_owner = true
+wait_time = 0.25
+one_shot = true
+
+[connection signal="timeout" from="ParachuteGroup/ParachuteActivationTimer" to="." method="_on_parachute_activation_timer_timeout"]
