@@ -53,6 +53,7 @@ const _DIRTY_ALL			:= 0x07FF	# All dirty
 # Default layer of 1:static-world, 21:pointable, 23:ui-objects
 const DEFAULT_LAYER := 0b0000_0000_0101_0000_0000_0000_0000_0001
 
+var viewport: SubViewport = InternalSceneRoot
 
 # Physics property group
 @export_group("Physics")
@@ -130,6 +131,7 @@ func is_xr_class(p_name : String) -> bool:
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	is_ready = true
+	GameEvents.scene_switched.connect(_on_scene_switched)
 
 	# Listen for pointer events on the screen body
 	$StaticBody3D.connect("pointer_event", _on_pointer_event)
@@ -309,12 +311,12 @@ func _on_pointer_event(event : XRToolsPointerEvent) -> void:
 func _input(event):
 	# Map keyboard events to the viewport if enabled
 	if input_keyboard and (event is InputEventKey or event is InputEventShortcut):
-		$Viewport.push_input(event)
+		viewport.push_input(event)
 		return
 
 	# Map gamepad events to the viewport if enable
 	if input_gamepad and (event is InputEventJoypadButton or event is InputEventJoypadMotion):
-		$Viewport.push_input(event)
+		viewport.push_input(event)
 		return
 
 
@@ -322,14 +324,15 @@ func _input(event):
 func _process(delta):
 	# Process screen refreshing
 	if Engine.is_editor_hint():
-		# Perform periodic material refreshes to handle the user modifying the
-		# material properties in the editor
-		time_since_last_update += delta
-		if time_since_last_update > 1.0:
-			time_since_last_update = 0.0
-			# Trigger material refresh
-			_dirty = _DIRTY_MATERIAL
-			_update_render()
+		pass
+		## Perform periodic material refreshes to handle the user modifying the
+		## material properties in the editor
+		#time_since_last_update += delta
+		#if time_since_last_update > 1.0:
+			#time_since_last_update = 0.0
+			## Trigger material refresh
+			#_dirty = _DIRTY_MATERIAL
+			#_update_render()
 	elif update_mode == UpdateMode.UPDATE_THROTTLED:
 		# Perform throttled updates of the viewport
 		var frame_time = 1.0 / throttle_fps
@@ -337,7 +340,7 @@ func _process(delta):
 		if time_since_last_update > frame_time:
 			time_since_last_update = 0.0
 			# Trigger update
-			$Viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+			viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	else:
 		# This is no longer needed
 		set_process(false)
@@ -505,7 +508,7 @@ func _update_render() -> void:
 		if is_instance_valid(scene_node):
 			if scene_node.property_list_changed.is_connected(_update_scene_property_list):
 				scene_node.property_list_changed.disconnect(_update_scene_property_list)
-			$Viewport.remove_child(scene_node)
+			viewport.remove_child(scene_node)
 			scene_node.queue_free()
 			_update_scene_property_list()
 
@@ -522,10 +525,10 @@ func _update_render() -> void:
 					scene_node.set(key, scene_proxy_configuration[key])
 
 			# Finally add it to the scene, so values are available in _ready
-			$Viewport.add_child(scene_node)
-		elif $Viewport.get_child_count() == 1:
+			viewport.add_child(scene_node)
+		elif viewport.get_child_count() == 1:
 			# Use already-provided scene
-			scene_node = $Viewport.get_child(0)
+			scene_node = viewport.get_child(0)
 
 		# Ensure the new scene is rendered at least once
 		_dirty |= _DIRTY_REDRAW
@@ -535,7 +538,7 @@ func _update_render() -> void:
 		_dirty &= ~_DIRTY_SIZE
 
 		# Set the viewport size
-		$Viewport.size = viewport_size
+		viewport.size = viewport_size
 		$StaticBody3D.viewport_size = viewport_size
 
 		# Update our viewport texture, it will have changed
@@ -546,7 +549,7 @@ func _update_render() -> void:
 		_dirty &= ~_DIRTY_ALBEDO
 
 		# Set the screen material to use the viewport for the albedo channel
-		viewport_texture = $Viewport.get_texture()
+		viewport_texture = viewport.get_texture()
 		_screen_material.albedo_texture = viewport_texture
 
 	# Handle update mode change
@@ -556,19 +559,19 @@ func _update_render() -> void:
 		# Apply update rules
 		if Engine.is_editor_hint():
 			# Update once. Process function used for editor refreshes
-			$Viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+			viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 			set_process(true)
 		elif update_mode == UpdateMode.UPDATE_ONCE or not is_visible_in_tree():
 			# Update once. Process function not used
-			$Viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+			viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 			set_process(false)
 		elif update_mode == UpdateMode.UPDATE_ALWAYS:
 			# Update always. Process function not used
-			$Viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+			viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 			set_process(false)
 		elif update_mode == UpdateMode.UPDATE_THROTTLED:
 			# Update once. Process function triggers periodic refresh
-			$Viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+			viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 			set_process(true)
 
 	# Handle transparency update
@@ -587,7 +590,7 @@ func _update_render() -> void:
 					_screen_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
 
 		# Set the viewport background transparency mode and force a redraw
-		$Viewport.transparent_bg = transparent != TransparancyMode.OPAQUE
+		viewport.transparent_bg = transparent != TransparancyMode.OPAQUE
 		_dirty |= _DIRTY_REDRAW
 
 	# Handle alpha scissor update
@@ -633,4 +636,7 @@ func _update_render() -> void:
 
 		# Force a redraw of the viewport
 		if Engine.is_editor_hint() or update_mode == UpdateMode.UPDATE_ONCE:
-			$Viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+			viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+
+func _on_scene_switched(new_scene: Node) -> void:
+	pass

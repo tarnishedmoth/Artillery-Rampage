@@ -2,7 +2,7 @@
 
 [node name="InternalSceneRoot" type="SubViewport"]
 process_mode = 3
-handle_input_locally = false
+transparent_bg = true
 audio_listener_enable_2d = true
 physics_object_picking = true
 gui_embed_subwindows = true

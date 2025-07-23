@@ -32,7 +32,8 @@ var _mouse_last := Vector2.ZERO
 
 func _ready():
 	# Get viewport node
-	_viewport = get_node("../Viewport")
+	#_viewport = get_node("../Viewport")
+	_viewport = InternalSceneRoot
 
 	# Subscribe to pointer events
 	pointer_event.connect(_on_pointer_event)

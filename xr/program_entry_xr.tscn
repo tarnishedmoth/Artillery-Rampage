@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://br3ip0dg0a52d"]
+[gd_scene load_steps=31 format=3 uid="uid://br3ip0dg0a52d"]
 
 [ext_resource type="Script" uid="uid://cd82tnurg18sn" path="res://xr/program_entry_xr.gd" id="1_np8ie"]
 [ext_resource type="PackedScene" uid="uid://btknduttnmoxf" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="3_0bjtw"]
@@ -10,8 +10,11 @@
 [ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="6_6esj4"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="7_h80nf"]
 [ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="8_15h2m"]
+[ext_resource type="PackedScene" uid="uid://cqhw276realc" path="res://addons/godot-xr-tools/functions/function_pointer.tscn" id="9_cc6jf"]
 [ext_resource type="Script" uid="uid://dhab8nl38febn" path="res://addons/godot-xr-tools/objects/pickable.gd" id="10_h80nf"]
 [ext_resource type="Texture2D" uid="uid://byxfbh0q6w7ua" path="res://terrain/terrain-rock-snowy.png" id="11_m0kp7"]
+[ext_resource type="Script" uid="uid://ncsijhksfhg5" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.gd" id="12_sofa6"]
+[ext_resource type="Script" uid="uid://c7uxdjtphudyo" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d_body.gd" id="13_yht1y"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_np8ie"]
 
@@ -32,8 +35,21 @@ size = Vector2(10, 10)
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_np8ie"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_o5nmn"]
+[sub_resource type="QuadMesh" id="QuadMesh_73ftp"]
+resource_local_to_scene = true
 size = Vector2(3.2, 1.8)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_w5kes"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ts63t"]
+transparency = 1
+cull_mode = 2
+albedo_texture = SubResource("ViewportTexture_w5kes")
+texture_filter = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_er54b"]
+resource_local_to_scene = true
+size = Vector3(3.2, 1.8, 0.02)
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_o5nmn"]
 rayleigh_coefficient = 2.4
@@ -61,7 +77,7 @@ size = Vector3(0.25, 0.25, 0.25)
 [node name="ProgramEntryXR" type="Node3D" node_paths=PackedStringArray("screen_mesh")]
 script = ExtResource("1_np8ie")
 program_entry_2d = ExtResource("3_o5nmn")
-screen_mesh = NodePath("Game3DRoot/Screen")
+screen_mesh = NodePath("Game3DRoot/Viewport2Din3D/Screen")
 screen_material = SubResource("StandardMaterial3D_np8ie")
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
@@ -90,6 +106,10 @@ turn_mode = 1
 step_turn_angle = 15.0
 
 [node name="FunctionPickup" parent="XROrigin3D/RightHand" instance=ExtResource("8_15h2m")]
+ranged_distance = 6.0
+ranged_angle = 12.0
+
+[node name="FunctionPointer" parent="XROrigin3D/RightHand" instance=ExtResource("9_cc6jf")]
 
 [node name="PlayerBody" parent="XROrigin3D" instance=ExtResource("5_j8t2p")]
 
@@ -105,10 +125,27 @@ skeleton = NodePath("../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Game3DRoot/Floor"]
 shape = SubResource("WorldBoundaryShape3D_np8ie")
 
-[node name="Screen" type="MeshInstance3D" parent="Game3DRoot"]
-transform = Transform3D(1, 0, 0, 0, 0.000803046, -0.999999, 0, 0.999999, 0.000803046, 0, 2.5, -1.8)
-cast_shadow = 2
-mesh = SubResource("PlaneMesh_o5nmn")
+[node name="Viewport2Din3D" type="Node3D" parent="Game3DRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -2)
+script = ExtResource("12_sofa6")
+screen_size = Vector2(3.2, 1.8)
+viewport_size = Vector2(1280, 720)
+throttle_fps = 60.0
+
+[node name="Screen" type="MeshInstance3D" parent="Game3DRoot/Viewport2Din3D"]
+mesh = SubResource("QuadMesh_73ftp")
+surface_material_override/0 = SubResource("StandardMaterial3D_ts63t")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Game3DRoot/Viewport2Din3D"]
+collision_layer = 5242881
+collision_mask = 0
+script = ExtResource("13_yht1y")
+screen_size = Vector2(3.2, 1.8)
+viewport_size = Vector2(3.2, 1.8)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Game3DRoot/Viewport2Din3D/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.01)
+shape = SubResource("BoxShape3D_er54b")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Game3DRoot"]
 environment = SubResource("Environment_o5nmn")
