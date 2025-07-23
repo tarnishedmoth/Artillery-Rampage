@@ -1,4 +1,4 @@
-extends Node
+extends SubViewport
 
 func _exit_tree() -> void:
 	if not SceneManager.is_quitting_game:
