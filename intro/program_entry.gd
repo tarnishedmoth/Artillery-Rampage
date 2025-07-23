@@ -6,6 +6,7 @@ extends Control
 
 func _enter_tree() -> void:
 	SceneManager.set_current_scene(self) ## CRITICAL
+	get_tree().current_scene = InternalSceneRoot
 
 func _ready() -> void:
 	modulate = Color.BLACK

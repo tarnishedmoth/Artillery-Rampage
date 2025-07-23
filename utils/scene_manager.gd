@@ -11,6 +11,7 @@ var levels_always_selectable: Array[StoryLevel] = []
 
 var is_switching_scene: bool
 var is_precompiler_running:bool = false
+var is_quitting_game: bool = false
 
 enum PlayMode {
 	DIRECT, # Happens with playing level directly
@@ -107,7 +108,7 @@ func _ready()->void:
 	
 	## Check if we loaded a level directly instead of launching the game normally
 	check_for_directly_loaded_level()
-			
+	
 func check_for_directly_loaded_level() -> void:
 	## Check if the current scene is set (typically only when launching the game normally)
 	## Otherwise move the scene to the InternalSceneRoot and set our reference
@@ -120,7 +121,12 @@ func check_for_directly_loaded_level() -> void:
 			var _current_scene_file_path: String = get_tree().current_scene.scene_file_path
 			get_tree().unload_current_scene()
 			instantiate_scene_to_internal_root(load(_current_scene_file_path))
-			push_warning("Killed and reinstanced scene tree current scene to InternalSceneRoot!")
+			get_tree().current_scene = InternalSceneRoot
+			push_warning("Killed and reinstanced scene tree current scene to InternalSceneRoot! You may see some warnings for any callbacks from the initial instance.")
+			print_scene_tree_current_scene()
+	else:
+		get_tree().current_scene = InternalSceneRoot
+		print_scene_tree_current_scene()
 	
 func set_current_scene(node: Node) -> void:
 	if node.is_inside_tree():
@@ -166,6 +172,7 @@ func get_current_level_root() -> GameLevel:
 	return null
 
 func quit() -> void:
+	is_quitting_game = true
 	game_quit.emit()
 	get_tree().quit()
 	
@@ -405,3 +412,6 @@ func get_spawnables_container() -> Node2D:
 		return get_current_level_root().get_container()
 	else:
 		return get_current_game_scene_root()
+
+func print_scene_tree_current_scene() -> void:
+	push_warning("Scene Tree current scene is %s." % [get_tree().current_scene])

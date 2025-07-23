@@ -27,6 +27,7 @@ func _init() -> void:
 	modulate = Color.BLACK # For fade-in
 	
 func _ready() -> void:
+	SceneManager.print_scene_tree_current_scene()
 	main_menu.show()
 	level_select_menu.hide()
 	
