@@ -4,6 +4,8 @@ extends Control
 @onready var gd_rocket: Sprite2D = %GDRocket
 @onready var v_box_container: VBoxContainer = $VBoxContainer
 
+func _enter_tree() -> void:
+	SceneManager.set_current_scene(self) ## CRITICAL
 
 func _ready() -> void:
 	modulate = Color.BLACK
@@ -35,3 +37,4 @@ func _on_precompilation_completed() -> void:
 	tween.tween_callback(
 		SceneManager.switch_scene_keyed.bind(SceneManager.SceneKeys.MainMenu, 0.0)
 		)
+	#tween.tween_callback(queue_free)

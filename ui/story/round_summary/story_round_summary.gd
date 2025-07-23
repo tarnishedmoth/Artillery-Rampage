@@ -185,15 +185,15 @@ func _calculate_scrap_earned(config: StoryRewardsConfig, stats: RoundStatTracker
 		
 		if enemy_data.is_full_kill():
 			earned_scrap += config.scrap_per_full_kill
-			print_debug("%s: Awarding %i scrap for full kill against %s" % [name, config.scrap_per_full_kill, enemy_data.name])
+			print_debug("%s: Awarding %d scrap for full kill against %s" % [name, config.scrap_per_full_kill, enemy_data.name])
 			
 		elif enemy_data.is_partial_kill():
 			earned_scrap += config.scrap_per_partial_kill
-			print_debug("%s: Awarding %i scrap for partial kill against %s" % [name, config.scrap_per_partial_kill, enemy_data.name])
+			print_debug("%s: Awarding %d scrap for partial kill against %s" % [name, config.scrap_per_partial_kill, enemy_data.name])
 			
 		elif enemy_data.is_damaged():
 			earned_scrap += config.scrap_per_enemy_damaged
-			print_debug("%s: Awarding %i scrap for some damage against %s" % [name, config.scrap_per_enemy_damaged, enemy_data.name])
+			print_debug("%s: Awarding %d scrap for some damage against %s" % [name, config.scrap_per_enemy_damaged, enemy_data.name])
 	
 	if stats.additional_scrap_rewarded > 0:
 		print_debug("%s: Awarding additional %d scrap from level-specific rewards" % [name, stats.additional_scrap_rewarded])

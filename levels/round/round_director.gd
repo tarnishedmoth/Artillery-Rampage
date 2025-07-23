@@ -316,10 +316,10 @@ func _async_check_and_await_falling() -> void:
 		print("%s: Check Falling - Begin" % name)
 	 # Wait for physics to settle prior to allowing next player to start
 	# or just make this class a Node and add to tree from Game
-	var scene_tree := get_tree()
+	#var scene_tree := get_tree()
 
 	# Wait a smidge and then check if any tank is falling and give time for physics to settle
-	await scene_tree.create_timer(physics_check_time).timeout
+	await get_tree().create_timer(physics_check_time).timeout
 
 	if is_any_tank_falling():
 		print("_on_turn_ended: At least one tank falling - Starting fall_check_timer")

@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://d1ivm04rd562b"]
+
+[node name="InternalSceneRoot" type="Node"]
+process_mode = 3

@@ -417,12 +417,13 @@ func _calculate_dist_frac(dist: float):
 	return  (1.0 - (dist - min_falloff_distance) / (max_falloff_distance - min_falloff_distance))
 	
 func _get_container() -> Node:
-	var container = SceneManager.get_current_level_root()
-	if container == null: container = SceneManager.current_scene
-	#deployed_container = SceneManager.current_scene
-	if container.has_method("get_container"):
-		container = container.get_container()
-	return container
+	#var container = SceneManager.get_current_level_root()
+	#if container == null: container = SceneManager.current_scene
+	##deployed_container = SceneManager.current_scene
+	#if container.has_method("get_container"):
+		#container = container.get_container()
+	#return container
+	return SceneManager.get_spawnables_container()
 
 func _emit_completed_lifespan_without_destroying(time:float) -> void:
 	if time > 0.0: await get_tree().create_timer(time).timeout

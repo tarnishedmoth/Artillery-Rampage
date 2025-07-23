@@ -87,13 +87,15 @@ func toggle_visibility():
 
 	if paused:
 		self.show()
-		get_tree().paused = true
-		GameEvents.game_paused.emit(true)
+		SceneManager.pause_game()
+		#get_tree().paused = true
+		#GameEvents.game_paused.emit(true)
 		input_buffer_listening = true
 	else:
 		self.hide()
-		get_tree().paused = false
-		GameEvents.game_paused.emit(false)
+		#get_tree().paused = false
+		#GameEvents.game_paused.emit(false)
+		SceneManager.pause_game(false)
 		input_buffer_listening = false
 	input_buffer.clear()
 
@@ -105,7 +107,8 @@ func _on_main_menu_pressed() -> void:
 	SceneManager.switch_scene_keyed(SceneManager.SceneKeys.MainMenu, 0.0)
 
 func _on_quit_to_desktop_pressed() -> void:
-	get_tree().quit()
+	#get_tree().quit()
+	SceneManager.quit()
 
 func _on_options_pressed() -> void:
 	pause_menu.hide()

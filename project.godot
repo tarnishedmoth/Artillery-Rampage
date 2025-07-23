@@ -24,9 +24,11 @@ driver/output_latency.web=90
 
 [autoload]
 
-ObjectUtils="*res://utils/object_utils.gd"
-RunOnce="*res://utils/run_once.gd"
+InternalSceneRoot="*res://intro/internal_scene_root.tscn"
 GameEvents="*res://events/game_events.gd"
+SceneManager="*res://utils/scene_manager.tscn"
+RunOnce="*res://utils/run_once.gd"
+ObjectUtils="*res://utils/object_utils.gd"
 Collisions="*res://utils/collisions.gd"
 Groups="*res://utils/groups.gd"
 PhysicsUtils="*res://utils/physics_utils.gd"
@@ -34,7 +36,6 @@ AITypes="*res://controller/ai/ai_types.gd"
 SpawnLimiterManager="*res://utils/SpawnLimiterManager.tscn"
 RoundStatTracker="*res://levels/round/round_stat_tracker.tscn"
 SaveStateManager="*res://utils/save_state_manager.gd"
-SceneManager="*res://utils/scene_manager.tscn"
 PlayerUpgrades="*res://progression/player_upgrades.tscn"
 UserOptions="*res://utils/user_options.tscn"
 Difficulty="*res://progression/difficulty.tscn"

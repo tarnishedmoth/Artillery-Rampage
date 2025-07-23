@@ -366,12 +366,13 @@ func _separate_particles_to_despawn(particles:GPUParticles2D) -> void:
 	particles.finished.connect(particles.queue_free)
 
 func _get_scene_container() -> Node2D:
-	var container = SceneManager.get_current_level_root()
-	if container == null:
-		container = SceneManager.current_scene
-	if container.has_method("get_container"):
-		container = container.get_container()
-	return container
+	#var container = SceneManager.get_current_level_root()
+	#if container == null:
+		#container = SceneManager.current_scene
+	#if container.has_method("get_container"):
+		#container = container.get_container()
+	#return container
+	return SceneManager.get_spawnables_container()
 
 func _update_visuals_after_damage(damage_shader:bool = true):
 	var threshold = 0.75
