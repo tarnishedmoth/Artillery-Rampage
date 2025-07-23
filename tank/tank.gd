@@ -9,6 +9,7 @@ signal  tank_took_emp(
 
 signal tank_started_falling(tank: Tank)
 signal tank_stopped_falling(tank: Tank)
+signal parachute_activated(tank: Tank)
 
 @export var drop_on_death:PackedScene ## Scene is spawned at tank's global position when it dies.
 ## Trajectory Indicator for projectile-based weapons
@@ -67,9 +68,26 @@ var current_equipped_weapon_index: int = -1
 
 @onready var fall_damage_causer: FallDamageCauser = %FallDamageCauser
 @onready var parachute = %Parachute
-# used to check whether the parachute should deploy or not when tank falls
-var has_parachute:bool = false
+@onready var parachute_pack = %ParachuteBackpack
+@onready var parachute_activation_timer:Timer = %ParachuteActivationTimer
 
+# used to check whether the parachute should deploy or not when tank falls
+@export_group("Parachute")
+@export
+var start_with_parachute:bool = false
+
+@export_range(1.0, 1e9, 0.1, "or_greater")
+var activate_parachute_min_damage:float = 10.0
+
+var has_parachute:bool = false:
+	set(value):
+		has_parachute = value
+		if value:
+			parachute_pack.show()
+		else:
+			parachute_pack.hide()
+			parachute.hide()
+			
 var health: float:
 	set(value):
 		health = clampf(value, 0.0, max_health)
@@ -154,6 +172,9 @@ func _ready() -> void:
 	# TODO: Using this in conjunction with falling detection
 	tankBody.contact_monitor = true
 	tankBody.max_contacts_reported = 1
+	
+	if start_with_parachute:
+		has_parachute = true
 
 func _exit_tree() -> void:
 	disconnect_from_weapons()
@@ -466,6 +487,9 @@ func _check_and_emit_fall_damage(start_position: Vector2, end_position: Vector2)
 	if !enable_fall_damage:
 		print_debug("tank(%s): _check_and_emit_fall_damage - fall damage disabled" % [get_parent().name])
 		return
+	if has_parachute:
+		print_debug("tank(%s): _check_and_emit_fall_damage - no damage as has parachute" % [get_parent().name])
+		return
 	var fall_damage := _calculate_fall_damage(start_position, end_position)
 	if fall_damage > 0:
 		var instigator_controller:TankController = fall_damage_causer.instigator_controller if fall_damage_causer.instigator_controller else owner
@@ -483,10 +507,11 @@ func _calculate_fall_damage(start_position: Vector2, end_position: Vector2) -> f
 	return damage
 
 func started_falling() -> void:
-	if has_parachute:
-		parachute.show()
 	if mark_falling:
 		return
+	if has_parachute:
+		parachute_activation_timer.start()
+		
 	print_debug("tank(%s) started falling at position=%s" % [get_parent().name, str(tankBody.global_position)])
 	fall_start_position = tankBody.global_position
 	mark_falling = true
@@ -495,6 +520,7 @@ func started_falling() -> void:
 func stopped_falling() -> void:
 	if has_parachute:
 		parachute.hide()
+		parachute_pack.show()
 	if !mark_falling:
 		return
 
@@ -671,3 +697,18 @@ func get_body_reference_points_global() -> PackedVector2Array:
 	]
 
 #endregion
+
+func _on_parachute_activation_timer_timeout() -> void:
+	if not has_parachute or not mark_falling:
+		return
+	# Check to see if we are really falling and will take damage before showing the parachute
+	var ground_pos := _ground_trace(ground_trace_distance)
+	var calculated_fall_damage:float = _calculate_fall_damage(fall_start_position, ground_pos)
+	if calculated_fall_damage < activate_parachute_min_damage:
+		print_debug("%s: Ignoring parachute as calculated_fall_damage=%.1f < %.1f" % [get_parent().name, calculated_fall_damage, activate_parachute_min_damage])
+		return
+		
+	print_debug("%s: Parachute deployed: calculated_fall_damage=%.1f" % [get_parent().name, calculated_fall_damage])
+	parachute.show()
+	parachute_pack.hide()
+	parachute_activated.emit(self)
