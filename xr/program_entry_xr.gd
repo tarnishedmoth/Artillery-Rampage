@@ -26,10 +26,6 @@ var xr_interface: XRInterface
 
 @export var program_entry_2d: PackedScene
 
-@export var screen_mesh: MeshInstance3D
-@export var screen_material: StandardMaterial3D
-@onready var screen_material_texture: ViewportTexture = screen_material.albedo_texture
-
 # Input property group
 @export_group("Input")
 ## Allow physical keyboard input to viewport
@@ -50,7 +46,6 @@ func _ready():
 	#else:
 		#print("OpenXR not initialized, please check if your headset is connected")
 		#
-	set_viewport(InternalSceneRoot)
 	SceneManager.switch_scene(program_entry_2d)
 	
 func _input(event):
@@ -66,5 +61,5 @@ func _input(event):
 
 func set_viewport(viewport: SubViewport) -> void:
 	var nodepath: NodePath = get_path_to(viewport)
-	screen_material_texture.viewport_path = nodepath
-	screen_mesh.material_overlay = screen_material
+	#screen_material_texture.viewport_path = nodepath
+	#screen_mesh.material_overlay = screen_material

@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://br3ip0dg0a52d"]
+[gd_scene load_steps=30 format=3 uid="uid://br3ip0dg0a52d"]
 
 [ext_resource type="Script" uid="uid://cd82tnurg18sn" path="res://xr/program_entry_xr.gd" id="1_np8ie"]
 [ext_resource type="PackedScene" uid="uid://btknduttnmoxf" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="3_0bjtw"]
@@ -16,16 +16,6 @@
 [ext_resource type="Script" uid="uid://ncsijhksfhg5" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.gd" id="12_sofa6"]
 [ext_resource type="Script" uid="uid://c7uxdjtphudyo" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d_body.gd" id="13_yht1y"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_np8ie"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_np8ie"]
-resource_local_to_scene = true
-shading_mode = 0
-disable_ambient_light = true
-disable_fog = true
-albedo_texture = SubResource("ViewportTexture_np8ie")
-texture_filter = 5
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2xtcp"]
 albedo_texture = ExtResource("4_o5nmn")
 uv1_triplanar = true
@@ -35,17 +25,18 @@ size = Vector2(10, 10)
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_np8ie"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sofa6"]
+shading_mode = 0
+
 [sub_resource type="QuadMesh" id="QuadMesh_73ftp"]
 resource_local_to_scene = true
 size = Vector2(3.2, 1.8)
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_w5kes"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_yht1y"]
+viewport_path = NodePath(".")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ts63t"]
-transparency = 1
-cull_mode = 2
-albedo_texture = SubResource("ViewportTexture_w5kes")
-texture_filter = 1
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_73ftp"]
+albedo_texture = SubResource("ViewportTexture_yht1y")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_er54b"]
 resource_local_to_scene = true
@@ -74,11 +65,9 @@ albedo_texture = ExtResource("11_m0kp7")
 [sub_resource type="BoxMesh" id="BoxMesh_m0kp7"]
 size = Vector3(0.25, 0.25, 0.25)
 
-[node name="ProgramEntryXR" type="Node3D" node_paths=PackedStringArray("screen_mesh")]
+[node name="ProgramEntryXR" type="Node3D"]
 script = ExtResource("1_np8ie")
 program_entry_2d = ExtResource("3_o5nmn")
-screen_mesh = NodePath("Game3DRoot/Viewport2Din3D/Screen")
-screen_material = SubResource("StandardMaterial3D_np8ie")
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 
@@ -131,17 +120,22 @@ script = ExtResource("12_sofa6")
 screen_size = Vector2(3.2, 1.8)
 viewport_size = Vector2(1280, 720)
 throttle_fps = 60.0
+material = SubResource("StandardMaterial3D_sofa6")
+alpha_scissor_threshold = 0.25
+unshaded = false
+filter = true
+scene_properties_keys = PackedStringArray()
 
 [node name="Screen" type="MeshInstance3D" parent="Game3DRoot/Viewport2Din3D"]
 mesh = SubResource("QuadMesh_73ftp")
-surface_material_override/0 = SubResource("StandardMaterial3D_ts63t")
+surface_material_override/0 = SubResource("StandardMaterial3D_73ftp")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Game3DRoot/Viewport2Din3D"]
 collision_layer = 5242881
 collision_mask = 0
 script = ExtResource("13_yht1y")
 screen_size = Vector2(3.2, 1.8)
-viewport_size = Vector2(3.2, 1.8)
+viewport_size = Vector2(1280, 720)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Game3DRoot/Viewport2Din3D/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.01)
