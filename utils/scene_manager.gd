@@ -77,6 +77,8 @@ var current_scene:Node = null:
 	get: return current_scene if current_scene else get_current_game_scene_root()
 	set(value):
 		current_scene = value
+		
+var is_current_scene_set:bool = false
 
 var current_story_level:StoryLevel:
 	get:
@@ -94,14 +96,38 @@ var _last_game_level_resource:Resource
 
 @onready var loading_bg: ColorRect = $LoadingBG
 
+func _enter_tree() -> void:
+	get_tree()
+
 func _ready()->void:
 	GameEvents.level_loaded.connect(_on_GameLevel_loaded)
 	loading_bg.hide()
 
 	_init_selectable_levels()
 	
+	## Check if we loaded a level directly instead of launching the game normally
+	check_for_directly_loaded_level()
+			
+func check_for_directly_loaded_level() -> void:
+	## Check if the current scene is set (typically only when launching the game normally)
+	## Otherwise move the scene to the InternalSceneRoot and set our reference
+	await get_tree().process_frame
+	if get_tree().current_scene:
+		if not is_current_scene_set:
+			push_warning("Loaded level external to SceneManager. Capturing and reloading level.")
+			# Force reload and reinstance
+			# Find the current scene directly instanced
+			var _current_scene_file_path: String = get_tree().current_scene.scene_file_path
+			get_tree().unload_current_scene()
+			instantiate_scene_to_internal_root(load(_current_scene_file_path))
+			push_warning("Killed and reinstanced scene tree current scene to InternalSceneRoot!")
+	
 func set_current_scene(node: Node) -> void:
-	current_scene = node
+	if node.is_inside_tree():
+		current_scene = node
+		is_current_scene_set = true
+	else:
+		push_error("Node is not inside tree!")
 	
 func _init_selectable_levels() -> void:
 	levels_always_selectable.clear()
@@ -118,9 +144,6 @@ func _init_selectable_levels() -> void:
 	levels_always_selectable.sort_custom(func(a,b)->bool: return a.name < b.name)
 	
 func get_current_game_scene_root() -> Node:
-	#if 2D:
-	#return root.get_child(root.get_child_count() - 1) ## FIXME XR
-	#else:
 	assert(InternalSceneRoot, "Null internal scene root!")
 	
 	if not InternalSceneRoot.get_child_count() > 0:
@@ -144,7 +167,7 @@ func get_current_level_root() -> GameLevel:
 
 func quit() -> void:
 	game_quit.emit()
-	get_tree().quit() ## FIXME XR
+	get_tree().quit()
 	
 func restart_level(delay: float = default_delay) -> void:
 	print_debug("restart_level: %s, delay=%f" % [str(_current_level_root_node.name) if _current_level_root_node else "NULL", delay])
@@ -323,7 +346,7 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	else:
 		await get_tree().process_frame
 	
-	#var root = get_tree().root ## NOTICE XR
+	#var root = get_tree().root
 	await loading_screen(true)
 	
 	GameEvents.scene_leaving.emit(current_scene)
