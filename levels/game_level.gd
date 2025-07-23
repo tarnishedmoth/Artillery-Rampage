@@ -25,12 +25,12 @@ const toast_notification_scene:PackedScene = preload("res://ui/toast_notificatio
 @export var simultaneous_fire_message:String = "Shoot at same time!"
 
 func _ready() -> void:
-	screen_shake.enabled = UserOptions.enable_screenshake
-	GameEvents.user_options_changed.connect(_on_options_applied)
-	
-	GameEvents.connect("round_ended", _on_round_ended)
 	container_for_spawnables = make_container_node() # For spawnables
 	
+	screen_shake.enabled = UserOptions.enable_screenshake
+	
+	GameEvents.user_options_changed.connect(_on_options_applied)
+	GameEvents.round_ended.connect(_on_round_ended)
 	GameEvents.level_loaded.emit(self)
 	
 	await begin_round()
@@ -111,7 +111,7 @@ func connect_events(controller: TankController) -> void:
 func make_container_node() -> Node2D:
 	var container = Node2D.new()
 	container.name = "SpawnablesContainer"
-	add_child(container)
+	add_child(container, true)
 	
 	return container
 

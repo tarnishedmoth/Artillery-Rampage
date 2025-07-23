@@ -1,6 +1,11 @@
 extends Node
 
+signal game_quit
+
 @export var level_resources_always_selectable: Array[StoryLevelsResource] ## These levels are immediately & always available to select.
+
+# Don't use PackedScene as we don't want all the scene data to be preloaded at the start of the game
+@export var story_levels: StoryLevelsResource
 
 var levels_always_selectable: Array[StoryLevel] = []
 
@@ -32,9 +37,6 @@ class SceneKeys:
 # We expect to reference the above keys with a const "preload" of a packed scene 
 # or reference to a unique name (possibly for pause menu)
 
-# Don't use PackedScene as we don't want all the scene data to be preloaded at the start of the game
-@export var story_levels: StoryLevelsResource
-
 const default_delay: float = 2.0
 
 const main_menu_scene_file = "res://levels/main_menu.tscn"
@@ -50,12 +52,15 @@ const story_shop_scene_file = "res://ui/story/shop/story_shop.tscn"
 
 const game_over_scene_file = "res://levels/game_over.tscn"
 
+## CRITICAL
+var _current_level_root_node:GameLevel
+var _current_story_level:StoryLevel
+
 var _current_level_index:int = -1
 var next_level_index:int:
 	get: return 0 if is_on_last_story_level() else _current_level_index + 1
-	
-var _current_level_root_node:GameLevel
-var _current_story_level:StoryLevel
+
+var _scene_queue:Array[Callable] = []
 
 var play_mode:PlayMode:
 	set(value):
@@ -69,7 +74,7 @@ const new_story_selected:StringName = &"NewStory"
 const continue_story_selected:StringName = &"ContinueStory"
 
 var current_scene:Node = null:
-	get: return current_scene if current_scene else get_tree().current_scene
+	get: return current_scene if current_scene else get_current_game_scene_root()
 	set(value):
 		current_scene = value
 
@@ -89,17 +94,14 @@ var _last_game_level_resource:Resource
 
 @onready var loading_bg: ColorRect = $LoadingBG
 
-var _scene_queue:Array[Callable] = []
-
 func _ready()->void:
+	GameEvents.level_loaded.connect(_on_GameLevel_loaded)
 	loading_bg.hide()
-	var root = get_tree().root
-	current_scene = root.get_child(root.get_child_count() - 1)
 
 	_init_selectable_levels()
 	
-func _init() -> void:
-	GameEvents.level_loaded.connect(_on_GameLevel_loaded)
+func set_current_scene(node: Node) -> void:
+	current_scene = node
 	
 func _init_selectable_levels() -> void:
 	levels_always_selectable.clear()
@@ -114,6 +116,18 @@ func _init_selectable_levels() -> void:
 				levels_always_selectable.push_back(level)
 	
 	levels_always_selectable.sort_custom(func(a,b)->bool: return a.name < b.name)
+	
+func get_current_game_scene_root() -> Node:
+	#if 2D:
+	#return root.get_child(root.get_child_count() - 1) ## FIXME XR
+	#else:
+	assert(InternalSceneRoot, "Null internal scene root!")
+	
+	if not InternalSceneRoot.get_child_count() > 0:
+		push_warning("Access outside of a game scene! May create orphan nodes!")
+		return InternalSceneRoot ## May create orphans
+	else:
+		return InternalSceneRoot.get_child(0)
 
 func get_current_level_root() -> GameLevel:
 	#assert(is_instance_valid(_current_level_root_node), "Trying to access root outside of game level.")
@@ -121,14 +135,16 @@ func get_current_level_root() -> GameLevel:
 	if is_instance_valid(_current_level_root_node):
 		if _current_level_root_node.is_inside_tree():
 			return _current_level_root_node
-	else:
-		if not is_precompiler_running:
-			push_warning("Trying to access root outside of game level.")
-		_current_level_root_node = null
+			
+	if not is_precompiler_running:
+		push_error("Trying to access root outside of game level or precompiler!")
+		
+	_current_level_root_node = null
 	return null
 
 func quit() -> void:
-	get_tree().quit()
+	game_quit.emit()
+	get_tree().quit() ## FIXME XR
 	
 func restart_level(delay: float = default_delay) -> void:
 	print_debug("restart_level: %s, delay=%f" % [str(_current_level_root_node.name) if _current_level_root_node else "NULL", delay])
@@ -200,8 +216,31 @@ func level_failed() -> void:
 			
 func _default_restart_level():
 	await get_tree().create_timer(default_delay).timeout
-	get_tree().reload_current_scene()
-			
+	_reload_current_scene()
+	
+func _reload_current_scene() -> void:
+	unload_current_game_scene()
+	instantiate_scene_to_internal_root(_last_scene_resource)
+	
+func unload_current_game_scene() -> void:
+	if not current_scene or current_scene == InternalSceneRoot:
+		push_error("No current scene to unload!")
+		return
+	current_scene.queue_free()
+	current_scene = null
+	# wait a frame?
+	
+func instantiate_scene_to_internal_root(scene: PackedScene) -> void:
+	if scene.can_instantiate() and InternalSceneRoot:
+		var instance: Node = scene.instantiate()
+		InternalSceneRoot.add_child(instance, true)
+		
+		_last_scene_resource = scene
+		current_scene = instance
+	else:
+		push_error("Can't instantiate!")
+		return
+	
 func level_complete() -> void:
 	match play_mode:
 		PlayMode.DIRECT:
@@ -284,40 +323,36 @@ func _switch_scene(switchFunc: Callable, delay: float) -> void:
 	else:
 		await get_tree().process_frame
 	
-	var root = get_tree().root
-	var root_current_scene = root.get_child(root.get_child_count() - 1)
+	#var root = get_tree().root ## NOTICE XR
 	await loading_screen(true)
 	
-	GameEvents.scene_leaving.emit(root_current_scene)
-	root_current_scene.free()
+	GameEvents.scene_leaving.emit(current_scene)
+	unload_current_game_scene()
 	is_switching_scene = false
 
 	if OS.is_debug_build():
 		await get_tree().process_frame
 		print_debug("**********BEGIN ORPHAN NODES**********")
-		print_orphan_nodes()		
+		print_orphan_nodes()
 		print_debug("**********END ORPHAN NODES**********")
 
 	# Await in case the loading is done async
 	var new_scene:Resource = await switchFunc.call()
 	
-	current_scene = new_scene.instantiate()
-	_last_scene_resource = new_scene
-
+	instantiate_scene_to_internal_root(new_scene)
 	GameEvents.scene_switched.emit(current_scene)
-
-	#current_scene.scene_file_path = new_scene.resource_path
-	
-	# Somehow get_tree().current_scene is null inside _ready of the loaded scene
-	# even if we do get_tree().current_scene = current_scene before
-	# So instead set the current_scene on SceneManager and have it manage the current_scene rather than the tree root
-	# So replaced all references to this
-	get_tree().root.add_child(current_scene)
-	get_tree().current_scene = current_scene
 
 	SaveStateManager.restore_tree_state(SaveState.ContextTriggers.SCENE_SWITCH)
 	loading_screen(false)
-	get_tree().paused = false
+	pause_game(false)
+	
+func pause_game(paused:bool = true) -> void:
+	#get_tree().paused = paused ## FIXME VR
+	if paused:
+		InternalSceneRoot.process_mode = Node.PROCESS_MODE_DISABLED
+	else:
+		InternalSceneRoot.process_mode = Node.PROCESS_MODE_ALWAYS
+	GameEvents.game_paused.emit(paused)
 
 func _on_GameLevel_loaded(level:GameLevel) -> void:
 	print_debug("_on_GameLevel_loaded: level=%s" % [str(level.get_parent().name) if level else "NULL"])
@@ -341,3 +376,9 @@ func loading_screen(_visible:bool) -> bool:
 	else:
 		loading_bg.hide()
 		return true
+
+func get_spawnables_container() -> Node2D:
+	if get_current_level_root():
+		return get_current_level_root().get_container()
+	else:
+		return get_current_game_scene_root()

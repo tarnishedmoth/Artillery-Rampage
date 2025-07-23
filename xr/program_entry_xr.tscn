@@ -51,7 +51,6 @@ tracker = &"right_hand"
 [node name="PlayerBody" type="CharacterBody3D" parent="XROrigin3D"]
 top_level = true
 script = ExtResource("2_np8ie")
-metadata/_custom_type_script = "uid://dvn6qx78do8ds"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/PlayerBody"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

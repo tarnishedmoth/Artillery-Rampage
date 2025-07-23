@@ -22,11 +22,7 @@ func trigger() -> void:
 		if scene_to_spawn.can_instantiate():
 			var instance:Node2D = scene_to_spawn.instantiate()
 			instance.global_position = target.global_position
-			var container = SceneManager.get_current_level_root()
-			if container is GameLevel:
-				container = container.get_container()
-			else:
-				container = self
+			var container = SceneManager.get_spawnables_container()
 
 			container.add_child(instance)
 

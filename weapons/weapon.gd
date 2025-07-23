@@ -633,11 +633,7 @@ func _spawn_projectile(power: float = fire_velocity) -> void:
 	if scene_to_spawn and scene_to_spawn.can_instantiate():
 		var new_shot = scene_to_spawn.instantiate()
 		
-		var container = SceneManager.get_current_level_root()
-		if container == null:
-			container = SceneManager.current_scene
-		if container.has_method("get_container"):
-			container = container.get_container()
+		var container = SceneManager.get_spawnables_container()
 			
 		## Enforced projectile properties (used for trajectory previewer)
 		for property:String in _enforced_projectile_properties:
