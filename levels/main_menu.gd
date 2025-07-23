@@ -10,6 +10,7 @@ var _current_credits_list_line:int = 0
 var credits_list_is_focused:bool = false
 
 @onready var main_menu: VBoxContainer = %MainMenu
+@onready var play_now: Button = %PlayNow
 @onready var options_menu: Control = %Options
 @onready var level_select_menu: LevelSelect = %LevelSelect
 @onready var exit_to_desktop_button: Button = %Quit
@@ -45,6 +46,9 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await Juice.fade_in(self, Juice.SMOOTH, Color.BLACK).finished
 	AudioServer.set_bus_mute(AudioServer.get_bus_index("SFX"), false) # Unmute SFX bus
+	
+	play_now.grab_focus()
+	
 #endregion
 
 #region--Public Methods

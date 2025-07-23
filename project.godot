@@ -172,6 +172,7 @@ game_time={
 
 [xr]
 
+openxr/enabled=true
 openxr/reference_space=2
 openxr/extensions/debug_utils=1
 shaders/enabled=true

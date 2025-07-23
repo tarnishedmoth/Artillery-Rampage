@@ -1,4 +1,9 @@
 [gd_scene format=3 uid="uid://d1ivm04rd562b"]
 
-[node name="InternalSceneRoot" type="Node"]
+[node name="InternalSceneRoot" type="SubViewport"]
 process_mode = 3
+handle_input_locally = false
+audio_listener_enable_2d = true
+physics_object_picking = true
+gui_embed_subwindows = true
+size = Vector2i(1280, 720)

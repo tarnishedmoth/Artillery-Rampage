@@ -24,6 +24,19 @@ signal xr_ended
 
 var xr_interface: XRInterface
 
+@export var program_entry_2d: PackedScene
+
+@export var screen_mesh: MeshInstance3D
+@export var screen_material: StandardMaterial3D
+@onready var screen_material_texture: ViewportTexture = screen_material.albedo_texture
+
+# Input property group
+@export_group("Input")
+## Allow physical keyboard input to viewport
+@export var input_keyboard : bool = true
+## Allow gamepad input to viewport
+@export var input_gamepad : bool = false
+
 func _ready():
 	xr_interface = XRServer.find_interface("OpenXR")
 	if xr_interface and xr_interface.is_initialized():
@@ -36,3 +49,22 @@ func _ready():
 		get_viewport().use_xr = true
 	else:
 		print("OpenXR not initialized, please check if your headset is connected")
+		
+	set_viewport(InternalSceneRoot)
+	SceneManager.switch_scene(program_entry_2d)
+	
+func _input(event):
+	# Map keyboard events to the viewport if enabled
+	if input_keyboard and (event is InputEventKey or event is InputEventShortcut):
+		InternalSceneRoot.push_input(event)
+		return
+
+	# Map gamepad events to the viewport if enable
+	if input_gamepad and (event is InputEventJoypadButton or event is InputEventJoypadMotion):
+		InternalSceneRoot.push_input(event)
+		return
+
+func set_viewport(viewport: SubViewport) -> void:
+	var nodepath: NodePath = get_path_to(viewport)
+	screen_material_texture.viewport_path = nodepath
+	screen_mesh.material_overlay = screen_material
