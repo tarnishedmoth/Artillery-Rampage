@@ -41,6 +41,7 @@ lights = [NodePath("TankBody/TankTurret/Spotlight"), NodePath("TankBody/PointLig
 max_power_v_health = ExtResource("3_6i2oc")
 aim_deviation_v_health = ExtResource("4_cvubm")
 damage_material = ExtResource("5_16yu1")
+activate_parachute_min_damage = 5.0
 
 [node name="TankBody" type="RigidBody2D" parent="."]
 use_parent_material = true

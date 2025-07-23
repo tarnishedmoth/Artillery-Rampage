@@ -76,6 +76,9 @@ var current_equipped_weapon_index: int = -1
 @export
 var start_with_parachute:bool = false
 
+@export_range(1.0, 1e9, 0.1, "or_greater")
+var activate_parachute_min_damage:float = 10.0
+
 var has_parachute:bool = false:
 	set(value):
 		has_parachute = value
@@ -695,10 +698,17 @@ func get_body_reference_points_global() -> PackedVector2Array:
 
 #endregion
 
-
 func _on_parachute_activation_timer_timeout() -> void:
-	if has_parachute and mark_falling:
-		print_debug("%s: Parachute deployed" % [get_parent().name])
-		parachute.show()
-		parachute_pack.hide()
-		parachute_activated.emit(self)
+	if not has_parachute or not mark_falling:
+		return
+	# Check to see if we are really falling and will take damage before showing the parachute
+	var ground_pos := _ground_trace(ground_trace_distance)
+	var calculated_fall_damage:float = _calculate_fall_damage(fall_start_position, ground_pos)
+	if calculated_fall_damage < activate_parachute_min_damage:
+		print_debug("%s: Ignoring parachute as calculated_fall_damage=%.1f < %.1f" % [get_parent().name, calculated_fall_damage, activate_parachute_min_damage])
+		return
+		
+	print_debug("%s: Parachute deployed: calculated_fall_damage=%.1f" % [get_parent().name, calculated_fall_damage])
+	parachute.show()
+	parachute_pack.hide()
+	parachute_activated.emit(self)
