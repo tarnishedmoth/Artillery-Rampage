@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://br3ip0dg0a52d"]
+[gd_scene load_steps=25 format=3 uid="uid://br3ip0dg0a52d"]
 
 [ext_resource type="Script" uid="uid://cd82tnurg18sn" path="res://xr/program_entry_xr.gd" id="1_np8ie"]
 [ext_resource type="PackedScene" uid="uid://btknduttnmoxf" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="3_0bjtw"]
@@ -7,6 +7,11 @@
 [ext_resource type="PackedScene" uid="uid://dup2vp8v5rpi5" path="res://addons/godot-xr-tools/hands/scenes/highpoly/right_tac_glove.tscn" id="4_0bjtw"]
 [ext_resource type="Texture2D" uid="uid://bqxc5xpyuad54" path="res://terrain/terrain-rock.png" id="4_o5nmn"]
 [ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="5_j8t2p"]
+[ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="6_6esj4"]
+[ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="7_h80nf"]
+[ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="8_15h2m"]
+[ext_resource type="Script" uid="uid://dhab8nl38febn" path="res://addons/godot-xr-tools/objects/pickable.gd" id="10_h80nf"]
+[ext_resource type="Texture2D" uid="uid://byxfbh0q6w7ua" path="res://terrain/terrain-rock-snowy.png" id="11_m0kp7"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_np8ie"]
 
@@ -19,11 +24,10 @@ albedo_texture = SubResource("ViewportTexture_np8ie")
 texture_filter = 5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2xtcp"]
-albedo_color = Color(0.404755, 0.464951, 0.705078, 1)
 albedo_texture = ExtResource("4_o5nmn")
+uv1_triplanar = true
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_j8t2p"]
-material = SubResource("StandardMaterial3D_2xtcp")
 size = Vector2(10, 10)
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_np8ie"]
@@ -44,6 +48,15 @@ sky_material = SubResource("PhysicalSkyMaterial_o5nmn")
 background_mode = 2
 sky = SubResource("Sky_2xtcp")
 ambient_light_color = Color(1, 1, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_m0kp7"]
+size = Vector3(0.25, 0.25, 0.25)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_15h2m"]
+albedo_texture = ExtResource("11_m0kp7")
+
+[sub_resource type="BoxMesh" id="BoxMesh_m0kp7"]
+size = Vector3(0.25, 0.25, 0.25)
 
 [node name="ProgramEntryXR" type="Node3D" node_paths=PackedStringArray("screen_mesh")]
 script = ExtResource("1_np8ie")
@@ -70,6 +83,14 @@ tracker = &"right_hand"
 
 [node name="RightHand" parent="XROrigin3D/RightHand" instance=ExtResource("4_0bjtw")]
 
+[node name="MovementDirect" parent="XROrigin3D/RightHand" instance=ExtResource("6_6esj4")]
+
+[node name="MovementTurn" parent="XROrigin3D/RightHand" instance=ExtResource("7_h80nf")]
+turn_mode = 1
+step_turn_angle = 15.0
+
+[node name="FunctionPickup" parent="XROrigin3D/RightHand" instance=ExtResource("8_15h2m")]
+
 [node name="PlayerBody" parent="XROrigin3D" instance=ExtResource("5_j8t2p")]
 
 [node name="Game3DRoot" type="Node3D" parent="."]
@@ -77,6 +98,7 @@ tracker = &"right_hand"
 [node name="Floor" type="StaticBody3D" parent="Game3DRoot"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Game3DRoot/Floor"]
+material_override = SubResource("StandardMaterial3D_2xtcp")
 mesh = SubResource("PlaneMesh_j8t2p")
 skeleton = NodePath("../..")
 
@@ -92,6 +114,20 @@ mesh = SubResource("PlaneMesh_o5nmn")
 environment = SubResource("Environment_o5nmn")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Game3DRoot"]
-transform = Transform3D(-0.0721281, -0.975936, 0.205783, -0.897334, 0.153566, 0.413774, -0.435418, -0.154811, -0.886817, 0, 0, 0)
+transform = Transform3D(0.14405, -0.927855, 0.343999, -0.751613, 0.123531, 0.647934, -0.643683, -0.351889, -0.679593, 0, 0, 0)
 light_energy = 5.0
 shadow_enabled = true
+
+[node name="PickableObject" type="RigidBody3D" parent="Game3DRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, -0.331553)
+collision_layer = 4
+collision_mask = 196615
+freeze_mode = 1
+script = ExtResource("10_h80nf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Game3DRoot/PickableObject"]
+shape = SubResource("BoxShape3D_m0kp7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Game3DRoot/PickableObject"]
+material_override = SubResource("StandardMaterial3D_15h2m")
+mesh = SubResource("BoxMesh_m0kp7")
