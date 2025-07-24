@@ -252,12 +252,7 @@ Michael Tanner
 Owen \"Q-Bit\"
 Chris DeLeon
 
-PLAYTESTERS:
-Meatball
-kittykatmeowmeow
-
-DETAILED CREDITS
-
+DETAILED CREDITS:
 Justin Montgomery: Project lead, core gameplay, terrain (including procedural generation, destruction, fragmentation, randomization, smoothing), object damage and shattering, story mode systems, shop and upgrades with resources, shot mechanics including wind impact, tank gravity, spawning, difficulties, turn management, damage behaviors (wobble etc), AI opponents (including all major behavioral variations, names), water, save/load, gameplay timer, announcer one liners script and voiceover, bloom/nuke shaders, most edge modes (wrap, accelerate, sticky, none), round grading, game over detection, simultaneous fire mode improvements, additional weapon tuning, desert level, physics tuning, memory leak repairs, numerous bug fixes and contribution integration
 
 Michael Avrie: Weapons Systems Lead (types, selection, explosions, nuke, flares, missiles, EMP, stats, upgrades), UI Lead (typing reveal, scrolling, ammo, tooltips, healthbars, options, key remap, pause logs, fine aiming, story map improvements, loading screen, upgrade screen additions), snowcaps level music, level design (snowy mountain, plateau, islands, divide, plains, factory), narrative randomization, theming and UI design (main menu, options, story sequence, tooltips, font), day/night, enemy units, pickup helicopter, sounds (turn change, most weapons, tank destroyed, rain), dust/smoke/rubble, wind and weather, simultaneous fire mode, action queue system, assorted audio integration, internal documentation, terrain depth tint, bouncing mode, bug fixes, terrain chunk fading, light balancing, various tuning
