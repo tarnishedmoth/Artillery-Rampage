@@ -97,9 +97,6 @@ var _last_game_level_resource:Resource
 
 @onready var loading_bg: ColorRect = $LoadingBG
 
-func _enter_tree() -> void:
-	get_tree()
-
 func _ready()->void:
 	GameEvents.level_loaded.connect(_on_GameLevel_loaded)
 	loading_bg.hide()

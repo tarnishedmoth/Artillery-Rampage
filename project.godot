@@ -24,7 +24,6 @@ driver/output_latency.web=90
 
 [autoload]
 
-InternalSceneRoot="*res://intro/internal_scene_root.tscn"
 GameEvents="*res://events/game_events.gd"
 SceneManager="*res://utils/scene_manager.tscn"
 RunOnce="*res://utils/run_once.gd"
@@ -42,6 +41,7 @@ Difficulty="*res://progression/difficulty.tscn"
 PlayerStateManager="*res://levels/round/player_state_manager.tscn"
 PlayerAttributes="*res://progression/player_attributes.tscn"
 StoryModeManager="*res://story/story_mode_manager.tscn"
+InternalSceneRoot="*res://intro/internal_scene_root.tscn"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 GlobalXR="*res://xr/global_xr.tscn"
 StartXR="*res://addons/godot-xr-tools/xr/start_xr.tscn"
