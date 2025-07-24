@@ -124,6 +124,7 @@ func check_for_directly_loaded_level() -> void:
 			get_tree().current_scene = InternalSceneRoot
 			push_warning("Killed and reinstanced scene tree current scene to InternalSceneRoot! You may see some warnings for any callbacks from the initial instance.")
 			print_scene_tree_current_scene()
+			GameEvents.scene_switched.emit(get_current_game_scene_root())
 	else:
 		get_tree().current_scene = InternalSceneRoot
 		print_scene_tree_current_scene()
@@ -149,6 +150,9 @@ func _init_selectable_levels() -> void:
 	
 	levels_always_selectable.sort_custom(func(a,b)->bool: return a.name < b.name)
 	
+## This method returns the current scene root, regardless of being in a GameLevel or not.
+## Use this when you don't care if we're inside a level, for example if we're in a UI scene
+## such as round_summary, the upgrade or item shop, etc.
 func get_current_game_scene_root() -> Node:
 	assert(InternalSceneRoot, "Null internal scene root!")
 	
@@ -158,6 +162,8 @@ func get_current_game_scene_root() -> Node:
 	else:
 		return InternalSceneRoot.get_child(0)
 
+## This method returns a GameLevel type node, if the current scene is a GameLevel (we're in a round of artillery rampage).
+## Otherwise returns null. Use this method when you are only looking for the GameLevel scene root.
 func get_current_level_root() -> GameLevel:
 	#assert(is_instance_valid(_current_level_root_node), "Trying to access root outside of game level.")
 	
@@ -166,7 +172,7 @@ func get_current_level_root() -> GameLevel:
 			return _current_level_root_node
 			
 	if not is_precompiler_running:
-		push_error("Trying to access root outside of game level or precompiler!")
+		push_warning("Trying to access root outside of game level or precompiler!")
 		
 	_current_level_root_node = null
 	return null

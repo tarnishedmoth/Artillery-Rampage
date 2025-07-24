@@ -67,12 +67,13 @@ func _remove_story_state() -> void:
 		_story_level_state_added = false
 
 func _get_game_level(scene: Node) -> GameLevel:
-	var nodes:Array[Node] = [scene]
-
-	while not nodes.is_empty():
-		var node: Node = nodes.pop_back()
-		if node is GameLevel:
-			return node
-		nodes.append_array(node.get_children())
-	
-	return null
+	#var nodes:Array[Node] = [scene]
+#
+	#while not nodes.is_empty():
+		#var node: Node = nodes.pop_back()
+		#if node is GameLevel:
+			#return node
+		#nodes.append_array(node.get_children())
+	#
+	#return null
+	return SceneManager.get_current_level_root()
