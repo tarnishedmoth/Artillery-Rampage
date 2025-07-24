@@ -619,6 +619,9 @@ func _get_current_time_seconds() -> float:
 func _get_playable_x_extent() -> float:
 	return get_viewport().get_visible_rect().size.x
 
+#endregion
+
+#region Weapon Selection
 func compute_damage_score(weapon: Weapon, projectile: WeaponProjectile) -> float:
 	var count_multiplier: float = weapon.number_of_scenes_to_spawn
 	if weapon.always_shoot_for_duration > 0:
@@ -629,4 +632,59 @@ func compute_damage_score(weapon: Weapon, projectile: WeaponProjectile) -> float
 
 	return score
 
+func select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavior.WeaponInfo]) -> int:
+	
+	# If only have one weapon then immediately return
+	if tank.weapons.is_empty():
+		push_warning("%s(%s): No weapons available! - returning 0" % [name, tank.owner.name])
+		# Return 0 instead of -1 in case issue resolves itself by the time we try to shoot
+		return 0
+	if tank.weapons.size() == 1:
+		print_debug("%s(%s): Only 1 weapon available - returning 0" % [name, tank.owner.name])
+		return 0
+	
+	var target_distance: float
+
+	# We are going to hit something other than opponent tank first
+	if opponent_data.has("hit_position"):
+		target_distance = tank.global_position.distance_to(opponent_data.hit_position)
+	else:
+		target_distance = tank.global_position.distance_to(opponent_data.adjusted_position)
+
+	# Select most powerful available weapon that won't cause self-damage
+	var player_has_not_fired:bool = _target_is_player_and_has_not_fired(opponent_data.opponent)
+	var best_weapon:int = -1
+
+	# Find the best weapon unless shooting at player and they haven't shot in which case we want the worst weapon
+	var best_score:float
+	var comparison_result: int
+
+	if player_has_not_fired:
+		best_score = 1e9
+		comparison_result = -1
+	else:
+		best_score = 0.0
+		comparison_result = 1
+
+	for i in range(weapon_infos.size()):
+		var weapon_info: AIBehavior.WeaponInfo = weapon_infos[i]
+		var weapon: Weapon = weapon_info.weapon
+		# FIXME: This doesn't work well for shield and parachute "weapons"
+		var projectile : WeaponProjectile = weapon_info.projectile_prototype
+		
+		if projectile and target_distance > projectile.max_falloff_distance:
+			var score: float = compute_damage_score(weapon, projectile)
+			print_debug("Lobber AI(%s): weapon(%d)=%s; score=%f" % [tank.owner.name, i, weapon.name, score])
+			if int(signf(score - best_score)) == comparison_result:
+				best_score = score
+				best_weapon = i
+
+	if best_weapon != -1:
+		print_debug("Lobber AI(%s): selected best_weapon=%d/%d; score=%f" % [tank.owner.name, best_weapon, weapon_infos.size(), best_score])
+		return best_weapon
+	
+	# Fallback to random weapon
+	print_debug("Lobber AI(%s): Could not find viable weapon - falling back to random selection out of %d candidates" % [tank.owner.name, tank.weapons.size()])
+
+	return randi_range(0, tank.weapons.size() - 1)
 #endregion
