@@ -75,7 +75,7 @@ func damage(chunk: DestructibleObjectChunk, projectile: WeaponPhysicsContainer, 
 	var destructible_poly_global: PackedVector2Array = chunk.get_destructible_global()
 
 	# Do clipping operations in global space
-	var clipping_results = Geometry2D.clip_polygons(destructible_poly_global, projectile_poly_global)
+	var clipping_results: Array[PackedVector2Array] = Geometry2D.clip_polygons(destructible_poly_global, projectile_poly_global)
 
 	# This means the chunk was destroyed so we need to queue_free
 	if clipping_results.is_empty():

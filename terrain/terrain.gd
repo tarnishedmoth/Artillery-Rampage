@@ -122,7 +122,7 @@ func damage(terrainChunk: TerrainChunk, projectile: WeaponPhysicsContainer, cont
 	#print_poly(terrain_poly_global)
 	
 	# Do clipping operations in global space
-	var clipping_results = Geometry2D.clip_polygons(terrain_poly_global, projectile_poly_global)
+	var clipping_results: Array[PackedVector2Array] = Geometry2D.clip_polygons(terrain_poly_global, projectile_poly_global)
 	
 	# This means the chunk was destroyed so we need to queue_free
 	if clipping_results.is_empty():
