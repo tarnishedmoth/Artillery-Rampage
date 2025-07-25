@@ -1,4 +1,4 @@
-[gd_resource type="AudioBusLayout" load_steps=4 format=3 uid="uid://54rbdkxa5lne"]
+[gd_resource type="AudioBusLayout" load_steps=5 format=3 uid="uid://54rbdkxa5lne"]
 
 [sub_resource type="AudioEffectHardLimiter" id="AudioEffectHardLimiter_j3pel"]
 resource_name = "HardLimiter"
@@ -19,6 +19,13 @@ damping = 0.1
 spread = 0.5
 hipass = 0.1
 wet = 0.03
+
+[sub_resource type="AudioEffectReverb" id="AudioEffectReverb_g28q7"]
+resource_name = "Reverb"
+room_size = 0.2
+damping = 0.1
+spread = 0.5
+wet = 0.1
 
 [resource]
 bus/0/effect/0/effect = SubResource("AudioEffectHardLimiter_j3pel")
@@ -63,3 +70,11 @@ bus/6/mute = false
 bus/6/bypass_fx = false
 bus/6/volume_db = 0.0
 bus/6/send = &"Master"
+bus/7/name = &"Interior"
+bus/7/solo = false
+bus/7/mute = false
+bus/7/bypass_fx = false
+bus/7/volume_db = 0.0
+bus/7/send = &"Master"
+bus/7/effect/0/effect = SubResource("AudioEffectReverb_g28q7")
+bus/7/effect/0/enabled = true

@@ -1,3 +1,6 @@
-[gd_scene format=3 uid="uid://d108q1j2twf44"]
+[gd_scene load_steps=2 format=3 uid="uid://d108q1j2twf44"]
 
-[node name="GlobalXR" type="Node3D"]
+[ext_resource type="Script" uid="uid://cfid5au5d3fr0" path="res://xr/global_xr.gd" id="1_fj5t5"]
+
+[node name="GlobalXR" type="Node"]
+script = ExtResource("1_fj5t5")

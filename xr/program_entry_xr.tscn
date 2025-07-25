@@ -1,25 +1,17 @@
-[gd_scene load_steps=22 format=3 uid="uid://br3ip0dg0a52d"]
+[gd_scene load_steps=25 format=3 uid="uid://br3ip0dg0a52d"]
 
 [ext_resource type="Script" uid="uid://cd82tnurg18sn" path="res://xr/program_entry_xr.gd" id="1_np8ie"]
 [ext_resource type="PackedScene" uid="uid://w0vyns6fki58" path="res://xr/player/xr_origin_3d.tscn" id="3_6esj4"]
 [ext_resource type="PackedScene" uid="uid://clfh2l3a2t5f2" path="res://intro/program_entry.tscn" id="3_o5nmn"]
 [ext_resource type="Texture2D" uid="uid://bqxc5xpyuad54" path="res://terrain/terrain-rock.png" id="4_o5nmn"]
+[ext_resource type="Script" uid="uid://dhfg28px4not7" path="res://xr/debug_screen.gd" id="5_6esj4"]
+[ext_resource type="CompressedTexture3D" uid="uid://bb20nsbh7x336" path="res://xr/environment/filmictest1.png" id="8_h80nf"]
 [ext_resource type="Script" uid="uid://dhab8nl38febn" path="res://addons/godot-xr-tools/objects/pickable.gd" id="10_h80nf"]
 [ext_resource type="Texture2D" uid="uid://byxfbh0q6w7ua" path="res://terrain/terrain-rock-snowy.png" id="11_m0kp7"]
 [ext_resource type="PackedScene" uid="uid://cuy5wqtwv254g" path="res://xr/player_artillery.tscn" id="11_yht1y"]
-[ext_resource type="Script" uid="uid://ncsijhksfhg5" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.gd" id="12_sofa6"]
 [ext_resource type="Script" uid="uid://c7uxdjtphudyo" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d_body.gd" id="13_yht1y"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2xtcp"]
-albedo_texture = ExtResource("4_o5nmn")
-uv1_triplanar = true
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_j8t2p"]
-size = Vector2(10, 10)
-
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_np8ie"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sofa6"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h80nf"]
 shading_mode = 0
 
 [sub_resource type="QuadMesh" id="QuadMesh_73ftp"]
@@ -31,17 +23,49 @@ viewport_path = NodePath(".")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_73ftp"]
 albedo_texture = SubResource("ViewportTexture_yht1y")
+emission = Color(1, 1, 1, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_er54b"]
 resource_local_to_scene = true
 size = Vector3(3.2, 1.8, 0.02)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2xtcp"]
+albedo_texture = ExtResource("4_o5nmn")
+roughness = 0.9
+roughness_texture = ExtResource("4_o5nmn")
+roughness_texture_channel = 4
+uv1_scale = Vector3(0.02, 0.02, 0.02)
+uv1_triplanar = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_j8t2p"]
+size = Vector2(1000, 1000)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_np8ie"]
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_6esj4"]
+mie_coefficient = 0.003
+mie_eccentricity = 0.88
+
+[sub_resource type="Sky" id="Sky_h80nf"]
+sky_material = SubResource("PhysicalSkyMaterial_6esj4")
+radiance_size = 0
+
 [sub_resource type="Environment" id="Environment_o5nmn"]
-background_mode = 1
+background_mode = 2
 background_color = Color(1, 1, 1, 1)
-background_energy_multiplier = 0.5
-tonemap_mode = 2
+sky = SubResource("Sky_h80nf")
+ambient_light_source = 3
+tonemap_mode = 3
 glow_enabled = true
+fog_enabled = true
+fog_light_energy = 0.8
+fog_sun_scatter = 0.02
+fog_density = 0.002
+fog_sky_affect = 0.2
+fog_depth_begin = 0.0
+fog_depth_end = 646.5
+adjustment_enabled = true
+adjustment_color_correction = ExtResource("8_h80nf")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_m0kp7"]
 size = Vector3(0.25, 0.25, 0.25)
@@ -57,47 +81,46 @@ script = ExtResource("1_np8ie")
 program_entry_2d = ExtResource("3_o5nmn")
 
 [node name="Player" parent="." instance=ExtResource("3_6esj4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0881346, 4)
 
 [node name="Game3DRoot" type="Node3D" parent="."]
 
 [node name="PlayerArtillery" parent="Game3DRoot" instance=ExtResource("11_yht1y")]
 
-[node name="Floor" type="StaticBody3D" parent="Game3DRoot"]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Game3DRoot/Floor"]
-material_override = SubResource("StandardMaterial3D_2xtcp")
-mesh = SubResource("PlaneMesh_j8t2p")
-skeleton = NodePath("../..")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Game3DRoot/Floor"]
-shape = SubResource("WorldBoundaryShape3D_np8ie")
-
-[node name="Viewport2Din3D" type="Node3D" parent="Game3DRoot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -2)
-script = ExtResource("12_sofa6")
+[node name="DebugScreen" type="Node3D" parent="Game3DRoot/PlayerArtillery"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, -2.08616e-07, 0, 2.08616e-07, 1, 0, 3, -7.47849)
+script = ExtResource("5_6esj4")
 screen_size = Vector2(3.2, 1.8)
 viewport_size = Vector2(1280, 720)
 throttle_fps = 60.0
-material = SubResource("StandardMaterial3D_sofa6")
-alpha_scissor_threshold = 0.25
-unshaded = false
-filter = true
-scene_properties_keys = PackedStringArray()
+material = SubResource("StandardMaterial3D_h80nf")
 
-[node name="Screen" type="MeshInstance3D" parent="Game3DRoot/Viewport2Din3D"]
+[node name="Screen" type="MeshInstance3D" parent="Game3DRoot/PlayerArtillery/DebugScreen"]
 mesh = SubResource("QuadMesh_73ftp")
 surface_material_override/0 = SubResource("StandardMaterial3D_73ftp")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Game3DRoot/Viewport2Din3D"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Game3DRoot/PlayerArtillery/DebugScreen"]
 collision_layer = 5242881
 collision_mask = 0
 script = ExtResource("13_yht1y")
 screen_size = Vector2(3.2, 1.8)
 viewport_size = Vector2(1280, 720)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Game3DRoot/Viewport2Din3D/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Game3DRoot/PlayerArtillery/DebugScreen/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.01)
 shape = SubResource("BoxShape3D_er54b")
+
+[node name="Ground" type="StaticBody3D" parent="Game3DRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -16, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Game3DRoot/Ground"]
+material_override = SubResource("StandardMaterial3D_2xtcp")
+mesh = SubResource("PlaneMesh_j8t2p")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Game3DRoot/Ground"]
+shape = SubResource("WorldBoundaryShape3D_np8ie")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Game3DRoot"]
 environment = SubResource("Environment_o5nmn")
@@ -106,6 +129,10 @@ environment = SubResource("Environment_o5nmn")
 transform = Transform3D(0.0285696, -0.992486, 0.118976, -0.8926, 0.0282458, 0.449964, -0.449944, -0.119053, -0.885086, 0, 0, 0)
 light_energy = 5.0
 shadow_enabled = true
+directional_shadow_mode = 1
+directional_shadow_split_1 = 0.12
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 200.0
 
 [node name="PickableObject" type="RigidBody3D" parent="Game3DRoot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, -0.331553)

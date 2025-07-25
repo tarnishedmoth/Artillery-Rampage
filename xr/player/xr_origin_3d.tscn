@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://w0vyns6fki58"]
+[gd_scene load_steps=13 format=3 uid="uid://w0vyns6fki58"]
 
 [ext_resource type="PackedScene" uid="uid://btknduttnmoxf" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="1_nyp37"]
 [ext_resource type="PackedScene" uid="uid://hpr0v012ghsb" path="res://addons/godot-xr-tools/hands/scenes/highpoly/left_tac_glove.tscn" id="2_uvlrn"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="8_pmswu"]
 [ext_resource type="Script" uid="uid://wg72hw11fhmy" path="res://addons/godot-xr-tools/overrides/ground_physics_settings.gd" id="9_sh0er"]
 [ext_resource type="PackedScene" uid="uid://6uusxts6n6gm" path="res://addons/godot-xr-tools/desktop-support/movement_desktop_direct.tscn" id="9_uvlrn"]
+[ext_resource type="PackedScene" uid="uid://c4d13r420hnx2" path="res://addons/godot-xr-tools/desktop-support/movement_desktop_turn.tscn" id="11_eef48"]
 
 [sub_resource type="Resource" id="Resource_eef48"]
 script = ExtResource("9_sh0er")
@@ -38,7 +39,7 @@ tracker = &"left_hand"
 [node name="LeftHand" parent="LeftHand" instance=ExtResource("2_uvlrn")]
 
 [node name="RightHand" type="XRController3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
 tracker = &"right_hand"
 
 [node name="RightHand" parent="RightHand" instance=ExtResource("3_sh0er")]
@@ -59,3 +60,6 @@ ranged_angle = 12.0
 physics = SubResource("Resource_eef48")
 
 [node name="MovementDesktopDirect" parent="PlayerBody" instance=ExtResource("9_uvlrn")]
+
+[node name="MovementDesktopTurn" parent="PlayerBody" instance=ExtResource("11_eef48")]
+smooth_turn_speed = 2.5

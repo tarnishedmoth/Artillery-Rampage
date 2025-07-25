@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://d2bbsfstpvu7m"]
+
+[ext_resource type="Texture2D" uid="uid://sbtusv71ggku" path="res://xr/texture_hammered_metal.tres" id="1_nte33"]
+
+[resource]
+albedo_texture = ExtResource("1_nte33")
+metallic = 0.3
+roughness = 0.85
+roughness_texture = ExtResource("1_nte33")
+roughness_texture_channel = 4
+clearcoat_enabled = true
+clearcoat = 0.5
+clearcoat_roughness = 0.2
+uv1_triplanar = true

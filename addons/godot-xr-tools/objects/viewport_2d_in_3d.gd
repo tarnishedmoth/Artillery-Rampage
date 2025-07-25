@@ -53,7 +53,7 @@ const _DIRTY_ALL			:= 0x07FF	# All dirty
 # Default layer of 1:static-world, 21:pointable, 23:ui-objects
 const DEFAULT_LAYER := 0b0000_0000_0101_0000_0000_0000_0000_0001
 
-var viewport: SubViewport = InternalSceneRoot
+var viewport
 
 # Physics property group
 @export_group("Physics")
@@ -308,6 +308,7 @@ func _on_pointer_event(event : XRToolsPointerEvent) -> void:
 
 
 # Handler for input events
+# FIXME
 func _input(event):
 	# Map keyboard events to the viewport if enabled
 	if input_keyboard and (event is InputEventKey or event is InputEventShortcut):
@@ -472,6 +473,7 @@ func _update_collision_layer() -> void:
 # This complex function processes the render dirty flags and performs the
 # minimal number of updates to get the render objects into the correct state.
 func _update_render() -> void:
+	if not viewport: return
 	# Handle material change
 	if _dirty & _DIRTY_MATERIAL:
 		_dirty &= ~_DIRTY_MATERIAL
@@ -549,6 +551,7 @@ func _update_render() -> void:
 		_dirty &= ~_DIRTY_ALBEDO
 
 		# Set the screen material to use the viewport for the albedo channel
+		# CRITICAL
 		viewport_texture = viewport.get_texture()
 		_screen_material.albedo_texture = viewport_texture
 

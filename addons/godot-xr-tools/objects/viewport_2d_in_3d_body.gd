@@ -7,6 +7,10 @@ extends XRToolsInteractableBody
 ## Viewport size
 @export var viewport_size = Vector2(100.0, 100.0)
 
+@export var viewport: Viewport:
+	set(value):
+		viewport = value
+		_viewport = value
 
 # Current mouse mask
 var _mouse_mask := 0
@@ -33,7 +37,8 @@ var _mouse_last := Vector2.ZERO
 func _ready():
 	# Get viewport node
 	#_viewport = get_node("../Viewport")
-	_viewport = InternalSceneRoot
+	if viewport:
+		_viewport = viewport
 
 	# Subscribe to pointer events
 	pointer_event.connect(_on_pointer_event)

@@ -58,8 +58,3 @@ func _input(event):
 	if input_gamepad and (event is InputEventJoypadButton or event is InputEventJoypadMotion):
 		InternalSceneRoot.push_input(event)
 		return
-
-func set_viewport(viewport: SubViewport) -> void:
-	var nodepath: NodePath = get_path_to(viewport)
-	#screen_material_texture.viewport_path = nodepath
-	#screen_mesh.material_overlay = screen_material

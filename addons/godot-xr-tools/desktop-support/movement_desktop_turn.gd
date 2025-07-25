@@ -52,10 +52,11 @@ var _turn_step : float = 0.0
 
 
 # XRStart node
-@onready var xr_start_node = XRTools.find_xr_child(
-	XRTools.find_xr_ancestor(self,
-	"*Staging",
-	"XRToolsStaging"),"StartXR","Node")
+@onready var xr_start_node = StartXR
+#@onready var xr_start_node = XRTools.find_xr_child(
+	#XRTools.find_xr_ancestor(self,
+	#"*Staging",
+	#"XRToolsStaging"),"StartXR","Node")
 
 
 # Add support for is_xr_class on XRTools classes

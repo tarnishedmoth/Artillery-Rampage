@@ -1,83 +1,362 @@
-[gd_scene load_steps=3 format=3 uid="uid://cuy5wqtwv254g"]
+[gd_scene load_steps=18 format=3 uid="uid://cuy5wqtwv254g"]
 
+[ext_resource type="Script" uid="uid://7jrphqhnhdd0" path="res://xr/player_artillery.gd" id="1_dl8w8"]
 [ext_resource type="Material" uid="uid://cej2fi5vo4hky" path="res://xr/artillery_material.tres" id="1_dny1d"]
+[ext_resource type="Material" uid="uid://d2bbsfstpvu7m" path="res://xr/material_generic_metal.tres" id="2_wv7so"]
+[ext_resource type="PackedScene" uid="uid://cme66uldrjl2i" path="res://addons/godot-xr-tools/interactables/interactable_area_button.tscn" id="4_2r25d"]
+[ext_resource type="Script" uid="uid://d044axdhfeohg" path="res://xr/dashboard.gd" id="4_7g84s"]
+[ext_resource type="AudioStream" uid="uid://bngaenut45u0e" path="res://ui/sounds/snare_roll_3.wav" id="6_shrdf"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wv7so"]
+size = Vector3(16, 1.5, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_yglro"]
-size = Vector3(10, 1, 10)
+size = Vector3(16, 1, 16)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dny1d"]
+height = 20.0
+radial_segments = 6
+rings = 16
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wv7so"]
+top_radius = 1.0
+bottom_radius = 1.0
+height = 3.0
+radial_segments = 6
+rings = 3
+
+[sub_resource type="BoxMesh" id="BoxMesh_dl8w8"]
+size = Vector3(6, 0.5, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2r25d"]
+size = Vector3(2.5, 6, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wv7so"]
+size = Vector3(16, 1, 16)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dl8w8"]
+size = Vector3(16, 1, 16)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_2r25d"]
+height = 0.15
+radius = 0.2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_7g84s"]
+top_radius = 0.2
+bottom_radius = 0.2
+height = 0.1
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_7g84s"]
+size = Vector3(4, 0.25, 1)
 
 [node name="PlayerArtillery" type="Node3D"]
+script = ExtResource("1_dl8w8")
 
-[node name="Wall" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -5)
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -8)
+
+[node name="Wall" type="CSGBox3D" parent="StaticBody3D"]
 material_override = ExtResource("1_dny1d")
-size = Vector3(10, 10, 1)
+size = Vector3(16, 10, 1)
 
-[node name="CSGBox3D" type="CSGBox3D" parent="Wall"]
+[node name="CSGBox3D" type="CSGBox3D" parent="StaticBody3D/Wall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -3, 0)
+operation = 2
+size = Vector3(3, 1, 1)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="StaticBody3D/Wall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -3, 0)
+operation = 2
+size = Vector3(3, 1, 1)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="StaticBody3D/Wall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, 0)
+operation = 2
+size = Vector3(3, 1, 1)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="StaticBody3D/Wall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 2, 0)
+operation = 2
+size = Vector3(3, 1, 1)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.25, 0)
+shape = SubResource("BoxShape3D_wv7so")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 8)
+
+[node name="Wall" type="CSGBox3D" parent="StaticBody3D2"]
+material_override = ExtResource("1_dny1d")
+size = Vector3(16, 10, 1)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="StaticBody3D2/Wall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, -3, 0)
 operation = 2
 size = Vector3(3, 1, 1)
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="Wall"]
+[node name="CSGBox3D2" type="CSGBox3D" parent="StaticBody3D2/Wall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, -3, 0)
 operation = 2
 size = Vector3(3, 1, 1)
 
-[node name="CSGBox3D3" type="CSGBox3D" parent="Wall"]
+[node name="CSGBox3D3" type="CSGBox3D" parent="StaticBody3D2/Wall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, 0)
 operation = 2
 size = Vector3(3, 1, 1)
 
-[node name="CSGBox3D4" type="CSGBox3D" parent="Wall"]
+[node name="CSGBox3D4" type="CSGBox3D" parent="StaticBody3D2/Wall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 2, 0)
 operation = 2
 size = Vector3(3, 1, 1)
 
-[node name="Wall2" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 5)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.25, 0)
+shape = SubResource("BoxShape3D_wv7so")
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 8, 5, 0)
+
+[node name="Wall" type="CSGBox3D" parent="StaticBody3D3"]
 material_override = ExtResource("1_dny1d")
-size = Vector3(10, 10, 1)
+size = Vector3(16, 10, 1)
 
-[node name="CSGBox3D3" type="CSGBox3D" parent="Wall2"]
+[node name="CSGBox3D" type="CSGBox3D" parent="StaticBody3D3/Wall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+operation = 2
+size = Vector3(3, 1, 1)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="StaticBody3D3/Wall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
+operation = 2
+size = Vector3(3, 1, 1)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="StaticBody3D3/Wall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, 0)
 operation = 2
 size = Vector3(3, 1, 1)
 
-[node name="CSGBox3D4" type="CSGBox3D" parent="Wall2"]
+[node name="CSGBox3D4" type="CSGBox3D" parent="StaticBody3D3/Wall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 2, 0)
 operation = 2
 size = Vector3(3, 1, 1)
 
-[node name="Wall3" type="CSGBox3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 5, 5, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.25, 0)
+shape = SubResource("BoxShape3D_wv7so")
+
+[node name="StaticBody3D4" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -8, 5, 0)
+
+[node name="Wall" type="CSGBox3D" parent="StaticBody3D4"]
 material_override = ExtResource("1_dny1d")
-size = Vector3(10, 10, 1)
+size = Vector3(16, 10, 1)
 
-[node name="CSGBox3D3" type="CSGBox3D" parent="Wall3"]
+[node name="CSGBox3D" type="CSGBox3D" parent="StaticBody3D4/Wall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+operation = 2
+size = Vector3(3, 1, 1)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="StaticBody3D4/Wall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
+operation = 2
+size = Vector3(3, 1, 1)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="StaticBody3D4/Wall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, 0)
 operation = 2
 size = Vector3(3, 1, 1)
 
-[node name="CSGBox3D4" type="CSGBox3D" parent="Wall3"]
+[node name="CSGBox3D4" type="CSGBox3D" parent="StaticBody3D4/Wall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 2, 0)
 operation = 2
 size = Vector3(3, 1, 1)
 
-[node name="Wall4" type="CSGBox3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -5, 5, 0)
-material_override = ExtResource("1_dny1d")
-size = Vector3(10, 10, 1)
-
-[node name="CSGBox3D3" type="CSGBox3D" parent="Wall4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, 0)
-operation = 2
-size = Vector3(3, 1, 1)
-
-[node name="CSGBox3D4" type="CSGBox3D" parent="Wall4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 2, 0)
-operation = 2
-size = Vector3(3, 1, 1)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.25, 0)
+shape = SubResource("BoxShape3D_wv7so")
 
 [node name="Ceiling" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 material_override = ExtResource("1_dny1d")
 mesh = SubResource("BoxMesh_yglro")
+
+[node name="Cannon" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -1)
+
+[node name="Barrel" type="Node3D" parent="Cannon"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Cannon/Barrel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+material_override = ExtResource("2_wv7so")
+mesh = SubResource("CylinderMesh_dny1d")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Cannon/Barrel"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+material_override = ExtResource("2_wv7so")
+mesh = SubResource("CylinderMesh_wv7so")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Cannon/Barrel"]
+collision_mask = 524294
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Cannon/Barrel/StaticBody3D"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -1, -2, 0)
+material_override = ExtResource("2_wv7so")
+mesh = SubResource("BoxMesh_dl8w8")
+skeleton = NodePath("../../..")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Cannon/Barrel/StaticBody3D"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 1, -2, 0)
+material_override = ExtResource("2_wv7so")
+mesh = SubResource("BoxMesh_dl8w8")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cannon/Barrel/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+shape = SubResource("BoxShape3D_2r25d")
+
+[node name="Loader" type="Node3D" parent="Cannon"]
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+material_override = ExtResource("1_dny1d")
+mesh = SubResource("BoxMesh_wv7so")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_dl8w8")
+
+[node name="Dashboard" type="Node3D" parent="." node_paths=PackedStringArray("sfx_turn_start", "shoot_button", "angle_right_button", "angle_left_button", "power_up_button", "power_down_button", "weapon_cycle_button", "angle_label", "power_label", "weapon_label")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -7)
+script = ExtResource("4_7g84s")
+sfx_turn_start = NodePath("TurnStarted")
+shoot_button = NodePath("ShootButton")
+angle_right_button = NodePath("AngleRightButton")
+angle_left_button = NodePath("AngleLeftButton")
+power_up_button = NodePath("PowerUpButton")
+power_down_button = NodePath("PowerDownButton")
+weapon_cycle_button = NodePath("ChangeWeaponButton")
+angle_label = NodePath("Angle")
+power_label = NodePath("Power")
+weapon_label = NodePath("Weapon")
+
+[node name="Weapon" type="Label3D" parent="Dashboard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.58576, 0.357922, -0.489351)
+text = "Weapon"
+
+[node name="Angle" type="Label3D" parent="Dashboard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0.627012, -0.489351)
+text = "Aim Angle"
+
+[node name="Power" type="Label3D" parent="Dashboard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.627, -0.489)
+text = "Power"
+
+[node name="ShootButton" parent="Dashboard" instance=ExtResource("4_2r25d")]
+transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0, 0, 0)
+button = NodePath("Button")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/ShootButton"]
+shape = SubResource("CylinderShape3D_2r25d")
+
+[node name="Button" type="MeshInstance3D" parent="Dashboard/ShootButton"]
+mesh = SubResource("CylinderMesh_7g84s")
+
+[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/ShootButton/Button"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.0924242, 0)
+text = "Shoot"
+
+[node name="ChangeWeaponButton" parent="Dashboard" instance=ExtResource("4_2r25d")]
+transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, -1.6013, 0, 0)
+button = NodePath("Button")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/ChangeWeaponButton"]
+shape = SubResource("CylinderShape3D_2r25d")
+
+[node name="Button" type="MeshInstance3D" parent="Dashboard/ChangeWeaponButton"]
+mesh = SubResource("CylinderMesh_7g84s")
+
+[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/ChangeWeaponButton/Button"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.0924242, 0)
+text = ">"
+
+[node name="AngleLeftButton" parent="Dashboard" instance=ExtResource("4_2r25d")]
+transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, -0.75, -0.101394, 0.175619)
+button = NodePath("Button")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/AngleLeftButton"]
+shape = SubResource("CylinderShape3D_2r25d")
+
+[node name="Button" type="MeshInstance3D" parent="Dashboard/AngleLeftButton"]
+mesh = SubResource("CylinderMesh_7g84s")
+
+[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/AngleLeftButton/Button"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.0924242, 0)
+text = "-"
+
+[node name="AngleRightButton" parent="Dashboard" instance=ExtResource("4_2r25d")]
+transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, -0.75, 0.135898, -0.235381)
+button = NodePath("Button")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/AngleRightButton"]
+shape = SubResource("CylinderShape3D_2r25d")
+
+[node name="Button" type="MeshInstance3D" parent="Dashboard/AngleRightButton"]
+mesh = SubResource("CylinderMesh_7g84s")
+
+[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/AngleRightButton/Button"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.0924244, 0)
+text = "+"
+
+[node name="PowerDownButton" parent="Dashboard" instance=ExtResource("4_2r25d")]
+transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0.75, -0.101394, 0.175619)
+button = NodePath("Button")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/PowerDownButton"]
+shape = SubResource("CylinderShape3D_2r25d")
+
+[node name="Button" type="MeshInstance3D" parent="Dashboard/PowerDownButton"]
+mesh = SubResource("CylinderMesh_7g84s")
+
+[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/PowerDownButton/Button"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.0924242, 0)
+text = "-"
+
+[node name="PowerUpButton" parent="Dashboard" instance=ExtResource("4_2r25d")]
+transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0.75, 0.135898, -0.235381)
+button = NodePath("Button")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/PowerUpButton"]
+shape = SubResource("CylinderShape3D_2r25d")
+
+[node name="Button" type="MeshInstance3D" parent="Dashboard/PowerUpButton"]
+mesh = SubResource("CylinderMesh_7g84s")
+
+[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/PowerUpButton/Button"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.0924244, 0)
+text = "+"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Dashboard"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0, -0.15182, -0.0876533)
+mesh = SubResource("BoxMesh_7g84s")
+
+[node name="TurnStarted" type="AudioStreamPlayer3D" parent="Dashboard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 7, 0)
+stream = ExtResource("6_shrdf")
+bus = &"Interior"
+
+[connection signal="button_pressed" from="Dashboard/ShootButton" to="Dashboard" method="_on_shoot_button_button_pressed"]
+[connection signal="button_pressed" from="Dashboard/ChangeWeaponButton" to="Dashboard" method="_on_shoot_button_button_pressed"]
+[connection signal="button_pressed" from="Dashboard/AngleLeftButton" to="Dashboard" method="_on_angle_left_button_button_pressed"]
+[connection signal="button_released" from="Dashboard/AngleLeftButton" to="Dashboard" method="_on_angle_left_button_button_released"]
+[connection signal="button_pressed" from="Dashboard/AngleRightButton" to="Dashboard" method="_on_angle_right_button_button_pressed"]
+[connection signal="button_released" from="Dashboard/AngleRightButton" to="Dashboard" method="_on_angle_right_button_button_released"]
+[connection signal="button_pressed" from="Dashboard/PowerDownButton" to="Dashboard" method="_on_power_down_button_button_pressed"]
+[connection signal="button_released" from="Dashboard/PowerDownButton" to="Dashboard" method="_on_power_down_button_button_released"]
+[connection signal="button_pressed" from="Dashboard/PowerUpButton" to="Dashboard" method="_on_power_up_button_button_pressed"]
+[connection signal="button_released" from="Dashboard/PowerUpButton" to="Dashboard" method="_on_power_up_button_button_released"]
