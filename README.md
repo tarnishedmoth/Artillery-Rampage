@@ -2,12 +2,20 @@
 
 ## Info
 
-Project uses Godot 4.4.1 with GDScript.
+Project uses Godot 4.4.1 with GDScript. This project will upgrade to Godot 4.5 when it is released.
+
+Targeting as many VR/XR setups as we can manage. Godot XR Tools has a variety of features to help make this possible, but it will be difficult to truly test without playtesters with dedicated hardware.
+
+##Currently verified environments:
+.EXE export:
+Windows PC + Sony PSVR2
+
+WEB export:
+None verified
 
 ## Inspiration
 
-- [Tank Wars Design Breakdown](https://www.youtube.com/watch?v=l0DzDR9B6To)
-- [Tank Wars DOS Longplay](https://www.youtube.com/watch?v=Nl8YiKuGFGc)
+todo?
 
 ## Contribution Guidelines
 
