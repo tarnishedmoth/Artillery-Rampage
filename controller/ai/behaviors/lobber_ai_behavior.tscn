@@ -1,7 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://c5g3m0l3ccwf1"]
+[gd_scene load_steps=3 format=3 uid="uid://c5g3m0l3ccwf1"]
 
 [ext_resource type="Script" uid="uid://bdm12sqv7wle8" path="res://controller/ai/behaviors/lobber_ai_behavior.gd" id="1_v83to"]
+[ext_resource type="Script" uid="uid://cs2drryg4e7ar" path="res://controller/ai/weapons/default_projectile_scorer.gd" id="2_18v33"]
 
-[node name="LobberAiBehavior" type="Node"]
+[node name="LobberAiBehavior" type="Node" node_paths=PackedStringArray("weapon_scoring_strategies_container")]
 script = ExtResource("1_v83to")
 aim_error_chance = 0.25
+weapon_scoring_strategies_container = NodePath("WeaponHandlers")
+
+[node name="WeaponHandlers" type="Node" parent="."]
+
+[node name="DefaultProjectileScorer" type="Node" parent="WeaponHandlers"]
+script = ExtResource("2_18v33")
+metadata/_custom_type_script = "uid://cs2drryg4e7ar"

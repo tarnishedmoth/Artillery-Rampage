@@ -10,6 +10,8 @@ var behavior_type: Enums.AIBehaviorType
 
 @export_range(0.0, 1.0, 0.01) var ceiling_velocity_threshold: float = 0.1
 
+@export var weapon_scoring_strategies_container:Node
+
 var track_shot_history: bool = false
 
 class LaunchProperties:
@@ -19,7 +21,7 @@ class LaunchProperties:
 
 class WeaponInfo:
 	var weapon: Weapon
-	var projectile_prototype: WeaponProjectile
+	var projectile_prototype: Node2D
 	
 	func delete() -> void:
 		if projectile_prototype:
@@ -50,6 +52,9 @@ var last_opponent_history_entry: OpponentTargetHistory
 func _ready() -> void:
 	# Listen to track opponent targeting feedback and if player has fired
 	GameEvents.projectile_fired.connect(_on_projectile_fired)
+
+	if not weapon_scoring_strategies_container:
+		weapon_scoring_strategies_container = self
 
 var game_level: GameLevel:
 	get: return SceneManager.get_current_level_root()
@@ -379,7 +384,7 @@ func get_weapon_infos() -> Array[WeaponInfo]:
 		
 		var scene_to_spawn: PackedScene = weapon.scene_to_spawn
 		if scene_to_spawn and scene_to_spawn.can_instantiate():
-			weapon_info.projectile_prototype = scene_to_spawn.instantiate() as WeaponProjectile
+			weapon_info.projectile_prototype = scene_to_spawn.instantiate() as Node2D
 			
 		weapon_infos.push_back(weapon_info)
 		
@@ -622,18 +627,8 @@ func _get_playable_x_extent() -> float:
 #endregion
 
 #region Weapon Selection
-func compute_damage_score(weapon: Weapon, projectile: WeaponProjectile) -> float:
-	var count_multiplier: float = weapon.number_of_scenes_to_spawn
-	if weapon.always_shoot_for_duration > 0:
-		count_multiplier *= weapon.always_shoot_for_duration * weapon.fire_rate
-	else:
-		count_multiplier *= weapon.ammo_used_per_shot
-	var score: float = projectile.max_damage * projectile.max_damage * projectile.min_falloff_distance * projectile.max_falloff_distance * count_multiplier
-
-	return score
 
 func select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavior.WeaponInfo]) -> int:
-	
 	# If only have one weapon then immediately return
 	if tank.weapons.is_empty():
 		push_warning("%s(%s): No weapons available! - returning 0" % [name, tank.owner.name])
@@ -666,25 +661,36 @@ func select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavio
 		best_score = 0.0
 		comparison_result = 1
 
+	# Determine strategy to use for each weapon based on registered handlers
+	# If two handlers match then the latest one is used
+	# We can order the siblings nodes such that the "highest priority" one comes last
+	var weapon_handlers:Dictionary[Weapon, WeaponScorer]
+	for weapon_info in weapon_infos:
+		for weapon_scorer in weapon_scoring_strategies_container.get_children():
+			if weapon_scorer is WeaponScorer and weapon_scorer.handles_weapon(weapon_info.weapon, weapon_info.projectile_prototype):
+				weapon_handlers[weapon_info.weapon] = weapon_scorer
+
 	for i in range(weapon_infos.size()):
 		var weapon_info: AIBehavior.WeaponInfo = weapon_infos[i]
 		var weapon: Weapon = weapon_info.weapon
-		# FIXME: This doesn't work well for shield and parachute "weapons"
-		var projectile : WeaponProjectile = weapon_info.projectile_prototype
+		var projectile: Node2D = weapon_info.projectile_prototype
 		
-		if projectile and target_distance > projectile.max_falloff_distance:
-			var score: float = compute_damage_score(weapon, projectile)
-			print_debug("Lobber AI(%s): weapon(%d)=%s; score=%f" % [tank.owner.name, i, weapon.name, score])
+		var weapon_scorer:WeaponScorer = weapon_handlers.get(weapon)
+		if weapon_scorer:
+			var score: float = weapon_scorer.compute_score(tank, weapon, projectile, target_distance)
+			print_debug("%s(%s): weapon(%d)=%s; score=%f" % [name, tank.owner.name, i, weapon.name, score])
 			if int(signf(score - best_score)) == comparison_result:
 				best_score = score
 				best_weapon = i
+		else:
+			push_warning("%s(%s): weapon(%d)=%s did not match a handler and will be ignored" % [name, tank.owner.name,i, weapon.name])
 
 	if best_weapon != -1:
-		print_debug("Lobber AI(%s): selected best_weapon=%d/%d; score=%f" % [tank.owner.name, best_weapon, weapon_infos.size(), best_score])
+		print_debug("%s(%s): selected best_weapon=%d/%d; score=%f" % [name, tank.owner.name, best_weapon, weapon_infos.size(), best_score])
 		return best_weapon
 	
 	# Fallback to random weapon
-	print_debug("Lobber AI(%s): Could not find viable weapon - falling back to random selection out of %d candidates" % [tank.owner.name, tank.weapons.size()])
+	print_debug("%s(%s): Could not find viable weapon - falling back to random selection out of %d candidates" % [name, tank.owner.name, tank.weapons.size()])
 
 	return randi_range(0, tank.weapons.size() - 1)
 #endregion

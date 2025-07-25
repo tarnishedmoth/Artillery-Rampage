@@ -1,11 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://kiyo740x1l75"]
+[gd_scene load_steps=4 format=3 uid="uid://kiyo740x1l75"]
 
 [ext_resource type="Script" uid="uid://bmxqsq2rienyj" path="res://controller/ai/variations/nearsight/nearsight_lobber_ai_behavior.gd" id="1_jc52e"]
 [ext_resource type="PackedScene" uid="uid://bqwipuud0pxsi" path="res://controller/ai/variations/nearsight/nearsight_error_calc.tscn" id="2_feg3f"]
+[ext_resource type="Script" uid="uid://cs2drryg4e7ar" path="res://controller/ai/weapons/default_projectile_scorer.gd" id="3_gxjf1"]
 
-[node name="NearsightLobber" type="Node"]
+[node name="NearsightLobber" type="Node" node_paths=PackedStringArray("weapon_scoring_strategies_container")]
 script = ExtResource("1_jc52e")
 aim_deviation_degrees = 5.0
 error_reduction_exp = 3.0
+weapon_scoring_strategies_container = NodePath("WeaponHandlers")
 
 [node name="NearsightErrorCalculation" parent="." instance=ExtResource("2_feg3f")]
+
+[node name="WeaponHandlers" type="Node" parent="."]
+
+[node name="DefaultProjectileScorer" type="Node" parent="WeaponHandlers"]
+script = ExtResource("3_gxjf1")
+metadata/_custom_type_script = "uid://cs2drryg4e7ar"
