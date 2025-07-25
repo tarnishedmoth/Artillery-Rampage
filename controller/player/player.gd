@@ -65,9 +65,9 @@ func _input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	if Input.is_action_pressed("aim_left"):
-		aim(-delta*input_modifier)
+		aim(-delta * aim_speed_degs_per_sec * input_modifier)
 	if Input.is_action_pressed("aim_right"):
-		aim(delta*input_modifier)
+		aim(delta * aim_speed_degs_per_sec * input_modifier)
 	#if Input.is_action_just_pressed("shoot"):
 		#shoot()
 	if Input.is_action_pressed("power_increase"):
@@ -82,7 +82,7 @@ func _process(delta: float) -> void:
 func aim(delta: float) -> void:
 	if !can_aim : return
 
-	tank.aim_delta(deg_to_rad(delta * aim_speed_degs_per_sec))
+	tank.aim_delta(deg_to_rad(delta))
 
 func set_power(delta: float) -> void:
 	if !can_aim: return
