@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://dku7irydr1vm7"]
+[gd_scene load_steps=6 format=3 uid="uid://dku7irydr1vm7"]
 
 [ext_resource type="Script" uid="uid://bhghom7nyilg7" path="res://controller/ai/variations/sniper/sniper_brute_ai_behavior.gd" id="1_4g52i"]
 [ext_resource type="PackedScene" uid="uid://brdhgxtj0uff2" path="res://controller/ai/variations/sniper/sniper_error_calc.tscn" id="2_gbifq"]
 [ext_resource type="Script" uid="uid://cs2drryg4e7ar" path="res://controller/ai/weapons/default_projectile_scorer.gd" id="3_u0sm2"]
+[ext_resource type="PackedScene" uid="uid://dkqsqxhoiux76" path="res://controller/ai/weapons/parachute_weapon_scorer.tscn" id="4_bxxh1"]
+[ext_resource type="PackedScene" uid="uid://b6pnei4t7gvmc" path="res://controller/ai/weapons/shield_weapon_scorer.tscn" id="5_eyc1r"]
 
 [node name="SniperBrute" type="Node" node_paths=PackedStringArray("weapon_scoring_strategies_container")]
 script = ExtResource("1_4g52i")
@@ -16,3 +18,7 @@ weapon_scoring_strategies_container = NodePath("WeaponHandlers")
 [node name="DefaultProjectileScorer" type="Node" parent="WeaponHandlers"]
 script = ExtResource("3_u0sm2")
 metadata/_custom_type_script = "uid://cs2drryg4e7ar"
+
+[node name="ParachuteWeaponScorer" parent="WeaponHandlers" instance=ExtResource("4_bxxh1")]
+
+[node name="ShieldWeaponScorer" parent="WeaponHandlers" instance=ExtResource("5_eyc1r")]

@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://dkqsqxhoiux76"]
+
+[ext_resource type="Script" uid="uid://d2s1gcrn5ksju" path="res://controller/ai/weapons/parachute_weapon_scorer.gd" id="1_sahy1"]
+[ext_resource type="PackedScene" uid="uid://dntmfa5iohhm4" path="res://weapons/weapon_parachute.tscn" id="2_k68vy"]
+
+[node name="ParachuteWeaponScorer" type="Node"]
+script = ExtResource("1_sahy1")
+parachute_weapon_scene = ExtResource("2_k68vy")
+metadata/_custom_type_script = "uid://cii7mywtinj8f"
