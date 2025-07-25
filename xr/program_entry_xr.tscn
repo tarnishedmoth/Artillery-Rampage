@@ -81,7 +81,7 @@ script = ExtResource("1_np8ie")
 program_entry_2d = ExtResource("3_o5nmn")
 
 [node name="Player" parent="." instance=ExtResource("3_6esj4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0881346, 4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0881346, -2)
 
 [node name="Game3DRoot" type="Node3D" parent="."]
 
@@ -89,7 +89,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0881346, 4)
 
 [node name="DebugScreen" type="Node3D" parent="Game3DRoot/PlayerArtillery"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, -2.08616e-07, 0, 2.08616e-07, 1, 0, 3, -7.47849)
+transform = Transform3D(1, 0, 0, 0, 1, -2.08616e-07, 0, 2.08616e-07, 1, 0, 2.55932, -7.47849)
 script = ExtResource("5_6esj4")
 screen_size = Vector2(3.2, 1.8)
 viewport_size = Vector2(1280, 720)

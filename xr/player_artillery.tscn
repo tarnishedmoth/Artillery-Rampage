@@ -184,7 +184,7 @@ material_override = ExtResource("1_dny1d")
 mesh = SubResource("BoxMesh_yglro")
 
 [node name="Cannon" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 2)
 
 [node name="Barrel" type="Node3D" parent="Cannon"]
 
@@ -201,7 +201,8 @@ mesh = SubResource("CylinderMesh_wv7so")
 skeleton = NodePath("../..")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Cannon/Barrel"]
-collision_mask = 524294
+collision_layer = 0
+collision_mask = 0
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="Cannon/Barrel/StaticBody3D"]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -1, -2, 0)
@@ -232,7 +233,7 @@ mesh = SubResource("BoxMesh_wv7so")
 shape = SubResource("BoxShape3D_dl8w8")
 
 [node name="Dashboard" type="Node3D" parent="." node_paths=PackedStringArray("sfx_turn_start", "shoot_button", "angle_right_button", "angle_left_button", "power_up_button", "power_down_button", "weapon_cycle_button", "angle_label", "power_label", "weapon_label")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.30095, -6)
 script = ExtResource("4_7g84s")
 sfx_turn_start = NodePath("TurnStarted")
 shoot_button = NodePath("ShootButton")
