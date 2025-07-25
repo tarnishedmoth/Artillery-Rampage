@@ -1,16 +1,9 @@
-[gd_scene load_steps=29 format=3 uid="uid://br3ip0dg0a52d"]
+[gd_scene load_steps=22 format=3 uid="uid://br3ip0dg0a52d"]
 
 [ext_resource type="Script" uid="uid://cd82tnurg18sn" path="res://xr/program_entry_xr.gd" id="1_np8ie"]
-[ext_resource type="PackedScene" uid="uid://btknduttnmoxf" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="3_0bjtw"]
-[ext_resource type="PackedScene" uid="uid://hpr0v012ghsb" path="res://addons/godot-xr-tools/hands/scenes/highpoly/left_tac_glove.tscn" id="3_j8t2p"]
+[ext_resource type="PackedScene" uid="uid://w0vyns6fki58" path="res://xr/player/xr_origin_3d.tscn" id="3_6esj4"]
 [ext_resource type="PackedScene" uid="uid://clfh2l3a2t5f2" path="res://intro/program_entry.tscn" id="3_o5nmn"]
-[ext_resource type="PackedScene" uid="uid://dup2vp8v5rpi5" path="res://addons/godot-xr-tools/hands/scenes/highpoly/right_tac_glove.tscn" id="4_0bjtw"]
 [ext_resource type="Texture2D" uid="uid://bqxc5xpyuad54" path="res://terrain/terrain-rock.png" id="4_o5nmn"]
-[ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="5_j8t2p"]
-[ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="6_6esj4"]
-[ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="7_h80nf"]
-[ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="8_15h2m"]
-[ext_resource type="PackedScene" uid="uid://cqhw276realc" path="res://addons/godot-xr-tools/functions/function_pointer.tscn" id="9_cc6jf"]
 [ext_resource type="Script" uid="uid://dhab8nl38febn" path="res://addons/godot-xr-tools/objects/pickable.gd" id="10_h80nf"]
 [ext_resource type="Texture2D" uid="uid://byxfbh0q6w7ua" path="res://terrain/terrain-rock-snowy.png" id="11_m0kp7"]
 [ext_resource type="PackedScene" uid="uid://cuy5wqtwv254g" path="res://xr/player_artillery.tscn" id="11_yht1y"]
@@ -63,38 +56,7 @@ size = Vector3(0.25, 0.25, 0.25)
 script = ExtResource("1_np8ie")
 program_entry_2d = ExtResource("3_o5nmn")
 
-[node name="XROrigin3D" type="XROrigin3D" parent="."]
-
-[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
-
-[node name="VRCommonShaderCache" parent="XROrigin3D/XRCamera3D" instance=ExtResource("3_0bjtw")]
-
-[node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
-tracker = &"left_hand"
-
-[node name="LeftHand" parent="XROrigin3D/LeftHand" instance=ExtResource("3_j8t2p")]
-
-[node name="RightHand" type="XRController3D" parent="XROrigin3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
-tracker = &"right_hand"
-
-[node name="RightHand" parent="XROrigin3D/RightHand" instance=ExtResource("4_0bjtw")]
-
-[node name="MovementDirect" parent="XROrigin3D/RightHand" instance=ExtResource("6_6esj4")]
-
-[node name="MovementTurn" parent="XROrigin3D/RightHand" instance=ExtResource("7_h80nf")]
-turn_mode = 1
-step_turn_angle = 15.0
-
-[node name="FunctionPickup" parent="XROrigin3D/RightHand" instance=ExtResource("8_15h2m")]
-ranged_distance = 6.0
-ranged_angle = 12.0
-
-[node name="FunctionPointer" parent="XROrigin3D/RightHand" instance=ExtResource("9_cc6jf")]
-
-[node name="PlayerBody" parent="XROrigin3D" instance=ExtResource("5_j8t2p")]
+[node name="Player" parent="." instance=ExtResource("3_6esj4")]
 
 [node name="Game3DRoot" type="Node3D" parent="."]
 
