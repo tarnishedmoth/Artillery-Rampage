@@ -6,7 +6,8 @@ Project uses Godot 4.4.1 with GDScript. This project will upgrade to Godot 4.5 w
 
 Targeting as many VR/XR setups as we can manage. Godot XR Tools has a variety of features to help make this possible, but it will be difficult to truly test without playtesters with dedicated hardware.
 
-##Currently verified environments:
+##Currently verified environments
+
 .EXE export:
 Windows PC + Sony PSVR2
 
