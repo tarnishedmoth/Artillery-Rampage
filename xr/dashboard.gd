@@ -163,10 +163,11 @@ func _get_ammo_text(weapon: Weapon) -> String:
 #region Local Events
 
 func _on_shoot_button_button_pressed(button: Variant) -> void:
-	if not player.can_shoot:
-		# Foo
-		return
-	player.shoot()
+	if player:
+		if not player.can_shoot:
+			# Foo
+			return
+		player.shoot()
 
 func _on_angle_left_button_button_pressed(button: Variant) -> void:
 	angle_left_pressed = true
