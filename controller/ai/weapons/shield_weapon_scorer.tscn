@@ -6,4 +6,5 @@
 [node name="ShieldWeaponScorer" type="Node"]
 script = ExtResource("1_xly6x")
 shield_weapon_scene = ExtResource("2_61ovb")
+max_target_distance_fraction = 0.2
 metadata/_custom_type_script = "uid://cii7mywtinj8f"

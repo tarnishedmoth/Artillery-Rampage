@@ -670,6 +670,8 @@ func select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavio
 			if weapon_scorer is WeaponScorer and weapon_scorer.handles_weapon(weapon_info.weapon, weapon_info.projectile_prototype):
 				weapon_handlers[weapon_info.weapon] = weapon_scorer
 
+	var all_opponents := get_opponents()
+
 	for i in range(weapon_infos.size()):
 		var weapon_info: AIBehavior.WeaponInfo = weapon_infos[i]
 		var weapon: Weapon = weapon_info.weapon
@@ -677,7 +679,7 @@ func select_best_weapon(opponent_data: Dictionary, weapon_infos: Array[AIBehavio
 		
 		var weapon_scorer:WeaponScorer = weapon_handlers.get(weapon)
 		if weapon_scorer:
-			var score: float = weapon_scorer.compute_score(tank, weapon, projectile, target_distance)
+			var score: float = weapon_scorer.compute_score(tank, weapon, projectile, target_distance, all_opponents, comparison_result)
 			print_debug("%s(%s): weapon(%d)=%s; score=%f" % [name, tank.owner.name, i, weapon.name, score])
 			if int(signf(score - best_score)) == comparison_result:
 				best_score = score

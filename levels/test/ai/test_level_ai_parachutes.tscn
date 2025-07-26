@@ -1,0 +1,55 @@
+[gd_scene load_steps=12 format=3 uid="uid://dfb8kgcwne4mw"]
+
+[ext_resource type="PackedScene" uid="uid://uaih1d1o2vd7" path="res://levels/game_level.tscn" id="1_kh5d5"]
+[ext_resource type="Script" uid="uid://43ab121okvpb" path="res://terrain/terrain_chunk_texture.gd" id="2_272hu"]
+[ext_resource type="Shader" uid="uid://di1pukbtp8y67" path="res://terrain/terrain_shader.gdshader" id="3_eys42"]
+[ext_resource type="Texture2D" uid="uid://byy76mvisn1j0" path="res://terrain/terrain-strata.png" id="4_dmsic"]
+[ext_resource type="Resource" uid="uid://dgrisjpfie3hx" path="res://terrain/terrain_outline_grass.tres" id="5_5krlj"]
+[ext_resource type="PackedScene" uid="uid://ftti54qs3g8c" path="res://terrain/procedural_terrain_modifier.tscn" id="6_kxjh5"]
+[ext_resource type="PackedScene" uid="uid://bncglf44illq3" path="res://weapons/weapon_leadball.tscn" id="7_dmsic"]
+[ext_resource type="PackedScene" uid="uid://dntmfa5iohhm4" path="res://weapons/weapon_parachute.tscn" id="8_5krlj"]
+[ext_resource type="PackedScene" uid="uid://dtl6c4qaxjdaj" path="res://weapons/weapon_kilonuke.tscn" id="9_kxjh5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_52q06"]
+shader = ExtResource("3_eys42")
+shader_parameter/amount = Vector3(1, 1, 1)
+shader_parameter/multiply = 1.35
+shader_parameter/minimum = 0.0
+shader_parameter/maximum = 1.15
+
+[sub_resource type="Resource" id="Resource_msmqt"]
+script = ExtResource("2_272hu")
+texture = ExtResource("4_dmsic")
+material = SubResource("ShaderMaterial_52q06")
+repeat = 3
+offset = Vector2(0, 400)
+
+[node name="TestLevelProcGen" type="Node2D"]
+
+[node name="GameLevel" parent="." instance=ExtResource("1_kh5d5")]
+
+[node name="TerrainChunk" parent="GameLevel/Terrain" index="0"]
+texture_resources = Array[ExtResource("2_272hu")]([SubResource("Resource_msmqt"), ExtResource("5_5krlj")])
+
+[node name="Polygon2D" parent="GameLevel/Terrain/TerrainChunk" index="2"]
+polygon = PackedVector2Array()
+
+[node name="ProceduralTerrainModifier" parent="GameLevel/Terrain" index="1" instance=ExtResource("6_kxjh5")]
+additional_vertices = 100
+replace_existing_heights = true
+height_win_size_min_variation = -0.185
+height_win_size_max_variation = 0.18
+
+[node name="ArtillerySpawner" parent="GameLevel" index="9"]
+artillery_ai_starting_weapons = Array[PackedScene]([ExtResource("7_dmsic"), ExtResource("8_5krlj"), ExtResource("9_kxjh5")])
+artillery_ai_starting_weapon_count = Vector2i(3, 3)
+default_ai_players = Vector2i(4, 4)
+default_human_players = Vector2i(1, 1)
+ideal_min_spawn_separation = 250.0
+
+[editable path="GameLevel"]
+[editable path="GameLevel/ScreenShakeCamera2D"]
+[editable path="GameLevel/Terrain"]
+[editable path="GameLevel/Terrain/TerrainChunk"]
+[editable path="GameLevel/Walls"]
+[editable path="GameLevel/ArtillerySpawner"]

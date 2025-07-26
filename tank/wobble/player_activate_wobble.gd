@@ -41,7 +41,7 @@ func _input(event: InputEvent) -> void:
 		return
 
 	# Make sure player can shoot with current weapon
-	if event.is_action_pressed("shoot") and _can_shoot():
+	if event.is_action_pressed("shoot") and _can_shoot() and _active_weapon_supports_wobble():
 		if not aim_damage_wobble.wobble_activated:
 			print_debug("%s(%s) intercepting shoot to activate wobble" % [name, controller])
 			_start_wobble()
@@ -53,6 +53,10 @@ func _input(event: InputEvent) -> void:
 
 func _can_shoot() -> bool:
 	return is_instance_valid(controller.tank) and controller.tank.check_can_shoot_weapon(controller.tank.current_equipped_weapon)
+
+func _active_weapon_supports_wobble() -> bool:
+	var current_weapon:Weapon = controller.tank.current_equipped_weapon
+	return current_weapon.supports_wobble
 
 func _start_wobble() -> void:
 	aim_damage_wobble.activate_wobble.emit()

@@ -134,6 +134,9 @@ var barrels_sfx_fire: Array[AudioStreamPlayer2D] = []
 ## Iterator index for [member barrels], used by [method cycle].
 var current_barrel: int = 0
 
+## Indicates whether the wobble mechanic makes sense for this weapon.
+## Some weapons like the shield and parachute are not aimed so shouldn't have wobble.
+@export var supports_wobble:bool = true
 
 @export_group("Ammo")
 ## If false, call [method destroy] once out of ammo (and magazines, if configured).

@@ -3,7 +3,7 @@ class_name DefaultProjectileScorer extends WeaponScorer
 func handles_weapon(_weapon: Weapon, projectile: Node2D) -> bool:
 	return projectile is WeaponProjectile
 
-func compute_score(_tank: Tank, weapon: Weapon, in_projectile: Node2D, target_distance:float) -> float:
+func compute_score(_tank: Tank, weapon: Weapon, in_projectile: Node2D, target_distance:float, _opponents: Array[TankController], _comparison_result:int) -> float:
 	var projectile: WeaponProjectile = in_projectile as WeaponProjectile
 	if not projectile or target_distance <= projectile.max_falloff_distance:
 		# 0 signifies a netural result so won't be picked as best or worst

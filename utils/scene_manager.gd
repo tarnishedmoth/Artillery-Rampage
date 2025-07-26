@@ -176,7 +176,7 @@ func quit() -> void:
 	get_tree().quit()
 	
 func restart_level(delay: float = default_delay) -> void:
-	print_debug("restart_level: %s, delay=%f" % [str(_current_level_root_node.name) if _current_level_root_node else "NULL", delay])
+	print_debug("restart_level: %s, delay=%f" % [str(_current_level_root_node.name) if _current_level_root_node else "Not In A Game Level!", delay])
 
 	if not _last_game_level_resource:
 		push_error("restart_level: No last game level resource to restart")
@@ -262,10 +262,13 @@ func unload_current_game_scene() -> void:
 func instantiate_scene_to_internal_root(scene: PackedScene) -> void:
 	if scene.can_instantiate() and InternalSceneRoot:
 		var instance: Node = scene.instantiate()
-		InternalSceneRoot.add_child(instance, true)
 		
+		## These variables must be set before add_child() otherwise the 
+		## _ready functions get called before these are set. i think ;)
 		_last_scene_resource = scene
 		current_scene = instance
+		
+		InternalSceneRoot.add_child(instance, true)
 	else:
 		push_error("Can't instantiate!")
 		return
