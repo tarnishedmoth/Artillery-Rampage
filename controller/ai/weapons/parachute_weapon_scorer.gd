@@ -15,6 +15,7 @@ func _ready() -> void:
 	if not parachute_weapon_scene:
 		push_error("Missing parachute weapon scene")
 		return
+		
 	var viewport_size:Vector2 = get_viewport().get_visible_rect().size
 	_min_target_distance = viewport_size.x * min_target_distance_fraction
 	_min_height = viewport_size.y * min_height_fraction
