@@ -15,7 +15,7 @@ func _ready() -> void:
 	if not parachute_weapon_scene:
 		push_error("Missing parachute weapon scene")
 		return
-		
+
 	var viewport_size:Vector2 = get_viewport().get_visible_rect().size
 	_min_target_distance = viewport_size.x * min_target_distance_fraction
 	_min_height = viewport_size.y * min_height_fraction
@@ -23,9 +23,9 @@ func _ready() -> void:
 func handles_weapon(weapon: Weapon, _projectile: Node2D) -> bool:
 	return parachute_weapon_scene and weapon.scene_file_path == parachute_weapon_scene.resource_path
 
-func compute_score(tank: Tank, _weapon: Weapon, _in_projectile: Node2D, target_distance:float) -> float:
+func compute_score(tank: Tank, _weapon: Weapon, _in_projectile: Node2D, target_distance:float, _opponents: Array[TankController], comparison_result:int) -> float:
 	# Simple implementation that will activate the parachute if criteria met
 	if tank.has_parachute or target_distance < _min_target_distance or tank.global_position.y >_min_height:
 		return 0
-	# Big number so that it is picked when selecting the best weapon
-	return 1e100
+	# Big number so that it is picked when selecting the best weapon and then small number so picked when selecting the "worst weapon"
+	return 1e100 if comparison_result > 0 else 0.01

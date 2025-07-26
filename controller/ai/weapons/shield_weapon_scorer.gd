@@ -3,7 +3,7 @@ extends WeaponScorer
 @export var shield_weapon_scene:PackedScene
 
 ## Max distance fraction in terms of window width
-@export_range(0.0, 1.0, 0.01) var max_target_distance_fraction:float = 0.125
+@export_range(0.0, 1.0, 0.001) var max_target_distance_fraction:float = 0.125
 
 var _max_target_distance:float
 var _owner_tank:Tank
@@ -22,14 +22,33 @@ func _ready() -> void:
 func handles_weapon(weapon: Weapon, _projectile: Node2D) -> bool:
 	return shield_weapon_scene and weapon.scene_file_path == shield_weapon_scene.resource_path
 
-func compute_score(tank: Tank, _weapon: Weapon, _in_projectile: Node2D, target_distance:float) -> float:
+func compute_score(tank: Tank, _weapon: Weapon, _in_projectile: Node2D, _target_distance:float, opponents: Array[TankController], comparison_result:int) -> float:
 	if _is_shield_already_active():
 		return 0.0
 	
-	# Activate shield if target is close
-	# Need to determine how to detect if the shield is already active
+	# Activate shield if more than one enemy is close
+	# TODO: Revise this strategy
 	_owner_tank = tank
-	return 1e100 if target_distance <= _max_target_distance else 0.0
+
+	var use_shield:bool = _multiple_enemies_are_close(tank, opponents)
+	if not use_shield:
+		return 0.0
+
+	# Big number so that it is picked when selecting the best weapon and then small number so picked when selecting the "worst weapon"
+	return 1e100 if comparison_result > 0 else 0.01
+
+func _multiple_enemies_are_close(tank: Tank, opponents: Array[TankController]) -> bool:
+	var tank_pos:Vector2 = tank.global_position
+	var matching_count:int = 0
+	var max_target_dist_sq:float = _max_target_distance * _max_target_distance
+
+	for enemy in opponents:
+		if enemy.global_position.distance_squared_to(tank_pos) <= max_target_dist_sq:
+			matching_count += 1
+			if matching_count > 1:
+				return true
+	
+	return false
 
 func _on_projectile_fired(projectile: WeaponProjectile) -> void:
 	var source_weapon:Weapon = projectile.source_weapon
