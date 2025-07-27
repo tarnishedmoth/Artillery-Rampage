@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cuy5wqtwv254g"]
+[gd_scene load_steps=19 format=3 uid="uid://cuy5wqtwv254g"]
 
 [ext_resource type="Script" uid="uid://7jrphqhnhdd0" path="res://xr/player_artillery.gd" id="1_dl8w8"]
 [ext_resource type="Material" uid="uid://cej2fi5vo4hky" path="res://xr/artillery_material.tres" id="1_dny1d"]
@@ -37,19 +37,22 @@ size = Vector3(16, 1, 16)
 [sub_resource type="BoxShape3D" id="BoxShape3D_dl8w8"]
 size = Vector3(16, 1, 16)
 
+[sub_resource type="BoxMesh" id="BoxMesh_7g84s"]
+size = Vector3(2, 0.25, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_shrdf"]
+size = Vector3(2, 0.25, 1)
+
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_2r25d"]
-height = 0.15
-radius = 0.2
+height = 0.1
+radius = 0.1
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_7g84s"]
-top_radius = 0.2
-bottom_radius = 0.2
+top_radius = 0.1
+bottom_radius = 0.1
 height = 0.1
 radial_segments = 8
 rings = 1
-
-[sub_resource type="BoxMesh" id="BoxMesh_7g84s"]
-size = Vector3(4, 0.25, 1)
 
 [node name="PlayerArtillery" type="Node3D"]
 script = ExtResource("1_dl8w8")
@@ -236,128 +239,142 @@ shape = SubResource("BoxShape3D_dl8w8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.30095, -6)
 script = ExtResource("4_7g84s")
 sfx_turn_start = NodePath("TurnStarted")
-shoot_button = NodePath("ShootButton")
-angle_right_button = NodePath("AngleRightButton")
-angle_left_button = NodePath("AngleLeftButton")
-power_up_button = NodePath("PowerUpButton")
-power_down_button = NodePath("PowerDownButton")
-weapon_cycle_button = NodePath("ChangeWeaponButton")
+shoot_button = NodePath("Dash/ShootButton")
+angle_right_button = NodePath("Dash/AngleRightButton")
+angle_left_button = NodePath("Dash/AngleLeftButton")
+power_up_button = NodePath("Dash/PowerUpButton")
+power_down_button = NodePath("Dash/PowerDownButton")
+weapon_cycle_button = NodePath("Dash/ChangeWeaponButton")
 angle_label = NodePath("Angle")
 power_label = NodePath("Power")
 weapon_label = NodePath("Weapon")
 
 [node name="Weapon" type="Label3D" parent="Dashboard"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.58576, 0.357922, -0.489351)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.124616, 0.357922, -0.489351)
 text = "Weapon"
+font_size = 28
 
 [node name="Angle" type="Label3D" parent="Dashboard"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0.627012, -0.489351)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.794345, 0.627012, -0.489351)
 text = "Aim Angle"
+font_size = 16
+outline_size = 8
 
 [node name="Power" type="Label3D" parent="Dashboard"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.627, -0.489)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.368302, 0.627, -0.489)
 text = "Power"
+font_size = 16
+outline_size = 8
 
-[node name="ShootButton" parent="Dashboard" instance=ExtResource("4_2r25d")]
+[node name="Dash" type="StaticBody3D" parent="Dashboard"]
 transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Dashboard/Dash"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15182, -0.0876532)
+mesh = SubResource("BoxMesh_7g84s")
+skeleton = NodePath("../../root/@EditorNode@21305/@Panel@14/@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplitMain/@VBoxContainer@26/DockVSplitCenter/@VSplitContainer@54/@VBoxContainer@55/@EditorMainScreen@102/MainScreen/@CanvasItemEditor@11482/@VSplitContainer@11134/@HSplitContainer@11136/@HSplitContainer@11138/@Control@11139/@SubViewportContainer@11140/@SubViewport@11141/PlayerArtillery/Dashboard")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/Dash"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.151378, -0.0878258)
+shape = SubResource("BoxShape3D_shrdf")
+
+[node name="ShootButton" parent="Dashboard/Dash" instance=ExtResource("4_2r25d")]
+transform = Transform3D(1, 0, 0, 0, 1, -2.08616e-07, 0, 2.08616e-07, 1, 0.69277, 2.65956e-08, -0.158736)
 button = NodePath("Button")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/ShootButton"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/Dash/ShootButton"]
 shape = SubResource("CylinderShape3D_2r25d")
 
-[node name="Button" type="MeshInstance3D" parent="Dashboard/ShootButton"]
+[node name="Button" type="MeshInstance3D" parent="Dashboard/Dash/ShootButton"]
 mesh = SubResource("CylinderMesh_7g84s")
 
-[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/ShootButton/Button"]
+[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/Dash/ShootButton/Button"]
 transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.0924242, 0)
-text = "Shoot"
+text = "Fire"
+font_size = 28
 
-[node name="ChangeWeaponButton" parent="Dashboard" instance=ExtResource("4_2r25d")]
-transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, -1.6013, 0, 0)
+[node name="ChangeWeaponButton" parent="Dashboard/Dash" instance=ExtResource("4_2r25d")]
+transform = Transform3D(1, 0, 0, 0, 1, -2.08616e-07, 0, 2.08616e-07, 1, 0.109076, 0, 0)
 button = NodePath("Button")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/ChangeWeaponButton"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/Dash/ChangeWeaponButton"]
 shape = SubResource("CylinderShape3D_2r25d")
 
-[node name="Button" type="MeshInstance3D" parent="Dashboard/ChangeWeaponButton"]
+[node name="Button" type="MeshInstance3D" parent="Dashboard/Dash/ChangeWeaponButton"]
 mesh = SubResource("CylinderMesh_7g84s")
 
-[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/ChangeWeaponButton/Button"]
+[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/Dash/ChangeWeaponButton/Button"]
 transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.0924242, 0)
 text = ">"
 
-[node name="AngleLeftButton" parent="Dashboard" instance=ExtResource("4_2r25d")]
-transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, -0.75, -0.101394, 0.175619)
+[node name="AngleLeftButton" parent="Dashboard/Dash" instance=ExtResource("4_2r25d")]
+transform = Transform3D(1, 0, 0, 0, 1, -2.08616e-07, 0, 2.08616e-07, 1, -0.794345, -2.38419e-07, 0.202787)
 button = NodePath("Button")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/AngleLeftButton"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/Dash/AngleLeftButton"]
 shape = SubResource("CylinderShape3D_2r25d")
 
-[node name="Button" type="MeshInstance3D" parent="Dashboard/AngleLeftButton"]
+[node name="Button" type="MeshInstance3D" parent="Dashboard/Dash/AngleLeftButton"]
 mesh = SubResource("CylinderMesh_7g84s")
 
-[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/AngleLeftButton/Button"]
+[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/Dash/AngleLeftButton/Button"]
 transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.0924242, 0)
 text = "-"
 
-[node name="AngleRightButton" parent="Dashboard" instance=ExtResource("4_2r25d")]
-transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, -0.75, 0.135898, -0.235381)
+[node name="AngleRightButton" parent="Dashboard/Dash" instance=ExtResource("4_2r25d")]
+transform = Transform3D(1, 0, 0, 0, 1, -2.08616e-07, 0, 2.08616e-07, 1, -0.794345, 4.76837e-07, -0.271795)
 button = NodePath("Button")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/AngleRightButton"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/Dash/AngleRightButton"]
 shape = SubResource("CylinderShape3D_2r25d")
 
-[node name="Button" type="MeshInstance3D" parent="Dashboard/AngleRightButton"]
+[node name="Button" type="MeshInstance3D" parent="Dashboard/Dash/AngleRightButton"]
 mesh = SubResource("CylinderMesh_7g84s")
 
-[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/AngleRightButton/Button"]
+[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/Dash/AngleRightButton/Button"]
 transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.0924244, 0)
 text = "+"
 
-[node name="PowerDownButton" parent="Dashboard" instance=ExtResource("4_2r25d")]
-transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0.75, -0.101394, 0.175619)
+[node name="PowerDownButton" parent="Dashboard/Dash" instance=ExtResource("4_2r25d")]
+transform = Transform3D(1, 0, 0, 0, 1, -2.08616e-07, 0, 2.08616e-07, 1, -0.368302, -2.38419e-07, 0.202787)
 button = NodePath("Button")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/PowerDownButton"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/Dash/PowerDownButton"]
 shape = SubResource("CylinderShape3D_2r25d")
 
-[node name="Button" type="MeshInstance3D" parent="Dashboard/PowerDownButton"]
+[node name="Button" type="MeshInstance3D" parent="Dashboard/Dash/PowerDownButton"]
 mesh = SubResource("CylinderMesh_7g84s")
 
-[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/PowerDownButton/Button"]
+[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/Dash/PowerDownButton/Button"]
 transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.0924242, 0)
 text = "-"
 
-[node name="PowerUpButton" parent="Dashboard" instance=ExtResource("4_2r25d")]
-transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0.75, 0.135898, -0.235381)
+[node name="PowerUpButton" parent="Dashboard/Dash" instance=ExtResource("4_2r25d")]
+transform = Transform3D(1, 0, 0, 0, 1, -2.08616e-07, 0, 2.08616e-07, 1, -0.368302, 4.76837e-07, -0.271795)
 button = NodePath("Button")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/PowerUpButton"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dashboard/Dash/PowerUpButton"]
 shape = SubResource("CylinderShape3D_2r25d")
 
-[node name="Button" type="MeshInstance3D" parent="Dashboard/PowerUpButton"]
+[node name="Button" type="MeshInstance3D" parent="Dashboard/Dash/PowerUpButton"]
 mesh = SubResource("CylinderMesh_7g84s")
 
-[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/PowerUpButton/Button"]
+[node name="DebugButtonLabel" type="Label3D" parent="Dashboard/Dash/PowerUpButton/Button"]
 transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.0924244, 0)
 text = "+"
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Dashboard"]
-transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0, -0.15182, -0.0876533)
-mesh = SubResource("BoxMesh_7g84s")
 
 [node name="TurnStarted" type="AudioStreamPlayer3D" parent="Dashboard"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 7, 0)
 stream = ExtResource("6_shrdf")
 bus = &"Interior"
 
-[connection signal="button_pressed" from="Dashboard/ShootButton" to="Dashboard" method="_on_shoot_button_button_pressed"]
-[connection signal="button_pressed" from="Dashboard/ChangeWeaponButton" to="Dashboard" method="_on_shoot_button_button_pressed"]
-[connection signal="button_pressed" from="Dashboard/AngleLeftButton" to="Dashboard" method="_on_angle_left_button_button_pressed"]
-[connection signal="button_released" from="Dashboard/AngleLeftButton" to="Dashboard" method="_on_angle_left_button_button_released"]
-[connection signal="button_pressed" from="Dashboard/AngleRightButton" to="Dashboard" method="_on_angle_right_button_button_pressed"]
-[connection signal="button_released" from="Dashboard/AngleRightButton" to="Dashboard" method="_on_angle_right_button_button_released"]
-[connection signal="button_pressed" from="Dashboard/PowerDownButton" to="Dashboard" method="_on_power_down_button_button_pressed"]
-[connection signal="button_released" from="Dashboard/PowerDownButton" to="Dashboard" method="_on_power_down_button_button_released"]
-[connection signal="button_pressed" from="Dashboard/PowerUpButton" to="Dashboard" method="_on_power_up_button_button_pressed"]
-[connection signal="button_released" from="Dashboard/PowerUpButton" to="Dashboard" method="_on_power_up_button_button_released"]
+[connection signal="button_pressed" from="Dashboard/Dash/ShootButton" to="Dashboard" method="_on_shoot_button_button_pressed"]
+[connection signal="button_pressed" from="Dashboard/Dash/ChangeWeaponButton" to="Dashboard" method="_on_shoot_button_button_pressed"]
+[connection signal="button_pressed" from="Dashboard/Dash/AngleLeftButton" to="Dashboard" method="_on_angle_left_button_button_pressed"]
+[connection signal="button_released" from="Dashboard/Dash/AngleLeftButton" to="Dashboard" method="_on_angle_left_button_button_released"]
+[connection signal="button_pressed" from="Dashboard/Dash/AngleRightButton" to="Dashboard" method="_on_angle_right_button_button_pressed"]
+[connection signal="button_released" from="Dashboard/Dash/AngleRightButton" to="Dashboard" method="_on_angle_right_button_button_released"]
+[connection signal="button_pressed" from="Dashboard/Dash/PowerDownButton" to="Dashboard" method="_on_power_down_button_button_pressed"]
+[connection signal="button_released" from="Dashboard/Dash/PowerDownButton" to="Dashboard" method="_on_power_down_button_button_released"]
+[connection signal="button_pressed" from="Dashboard/Dash/PowerUpButton" to="Dashboard" method="_on_power_up_button_button_pressed"]
+[connection signal="button_released" from="Dashboard/Dash/PowerUpButton" to="Dashboard" method="_on_power_up_button_button_released"]
