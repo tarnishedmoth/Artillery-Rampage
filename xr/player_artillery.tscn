@@ -1,11 +1,15 @@
-[gd_scene load_steps=19 format=3 uid="uid://cuy5wqtwv254g"]
+[gd_scene load_steps=31 format=4 uid="uid://cuy5wqtwv254g"]
 
 [ext_resource type="Script" uid="uid://7jrphqhnhdd0" path="res://xr/player_artillery.gd" id="1_dl8w8"]
 [ext_resource type="Material" uid="uid://cej2fi5vo4hky" path="res://xr/artillery_material.tres" id="1_dny1d"]
 [ext_resource type="Material" uid="uid://d2bbsfstpvu7m" path="res://xr/material_generic_metal.tres" id="2_wv7so"]
 [ext_resource type="PackedScene" uid="uid://cme66uldrjl2i" path="res://addons/godot-xr-tools/interactables/interactable_area_button.tscn" id="4_2r25d"]
+[ext_resource type="Script" uid="uid://desgrk1ouq3p8" path="res://xr/debug_label_3d.gd" id="4_6h456"]
 [ext_resource type="Script" uid="uid://d044axdhfeohg" path="res://xr/dashboard.gd" id="4_7g84s"]
+[ext_resource type="Script" uid="uid://bdsu3wcgh6lhu" path="res://xr/cannon/ammo_load_area.gd" id="4_ootlv"]
 [ext_resource type="AudioStream" uid="uid://bngaenut45u0e" path="res://ui/sounds/snare_roll_3.wav" id="6_shrdf"]
+[ext_resource type="Script" uid="uid://ctf44gyabw8ao" path="res://xr/cannon/ammo_locker.gd" id="9_567cr"]
+[ext_resource type="PackedScene" uid="uid://dkm3ec0pbtq3x" path="res://xr/pickable/ammo/ammo_leadball.tscn" id="10_xc1lh"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wv7so"]
 size = Vector3(16, 1.5, 1)
@@ -28,8 +32,20 @@ rings = 3
 [sub_resource type="BoxMesh" id="BoxMesh_dl8w8"]
 size = Vector3(6, 0.5, 2)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_2r25d"]
-size = Vector3(2.5, 6, 2)
+[sub_resource type="BoxShape3D" id="BoxShape3D_6h456"]
+size = Vector3(0.48999, 5.99274, 2.00772)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_shrdf"]
+albedo_color = Color(0.580126, 0.826934, 1.54018e-06, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_shrdf"]
+size = Vector3(1.25, 0.5, 1.25)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ootlv"]
+size = Vector3(1.25, 0.5, 1.25)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_567cr"]
+size = Vector3(1.25, 0.5, 1.25)
 
 [sub_resource type="BoxMesh" id="BoxMesh_wv7so"]
 size = Vector3(16, 1, 16)
@@ -53,6 +69,26 @@ bottom_radius = 0.1
 height = 0.1
 radial_segments = 8
 rings = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xc1lh"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_jwfks"]
+size = Vector3(0.1, 0.1, 0.5)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_xc1lh"]
+_surfaces = [{
+"aabb": AABB(-0.5, -0.5, -0.5, 1, 1, 1),
+"attribute_data": PackedByteArray("zMzMPczMTD8AAAAAAACAP2ZmZj/MzEw/AACAPwAAAABmZmY/zMzMPQAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAABmZmY/zMzMPQAAgD8AAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD9mZmY/ZmZmPwAAAAAAAIA/ZmZmP2ZmZj8AAIA/AACAP2ZmZj/MzMw9AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAzMzMPczMTD8AAAAAAAAAAAAAAAAAAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAAAAAAAAAAAAAAAAAgD8AAIA/ZmZmPwAAAABmZmY/zMxMPwAAgD8AAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAAABmZmY/zMxMPwAAgD8AAIA/AAAAAAAAgD9mZmY/ZmZmPwAAAABmZmY/ZmZmP8zMTD8AAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAAADMzMw9zMxMP8zMzD0AAAAAAAAAAAAAAAAAAIA/AACAPwAAgD8AAAAAAAAAAAAAAAAAAAAAzMzMPWZmZj/MzMw9AACAPwAAAAAAAAAAZmZmPwAAAAAAAAAAAAAAANDMzD0AAIA/AACAPwAAAAAAAIA/AACAPwAAgD8AAAAAAACAPwAAAAAAAAAAAAAAANDMzD0AAIA/0MzMPQAAgD8AAIA/AACAPwAAgD/QzMw9AACAP9DMzD0AAAAAAACAP2ZmZj8AAAAAZmZmPwAAgD8AAAAAAAAAAAAAAAAAAIA/AAAAAAAAgD8AAIA/0MzMPQAAAAAAAIA/AAAAAAAAgD8AAIA/"),
+"format": 34359738391,
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 84,
+"vertex_data": PackedByteArray("mZmZvgAAAD/NzMw+AAAAvwAAAD8AAAA/mZmZvgAAAD/NzMy+AAAAPwAAAL8AAAA/AAAAP8zMzL7NzMw+AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAA/AAAAPwAAAD8AAAA/AAAAP8zMzL7NzMw+AAAAPwAAAL8AAAA/AAAAvwAAAL8AAAA/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAP8zMzL7NzMy+AAAAPwAAAD8AAAC/AAAAP8zMzL7NzMy+AAAAPwAAAL8AAAC/AAAAP8zMzL7NzMw+AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAD8AAAC/mZmZvgAAAD/NzMw+AAAAPwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAPwAAAD8AAAA/AAAAvwAAAL8AAAA/AAAAPwAAAD/NzMy+mZmZvgAAAD/NzMy+AAAAPwAAAD8AAAC/AAAAvwAAAD8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAL8AAAA/AAAAPwAAAD8AAAC/mZmZvgAAAD/NzMy+AAAAvwAAAD8AAAC/AAAAPwAAAD8AAAC/AAAAP8zMzL7NzMy+AAAAPwAAAD/NzMy+mZmZvgAAAD/NzMy+AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAPwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAPwAAAD8AAAA/mZmZvgAAAD/NzMw+AAAAPwAAAD/NzMw+AAAAvwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAvwAAAL8AAAC/AAAAPwAAAD8AAAA/AAAAPwAAAD/NzMw+AAAAP8zMzL7NzMw+mZmZvszMzL7NzMy+AAAAPwAAAD/NzMy+AAAAP8zMzL7NzMy+AAAAPwAAAD/NzMw+mZmZvszMzL7NzMw+AAAAP8zMzL7NzMw+AAAAP8zMzL7NzMy+AAAAP8zMzL7NzMw+mZmZvszMzL7NzMw+AAAAPwAAAD/NzMw+mZmZvgAAAD/NzMw+mZmZvszMzL7NzMw+mZmZvszMzL7NzMw+mZmZvgAAAD/NzMw+mZmZvgAAAD/NzMy+mZmZvgAAAD/NzMy+AAAAPwAAAD/NzMy+mZmZvszMzL7NzMy+mZmZvszMzL7NzMw+mZmZvszMzL7NzMy+AAAAP8zMzL7NzMy+mZmZvgAAAD/NzMy+mZmZvszMzL7NzMy+mZmZvszMzL7NzMw+/3///wAAAAD/f///AAAAAP9//////wAA////f/9//n////9//3/+f////3//f/5//3//fwAA/z//f/9/AAD/P/9//38AAP8/////f/9//n////9//3/+f////3//f/5//38AAP//AAD/fwAA//8AAP9/AAD//wAA////f/9//n////9//3/+f////3//f/5/////f/9//n////9//3/+f////3//f/5/AAD/f/9//n8AAP9//3/+fwAA/3//f/5//3///wAAAAD/f///AAAAAP9///8AAAAA/////wAA/z//////AAD/P/////8AAP8//3//fwAA/z//f/9/AAD/P/9//38AAP8//3//////AAD/f/////8AAP9//////wAAAAD/f/9//n8AAP9//3/+fwAA/3//f/5//3//////AAD/f/////8AAP9//////wAA////f/9//n////9//3/+f////3//f/5//3//////AAD/f///AAAAAP9//////wAA/////wAA/z//////AAD/P/////8AAP8//3///wAAAAD/f///AAAAAP9//////wAA/38AAP//AAD/fwAA//8AAP9/AAD//wAA////f/9//n////9//3/+f////3//f/5//3//fwAA/7//f/9/AAD/v/9//38AAP+//////wAA/7//////AAD/v/////8AAP+//3//////////f/////////9//////////////wAA/7//////AAD/v/////8AAP+/////f/9/AID///9//38AgP///3//fwCA/3//fwAA/7//f/9/AAD/v/9//38AAP+//3//////////f/////////9/////////////f/9/AID///9//38AgP///3//fwCA")
+}]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_jwfks"]
+data = PackedVector3Array(-0.3, 0.5, 0.4, -0.5, 0.5, 0.5, -0.3, 0.5, -0.4, 0.5, -0.5, 0.5, 0.5, -0.4, 0.4, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.4, 0.4, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.4, -0.4, 0.5, 0.5, -0.5, 0.5, -0.4, -0.4, 0.5, -0.5, -0.5, 0.5, -0.4, 0.4, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.3, 0.5, 0.4, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.4, -0.3, 0.5, -0.4, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.3, 0.5, -0.4, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.4, -0.4, 0.5, 0.5, -0.4, -0.3, 0.5, -0.4, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.3, 0.5, 0.4, 0.5, 0.5, 0.4, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.4, 0.5, -0.4, 0.4, -0.3, -0.4, -0.4, 0.5, 0.5, -0.4, 0.5, -0.4, -0.4, 0.5, 0.5, 0.4, -0.3, -0.4, 0.4, 0.5, -0.4, 0.4, 0.5, -0.4, -0.4, 0.5, -0.4, 0.4, -0.3, -0.4, 0.4, 0.5, 0.5, 0.4, -0.3, 0.5, 0.4, -0.3, -0.4, 0.4, -0.3, -0.4, 0.4, -0.3, 0.5, 0.4, -0.3, 0.5, -0.4, -0.3, 0.5, -0.4, 0.5, 0.5, -0.4, -0.3, -0.4, -0.4, -0.3, -0.4, 0.4, -0.3, -0.4, -0.4, 0.5, -0.4, -0.4, -0.3, 0.5, -0.4, -0.3, -0.4, -0.4, -0.3, -0.4, 0.4)
 
 [node name="PlayerArtillery" type="Node3D"]
 script = ExtResource("1_dl8w8")
@@ -203,25 +239,58 @@ material_override = ExtResource("2_wv7so")
 mesh = SubResource("CylinderMesh_wv7so")
 skeleton = NodePath("../..")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Cannon/Barrel"]
+[node name="StaticBody3D2" type="StaticBody3D" parent="Cannon/Barrel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 0)
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Cannon/Barrel/StaticBody3D2"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+material_override = ExtResource("2_wv7so")
+mesh = SubResource("BoxMesh_dl8w8")
+skeleton = NodePath("../../root/@EditorNode@21305/@Panel@14/@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplitMain/@VBoxContainer@26/DockVSplitCenter/@VSplitContainer@54/@VBoxContainer@55/@EditorMainScreen@102/MainScreen/@CanvasItemEditor@11482/@VSplitContainer@11134/@HSplitContainer@11136/@HSplitContainer@11138/@Control@11139/@SubViewportContainer@11140/@SubViewport@11141/PlayerArtillery/Cannon")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cannon/Barrel/StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00622559, -0.00210571, 0.00050354)
+shape = SubResource("BoxShape3D_6h456")
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="Cannon/Barrel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -2, 0)
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Cannon/Barrel/StaticBody3D3"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+material_override = ExtResource("2_wv7so")
+mesh = SubResource("BoxMesh_dl8w8")
+skeleton = NodePath("../../root/@EditorNode@21305/@Panel@14/@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplitMain/@VBoxContainer@26/DockVSplitCenter/@VSplitContainer@54/@VBoxContainer@55/@EditorMainScreen@102/MainScreen/@CanvasItemEditor@11482/@VSplitContainer@11134/@HSplitContainer@11136/@HSplitContainer@11138/@Control@11139/@SubViewportContainer@11140/@SubViewport@11141/PlayerArtillery/Cannon")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cannon/Barrel/StaticBody3D3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00622559, -0.00210571, 0.00050354)
+shape = SubResource("BoxShape3D_6h456")
+
+[node name="LoaderShelf" type="StaticBody3D" parent="Cannon/Barrel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.41237, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Cannon/Barrel/LoaderShelf"]
+material_override = SubResource("StandardMaterial3D_shrdf")
+mesh = SubResource("BoxMesh_shrdf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cannon/Barrel/LoaderShelf"]
+shape = SubResource("BoxShape3D_ootlv")
+
+[node name="AmmoLoadArea" type="Area3D" parent="Cannon/Barrel/LoaderShelf"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.255939, 0)
 collision_layer = 0
-collision_mask = 0
+collision_mask = 4
+script = ExtResource("4_ootlv")
+label_flash_color = Color(0.388385, 0.796555, 1.15514e-06, 1)
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Cannon/Barrel/StaticBody3D"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -1, -2, 0)
-material_override = ExtResource("2_wv7so")
-mesh = SubResource("BoxMesh_dl8w8")
-skeleton = NodePath("../../..")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cannon/Barrel/LoaderShelf/AmmoLoadArea"]
+shape = SubResource("BoxShape3D_567cr")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Cannon/Barrel/StaticBody3D"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 1, -2, 0)
-material_override = ExtResource("2_wv7so")
-mesh = SubResource("BoxMesh_dl8w8")
-skeleton = NodePath("../../..")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Cannon/Barrel/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
-shape = SubResource("BoxShape3D_2r25d")
+[node name="XRDebugLabel3D" type="Label3D" parent="Cannon/Barrel/LoaderShelf/AmmoLoadArea"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+billboard = 1
+no_depth_test = true
+text = "Load Ammo"
+metadata/_custom_type_script = "uid://desgrk1ouq3p8"
 
 [node name="Loader" type="Node3D" parent="Cannon"]
 
@@ -253,18 +322,24 @@ weapon_label = NodePath("Weapon")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.124616, 0.357922, -0.489351)
 text = "Weapon"
 font_size = 28
+script = ExtResource("4_6h456")
+metadata/_custom_type_script = "uid://desgrk1ouq3p8"
 
 [node name="Angle" type="Label3D" parent="Dashboard"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.794345, 0.627012, -0.489351)
 text = "Aim Angle"
 font_size = 16
 outline_size = 8
+script = ExtResource("4_6h456")
+metadata/_custom_type_script = "uid://desgrk1ouq3p8"
 
 [node name="Power" type="Label3D" parent="Dashboard"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.368302, 0.627, -0.489)
 text = "Power"
 font_size = 16
 outline_size = 8
+script = ExtResource("4_6h456")
+metadata/_custom_type_script = "uid://desgrk1ouq3p8"
 
 [node name="Dash" type="StaticBody3D" parent="Dashboard"]
 transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0, 0, 0)
@@ -368,6 +443,46 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 7, 0)
 stream = ExtResource("6_shrdf")
 bus = &"Interior"
 
+[node name="AmmoLockers" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="LeadBallLocker" type="Node3D" parent="AmmoLockers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.68593, 0)
+script = ExtResource("9_567cr")
+ammo_scene = ExtResource("10_xc1lh")
+
+[node name="InteractableAreaButton" parent="AmmoLockers/LeadBallLocker" instance=ExtResource("4_2r25d")]
+button = NodePath("MeshInstance3D")
+displacement = Vector3(0, -0.05, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AmmoLockers/LeadBallLocker/InteractableAreaButton"]
+shape = SubResource("BoxShape3D_xc1lh")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="AmmoLockers/LeadBallLocker/InteractableAreaButton"]
+mesh = SubResource("BoxMesh_jwfks")
+skeleton = NodePath("")
+
+[node name="XRDebugLabel3D" type="Label3D" parent="AmmoLockers/LeadBallLocker/InteractableAreaButton/MeshInstance3D"]
+billboard = 2
+no_depth_test = true
+text = "Weapon
+Ammo"
+script = ExtResource("4_6h456")
+metadata/_custom_type_script = "uid://desgrk1ouq3p8"
+
+[node name="Dispense" type="Marker3D" parent="AmmoLockers/LeadBallLocker"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="AmmoLockers/LeadBallLocker"]
+transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="AmmoLockers/LeadBallLocker/StaticBody3D"]
+mesh = SubResource("ArrayMesh_xc1lh")
+skeleton = NodePath("../..")
+
+[node name="CSGBakedCollisionShape3D" type="CollisionShape3D" parent="AmmoLockers/LeadBallLocker/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_jwfks")
+
+[connection signal="body_entered" from="Cannon/Barrel/LoaderShelf/AmmoLoadArea" to="Cannon/Barrel/LoaderShelf/AmmoLoadArea" method="_on_body_entered"]
 [connection signal="button_pressed" from="Dashboard/Dash/ShootButton" to="Dashboard" method="_on_shoot_button_button_pressed"]
 [connection signal="button_pressed" from="Dashboard/Dash/ChangeWeaponButton" to="Dashboard" method="_on_shoot_button_button_pressed"]
 [connection signal="button_pressed" from="Dashboard/Dash/AngleLeftButton" to="Dashboard" method="_on_angle_left_button_button_pressed"]
@@ -378,3 +493,4 @@ bus = &"Interior"
 [connection signal="button_released" from="Dashboard/Dash/PowerDownButton" to="Dashboard" method="_on_power_down_button_button_released"]
 [connection signal="button_pressed" from="Dashboard/Dash/PowerUpButton" to="Dashboard" method="_on_power_up_button_button_pressed"]
 [connection signal="button_released" from="Dashboard/Dash/PowerUpButton" to="Dashboard" method="_on_power_up_button_button_released"]
+[connection signal="button_pressed" from="AmmoLockers/LeadBallLocker/InteractableAreaButton" to="AmmoLockers/LeadBallLocker" method="_on_interactable_area_button_button_pressed"]

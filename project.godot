@@ -177,6 +177,7 @@ jolt_physics_3d/simulation/areas_detect_static_bodies=true
 [rendering]
 
 renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true
 limits/time/time_rollover_secs=300.0
 
 [shader_globals]

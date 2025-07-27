@@ -1,0 +1,1 @@
+class_name XRDebugLabel3D extends Label3D

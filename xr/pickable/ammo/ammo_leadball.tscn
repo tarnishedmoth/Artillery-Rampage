@@ -1,0 +1,52 @@
+[gd_scene load_steps=10 format=3 uid="uid://dkm3ec0pbtq3x"]
+
+[ext_resource type="Script" uid="uid://chscohamy02mc" path="res://xr/pickable/ammo/pickable_ammo.gd" id="1_n72r1"]
+[ext_resource type="PackedScene" uid="uid://bikkxsbo8x7sd" path="res://addons/godot-xr-tools/audio/pickable_audio.tscn" id="2_no7ux"]
+[ext_resource type="AudioStream" uid="uid://8yfc62je5neo" path="res://ui/sounds/rustle_i.wav" id="4_ilw5c"]
+[ext_resource type="AudioStream" uid="uid://bkyfhss2oiihe" path="res://xr/metal-pipe-clang.mp3" id="4_no7ux"]
+[ext_resource type="Script" uid="uid://cfagryi0vslb3" path="res://addons/godot-xr-tools/audio/pickable_audio_type.gd" id="5_ss222"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n72r1"]
+albedo_color = Color(0.078815, 0.078815, 0.078815, 1)
+roughness = 0.53
+
+[sub_resource type="SphereMesh" id="SphereMesh_k7u3w"]
+radius = 0.09
+height = 0.18
+radial_segments = 20
+rings = 14
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_vw0s2"]
+radius = 0.09
+
+[sub_resource type="Resource" id="Resource_lxy2r"]
+script = ExtResource("5_ss222")
+name = "Lead Ball"
+grab_sound = ExtResource("4_ilw5c")
+hit_sound = ExtResource("4_no7ux")
+metadata/_custom_type_script = "uid://cfagryi0vslb3"
+
+[node name="AmmoLeadball" type="RigidBody3D" node_paths=PackedStringArray("mesh")]
+collision_layer = 4
+collision_mask = 196615
+mass = 10.0
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_n72r1")
+display_name = "Lead Ball"
+mesh = NodePath("MeshInstance3D")
+ranged_grab_method = 2
+second_hand_grab = 2
+ranged_grab_speed = 5.0
+metadata/_custom_type_script = "uid://chscohamy02mc"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_n72r1")
+mesh = SubResource("SphereMesh_k7u3w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_vw0s2")
+
+[node name="PickableAudio" parent="." instance=ExtResource("2_no7ux")]
+bus = &"Interior"
+pickable_audio_type = SubResource("Resource_lxy2r")
